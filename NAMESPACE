@@ -1,0 +1,9 @@
+useDynLib(jSDM, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+importFrom(stats, model.frame, model.matrix, quantile)
+
+S3method(predict,jSDM)
+
+export(jSDM_binomial,
+       inv_logit,
+       logit)

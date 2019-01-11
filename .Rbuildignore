@@ -1,0 +1,8 @@
+# Ignores these files when building. For more information about
+# .Rbuildignore, see
+# http://cran.r-project.org/doc/manuals/R-exts.html#index-_002eRbuildignore-file
+
+# GitHub files
+.git/
+^.*\.Rproj$
+^\.Rproj\.user$
