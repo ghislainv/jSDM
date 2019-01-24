@@ -1,6 +1,6 @@
 Package: jSDM
 Type: Package
-Title: joint species distribution models
+Title: Joint Species Distribution Models
 Version: 0.1.0
 Date: 2019-01-11
 Imports: Rcpp (>= 1.0.0), coda
@@ -10,8 +10,7 @@ Suggests: rbenchmark, knitr, raster, sp
 Authors@R: c(
   person("Ghislain", "Vieilledent", role=c("aut", "cre"),
          email="ghislain.vieilledent@cirad.fr",
-         comment=c(ORCID="0000-0002-1685-4997")),
-  person("Matthieu", "Autier", role="ctb"))
+         comment=c(ORCID="0000-0002-1685-4997")))
 Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Package for fitting joint species distribution models (jSDM)
     in a hierarchical Bayesian framework. The Metropolis-within-Gibbs algorithm 

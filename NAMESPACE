@@ -1,6 +1,6 @@
 useDynLib(jSDM, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
-importFrom(stats, model.frame, model.matrix, quantile)
+importFrom(stats, model.frame, model.matrix, quantile, nobs)
 
 S3method(predict,jSDM)
 
