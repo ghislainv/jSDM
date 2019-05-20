@@ -6,3 +6,9 @@
 .git/
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+# pkgdown
+docs
+logos
+pkgdown
+README.Rmd

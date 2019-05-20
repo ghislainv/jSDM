@@ -575,4 +575,67 @@ form.priorVrho <- function (priorVrho) {
   return(priorVrho)
 }
 
+# =======================================================================
+#
+# Check and form starting parameters for jSDM_probit_block
+#
+# =======================================================================
+
+is.scalar <- function(x) {
+  is.atomic(x) && length(x) == 1L
+}
+
+form.beta.start.sp <- function (beta.start, np, nsp) {
+  if (sum(is.na(beta.start))>0) { 
+    beta.start.mat <- matrix(0, np, nsp)
+  }
+  else if(is.scalar(beta.start) & !is.na(beta.start)) {
+    beta.start.mat <- matrix(beta.start, np, nsp) 
+  }
+  else if(sum(dim(beta.start) != c(np, nsp)) > 0) {
+    stop("Error: beta.start not conformable.\n")
+  }
+  return(beta.start.mat)
+}
+
+form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
+  if (sum(is.na(lambda.start))>0) { 
+    lambda.start.mat <- matrix(0, n_latent, nsp)
+    for (i in 1:n_latent) {
+      lambda.start.mat[i, i] <- 1
+    }
+  }
+  else if(is.scalar(lambda.start) & !is.na(lambda.start)) {
+    lambda.start.mat <- matrix(lambda.start, n_latent, nsp)
+    for (i in 1:n_latent) {
+      if (lambda.start > 0) {
+        lambda.start.mat[i, i] <- lambda.start
+      } else {
+        lambda.start.mat[i, i] <- 1
+      }
+      for (j in 1:n_latent) {
+        if (i > j) {
+         lambda.start.mat[i, j] <- 0
+        }
+      }
+    }
+  }
+  else if(sum(dim(lambda.start) != c(n_latent, nsp)) > 0) {
+    stop("Error: lambda.start not conformable.\n")
+  }
+  else if(sum(dim(lambda.start) != c(n_latent, nsp)) == 0) {
+    for (i in 1:n_latent) {
+      if (lambda.start.mat[i, i]<=0) {
+        stop("Error: lambda must be positive on the diagonal.\n")
+      }
+      for (j in 1:n_latent) {
+        if (i > j & lambda.start.mat[i, j] != 0) {
+          stop("Error: lambda must be constrained to zero on lower diagonal.\n")
+        }
+      }
+    }
+  }
+  return(lambda.start.mat)
+}
+
 # End

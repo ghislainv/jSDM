@@ -1,7 +1,14 @@
+// ==============================================================================
+// author          :Ghislain Vieilledent
+// email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+// web             :https://ecology.ghislainv.fr
+// license         :GPLv3
+// ==============================================================================
+
 #include <RcppArmadillo.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
-#include "useful.h"
+#include "Rcpp_jSDM_useful.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]

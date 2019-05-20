@@ -10,15 +10,18 @@ Suggests: rbenchmark, knitr, raster, sp
 Authors@R: c(
   person("Ghislain", "Vieilledent", role=c("aut", "cre"),
          email="ghislain.vieilledent@cirad.fr",
-         comment=c(ORCID="0000-0002-1685-4997")))
+         comment=c(ORCID="0000-0002-1685-4997")),
+  person("Jeanne", "Clément", role=c("aut"),
+         email="jeanne.clement16@laposte.net",
+         comment=c(ORCID="0000-0002-5228-5015")))
 Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Package for fitting joint species distribution models (jSDM)
-    in a hierarchical Bayesian framework. The Metropolis-within-Gibbs algorithm 
-    is written in C++, making use of Rcpp, Armadillo and GSL to maximize
-    computation efficiency.
+    in a hierarchical Bayesian framework (Warton and others 2015
+    <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
+    in C++. It uses Rcpp, Armadillo and GSL to maximize computation
+    efficiency.
 License: GPL-3 | file LICENSE
-URL: https://github.com/ghislainv/jSDM
+URL: https://ecology.ghislainv.fr/jSDM, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues
 LazyLoad: yes
 Encoding: UTF-8
-

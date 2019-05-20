@@ -5,3 +5,7 @@ Rcpp_jSDM_binomial <- function(ngibbs, nthin, nburn, Y, T, X, beta_start, mubeta
     .Call(`_jSDM_Rcpp_jSDM_binomial`, ngibbs, nthin, nburn, Y, T, X, beta_start, mubeta, Vbeta, seed, ropt, verbose)
 }
 
+Rcpp_jSDM_probit_block <- function(ngibbs, nthin, nburn, Y, T, X, param_start, Vparam, muparam, VW, W_start, alpha_start, Valpha_start, shape, rate, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_probit_block`, ngibbs, nthin, nburn, Y, T, X, param_start, Vparam, muparam, VW, W_start, alpha_start, Valpha_start, shape, rate, seed, verbose)
+}
+
