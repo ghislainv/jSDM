@@ -638,4 +638,104 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
   return(lambda.start.mat)
 }
 
+form.alpha.start.sp <- function (alpha.start, nsite) {
+  if (sum(is.na(alpha.start))>0) { 
+    alpha.start <- rep(0, nsite)
+  }
+  else if(is.scalar(alpha.start) & !is.na(alpha.start)) {
+    alpha.start <- rep(alpha.start, nsite) 
+  }
+  else if(length(alpha.start) != nsite ) {
+    stop("Error: alpha.start not conformable.\n")
+  }
+  return(alpha.start)
+}
+
+form.W.start.sp <- function (W.start, nsite, n_latent) {
+  if (sum(is.na(W.start))>0) { 
+    W.start.mat <- matrix(0, nsite, n_latent)
+  }
+  else if(is.scalar(W.start) & !is.na(W.start)) {
+    W.start.mat <- matrix(W.start, nsite, n_latent) 
+  }
+  else if(sum(dim(W.start) != c(nsite, n_latent)) > 0) {
+    stop("Error: W.start not conformable.\n")
+  }
+  return(W.start.mat)
+}
+#==================================================================
+# Check and form priors for jSDM_probit_block
+#==================================================================
+check.mubeta <- function(mubeta, np) {
+  if (is.null(dim(mubeta))) {
+    mubeta <- rep(mubeta,np) 
+  }
+  else if (length(mubeta)!=np) {
+    cat("Error: mubeta not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(mubeta)
+}
+
+check.Vbeta.mat <- function(Vbeta, np) {
+  if (!all(Vbeta>0)) {
+    cat("Error: Vbeta should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  if (is.null(dim(Vbeta))) {
+    Vbeta <- diag(rep(Vbeta,np))
+  }
+  else if (sum(dim(Vbeta) != c(np, np)) > 0) {
+    cat("Error: Vbeta not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(Vbeta)
+}
+
+check.mulambda <- function(mulambda, n_latent) {
+  if (is.null(dim(mulambda))) {
+    mulambda <- rep(mulambda,n_latent) 
+  }
+  else if (length(mulambda)!=n_latent) {
+    cat("Error: mulambda not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(mulambda)
+}
+
+check.Vlambda.mat <- function(Vlambda, n_latent) {
+  if (!all(Vlambda>0)) {
+    cat("Error: Vlambda should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  if (is.null(dim(Vlambda))) {
+    Vlambda <- diag(rep(Vlambda,n_latent))
+  }
+  else if (sum(dim(Vlambda) != c(n_latent, n_latent)) > 0) {
+    cat("Error: Vlambda not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(Vlambda)
+}
+
+check.Valpha <- function(V_alpha_start) {
+  if (!(V_alpha_start>0)) {
+    cat("Error: V_alpha_start should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  else if (!is.null(dim(V_alpha_start))) {
+    cat("Error: V_alpha_start not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(V_alpha_start)
+}
+
 # End
