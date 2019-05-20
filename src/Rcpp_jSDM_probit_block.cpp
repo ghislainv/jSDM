@@ -280,6 +280,7 @@ set.seed(seed)
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
+colnames(X) <- c("Int","x1","x2")
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 data = cbind (X,W)
 beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
@@ -288,7 +289,6 @@ l.diag <- runif(2,0,2)
 l.other <- runif(nsp*2-3,-2,2)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
 param.target <- rbind(beta.target,lambda.target)
-param.target = rbind(beta.target,lambda.target)
 Valpha.target = 0.5
 V = 1
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
@@ -319,7 +319,7 @@ ngibbs <- nsamp+nburn
 mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                               Y=Y,T=visits,X=X,
                               param_start=param_start, Vparam=diag(c(rep(1.0E6,np),rep(10,nl))),
-                              muparam = rep(0,np+nl),W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
+                              muparam = rep(0,np+nl), W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
                               alpha_start=rep(0,nsite),Valpha_start=1, shape = 0.5, rate = 0.0005, seed=123, verbose=1)
 
 # ===================================================
