@@ -257,11 +257,6 @@ dev.off()
 summary(mod_jSDM_probit_block$mcmc.Deviance)
 plot(mod_jSDM_probit_block$mcmc.Deviance)
 
-#== glm resolution to compare
-
-mod_glm <- glm(cbind(Y,visits-Y) ~ x1+x2,family="binomial",data=X[,-1])
-summary(mod_glm)
-
 #= Predictions
 
 pdf(file="Pred-Init.pdf")
