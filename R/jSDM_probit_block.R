@@ -35,6 +35,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
   mf.suit <- model.frame(formula=site_suitability, data=site_data)
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
+  
   #= Iterations
   ngibbs <- mcmc+burnin
   nthin <- thin
@@ -91,7 +92,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
     MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
     colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
     ## lambda_j
-    MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+    MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
     colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
     
     MCMC.sp[[paste0("sp_",j)]] <- cbind(MCMC.beta_j, MCMC.lambda_j)
@@ -121,7 +122,6 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
                  mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
                  Z_latent=mod$Z_latent, 
                  probit_theta_pred=mod$probit_theta_pred,
-                 family="binomial",
                  model_spec=model_spec)
   
   class(output) <- "jSDM"

@@ -1,9 +1,10 @@
-# ==============================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ecology.ghislainv.fr
-# license         :GPLv3
-# ==============================================================================
+## ==============================================================================
+## author          :Ghislain Vieilledent, Jeanne Clément
+## email           :ghislain.vieilledent@cirad.fr, jeanne.clement16@laposte.net
+## web             :https://ecology.ghislainv.fr
+## license         :GPLv3
+## ==============================================================================
+
 
 logit <- function(x, min=0, max=1)
   {
