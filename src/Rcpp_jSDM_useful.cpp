@@ -1,6 +1,6 @@
 // ==============================================================================
-// author          :Ghislain Vieilledent
-// email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+// author          :Ghislain Vieilledent, Jeanne Clément
+// email           :ghislain.vieilledent@cirad.fr, jeanne.clement16@laposte.net
 // web             :https://ecology.ghislainv.fr
 // license         :GPLv3
 // ==============================================================================
@@ -15,10 +15,6 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
-
-extern "C" {
-#include "mvgauss.c"
-}
 
 using namespace arma;
 using namespace std;

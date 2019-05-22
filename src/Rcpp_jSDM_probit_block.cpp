@@ -22,20 +22,20 @@ using namespace std;
 
 // [[Rcpp::export]]
 Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn, 
-                                               arma::umat Y, 
-                                               arma::umat T, 
-                                               arma::mat X,
-                                               arma::mat param_start,
-                                               arma::mat Vparam,
-                                               arma::vec muparam,
-                                               arma::mat VW,
-                                               arma::mat W_start,
-                                               arma::vec alpha_start,
-                                               double Valpha_start,
-                                               double shape,
-                                               double rate,
-                                               const int seed,
-                                               const int verbose) {
+                                  arma::umat Y, 
+                                  arma::umat T, 
+                                  arma::mat X,
+                                  arma::mat param_start,
+                                  arma::mat Vparam,
+                                  arma::vec muparam,
+                                  arma::mat VW,
+                                  arma::mat W_start,
+                                  arma::vec alpha_start,
+                                  double Valpha_start,
+                                  double shape,
+                                  double rate,
+                                  const int seed,
+                                  const int verbose) {
   
   ////////////////////////////////////////////////////////////////////////////////
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -265,118 +265,118 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 
 // Test
 /*** R
-# ===================================================
-# Data
-# ===================================================
-
-nsp<- 100
-nsite <- 300
-np <- 3
-nl <- 2
-seed <- 123
-set.seed(seed)
-
-# Ecological process (suitability)
-x1 <- rnorm(nsite,0,1)
-x2 <- rnorm(nsite,0,1)
-X <- cbind(rep(1,nsite),x1,x2)
-colnames(X) <- c("Int","x1","x2")
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-data = cbind (X,W)
-beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*2-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
-Valpha.target = 0.5
-V = 1
-alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
-probit_theta = X %*% beta.target + W %*% lambda.target + alpha.target
-e = matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
-Z_true <- probit_theta + e
-visits <- matrix(1,nsite,nsp)
-#comment on fait pour prendre en compte le nombre de visites ?
-Y = matrix (NA, nsite,nsp)
-for (i in 1:nsite){
-  for (j in 1:nsp){
-    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
-    else {Y[i,j] <- 0}
-  }
-}
-
-param_start=matrix(0,np+nl,nsp)
-for (i in 1:nl){
-  param_start[np+i,i] = 1
-}
-
-# Call to C++ function
-# Iterations
-nsamp <- 100
-nburn <- 100
-nthin <- 1
-ngibbs <- nsamp+nburn
-mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                              Y=Y,T=visits,X=X,
-                              param_start=param_start, Vparam=diag(c(rep(1.0E6,np),rep(10,nl))),
-                              muparam = rep(0,np+nl), W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
-                              alpha_start=rep(0,nsite),Valpha_start=1, shape = 0.5, rate = 0.0005, seed=123, verbose=1)
-
-# ===================================================
-# Result analysis
-# ===================================================
-
-# Parameter estimates
-## probit_theta
-par(mfrow=c(1,1))
-plot(probit_theta,mod$probit_theta_pred)
-abline(a=0,b=1,col='red')
-## Z
-plot(Z_true,mod$Z_latent)
-abline(a=0,b=1,col='red')
-## alpha
-MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
-plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="alpha.estimated")
-abline(a=0,b=1,col='red')
-## Valpha
-MCMC_Valpha <- coda::mcmc(mod$Valpha, start=nburn+1, end=ngibbs, thin=nthin)
-summary(MCMC_Valpha)
-par(mfrow=c(1,2))
-coda::traceplot(MCMC_Valpha)
-coda::densplot(MCMC_Valpha)
-abline(v=Valpha.target,col='red')
-
-## beta_j
-par(mfrow=c(np,2))
-for (j in 1:4) {
-  for (p in 1:np) {
-    MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
-    summary(MCMC.betaj)
-    coda::traceplot(MCMC.betaj[,p])
-    coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
-    abline(v=beta.target[p,j],col='red')
-  }
-}
-## lambda_j
-par(mfrow=c(nl*2,2))
-for (j in 1:4) {
-  for (l in 1:nl) {
-    MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
-    summary(MCMC.lambdaj)
-    coda::traceplot(MCMC.lambdaj[,l])
-    coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
-    abline(v=lambda.target[l,j],col='red')
-  }
-}
-
-## W latent variables
-par(mfrow=c(1,1))
-MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"])
-abline(a=0,b=1,col='red')
-plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"])
-abline(a=0,b=1,col='red')
-## Deviance
-mean(mod$Deviance)
+# # ===================================================
+# # Data
+# # ===================================================
+# 
+# nsp<- 100
+# nsite <- 300
+# np <- 3
+# nl <- 2
+# seed <- 123
+# set.seed(seed)
+# 
+# # Ecological process (suitability)
+# x1 <- rnorm(nsite,0,1)
+# x2 <- rnorm(nsite,0,1)
+# X <- cbind(rep(1,nsite),x1,x2)
+# colnames(X) <- c("Int","x1","x2")
+# W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+# data = cbind (X,W)
+# beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+# l.zero <- 0
+# l.diag <- runif(2,0,2)
+# l.other <- runif(nsp*2-3,-2,2)
+# lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
+# param.target <- rbind(beta.target,lambda.target)
+# Valpha.target = 0.5
+# V = 1
+# alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
+# probit_theta = X %*% beta.target + W %*% lambda.target + alpha.target
+# e = matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+# Z_true <- probit_theta + e
+# visits <- matrix(1,nsite,nsp)
+# #comment on fait pour prendre en compte le nombre de visites ?
+# Y = matrix (NA, nsite,nsp)
+# for (i in 1:nsite){
+#   for (j in 1:nsp){
+#     if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
+#     else {Y[i,j] <- 0}
+#   }
+# }
+# 
+# param_start=matrix(0,np+nl,nsp)
+# for (i in 1:nl){
+#   param_start[np+i,i] = 1
+# }
+# 
+# # Call to C++ function
+# # Iterations
+# nsamp <- 100
+# nburn <- 100
+# nthin <- 1
+# ngibbs <- nsamp+nburn
+# mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#                               Y=Y,T=visits,X=X,
+#                               param_start=param_start, Vparam=diag(c(rep(1.0E6,np),rep(10,nl))),
+#                               muparam = rep(0,np+nl), W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
+#                               alpha_start=rep(0,nsite),Valpha_start=1, shape = 0.5, rate = 0.0005, seed=123, verbose=1)
+# 
+# # ===================================================
+# # Result analysis
+# # ===================================================
+# 
+# # Parameter estimates
+# ## probit_theta
+# par(mfrow=c(1,1))
+# plot(probit_theta,mod$probit_theta_pred)
+# abline(a=0,b=1,col='red')
+# ## Z
+# plot(Z_true,mod$Z_latent)
+# abline(a=0,b=1,col='red')
+# ## alpha
+# MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
+# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="alpha.estimated")
+# abline(a=0,b=1,col='red')
+# ## Valpha
+# MCMC_Valpha <- coda::mcmc(mod$Valpha, start=nburn+1, end=ngibbs, thin=nthin)
+# summary(MCMC_Valpha)
+# par(mfrow=c(1,2))
+# coda::traceplot(MCMC_Valpha)
+# coda::densplot(MCMC_Valpha)
+# abline(v=Valpha.target,col='red')
+# 
+# ## beta_j
+# par(mfrow=c(np,2))
+# for (j in 1:4) {
+#   for (p in 1:np) {
+#     MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+#     summary(MCMC.betaj)
+#     coda::traceplot(MCMC.betaj[,p])
+#     coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
+#     abline(v=beta.target[p,j],col='red')
+#   }
+# }
+# ## lambda_j
+# par(mfrow=c(nl*2,2))
+# for (j in 1:4) {
+#   for (l in 1:nl) {
+#     MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
+#     summary(MCMC.lambdaj)
+#     coda::traceplot(MCMC.lambdaj[,l])
+#     coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
+#     abline(v=lambda.target[l,j],col='red')
+#   }
+# }
+# 
+# ## W latent variables
+# par(mfrow=c(1,1))
+# MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
+# MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
+# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"])
+# abline(a=0,b=1,col='red')
+# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"])
+# abline(a=0,b=1,col='red')
+# ## Deviance
+# mean(mod$Deviance)
 */
