@@ -11,8 +11,8 @@
     Package: \tab jSDM\cr
     Type: \tab Package\cr
     Version: \tab 0.1.0\cr
-    Date: \tab 2019-01-11\cr
-    License: \tab GPL-3 \cr
+    Date: \tab 2019-05-20\cr
+    License: \tab GPL-3\cr
     LazyLoad: \tab yes\cr
   }
 }
@@ -20,17 +20,17 @@
 \author{
   \tabular{l}{
     Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-    Matthieu Authier <matthieu.authier@univ-lr.fr>\cr
+    Jeanne Clément <jeanne.clement16@laposte.net>\cr
   }
 }
 
 \keyword{biodiversity}
-\keyword{species distribution models}
+\keyword{biotic interactions}
+\keyword{community ecology}
+\keyword{Gibbs sampling}
 \keyword{hierarchical Bayesian models}
-\keyword{spatial correlation}
-\keyword{intrinsic CAR model}
-\keyword{conditional autoregressive model}
 \keyword{MCMC}
 \keyword{Markov Chains Monte Carlo}
-\keyword{Metropolis algorithm}
+\keyword{probit}
+\keyword{species distribution models}
 

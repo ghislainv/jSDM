@@ -6,6 +6,7 @@ Date: 2019-01-11
 Imports: Rcpp (>= 1.0.0), coda
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
+SystemRequirements: GNU GSL (>=2.2)
 Suggests: rbenchmark, knitr, raster, sp
 Authors@R: c(
   person("Ghislain", "Vieilledent", role=c("aut", "cre"),
