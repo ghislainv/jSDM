@@ -72,7 +72,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                Y=Y,T=visits,X=X,
+                                Y=Y,T=T,X=X,
                                 param_start= param_start, Vparam=Vparam, muparam = muparam,
                                 W_start=W_start, VW=VW,
                                 alpha_start=alpha_start, Valpha_start=V_alpha_start,
