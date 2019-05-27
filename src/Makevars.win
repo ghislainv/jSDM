@@ -1,3 +1,4 @@
 PKG_CPPFLAGS = -I$(LIB_GSL)/include $(SHLIB_OPENMP_CXXFLAGS)
 ## Use the R_HOME indirection to support installations of multiple R version
 PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
