@@ -12,9 +12,9 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
 
-extern "C" {
-#include "mvgauss.c"
-}
+//extern "C" {
+//#include "mvgauss.c"
+//}
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
 
