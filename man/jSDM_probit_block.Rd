@@ -16,7 +16,7 @@ seed=1234, verbose=1)}
 
 \arguments{
   
-  \item{presences_sites_sp}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the presence by a 1 (or the absence by a 0) of each species on each site.}
+  \item{presence_site_sp}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the presence by a 1 (or the absence by a 0) of each species on each site.}
 
   \item{n_latent}{An integer indicating the number of latent variables.}
 
@@ -41,22 +41,22 @@ seed=1234, verbose=1)}
 
     \item{V_alpha_start}{Starting value for variance of random site effect must be a stricly positive scalar.}
 
-    \item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \time n_latent}{n_site x n_latent} matrix. If \code{W_start} takes a scalar value, then that value will serve for all of the Ws.}  
+    \item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix. If \code{W_start} takes a scalar value, then that value will serve for all of the Ws.}  
 
     \item{rate}{Rate parameter of the Inverse-Gamma prior for the variance \code{V_alpha} of random site effect must be a stricly positive scalar.}
 
     \item{shape}{Shape parameter of the Inverse-Gamma prior for the variance \code{V_alpha} of random site effect must be a stricly positive scalar.}
 
     
-  \item{mubeta}{Means of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{mubeta} must be either a scalar or a p-length vector. If \code{mubeta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set to 0 for an uninformative prior.}
+  \item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{mubeta} must be either a scalar or a p-length vector. If \code{mubeta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set to 0 for an uninformative prior.}
 
-  \item{Vbeta}{Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{Vbeta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{Vbeta} takes a scalar value,
+  \item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{Vbeta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{Vbeta} takes a scalar value,
 then that value will serve as the prior variance for all of the
 betas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 1.0E6 for an uninformative flat prior.}
 
-  \item{mulambda}{Means of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{mulambda} must be either a scalar or a n_latent-length vector. If \code{mulambda} takes a scalar value, then that value will serve as the prior mean for all of the lambdas. The default value is set to 0 for an uninformative prior.}
+  \item{mu_lambda}{Means of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{mulambda} must be either a scalar or a n_latent-length vector. If \code{mulambda} takes a scalar value, then that value will serve as the prior mean for all of the lambdas. The default value is set to 0 for an uninformative prior.}
 
-  \item{Vlambda}{Variances of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{Vlambda} must be either a scalar or a \eqn{n_{latent} \times n_{latent}}{n_latent x n_latent} symmetric positive semi-definite square matrix. If \code{Vlambda} takes a scalar value, then that value will serve as the prior variance for all of the lambdas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 10 for an uninformative flat prior.}
+  \item{V_lambda}{Variances of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{Vlambda} must be either a scalar or a \eqn{n_{latent} \times n_{latent}}{n_latent x n_latent} symmetric positive semi-definite square matrix. If \code{Vlambda} takes a scalar value, then that value will serve as the prior variance for all of the lambdas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 10 for an uninformative flat prior.}
  
   \item{seed}{The seed for the random number generator. Default to 1234.}
   
@@ -99,7 +99,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 \references{
 
-  Albert, J. H. and Chib, S. (1993) Bayesian Analysis of Binary and Polychotomous Response Data. \emph{American Statistical Association}, 88, 669-679.
+  Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361.
   
   Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.
 
