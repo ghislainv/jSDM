@@ -2,7 +2,7 @@ Package: jSDM
 Type: Package
 Title: Joint Species Distribution Models
 Version: 0.1.0
-Date: 2019-01-11
+Date: 2019-05-27
 Imports: Rcpp (>= 1.0.0), coda
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
@@ -16,7 +16,7 @@ Authors@R: c(
          comment=c(ORCID="0000-0002-5228-5015")))
 Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Package for fitting joint species distribution models (jSDM)
-    in a hierarchical Bayesian framework (Warton and others 2015
+    in a hierarchical Bayesian framework (Warton et al. 2015
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
     in C++. It uses Rcpp, Armadillo and GSL to maximize computation
     efficiency.

@@ -1,3 +1,4 @@
-PKG_CPPFLAGS = `gsl-config --cflags` $(SHLIB_OPENMP_CXXFLAGS)
-## Use the R_HOME indirection to support installations of multiple R version
+CXX_STD = CXX11
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_CPPFLAGS = `gsl-config --cflags`
 PKG_LIBS = `gsl-config --libs` $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)

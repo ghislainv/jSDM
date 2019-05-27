@@ -5,7 +5,6 @@
 ## license         :GPLv3
 ## ==============================================================================
 
-
 jSDM_binomial <- function (presences, trials,
                            suitability,
                            data,
