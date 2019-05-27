@@ -2,8 +2,9 @@ useDynLib(jSDM, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 importFrom(stats, model.frame, model.matrix, quantile, nobs)
 
-S3method(predict,jSDM)
+S3method(predict, jSDM)
 
 export(jSDM_binomial,
+	   jSDM_probit_block,
        inv_logit,
        logit)
