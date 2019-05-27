@@ -72,7 +72,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
   
   \item{mcmc.Valpha}{An mcmc object that contains the posterior samples for variance of random site effect.}
   
-    \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.}
+  \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.}
     
   \item{mcmc.sp}{A list by species of mcmc objects that contains the posterior samples for betas and lambdas.}
 
