@@ -198,7 +198,8 @@ mod_jSDM_probit_block <- jSDM_probit_block ( presence_site_sp = Y ,
 summary(mod_jSDM_probit_block$mcmc.alpha)
 pdf(file="Posteriors_alpha_jSDM_probit_block.pdf")
 plot(mod_jSDM_probit_block$mcmc.alpha)
-plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"], ylab ="alpha.estimated")
+plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"],
+     ylab ="alpha.estimated")
 abline(a=0,b=1,col='red')
 dev.off()
 
@@ -235,7 +236,8 @@ for (j in 1:nsp) {
   for (l in 1:n_latent) {
     coda::traceplot(coda::as.mcmc(mod_jSDM_probit_block$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
     coda::densplot(coda::as.mcmc(mod_jSDM_probit_block$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]), 
-    main = paste(colnames(mod_jSDM_probit_block$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l],", species : ",j))
+    main=paste(colnames(mod_jSDM_probit_block$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l],",
+    species : ",j))
     abline(v=lambda.target[l,j],col='red')
   }
 }
