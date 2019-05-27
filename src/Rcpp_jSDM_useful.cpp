@@ -11,10 +11,8 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_blas.h>
 
-//extern "C" {
-//#include "mvgauss.c"
-//}
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
 
@@ -22,12 +20,40 @@ using namespace arma;
 using namespace std;
 
 //* ************************************************************ */
+/* GSL mvgaussian */
+int my_gsl_ran_multivariate_gaussian (const gsl_rng * r, const gsl_vector * mu, 
+                                      const gsl_matrix * L, gsl_vector * result) {
+	const size_t M = L->size1;
+	const size_t N = L->size2;
+	
+	if (M != N) {
+		GSL_ERROR("requires square matrix", GSL_ENOTSQR);
+	}
+	else if (mu->size != M) {
+		GSL_ERROR("incompatible dimension of mean vector with variance-covariance matrix", GSL_EBADLEN);
+	}
+	else if (result->size != M) {
+		GSL_ERROR("incompatible dimension of result vector", GSL_EBADLEN);
+	}
+	else {
+		size_t i;
+		for (i = 0; i < M; ++i) {
+			gsl_vector_set(result, i, gsl_ran_ugaussian(r));
+		}
+		gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, L, result);
+		gsl_vector_add(result, mu);
+		return GSL_SUCCESS;
+	}
+}
+
+
+//* ************************************************************ */
 /* chol_decomp */
 arma::mat chol_decomp(arma::mat V) {
 	// Cholesky decomposition
 	arma::mat L = arma::chol(V, "lower"); 
 	return L;
-} 
+}
 
 /* ************************************************************ */
 /* arma_mvgauss */
@@ -56,7 +82,7 @@ arma::vec arma_mvgauss(const gsl_rng *r, const arma::vec mu,
 	gsl_vector_set_zero(gsl_R);
 	
 	// Call to gsl_ran_multivariate_gaussian
-	gsl_ran_multivariate_gaussian(r, gsl_mu, gsl_L, gsl_R);
+	my_gsl_ran_multivariate_gaussian(r, gsl_mu, gsl_L, gsl_R);
 	
 	// arma vec R
 	arma::vec R; R.zeros(gsl_R->size);
