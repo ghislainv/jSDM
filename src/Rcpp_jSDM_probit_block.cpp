@@ -1,5 +1,5 @@
 // ==============================================================================
-// author          :Ghislain Vieilledent, Jeanne Clément
+// author          :Ghislain Vieilledent, Jeanne Clement
 // email           :ghislain.vieilledent@cirad.fr, jeanne.clement16@laposte.net
 // web             :https://ecology.ghislainv.fr
 // license         :GPLv3
@@ -52,7 +52,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
   const int NTHIN = nthin;
   const int NBURN = nburn;
   const int NSAMP = (NGIBBS-NBURN)/NTHIN;
-  const int NSITE = X.n_rows;
+  const int NSITE = Y.n_rows;
   const int NP = X.n_cols;
   const int NSP = Y.n_cols;
   const int NL = W_start.n_cols; 
@@ -119,7 +119,6 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       }
     }
     
-    
     //////////////////////////////////
     // mat param: Gibbs algorithm //
     
@@ -182,6 +181,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
       
       sum += alpha_run(i)*alpha_run(i);
+      
     }
     
     ////////////////////////////////////////////////
