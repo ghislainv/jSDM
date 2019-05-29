@@ -6,5 +6,6 @@ S3method(predict, jSDM)
 
 export(jSDM_binomial,
 	   jSDM_probit_block,
+	   predict.jSDM,
        inv_logit,
        logit)

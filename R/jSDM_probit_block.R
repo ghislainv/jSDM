@@ -57,6 +57,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
   alpha_start <- form.alpha.start.sp(alpha_start, nsite)
   W_start <-form.W.start.sp(W_start, nsite, n_latent)
   param_start = rbind(beta_start,lambda_start)
+  
   #========
   # Form and check priors
   #========
@@ -68,6 +69,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
   muparam <- c(mubeta,mulambda)
   VW <- diag(rep(1,n_latent))
   V_alpha_start <- check.Valpha(V_alpha_start)
+  
   #========
   # call Rcpp function
   #========
@@ -105,15 +107,14 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
     }
   
   #= Model specification, site_suitability,
-  
   model_spec <- list(presences=presence_site_sp,
                      site_suitability=site_suitability,
-                     site_data=site_data,  n_latent=n_latent,
+                     site_data=site_data, n_latent=n_latent,
                      burnin=burnin, mcmc=mcmc, thin=thin,
                      beta_start=beta_start, mubeta=mubeta, Vbeta=Vbeta,
                      lambda_start=lambda_start, mulambda=mulambda, Vlambda=Vlambda,
                      alpha_start=alpha_start, V_alpha_start=V_alpha_start, 
-                     W_start = W_start, VW = VW,
+                     W_start=W_start, VW=VW,
                      seed=seed, verbose=verbose)
   
   #= Output

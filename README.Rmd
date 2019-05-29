@@ -1,0 +1,44 @@
+---
+output: github_document
+link-citations: yes
+bibliography: vignettes/bib/biblio-jSDM.bib
+biblio-style: vignettes/bib/jae.bst
+csl: vignettes/bib/journal-of-applied-ecology.csl
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/"
+)
+```
+
+# jSDM R Package <img src="man/figures/logo.png" align="right" alt="" width="120" />
+
+[![CRAN Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/package=jSDM)
+[![Downloads](https://cranlogs.r-pkg.org/badges/jSDM)](https://cran.r-project.org/package=jSDM)
+
+Package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework [@Warton2015]. The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+
+## System requirements
+
+Make sure the GNU Scientific Library ([GSL](https://www.gnu.org/software/gsl/)) is installed on your system.
+
+## Installation
+
+Install the latest stable version of **jSDM** from [CRAN](https://cran.r-project.org/) with:
+
+```{r cran, eval=FALSE}
+install.packages("jSDM")
+```
+
+Or install the development version of **jSDM** from [GitHub](https://github.com/ghislainv/jSDM) with:
+
+```{r github, eval=FALSE}
+devtools::install_github("ghislainv/jSDM")
+```
+
+## References

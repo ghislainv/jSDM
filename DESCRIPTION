@@ -6,6 +6,7 @@ Date: 2019-05-27
 Imports: Rcpp (>= 1.0.0), coda
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
+SystemRequirements: GNU GSL
 Suggests: rbenchmark, knitr, raster, sp
 Authors@R: c(
   person("Ghislain", "Vieilledent", role=c("aut", "cre"),
@@ -25,3 +26,4 @@ URL: https://ecology.ghislainv.fr/jSDM, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues
 LazyLoad: yes
 Encoding: UTF-8
+RoxygenNote: 6.1.1

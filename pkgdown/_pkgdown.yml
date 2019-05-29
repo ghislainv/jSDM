@@ -1,0 +1,54 @@
+authors:
+  Ghislain Vieilledent:
+    href: "https://ecology.ghislainv.fr"
+  CIRAD:
+    href: "https://www.cirad.fr"
+    html: "<img src='https://ecology.ghislainv.fr/images/logos/logo-cirad.svg' height=24>"
+    
+navbar:
+  structure:
+    left: [home, intro, reference, articles, tutorials, news]
+    right: [twitter, github]
+  components:
+    articles: ~
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    intro:
+      text: Get started
+      href: articles/jSDM.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Change log
+      href: news/index.html
+    twitter:
+      icon: fa-twitter fa-lg
+      href: http://twitter.com/ghislainv
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/ghislainv/jSDM
+
+reference:
+- title: Package
+  desc: Package description
+  contents:
+  - '`jSDM-package`'
+- title: jSDM
+  desc: Functions for joint species distribution models
+  contents:  
+  - '`jSDM_probit_block`'
+- title: Test
+  desc: Simple binomial function for GSL tests
+  contents:
+  - '`jSDM_binomial`'
+- title: Miscellaneous
+  desc: Miscellaneous functions
+  contents:
+  - '`logit`'
+- title: Predict
+  desc: S3 method to predict from a jSDM model
+  contents:
+  - '`predict.jSDM`'
+
