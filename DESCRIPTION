@@ -14,7 +14,8 @@ Authors@R: c(
          comment=c(ORCID="0000-0002-1685-4997")),
   person("Jeanne", "Clément", role=c("aut"),
          email="jeanne.clement16@laposte.net",
-         comment=c(ORCID="0000-0002-5228-5015")))
+         comment=c(ORCID="0000-0002-5228-5015")),
+  person("CIRAD", role=c("cph", "fnd")))
 Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Package for fitting joint species distribution models (jSDM)
     in a hierarchical Bayesian framework (Warton et al. 2015
