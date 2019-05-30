@@ -1,11 +1,17 @@
 useDynLib(jSDM, .registration=TRUE)
+
 importFrom(Rcpp, evalCpp)
-importFrom(stats, model.frame, model.matrix, quantile, nobs)
+importFrom(stats, model.frame, model.matrix, quantile,
+           nobs, cov2cor, median)
+importFrom(graphics, par)
+importFrom(corrplot, corrplot, corrMatOrder)
 
 S3method(predict, jSDM)
 
-export(jSDM_binomial,
-	   jSDM_probit_block,
-	   predict.jSDM,
+export(get_residual_cor,
+       plot_residual_cor,
+       jSDM_binomial,
+       jSDM_probit_block,
+       predict.jSDM,
        inv_logit,
        logit)

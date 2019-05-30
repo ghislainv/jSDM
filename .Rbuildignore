@@ -12,3 +12,6 @@ docs
 logos
 pkgdown
 README.Rmd
+
+# travis
+^\.travis\.yml$

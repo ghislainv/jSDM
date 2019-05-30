@@ -106,8 +106,8 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 }
 
 \author{
+  Jeanne Clement \email{jeanne.clement16@laposte.net}
   Ghislain Vieilledent \email{ghislain.vieilledent@cirad.fr}
-  Jeanne Clement  \email{jeanne.clement16@laposte.net}
 }
 
 \seealso{
