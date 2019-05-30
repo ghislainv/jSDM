@@ -3,7 +3,7 @@
 language: R
 
 apt_packages:
-  - gsl-bin
+  - libgsl-dev
 
 matrix:
   include:
