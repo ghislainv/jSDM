@@ -7,8 +7,8 @@ apt_packages:
 
 r:
   include:
-  - r: devel
-  - r: release
+  - devel
+  - release
     after_success: Rscript -e 'covr::codecov()'
     before_deploy:
     - Rscript -e 'remotes::install_cran("pkgdown")'
@@ -16,4 +16,4 @@ r:
       provider: script
       script: Rscript -e 'pkgdown::deploy_site_github()'
       skip_cleanup: true
-  - r: oldrel
+  - oldrel
