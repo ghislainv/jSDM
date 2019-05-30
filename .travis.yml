@@ -1,11 +1,11 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-sudo: false
-cache: packages
-latex: false
+language: r
 
-matrix:
+apt_packages:
+  - gsl-bin
+
+r:
   include:
   - r: devel
   - r: release
