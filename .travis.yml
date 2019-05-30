@@ -6,7 +6,6 @@ apt_packages:
   - gsl-bin
 
 r:
-  include:
   - devel
   - release
     after_success: Rscript -e 'covr::codecov()'
