@@ -7,7 +7,8 @@ apt_packages:
   - libgsl-dev
 
 r_packages:
-  - 'pkgdown', 'covr'
+  - pkgdown
+  - covr
   
 after_success:
   - Rscript -e 'pkgdown::build_site()'
