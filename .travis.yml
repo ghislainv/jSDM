@@ -1,13 +1,28 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
+cache: packages
 
 apt_packages:
   - libgsl-dev
 
-matrix:
-  include:
-  - r: devel
-  - r: release
-    after_success: Rscript -e 'covr::codecov()'
-  - r: oldrel
+r_packages:
+  - pkgdown, covr
+  
+after_success:
+  - Rscript -e 'pkgdown::build_site()'
+  - Rscript -e 'library(covr); codecov()'
+
+r:
+  - oldrel
+  - release
+  - devel   
+  
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_PAT
+  keep-history: true
+  local-dir: docs
+  on:
+    branch: master
