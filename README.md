@@ -6,6 +6,8 @@
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/package=jSDM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/jSDM)](https://cran.r-project.org/package=jSDM)
+[![Travis
+CI](https://api.travis-ci.org/ghislainv/jSDM.svg?branch=master)](https://travis-ci.org/ghislainv/jSDM)
 
 Package for fitting joint species distribution models (jSDM) in a
 hierarchical Bayesian framework (Warton *et al.*
