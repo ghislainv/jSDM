@@ -64,7 +64,7 @@ It can be easily shown that: $y_{i,j}| Z_i \sim \mathcal{B}ernouilli(\theta_{i,j
 We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$.
 
 - Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ avec $X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
-The corresponding regression coefficients for each species $ j $ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
+The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
 
 - $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect.
 
@@ -73,10 +73,10 @@ The corresponding regression coefficients for each species $ j $ are noted : $\b
 
 # Data-set
 
-(ref:cap-frog) **Frog**. @Wilkinson2019.
+(ref:cap-frog) **Frog Litoria ewingii**. @Wilkinson2019.
 
-```{r frog-picture, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-frog)"}
-knitr::include_graphics("figures/frog.jpg")
+```{r frog-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-frog)"}
+knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
 We first load the `jSDM` library.
@@ -121,7 +121,7 @@ mod_jSDM_block_frogs <- jSDM_probit_block (
   site_suitability = ~.,   
   site_data = as.data.frame(Env_frogs), n_latent=2,
   # Chains
-  burnin=10000, mcmc=5000, thin=5,
+  burnin=20000, mcmc=5000, thin=5,
   # Starting values
   alpha_start=0, beta_start=0,
   lambda_start=0, W_start=0,
@@ -148,7 +148,7 @@ coda::densplot(mod_jSDM_block_frogs$mcmc.Valpha, main = "V_alpha")
 np <- nrow(mod_jSDM_block_frogs$model_spec$beta_start)
 ## beta_j of two first species
 par(mfrow=c(np,2))
-for (j in 1:3) {
+for (j in 1:2) {
   for (p in 1:np) {
       coda::traceplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]))
       coda::densplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]), 
@@ -158,7 +158,7 @@ main = paste(colnames(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]])[p],
 }
 
 n_latent <- mod_jSDM_block_frogs$model_spec$n_latent
-## lambda_j of 2 first species
+## lambda_j of two first species
 par(mfrow=c(n_latent*2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
@@ -169,7 +169,7 @@ for (j in 1:2) {
     }
   }
 
-## Latent variables W_i of 2 first sites
+## Latent variables W_i of two first sites
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
   plot(mod_jSDM_block_frogs$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
@@ -179,14 +179,41 @@ for (l in 1:n_latent) {
 plot(mod_jSDM_block_frogs$mcmc.Deviance,main = "Deviance")
 ## Deviance
 par (mfrow=c(1,1))
-hist(mod_jSDM_block_frogs$probit_theta_pred, main = "Predicted probit theta")
+hist(mod_jSDM_block_frogs$probit_theta_pred, main = "Predicted probit theta", xlab ="predicted probit theta")
 
 ```
 
 # Matrice of correlations 
 
+We use the `plot_residual_cor()` function.
+
 ```{r correlation-matrix}
 plot_residual_cor(mod_jSDM_block_frogs)
+```
+
+# Predictions 
+
+We use the `predict_jSDM()` function.
+
+```{r predictions}
+# Sites and species concerned by predictions :
+## 50 sites among the 104
+Id_sites <- sample.int(nrow(PA_frogs), 50)
+## All species 
+Id_species <- colnames(PA_frogs)
+# Simulate new observations of covariates on those sites 
+simdata <- matrix(nrow=50, ncol = ncol(mod_jSDM_block_frogs$model_spec$site_data))
+colnames(simdata) <- colnames(mod_jSDM_block_frogs$model_spec$site_data)
+rownames(simdata) <- Id_sites
+simdata <- as.data.frame(simdata)
+simdata$Covariate_1 <- rnorm(50)
+simdata$Covariate_3 <- rnorm(50)
+simdata$Covariate_2 <- rbinom(50,1,0.5)
+
+
+# Predictions 
+theta_pred <- predict.jSDM(mod_jSDM_block_frogs, newdata =simdata, Id_species =Id_species, Id_sites = Id_sites, type="mean")
+hist(theta_pred, main = "Predicted theta with simulated data", xlab ="predicted theta")
 ```
 
 # References
