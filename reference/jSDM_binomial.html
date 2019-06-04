@@ -300,7 +300,7 @@
 <span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>,<span class='no'>nsite</span>),<span class='no'>x1</span>,<span class='no'>x2</span>)
 <span class='no'>beta.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1</span>,<span class='fl'>1</span>,-<span class='fl'>1</span>)
 <span class='no'>logit.theta</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='no'>beta.target</span>
-<span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/logit'>inv_logit</a></span>(<span class='no'>logit.theta</span>)
+<span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='logit.html'>inv_logit</a></span>(<span class='no'>logit.theta</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='no'>seed</span>)
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='no'>nsite</span>,<span class='no'>visits</span>,<span class='no'>theta</span>)
 
@@ -310,7 +310,7 @@
 <span class='co'>#==================================</span>
 <span class='co'>#== Site-occupancy model</span>
 
-<span class='no'>mod_jSDM_binomial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_binomial'>jSDM_binomial</a></span>(<span class='kw'>presences</span><span class='kw'>=</span><span class='no'>data.obs</span>$<span class='no'>Y</span>,
+<span class='no'>mod_jSDM_binomial</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_binomial</span>(<span class='kw'>presences</span><span class='kw'>=</span><span class='no'>data.obs</span>$<span class='no'>Y</span>,
                                    <span class='kw'>trials</span><span class='kw'>=</span><span class='no'>data.obs</span>$<span class='no'>visits</span>,
                                    <span class='kw'>suitability</span><span class='kw'>=</span>~<span class='no'>x1</span>+<span class='no'>x2</span>,
                                    <span class='kw'>data</span><span class='kw'>=</span><span class='no'>data.obs</span>,
