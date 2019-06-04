@@ -36,7 +36,11 @@ Joint Species distribution models (jSDM) are useful tools to explain or predict 
 Below, we show an example of the use of `jSDM` for fitting species distribution model to abundance data for 9 frog's species. Model types available in `jSDM` are not limited to those described in this example. `jSDM` includes various model types for occurrence data: 
 
 # Definition of the model 
-$$ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}$$
+
+
+Referring to the models used in the articles [@Warton2015] and [@Albert1993], we define the following model :
+
+$$ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j $$
      
 - Link function probit: $\mathrm{probit} : q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
 
@@ -50,7 +54,7 @@ $$y_{i,j}=\begin{cases}
 - Latent variable $Z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}$, with $\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)$ and such as:
 
 $$y_{i,j}=\begin{cases}
-    1 & \text{ si } Z_{i,j} > 0 \\
+    1 & \text{ if } Z_{i,j} > 0 \\
     0 &  \text{ otherwise.}
     \end{cases}$$
     
@@ -133,8 +137,8 @@ mod_jSDM_block_frogs <- jSDM_probit_block (
 # Analysis of the results
 
 ```{r plot-results}
-## alpha_i of 4 first sites
-plot(mod_jSDM_block_frogs$mcmc.alpha[,1:4])
+## alpha_i of 3 first sites
+plot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.alpha[,1:3]))
 
 ## Valpha
 par(mfrow=c(1,2))
@@ -142,9 +146,9 @@ coda::traceplot(mod_jSDM_block_frogs$mcmc.Valpha, main = "V_alpha")
 coda::densplot(mod_jSDM_block_frogs$mcmc.Valpha, main = "V_alpha")
 
 np <- nrow(mod_jSDM_block_frogs$model_spec$beta_start)
-## beta_j of 4 first species
+## beta_j of two first species
 par(mfrow=c(np,2))
-for (j in 1:4) {
+for (j in 1:3) {
   for (p in 1:np) {
       coda::traceplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]))
       coda::densplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]), 
@@ -154,9 +158,9 @@ main = paste(colnames(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]])[p],
 }
 
 n_latent <- mod_jSDM_block_frogs$model_spec$n_latent
-## lambda_j of 4 first species
+## lambda_j of 2 first species
 par(mfrow=c(n_latent*2,2))
-for (j in 1:4) {
+for (j in 1:2) {
   for (l in 1:n_latent) {
       coda::traceplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,np+l]))
       coda::densplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
@@ -165,10 +169,10 @@ for (j in 1:4) {
     }
   }
 
-## Latent variables W_i of 4 first sites
+## Latent variables W_i of 2 first sites
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-  plot(mod_jSDM_block_frogs$mcmc.latent[[paste0("lv_",l)]][,1:4], main = paste0("Latent variable W_", l))
+  plot(mod_jSDM_block_frogs$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
 }
 
 ## probit_theta

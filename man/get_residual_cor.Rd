@@ -8,7 +8,6 @@
 
 \usage{get_residual_cor(mod)}
 
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{mod}{ 
     An object of class \code{"jSDM"}
@@ -16,18 +15,15 @@
 }
 
 \value{
-\item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.}
-\item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
-\item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
-\item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
+  \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.}
+  \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
+  \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
+  \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
 }
 
 \author{
-  Jeanne Clement \email{jeanne.clement16@laposte.net}
-  Ghislain Vieilledent \email{ghislain.vieilledent@cirad.fr}
+  Jeanne Clement \email{jeanne.clement16@laposte.net}, adapted from function \code{boral::get.residual.cor()} written by Francis K. Hui \email{fhui28@gmail.com}.
+  
 }
 
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{boral}% use one of  RShowDoc("KEYWORDS")
 \keyword{stats::cov2cor}
