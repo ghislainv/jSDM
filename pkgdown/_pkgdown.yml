@@ -10,9 +10,6 @@ navbar:
     left: [home, intro, reference, articles, tutorials, news]
     right: [twitter, github]
   components:
-    articles: 
-      text: Mathematical proof
-      href: articles/proof.html
     home:
       icon: fa-home fa-lg
       href: index.html
@@ -42,7 +39,7 @@ reference:
   contents:  
   - '`jSDM_probit_block`'
 - title: Data
-  desc: Data-sets used in examples
+  desc: Dat a-sets used in examples
   contents:
   - '`frogs`'
 - title: Test
