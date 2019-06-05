@@ -97,7 +97,7 @@ jSDM_probit_block <- function (presence_site_sp, site_suitability,
     MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
     colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
     
-    MCMC.sp[[paste0("sp_",j)]] <- cbind(MCMC.beta_j, MCMC.lambda_j)
+    MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
   }
   ## W latent variables 
   MCMC.latent <- list()

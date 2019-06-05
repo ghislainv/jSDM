@@ -51,24 +51,24 @@ $$y_{i,j}=\begin{cases}
     1 &  \text{ if species  $j$ is present on the site $i$}
     \end{cases}.$$
     
-- Latent variable $Z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}$, with $\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)$ and such as:
+- Latent variable $z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}$, with $\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)$ and such as:
 
 $$y_{i,j}=\begin{cases}
-    1 & \text{ if } Z_{i,j} > 0 \\
+    1 & \text{ if } z_{i,j} > 0 \\
     0 &  \text{ otherwise.}
     \end{cases}$$
     
-It can be easily shown that: $y_{i,j}| Z_i \sim \mathcal{B}ernouilli(\theta_{i,j})$. 
+It can be easily shown that: $y_{i,j}| z_{i,j} \sim \mathcal{B}ernouilli(\theta_{i,j})$. 
 
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$.
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints. 
 
 - Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ avec $X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
 
-- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect.
+- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10^6)$ for all betas. 
 
-- $\alpha_i$ represents the random effect of site $i$. 
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(0.5,\frac{1}{0.005})$ as prior distribution by default. 
 
 
 # Data-set
