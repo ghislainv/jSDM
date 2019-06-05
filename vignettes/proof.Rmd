@@ -1,0 +1,139 @@
+---
+title: "Mathematical proof"
+output:
+  bookdown::html_document2:
+    #base_format: rmarkdown::html_vignette
+    #highlight: tango
+    number_sections: true
+    toc: true
+    #toc_float: true
+    fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Mathematical proof}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align = "center",
+  fig.width = 6, fig.height = 6,
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  highlight = TRUE
+)
+```
+# Proposition about probit link 
+$$
+\begin{aligned}
+&z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j},\\
+&\text{ with } \epsilon_{i,j} \sim \mathcal{N}(0,1) \ \forall i,j  \text{ and such as : } \\
+&y_{i,j}=
+\begin{cases}
+1 & \text{ if } z_{i,j} > 0 \\
+0 &  \text{ otherwise.}
+\end{cases} 
+\end{aligned}
+\Rightarrow  
+\begin{cases}
+y_{i,j}| z_{i,j} \sim \mathcal{B}ernouilli(\theta_{i,j}) \text{ with } \\
+\theta_{i,j} = \Phi(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j) \\
+\text{where } \Phi \text{ correspond to the repartition function} \\
+\text{of the reduced centred normal distribution.}
+\end{cases}
+$$
+
+**Proof**
+In fact 
+$$\begin{aligned}
+\mathbb{P}(y_{i,j}=1) & = \mathbb{P}(z_{i,j} > 0)\\
+& = \mathbb{P}(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j} > 0)\\
+& = \mathbb{P}(\epsilon_{i,j} > - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
+& = \mathbb{P}(\epsilon_{i,j} \leq \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+& = \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+\end{aligned}$$
+
+In the same way : 
+$$\begin{aligned}
+\mathbb{P}(y_{i,j}=1) & = \mathbb{P}(z_{i,j} \leq 0)\\
+& = \mathbb{P}(\epsilon_{i,j} \leq - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
+& = \mathbb{P}(\epsilon_{i,j} > \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+& = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+\end{aligned}$$
+
+
+# Proposition about conjugate prior used :
+
+- We can bring us back to a models of the form : $Z' = X\beta +\epsilon$ to estimate the posterior distributions of betas, lambdas and latent variables $W_i$ of the model. For example concerning latent varaible $\lambda_j$, we define $Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j$ such as $Z'_{i,j} = W_i'\lambda_j +\epsilon_{i,j}$ so $Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j,1)$.  
+In this case we can use the following proposition :
+If $$\begin{cases} 
+Y \ | \ \beta &\sim \mathcal{N}_n ( X\beta, I_n) \\
+\beta  &\sim \mathcal{N}_p (m,V)
+\end{cases}
+\Rightarrow \begin{cases}
+\beta|Y &\sim \mathcal{N}_p (m^*,V^*) \text{ with }  \\
+m^* &= (V^{-1} + X'X)^{-1}(V^{-1}m + X'Y)\\
+V^*&=(V^{-1} + X'X)^{-1} 
+\end{cases}$$.
+
+**Proof** : 
+$$\begin{aligned}
+p(\beta \ | \ Y) & \propto  p(Y \ | \ \beta) \ p(\beta) \\
+& \propto  \frac{1}{(2\pi)^{\frac{n}{2}}}\exp\left(-\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right)\frac{1}{(2\pi)^{\frac{p}{2}}|V|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}(\beta-m)'V^{-1}(\beta-m)\right) \\
+& \propto \exp\left(-\frac{1}{2}\left((\beta-m)'V^{-1}(\beta-m) + (Y-X\beta)'(Y-X\beta)\right)\right) \\
+& \propto \exp\left(-\frac{1}{2}\left(\beta'V^{-1}\beta + m'V^{-1}m - m'V^{-1}\beta -\beta'V^{-1}m + Y'Y + \beta'X'X\beta - Y'X\beta - \beta'X'Y\right)\right) \\
+& \propto \exp\left(-\frac{1}{2}\left(\beta'(V^{-1}+X'X)\beta -\beta'(V^{-1}m + X'Y) - (Y'X + m'V^{-1})\beta + m'V^{-1}m + Y'Y \right)\right) \\
+& \propto \exp\left(-\frac{1}{2}\left(\beta'(V^{-1}+X'X)\beta -\beta'(V^{-1}m + X'Y) - (X'Y + V^{-1}m)'\beta + m'V^{-1}m + Y'Y \right)\right) \\
+& \propto \exp(-\frac{1}{2}\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)'(V^{-1}+X'X)\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)\\
+& \quad -(V^{-1}m + X'Y)'(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y) +m'V^{-1}m + Y'Y)\\
+& \propto \exp\left(-\frac{1}{2}\left(\beta - \underbrace{(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)}_{m^*}\right)'\underbrace{(V^{-1}+X'X)}_{{V^*}^{-1}}\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)\right)
+\end{aligned}$$
+Actually we use that proposition to estimate lambdas and betas in a single block, so we consider $Z'_{i,j} = \beta_{0j} + X_i'\beta_j+ W_i'\lambda_j +\epsilon_{i,j}$. 
+
+- About posterior distribution of random site effect $(\alpha_i)_{i=1,\dots,nsite}$, we can use model of the form $Z'_{i,j} =\alpha_i +\epsilon_{i,j}$, with $Z'_{i,j} = Z_{i,j} - W_i'\lambda_j - X_i'\beta_j- \beta_{0j}$ so $Z'_{i,j} \ | \ W_i \ , \ \lambda_j, \ \beta_j, \ \beta_{0j}, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)$. We use the following proposition :  
+If $$\begin{cases} 
+x \ | \ \theta & \sim \mathcal{N}(\theta, \ \sigma^2) \\
+\theta  & \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
+\sigma^2 & \text{ connu}
+\end{cases}
+\begin{cases} 
+\Rightarrow \theta | \ x &\sim \mathcal{N}(\mu_1,{\tau_1}^2) \text{ with }\\
+\mu_1 &= \dfrac{{\tau_0}^2\mu_0 + x\sigma^2}{{\tau_0}^{-2}+\sigma^{-2}} \\
+{\tau_1}^{-2} &={\tau_0}^{-2}+\sigma^{-2}
+\end{cases}$$.  
+**Proof** : 
+$$\begin{aligned}
+p(\theta \ | \ x) & \propto  p(x \ | \ \theta) \ p(\theta) \\
+& \propto  \frac{1}{(2\pi\sigma^2)^{\frac{1}{2}}}\exp\left(-\frac{1}{2\sigma^2}(x-\theta)^2\right)\frac{1}{(2\pi{\tau_0}^2)^{\frac{1}{2}}}\exp\left(-\frac{1}{2{\tau_0}^2}(\theta-\mu_0)^2\right) \\
+& \propto \exp\left(-\frac{1}{2{\tau_0}^2}(\theta-\mu_0)^2-\frac{1}{2\sigma^2}(x-\theta)^2\right) \\
+& \propto \exp\left(-\frac{1}{2{\tau_0}^2}(\theta^2-2\mu_0\theta)-\frac{1}{2\sigma^2}(\theta^2-2x\theta)\right)\\
+& \propto \exp\left(-\frac{1}{2}\left(\theta^2 ({\tau_0}^{-2}+\sigma^{-2})-2\mu_0\theta{\tau_0}^{-2}-2x\theta\sigma^{-2}\right)\right)\\
+& \propto \exp\left(-\frac{1}{2({\tau_0}^{-2}+\sigma^{-2})^{-1}}\left(\theta^2 -2\theta \frac{\mu_0{\tau_0}^{-2}+ x\sigma^{-2}}{{\tau_0}^{-2}+\sigma^{-2}}\right)\right)\\
+\end{aligned}$$
+
+- Concerning posterior distribution of $V_{\alpha}$, the variance of random site effect $(\alpha_i)_{i=1,\dots,nsite}$, we use the following proposition :   
+If $$\begin{cases} 
+x \ | \ \sigma^2 & \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
+\sigma^2  & \sim \mathcal{IG} (a,b) \\
+\theta & \text{ connu}
+\end{cases} \Rightarrow 
+\begin{cases}
+\sigma^2|x \sim \mathcal{IG}(a',b') \text{ with } \\
+a' = a + \frac{n}{2} \\ 
+b' = \frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2 + b. 
+\end{cases}$$
+**Proof** : 
+$$\begin{aligned}
+p(\sigma^2 \ | \ x) & \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
+& \propto  \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\exp\left(-\frac{1}{2\sigma^2}(x-\theta)'(x-\theta)\right)\frac{b^a}{\Gamma(a)}{(\sigma^2)}^{-(a+1)}\exp\left(-\frac{b}{\sigma^2}\right) \\
+& \propto {(\sigma^2)}^{-\left(\underbrace{\frac{n}{2}+a}_{a'}+1\right)}\exp\left(-\frac{1}{\sigma^2}\underbrace{\left(b+\frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2\right)}_{b'}\right)
+\end{aligned}$$
+
