@@ -55,6 +55,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Mathematical proof
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/proof.html">Mathematical proof</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Change log</a>
 </li>
@@ -110,20 +122,20 @@
     1 &amp;  \text{ if species  $j$ is present on the site $i$}
     \end{cases}.\]</span></p>
 <ul>
-<li>Latent variable <span class="math inline">\(Z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)\)</span> and such as:</li>
+<li>Latent variable <span class="math inline">\(z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)\)</span> and such as:</li>
 </ul>
 <p><span class="math display">\[y_{i,j}=\begin{cases}
-    1 &amp; \text{ if } Z_{i,j} &gt; 0 \\
+    1 &amp; \text{ if } z_{i,j} &gt; 0 \\
     0 &amp;  \text{ otherwise.}
     \end{cases}\]</span></p>
-<p>It can be easily shown that: <span class="math inline">\(y_{i,j}| Z_i \sim \mathcal{B}ernoulli(\theta_{i,j})\)</span>.</p>
+<p>It can be easily shown that: <span class="math inline">\(y_{i,j}| z_{i,j} \sim \mathcal{B}ernouilli(\theta_{i,j})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>.</p></li>
+We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints.</p></li>
 <li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> avec <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
-<li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect.</p></li>
-<li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10^6)\)</span> for all betas.</p></li>
+<li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(0.5,\frac{1}{0.005})\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
 <div id="data-set" class="section level1">
