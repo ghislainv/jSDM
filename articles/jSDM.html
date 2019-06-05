@@ -99,7 +99,8 @@
 <div id="definition-of-the-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
-<p><span class="math display">\[ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}\]</span></p>
+<p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span>, we define the following model :</p>
+<p><span class="math display">\[ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j \]</span></p>
 <ul>
 <li><p>Link function probit: <span class="math inline">\(\mathrm{probit} : q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
 <li><p>Response variable: <span class="math inline">\(Y=(y_{i,j})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
@@ -112,15 +113,15 @@
 <li>Latent variable <span class="math inline">\(Z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)\)</span> and such as:</li>
 </ul>
 <p><span class="math display">\[y_{i,j}=\begin{cases}
-    1 &amp; \text{ si } Z_{i,j} &gt; 0 \\
+    1 &amp; \text{ if } Z_{i,j} &gt; 0 \\
     0 &amp;  \text{ otherwise.}
     \end{cases}\]</span></p>
-<p>It can be easily shown that: <span class="math inline">\(y_{i,j}| Z_i \sim \mathcal{B}ernouilli(\theta_{i,j})\)</span>.</p>
+<p>It can be easily shown that: <span class="math inline">\(y_{i,j}| Z_i \sim \mathcal{B}ernoulli(\theta_{i,j})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>.</p></li>
 <li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> avec <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
-The corresponding regression coefficients for each species $ j $ are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
+The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
 <li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect.</p></li>
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span>.</p></li>
 </ul>
@@ -131,8 +132,8 @@ The corresponding regression coefficients for each species $ j $ are noted : <sp
 
 <div class="figure" style="text-align: center">
 <span id="fig:frog-picture"></span>
-<img src="figures/frog.jpg" alt="Frog. Wilkinson et al. (2019)." width="\textwidth"><p class="caption">
-Figure 2.1: <strong>Frog</strong>. <span class="citation">Wilkinson <em>et al.</em> (<a href="#ref-Wilkinson2019">2019</a>)</span>.
+<img src="figures/Litoria_ewingii.jpg" alt="Litoria ewingii (Wilkinson et al. 2019)." width="500" height="400"><p class="caption">
+Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
 </p>
 </div>
 <p>We first load the <code>jSDM</code> library.</p>
@@ -189,7 +190,7 @@ PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span cla
   <span class="dt">site_suitability =</span> <span class="op">~</span>.,   
   <span class="dt">site_data =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(Env_frogs), <span class="dt">n_latent=</span><span class="dv">2</span>,
   <span class="co"># Chains</span>
-  <span class="dt">burnin=</span><span class="dv">10000</span>, <span class="dt">mcmc=</span><span class="dv">5000</span>, <span class="dt">thin=</span><span class="dv">5</span>,
+  <span class="dt">burnin=</span><span class="dv">20000</span>, <span class="dt">mcmc=</span><span class="dv">5000</span>, <span class="dt">thin=</span><span class="dv">5</span>,
   <span class="co"># Starting values</span>
   <span class="dt">alpha_start=</span><span class="dv">0</span>, <span class="dt">beta_start=</span><span class="dv">0</span>,
   <span class="dt">lambda_start=</span><span class="dv">0</span>, <span class="dt">W_start=</span><span class="dv">0</span>,
@@ -217,8 +218,8 @@ PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span cla
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
-<pre class="sourceCode r"><code class="sourceCode r">## alpha_i of 4 first sites
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">## alpha_i of 3 first sites
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]))</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-1.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 ## Valpha
@@ -228,9 +229,9 @@ coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentati
 <p><img src="jSDM_files/figure-html/plot-results-2.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>beta_start)
-## beta_j of 4 first species
+## beta_j of two first species
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(np,<span class="dv">2</span>))
-<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
   <span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>np) {
       coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]))
       coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]), 
@@ -238,12 +239,12 @@ np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocument
 <span class="st">", species : "</span>,j))
   }
 }</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-5.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-6.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-4.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>n_latent
-## lambda_j of 4 first species
+## lambda_j of two first species
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(n_latent<span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>))
-<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
   <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
       coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]))
       coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]), 
@@ -251,33 +252,62 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
       <span class="st">", species : "</span>,j))
     }
   }</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-5.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
-## Latent variables W_i of 4 first sites
+## Latent variables W_i of two first sites
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))
 <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.latent[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lv_"</span>,l)]][,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Latent variable W_"</span>, l))
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.latent[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lv_"</span>,l)]][,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Latent variable W_"</span>, l))
 }</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-9.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-10.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-7.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 ## probit_theta
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Deviance,<span class="dt">main =</span> <span class="st">"Deviance"</span>)</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-11.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">## Deviance
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span> (<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(mod_jSDM_block_frogs<span class="op">$</span>probit_theta_pred, <span class="dt">main =</span> <span class="st">"Predicted probit theta"</span>)</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-12.png" width="576" style="display: block; margin: auto;"></p>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(mod_jSDM_block_frogs<span class="op">$</span>probit_theta_pred, <span class="dt">main =</span> <span class="st">"Predicted probit theta"</span>, <span class="dt">xlab =</span><span class="st">"predicted probit theta"</span>)</code></pre>
+<p><img src="jSDM_files/figure-html/plot-results-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#matrice-of-correlations" class="anchor"></a><span class="header-section-number">5</span> Matrice of correlations</h1>
+<p>We use the <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(mod_jSDM_block_frogs)</code></pre>
 <p><img src="jSDM_files/figure-html/correlation-matrix-1.png" width="576" style="display: block; margin: auto;"></p>
+</div>
+<div id="predictions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
+<p>We use the <code>predict_jSDM()</code> function.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sites and species concerned by predictions :</span>
+## 50 sites among the 104
+Id_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(PA_frogs), <span class="dv">50</span>)
+## All species 
+Id_species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(PA_frogs)
+<span class="co"># Simulate new observations of covariates on those sites </span>
+simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dt">nrow=</span><span class="dv">50</span>, <span class="dt">ncol =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data))
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(simdata) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(simdata) &lt;-<span class="st"> </span>Id_sites
+simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(simdata)
+simdata<span class="op">$</span>Covariate_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)
+simdata<span class="op">$</span>Covariate_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)
+simdata<span class="op">$</span>Covariate_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="dv">50</span>,<span class="dv">1</span>,<span class="fl">0.5</span>)
+
+
+<span class="co"># Predictions </span>
+theta_pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict.jSDM.html">predict.jSDM</a></span>(mod_jSDM_block_frogs, <span class="dt">newdata=</span>simdata, <span class="dt">Id_species=</span>Id_species,
+                           <span class="dt">Id_sites=</span>Id_sites, <span class="dt">type=</span><span class="st">"mean"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(theta_pred, <span class="dt">main=</span><span class="st">"Predicted theta with simulated data"</span>, <span class="dt">xlab=</span><span class="st">"predicted theta"</span>)</code></pre>
+<p><img src="jSDM_files/figure-html/predictions-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
+<div id="ref-Albert1993">
+<p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
+</div>
 <div id="ref-Warton2015">
 <p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
 </div>
@@ -298,6 +328,7 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
       <li><a href="#parameter-inference"><span class="toc-section-number">3</span> Parameter inference</a></li>
       <li><a href="#analysis-of-the-results"><span class="toc-section-number">4</span> Analysis of the results</a></li>
       <li><a href="#matrice-of-correlations"><span class="toc-section-number">5</span> Matrice of correlations</a></li>
+      <li><a href="#predictions"><span class="toc-section-number">6</span> Predictions</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>
