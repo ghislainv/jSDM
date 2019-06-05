@@ -2,7 +2,7 @@ useDynLib(jSDM, .registration=TRUE)
 
 importFrom(Rcpp, evalCpp)
 importFrom(stats, model.frame, model.matrix, quantile,
-           nobs, cov2cor, median)
+           nobs, cov2cor, median, pnorm)
 importFrom(graphics, par)
 importFrom(corrplot, corrplot, corrMatOrder)
 

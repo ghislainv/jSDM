@@ -38,7 +38,7 @@ Below, we show an example of the use of `jSDM` for fitting species distribution 
 # Definition of the model 
 
 
-Referring to the models used in the articles [@Warton2015] and [@Albert1993], we define the following model :
+Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
 $$ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j $$
      
@@ -58,7 +58,7 @@ $$y_{i,j}=\begin{cases}
     0 &  \text{ otherwise.}
     \end{cases}$$
     
-It can be easily shown that: $y_{i,j}| Z_i \sim \mathcal{B}ernouilli(\theta_{i,j})$. 
+It can be easily shown that: $y_{i,j}| Z_i \sim \mathcal{B}ernoulli(\theta_{i,j})$. 
 
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$.
@@ -73,7 +73,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 # Data-set
 
-(ref:cap-frog) **Frog Litoria ewingii**. @Wilkinson2019.
+(ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
 
 ```{r frog-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-frog)"}
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
@@ -212,8 +212,9 @@ simdata$Covariate_2 <- rbinom(50,1,0.5)
 
 
 # Predictions 
-theta_pred <- predict.jSDM(mod_jSDM_block_frogs, newdata =simdata, Id_species =Id_species, Id_sites = Id_sites, type="mean")
-hist(theta_pred, main = "Predicted theta with simulated data", xlab ="predicted theta")
+theta_pred <- predict.jSDM(mod_jSDM_block_frogs, newdata=simdata, Id_species=Id_species,
+						   Id_sites=Id_sites, type="mean")
+hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
 ```
 
 # References
