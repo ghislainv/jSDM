@@ -10,7 +10,9 @@ navbar:
     left: [home, intro, reference, articles, tutorials, news]
     right: [twitter, github]
   components:
-    articles: ~
+    articles: 
+      text: Mathematical proof
+      href: articles/proof.html
     home:
       icon: fa-home fa-lg
       href: index.html
