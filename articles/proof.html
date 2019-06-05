@@ -57,7 +57,7 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Mathematical proof
+    Articles
      
     <span class="caret"></span>
   </a>
@@ -106,9 +106,12 @@
 
     
     
-<div id="proposition-about-probit-link" class="section level1">
+<div id="bernoulli-distribution-with-probit-link" class="section level1">
 <h1 class="hasAnchor">
-<a href="#proposition-about-probit-link" class="anchor"></a><span class="header-section-number">1</span> Proposition about probit link</h1>
+<a href="#bernoulli-distribution-with-probit-link" class="anchor"></a><span class="header-section-number">1</span> Bernoulli distribution with probit link</h1>
+<ul>
+<li>Proposition</li>
+</ul>
 <p><span class="math display">\[
 \begin{aligned}
 &amp;z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j},\\
@@ -121,36 +124,39 @@
 \end{aligned}
 \Rightarrow  
 \begin{cases}
-y_{i,j}| z_{i,j} \sim \mathcal{B}ernouilli(\theta_{i,j}) \text{ with } \\
+y_{i,j}| z_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j}) \text{ with } \\
 \theta_{i,j} = \Phi(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j) \\
 \text{where } \Phi \text{ correspond to the repartition function} \\
 \text{of the reduced centred normal distribution.}
 \end{cases}
 \]</span></p>
-<p><strong>Proof</strong>
-In fact
-<span class="math display">\[\begin{aligned}
+<ul>
+<li>Proof</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
 \mathbb{P}(y_{i,j}=1) &amp; = \mathbb{P}(z_{i,j} &gt; 0)\\
 &amp; = \mathbb{P}(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j} &gt; 0)\\
 &amp; = \mathbb{P}(\epsilon_{i,j} &gt; - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
 &amp; = \mathbb{P}(\epsilon_{i,j} \leq \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 &amp; = \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}\]</span></p>
-<p>In the same way :
-<span class="math display">\[\begin{aligned}
+<p>In the same way:</p>
+<p><span class="math display">\[\begin{aligned}
 \mathbb{P}(y_{i,j}=1) &amp; = \mathbb{P}(z_{i,j} \leq 0)\\
 &amp; = \mathbb{P}(\epsilon_{i,j} \leq - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
 &amp; = \mathbb{P}(\epsilon_{i,j} &gt; \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 &amp; = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}\]</span></p>
 </div>
-<div id="proposition-about-conjugate-prior-used" class="section level1">
+<div id="fixed-species-effects" class="section level1">
 <h1 class="hasAnchor">
-<a href="#proposition-about-conjugate-prior-used" class="anchor"></a><span class="header-section-number">2</span> Proposition about conjugate prior used :</h1>
+<a href="#fixed-species-effects" class="anchor"></a><span class="header-section-number">2</span> Fixed species effects</h1>
 <ul>
-<li>We can bring us back to a models of the form : <span class="math inline">\(Z' = X\beta +\epsilon\)</span> to estimate the posterior distributions of betas, lambdas and latent variables <span class="math inline">\(W_i\)</span> of the model. For example concerning latent varaible <span class="math inline">\(\lambda_j\)</span>, we define <span class="math inline">\(Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j\)</span> such as <span class="math inline">\(Z'_{i,j} = W_i'\lambda_j +\epsilon_{i,j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j,1)\)</span>.<br>
-In this case we can use the following proposition :
-If <span class="math display">\[\begin{cases} 
+<li>Proposition</li>
+</ul>
+<p>We go back to a model of the form: <span class="math inline">\(Z' = X\beta + \epsilon\)</span> to estimate the posterior distributions of betas, lambdas and latent variables <span class="math inline">\(W_i\)</span> of the model. For example concerning latent variable <span class="math inline">\(\lambda_j\)</span>, we define <span class="math inline">\(Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j\)</span> such as <span class="math inline">\(Z'_{i,j} = W_i'\lambda_j + \epsilon_{i,j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)\)</span>.</p>
+<p>In this case we can use the following proposition:</p>
+<p><span class="math display">\[\begin{cases} 
 Y \ | \ \beta &amp;\sim \mathcal{N}_n ( X\beta, I_n) \\
 \beta  &amp;\sim \mathcal{N}_p (m,V)
 \end{cases}
@@ -158,10 +164,11 @@ Y \ | \ \beta &amp;\sim \mathcal{N}_n ( X\beta, I_n) \\
 \beta|Y &amp;\sim \mathcal{N}_p (m^*,V^*) \text{ with }  \\
 m^* &amp;= (V^{-1} + X'X)^{-1}(V^{-1}m + X'Y)\\
 V^*&amp;=(V^{-1} + X'X)^{-1} 
-\end{cases}\]</span>.</li>
+\end{cases}\]</span>.</p>
+<ul>
+<li>Proof</li>
 </ul>
-<p><strong>Proof</strong> :
-<span class="math display">\[\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 &amp; \propto  \frac{1}{(2\pi)^{\frac{n}{2}}}\exp\left(-\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right)\frac{1}{(2\pi)^{\frac{p}{2}}|V|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}(\beta-m)'V^{-1}(\beta-m)\right) \\
 &amp; \propto \exp\left(-\frac{1}{2}\left((\beta-m)'V^{-1}(\beta-m) + (Y-X\beta)'(Y-X\beta)\right)\right) \\
@@ -171,29 +178,46 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 &amp; \propto \exp(-\frac{1}{2}\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)'(V^{-1}+X'X)\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)\\
 &amp; \quad -(V^{-1}m + X'Y)'(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y) +m'V^{-1}m + Y'Y)\\
 &amp; \propto \exp\left(-\frac{1}{2}\left(\beta - \underbrace{(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)}_{m^*}\right)'\underbrace{(V^{-1}+X'X)}_{{V^*}^{-1}}\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)\right)
-\end{aligned}\]</span>
-Actually we use that proposition to estimate lambdas and betas in a single block, so we consider <span class="math inline">\(Z'_{i,j} = \beta_{0j} + X_i'\beta_j+ W_i'\lambda_j +\epsilon_{i,j}\)</span>.</p>
+\end{aligned}\]</span></p>
+<p>Actually, we use that proposition to estimate lambdas and betas in a single block. So, we consider <span class="math inline">\(Z'_{i,j} = \beta_{0j} + X_i'\beta_j+ W_i'\lambda_j +\epsilon_{i,j}\)</span>.</p>
+</div>
+<div id="random-site-effects" class="section level1">
+<h1 class="hasAnchor">
+<a href="#random-site-effects" class="anchor"></a><span class="header-section-number">3</span> Random site effects</h1>
 <ul>
-<li><p>About posterior distribution of random site effect <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we can use model of the form <span class="math inline">\(Z'_{i,j} =\alpha_i +\epsilon_{i,j}\)</span>, with <span class="math inline">\(Z'_{i,j} = Z_{i,j} - W_i'\lambda_j - X_i'\beta_j- \beta_{0j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j, \ \beta_j, \ \beta_{0j}, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)\)</span>. We use the following proposition :<br>
-If <span class="math display">\[\begin{cases} 
+<li>Proposition</li>
+</ul>
+<p>About the posterior distribution of the random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we can use a transformation of the form <span class="math inline">\(Z'_{i,j} = \alpha_i + \epsilon_{i,j}\)</span>, with <span class="math inline">\(Z'_{i,j} = Z_{i,j} - W_i'\lambda_j - X_i'\beta_j- \beta_{0j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j, \ \beta_j, \ \beta_{0j}, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)\)</span>. We then use the following proposition:</p>
+<p><span class="math display">\[\begin{cases} 
 x \ | \ \theta &amp; \sim \mathcal{N}(\theta, \ \sigma^2) \\
 \theta  &amp; \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
 \sigma^2 &amp; \text{ connu}
 \end{cases}
+\Rightarrow
 \begin{cases} 
-\Rightarrow \theta | \ x &amp;\sim \mathcal{N}(\mu_1,{\tau_1}^2) \text{ with }\\
+\theta | \ x &amp;\sim \mathcal{N}(\mu_1,{\tau_1}^2) \text{ with }\\
 \mu_1 &amp;= \dfrac{{\tau_0}^2\mu_0 + x\sigma^2}{{\tau_0}^{-2}+\sigma^{-2}} \\
 {\tau_1}^{-2} &amp;={\tau_0}^{-2}+\sigma^{-2}
-\end{cases}\]</span>.<br><strong>Proof</strong> :
-<span class="math display">\[\begin{aligned}
+\end{cases}\]</span>.</p>
+<ul>
+<li>Proof</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
 p(\theta \ | \ x) &amp; \propto  p(x \ | \ \theta) \ p(\theta) \\
 &amp; \propto  \frac{1}{(2\pi\sigma^2)^{\frac{1}{2}}}\exp\left(-\frac{1}{2\sigma^2}(x-\theta)^2\right)\frac{1}{(2\pi{\tau_0}^2)^{\frac{1}{2}}}\exp\left(-\frac{1}{2{\tau_0}^2}(\theta-\mu_0)^2\right) \\
 &amp; \propto \exp\left(-\frac{1}{2{\tau_0}^2}(\theta-\mu_0)^2-\frac{1}{2\sigma^2}(x-\theta)^2\right) \\
 &amp; \propto \exp\left(-\frac{1}{2{\tau_0}^2}(\theta^2-2\mu_0\theta)-\frac{1}{2\sigma^2}(\theta^2-2x\theta)\right)\\
 &amp; \propto \exp\left(-\frac{1}{2}\left(\theta^2 ({\tau_0}^{-2}+\sigma^{-2})-2\mu_0\theta{\tau_0}^{-2}-2x\theta\sigma^{-2}\right)\right)\\
 &amp; \propto \exp\left(-\frac{1}{2({\tau_0}^{-2}+\sigma^{-2})^{-1}}\left(\theta^2 -2\theta \frac{\mu_0{\tau_0}^{-2}+ x\sigma^{-2}}{{\tau_0}^{-2}+\sigma^{-2}}\right)\right)\\
-\end{aligned}\]</span></p></li>
-<li><p>Concerning posterior distribution of <span class="math inline">\(V_{\alpha}\)</span>, the variance of random site effect <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we use the following proposition :<br>
+\end{aligned}\]</span></p>
+</div>
+<div id="random-site-effect-variance" class="section level1">
+<h1 class="hasAnchor">
+<a href="#random-site-effect-variance" class="anchor"></a><span class="header-section-number">4</span> Random site effect variance</h1>
+<ul>
+<li>Proposition</li>
+</ul>
+<p>Concerning posterior distribution of <span class="math inline">\(V_{\alpha}\)</span>, the variance of random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we use the following proposition :<br>
 If <span class="math display">\[\begin{cases} 
 x \ | \ \sigma^2 &amp; \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
 \sigma^2  &amp; \sim \mathcal{IG} (a,b) \\
@@ -203,14 +227,15 @@ x \ | \ \sigma^2 &amp; \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
 \sigma^2|x \sim \mathcal{IG}(a',b') \text{ with } \\
 a' = a + \frac{n}{2} \\ 
 b' = \frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2 + b. 
-\end{cases}\]</span>
-<strong>Proof</strong> :
-<span class="math display">\[\begin{aligned}
+\end{cases}\]</span></p>
+<ul>
+<li>Proof</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
 p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 &amp; \propto  \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\exp\left(-\frac{1}{2\sigma^2}(x-\theta)'(x-\theta)\right)\frac{b^a}{\Gamma(a)}{(\sigma^2)}^{-(a+1)}\exp\left(-\frac{b}{\sigma^2}\right) \\
 &amp; \propto {(\sigma^2)}^{-\left(\underbrace{\frac{n}{2}+a}_{a'}+1\right)}\exp\left(-\frac{1}{\sigma^2}\underbrace{\left(b+\frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2\right)}_{b'}\right)
-\end{aligned}\]</span></p></li>
-</ul>
+\end{aligned}\]</span></p>
 </div>
   </div>
 
@@ -219,8 +244,10 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#proposition-about-probit-link"><span class="toc-section-number">1</span> Proposition about probit link</a></li>
-      <li><a href="#proposition-about-conjugate-prior-used"><span class="toc-section-number">2</span> Proposition about conjugate prior used :</a></li>
+<li><a href="#bernoulli-distribution-with-probit-link"><span class="toc-section-number">1</span> Bernoulli distribution with probit link</a></li>
+      <li><a href="#fixed-species-effects"><span class="toc-section-number">2</span> Fixed species effects</a></li>
+      <li><a href="#random-site-effects"><span class="toc-section-number">3</span> Random site effects</a></li>
+      <li><a href="#random-site-effect-variance"><span class="toc-section-number">4</span> Random site effect variance</a></li>
       </ul>
 </div>
       </div>
