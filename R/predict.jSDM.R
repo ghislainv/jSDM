@@ -12,7 +12,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   if (sum(probs<0)>0 | sum(probs>1)>0) {stop("probs must be a vector of probabilities between (0,1)")}
   
   ##= Link function probit for family=="binomial"
-  inv.link <- function (x) { pnorm(x)}
+  inv.link <- function (x) {pnorm(x)}
   
   ##= Model specifications
   model.spec <- object$model_spec

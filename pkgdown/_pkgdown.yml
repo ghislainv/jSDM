@@ -41,6 +41,10 @@ reference:
   desc: Functions for joint species distribution models
   contents:  
   - '`jSDM_probit_block`'
+- title: Data
+  desc: Data-sets used in examples
+  contents:
+  - '`frogs`'
 - title: Test
   desc: Simple binomial function for GSL tests
   contents:
