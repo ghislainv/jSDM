@@ -78,7 +78,7 @@ $$\begin{aligned}
 
 - Proposition
 
-We go back to a model of the form: $Z' = X\beta + \epsilon$ to estimate the posterior distributions of betas, lambdas and latent variables $W_i$ of the model. For example concerning latent variable $\lambda_j$, we define $Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j$ such as $Z'_{i,j} = W_i'\lambda_j + \epsilon_{i,j}$ so $Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)$.  
+We go back to a model of the form: $Z' = X\beta + \epsilon$ to estimate the posterior distributions of betas, lambdas and latent variables $W_i$ of the model. For example concerning $\lambda_j$, we define $Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j$ such as $Z'_{i,j} = W_i'\lambda_j + \epsilon_{i,j}$ so $Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)$.  
 
 In this case we can use the following proposition:
 

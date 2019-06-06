@@ -107,14 +107,14 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       for (int i=0; i<NSITE; i++) {
         
         // Mean of the prior
-        probit_theta_run(i,j) = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
+        double probit_theta = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
         
         // Actualization
         if ( Y(i,j) == 1) {
-          Z_run(i,j) = left_truncated_normal_sample(probit_theta_run(i,j), 1, 0, s);
+          Z_run(i,j) = left_truncated_normal_sample(probit_theta, 1, 0, s);
         }
         if ( Y(i,j) == 0) {
-          Z_run(i,j) = right_truncated_normal_sample(probit_theta_run(i,j), 1, 0, s);
+          Z_run(i,j) = right_truncated_normal_sample(probit_theta, 1, 0, s);
         }
       }
     }
@@ -198,9 +198,10 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
     double logL = 0.0;
     for ( int i = 0; i < NSITE; i++ ) {
       for ( int j = 0; j < NSP; j++ ) {
-        // probit(theta) = Z_run
-        // link function probit = inverse of N(0,1) repartition function 
-        double theta = gsl_cdf_ugaussian_P(Z_run(i,j));
+        // probit(theta_ij) = X_i*beta_j + W_i*lambda_j + alpha_i 
+        probit_theta_run(i,j) = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
+        // link function probit is the inverse of N(0,1) repartition function 
+        double theta = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
         
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), T(i,j), theta, 1);

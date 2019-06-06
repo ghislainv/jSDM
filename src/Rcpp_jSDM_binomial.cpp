@@ -237,6 +237,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 
     } // Gibbs sampler
     
+    
     // Free memory
     gsl_rng_free(r);
     
