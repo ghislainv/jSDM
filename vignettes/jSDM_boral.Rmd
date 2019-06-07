@@ -105,7 +105,7 @@ logL = 0
 for (i in 1:nsite){
   for (j in 1:nsp){
     theta <- pnorm(probit_theta_pred_sim[i,j])
-    logL = logL + dbinom(Y[i,j],1,theta)  
+    logL = logL + dbinom(Y[i,j],1,theta,1)  
   }
 }
 Deviance_boral_sim <- -2*logL
@@ -157,7 +157,7 @@ logL = 0
 for (i in 1:nrow(PA_mosquito)){
   for (j in 1:ncol(PA_mosquito)){
     theta <- pnorm(probit_theta_pred_Mosquito[i,j])
-    logL = logL + dbinom(PA_mosquito[i,j],1,theta)  
+    logL = logL + dbinom(PA_mosquito[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Mosquito <- -2*logL
@@ -187,7 +187,7 @@ logL = 0
 for (i in 1:nrow(PA_Eucalypts)){
   for (j in 1:ncol(PA_Eucalypts)){
     theta <- pnorm(probit_theta_pred_Eucalypts[i,j])
-    logL = logL + dbinom(PA_Eucalypts[i,j],1,theta)  
+    logL = logL + dbinom(PA_Eucalypts[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Eucalypts <- -2*logL
@@ -217,7 +217,7 @@ logL = 0
 for (i in 1:nrow(PA_Frogs)){
   for (j in 1:ncol(PA_Frogs)){
     theta <- pnorm(probit_theta_pred_Frogs[i,j])
-    logL = logL + dbinom(PA_Frogs[i,j],1,theta)  
+    logL = logL + dbinom(PA_Frogs[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Frogs <- -2*logL
@@ -237,6 +237,7 @@ PA_Fungi <- Fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut","phef
 T1 <- Sys.time()
 mod_boral_Fungi <- boral(y = PA_Fungi, X = Env_Fungi, lv.control = list(num.lv = 2, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nrow(PA_Fungi)),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
 T2 <- Sys.time()
+T_boral_Fungi <- difftime(T2,T1)
 
 # Predicted probit theta 
 probit_theta_pred_Fungi = mod_boral_Fungi$row.coefs[[1]]$mean + as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean)  + mod_boral_Fungi$lv.coefs.mean[,"beta0"] + mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
@@ -246,12 +247,10 @@ logL = 0
 for (i in 1:nrow(PA_Fungi)){
   for (j in 1:ncol(PA_Fungi)){
     theta <- pnorm(probit_theta_pred_Fungi[i,j])
-    logL = logL + dbinom(PA_Fungi[i,j],1,theta)  
+    logL = logL + dbinom(PA_Fungi[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Fungi <- -2*logL
-T_boral_Fungi <- difftime(T2,T1)
-
 ```
 
 # Package jSDM :
@@ -454,14 +453,14 @@ result[2,] = c(T_jSDM_block_sim, T_jSDM_block_Mosquito, T_jSDM_block_Eucalypts, 
 kable(result, digits =1)
 ```
 
-## Mean of Deviance : 
+## Deviance : 
 
 ```{r deviance, echo = FALSE}
 library(knitr)
 result <- data.frame(matrix(NA,2,5),row.names=c("Deviance boral", "Deviance jSDM_block"))
 colnames(result) <- c("Simulated","Mosquito","Eucalypts","Frogs","Fungi")
-result[1,] <- c( mean(mod_jSDM_block_sim$mcmc.Deviance),  mean(mod_jSDM_block_Mosquito$mcmc.Deviance),  mean(mod_jSDM_block_Eucalypts$mcmc.Deviance),  mean(mod_jSDM_block_Frogs$mcmc.Deviance),  mean(mod_jSDM_block_Fungi$mcmc.Deviance))
-result[2,] <- c(Deviance_boral_sim, Deviance_boral_Mosquito, Deviance_boral_Eucalypts, Deviance_boral_Frogs, Deviance_boral_Fungi)
+result[1,] <- c(Deviance_boral_sim, Deviance_boral_Mosquito, Deviance_boral_Eucalypts, Deviance_boral_Frogs, Deviance_boral_Fungi)
+result[2,] <- c( mean(mod_jSDM_block_sim$mcmc.Deviance),  mean(mod_jSDM_block_Mosquito$mcmc.Deviance),  mean(mod_jSDM_block_Eucalypts$mcmc.Deviance),  mean(mod_jSDM_block_Frogs$mcmc.Deviance),  mean(mod_jSDM_block_Fungi$mcmc.Deviance))
 kable(result, digits =1)
 ```
 
