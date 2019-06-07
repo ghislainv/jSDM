@@ -5,10 +5,12 @@ cache: packages
 
 apt_packages:
   - libgsl-dev
+  - jags
 
 r_packages:
   - pkgdown
   - covr
+  - boral
   
 after_success:
   - R CMD INSTALL .

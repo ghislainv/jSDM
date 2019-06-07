@@ -1,5 +1,5 @@
 ---
-title: "Comparison jSDM boral"
+title: "Comparison jSDM-boral"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -16,20 +16,30 @@ pkgdown:
   as_is: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Comparison jSDM boral}
+  %\VignetteIndexEntry{Comparison jSDM-boral}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Package boral :
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align="center",
+  fig.width=6, fig.height=6,
+  cache=FALSE,
+  collapse=TRUE,
+  comment="#>",
+  highlight=TRUE
+)
+```
 
-## Simulated dataset :
+# Package boral
+
+## Simulated dataset
 
 300 sites et 100 species with as parameters :
 
-```{r simulated data, echo = TRUE}
+```{r simulated-data, echo=TRUE}
 
 # Toy example : 
-
 nsp <- 100
 nsite <- 300
 np <- 3
@@ -43,23 +53,23 @@ x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 # Simulation of parameters
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-data = cbind (X,W)
+data=cbind (X,W)
 beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*2-3,-2,2)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
 param.target <- rbind(beta.target,lambda.target)
-param.target = rbind(beta.target,lambda.target)
-Valpha.target = 0.5
-V = 1
+param.target=rbind(beta.target,lambda.target)
+Valpha.target=0.5
+V=1
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
 
 # Simulation of response data with probit link
-probit_theta = X %*% beta.target + W %*% lambda.target + alpha.target
-e = matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+probit_theta=X %*% beta.target + W %*% lambda.target + alpha.target
+e=matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 Z_true <- probit_theta + e
-Y = matrix (NA, nsite,nsp)
+Y=matrix (NA, nsite,nsp)
 for (i in 1:nsite){
   for (j in 1:nsp){
     if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
@@ -68,204 +78,204 @@ for (i in 1:nsite){
 }
 ```
 
-- $\beta_{target}$ :
+- $\beta_{target}$:
 
-```{r beta, echo=FALSE}
+```{r beta}
 library(knitr)
 colnames(beta.target) <- paste(rep("nsp",nsp),1:nsp,sep="")
 kable(beta.target[,1:15], digits=1)
 ```
 
-- $\lambda_{target}$ :
+- $\lambda_{target}$:
 
-```{r lambda, echo=FALSE}
+```{r lambda}
 colnames(lambda.target) <- paste(rep("nsp",nsp),1:nsp,sep="")
 kable(lambda.target[,1:15], digits=1)
 ```
 
-- $V_{\alpha}$ : 
-```{r Valpha, echo=FALSE}
+- $V_{\alpha}$: 
+
+```{r Valpha}
 Valpha.target
 ```
 
-```{r boral simulation, echo=TRUE, cache=TRUE}
+```{r boral-simulation, cache=TRUE}
 library(boral)
 T1<-Sys.time() 
-mod_boral_sim <- boral(y = Y, X = X[,-1], lv.control = list(num.lv = nl, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nsite),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
+mod_boral_sim <- boral(y=Y, X=X[,-1], lv.control=list(num.lv=nl, type="independent", distmat=NULL), family="binomial", row.eff="random", row.ids=matrix(c(1:nsite),ncol=1), save.model=TRUE, calc.ics=F, hypparams=c(20,20,20,20), mcmc.control=list(n.burnin=10000, n.iteration=15000,n.thin=5,seed=123))
 T2<-Sys.time() 
-T_boral_sim = difftime(T2, T1)
+T_boral_sim=difftime(T2, T1)
 
 # Predicted probit theta 
-probit_theta_pred_sim = mod_boral_sim$row.coefs[[1]]$mean + X[,-1] %*% t(mod_boral_sim$X.coefs.mean)  + mod_boral_sim$lv.coefs.mean[,"beta0"] + mod_boral_sim$lv.mean%*%t(mod_boral_sim$lv.coefs.mean[,-1])
+probit_theta_pred_sim=mod_boral_sim$row.coefs[[1]]$mean + X[,-1] %*% t(mod_boral_sim$X.coefs.mean)  + mod_boral_sim$lv.coefs.mean[,"beta0"] + mod_boral_sim$lv.mean%*%t(mod_boral_sim$lv.coefs.mean[,-1])
 # RMSE
-SE = (probit_theta-probit_theta_pred_sim)^2
-RMSE_boral_sim = sqrt(sum(SE/(nsite*nsp)))
+SE=(probit_theta-probit_theta_pred_sim)^2
+RMSE_boral_sim=sqrt(sum(SE/(nsite*nsp)))
 # Deviance 
-logL = 0
+logL=0
 for (i in 1:nsite){
   for (j in 1:nsp){
     theta <- pnorm(probit_theta_pred_sim[i,j])
-    logL = logL + dbinom(Y[i,j],1,theta,1)  
+    logL=logL + dbinom(Y[i,j],1,theta,1)  
   }
 }
 Deviance_boral_sim <- -2*logL
 ```
 
-```{r boral simulation plot, echo = FALSE}
+```{r boral-simulation-plot}
 ## beta_j
 par(mfrow=c(1,2))
-plot(t(beta.target),cbind(mod_boral_sim$lv.coefs.mean[,1], mod_boral_sim$X.coefs.mean), xlab = "betas target", ylab = "means of estimated betas") 
+plot(t(beta.target),cbind(mod_boral_sim$lv.coefs.mean[,1], mod_boral_sim$X.coefs.mean), xlab="betas target", ylab="means of estimated betas") 
 abline(a=0,b=1,col='red')
 ## lambda_j
-plot(t(lambda.target),mod_boral_sim$lv.coefs.mean[,-1], xlab = "lambdas target", ylab = "means of estimated lambdas") 
+plot(t(lambda.target),mod_boral_sim$lv.coefs.mean[,-1], xlab="lambdas target", ylab="means of estimated lambdas") 
 abline(a=0,b=1,col='red')
 ## Latent variable W 
 par(mfrow=c(1,2))
 for (l in 1:nl) {
-  plot(W[,l],mod_boral_sim$lv.mean[,l], main = paste0("Latent variable W_", l), xlab = "W_i target", ylab = "means of estimated W_i")
+  plot(W[,l],mod_boral_sim$lv.mean[,l], main=paste0("Latent variable W_", l), xlab="W_i target", ylab="means of estimated W_i")
   abline(a=0,b=1,col='red')
 }
 ## alphas 
-plot(alpha.target, mod_boral_sim$row.coefs[[1]]$mean, xlab = "alphas target", ylab = "means of estimated alphas")
+plot(alpha.target, mod_boral_sim$row.coefs[[1]]$mean, xlab="alphas target", ylab="means of estimated alphas")
 abline(a=0,b=1,col='red')
 print(paste("Estimated V_alpha : ",mod_boral_sim$row.sigma[[1]]$mean))
 ## Prediction
 # probit_theta_pred 
-plot(probit_theta,probit_theta_pred_sim, main = "Prediction", xlab ="True probit theta", ylab = " Estimated probit theta")
+plot(probit_theta,probit_theta_pred_sim, main="Prediction", xlab ="True probit theta", ylab=" Estimated probit theta")
 abline(a=0,b=1,col='red')
 ```
 
-## Mosquito dataset : 
+## Mosquito dataset
 
-```{r boral mosquito, echo=TRUE, cache=TRUE}
+```{r boral-mosquito, cache=TRUE}
 # Import center and reduce Mosquito dataset
-Env_mosquito <- read.csv("~/Code/data/Mosquito_Covar.csv", sep=",", header = T)
+Env_mosquito <- read.csv("~/Code/data/Mosquito_Covar.csv", sep=",", header=T)
 Env_mosquito <- cbind(scale(Env_mosquito[,1:4]), Env_mosquito[,5:13])
 PA_mosquito <- read.csv("~/Code/data/Mosquito_PA.csv", sep=",", header=T)
 
 # Fit the model 
 T1 <- Sys.time()
-mod_boral_Mosquito <- boral(y = PA_mosquito, X = Env_mosquito, lv.control = list(num.lv = 2, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nrow(PA_mosquito)),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
+mod_boral_Mosquito <- boral(y=PA_mosquito, X=Env_mosquito, lv.control=list(num.lv=2, type="independent", distmat=NULL), family="binomial", row.eff="random", row.ids=matrix(c(1:nrow(PA_mosquito)),ncol=1), save.model=TRUE, calc.ics=F, hypparams=c(20,20,20,20), mcmc.control=list(n.burnin=10000, n.iteration=15000,n.thin=5,seed=123))
 T2 <- Sys.time()
 T_boral_Mosquito <- difftime(T2,T1)
 
 # Predicted probit theta 
-probit_theta_pred_Mosquito = mod_boral_Mosquito$row.coefs[[1]]$mean + as.matrix(Env_mosquito) %*% t(mod_boral_Mosquito$X.coefs.mean)  + mod_boral_Mosquito$lv.coefs.mean[,"beta0"] + mod_boral_Mosquito$lv.mean%*%t(mod_boral_Mosquito$lv.coefs.mean[,-1])
+probit_theta_pred_Mosquito=mod_boral_Mosquito$row.coefs[[1]]$mean + as.matrix(Env_mosquito) %*% t(mod_boral_Mosquito$X.coefs.mean)  + mod_boral_Mosquito$lv.coefs.mean[,"beta0"] + mod_boral_Mosquito$lv.mean%*%t(mod_boral_Mosquito$lv.coefs.mean[,-1])
 
 # Deviance
-logL = 0
+logL=0
 for (i in 1:nrow(PA_mosquito)){
   for (j in 1:ncol(PA_mosquito)){
     theta <- pnorm(probit_theta_pred_Mosquito[i,j])
-    logL = logL + dbinom(PA_mosquito[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_mosquito[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Mosquito <- -2*logL
 ```
 
 
-## Eucalypts dataset: 
+## Eucalypts dataset
 
-```{r boral eucalypts,echo=TRUE,cache=TRUE}
+```{r boral-eucalypts, cache=TRUE}
 # Import center and reduce Eucalypts dataset
-Env_Eucalypts <- read.csv("~/Code/data/Eucalypts_Covar.csv", sep=",", header = T)
+Env_Eucalypts <- read.csv("~/Code/data/Eucalypts_Covar.csv", sep=",", header=T)
 Env_Eucalypts <- cbind(scale(Env_Eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),Env_Eucalypts[,c("Sandiness","Loaminess")])
 colnames(Env_Eucalypts) <-c("VallyBotFlat","PPTann", "cvTemp","T0","Rockiness","Sandiness","Loaminess")
 PA_Eucalypts<- read.csv("~/Code/data/Eucalypts_PA.csv", sep=",", header=T)
 
 # Fit the model 
 T1 <- Sys.time()
-mod_boral_Eucalypts <- boral(y = PA_Eucalypts, X = Env_Eucalypts, lv.control = list(num.lv = 2, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nrow(PA_Eucalypts)),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
+mod_boral_Eucalypts <- boral(y=PA_Eucalypts, X=Env_Eucalypts, lv.control=list(num.lv=2, type="independent", distmat=NULL), family="binomial", row.eff="random", row.ids=matrix(c(1:nrow(PA_Eucalypts)),ncol=1), save.model=TRUE, calc.ics=F, hypparams=c(20,20,20,20), mcmc.control=list(n.burnin=10000, n.iteration=15000,n.thin=5,seed=123))
 T2 <- Sys.time()
 T_boral_Eucalypts <- difftime(T2,T1)
 
 # Predicted probit theta 
-probit_theta_pred_Eucalypts = mod_boral_Eucalypts$row.coefs[[1]]$mean + as.matrix(Env_Eucalypts) %*% t(mod_boral_Eucalypts$X.coefs.mean)  + mod_boral_Eucalypts$lv.coefs.mean[,"beta0"] + mod_boral_Eucalypts$lv.mean%*%t(mod_boral_Eucalypts$lv.coefs.mean[,-1])
+probit_theta_pred_Eucalypts=mod_boral_Eucalypts$row.coefs[[1]]$mean + as.matrix(Env_Eucalypts) %*% t(mod_boral_Eucalypts$X.coefs.mean)  + mod_boral_Eucalypts$lv.coefs.mean[,"beta0"] + mod_boral_Eucalypts$lv.mean%*%t(mod_boral_Eucalypts$lv.coefs.mean[,-1])
 
 # Deviance
-logL = 0
+logL=0
 for (i in 1:nrow(PA_Eucalypts)){
   for (j in 1:ncol(PA_Eucalypts)){
     theta <- pnorm(probit_theta_pred_Eucalypts[i,j])
-    logL = logL + dbinom(PA_Eucalypts[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Eucalypts[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Eucalypts <- -2*logL
 ```
 
-## Frogs dataset : 
+## Frogs dataset
 
-```{r boral frogs,echo=TRUE, cache=TRUE}
+```{r boral-frogs, cache=TRUE}
 # Import center and reduce Frogs dataset
-Frogs <- read.csv("~/Code/data/frogs.csv", sep=",", header = T)
+Frogs <- read.csv("~/Code/data/frogs.csv", sep=",", header=T)
 Env_Frogs <- cbind(scale(Frogs[,1]),Frogs[,2],scale(Frogs[,3]))
 colnames(Env_Frogs) <- colnames (Frogs[,1:3])
 PA_Frogs <- Frogs[,4:12]
 
 # Fit the model
 T1 <- Sys.time()
-mod_boral_Frogs <- boral(y = PA_Frogs, X = Env_Frogs, lv.control = list(num.lv = 2, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nrow(PA_Frogs)),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
+mod_boral_Frogs <- boral(y=PA_Frogs, X=Env_Frogs, lv.control=list(num.lv=2, type="independent", distmat=NULL), family="binomial", row.eff="random", row.ids=matrix(c(1:nrow(PA_Frogs)),ncol=1), save.model=TRUE, calc.ics=F, hypparams=c(20,20,20,20), mcmc.control=list(n.burnin=10000, n.iteration=15000,n.thin=5,seed=123))
 T2 <- Sys.time()
 T_boral_Frogs <- difftime(T2,T1)
 
-
 # Predicted probit theta 
-probit_theta_pred_Frogs = mod_boral_Frogs$row.coefs[[1]]$mean + as.matrix(Env_Frogs) %*% t(mod_boral_Frogs$X.coefs.mean)  + mod_boral_Frogs$lv.coefs.mean[,"beta0"] + mod_boral_Frogs$lv.mean%*%t(mod_boral_Frogs$lv.coefs.mean[,-1])
+probit_theta_pred_Frogs=mod_boral_Frogs$row.coefs[[1]]$mean + as.matrix(Env_Frogs) %*% t(mod_boral_Frogs$X.coefs.mean)  + mod_boral_Frogs$lv.coefs.mean[,"beta0"] + mod_boral_Frogs$lv.mean%*%t(mod_boral_Frogs$lv.coefs.mean[,-1])
 
 # Deviance
-logL = 0
+logL=0
 for (i in 1:nrow(PA_Frogs)){
   for (j in 1:ncol(PA_Frogs)){
     theta <- pnorm(probit_theta_pred_Frogs[i,j])
-    logL = logL + dbinom(PA_Frogs[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Frogs[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Frogs <- -2*logL
 ```
 
-## Fungi dataset : 
+## Fungi dataset
 
-```{r boral fungi,echo=TRUE, cache=TRUE}
+```{r boral-fungi, cache=TRUE}
 
 # Import center and reduce fungi dataset
-Fungi <- read.csv("~/Code/data/Fungi.csv", sep=",", header = T)
+Fungi <- read.csv("~/Code/data/Fungi.csv", sep=",", header=T)
 Env_Fungi <- cbind(scale(Fungi[,c("diam","epi","bark")]),Fungi[,c("dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")])
 colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")
 PA_Fungi <- Fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut","phefer","phenig","phevit","poscae","triabi")]
 
 # Fit the model 
 T1 <- Sys.time()
-mod_boral_Fungi <- boral(y = PA_Fungi, X = Env_Fungi, lv.control = list(num.lv = 2, type = "independent", distmat = NULL), family = "binomial", row.eff = "random", row.ids = matrix(c(1:nrow(PA_Fungi)),ncol=1), save.model = TRUE, calc.ics = F, hypparams = c(20,20,20,20), mcmc.control = list(n.burnin = 10000, n.iteration = 15000,n.thin = 5,seed = 123))
+mod_boral_Fungi <- boral(y=PA_Fungi, X=Env_Fungi, lv.control=list(num.lv=2, type="independent", distmat=NULL), family="binomial", row.eff="random", row.ids=matrix(c(1:nrow(PA_Fungi)),ncol=1), save.model=TRUE, calc.ics=F, hypparams=c(20,20,20,20), mcmc.control=list(n.burnin=10000, n.iteration=15000,n.thin=5,seed=123))
 T2 <- Sys.time()
 T_boral_Fungi <- difftime(T2,T1)
 
 # Predicted probit theta 
-probit_theta_pred_Fungi = mod_boral_Fungi$row.coefs[[1]]$mean + as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean)  + mod_boral_Fungi$lv.coefs.mean[,"beta0"] + mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
+probit_theta_pred_Fungi=mod_boral_Fungi$row.coefs[[1]]$mean + as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean)  + mod_boral_Fungi$lv.coefs.mean[,"beta0"] + mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
 
 # Deviance
-logL = 0
+logL=0
 for (i in 1:nrow(PA_Fungi)){
   for (j in 1:ncol(PA_Fungi)){
     theta <- pnorm(probit_theta_pred_Fungi[i,j])
-    logL = logL + dbinom(PA_Fungi[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Fungi[i,j],1,theta,1)  
   }
 }
 Deviance_boral_Fungi <- -2*logL
 ```
 
-# Package jSDM :
+# Package jSDM
 
-## Simulated dataset :
+## Simulated dataset
 
-```{r jSDM simulation, echo=TRUE, cache=TRUE}
+```{r jSDM-simulation, cache=TRUE}
 library(jSDM)
 
 # Fit the model
 T1<-Sys.time() 
 mod_jSDM_block_sim <-  jSDM_probit_block (
-  presence_site_sp = Y, 
-  site_suitability = ~.,   
-  site_data = as.data.frame(X[,-1]), n_latent=2,
+  presence_site_sp=Y, 
+  site_suitability=~.,   
+  site_data=as.data.frame(X[,-1]), n_latent=2,
   burnin=10000, mcmc=5000, thin=5,
   alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
   V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -273,14 +283,14 @@ mod_jSDM_block_sim <-  jSDM_probit_block (
   mu_lambda=0, V_lambda=10,
   seed=1234, verbose=1)
 T2<-Sys.time() 
-T_jSDM_block_sim = difftime(T2, T1)
+T_jSDM_block_sim=difftime(T2, T1)
 
 # RMSE
-SE = (probit_theta-mod_jSDM_block_sim$probit_theta_pred)^2
-RMSE_jSDM_block_sim = sqrt(sum(SE/(nsite*nsp)))
+SE=(probit_theta-mod_jSDM_block_sim$probit_theta_pred)^2
+RMSE_jSDM_block_sim=sqrt(sum(SE/(nsite*nsp)))
 ```
 
-```{r jSDM simulation plot, echo = FALSE}
+```{r jSDM-simulation-plot}
 
 # ===================================================
 # Result analysis
@@ -288,12 +298,12 @@ RMSE_jSDM_block_sim = sqrt(sum(SE/(nsite*nsp)))
 
 ## Valpha
 par(mfrow=c(1,2))
-coda::traceplot(mod_jSDM_block_sim$mcmc.Valpha, main = "V_alpha")
-coda::densplot(mod_jSDM_block_sim$mcmc.Valpha, main = "V_alpha")
+coda::traceplot(mod_jSDM_block_sim$mcmc.Valpha, main="V_alpha")
+coda::densplot(mod_jSDM_block_sim$mcmc.Valpha, main="V_alpha")
 abline(v=Valpha.target,col='red')
 
 ## Deviance
-plot(mod_jSDM_block_sim$mcmc.Deviance,main = "Deviance")
+plot(mod_jSDM_block_sim$mcmc.Deviance, main="Deviance")
 
 ## beta_j
 mean_betas <- matrix(0,nsp,np)
@@ -304,7 +314,7 @@ for (j in 1:nsp) {
     if (j < 3){
       coda::traceplot(coda::as.mcmc(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]][,p]))
       coda::densplot(coda::as.mcmc(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]][,p]), 
-                     main = paste(colnames(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]])[p],", species : ",j))
+                     main=paste(colnames(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]])[p],", species : ",j))
       abline(v=beta.target[p,j],col='red')
     }
   }
@@ -320,21 +330,21 @@ for (j in 1:nsp) {
     if (j < 3){
       coda::traceplot(coda::as.mcmc(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
       coda::densplot(coda::as.mcmc(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]), 
-                     main = paste(colnames(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l],", species : ",j))
+                     main=paste(colnames(mod_jSDM_block_sim$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l],", species : ",j))
       abline(v=lambda.target[l,j],col='red')
     }
   }
 }
 par(mfrow=c(1,2))
-plot(t(beta.target),mean_betas, xlab = "betas target", ylab = "means of estimated betas")
+plot(t(beta.target),mean_betas, xlab="betas target", ylab="means of estimated betas")
 abline(a=0,b=1,col='red')
-plot(t(lambda.target),mean_lambdas, xlab = "lambdas target", ylab = "means of estimated lambda")
+plot(t(lambda.target),mean_lambdas, xlab="lambdas target", ylab="means of estimated lambda")
 abline(a=0,b=1,col='red')
 
 ## W latent variables
 par(mfrow=c(1,2))
 for (l in 1:nl) {
-  plot(W[,l],summary(mod_jSDM_block_sim$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"], main = paste0("Latent variable W_", l), xlab = "W_i target", ylab = "means of estimated W_i")
+  plot(W[,l],summary(mod_jSDM_block_sim$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"], main=paste0("Latent variable W_", l), xlab="W_i target", ylab="means of estimated W_i")
   abline(a=0,b=1,col='red')
 }
 
@@ -346,23 +356,23 @@ abline(a=0,b=1,col='red')
 
 ## probit_theta
 par(mfrow=c(1,2))
-plot(probit_theta,mod_jSDM_block_sim$probit_theta_pred, xlab = "True probit theta", ylab="Predicted probit theta")
+plot(probit_theta,mod_jSDM_block_sim$probit_theta_pred, xlab="True probit theta", ylab="Predicted probit theta")
 abline(a=0,b=1,col='red')
 title(main="Predictions")
 ## Z
-plot(Z_true,mod_jSDM_block_sim$Z_latent, xlab = "True latent variable Z", ylab="Predicted latent variable Z")
+plot(Z_true,mod_jSDM_block_sim$Z_latent, xlab="True latent variable Z", ylab="Predicted latent variable Z")
 abline(a=0,b=1,col='red')
 ```
 
-## Mosquito dataset :
+## Mosquito dataset
 
-```{r jSDM mosquito ,echo=TRUE, cache=TRUE}
+```{r jSDM-mosquito, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_block_Mosquito <- jSDM_probit_block (
-  presence_site_sp = as.matrix(PA_mosquito), 
-  site_suitability = ~.,   
-  site_data = Env_mosquito, n_latent=2,
+  presence_site_sp=as.matrix(PA_mosquito), 
+  site_suitability=~.,   
+  site_data=Env_mosquito, n_latent=2,
   burnin=10000, mcmc=5000, thin=5,
   alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
   V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -373,15 +383,15 @@ T2 <- Sys.time()
 T_jSDM_block_Mosquito <- difftime(T2,T1)
 ```
 
-## Eucalypts dataset :
+## Eucalypts dataset
 
-```{r jSDM eucalypts, echo=TRUE, cache=TRUE}
+```{r jSDM-eucalypts, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_block_Eucalypts <- jSDM_probit_block (
-  presence_site_sp = as.matrix(PA_Eucalypts), 
-  site_suitability = ~.,   
-  site_data = Env_Eucalypts, n_latent=2,
+  presence_site_sp=as.matrix(PA_Eucalypts), 
+  site_suitability=~.,   
+  site_data=Env_Eucalypts, n_latent=2,
   burnin=10000, mcmc=5000, thin=5,
   alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
   V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -392,15 +402,15 @@ T2 <- Sys.time()
 T_jSDM_block_Eucalypts <- difftime(T2,T1)
 ```
 
-## Frogs dataset :
+## Frogs dataset
 
-```{r jSDM frogs,echo=TRUE,cache=TRUE}
+```{r jSDM-frogs, cache=TRUE}
 # Fit the model 
 T1 <- Sys.time()
 mod_jSDM_block_Frogs <- jSDM_probit_block (
-  presence_site_sp = as.matrix(PA_Frogs), 
-  site_suitability = ~.,   
-  site_data = as.data.frame(Env_Frogs), n_latent=2,
+  presence_site_sp=as.matrix(PA_Frogs), 
+  site_suitability=~.,   
+  site_data=as.data.frame(Env_Frogs), n_latent=2,
   burnin=10000, mcmc=5000, thin=5,
   alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
   V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -411,15 +421,15 @@ T2 <- Sys.time()
 T_jSDM_block_Frogs <- difftime(T2,T1)
 ```
 
-## Fungi dataset : 
+## Fungi dataset
 
-```{r jSDM fungi, echo=TRUE, cache=TRUE}
+```{r jSDM-fungi, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_block_Fungi <- jSDM_probit_block (
-  presence_site_sp = as.matrix(PA_Fungi), 
-  site_suitability = ~.,   
-  site_data = Env_Fungi, n_latent=2,
+  presence_site_sp=as.matrix(PA_Fungi), 
+  site_suitability=~.,   
+  site_data=Env_Fungi, n_latent=2,
   burnin=10000, mcmc=5000, thin=5,
   alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
   V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -432,9 +442,9 @@ T_jSDM_block_Fungi <- difftime(T2,T1)
 
 # Comparison
 
-## Root-Mean-Square Error (RMSE) for simulated data : 
+## Root-Mean-Square Error (RMSE) for simulated data
 
-```{r RMSE, echo = FALSE}
+```{r RMSE}
 library(knitr)
 result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("Boral","jSDM_block")
@@ -443,19 +453,20 @@ result$jSDM_block <- RMSE_jSDM_block_sim
 kable(result, digits =1)
 ```
 
-## Compilation time in secondes: 
-```{r time, echo = FALSE}
+## Compilation time in secondes
+
+```{r time}
 library(knitr)
 result <- data.frame(matrix(NA,2,5),row.names=c("time_boral","time_jSDM_block"))
 colnames(result) <- c("Simulated","Mosquito","Eucalypts","Frogs","Fungi")
-result[1,] = c(T_boral_sim, T_boral_Mosquito, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi)
-result[2,] = c(T_jSDM_block_sim, T_jSDM_block_Mosquito, T_jSDM_block_Eucalypts, T_jSDM_block_Frogs, T_jSDM_block_Fungi)
+result[1,]=c(T_boral_sim, T_boral_Mosquito, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi)
+result[2,]=c(T_jSDM_block_sim, T_jSDM_block_Mosquito, T_jSDM_block_Eucalypts, T_jSDM_block_Frogs, T_jSDM_block_Fungi)
 kable(result, digits =1)
 ```
 
-## Deviance : 
+## Deviance
 
-```{r deviance, echo = FALSE}
+```{r deviance}
 library(knitr)
 result <- data.frame(matrix(NA,2,5),row.names=c("Deviance boral", "Deviance jSDM_block"))
 colnames(result) <- c("Simulated","Mosquito","Eucalypts","Frogs","Fungi")
@@ -464,20 +475,20 @@ result[2,] <- c( mean(mod_jSDM_block_sim$mcmc.Deviance),  mean(mod_jSDM_block_Mo
 kable(result, digits =1)
 ```
 
+## Estimated  Parameters
 
-## Estimated  Parameters : 
+### Simulated dataset
 
-### Simulated dataset : 
-300 sites 100 species
+300 sites 100 species.
 
-```{r jSDM_boral simulation, echo = FALSE}
+```{r jSDM-boral-simulation}
 # Alpha et V_alpha
 par(mfrow=c(1,2))
-plot(mod_boral_sim$row.coefs[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.alpha)[[1]][,"Mean"], xlab = "alphas estimated by Boral", ylab = "alphas estimated by jSDM", main = "Site random effect alpha")
+plot(mod_boral_sim$row.coefs[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
 points(mod_boral_sim$row.sigma[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.Valpha)[[1]]["Mean"],
-       pch = 18, col ='red',cex=2.5)
-legend("bottomright", legend = c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
+       pch=18, col ='red',cex=2.5)
+legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
@@ -488,11 +499,10 @@ for (j in 1:nsp){
 }
 boral_betas <- cbind(mod_boral_sim$lv.coefs.mean[,"beta0"],mod_boral_sim$X.coefs.mean)
 
-plot(boral_betas,jSDM_betas, xlab = "betas estimated by Boral", ylab = "betas estimated by jSDM", main = "Species fixed effect beta_j")
+plot(boral_betas,jSDM_betas, xlab="betas estimated by Boral", ylab="betas estimated by jSDM", main="Species fixed effect beta_j")
 abline(a=0,b=1,col='red')
 
 # Lambdas
-
 jSDM_lambdas <- matrix(0,nsp,nl)
 for (j in 1:nsp){
   for (l in 1:nl){
@@ -501,7 +511,7 @@ for (j in 1:nsp){
 }
 boral_lambdas <- mod_boral_sim$lv.coefs.mean[,-1]
 
-plot(boral_lambdas,jSDM_lambdas, xlab = "lambdas estimated by Boral", ylab = "lambdas estimated by jSDM", main = "Species fixed effect lambda_j")
+plot(boral_lambdas,jSDM_lambdas, xlab="lambdas estimated by Boral", ylab="lambdas estimated by jSDM", main="Species fixed effect lambda_j")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -509,17 +519,17 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- colMeans(mod_jSDM_block_sim$mcmc.latent[[paste0("lv_",l)]])
 }
-plot(mod_boral_sim$lv.mean, jSDM_lvs, xlab = "latent variables estimated by Boral", ylab = "latent variables estimated by jSDM", main = "Latent variables W_1 and W_2")
+plot(mod_boral_sim$lv.mean, jSDM_lvs, xlab="latent variables estimated by Boral", ylab="latent variables estimated by jSDM", main="Latent variables W_1 and W_2")
 abline(a=0,b=1,col='red')
 
 # Predictions 
-plot(probit_theta_pred_sim, mod_jSDM_block_sim$probit_theta_pred, xlab = "probit theta estimated by Boral", ylab = "probit theta estimated by jSDM", main = "Predicted probit theta")
+plot(probit_theta_pred_sim, mod_jSDM_block_sim$probit_theta_pred, xlab="probit theta estimated by Boral", ylab="probit theta estimated by jSDM", main="Predicted probit theta")
 abline(a=0,b=1,col='red')
 ```
 
-### Mosquito dataset :
+### Mosquito dataset
 
-```{r jSDM_boral mosquito, echo = FALSE}
+```{r jSDM-boral-mosquito}
 print(paste(nrow(PA_mosquito),"sites and ",ncol(PA_mosquito)," species"))
 nsp <- ncol(mod_jSDM_block_Mosquito$model_spec$presences)
 nsite <- nrow(mod_jSDM_block_Mosquito$model_spec$presences)
@@ -527,10 +537,10 @@ nl <- mod_jSDM_block_Mosquito$model_spec$n_latent
 np <- nrow(mod_jSDM_block_Mosquito$model_spec$beta_start)
 # Alpha et V_alpha
 par(mfrow=c(1,2))
-plot(mod_boral_Mosquito$row.coefs[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.alpha)[[1]][,"Mean"], xlab = "alphas estimated by Boral", ylab = "alphas estimated by jSDM", main = "Site random effect alpha")
+plot(mod_boral_Mosquito$row.coefs[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Mosquito$row.sigma[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.Valpha)[[1]]["Mean"], pch = 18, col ='red',cex=2.5)
-legend("bottomright", legend = c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
+points(mod_boral_Mosquito$row.sigma[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.Valpha)[[1]]["Mean"], pch=18, col ='red',cex=2.5)
+legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
@@ -539,18 +549,17 @@ for (j in 1:nsp){
   }
 boral_betas <- cbind(mod_boral_Mosquito$lv.coefs.mean[,"beta0"],mod_boral_Mosquito$X.coefs.mean)
 
-plot(boral_betas,jSDM_betas, xlab = "betas estimated by Boral", ylab = "betas estimated by jSDM", main = "Species fixed effect beta_j")
+plot(boral_betas,jSDM_betas, xlab="betas estimated by Boral", ylab="betas estimated by jSDM", main="Species fixed effect beta_j")
 abline(a=0,b=1,col='red')
 
 # Lambdas
-
 jSDM_lambdas <- matrix(0,nsp,nl)
 for (j in 1:nsp){
     jSDM_lambdas[j,] <- summary(mod_jSDM_block_Mosquito$mcmc.sp[[paste0("sp_",j)]])[[1]][(np+1):(np+nl),"Mean"]
   }
 boral_lambdas <- mod_boral_Mosquito$lv.coefs.mean[,-1]
 
-plot(boral_lambdas,jSDM_lambdas, xlab = "lambdas estimated by Boral", ylab = "lambdas estimated by jSDM", main = "Species fixed effect lambda_j")
+plot(boral_lambdas,jSDM_lambdas, xlab="lambdas estimated by Boral", ylab="lambdas estimated by jSDM", main="Species fixed effect lambda_j")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -558,16 +567,16 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- summary(mod_jSDM_block_Mosquito$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
 }
-plot(mod_boral_Mosquito$lv.mean, jSDM_lvs, xlab = "latent variables estimated by Boral", ylab = "latent variables estimated by jSDM", main = "Latent variables W_1 and W_2")
+plot(mod_boral_Mosquito$lv.mean, jSDM_lvs, xlab="latent variables estimated by Boral", ylab="latent variables estimated by jSDM", main="Latent variables W_1 and W_2")
 abline(a=0,b=1,col='red')
 # Predictions 
-plot(probit_theta_pred_Mosquito, mod_jSDM_block_Mosquito$probit_theta_pred, xlab = "probit theta estimated by Boral", ylab = "probit theta estimated by jSDM", main = "Predicted probit theta")
+plot(probit_theta_pred_Mosquito, mod_jSDM_block_Mosquito$probit_theta_pred, xlab="probit theta estimated by Boral", ylab="probit theta estimated by jSDM", main="Predicted probit theta")
 abline(a=0,b=1,col='red')
 ```
 
-### Eucalypts dataset : 
+### Eucalypts dataset
 
-```{r jSDM_boral Eucalypts, echo = FALSE}
+```{r jSDM-boral-Eucalypts}
 print(paste(nrow(PA_Eucalypts),"sites and ",ncol(PA_Eucalypts)," species"))
 nsp <- ncol(mod_jSDM_block_Eucalypts$model_spec$presences)
 nsite <- nrow(mod_jSDM_block_Eucalypts$model_spec$presences)
@@ -575,11 +584,11 @@ nl <- mod_jSDM_block_Eucalypts$model_spec$n_latent
 np <- nrow(mod_jSDM_block_Eucalypts$model_spec$beta_start)
 # Alpha et V_alpha
 par(mfrow=(c(1,2)))
-plot(mod_boral_Eucalypts$row.coefs[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.alpha)[[1]][,"Mean"], xlab = "alphas estimated by Boral", ylab = "alphas estimated by jSDM", main = "Site random effect alpha")
+plot(mod_boral_Eucalypts$row.coefs[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
 points(mod_boral_Eucalypts$row.sigma[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.Valpha)[[1]]["Mean"],
-       pch = 18, col ='red',cex=2.5)
-legend("bottomright", legend = c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
+       pch=18, col ='red',cex=2.5)
+legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
@@ -588,18 +597,17 @@ for (j in 1:nsp){
 }
 boral_betas <- cbind(mod_boral_Eucalypts$lv.coefs.mean[,"beta0"],mod_boral_Eucalypts$X.coefs.mean)
 
-plot(boral_betas,jSDM_betas, xlab = "betas estimated by Boral", ylab = "betas estimated by jSDM", main = "Species fixed effect beta_j")
+plot(boral_betas,jSDM_betas, xlab="betas estimated by Boral", ylab="betas estimated by jSDM", main="Species fixed effect beta_j")
 abline(a=0,b=1,col='red')
 
 # Lambdas
-
 jSDM_lambdas <- matrix(0,nsp,nl)
 for (j in 1:nsp){
     jSDM_lambdas[j,] <- summary(mod_jSDM_block_Eucalypts$mcmc.sp[[paste0("sp_",j)]])[[1]][(np+1):(np+nl),"Mean"]
 }
 boral_lambdas <- mod_boral_Eucalypts$lv.coefs.mean[,-1]
 
-plot(boral_lambdas,jSDM_lambdas, xlab = "lambdas estimated by Boral", ylab = "lambdas estimated by jSDM", main = "Species fixed effect lambda_j")
+plot(boral_lambdas,jSDM_lambdas, xlab="lambdas estimated by Boral", ylab="lambdas estimated by jSDM", main="Species fixed effect lambda_j")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -607,16 +615,17 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- summary(mod_jSDM_block_Eucalypts$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
 }
-plot(mod_boral_Eucalypts$lv.mean, jSDM_lvs, xlab = "latent variables estimated by Boral", ylab = "latent variables estimated by jSDM", main = "Latent variables W_1 and W_2")
+plot(mod_boral_Eucalypts$lv.mean, jSDM_lvs, xlab="latent variables estimated by Boral", ylab="latent variables estimated by jSDM", main="Latent variables W_1 and W_2")
 abline(a=0,b=1,col='red')
+
 # Predictions 
-plot(probit_theta_pred_Eucalypts, mod_jSDM_block_Eucalypts$probit_theta_pred, xlab = "probit theta estimated by Boral", ylab = "probit theta estimated by jSDM", main = "Predicted probit theta")
+plot(probit_theta_pred_Eucalypts, mod_jSDM_block_Eucalypts$probit_theta_pred, xlab="probit theta estimated by Boral", ylab="probit theta estimated by jSDM", main="Predicted probit theta")
 abline(a=0,b=1,col='red')
 ```
 
-### Frogs dataset : 
+### Frogs dataset
 
-```{r jSDM_boral frogs, echo = FALSE}
+```{r jSDM-boral-frogs}
 print(paste(nrow(PA_Frogs),"sites and ",ncol(PA_Frogs)," species"))
 nsp <- ncol(mod_jSDM_block_Frogs$model_spec$presences)
 nsite <- nrow(mod_jSDM_block_Frogs$model_spec$presences)
@@ -624,11 +633,11 @@ nl <- mod_jSDM_block_Frogs$model_spec$n_latent
 np <- nrow(mod_jSDM_block_Frogs$model_spec$beta_start)
 # Alpha et V_alpha
 par(mfrow=c(1,2))
-plot(mod_boral_Frogs$row.coefs[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.alpha)[[1]][,"Mean"], xlab = "alphas estimated by Boral", ylab = "alphas estimated by jSDM", main = "Site random effect alpha")
+plot(mod_boral_Frogs$row.coefs[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
 points(mod_boral_Frogs$row.sigma[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.Valpha)[[1]]["Mean"],
-       pch = 18, col ='red',cex=2.5)
-legend("bottomright", legend = c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
+       pch=18, col ='red',cex=2.5)
+legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
@@ -637,18 +646,17 @@ for (j in 1:nsp){
 }
 boral_betas <- cbind(mod_boral_Frogs$lv.coefs.mean[,"beta0"],mod_boral_Frogs$X.coefs.mean)
 
-plot(boral_betas,jSDM_betas, xlab = "betas estimated by Boral", ylab = "betas estimated by jSDM", main = "Species fixed effect beta_j")
+plot(boral_betas,jSDM_betas, xlab="betas estimated by Boral", ylab="betas estimated by jSDM", main="Species fixed effect beta_j")
 abline(a=0,b=1,col='red')
 
 # Lambdas
-
 jSDM_lambdas <- matrix(0,nsp,nl)
 for (j in 1:nsp){
     jSDM_lambdas[j,] <- summary(mod_jSDM_block_Frogs$mcmc.sp[[paste0("sp_",j)]])[[1]][(np+1):(np+nl),"Mean"]
 }
 boral_lambdas <- mod_boral_Frogs$lv.coefs.mean[,-1]
 
-plot(boral_lambdas,jSDM_lambdas, xlab = "lambdas estimated by Boral", ylab = "lambdas estimated by jSDM", main = "Species fixed effect lambda_j")
+plot(boral_lambdas,jSDM_lambdas, xlab="lambdas estimated by Boral", ylab="lambdas estimated by jSDM", main="Species fixed effect lambda_j")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -656,17 +664,17 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- summary(mod_jSDM_block_Frogs$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
 }
-plot(mod_boral_Frogs$lv.mean, jSDM_lvs, xlab = "latent variables estimated by Boral", ylab = "latent variables estimated by jSDM", main = "Latent variables W_1 and W_2")
+plot(mod_boral_Frogs$lv.mean, jSDM_lvs, xlab="latent variables estimated by Boral", ylab="latent variables estimated by jSDM", main="Latent variables W_1 and W_2")
 abline(a=0,b=1,col='red')
 
 # Predictions 
-plot(probit_theta_pred_Frogs, mod_jSDM_block_Frogs$probit_theta_pred, xlab = "probit theta estimated by Boral", ylab = "probit theta estimated by jSDM", main = "Predicted probit theta")
+plot(probit_theta_pred_Frogs, mod_jSDM_block_Frogs$probit_theta_pred, xlab="probit theta estimated by Boral", ylab="probit theta estimated by jSDM", main="Predicted probit theta")
 abline(a=0,b=1,col='red')
 ```
 
-### Fungi dataset : 
+### Fungi dataset
 
-```{r jSDM_boral fungi, echo = FALSE}
+```{r jSDM-boral-fungi}
 print(paste(nrow(PA_Fungi),"sites and ",ncol(PA_Fungi)," species"))
 nsp <- ncol(mod_jSDM_block_Fungi$model_spec$presences)
 nsite <- nrow(mod_jSDM_block_Fungi$model_spec$presences)
@@ -674,11 +682,11 @@ nl <- mod_jSDM_block_Fungi$model_spec$n_latent
 np <- nrow(mod_jSDM_block_Fungi$model_spec$beta_start)
 # Alpha et V_alpha
 par(mfrow=c(1,2))
-plot(mod_boral_Fungi$row.coefs[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.alpha)[[1]][,"Mean"], xlab = "alphas estimated by Boral", ylab = "alphas estimated by jSDM", main = "Site random effect alpha")
+plot(mod_boral_Fungi$row.coefs[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
 points(mod_boral_Fungi$row.sigma[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.Valpha)[[1]]["Mean"],
-       pch = 18, col ='red',cex=2.5)
-legend("bottomright", legend = c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
+       pch=18, col ='red',cex=2.5)
+legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
@@ -687,18 +695,17 @@ for (j in 1:nsp){
 }
 boral_betas <- cbind(mod_boral_Fungi$lv.coefs.mean[,"beta0"],mod_boral_Fungi$X.coefs.mean)
 
-plot(boral_betas,jSDM_betas, xlab = "betas estimated by Boral", ylab = "betas estimated by jSDM", main = "Species fixed effect beta_j")
+plot(boral_betas,jSDM_betas, xlab="betas estimated by Boral", ylab="betas estimated by jSDM", main="Species fixed effect beta_j")
 abline(a=0,b=1,col='red')
 
 # Lambdas
-
 jSDM_lambdas <- matrix(0,nsp,nl)
 for (j in 1:nsp){
     jSDM_lambdas[j,] <- summary(mod_jSDM_block_Fungi$mcmc.sp[[paste0("sp_",j)]])[[1]][(np+1):(np+nl),"Mean"]
 }
 boral_lambdas <- mod_boral_Fungi$lv.coefs.mean[,-1]
 
-plot(boral_lambdas,jSDM_lambdas, xlab = "lambdas estimated by Boral", ylab = "lambdas estimated by jSDM", main = "Species fixed effect lambda_j")
+plot(boral_lambdas,jSDM_lambdas, xlab="lambdas estimated by Boral", ylab="lambdas estimated by jSDM", main="Species fixed effect lambda_j")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -706,9 +713,9 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- summary(mod_jSDM_block_Fungi$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
 }
-plot(mod_boral_Fungi$lv.mean, jSDM_lvs, xlab = "latent variables estimated by Boral", ylab = "latent variables estimated by jSDM", main = "Latent variables W_1 and W_2")
+plot(mod_boral_Fungi$lv.mean, jSDM_lvs, xlab="latent variables estimated by Boral", ylab="latent variables estimated by jSDM", main="Latent variables W_1 and W_2")
 abline(a=0,b=1,col='red')
 # Predictions 
-plot(probit_theta_pred_Fungi, mod_jSDM_block_Fungi$probit_theta_pred, xlab = "probit theta estimated by Boral", ylab = "probit theta estimated by jSDM", main = "Predicted probit theta")
+plot(probit_theta_pred_Fungi, mod_jSDM_block_Fungi$probit_theta_pred, xlab="probit theta estimated by Boral", ylab="probit theta estimated by jSDM", main="Predicted probit theta")
 abline(a=0,b=1,col='red')
 ```

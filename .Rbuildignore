@@ -13,7 +13,6 @@ logos
 pkgdown
 README.Rmd
 jSDM_boral.Rmd
-jSDM_boral_cache
 
 # travis
 ^\.travis\.yml$

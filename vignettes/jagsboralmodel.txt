@@ -1,4 +1,4 @@
-## JAGS model written for boral version 1.7 on 2019-06-07 00:13:30 ##
+## JAGS model written for boral version 1.7 on 2019-06-07 10:56:00 ##
 
  model {
 	 ## Data Level ## 
@@ -25,7 +25,6 @@
 
 	 for(j in 1:p) { X.coefs[j,1] ~ dnorm(0,0.1) } 
 	 for(j in 1:p) { X.coefs[j,2] ~ dnorm(0,0.1) } 
-	 for(j in 1:p) { X.coefs[j,3] ~ dnorm(0,0.1) } 
 
 
 	 }
