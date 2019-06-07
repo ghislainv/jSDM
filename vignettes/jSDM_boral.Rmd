@@ -27,7 +27,8 @@ knitr::opts_chunk$set(
   cache=FALSE,
   collapse=TRUE,
   comment="#>",
-  highlight=TRUE
+  highlight=TRUE,
+  eval=FALSE
 )
 ```
 
