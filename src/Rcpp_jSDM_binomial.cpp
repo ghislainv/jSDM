@@ -252,65 +252,65 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 
 // Test
 /*** R
-library(coda)
-
-inv.logit <- function(x, min=0, max=1) {
-    p <- exp(x)/(1+exp(x))
-    p <- ifelse( is.na(p) & !is.na(x), 1, p ) # fix problems with +Inf
-    p * (max-min) + min
-}
-
-nsite <- 200
-seed <- 1234
-set.seed(seed)
-visits<- rpois(nsite,3)
-visits[visits==0] <- 1
-
-# Ecological process (suitability)
-x1 <- rnorm(nsite,0,1)
-x2 <- rnorm(nsite,0,1)
-X <- cbind(rep(1,nsite),x1,x2)
-beta.target <- c(-1,1,-1)
-logit.theta <- X %*% beta.target
-theta <- inv.logit(logit.theta)
-Y <- rbinom(nsite,visits,theta)
-    
-# Data-sets
-data.obs <- data.frame(Y,visits,x1,x2)
-
-# Iterations
-nsamp <- 1000
-nburn <- 1000
-nthin <- 1
-ngibbs <- nsamp+nburn
-
-mf.suit <- model.frame(formula=~x1+x2, data=data.obs)
-X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
-    
-# Call to C++ function
-mod <- Rcpp_jSDM_binomial(
-    ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-    Y=data.obs$Y,
-    T=data.obs$visits,
-    X=X,
-    beta_start=rep(0, 3),
-    mubeta=rep(0, 3), Vbeta=rep(1.0E6, 3),
-    seed=1234, ropt=0.44, verbose=1)
-
-# Parameter estimates
-MCMC <- mcmc(mod$beta, start=nburn+1, end=ngibbs, thin=nthin)
-summary(MCMC)
-mean(mod$Deviance)
-plot(MCMC)
-           
-# GLM resolution to compare
-mod.glm <- glm(cbind(Y,visits-Y)~x1+x2,family="binomial",data=data.obs)
-summary(mod.glm)
-          
-# Predictions
-plot(theta,mod$theta_latent, main="theta",
-     xlab="obs", ylab="fitted")
-abline(a=0,b=1,col="red")
+# library(coda)
+# 
+# inv.logit <- function(x, min=0, max=1) {
+#     p <- exp(x)/(1+exp(x))
+#     p <- ifelse( is.na(p) & !is.na(x), 1, p ) # fix problems with +Inf
+#     p * (max-min) + min
+# }
+# 
+# nsite <- 200
+# seed <- 1234
+# set.seed(seed)
+# visits<- rpois(nsite,3)
+# visits[visits==0] <- 1
+# 
+# # Ecological process (suitability)
+# x1 <- rnorm(nsite,0,1)
+# x2 <- rnorm(nsite,0,1)
+# X <- cbind(rep(1,nsite),x1,x2)
+# beta.target <- c(-1,1,-1)
+# logit.theta <- X %*% beta.target
+# theta <- inv.logit(logit.theta)
+# Y <- rbinom(nsite,visits,theta)
+#     
+# # Data-sets
+# data.obs <- data.frame(Y,visits,x1,x2)
+# 
+# # Iterations
+# nsamp <- 1000
+# nburn <- 1000
+# nthin <- 1
+# ngibbs <- nsamp+nburn
+# 
+# mf.suit <- model.frame(formula=~x1+x2, data=data.obs)
+# X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+#     
+# # Call to C++ function
+# mod <- Rcpp_jSDM_binomial(
+#     ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#     Y=data.obs$Y,
+#     T=data.obs$visits,
+#     X=X,
+#     beta_start=rep(0, 3),
+#     mubeta=rep(0, 3), Vbeta=rep(1.0E6, 3),
+#     seed=1234, ropt=0.44, verbose=1)
+# 
+# # Parameter estimates
+# MCMC <- mcmc(mod$beta, start=nburn+1, end=ngibbs, thin=nthin)
+# summary(MCMC)
+# mean(mod$Deviance)
+# plot(MCMC)
+#            
+# # GLM resolution to compare
+# mod.glm <- glm(cbind(Y,visits-Y)~x1+x2,family="binomial",data=data.obs)
+# summary(mod.glm)
+#           
+# # Predictions
+# plot(theta,mod$theta_latent, main="theta",
+#      xlab="obs", ylab="fitted")
+# abline(a=0,b=1,col="red")
 */
 
 ////////////////////////////////////////////////////////////////////

@@ -123,7 +123,7 @@ for (i in 1:nsite){
 Deviance_boral_sim <- -2*logL
 ```
 
-```{r boral-simulation-plot}
+```{r boral-simulation-plot, cache=T}
 ## beta_j
 par(mfrow=c(1,2))
 plot(t(beta.target),cbind(mod_boral_sim$lv.coefs.mean[,1], mod_boral_sim$X.coefs.mean), xlab="betas target", ylab="means of estimated betas") 
@@ -484,13 +484,13 @@ kable(result, digits =1)
 
 ```{r jSDM-boral-simulation}
 # Alpha et V_alpha
+
 par(mfrow=c(1,2))
 plot(mod_boral_sim$row.coefs[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
 points(mod_boral_sim$row.sigma[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.Valpha)[[1]]["Mean"],
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
-
 # Betas
 jSDM_betas <- matrix(0,nsp,np)
 for (j in 1:nsp){
