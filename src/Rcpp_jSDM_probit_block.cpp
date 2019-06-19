@@ -109,12 +109,14 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
         // Mean of the prior
         double probit_theta = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
         
+        
         // Actualization
         if ( Y(i,j) == 1) {
-          Z_run(i,j) = left_truncated_normal_sample(probit_theta, 1, 0, s);
+          Z_run(i,j) = rtnorm(0,1.79e308,probit_theta_run(i,j), 1, s);
         }
+        
         if ( Y(i,j) == 0) {
-          Z_run(i,j) = right_truncated_normal_sample(probit_theta, 1, 0, s);
+          Z_run(i,j) = rtnorm(-1.79e308,0,probit_theta_run(i,j), 1, s);
         }
       }
     }
