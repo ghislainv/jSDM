@@ -12,7 +12,8 @@ docs
 logos
 pkgdown
 README.Rmd
-jSDM_boral.Rmd
+vignettes/jSDM_boral.Rmd
+vignettes/proof.Rmd
 
 # travis
 ^\.travis\.yml$

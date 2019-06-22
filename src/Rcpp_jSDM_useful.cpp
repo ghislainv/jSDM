@@ -2670,8 +2670,9 @@ double rtnorm(
   // Check if a < b
   if(a>=b)
   {
-    std::cerr<<"*** B must be greater than A ! ***"<<std::endl;
-    exit(1);
+    //std::cerr << "*** B must be greater than A ! ***" << std::endl;
+    //exit(1);
+    Rcpp::stop("*** B must be greater than A ! ***");
   }
   
   // Check if |a| < |b|
