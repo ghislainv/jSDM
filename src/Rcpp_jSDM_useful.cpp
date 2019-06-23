@@ -2652,10 +2652,10 @@ double rtnorm(
   double ALPHA = 1.837877066409345;             // = log(2*pi)
   int xsize=sizeof(Rtnorm::x)/sizeof(double);   // Length of table x
   int stop = false;
-  double sq2 = 7.071067811865475e-1;            // = 1/sqrt(2)
-  double sqpi = 1.772453850905516;              // = sqrt(pi)
+  //double sq2 = 7.071067811865475e-1;            // = 1/sqrt(2), unused var
+  //double sqpi = 1.772453850905516;              // = sqrt(pi), unused var
   
-  double r, z, e, ylk, simy, lbound, u, d, sim, Z, p;
+  double r, z, e, ylk, simy, lbound, u, d, sim; //, Z, p; unused var
   int i, ka, kb, k;
   
   // Scaling

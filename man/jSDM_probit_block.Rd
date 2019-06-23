@@ -42,12 +42,11 @@ seed=1234, verbose=1)}
     \item{V_alpha_start}{Starting value for variance of random site effect must be a stricly positive scalar.}
 
     \item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix. If \code{W_start} takes a scalar value, then that value will serve for all of the Ws.}  
-
-    \item{rate}{Rate parameter of the Inverse-Gamma prior for the variance \code{V_alpha} of random site effect must be a stricly positive scalar.}
-
-    \item{shape}{Shape parameter of the Inverse-Gamma prior for the variance \code{V_alpha} of random site effect must be a stricly positive scalar.}
-
     
+    \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
+
+    \item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.}
+
   \item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{mubeta} must be either a scalar or a p-length vector. If \code{mubeta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set to 0 for an uninformative prior.}
 
   \item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{Vbeta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{Vbeta} takes a scalar value,

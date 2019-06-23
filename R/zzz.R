@@ -13,6 +13,7 @@
    # echo output to screen
    packageStartupMessage("##\n## jSDM R package \n",
                          "## For joint species distribution models \n",
+   					     "## https://ecology.ghislainv.fr/jSDM \n",
                          "##\n")
 }
 

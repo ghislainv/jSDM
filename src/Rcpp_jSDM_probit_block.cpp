@@ -85,7 +85,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
   // Z latent (nsite*nsp)
   arma::mat Z_run; Z_run.zeros(NSITE,NSP);
   // probit_theta_ij = X_i*beta_j + W_i*lambda_j + alpha_i
-  arma::mat probit_theta_run ;probit_theta_run.zeros(NSITE,NSP);
+  arma::mat probit_theta_run; probit_theta_run.zeros(NSITE,NSP);
   // data 
   arma::mat data = arma::join_rows(X,W_run);
   
@@ -104,19 +104,12 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
     // latent variable Z // 
     
     for (int j=0; j<NSP; j++) {
-      
       for (int i=0; i<NSITE; i++) {
-        
-        // Mean of the prior
-        double probit_theta = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
-        
         // Actualization
-        if ( Y(i,j) == 1) {
-          Z_run(i,j) = rtnorm(s,0,R_PosInf,probit_theta_run(i,j), 1);
-        }
-        
-        if ( Y(i,j) == 0) {
-          Z_run(i,j) = rtnorm(s,R_NegInf,0,probit_theta_run(i,j), 1);
+        if (Y(i,j) == 0) {
+          Z_run(i,j) = rtnorm(s, R_NegInf, 0, probit_theta_run(i,j), 1);
+        } else {
+          Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
     }
@@ -140,7 +133,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
         if (l > j) {
           param_prop(NP+l) = 0;
         }
-        if ((l==j) & (param_prop(NP+l)< 0)) {
+        if ((l==j) & (param_prop(NP+l) < 0)) {
           param_prop(NP+l) = param_run(NP+l,j);
         }
       }
@@ -166,7 +159,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       W_run.row(i) = W_i.t();
     }
     
-    data = arma::join_rows(X,W_run);
+    data = arma::join_rows(X, W_run);
     
     ///////////////////////////////
     // vec alpha : Gibbs algorithm //
@@ -202,7 +195,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
     for ( int i = 0; i < NSITE; i++ ) {
       for ( int j = 0; j < NSP; j++ ) {
         // probit(theta_ij) = X_i*beta_j + W_i*lambda_j + alpha_i 
-        probit_theta_run(i,j) = arma::as_scalar(data.row(i)*param_run.col(j)  + alpha_run(i));
+        probit_theta_run(i,j) = arma::as_scalar(data.row(i)*param_run.col(j) + alpha_run(i));
         // link function probit is the inverse of N(0,1) repartition function 
         double theta = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
         
@@ -324,7 +317,8 @@ mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                               Y=Y,T=visits,X=X,
                               param_start=param_start, Vparam=diag(c(rep(1.0E6,np),rep(10,nl))),
                               muparam = rep(0,np+nl), W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
-                              alpha_start=rep(0,nsite),Valpha_start=1, shape = 0.5, rate = 0.0005, seed=123, verbose=1)
+                              alpha_start=rep(0,nsite), Valpha_start=1, shape=0.5, rate=0.0005,
+                              seed=123, verbose=1)
 
 # ===================================================
 # Result analysis

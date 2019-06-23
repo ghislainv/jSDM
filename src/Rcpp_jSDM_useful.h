@@ -27,6 +27,6 @@ double invlogit (double x);
 // Returns the random variable x and its probability p(x).
 //  The code is based on the implementation by Guillaume Dollé, Vincent Mazet
 //  available from http://miv.u-strasbg.fr/mazet/rtnorm/.
-double rtnorm(gsl_rng *gen, double a,double b,const double mu,const double sigma);
+double rtnorm (gsl_rng *gen, double a,double b,const double mu,const double sigma);
 
 // End

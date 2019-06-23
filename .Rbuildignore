@@ -2,18 +2,29 @@
 # .Rbuildignore, see
 # http://cran.r-project.org/doc/manuals/R-exts.html#index-_002eRbuildignore-file
 
-# GitHub files
-.git/
+# Default
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
+^NEWS\.Rmd$
+^vignettes/figure/.*$
+^vignettes/cache/.*$
+vignettes/.*_files/
+vignettes/.*\.html
+vignettes/.*\.md
+^.git$
+^.gitignore$
 
 # pkgdown
-docs
-logos
-pkgdown
-README.Rmd
-vignettes/jSDM_boral.Rmd
-vignettes/proof.Rmd
+^docs$
+^logos$
+^pkgdown$
 
 # travis
 ^\.travis\.yml$
+
+# vignettes
+^vignettes/jSDM_boral\.Rmd$
+^vignettes/jagsboralmodel\.txt$
+^vignettes/proof\.Rmd$
+^vignettes/.*_cache$
