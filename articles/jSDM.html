@@ -109,36 +109,36 @@
 
     
     
-<p>Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>)</span>. jSDM is becoming an increasingly popular statistical method in conservation biology. In this vignette, we illustrate the use of the <code>jSDM</code> R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models. Package’s functions are developped in a hierarchical Bayesian framework and use conjugate priors to estimate model’s parameters. Using compiled C code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity.</p>
+<p>Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>)</span>. jSDM is becoming an increasingly popular statistical method in conservation biology. In this vignette, we illustrate the use of the <code>jSDM</code> R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models. Package’s functions are developped in a hierarchical Bayesian framework and use conjugate priors to estimate model’s parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity.</p>
 <p>Below, we show an example of the use of <code>jSDM</code> for fitting species distribution model to abundance data for 9 frog’s species. Model types available in <code>jSDM</code> are not limited to those described in this example. <code>jSDM</code> includes various model types for occurrence data:</p>
 <div id="definition-of-the-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
 <p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span>, we define the following model :</p>
-<p><span class="math display">\[ \mathrm{probit}(\theta_{i,j}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j \]</span></p>
+<p><span class="math display">\[ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j \]</span></p>
 <ul>
-<li><p>Link function probit: <span class="math inline">\(\mathrm{probit} : q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
-<li><p>Response variable: <span class="math inline">\(Y=(y_{i,j})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
+<li><p>Link function probit: <span class="math inline">\(\mathrm{probit}: q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
+<li><p>Response variable: <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
 </ul>
-<p><span class="math display">\[y_{i,j}=\begin{cases}
+<p><span class="math display">\[y_{ij}=\begin{cases}
     0 &amp; \text{ if species $j$ is absent on the site $i$}\\
-    1 &amp;  \text{ if species  $j$ is present on the site $i$}
-    \end{cases}.\]</span></p>
-<ul>
-<li>Latent variable <span class="math inline">\(z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall i,j \ \epsilon_{i,j} \sim \mathcal{N}(0,1)\)</span> and such as:</li>
-</ul>
-<p><span class="math display">\[y_{i,j}=\begin{cases}
-    1 &amp; \text{ if } z_{i,j} &gt; 0 \\
-    0 &amp;  \text{ otherwise.}
+    1 &amp;  \text{ if species  $j$ is present on the site $i$}.
     \end{cases}\]</span></p>
-<p>It can be easily shown that: <span class="math inline">\(y_{i,j}| z_{i,j} \sim \mathcal{B}ernouilli(\theta_{i,j})\)</span>.</p>
+<ul>
+<li>Latent variable <span class="math inline">\(z_{ij} = \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)\)</span> and such that:</li>
+</ul>
+<p><span class="math display">\[y_{ij}=\begin{cases}
+    1 &amp; \text{if} \ z_{ij} &gt; 0 \\
+    0 &amp;  \text{otherwise.}
+    \end{cases}\]</span></p>
+<p>It can be easily shown that: <span class="math inline">\(y_{ij} \sim \mathcal{B}ernouilli(\theta_{ij})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints.</p></li>
 <li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> avec <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
 <li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10^6)\)</span> for all betas.</p></li>
-<li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(0.5,\frac{1}{0.005})\)</span> as prior distribution by default.</p></li>
+<li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
 <div id="data-set" class="section level1">
@@ -157,8 +157,9 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">#&gt; ##</span>
 <span class="co">#&gt; ## jSDM R package </span>
 <span class="co">#&gt; ## For joint species distribution models </span>
+<span class="co">#&gt; ## https://ecology.ghislainv.fr/jSDM </span>
 <span class="co">#&gt; ##</span></code></pre>
-<p>This data-set is available in the <code>jSDM</code> R package. It can be loaded with the <code>data</code> command. The data is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariates and two other continuous.</p>
+<p>This data-set is available in the <code>jSDM</code> R package. It can be loaded with the <code>data</code> command. The data is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># frogs data</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(frogs, <span class="dt">package=</span><span class="st">"jSDM"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(frogs)
@@ -183,16 +184,14 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">#&gt; 4 9.029745</span>
 <span class="co">#&gt; 5 9.026514</span>
 <span class="co">#&gt; 6 9.023580</span></code></pre>
-<p>We rearrange the data in two data-sets, one for the observation (or detection) process and one for the suitability (or ecological) process.</p>
-<p>We normalize the continuous data to facilitate MCMC convergence.</p>
-<pre class="sourceCode r"><code class="sourceCode r">
-<span class="co"># data.suit</span>
+<p>We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.</p>
+<p>We also normalize the continuous explicative variables to facilitate MCMC convergence.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># data.obs</span>
+PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span class="op">:</span><span class="dv">12</span>]
+
 <span class="co"># Normalized continuous variables</span>
 Env_frogs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">1</span>]),frogs[,<span class="dv">2</span>],<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">3</span>]))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(Env_frogs) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span> (frogs[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])
-
-<span class="co"># data.obs</span>
-PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span class="op">:</span><span class="dv">12</span>]</code></pre>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(Env_frogs) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(frogs[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</code></pre>
 </div>
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
@@ -233,18 +232,19 @@ PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span cla
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
-<pre class="sourceCode r"><code class="sourceCode r">## alpha_i of 3 first sites
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">## alpha_i of the first two sites
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]))</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-1.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 ## Valpha
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))
-coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main =</span> <span class="st">"V_alpha"</span>)
-coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main =</span> <span class="st">"V_alpha"</span>)</code></pre>
+coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)
+coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-2.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>beta_start)
-## beta_j of two first species
+
+## beta_j of the first two species
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(np,<span class="dv">2</span>))
 <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
   <span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>np) {
@@ -256,8 +256,8 @@ np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocument
 }</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-4.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
+## lambda_j of the first two species
 n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>n_latent
-## lambda_j of two first species
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(n_latent<span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>))
 <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
   <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
@@ -269,7 +269,7 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
   }</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-5.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
-## Latent variables W_i of two first sites
+## Latent variables W_i for the first two sites
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))
 <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
   <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.latent[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lv_"</span>,l)]][,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Latent variable W_"</span>, l))
@@ -277,11 +277,12 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
 <p><img src="jSDM_files/figure-html/plot-results-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-7.png" width="576" style="display: block; margin: auto;"></p>
 <pre class="sourceCode r"><code class="sourceCode r">
 ## probit_theta
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Deviance,<span class="dt">main =</span> <span class="st">"Deviance"</span>)</code></pre>
-<p><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">## Deviance
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span> (<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(mod_jSDM_block_frogs<span class="op">$</span>probit_theta_pred, <span class="dt">main =</span> <span class="st">"Predicted probit theta"</span>, <span class="dt">xlab =</span><span class="st">"predicted probit theta"</span>)</code></pre>
+<p><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
+<pre class="sourceCode r"><code class="sourceCode r">
+## Deviance
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Deviance,<span class="dt">main =</span> <span class="st">"Deviance"</span>)</code></pre>
 <p><img src="jSDM_files/figure-html/plot-results-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level1">
@@ -309,7 +310,6 @@ simdata<span class="op">$</span>Covariate_<span class="dv">1</span> &lt;-<span c
 simdata<span class="op">$</span>Covariate_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)
 simdata<span class="op">$</span>Covariate_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="dv">50</span>,<span class="dv">1</span>,<span class="fl">0.5</span>)
 
-
 <span class="co"># Predictions </span>
 theta_pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict.jSDM.html">predict.jSDM</a></span>(mod_jSDM_block_frogs, <span class="dt">newdata=</span>simdata, <span class="dt">Id_species=</span>Id_species,
                            <span class="dt">Id_sites=</span>Id_sites, <span class="dt">type=</span><span class="st">"mean"</span>)
@@ -327,7 +327,7 @@ theta_pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
 </div>
 <div id="ref-Wilkinson2019">
-<p>Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) A comparison of joint species distribution models for presence–absence data. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.</p>
+<p>Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.</p>
 </div>
 </div>
 </div>
