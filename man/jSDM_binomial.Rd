@@ -116,8 +116,6 @@ beta_start, mubeta = 0, Vbeta = 1e+06, seed = 1234, ropt = 0.44, verbose = 1)}
 
 \examples{
 
-\dontrun{
-
 #==============================================
 # jSDM_binomial()
 # Example with simulated data
@@ -173,7 +171,7 @@ mod_jSDM_binomial <- jSDM_binomial(presences=data.obs$Y,
 
 #= Parameter estimates
 summary(mod_jSDM_binomial$mcmc)
-pdf(file="Posteriors_jSDM_binomial.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_jSDM_binomial.pdf"))
 plot(mod_jSDM_binomial$mcmc)
 dev.off()
 
@@ -183,12 +181,10 @@ summary(mod_glm)
 
 #= Predictions
 summary(mod_jSDM_binomial$theta_latent)
-pdf(file="Pred-Init.pdf")
+pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
 plot(theta, mod_jSDM_binomial$theta_latent)
 abline(a=0 ,b=1, col="red")
 dev.off()
-
-}
 
 }
 

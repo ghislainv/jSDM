@@ -115,7 +115,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 \examples{
 
-\dontrun{
+\donttest{
 
 #==============================================
 # jSDM_probit_block()
@@ -157,7 +157,7 @@ param.target <- rbind(beta.target,lambda.target)
 Valpha.target <- 0.5
 V <- 1
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
-probit_theta <- as.matrix(X) %*% beta.target + W %*% lambda.target + alpha.target
+probit_theta <- as.matrix(X) \%*\% beta.target + W \%*\% lambda.target + alpha.target
 e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 Z_true <- probit_theta + e
 visits <- matrix(1,nsite,nsp)
@@ -195,7 +195,7 @@ mod_jSDM_probit_block <- jSDM_probit_block ( presence_site_sp = Y ,
 
 ## alpha
 summary(mod_jSDM_probit_block$mcmc.alpha)
-pdf(file="Posteriors_alpha_jSDM_probit_block.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_probit_block.pdf"))
 plot(mod_jSDM_probit_block$mcmc.alpha)
 plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"],
      ylab ="alpha.estimated")
@@ -204,7 +204,7 @@ dev.off()
 
 ## Valpha
 summary(mod_jSDM_probit_block$mcmc.Valpha)
-pdf(file="Posteriors_Valpha_jSDM_probit_block.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_Valpha_jSDM_probit_block.pdf"))
 par(mfrow=c(1,2))
 coda::traceplot(mod_jSDM_probit_block$mcmc.Valpha)
 coda::densplot(mod_jSDM_probit_block$mcmc.Valpha)
@@ -214,7 +214,7 @@ dev.off()
 
 ## beta_j
 summary(mod_jSDM_probit_block$mcmc.sp$sp_1[,1:ncol(X)])
-pdf(file="Posteriors_beta_jSDM_probit_block.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit_block.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
   for (p in 1:ncol(X)) {
@@ -229,7 +229,7 @@ dev.off()
 ## lambda_j
 summary(mod_jSDM_probit_block$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
 summary(mod_jSDM_probit_block$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
-pdf(file="Posteriors_lambda_jSDM_probit_block.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit_block.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
   for (l in 1:n_latent) {
@@ -243,7 +243,7 @@ for (j in 1:nsp) {
 dev.off()
 
 ## W latent variables
-pdf(file="Posteriors_lv_jSDM_probit_block.pdf")
+pdf(file=file.path(tempdir(), "Posteriors_lv_jSDM_probit_block.pdf"))
 par(mfrow=c(1,1))
 for (l in 1:n_latent) {
 summary(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])
@@ -260,7 +260,7 @@ plot(mod_jSDM_probit_block$mcmc.Deviance)
 
 #= Predictions
 
-pdf(file="Pred-Init.pdf")
+pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
 ## probit_theta
 summary(mod_jSDM_probit_block$probit_theta_pred)
 par(mfrow=c(1,1))
