@@ -7,6 +7,7 @@
 CI](https://api.travis-ci.org/ghislainv/jSDM.svg?branch=master)](https://travis-ci.org/ghislainv/jSDM)
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/package=jSDM)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3253460.svg)](https://doi.org/10.5281/zenodo.3253460)
 [![Downloads](https://cranlogs.r-pkg.org/badges/jSDM)](https://cran.r-project.org/package=jSDM)
 
 Package for fitting joint species distribution models (jSDM) in a
