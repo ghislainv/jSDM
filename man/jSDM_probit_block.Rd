@@ -130,14 +130,14 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 300
+nsite <- 50
 
 #= Set seed for repeatability
 seed <- 1234
 set.seed(seed)
 
 #= Number of species
-nsp<- 100
+nsp<- 5
 
 #= Number of latent variables
 n_latent <- 2
@@ -160,8 +160,6 @@ alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
 probit_theta <- as.matrix(X) \%*\% beta.target + W \%*\% lambda.target + alpha.target
 e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 Z_true <- probit_theta + e
-visits <- matrix(1,nsite,nsp)
-#comment on fait pour prendre en compte le nombre de visites ?
 Y <- matrix (NA, nsite,nsp)
 for (i in 1:nsite){
   for (j in 1:nsp){
@@ -173,10 +171,10 @@ for (i in 1:nsite){
 #==================================
 #== Site-occupancy model
 
-mod_jSDM_probit_block <- jSDM_probit_block ( presence_site_sp = Y ,
+mod_jSDM_probit_block <- jSDM::jSDM_probit_block ( presence_site_sp = Y ,
                                              site_suitability = ~ x1 + x2,
                                              site_data = X[,-1], n_latent=2,
-                                             burnin=5000, mcmc=15000, thin=10,
+                                             burnin=5000, mcmc=10000, thin=5,
                                              alpha_start=0, beta_start=0,
                                              lambda_start=0, W_start=0,
                                              V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -196,9 +194,8 @@ mod_jSDM_probit_block <- jSDM_probit_block ( presence_site_sp = Y ,
 ## alpha
 summary(mod_jSDM_probit_block$mcmc.alpha)
 pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_probit_block.pdf"))
-plot(mod_jSDM_probit_block$mcmc.alpha)
-plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"],
-     ylab ="alpha.estimated")
+plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"], xlab ="alphas target"
+     ylab ="alphas estimated")
 abline(a=0,b=1,col='red')
 dev.off()
 
@@ -244,12 +241,10 @@ dev.off()
 
 ## W latent variables
 pdf(file=file.path(tempdir(), "Posteriors_lv_jSDM_probit_block.pdf"))
-par(mfrow=c(1,1))
+par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-summary(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])
-plot(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])
 plot(W[,l],summary(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
-main = paste0("Latent variable W_", l))
+main = paste0("Latent variable W_", l), xlab =paste0("W_", l, " target"), ylab =paste0("W_", l, " estimated"))
 abline(a=0,b=1,col='red')
 }
 dev.off()
