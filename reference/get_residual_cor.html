@@ -167,6 +167,89 @@
 
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># frogs data</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
+<span class='co'># Arranging data</span>
+<span class='co'># data.obs</span>
+<span class='no'>PA_frogs</span> <span class='kw'>&lt;-</span> <span class='no'>frogs</span>[,<span class='fl'>4</span>:<span class='fl'>12</span>]
+
+<span class='co'># Normalized continuous variables</span>
+<span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
+
+ <span class='co'># Parameter inference</span>
+ <span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> (
+  <span class='co'># Response variable </span>
+  <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
+  <span class='co'># Explanatory variables </span>
+  <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
+  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>), <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
+  <span class='co'># Chains</span>
+  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>3000</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>3000</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>3</span>,
+  <span class='co'># Starting values</span>
+  <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+  <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+  <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
+  <span class='co'># Priors</span>
+  <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
+  <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
+  <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
+  <span class='co'># Various </span>
+  <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+#&gt; Running the Gibbs sampler. It may be long, please keep cool :)
+#&gt; 
+#&gt; **********:10.0% 
+#&gt; **********:20.0% 
+#&gt; **********:30.0% 
+#&gt; **********:40.0% 
+#&gt; **********:50.0% 
+#&gt; **********:60.0% 
+#&gt; **********:70.0% 
+#&gt; **********:80.0% 
+#&gt; **********:90.0% 
+#&gt; **********:100.0% </div><div class='input'>
+ <span class='co'># Calcul of residual correlation between species </span>
+ <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>get_residual_cor</span>(<span class='no'>mod_jSDM_block_frogs</span>)
+ <span class='no'>result</span>$<span class='no'>cov.mean</span></div><div class='output co'>#&gt;              [,1]        [,2]       [,3]      [,4]        [,5]       [,6]
+#&gt;  [1,]  2.60388060 -0.07213523  5.2766631  0.664270  0.09692822   3.739117
+#&gt;  [2,] -0.07213523  3.55703779  0.5306708 -1.626357  2.24071926   7.234035
+#&gt;  [3,]  5.27666307  0.53067079 30.1362281  2.945093  0.67182332  10.817757
+#&gt;  [4,]  0.66427003 -1.62635661  2.9450931  8.183835 -1.63318162  -8.530132
+#&gt;  [5,]  0.09692822  2.24071926  0.6718233 -1.633182  4.30941514   8.134145
+#&gt;  [6,]  3.73911662  7.23403549 10.8177566 -8.530132  8.13414487  55.973218
+#&gt;  [7,]  4.09543923  4.47916801 16.6750989 -4.000198  5.05364806  31.273851
+#&gt;  [8,]  0.43086991 -3.64610296  4.2239573  4.870961 -3.66718333 -19.591315
+#&gt;  [9,]  4.37152899  3.77102283 17.8599289 -2.784700  4.48781243  31.558153
+#&gt;            [,7]        [,8]      [,9]
+#&gt;  [1,]  4.095439   0.4308699  4.371529
+#&gt;  [2,]  4.479168  -3.6461030  3.771023
+#&gt;  [3,] 16.675099   4.2239573 17.859929
+#&gt;  [4,] -4.000198   4.8709605 -2.784700
+#&gt;  [5,]  5.053648  -3.6671833  4.487812
+#&gt;  [6,] 31.273851 -19.5913150 31.558153
+#&gt;  [7,] 26.915581  -8.4011617 23.444647
+#&gt;  [8,] -8.401162  13.0609079 -7.934393
+#&gt;  [9,] 23.444647  -7.9343929 28.351107</div><div class='input'> <span class='no'>result</span>$<span class='no'>cor.mean</span></div><div class='output co'>#&gt;             [,1]        [,2]       [,3]       [,4]        [,5]       [,6]
+#&gt;  [1,] 1.00000000  0.05326725 0.57416452  0.1127339  0.08522255  0.3130669
+#&gt;  [2,] 0.05326725  1.00000000 0.03763290 -0.2984142  0.47710740  0.5663358
+#&gt;  [3,] 0.57416452  0.03763290 1.00000000  0.2077572  0.03716552  0.2875858
+#&gt;  [4,] 0.11273391 -0.29841423 0.20775721  1.0000000 -0.28403587 -0.4435746
+#&gt;  [5,] 0.08522255  0.47710740 0.03716552 -0.2840359  1.00000000  0.5949151
+#&gt;  [6,] 0.31306693  0.56633579 0.28758584 -0.4435746  0.59491514  1.0000000
+#&gt;  [7,] 0.47673234  0.48619433 0.54190653 -0.2695672  0.51713800  0.8363977
+#&gt;  [8,] 0.04954751 -0.48970280 0.14664497  0.5225313 -0.50015594 -0.7355103
+#&gt;  [9,] 0.50100969  0.44453601 0.55941039 -0.2536408  0.47738223  0.8646305
+#&gt;             [,7]        [,8]       [,9]
+#&gt;  [1,]  0.4767323  0.04954751  0.5010097
+#&gt;  [2,]  0.4861943 -0.48970280  0.4445360
+#&gt;  [3,]  0.5419065  0.14664497  0.5594104
+#&gt;  [4,] -0.2695672  0.52253130 -0.2536408
+#&gt;  [5,]  0.5171380 -0.50015594  0.4773822
+#&gt;  [6,]  0.8363977 -0.73551033  0.8646305
+#&gt;  [7,]  1.0000000 -0.46294117  0.8939142
+#&gt;  [8,] -0.4629412  1.00000000 -0.4841556
+#&gt;  [9,]  0.8939142 -0.48415557  1.0000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -174,7 +257,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Jeanne Clement <a href='mailto:jeanne.clement16@laposte.net'>jeanne.clement16@laposte.net</a>, adapted from function <code><a href='https://www.rdocumentation.org/packages/boral/topics/get.residual.cor'>boral::get.residual.cor()</a></code> written by Francis K. Hui <a href='mailto:fhui28@gmail.com'>fhui28@gmail.com</a>.</p>
