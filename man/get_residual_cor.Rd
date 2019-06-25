@@ -38,6 +38,7 @@ Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
 colnames(Env_frogs) <- colnames(frogs[,1:3])
 
  # Parameter inference
+ # Increase number of iterations (burnin and mcmc) to get convergence 
  mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
   # Response variable 
   presence_site_sp = as.matrix(PA_frogs), 

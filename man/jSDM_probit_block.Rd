@@ -170,6 +170,7 @@ for (i in 1:nsite){
 #==================================
 #== Site-occupancy model
 
+# Increase number of iterations (burnin and mcmc) to get convergence 
 mod_jSDM_probit_block <- jSDM::jSDM_probit_block ( presence_site_sp = Y ,
                                              site_suitability = ~ x1 + x2,
                                              site_data = X[,-1], n_latent=2,
