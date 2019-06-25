@@ -35,6 +35,9 @@
 \seealso{
   \code{\link{jSDM}}
 }
+
+\examples{
+
 # frogs data
 data(frogs, package="jSDM")
 # Arranging data
@@ -53,7 +56,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
   site_suitability = ~.,   
   site_data = as.data.frame(Env_frogs), n_latent=2,
   # Chains
-  burnin=5000, mcmc=5000, thin=5,
+  burnin=3000, mcmc=3000, thin=3,
   # Starting values
   alpha_start=0, beta_start=0,
   lambda_start=0, W_start=0,
@@ -80,9 +83,10 @@ simdata$Covariate_3 <- rnorm(50)
 simdata$Covariate_2 <- rbinom(50,1,0.5)
 
 # Predictions 
-theta_pred <- predict.jSDM(mod_jSDM_block_frogs, newdata=simdata, Id_species=Id_species, Id_sites=Id_sites, type="mean")
+theta_pred <- predict.jSDM(
+mod_jSDM_block_frogs, newdata=simdata,
+Id_species=Id_species, Id_sites=Id_sites, type="mean")
 hist(theta_pred, main="Predicted theta with simulated covariates")
- }
  }
  
 \keyword{prediction}

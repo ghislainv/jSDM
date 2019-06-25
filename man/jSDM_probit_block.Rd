@@ -115,8 +115,6 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 \examples{
 
-\donttest{
-
 #==============================================
 # jSDM_probit_block()
 # Example with simulated data
@@ -152,7 +150,8 @@ beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
+lambda.target <- t(matrix(c(l.diag[1],l.zero,
+l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 param.target <- rbind(beta.target,lambda.target)
 Valpha.target <- 0.5
 V <- 1
@@ -174,10 +173,11 @@ for (i in 1:nsite){
 mod_jSDM_probit_block <- jSDM::jSDM_probit_block ( presence_site_sp = Y ,
                                              site_suitability = ~ x1 + x2,
                                              site_data = X[,-1], n_latent=2,
-                                             burnin=5000, mcmc=10000, thin=5,
+                                             burnin=3000, mcmc=3000, thin=3,
                                              alpha_start=0, beta_start=0,
                                              lambda_start=0, W_start=0,
-                                             V_alpha_start=1, shape=0.5, rate=0.0005,
+                                             V_alpha_start=1,
+                                             shape=0.5, rate=0.0005,
                                              mu_beta=0, V_beta=1.0E6,
                                              mu_lambda=0, V_lambda=10,
                                              seed=1234, verbose=1)
@@ -194,8 +194,9 @@ mod_jSDM_probit_block <- jSDM::jSDM_probit_block ( presence_site_sp = Y ,
 ## alpha
 summary(mod_jSDM_probit_block$mcmc.alpha)
 pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_probit_block.pdf"))
-plot(alpha.target,summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"], xlab ="alphas target"
-     ylab ="alphas estimated")
+plot(alpha.target,
+summary(mod_jSDM_probit_block$mcmc.alpha)[[1]][,"Mean"],
+xlab ="alphas target", ylab ="alphas estimated")
 abline(a=0,b=1,col='red')
 dev.off()
 
@@ -243,8 +244,10 @@ dev.off()
 pdf(file=file.path(tempdir(), "Posteriors_lv_jSDM_probit_block.pdf"))
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-plot(W[,l],summary(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
-main = paste0("Latent variable W_", l), xlab =paste0("W_", l, " target"), ylab =paste0("W_", l, " estimated"))
+plot(W[,l],
+summary(mod_jSDM_probit_block$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+main = paste0("Latent variable W_", l),
+xlab =paste0("W_", l, " target"), ylab =paste0("W_", l, " estimated"))
 abline(a=0,b=1,col='red')
 }
 dev.off()
@@ -267,8 +270,6 @@ summary(mod_jSDM_probit_block$Z_latent)
 plot(Z_true,mod_jSDM_probit_block$Z_latent)
 abline(a=0,b=1,col='red')
 dev.off()
-
-}
 
 }
 

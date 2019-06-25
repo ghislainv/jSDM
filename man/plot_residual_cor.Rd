@@ -22,8 +22,6 @@ plot_residual_cor(mod)
 }
 
 \examples{
-
-\donttest{
 # frogs data
 data(frogs, package="jSDM")
 # Arranging data
@@ -42,7 +40,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
   site_suitability = ~.,   
   site_data = as.data.frame(Env_frogs), n_latent=2,
   # Chains
-  burnin=5000, mcmc=5000, thin=5,
+  burnin=3000, mcmc=3000, thin=3,
   # Starting values
   alpha_start=0, beta_start=0,
   lambda_start=0, W_start=0,
@@ -57,5 +55,5 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
  # Representation of residual correlation between species 
  plot_residual_cor(mod_jSDM_block_frogs)
 }
-}
+
 \keyword{corrplot}
