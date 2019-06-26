@@ -170,6 +170,7 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
 
  <span class='co'># Parameter inference</span>
+ <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence </span>
  <span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> (
   <span class='co'># Response variable </span>
   <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),

@@ -349,6 +349,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 <span class='co'>#==================================</span>
 <span class='co'>#== Site-occupancy model</span>
 
+<span class='co'># Increase number of iterations (burnin and mcmc) to get convergence </span>
 <span class='no'>mod_jSDM_probit_block</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> ( <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='no'>Y</span> ,
                                              <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~ <span class='no'>x1</span> + <span class='no'>x2</span>,
                                              <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>X</span>[,-<span class='fl'>1</span>], <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
