@@ -11,7 +11,7 @@ seed <- 1234
 set.seed(seed)
 
 #= Number of species
-nsp<- 5
+nsp <- 5
 
 #= Number of latent variables
 n_latent <- 2
