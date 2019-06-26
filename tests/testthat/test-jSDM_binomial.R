@@ -29,18 +29,24 @@ Y <- rbinom(nsite,visits,theta)
 #= Data-sets
 data.obs <- data.frame(Y,visits,x1,x2)
 
-# Fit the model 
+#==================
+#== Fit the model 
+burnin <- 1000
+mcmc <- 1000
+thin <- 1
+nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial(presences=data.obs$Y,
                       trials=data.obs$visits,
                       suitability=~x1+x2,
                       data=data.obs,
-                      burnin=1000, mcmc=1000, thin=1,
+                      burnin=burnin, mcmc=mcmc, thin=thin,
                       beta_start=0,
                       mubeta=0, Vbeta=1.0E6,
                       seed=1234, ropt=0.44, verbose=1)
 
 test_that("jSDM_binomial works", {
-  expect_equal(mean(mod$theta_latent),0.3227354614)
-  expect_equal(as.numeric(mod$mcmc[1,"beta_(Intercept)"]),-1.104863817)
-  expect_equal(as.numeric(mod$mcmc[1,"Deviance"]),335.7975026)
+  expect_equal(sum(is.na(mod$theta_latent)),0)
+  expect_equal(dim(mod$theta_latent),c(nsite,1))
+  expect_equal(dim(mod$mcmc),c(nsamp,ncol(X)+1))
+  expect_equal(sum(is.na(mod$mcmc)),0)
 })

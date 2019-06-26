@@ -43,10 +43,16 @@ for (i in 1:nsite){
   }
 }
 
+#==================
+#== Fit the model
+burnin <- 3000
+mcmc <- 3000
+thin <- 3
+nsamp <- mcmc/thin
 mod <- jSDM::jSDM_probit_block(presence_site_sp = Y ,
                                site_suitability = ~ x1 + x2,
                                site_data = X[,-1], n_latent=2,
-                               burnin=3000, mcmc=3000, thin=3,
+                               burnin=burnin, mcmc=mcmc, thin=thin,
                                alpha_start=0, beta_start=0,
                                lambda_start=0, W_start=0,
                                V_alpha_start=1,
@@ -56,12 +62,22 @@ mod <- jSDM::jSDM_probit_block(presence_site_sp = Y ,
                                seed=1234, verbose=1)
 
 test_that("jSDM_probit_block works", {
-  expect_equal(as.numeric(mod$mcmc.sp[["sp_1"]][1,1]),0.7909628909)
-  expect_equal(as.numeric(mod$mcmc.sp[["sp_2"]][1,ncol(X)+1]),-6.281034902)
-  expect_equal(as.numeric(mod$mcmc.latent$lv_1[1,1]),0.1366113792)
-  expect_equal(as.numeric(mod$mcmc.alpha[1,1]),-0.06032532822)
-  expect_equal(mod$Z_latent[1,1],0.9159269489)
-  expect_equal(mod$probit_theta_pred[1,1],-0.02197215596)
-  expect_equal(mean(mod$mcmc.Valpha),0.6646393932)
-  #expect_equal(mean(mod$mcmc.Deviance),78.53033811)
+  expect_equal(length(mod$mcmc.sp),nsp)
+  expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
+  expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
+  expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(sum(is.na(mod$Z_latent)),0)
+  expect_equal(sum(is.infinite(mod$Z_latent)),0)
+  expect_equal(dim(mod$Z_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$probit_theta_pred)),0)
+  expect_equal(dim(mod$probit_theta_pred),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$mcmc.Valpha)),0)
+  expect_equal(dim(mod$mcmc.Valpha),c(nsamp,1))
+  expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
+  expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
 })
