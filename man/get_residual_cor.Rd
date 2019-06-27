@@ -27,26 +27,27 @@
 }
 
 \examples{
+
 # frogs data
 data(frogs, package="jSDM")
+
 # Arranging data
-# data.obs
 PA_frogs <- frogs[,4:12]
 
 # Normalized continuous variables
 Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
 colnames(Env_frogs) <- colnames(frogs[,1:3])
 
- # Parameter inference
- # Increase number of iterations (burnin and mcmc) to get convergence 
- mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
+# Parameter inference
+# Increase the number of iterations to reach MCMC convergence
+mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
   # Response variable 
   presence_site_sp = as.matrix(PA_frogs), 
   # Explanatory variables 
   site_suitability = ~.,   
   site_data = as.data.frame(Env_frogs), n_latent=2,
   # Chains
-  burnin=3000, mcmc=3000, thin=3,
+  burnin=1000, mcmc=1000, thin=1,
   # Starting values
   alpha_start=0, beta_start=0,
   lambda_start=0, W_start=0,
@@ -58,10 +59,11 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
   # Various 
   seed=1234, verbose=1)
   
- # Calcul of residual correlation between species 
- result <- get_residual_cor(mod_jSDM_block_frogs)
- result$cov.mean
- result$cor.mean
+# Calcul of residual correlation between species 
+result <- get_residual_cor(mod_jSDM_block_frogs)
+result$cov.mean
+result$cor.mean
+
 }
 
 \keyword{stats::cov2cor}
