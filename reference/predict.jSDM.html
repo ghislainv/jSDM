@@ -206,7 +206,7 @@
 
 <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> (
+<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span>(
   <span class='co'># Response variable </span>
   <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
   <span class='co'># Explanatory variables </span>
@@ -236,25 +236,15 @@
 #&gt; **********:80.0% 
 #&gt; **********:90.0% 
 #&gt; **********:100.0% </div><div class='input'>
-<span class='co'># Sites and species concerned by predictions :</span>
-<span class='co'>## 50 sites among the 104</span>
-<span class='no'>Id_sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample.int</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>PA_frogs</span>), <span class='fl'>50</span>)
-<span class='co'>## All species </span>
-<span class='no'>Id_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>PA_frogs</span>)
-
-<span class='co'># Simulate new observations of covariates on those sites </span>
-<span class='no'>simdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>mod_jSDM_block_frogs</span>$<span class='no'>model_spec</span>$<span class='no'>site_data</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>simdata</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>mod_jSDM_block_frogs</span>$<span class='no'>model_spec</span>$<span class='no'>site_data</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>simdata</span>) <span class='kw'>&lt;-</span> <span class='no'>Id_sites</span>
-<span class='no'>simdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>simdata</span>)
-<span class='no'>simdata</span>$<span class='no'>Covariate_1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>50</span>)
-<span class='no'>simdata</span>$<span class='no'>Covariate_3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>50</span>)
-<span class='no'>simdata</span>$<span class='no'>Covariate_2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='fl'>50</span>,<span class='fl'>1</span>,<span class='fl'>0.5</span>)
+<span class='co'># Select site and species for predictions</span>
+<span class='co'>## 30 sites</span>
+<span class='no'>Id_sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample.int</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>PA_frogs</span>), <span class='fl'>30</span>)
+<span class='co'>## 5 species</span>
+<span class='no'>Id_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>PA_frogs</span>), <span class='fl'>5</span>)
 
 <span class='co'># Predictions </span>
-<span class='no'>theta_pred</span> <span class='kw'>&lt;-</span> <span class='fu'>predict.jSDM</span>(
-<span class='no'>mod_jSDM_block_frogs</span>, <span class='kw'>newdata</span><span class='kw'>=</span><span class='no'>simdata</span>,
-<span class='kw'>Id_species</span><span class='kw'>=</span><span class='no'>Id_species</span>, <span class='kw'>Id_sites</span><span class='kw'>=</span><span class='no'>Id_sites</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"mean"</span>)
+<span class='no'>theta_pred</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/predict.jSDM'>predict.jSDM</a></span>(<span class='no'>mod_jSDM_block_frogs</span>,
+  <span class='kw'>Id_species</span><span class='kw'>=</span><span class='no'>Id_species</span>, <span class='kw'>Id_sites</span><span class='kw'>=</span><span class='no'>Id_sites</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"mean"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/hist'>hist</a></span>(<span class='no'>theta_pred</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Predicted theta with simulated covariates"</span>)</div><div class='img'><img src='predict.jSDM-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
