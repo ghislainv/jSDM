@@ -50,7 +50,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
-mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
+mod_jSDM_block_frogs <- jSDM::jSDM_probit_block(
   # Response variable 
   presence_site_sp = as.matrix(PA_frogs), 
   # Explanatory variables 
@@ -69,25 +69,15 @@ mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
   # Various 
   seed=1234, verbose=1)
   
-# Sites and species concerned by predictions :
-## 50 sites among the 104
-Id_sites <- sample.int(nrow(PA_frogs), 50)
-## All species 
-Id_species <- colnames(PA_frogs)
-
-# Simulate new observations of covariates on those sites 
-simdata <- matrix(nrow=50, ncol = ncol(mod_jSDM_block_frogs$model_spec$site_data))
-colnames(simdata) <- colnames(mod_jSDM_block_frogs$model_spec$site_data)
-rownames(simdata) <- Id_sites
-simdata <- as.data.frame(simdata)
-simdata$Covariate_1 <- rnorm(50)
-simdata$Covariate_3 <- rnorm(50)
-simdata$Covariate_2 <- rbinom(50,1,0.5)
+# Select site and species for predictions
+## 30 sites
+Id_sites <- sample.int(nrow(PA_frogs), 30)
+## 5 species
+Id_species <- sample(colnames(PA_frogs), 5)
 
 # Predictions 
-theta_pred <- predict.jSDM(
-mod_jSDM_block_frogs, newdata=simdata,
-Id_species=Id_species, Id_sites=Id_sites, type="mean")
+theta_pred <- jSDM::predict.jSDM(mod_jSDM_block_frogs,
+  Id_species=Id_species, Id_sites=Id_sites, type="mean")
 hist(theta_pred, main="Predicted theta with simulated covariates")
 
 }

@@ -55,7 +55,7 @@ mod_jSDM_block_frogs <- jSDM::jSDM_probit_block (
   seed=1234, verbose=1)
   
 # Representation of residual correlation between species 
-plot_residual_cor(mod_jSDM_block_frogs)
+jSDM::plot_residual_cor(mod_jSDM_block_frogs)
 
 }
 
