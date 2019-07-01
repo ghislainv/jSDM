@@ -185,7 +185,12 @@ plot(mod_jSDM_block_frogs$mcmc.Deviance,main = "Deviance")
 
 # Matrice of correlations 
 
-We use the `plot_residual_cor()` function.
+ After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+ $$\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
+ \end{cases}$$, then we compute correlations from covariances :
+  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 ```{r correlation-matrix}
 plot_residual_cor(mod_jSDM_block_frogs)
