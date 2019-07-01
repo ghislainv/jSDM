@@ -288,7 +288,12 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
 <div id="matrice-of-correlations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#matrice-of-correlations" class="anchor"></a><span class="header-section-number">5</span> Matrice of correlations</h1>
-<p>We use the <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> function.</p>
+<p>After fitting the jSDM with latent variables, the <strong>fullspecies residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can bederived from the covariance in the latent variables such as :
+<span class="math display">\[\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T &amp; \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
+ \end{cases}\]</span>, then we compute correlations from covariances :
+<span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(mod_jSDM_block_frogs)</code></pre>
 <p><img src="jSDM_files/figure-html/correlation-matrix-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
