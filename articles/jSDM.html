@@ -196,15 +196,16 @@ Env_frogs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rd
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
-<p>We use the <code><a href="../reference/jSDM_probit_block.html">jSDM_probit_block()</a></code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_jSDM_block_frogs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/jSDM_probit_block.html">jSDM_probit_block</a></span> (
+<p>We use the <code><a href="../reference/jSDM_probit_block.html">jSDM_probit_block()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
+<pre class="sourceCode r"><code class="sourceCode r">T1&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
+mod_jSDM_block_frogs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/jSDM_probit_block.html">jSDM_probit_block</a></span> (
   <span class="co"># Response variable </span>
   <span class="dt">presence_site_sp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(PA_frogs), 
   <span class="co"># Explanatory variables </span>
   <span class="dt">site_suitability =</span> <span class="op">~</span>.,   
   <span class="dt">site_data =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(Env_frogs), <span class="dt">n_latent=</span><span class="dv">2</span>,
   <span class="co"># Chains</span>
-  <span class="dt">burnin=</span><span class="dv">20000</span>, <span class="dt">mcmc=</span><span class="dv">5000</span>, <span class="dt">thin=</span><span class="dv">5</span>,
+  <span class="dt">burnin=</span><span class="dv">7000</span>, <span class="dt">mcmc=</span><span class="dv">1000</span>, <span class="dt">thin=</span><span class="dv">1</span>,
   <span class="co"># Starting values</span>
   <span class="dt">alpha_start=</span><span class="dv">0</span>, <span class="dt">beta_start=</span><span class="dv">0</span>,
   <span class="dt">lambda_start=</span><span class="dv">0</span>, <span class="dt">W_start=</span><span class="dv">0</span>,
@@ -227,7 +228,9 @@ Env_frogs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rd
 <span class="co">#&gt; **********:70.0% </span>
 <span class="co">#&gt; **********:80.0% </span>
 <span class="co">#&gt; **********:90.0% </span>
-<span class="co">#&gt; **********:100.0%</span></code></pre>
+<span class="co">#&gt; **********:100.0%</span>
+T2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
+T&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/difftime">difftime</a></span>(T2,T1)</code></pre>
 </div>
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
