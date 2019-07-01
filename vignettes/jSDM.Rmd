@@ -109,9 +109,10 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 # Parameter inference
 
-We use the `jSDM_probit_block()` function.
+We use the `jSDM_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM, cache=TRUE}
+T1<- Sys.time()
 mod_jSDM_block_frogs <- jSDM_probit_block (
   # Response variable 
   presence_site_sp = as.matrix(PA_frogs), 
@@ -119,7 +120,7 @@ mod_jSDM_block_frogs <- jSDM_probit_block (
   site_suitability = ~.,   
   site_data = as.data.frame(Env_frogs), n_latent=2,
   # Chains
-  burnin=20000, mcmc=5000, thin=5,
+  burnin=7000, mcmc=1000, thin=1,
   # Starting values
   alpha_start=0, beta_start=0,
   lambda_start=0, W_start=0,
@@ -130,6 +131,9 @@ mod_jSDM_block_frogs <- jSDM_probit_block (
   mu_lambda=0, V_lambda=10,
   # Various 
   seed=1234, verbose=1)
+T2 <- Sys.time()
+T<- difftime(T2,T1)
+
 ```
 
 # Analysis of the results
