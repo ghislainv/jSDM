@@ -41,13 +41,10 @@ inv_logit(x, min = 0, max = 1)
 }
 \author{Gregory R. Warnes <greg@warnes.net>}
 \examples{
-\dontrun{
   x <- seq(0,10, by=0.25)
-  xt <- logit(x, min=0, max=10)
+  xt <- jSDM::logit(x, min=0, max=10)
   cbind(x,xt)
-
-  y <- inv_logit(xt, min=0, max=10)
+  y <- jSDM::inv_logit(xt, min=0, max=10)
   cbind(x,xt,y)  
-}
 }
 \keyword{math}

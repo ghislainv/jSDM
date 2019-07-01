@@ -86,7 +86,6 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       
       ##= Loop on samples
       for (t in 1:nsamp) {
-        
         W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
         for(l in 2:nl) {
           W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
@@ -103,7 +102,6 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         term.pred[[Id_species[j]]] <- as.data.frame(t(rbind(term.mean,term.quant)))
         names(term.pred[[Id_species[j]]])[1] <- c("mean")
         rownames(term.pred[[Id_species[j]]]) <- Id_sites
-        
       }
       if (type=="posterior") {
         term.pred[[Id_species[j]]] <- coda::mcmc(term,start=nburn+1,end=ngibbs,thin=nthin)
