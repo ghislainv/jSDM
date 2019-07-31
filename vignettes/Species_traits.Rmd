@@ -1,0 +1,108 @@
+---
+title: "Fourth corner model with species traits"
+output:
+  bookdown::html_document2:
+    #base_format: rmarkdown::html_vignette
+    #highlight: tango
+    number_sections: true
+    toc: true
+    #toc_float: true
+    fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteIndexEntry{Fourth corner model with species traits}
+ %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	fig.align = "center",
+	fig.width = 6, fig.height = 6,
+	cache = FALSE,
+	collapse = TRUE,
+	comment = "#>",
+	highlight = TRUE
+)
+```
+
+Joint Species distribution models (jSDM) are able to consider species traits as covariates in addition to bioclimatic data. 
+
+# Definition of the model 
+
+Referring to the model used in the articles @Warton2015 to analyze response of alpine plants to snowmelt date : 
+
+$$ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j} + snow_i.b_1+ snow_i^2.b_2 + snow_i.SLA_j.b_3 + snow_i.\beta_j + W_i.\lambda_j $$
+     
+- Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
+
+- Response variable: $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ with:
+
+$$y_{ij}=\begin{cases}
+    0 & \text{ if species $j$ is absent on the site $i$}\\
+    1 &  \text{ if species  $j$ is present on the site $i$}.
+    \end{cases}$$
+    
+- Latent variable $z_{ij} = \alpha_i + \beta_{0j} + snow_i.b_1+ snow_i^2.b_2 + snow_i.SLA_j.b_3 + snow_i.\beta_j + W_i.\lambda_j + \epsilon_{i,j}$, with $\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)$ and such that:
+
+$$y_{ij}=\begin{cases}
+    1 & \text{if} \ z_{ij} > 0 \\
+    0 &  \text{otherwise.}
+    \end{cases}$$
+    
+It can be easily shown that: $y_{ij} \sim \mathcal{B}ernouilli(\theta_{ij})$. 
+
+- Explanatory variable : 
+  * $(snow_i)_{i=1,\ldots,nsite}$ where $snow_i$ reffers to mean snowmelt date between 1997 and 1999 on site $i$.
+
+  * Species traits : $SLA_j$ Specific Leaf Area of species $j$.
+
+- Regression coefficients corresponding for each species $j$ noted : $\beta_j=(\beta_{0j},\beta_j)'$ where $\beta_{0j}$ correspond to the intercept for species $j$ and $\beta_j$ is species effect reflecting cross-species variation that is not explained by the effects of snowmelt date and its interaction with SLA. $\beta_{0j}$'s and $\beta_j$'s are assumed to be fixed effects drawn from normal piror distributions $\mathcal{N}(0,10^6)$. ($\beta_j$ random $\mu \sim \mathcal{N}(0,10)$ and $\sigma^2 \sim  \mathcal {IG}(\text{shape}=0.1, \text{rate}=0.1)$)
+
+- $b = (b_1,b_2,b_3)$ coefficients corresponding to effect of snowmelt date, of its square and of its intercation with SLA. 
+
+- Latent variables: $W_i=(W_i^1,W_i^2)$ such as $W_i \sim \mathcal{N}(0,I_q)$.
+
+- Coefficients associated to latent variables: $\lambda_j=(\lambda_j^1,\lambda_j^2)'$ with a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+
+- Random site effect : $\alpha_i$ for site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default.
+
+# Data-set
+
+```{r aravo-dataset}
+library(ade4)
+## Convert to presence-absence response
+PA_aravo <- (aravo$spe>0) 
+PA_aravo[PA_aravo == FALSE] = 0; 
+PA_aravo[PA_aravo == TRUE] = 1
+
+## Consider only species with more than four presences
+sel.spp <- which(colSums(PA_aravo) > 4) 
+PA_aravo <- PA_aravo[,sel.spp]
+
+head(PA_aravo)
+
+## Bioclimatic variable (standardized)
+Env.aravo <- scale(aravo$env$Snow)
+
+## Species trait (standardized)
+Trait.aravo <- scale(aravo$traits$SLA[sel.spp])
+```
+
+# Parameters inference 
+```{r}
+
+```
+
+# Analysis of results 
+
+This model can be used to look at a few aspects of the problem :
+
+- Estimating species correlation
+- Unconstrained and partial (residual) ordination
+- Multivariate inference 

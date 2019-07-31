@@ -27,7 +27,7 @@ calling.function <- function(parentheses=TRUE) {
 # =======================================================================
 
 check.mcmc.parameters <- function(burnin, mcmc, thin) {
-    
+  
   if(mcmc %% thin != 0) {
     cat("Error: MCMC iterations not evenly divisible by thinning interval.\n")
     stop("Please respecify and call ", calling.function(), " again.",
@@ -525,7 +525,7 @@ check.Vgamma <- function(Vgamma, nq) {
 }
 
 check.ig.prior <- function(nu, delta) {
-     
+  
   if(nu <= 0) {
     cat("Error: in IG(nu,delta) prior, nu less than or equal to zero.\n")
     stop("Please respecify and call ", calling.function(), " again.\n",
@@ -598,6 +598,19 @@ form.beta.start.sp <- function (beta.start, np, nsp) {
   return(beta.start.mat)
 }
 
+form.b.start <- function (b.start, nd) {
+  if (sum(is.na(b.start))>0) { 
+    b.start.vec <- rep(0,nd)
+  }
+  else if(is.scalar(b.start) & !is.na(b.start)) {
+    b.start.vec <- rep(b.start, nd) 
+  }
+  else if(sum(length(b.start) != nd) > 0) {
+    stop("Error: b.start not conformable.\n")
+  }
+return(b.start.vec)
+}
+
 form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
   if (sum(is.na(lambda.start))>0) { 
     lambda.start.mat <- matrix(0, n_latent, nsp)
@@ -615,7 +628,7 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
       }
       for (j in 1:n_latent) {
         if (i > j) {
-         lambda.start.mat[i, j] <- 0
+          lambda.start.mat[i, j] <- 0
         }
       }
     }
@@ -693,6 +706,35 @@ check.Vbeta.mat <- function(Vbeta, np) {
          call.=FALSE)
   }
   return(Vbeta)
+}
+
+check.mub <- function(mub, nd) {
+  if (is.null(dim(mub))) {
+    mub <- rep(mub,nd) 
+  }
+  else if (length(mub)!=nd) {
+    cat("Error: mu_b not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(mub)
+}
+
+check.Vb.mat <- function(Vb, nd) {
+  if (!all(Vb>0)) {
+    cat("Error: V_b should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  if (is.null(dim(Vb))) {
+    Vb <- diag(rep(Vb,nd))
+  }
+  else if (sum(dim(Vb) != c(nd, nd)) > 0) {
+    cat("Error: V_b not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(Vb)
 }
 
 check.mulambda <- function(mulambda, n_latent) {

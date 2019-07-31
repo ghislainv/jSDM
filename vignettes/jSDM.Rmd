@@ -40,7 +40,7 @@ Below, we show an example of the use of `jSDM` for fitting species distribution 
 
 Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
-$$ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j $$
+$$ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j $$
      
 - Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
 
@@ -51,7 +51,7 @@ $$y_{ij}=\begin{cases}
     1 &  \text{ if species  $j$ is present on the site $i$}.
     \end{cases}$$
     
-- Latent variable $z_{ij} = \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j + \epsilon_{i,j}$, with $\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)$ and such that:
+- Latent variable $z_{ij} = \alpha_i + \beta_{0j} + X_i.\beta_j + W_i.\lambda_j + \epsilon_{i,j}$, with $\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)$ and such that:
 
 $$y_{ij}=\begin{cases}
     1 & \text{if} \ z_{ij} > 0 \\
@@ -61,9 +61,9 @@ $$y_{ij}=\begin{cases}
 It can be easily shown that: $y_{ij} \sim \mathcal{B}ernouilli(\theta_{ij})$. 
 
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints. 
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
 
-- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ avec $X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
+- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
 
 - $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10^6)$ for all betas. 
