@@ -117,7 +117,7 @@ About the posterior distribution of the random site effects $(\alpha_i)_{i=1,\do
 $$\begin{cases} 
 x \ | \ \theta & \sim \mathcal{N}(\theta, \ \sigma^2) \\
 \theta  & \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
-\sigma^2 & \text{ connu}
+\sigma^2 & \text{ known}
 \end{cases}
 \Rightarrow
 \begin{cases} 
@@ -145,7 +145,7 @@ Concerning posterior distribution of $V_{\alpha}$, the variance of random site e
 If $$\begin{cases} 
 x \ | \ \sigma^2 & \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
 \sigma^2  & \sim \mathcal{IG} (a,b) \\
-\theta & \text{ connu}
+\theta & \text{ known}
 \end{cases} \Rightarrow 
 \begin{cases}
 \sigma^2|x \sim \mathcal{IG}(a',b') \text{ with } \\
