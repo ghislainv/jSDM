@@ -341,7 +341,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 # summary(MCMC_Valpha)
 # par(mfrow=c(1,2))
 # coda::traceplot(MCMC_Valpha)
-# coda::densplot(MCMC_Valpha)
+# coda::densplot(MCMC_Valpha, main ="V_alpha" )
 # abline(v=Valpha.target,col='red')
 # 
 # ## beta_j
