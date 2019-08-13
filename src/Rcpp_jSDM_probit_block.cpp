@@ -287,10 +287,9 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 # lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
 # param.target <- rbind(beta.target,lambda.target)
 # Valpha.target <- 0.5
-# V <- 1
 # alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
 # probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
-# e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+# e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
 # visits <- matrix(1,nsite,nsp)
 # 
