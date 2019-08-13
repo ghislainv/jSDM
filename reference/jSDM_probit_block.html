@@ -353,7 +353,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 <span class='no'>mod_jSDM_probit_block</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> ( <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='no'>Y</span> ,
                                              <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~ <span class='no'>x1</span> + <span class='no'>x2</span>,
                                              <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>X</span>[,-<span class='fl'>1</span>], <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
-                                             <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>3000</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>3000</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>3</span>,
+                                             <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
                                              <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
                                              <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
                                              <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
@@ -384,119 +384,119 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 <span class='co'>## alpha</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)</div><div class='output co'>#&gt; 
-#&gt; Iterations = 3001:5998
-#&gt; Thinning interval = 3 
+#&gt; Iterations = 101:200
+#&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;          Mean    SD Naive SE Time-series SE
-#&gt;  [1,]  2.2965 1.803  0.05703         0.2356
-#&gt;  [2,] -1.7789 1.470  0.04647         0.1307
-#&gt;  [3,] -0.6418 1.993  0.06301         0.2313
-#&gt;  [4,] -1.6901 1.546  0.04888         0.1636
-#&gt;  [5,] -0.8356 1.441  0.04558         0.1759
-#&gt;  [6,] -2.9325 1.815  0.05741         0.2638
-#&gt;  [7,]  0.3951 2.098  0.06634         0.2608
-#&gt;  [8,]  1.0530 1.512  0.04780         0.1522
-#&gt;  [9,] -0.5913 1.988  0.06285         0.2550
-#&gt; [10,]  1.2284 1.416  0.04479         0.1388
-#&gt; [11,]  0.6258 1.813  0.05735         0.2480
-#&gt; [12,]  0.5080 2.233  0.07060         0.2953
-#&gt; [13,] -0.6672 1.551  0.04905         0.1383
-#&gt; [14,] -1.6339 1.429  0.04518         0.1458
-#&gt; [15,]  2.3484 1.883  0.05954         0.2235
-#&gt; [16,]  0.3632 1.856  0.05871         0.2094
-#&gt; [17,] -1.7308 1.778  0.05624         0.2099
-#&gt; [18,]  0.5781 1.828  0.05779         0.2145
-#&gt; [19,] -0.8065 2.169  0.06859         0.2948
-#&gt; [20,]  0.8760 1.706  0.05396         0.1714
-#&gt; [21,] -2.3677 1.789  0.05657         0.3188
-#&gt; [22,]  0.7606 1.480  0.04679         0.1285
-#&gt; [23,] -0.1420 1.417  0.04482         0.1187
-#&gt; [24,] -0.2596 1.553  0.04912         0.1540
-#&gt; [25,] -3.2580 2.188  0.06920         0.3719
-#&gt; [26,]  0.1762 1.686  0.05331         0.1735
-#&gt; [27,] -1.0078 1.720  0.05438         0.1812
-#&gt; [28,]  0.1539 1.579  0.04993         0.2073
-#&gt; [29,]  1.6141 2.071  0.06549         0.2655
-#&gt; [30,] -0.5801 1.481  0.04682         0.1489
-#&gt; [31,] -1.8158 1.771  0.05601         0.2738
-#&gt; [32,]  0.8070 1.585  0.05011         0.1496
-#&gt; [33,]  0.8555 1.178  0.03725         0.1086
-#&gt; [34,]  1.7274 1.746  0.05522         0.2521
-#&gt; [35,]  0.2430 1.840  0.05819         0.2409
-#&gt; [36,]  0.1980 1.874  0.05927         0.2394
-#&gt; [37,]  1.4795 1.927  0.06093         0.2150
-#&gt; [38,] -3.0745 1.554  0.04914         0.1766
-#&gt; [39,]  0.8266 1.549  0.04897         0.1720
-#&gt; [40,] -0.6871 1.535  0.04853         0.1417
-#&gt; [41,]  1.6561 1.568  0.04959         0.2159
-#&gt; [42,] -0.6442 1.638  0.05179         0.1518
-#&gt; [43,] -0.8214 1.937  0.06124         0.2407
-#&gt; [44,]  1.4057 1.971  0.06233         0.2253
-#&gt; [45,]  0.8402 1.857  0.05873         0.2489
-#&gt; [46,] -0.5045 1.528  0.04833         0.1364
-#&gt; [47,] -0.3000 1.452  0.04591         0.1813
-#&gt; [48,]  1.6776 2.114  0.06684         0.3141
-#&gt; [49,]  1.6738 1.869  0.05909         0.2245
-#&gt; [50,] -0.9662 2.313  0.07313         0.3229
+#&gt;             Mean     SD Naive SE Time-series SE
+#&gt;  [1,]  0.0431372 0.1436  0.01436       0.014335
+#&gt;  [2,] -0.0078532 0.1181  0.01181       0.007146
+#&gt;  [3,]  0.0111113 0.1130  0.01130       0.011298
+#&gt;  [4,] -0.0154665 0.1239  0.01239       0.012070
+#&gt;  [5,]  0.0212101 0.1375  0.01375       0.015754
+#&gt;  [6,] -0.0067938 0.1179  0.01179       0.011792
+#&gt;  [7,] -0.0041117 0.1450  0.01450       0.012306
+#&gt;  [8,] -0.0147464 0.1248  0.01248       0.009993
+#&gt;  [9,] -0.0143717 0.1361  0.01361       0.017615
+#&gt; [10,]  0.0230310 0.1146  0.01146       0.011455
+#&gt; [11,]  0.0121916 0.1174  0.01174       0.030270
+#&gt; [12,]  0.0061483 0.1038  0.01038       0.023508
+#&gt; [13,] -0.0187666 0.1172  0.01172       0.006713
+#&gt; [14,] -0.0125043 0.1338  0.01338       0.011177
+#&gt; [15,]  0.0228419 0.1464  0.01464       0.008673
+#&gt; [16,]  0.0139750 0.1338  0.01338       0.013382
+#&gt; [17,] -0.0059985 0.1464  0.01464       0.011332
+#&gt; [18,]  0.0042399 0.1620  0.01620       0.016197
+#&gt; [19,] -0.0063142 0.1334  0.01334       0.015807
+#&gt; [20,]  0.0066145 0.1382  0.01382       0.013820
+#&gt; [21,] -0.0259612 0.1323  0.01323       0.026441
+#&gt; [22,]  0.0263646 0.1008  0.01008       0.010077
+#&gt; [23,] -0.0218779 0.1421  0.01421       0.014206
+#&gt; [24,]  0.0075987 0.1280  0.01280       0.009193
+#&gt; [25,] -0.0225057 0.1363  0.01363       0.014852
+#&gt; [26,]  0.0306662 0.1195  0.01195       0.011953
+#&gt; [27,]  0.0093436 0.1299  0.01299       0.012991
+#&gt; [28,] -0.0061100 0.1261  0.01261       0.012606
+#&gt; [29,]  0.0290711 0.1459  0.01459       0.020770
+#&gt; [30,] -0.0290261 0.1370  0.01370       0.016561
+#&gt; [31,] -0.0071216 0.1224  0.01224       0.014360
+#&gt; [32,] -0.0057590 0.1504  0.01504       0.014299
+#&gt; [33,]  0.0207969 0.1314  0.01314       0.012776
+#&gt; [34,]  0.0131830 0.1303  0.01303       0.015487
+#&gt; [35,] -0.0009248 0.1475  0.01475       0.014753
+#&gt; [36,]  0.0033581 0.1488  0.01488       0.014884
+#&gt; [37,]  0.0138021 0.1010  0.01010       0.010098
+#&gt; [38,] -0.0442372 0.1253  0.01253       0.021406
+#&gt; [39,]  0.0124567 0.1617  0.01617       0.009436
+#&gt; [40,] -0.0175471 0.1089  0.01089       0.009216
+#&gt; [41,]  0.0657642 0.1431  0.01431       0.022776
+#&gt; [42,] -0.0230670 0.1136  0.01136       0.011362
+#&gt; [43,] -0.0072778 0.1207  0.01207       0.012073
+#&gt; [44,]  0.0269758 0.1350  0.01350       0.020886
+#&gt; [45,]  0.0118502 0.1470  0.01470       0.016586
+#&gt; [46,] -0.0272223 0.1457  0.01457       0.008546
+#&gt; [47,] -0.0253090 0.1264  0.01264       0.018873
+#&gt; [48,]  0.0018242 0.1224  0.01224       0.015783
+#&gt; [49,]  0.0150610 0.1145  0.01145       0.011448
+#&gt; [50,] -0.0167126 0.1400  0.01400       0.013822
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;          2.5%      25%      50%     75%    97.5%
-#&gt; var1  -0.7261  1.03102  2.20429  3.4249  6.18163
-#&gt; var2  -5.2366 -2.58561 -1.63967 -0.7983  0.67654
-#&gt; var3  -5.5819 -1.56002 -0.45376  0.6917  2.62908
-#&gt; var4  -4.6595 -2.69217 -1.72782 -0.7872  1.55047
-#&gt; var5  -3.6397 -1.80170 -0.81785  0.1156  2.03386
-#&gt; var6  -6.9877 -4.04981 -2.70343 -1.6120  0.06323
-#&gt; var7  -3.5551 -0.98202  0.31228  1.6335  5.05159
-#&gt; var8  -1.6256  0.07746  0.92685  1.9082  4.49060
-#&gt; var9  -4.4022 -1.97912 -0.43301  0.7147  3.51010
-#&gt; var10 -1.4151  0.28189  1.15292  2.0844  4.31546
-#&gt; var11 -2.8623 -0.52579  0.57475  1.5909  4.65246
-#&gt; var12 -3.9046 -0.90010  0.49845  1.9842  4.77952
-#&gt; var13 -3.4380 -1.83981 -0.67036  0.3040  2.47793
-#&gt; var14 -5.0287 -2.42234 -1.44172 -0.6284  0.64488
-#&gt; var15 -0.8156  0.95697  2.17107  3.5286  6.33248
-#&gt; var16 -3.2361 -0.74908  0.39023  1.5265  3.92211
-#&gt; var17 -6.1745 -2.61727 -1.54385 -0.5783  1.35006
-#&gt; var18 -2.9066 -0.63457  0.50686  1.8067  4.35517
-#&gt; var19 -5.3386 -2.17028 -0.77689  0.5295  3.64497
-#&gt; var20 -2.5168 -0.26671  0.80273  1.9622  4.30103
-#&gt; var21 -7.0471 -3.31120 -2.11603 -1.1537  0.54876
-#&gt; var22 -1.9571 -0.26922  0.66152  1.7380  3.67006
-#&gt; var23 -2.8795 -1.04789 -0.20324  0.7329  2.80950
-#&gt; var24 -3.1227 -1.35578 -0.28257  0.6968  3.02019
-#&gt; var25 -8.8160 -4.40246 -2.98851 -1.7843  0.33553
-#&gt; var26 -3.3944 -0.90883  0.21137  1.2610  3.66785
-#&gt; var27 -4.8357 -2.01367 -0.88904  0.1602  2.06814
-#&gt; var28 -2.6543 -0.84273  0.02282  1.0107  3.99572
-#&gt; var29 -1.7867  0.22162  1.31948  2.7343  6.51153
-#&gt; var30 -3.3628 -1.57770 -0.63934  0.3334  2.49558
-#&gt; var31 -6.1753 -2.75499 -1.51615 -0.5333  0.78360
-#&gt; var32 -2.2419 -0.33012  0.87056  1.8304  3.97387
-#&gt; var33 -1.3652  0.03771  0.83857  1.6118  3.27338
-#&gt; var34 -1.0561  0.44457  1.44459  2.8308  5.52692
-#&gt; var35 -3.5230 -0.81828  0.19823  1.3784  3.83679
-#&gt; var36 -3.5138 -0.98132  0.16390  1.3421  4.00304
-#&gt; var37 -2.1126  0.22565  1.31321  2.7149  5.32325
-#&gt; var38 -6.1976 -4.14497 -3.03568 -2.0695 -0.06353
-#&gt; var39 -1.6851 -0.27313  0.66928  1.6764  4.42516
-#&gt; var40 -3.8241 -1.70877 -0.65107  0.2541  2.54915
-#&gt; var41 -1.3663  0.61398  1.54835  2.6347  4.90014
-#&gt; var42 -3.7885 -1.77351 -0.62658  0.4129  2.60517
-#&gt; var43 -4.5790 -2.04057 -0.78043  0.3514  3.32813
-#&gt; var44 -2.0712  0.06243  1.31532  2.6091  5.46673
-#&gt; var45 -1.8796 -0.38766  0.60476  1.6803  6.19750
-#&gt; var46 -3.5622 -1.53080 -0.43836  0.5505  2.46104
-#&gt; var47 -3.2250 -1.27924 -0.31863  0.6639  2.69496
-#&gt; var48 -1.6851  0.24963  1.33639  2.8501  6.99344
-#&gt; var49 -1.3443  0.44330  1.42581  2.7409  6.11733
-#&gt; var50 -5.9133 -2.32906 -0.85956  0.5609  3.15652
+#&gt;          2.5%      25%        50%     75%  97.5%
+#&gt; var1  -0.1843 -0.04586  0.0193710 0.11617 0.4207
+#&gt; var2  -0.1925 -0.09485 -0.0036036 0.05202 0.2049
+#&gt; var3  -0.2176 -0.06014  0.0113031 0.07461 0.2307
+#&gt; var4  -0.2365 -0.08148 -0.0167692 0.05815 0.2709
+#&gt; var5  -0.2871 -0.04161  0.0277224 0.10806 0.2646
+#&gt; var6  -0.2529 -0.07581 -0.0115506 0.06920 0.2220
+#&gt; var7  -0.3336 -0.06484  0.0001006 0.06501 0.2648
+#&gt; var8  -0.2699 -0.07531 -0.0180502 0.04647 0.2374
+#&gt; var9  -0.2477 -0.07675 -0.0054562 0.05513 0.2439
+#&gt; var10 -0.1814 -0.03203  0.0152090 0.09816 0.2295
+#&gt; var11 -0.1763 -0.05730  0.0058007 0.06393 0.2580
+#&gt; var12 -0.2052 -0.05355  0.0080482 0.06480 0.1800
+#&gt; var13 -0.2467 -0.08752 -0.0108117 0.03783 0.2275
+#&gt; var14 -0.3393 -0.06959  0.0002794 0.05348 0.2515
+#&gt; var15 -0.3448 -0.03854  0.0217707 0.10628 0.2797
+#&gt; var16 -0.2395 -0.04955  0.0040451 0.06155 0.3757
+#&gt; var17 -0.3025 -0.07452 -0.0090282 0.03534 0.3846
+#&gt; var18 -0.3653 -0.06998  0.0121234 0.08857 0.3235
+#&gt; var19 -0.2946 -0.05907  0.0036137 0.04494 0.2575
+#&gt; var20 -0.1964 -0.07843  0.0021014 0.04868 0.3258
+#&gt; var21 -0.3890 -0.07101 -0.0037823 0.04197 0.2069
+#&gt; var22 -0.1233 -0.04785  0.0151358 0.08072 0.2826
+#&gt; var23 -0.2978 -0.11630 -0.0112058 0.06088 0.2448
+#&gt; var24 -0.2850 -0.05753  0.0096743 0.07452 0.2701
+#&gt; var25 -0.3233 -0.09314 -0.0186240 0.06613 0.2499
+#&gt; var26 -0.1535 -0.03867  0.0108486 0.09550 0.2985
+#&gt; var27 -0.2210 -0.07555 -0.0009920 0.07786 0.2869
+#&gt; var28 -0.2573 -0.07661  0.0082855 0.06637 0.2455
+#&gt; var29 -0.1929 -0.04298  0.0157907 0.08765 0.3336
+#&gt; var30 -0.3257 -0.11349 -0.0203126 0.06022 0.2328
+#&gt; var31 -0.2253 -0.07902 -0.0212696 0.05992 0.2549
+#&gt; var32 -0.3018 -0.06806 -0.0102283 0.06363 0.2868
+#&gt; var33 -0.2928 -0.03408  0.0229801 0.08546 0.2841
+#&gt; var34 -0.1881 -0.06594 -0.0039055 0.06150 0.3360
+#&gt; var35 -0.3116 -0.06641  0.0038016 0.05648 0.2563
+#&gt; var36 -0.3359 -0.05912  0.0034301 0.06011 0.2886
+#&gt; var37 -0.1743 -0.04837  0.0110233 0.05966 0.2245
+#&gt; var38 -0.3457 -0.10804 -0.0285666 0.02769 0.1451
+#&gt; var39 -0.3061 -0.06925  0.0115361 0.08666 0.3571
+#&gt; var40 -0.2109 -0.07836 -0.0286475 0.04301 0.1916
+#&gt; var41 -0.1753 -0.01312  0.0298969 0.11670 0.4456
+#&gt; var42 -0.2957 -0.08598  0.0010500 0.05346 0.1877
+#&gt; var43 -0.2288 -0.08133 -0.0064399 0.05226 0.1996
+#&gt; var44 -0.2261 -0.02936  0.0083933 0.07068 0.3454
+#&gt; var45 -0.3024 -0.06069  0.0162212 0.07307 0.2781
+#&gt; var46 -0.2881 -0.09040 -0.0109645 0.04188 0.2321
+#&gt; var47 -0.2704 -0.09283 -0.0208573 0.04363 0.2380
+#&gt; var48 -0.2745 -0.06565  0.0187651 0.06758 0.2454
+#&gt; var49 -0.1827 -0.05538  0.0114068 0.07245 0.2513
+#&gt; var50 -0.2926 -0.08658 -0.0054293 0.05563 0.2489
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_alpha_jSDM_probit_block.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>alpha.target</span>,
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
@@ -506,21 +506,21 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## Valpha</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)</div><div class='output co'>#&gt; 
-#&gt; Iterations = 3001:5998
-#&gt; Thinning interval = 3 
+#&gt; Iterations = 101:200
+#&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;        5.12342        3.05829        0.09671        0.80815 
+#&gt;       0.017453       0.015947       0.001595       0.008894 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;   2.5%    25%    50%    75%  97.5% 
-#&gt;  1.127  3.005  4.428  6.736 12.524 
+#&gt;     2.5%      25%      50%      75%    97.5% 
+#&gt; 0.001064 0.004432 0.011471 0.027100 0.053238 
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_Valpha_jSDM_probit_block.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/traceplot'>traceplot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)
@@ -531,25 +531,25 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 <span class='co'>## beta_j</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,<span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)])</div><div class='output co'>#&gt; 
-#&gt; Iterations = 1:1000
+#&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;                    Mean     SD Naive SE Time-series SE
-#&gt; beta_(Intercept)  1.919 0.8378  0.02649        0.15074
-#&gt; beta_x1          -1.115 0.6755  0.02136        0.09858
-#&gt; beta_x2           2.761 1.2598  0.03984        0.30596
+#&gt;                     Mean     SD Naive SE Time-series SE
+#&gt; beta_(Intercept)  0.5783 0.2216  0.02216        0.03393
+#&gt; beta_x1          -0.2932 0.2448  0.02448        0.04053
+#&gt; beta_x2           0.8306 0.2424  0.02424        0.05984
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;                     2.5%    25%    50%     75% 97.5%
-#&gt; beta_(Intercept)  0.4528  1.339  1.810  2.3978 3.755
-#&gt; beta_x1          -2.6115 -1.517 -1.024 -0.6571 0.053
-#&gt; beta_x2           1.0673  1.862  2.468  3.3533 5.780
+#&gt;                     2.5%     25%     50%     75%  97.5%
+#&gt; beta_(Intercept)  0.1636  0.4281  0.5882  0.7269 1.0253
+#&gt; beta_x1          -0.7398 -0.4568 -0.2958 -0.1375 0.2728
+#&gt; beta_x2           0.4090  0.6534  0.8103  1.0244 1.2720
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>),<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
@@ -564,41 +564,41 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## lambda_j</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
-#&gt; Iterations = 1:1000
+#&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;           Mean    SD Naive SE Time-series SE
-#&gt; lambda_1 1.243 1.188  0.03757         0.4128
-#&gt; lambda_2 0.000 0.000  0.00000         0.0000
+#&gt;            Mean     SD Naive SE Time-series SE
+#&gt; lambda_1 0.3724 0.3086  0.03086        0.09261
+#&gt; lambda_2 0.0000 0.0000  0.00000        0.00000
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;             2.5%    25%    50%   75% 97.5%
-#&gt; lambda_1 0.04787 0.4345 0.9047 1.617 4.795
-#&gt; lambda_2 0.00000 0.0000 0.0000 0.000 0.000
+#&gt;             2.5%    25%    50%    75% 97.5%
+#&gt; lambda_1 0.02572 0.1291 0.2727 0.5863 1.097
+#&gt; lambda_2 0.00000 0.0000 0.0000 0.0000 0.000
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_2</span>[,(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
-#&gt; Iterations = 1:1000
+#&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;            Mean   SD Naive SE Time-series SE
-#&gt; lambda_1 -3.106 1.72  0.05439         0.5258
-#&gt; lambda_2  3.273 2.05  0.06484         0.7769
+#&gt;            Mean     SD Naive SE Time-series SE
+#&gt; lambda_1 -1.432 0.5798  0.05798         0.2332
+#&gt; lambda_2  1.613 0.4270  0.04270         0.1684
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;             2.5%    25%    50%    75%  97.5%
-#&gt; lambda_1 -5.9513 -4.516 -3.067 -1.859 0.1881
-#&gt; lambda_2  0.1702  1.464  3.210  4.899 7.1777
+#&gt;             2.5%    25%    50%    75%   97.5%
+#&gt; lambda_1 -2.7176 -1.756 -1.266 -1.018 -0.6708
+#&gt; lambda_2  0.7985  1.335  1.572  1.910  2.4730
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_probit_block.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>n_latent</span>*<span class='fl'>2</span>,<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
@@ -626,58 +626,58 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## Deviance</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='output co'>#&gt; 
-#&gt; Iterations = 3001:5998
-#&gt; Thinning interval = 3 
+#&gt; Iterations = 101:200
+#&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;        63.0913        14.8097         0.4683         2.8810 
+#&gt;        124.686         10.015          1.001          2.341 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
-#&gt; 35.23 52.66 62.58 72.84 93.83 
+#&gt; 108.0 118.3 124.4 132.2 143.2 
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_probit_block-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
 <span class='co'>## probit_theta</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)</div><div class='output co'>#&gt;        V1                V2                V3                V4          
-#&gt;  Min.   :-3.5544   Min.   :-16.618   Min.   :-11.055   Min.   :-12.6440  
-#&gt;  1st Qu.:-0.2812   1st Qu.: -3.019   1st Qu.: -1.050   1st Qu.: -6.9298  
-#&gt;  Median : 2.9786   Median :  5.828   Median :  5.029   Median : -3.0716  
-#&gt;  Mean   : 2.8413   Mean   :  4.700   Mean   :  3.586   Mean   : -0.8256  
-#&gt;  3rd Qu.: 5.9856   3rd Qu.: 11.510   3rd Qu.:  7.258   3rd Qu.:  5.7931  
-#&gt;  Max.   :10.5394   Max.   : 24.536   Max.   : 13.113   Max.   : 11.5248  
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)</div><div class='output co'>#&gt;        V1                V2                V3                V4         
+#&gt;  Min.   :-1.2046   Min.   :-7.7269   Min.   :-4.0859   Min.   :-8.5609  
+#&gt;  1st Qu.: 0.1373   1st Qu.:-0.5125   1st Qu.: 0.1048   1st Qu.:-3.9700  
+#&gt;  Median : 0.6305   Median : 2.4428   Median : 1.4401   Median :-2.0468  
+#&gt;  Mean   : 0.8484   Mean   : 1.8261   Mean   : 1.0136   Mean   :-0.3845  
+#&gt;  3rd Qu.: 1.5579   3rd Qu.: 4.7797   3rd Qu.: 1.9887   3rd Qu.: 3.0496  
+#&gt;  Max.   : 2.9850   Max.   : 9.5048   Max.   : 4.4639   Max.   :11.6020  
 #&gt;        V5        
-#&gt;  Min.   :-8.661  
-#&gt;  1st Qu.: 3.161  
-#&gt;  Median : 6.460  
-#&gt;  Mean   : 5.992  
-#&gt;  3rd Qu.: 9.751  
-#&gt;  Max.   :18.071  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
+#&gt;  Min.   :-3.585  
+#&gt;  1st Qu.: 1.311  
+#&gt;  Median : 2.770  
+#&gt;  Mean   : 2.659  
+#&gt;  3rd Qu.: 4.129  
+#&gt;  Max.   : 9.080  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 
 <span class='co'>## Z</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)</div><div class='output co'>#&gt;        V1                V2                V3                V4          
-#&gt;  Min.   :-3.6674   Min.   :-16.637   Min.   :-11.085   Min.   :-12.6293  
-#&gt;  1st Qu.:-0.6746   1st Qu.: -3.213   1st Qu.: -1.655   1st Qu.: -7.0442  
-#&gt;  Median : 3.1390   Median :  5.897   Median :  5.096   Median : -3.3141  
-#&gt;  Mean   : 2.8488   Mean   :  4.702   Mean   :  3.592   Mean   : -0.8293  
-#&gt;  3rd Qu.: 6.0209   3rd Qu.: 11.563   3rd Qu.:  7.306   3rd Qu.:  5.8767  
-#&gt;  Max.   :10.5733   Max.   : 24.561   Max.   : 13.104   Max.   : 11.5431  
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)</div><div class='output co'>#&gt;        V1                V2               V3                V4         
+#&gt;  Min.   :-1.3913   Min.   :-7.784   Min.   :-4.1749   Min.   :-8.6331  
+#&gt;  1st Qu.:-0.2912   1st Qu.:-1.154   1st Qu.:-0.7409   1st Qu.:-4.2520  
+#&gt;  Median : 1.0528   Median : 2.584   Median : 1.6850   Median :-2.3357  
+#&gt;  Mean   : 0.8703   Mean   : 1.821   Mean   : 1.0308   Mean   :-0.4052  
+#&gt;  3rd Qu.: 1.6802   3rd Qu.: 4.904   3rd Qu.: 2.1735   3rd Qu.: 3.1269  
+#&gt;  Max.   : 2.8359   Max.   : 9.649   Max.   : 4.3779   Max.   :11.7596  
 #&gt;        V5        
-#&gt;  Min.   :-8.760  
-#&gt;  1st Qu.: 3.405  
-#&gt;  Median : 6.547  
-#&gt;  Mean   : 5.995  
-#&gt;  3rd Qu.: 9.786  
-#&gt;  Max.   :18.048  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)
+#&gt;  Min.   :-3.715  
+#&gt;  1st Qu.: 1.692  
+#&gt;  Median : 2.926  
+#&gt;  Mean   : 2.672  
+#&gt;  3rd Qu.: 4.074  
+#&gt;  Max.   : 9.171  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>

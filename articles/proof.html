@@ -145,7 +145,7 @@ y_{i,j}| z_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j}) \text{ with } \\
 \end{aligned}\]</span></p>
 <p>In the same way:</p>
 <p><span class="math display">\[\begin{aligned}
-\mathbb{P}(y_{i,j}=1) &amp; = \mathbb{P}(z_{i,j} \leq 0)\\
+\mathbb{P}(y_{i,j}=0) &amp; = \mathbb{P}(z_{i,j} \leq 0)\\
 &amp; = \mathbb{P}(\epsilon_{i,j} \leq - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
 &amp; = \mathbb{P}(\epsilon_{i,j} &gt; \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 &amp; = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
@@ -194,7 +194,7 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 <p><span class="math display">\[\begin{cases} 
 x \ | \ \theta &amp; \sim \mathcal{N}(\theta, \ \sigma^2) \\
 \theta  &amp; \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
-\sigma^2 &amp; \text{ connu}
+\sigma^2 &amp; \text{ known}
 \end{cases}
 \Rightarrow
 \begin{cases} 
@@ -224,7 +224,7 @@ p(\theta \ | \ x) &amp; \propto  p(x \ | \ \theta) \ p(\theta) \\
 If <span class="math display">\[\begin{cases} 
 x \ | \ \sigma^2 &amp; \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
 \sigma^2  &amp; \sim \mathcal{IG} (a,b) \\
-\theta &amp; \text{ connu}
+\theta &amp; \text{ known}
 \end{cases} \Rightarrow 
 \begin{cases}
 \sigma^2|x \sim \mathcal{IG}(a',b') \text{ with } \\

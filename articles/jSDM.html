@@ -115,7 +115,7 @@
 <h1 class="hasAnchor">
 <a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
 <p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span>, we define the following model :</p>
-<p><span class="math display">\[ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j \]</span></p>
+<p><span class="math display">\[ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j \]</span></p>
 <ul>
 <li><p>Link function probit: <span class="math inline">\(\mathrm{probit}: q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
 <li><p>Response variable: <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
@@ -125,7 +125,7 @@
     1 &amp;  \text{ if species  $j$ is present on the site $i$}.
     \end{cases}\]</span></p>
 <ul>
-<li>Latent variable <span class="math inline">\(z_{ij} = \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)\)</span> and such that:</li>
+<li>Latent variable <span class="math inline">\(z_{ij} = \alpha_i + \beta_{0j} + X_i.\beta_j + W_i.\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)\)</span> and such that:</li>
 </ul>
 <p><span class="math display">\[y_{ij}=\begin{cases}
     1 &amp; \text{if} \ z_{ij} &gt; 0 \\
@@ -134,8 +134,8 @@
 <p>It can be easily shown that: <span class="math inline">\(y_{ij} \sim \mathcal{B}ernouilli(\theta_{ij})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints.</p></li>
-<li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> avec <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)'\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
+We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal.</p></li>
+<li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
 <li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10^6)\)</span> for all betas.</p></li>
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
@@ -152,140 +152,140 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 </p>
 </div>
 <p>We first load the <code>jSDM</code> library.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load libraries</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(jSDM)
-<span class="co">#&gt; ##</span>
-<span class="co">#&gt; ## jSDM R package </span>
-<span class="co">#&gt; ## For joint species distribution models </span>
-<span class="co">#&gt; ## https://ecology.ghislainv.fr/jSDM </span>
-<span class="co">#&gt; ##</span></code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Load libraries</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(jSDM)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt; ##</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; ## jSDM R package </span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; ## For joint species distribution models </span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; ## https://ecology.ghislainv.fr/jSDM </span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; ##</span></a></code></pre></div>
 <p>This data-set is available in the <code>jSDM</code> R package. It can be loaded with the <code>data</code> command. The data is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># frogs data</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(frogs, <span class="dt">package=</span><span class="st">"jSDM"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(frogs)
-<span class="co">#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3</span>
-<span class="co">#&gt; 1    3.870111           0    0.045334         1         0         0</span>
-<span class="co">#&gt; 2    3.326950           1    0.115903         0         0         0</span>
-<span class="co">#&gt; 3    2.856729           1    0.147034         0         0         0</span>
-<span class="co">#&gt; 4    1.623249           1    0.124283         0         0         0</span>
-<span class="co">#&gt; 5    4.629685           1    0.081655         0         0         0</span>
-<span class="co">#&gt; 6    0.698970           1    0.107048         0         0         0</span>
-<span class="co">#&gt;   Species_4 Species_5 Species_6 Species_7 Species_8 Species_9        y</span>
-<span class="co">#&gt; 1         0         0         0         0         0         0 66.41479</span>
-<span class="co">#&gt; 2         0         0         1         0         0         0 67.03841</span>
-<span class="co">#&gt; 3         0         0         1         0         0         0 67.03855</span>
-<span class="co">#&gt; 4         0         0         1         0         0         0 67.04200</span>
-<span class="co">#&gt; 5         0         0         1         0         0         0 67.04439</span>
-<span class="co">#&gt; 6         0         0         0         0         0         0 67.03894</span>
-<span class="co">#&gt;          x</span>
-<span class="co">#&gt; 1 9.256424</span>
-<span class="co">#&gt; 2 9.025588</span>
-<span class="co">#&gt; 3 9.029416</span>
-<span class="co">#&gt; 4 9.029745</span>
-<span class="co">#&gt; 5 9.026514</span>
-<span class="co">#&gt; 6 9.023580</span></code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># frogs data</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(frogs, <span class="dt">package=</span><span class="st">"jSDM"</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(frogs)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 1    3.870111           0    0.045334         1         0         0</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 2    3.326950           1    0.115903         0         0         0</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 3    2.856729           1    0.147034         0         0         0</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 4    1.623249           1    0.124283         0         0         0</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 5    4.629685           1    0.081655         0         0         0</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; 6    0.698970           1    0.107048         0         0         0</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt;   Species_4 Species_5 Species_6 Species_7 Species_8 Species_9        y</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; 1         0         0         0         0         0         0 66.41479</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; 2         0         0         1         0         0         0 67.03841</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 3         0         0         1         0         0         0 67.03855</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; 4         0         0         1         0         0         0 67.04200</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 5         0         0         1         0         0         0 67.04439</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; 6         0         0         0         0         0         0 67.03894</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt;          x</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; 1 9.256424</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; 2 9.025588</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; 3 9.029416</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; 4 9.029745</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; 5 9.026514</span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; 6 9.023580</span></a></code></pre></div>
 <p>We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.</p>
 <p>We also normalize the continuous explicative variables to facilitate MCMC convergence.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># data.obs</span>
-PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span class="op">:</span><span class="dv">12</span>]
-
-<span class="co"># Normalized continuous variables</span>
-Env_frogs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">1</span>]),frogs[,<span class="dv">2</span>],<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">3</span>]))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(Env_frogs) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(frogs[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># data.obs</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">PA_frogs &lt;-<span class="st"> </span>frogs[,<span class="dv">4</span><span class="op">:</span><span class="dv">12</span>]</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># Normalized continuous variables</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">Env_frogs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">1</span>]),frogs[,<span class="dv">2</span>],<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(frogs[,<span class="dv">3</span>]))</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(Env_frogs) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(frogs[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a></code></pre></div>
 </div>
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
 <p>We use the <code><a href="../reference/jSDM_probit_block.html">jSDM_probit_block()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
-<pre class="sourceCode r"><code class="sourceCode r">T1&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
-mod_jSDM_block_frogs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/jSDM_probit_block.html">jSDM_probit_block</a></span> (
-  <span class="co"># Response variable </span>
-  <span class="dt">presence_site_sp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(PA_frogs), 
-  <span class="co"># Explanatory variables </span>
-  <span class="dt">site_suitability =</span> <span class="op">~</span>.,   
-  <span class="dt">site_data =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(Env_frogs), <span class="dt">n_latent=</span><span class="dv">2</span>,
-  <span class="co"># Chains</span>
-  <span class="dt">burnin=</span><span class="dv">5000</span>, <span class="dt">mcmc=</span><span class="dv">1000</span>, <span class="dt">thin=</span><span class="dv">1</span>,
-  <span class="co"># Starting values</span>
-  <span class="dt">alpha_start=</span><span class="dv">0</span>, <span class="dt">beta_start=</span><span class="dv">0</span>,
-  <span class="dt">lambda_start=</span><span class="dv">0</span>, <span class="dt">W_start=</span><span class="dv">0</span>,
-  <span class="dt">V_alpha_start=</span><span class="dv">1</span>, 
-  <span class="co"># Priors</span>
-  <span class="dt">shape=</span><span class="fl">0.5</span>, <span class="dt">rate=</span><span class="fl">0.0005</span>,
-  <span class="dt">mu_beta=</span><span class="dv">0</span>, <span class="dt">V_beta=</span><span class="fl">1.0E6</span>,
-  <span class="dt">mu_lambda=</span><span class="dv">0</span>, <span class="dt">V_lambda=</span><span class="dv">10</span>,
-  <span class="co"># Various </span>
-  <span class="dt">seed=</span><span class="dv">1234</span>, <span class="dt">verbose=</span><span class="dv">1</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Running the Gibbs sampler. It may be long, please keep cool :)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; **********:10.0% </span>
-<span class="co">#&gt; **********:20.0% </span>
-<span class="co">#&gt; **********:30.0% </span>
-<span class="co">#&gt; **********:40.0% </span>
-<span class="co">#&gt; **********:50.0% </span>
-<span class="co">#&gt; **********:60.0% </span>
-<span class="co">#&gt; **********:70.0% </span>
-<span class="co">#&gt; **********:80.0% </span>
-<span class="co">#&gt; **********:90.0% </span>
-<span class="co">#&gt; **********:100.0%</span>
-T2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
-T&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/difftime">difftime</a></span>(T2,T1)</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">T1&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">mod_jSDM_block_frogs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/jSDM_probit_block.html">jSDM_probit_block</a></span> (</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="co"># Response variable </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">presence_site_sp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(PA_frogs), </a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="co"># Explanatory variables </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">site_suitability =</span> <span class="op">~</span>.,   </a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="dt">site_data =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(Env_frogs), <span class="dt">n_latent=</span><span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="co"># Chains</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="dt">burnin=</span><span class="dv">100</span>, <span class="dt">mcmc=</span><span class="dv">100</span>, <span class="dt">thin=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">  <span class="co"># Starting values</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">  <span class="dt">alpha_start=</span><span class="dv">0</span>, <span class="dt">beta_start=</span><span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="dt">lambda_start=</span><span class="dv">0</span>, <span class="dt">W_start=</span><span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="dt">V_alpha_start=</span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">  <span class="co"># Priors</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15">  <span class="dt">shape=</span><span class="fl">0.5</span>, <span class="dt">rate=</span><span class="fl">0.0005</span>,</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="dt">mu_beta=</span><span class="dv">0</span>, <span class="dt">V_beta=</span><span class="fl">1.0E6</span>,</a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">  <span class="dt">mu_lambda=</span><span class="dv">0</span>, <span class="dt">V_lambda=</span><span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb4-18" data-line-number="18">  <span class="co"># Various </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19">  <span class="dt">seed=</span><span class="dv">1234</span>, <span class="dt">verbose=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; Running the Gibbs sampler. It may be long, please keep cool :)</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; **********:10.0% </span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; **********:20.0% </span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt; **********:30.0% </span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; **********:40.0% </span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; **********:50.0% </span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="co">#&gt; **********:60.0% </span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt; **********:70.0% </span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; **********:80.0% </span></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">#&gt; **********:90.0% </span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">#&gt; **********:100.0%</span></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33">T2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()</a>
+<a class="sourceLine" id="cb4-34" data-line-number="34">T&lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/difftime">difftime</a></span>(T2,T1)</a></code></pre></div>
 </div>
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
-<pre class="sourceCode r"><code class="sourceCode r">## alpha_i of the first two sites
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]))</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">## alpha_i of the first two sites</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.alpha[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]))</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-1.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-## Valpha
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))
-coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)
-coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">## Valpha</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Valpha, <span class="dt">main=</span><span class="st">"V_alpha"</span>)</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-2.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>beta_start)
-
-## beta_j of the first two species
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(np,<span class="dv">2</span>))
-<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
-  <span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>np) {
-      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]))
-      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]), 
-<span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]])[p],
-<span class="st">", species : "</span>,j))
-  }
-}</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">np &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>beta_start)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">## beta_j of the first two species</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(np,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">  <span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>np) {</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]))</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,p]), </a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]])[p],</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="st">", species : "</span>,j))</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">}</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-4.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-## lambda_j of the first two species
-n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>n_latent
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(n_latent<span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>))
-<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {
-  <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
-      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]))
-      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]), 
-      <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]])[np<span class="op">+</span>l],
-      <span class="st">", species : "</span>,j))
-    }
-  }</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">## lambda_j of the first two species</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>n_latent</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(n_latent<span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) {</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/traceplot">traceplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]))</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">      coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/densplot">densplot</a></span>(coda<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/coda/topics/mcmc">as.mcmc</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]][,np<span class="op">+</span>l]), </a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">      <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.sp[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"sp_"</span>,j)]])[np<span class="op">+</span>l],</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">      <span class="st">", species : "</span>,j))</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">    }</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">  }</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-5.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-## Latent variables W_i for the first two sites
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))
-<span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.latent[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lv_"</span>,l)]][,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Latent variable W_"</span>, l))
-}</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">## Latent variables W_i for the first two sites</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_latent) {</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.latent[[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lv_"</span>,l)]][,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">main =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Latent variable W_"</span>, l))</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">}</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-7.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-## probit_theta
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span> (<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(mod_jSDM_block_frogs<span class="op">$</span>probit_theta_pred, <span class="dt">main =</span> <span class="st">"Predicted probit theta"</span>, <span class="dt">xlab =</span><span class="st">"predicted probit theta"</span>)</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">## probit_theta</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span> (<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(mod_jSDM_block_frogs<span class="op">$</span>probit_theta_pred, <span class="dt">main =</span> <span class="st">"Predicted probit theta"</span>, <span class="dt">xlab =</span><span class="st">"predicted probit theta"</span>)</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
-<pre class="sourceCode r"><code class="sourceCode r">
-## Deviance
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Deviance,<span class="dt">main =</span> <span class="st">"Deviance"</span>)</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">## Deviance</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(mod_jSDM_block_frogs<span class="op">$</span>mcmc.Deviance,<span class="dt">main =</span> <span class="st">"Deviance"</span>)</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level1">
@@ -297,31 +297,31 @@ n_latent &lt;-<span class="st"> </span>mod_jSDM_block_frogs<span class="op">$</s
   \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
  \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(mod_jSDM_block_frogs)</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(mod_jSDM_block_frogs)</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/correlation-matrix-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="predictions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
 <p>We use the <code>predict_jSDM()</code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sites and species concerned by predictions :</span>
-## 50 sites among the 104
-Id_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(PA_frogs), <span class="dv">50</span>)
-## All species 
-Id_species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(PA_frogs)
-<span class="co"># Simulate new observations of covariates on those sites </span>
-simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dt">nrow=</span><span class="dv">50</span>, <span class="dt">ncol =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(simdata) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(simdata) &lt;-<span class="st"> </span>Id_sites
-simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(simdata)
-simdata<span class="op">$</span>Covariate_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)
-simdata<span class="op">$</span>Covariate_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)
-simdata<span class="op">$</span>Covariate_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="dv">50</span>,<span class="dv">1</span>,<span class="fl">0.5</span>)
-
-<span class="co"># Predictions </span>
-theta_pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict.jSDM.html">predict.jSDM</a></span>(mod_jSDM_block_frogs, <span class="dt">newdata=</span>simdata, <span class="dt">Id_species=</span>Id_species,
-                           <span class="dt">Id_sites=</span>Id_sites, <span class="dt">type=</span><span class="st">"mean"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(theta_pred, <span class="dt">main=</span><span class="st">"Predicted theta with simulated data"</span>, <span class="dt">xlab=</span><span class="st">"predicted theta"</span>)</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># Sites and species concerned by predictions :</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">## 50 sites among the 104</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">Id_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(PA_frogs), <span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">## All species </a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">Id_species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(PA_frogs)</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co"># Simulate new observations of covariates on those sites </span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dt">nrow=</span><span class="dv">50</span>, <span class="dt">ncol =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data))</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(simdata) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(mod_jSDM_block_frogs<span class="op">$</span>model_spec<span class="op">$</span>site_data)</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(simdata) &lt;-<span class="st"> </span>Id_sites</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">simdata &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(simdata)</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">simdata<span class="op">$</span>Covariate_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">simdata<span class="op">$</span>Covariate_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">simdata<span class="op">$</span>Covariate_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(<span class="dv">50</span>,<span class="dv">1</span>,<span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co"># Predictions </span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16">theta_pred &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict.jSDM.html">predict.jSDM</a></span>(mod_jSDM_block_frogs, <span class="dt">newdata=</span>simdata, <span class="dt">Id_species=</span>Id_species,</a>
+<a class="sourceLine" id="cb13-17" data-line-number="17">                           <span class="dt">Id_sites=</span>Id_sites, <span class="dt">type=</span><span class="st">"mean"</span>)</a>
+<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(theta_pred, <span class="dt">main=</span><span class="st">"Predicted theta with simulated data"</span>, <span class="dt">xlab=</span><span class="st">"predicted theta"</span>)</a></code></pre></div>
 <p><img src="jSDM_files/figure-html/predictions-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
