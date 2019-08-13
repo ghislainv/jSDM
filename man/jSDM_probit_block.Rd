@@ -174,7 +174,7 @@ for (i in 1:nsite){
 mod_jSDM_probit_block <- jSDM::jSDM_probit_block ( presence_site_sp = Y ,
                                              site_suitability = ~ x1 + x2,
                                              site_data = X[,-1], n_latent=2,
-                                             burnin=3000, mcmc=3000, thin=3,
+                                             burnin=100, mcmc=100, thin=1,
                                              alpha_start=0, beta_start=0,
                                              lambda_start=0, W_start=0,
                                              V_alpha_start=1,
