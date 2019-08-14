@@ -328,48 +328,48 @@
                                    <span class='kw'>trials</span><span class='kw'>=</span><span class='no'>data.obs</span>$<span class='no'>visits</span>,
                                    <span class='kw'>suitability</span><span class='kw'>=</span>~<span class='no'>x1</span>+<span class='no'>x2</span>,
                                    <span class='kw'>data</span><span class='kw'>=</span><span class='no'>data.obs</span>,
-                                   <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>1000</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>1000</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                   <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
                                    <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
                                    <span class='kw'>mubeta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>Vbeta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
                                    <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>ropt</span><span class='kw'>=</span><span class='fl'>0.44</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.207
-#&gt; **********:20.0%, mean accept. rates= beta:0.383
-#&gt; **********:30.0%, mean accept. rates= beta:0.467
-#&gt; **********:40.0%, mean accept. rates= beta:0.453
-#&gt; **********:50.0%, mean accept. rates= beta:0.430
-#&gt; **********:60.0%, mean accept. rates= beta:0.453
-#&gt; **********:70.0%, mean accept. rates= beta:0.417
-#&gt; **********:80.0%, mean accept. rates= beta:0.427
-#&gt; **********:90.0%, mean accept. rates= beta:0.460
-#&gt; **********:100.0%, mean accept. rates= beta:0.430</div><div class='input'>
+#&gt; **********:10.0%, mean accept. rates= beta:0.233
+#&gt; **********:20.0%, mean accept. rates= beta:0.167
+#&gt; **********:30.0%, mean accept. rates= beta:0.233
+#&gt; **********:40.0%, mean accept. rates= beta:0.400
+#&gt; **********:50.0%, mean accept. rates= beta:0.400
+#&gt; **********:60.0%, mean accept. rates= beta:0.433
+#&gt; **********:70.0%, mean accept. rates= beta:0.433
+#&gt; **********:80.0%, mean accept. rates= beta:0.567
+#&gt; **********:90.0%, mean accept. rates= beta:0.483
+#&gt; **********:100.0%, mean accept. rates= beta:0.450</div><div class='input'>
 <span class='co'>#==========</span>
 <span class='co'>#== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_binomial</span>$<span class='no'>mcmc</span>)</div><div class='output co'>#&gt; 
-#&gt; Iterations = 1001:2000
+#&gt; Iterations = 101:200
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
-#&gt; Sample size per chain = 1000 
+#&gt; Sample size per chain = 100 
 #&gt; 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;                      Mean      SD Naive SE Time-series SE
-#&gt; beta_(Intercept)  -0.9088 0.10181 0.003220       0.007664
-#&gt; beta_x1            0.6669 0.09763 0.003087       0.006336
-#&gt; beta_x2           -0.8881 0.12724 0.004024       0.009317
-#&gt; Deviance         334.5804 2.46402 0.077919       0.177122
+#&gt;                      Mean     SD Naive SE Time-series SE
+#&gt; beta_(Intercept)  -0.9388 0.1012  0.01012        0.02050
+#&gt; beta_x1            0.7059 0.1114  0.01114        0.02327
+#&gt; beta_x2           -0.9360 0.0969  0.00969        0.01578
+#&gt; Deviance         334.6096 2.1357  0.21357        0.41879
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;                      2.5%      25%      50%      75%    97.5%
-#&gt; beta_(Intercept)  -1.1049  -0.9726  -0.9153  -0.8394  -0.6886
-#&gt; beta_x1            0.4786   0.5971   0.6746   0.7395   0.8463
-#&gt; beta_x2           -1.1725  -0.9601  -0.8818  -0.8053  -0.6361
-#&gt; Deviance         331.7358 332.7496 333.9276 335.7975 340.8520
+#&gt; beta_(Intercept)  -1.1232  -1.0182  -0.9271  -0.8777  -0.7546
+#&gt; beta_x1            0.5018   0.6237   0.7092   0.7983   0.9033
+#&gt; beta_x2           -1.1223  -1.0041  -0.9236  -0.8728  -0.7466
+#&gt; Deviance         331.9897 333.0489 334.0679 335.8057 338.7498
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>mod_jSDM_binomial</span>$<span class='no'>mcmc</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
@@ -403,12 +403,12 @@
 #&gt; </div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_binomial</span>$<span class='no'>theta_latent</span>)</div><div class='output co'>#&gt;        V1         
-#&gt;  Min.   :0.03047  
-#&gt;  1st Qu.:0.14895  
-#&gt;  Median :0.29731  
-#&gt;  Mean   :0.32274  
-#&gt;  3rd Qu.:0.44811  
-#&gt;  Max.   :0.96024  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
+#&gt;  Min.   :0.02542  
+#&gt;  1st Qu.:0.13934  
+#&gt;  Median :0.29142  
+#&gt;  Mean   :0.32024  
+#&gt;  3rd Qu.:0.45035  
+#&gt;  Max.   :0.96801  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod_jSDM_binomial</span>$<span class='no'>theta_latent</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
