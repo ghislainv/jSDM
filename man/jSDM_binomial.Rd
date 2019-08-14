@@ -161,7 +161,7 @@ mod_jSDM_binomial <- jSDM_binomial(presences=data.obs$Y,
                                    trials=data.obs$visits,
                                    suitability=~x1+x2,
                                    data=data.obs,
-                                   burnin=1000, mcmc=1000, thin=1,
+                                   burnin=100, mcmc=100, thin=1,
                                    beta_start=0,
                                    mubeta=0, Vbeta=1.0E6,
                                    seed=1234, ropt=0.44, verbose=1)
