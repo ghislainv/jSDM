@@ -9,8 +9,6 @@
 \description{Presence or absence of 9 species of frogs on 104 sites, 3 covariates   collected on those site and their coordinates.
 }
 
-\usage{frogs}
-
 \format{
   \code{frogs} is a data frame with 104 observations on the following 14 variables.
   \describe{
