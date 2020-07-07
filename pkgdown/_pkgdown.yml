@@ -39,9 +39,12 @@ reference:
   contents:  
   - '`jSDM_probit_block`'
 - title: Data
-  desc: Dat a-sets used in examples
+  desc: Data-sets used in examples
   contents:
   - '`frogs`'
+  - '`mosquitos`'
+  - '`eucalypts`'
+  - '`fungi`'
 - title: Test
   desc: Simple binomial function for GSL tests
   contents:
