@@ -15,21 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,14 +45,13 @@
 
 
 
-<meta property="og:title" content="Binomial probit regression model — jSDM_probit_block" />
 
+<meta property="og:title" content="Binomial probit regression model — jSDM_probit_block" />
 <meta property="og:description" content="The jSDM_probit_block function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors
 to estimate the conditional posterior distribution of
 model's parameters." />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -58,9 +65,10 @@ model's parameters." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -111,7 +119,6 @@ model's parameters." />
   <a href="../news/index.html">Change log</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://twitter.com/ghislainv">
@@ -132,6 +139,7 @@ model's parameters." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -143,11 +151,9 @@ model's parameters." />
     </div>
 
     <div class="ref-description">
-    
     <p>The <code>jSDM_probit_block</code> function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors
 to estimate the conditional posterior distribution of
 model's parameters.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>jSDM_probit_block</span>(<span class='no'>presence_site_sp</span>, <span class='no'>site_suitability</span>,
@@ -156,7 +162,7 @@ model's parameters.</p>
 <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
 <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>, <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
 <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -248,7 +254,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
     progress bar is printed, indicating the step (in %) reached by the Gibbs sampler.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
@@ -271,26 +277,24 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
   <dt>model_spec</dt><dd><p>Model's specifications</p></dd>
       
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-    <p>We model an ecological process where the presence or absence
+
+<p>We model an ecological process where the presence or absence
   of the species is explained by habitat suitability.</p>
 <p><b>Ecological process:</b>
   $$y_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j})$$
   $$probit(\theta_{i,j}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i $$</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
-    <p>Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. <em>Biometrika</em>, 85, 347-361.</p>  
+
+<p>Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. <em>Biometrika</em>, 85, 347-361.</p>  
 <p>Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. <em>Trends in Ecology &amp; Evolution</em>, 30, 766-779.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/coda/topics/plot.mcmc'>plot.mcmc</a></code>, <code><a href='https://www.rdocumentation.org/packages/coda/topics/summary.mcmc'>summary.mcmc</a></code></p></div>
-    
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/coda/man/plot.mcmc.html'>plot.mcmc</a></code>, <code><a href='https://rdrr.io/pkg/coda/man/summary.mcmc.html'>summary.mcmc</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -301,7 +305,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 <span class='co'>#=================</span>
 <span class='co'>#== Load libraries</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>jSDM</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>jSDM</span>)
 
 <span class='co'>#==================</span>
 <span class='co'>#== Data simulation</span>
@@ -311,7 +315,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 
 <span class='co'>#= Set seed for repeatability</span>
 <span class='no'>seed</span> <span class='kw'>&lt;-</span> <span class='fl'>1234</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='no'>seed</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
 
 <span class='co'>#= Number of species</span>
 <span class='no'>nsp</span><span class='kw'>&lt;-</span> <span class='fl'>5</span>
@@ -320,25 +324,25 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 <span class='no'>n_latent</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
 
 <span class='co'>#= Ecological process (suitability)</span>
-<span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>Int</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>,<span class='no'>nsite</span>),<span class='kw'>x1</span><span class='kw'>=</span><span class='no'>x1</span>,<span class='kw'>x2</span><span class='kw'>=</span><span class='no'>x2</span>)
-<span class='no'>W</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span> (<span class='no'>X</span>,<span class='no'>W</span>)
-<span class='no'>beta.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>nsp</span>*<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>),-<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>))
+<span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
+<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
+<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>Int</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='no'>nsite</span>),<span class='kw'>x1</span><span class='kw'>=</span><span class='no'>x1</span>,<span class='kw'>x2</span><span class='kw'>=</span><span class='no'>x2</span>)
+<span class='no'>W</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span> (<span class='no'>X</span>,<span class='no'>W</span>)
+<span class='no'>beta.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='no'>nsp</span>*<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>),-<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>))
 <span class='no'>l.zero</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>
-<span class='no'>l.diag</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>2</span>)
-<span class='no'>l.other</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>nsp</span>*<span class='no'>n_latent</span>-<span class='fl'>3</span>,-<span class='fl'>2</span>,<span class='fl'>2</span>)
-<span class='no'>lambda.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>l.diag</span>[<span class='fl'>1</span>],<span class='no'>l.zero</span>,
+<span class='no'>l.diag</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>2</span>)
+<span class='no'>l.other</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='no'>nsp</span>*<span class='no'>n_latent</span>-<span class='fl'>3</span>,-<span class='fl'>2</span>,<span class='fl'>2</span>)
+<span class='no'>lambda.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>l.diag</span>[<span class='fl'>1</span>],<span class='no'>l.zero</span>,
 <span class='no'>l.other</span>[<span class='fl'>1</span>],<span class='no'>l.diag</span>[<span class='fl'>2</span>],<span class='no'>l.other</span>[-<span class='fl'>1</span>]), <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>))
-<span class='no'>param.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>beta.target</span>,<span class='no'>lambda.target</span>)
+<span class='no'>param.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='no'>beta.target</span>,<span class='no'>lambda.target</span>)
 <span class='no'>Valpha.target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.5</span>
 <span class='no'>V</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
-<span class='no'>alpha.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>Valpha.target</span>))
-<span class='no'>probit_theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>X</span>) <span class='kw'>%*%</span> <span class='no'>beta.target</span> + <span class='no'>W</span> <span class='kw'>%*%</span> <span class='no'>lambda.target</span> + <span class='no'>alpha.target</span>
-<span class='no'>e</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>nsp</span>*<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>V</span>)),<span class='no'>nsite</span>,<span class='no'>nsp</span>)
+<span class='no'>alpha.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>Valpha.target</span>))
+<span class='no'>probit_theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>X</span>) <span class='kw'>%*%</span> <span class='no'>beta.target</span> + <span class='no'>W</span> <span class='kw'>%*%</span> <span class='no'>lambda.target</span> + <span class='no'>alpha.target</span>
+<span class='no'>e</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsp</span>*<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>V</span>)),<span class='no'>nsite</span>,<span class='no'>nsp</span>)
 <span class='no'>Z_true</span> <span class='kw'>&lt;-</span> <span class='no'>probit_theta</span> + <span class='no'>e</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span> (<span class='fl'>NA</span>, <span class='no'>nsite</span>,<span class='no'>nsp</span>)
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span> (<span class='fl'>NA</span>, <span class='no'>nsite</span>,<span class='no'>nsp</span>)
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsite</span>){
   <span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>){
     <span class='kw'>if</span> ( <span class='no'>Z_true</span>[<span class='no'>i</span>,<span class='no'>j</span>] <span class='kw'>&gt;</span> <span class='fl'>0</span>) {<span class='no'>Y</span>[<span class='no'>i</span>,<span class='no'>j</span>] <span class='kw'>&lt;-</span> <span class='fl'>1</span>}
@@ -350,7 +354,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 <span class='co'>#== Site-occupancy model</span>
 
 <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence </span>
-<span class='no'>mod_jSDM_probit_block</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> ( <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='no'>Y</span> ,
+<span class='no'>mod_jSDM_probit_block</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'>jSDM_probit_block</span> ( <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='no'>Y</span> ,
                                              <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~ <span class='no'>x1</span> + <span class='no'>x2</span>,
                                              <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>X</span>[,-<span class='fl'>1</span>], <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
                                              <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
@@ -383,7 +387,7 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 <span class='co'>#= Parameter estimates</span>
 
 <span class='co'>## alpha</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)</div><div class='output co'>#&gt; 
 #&gt; Iterations = 101:200
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -392,120 +396,120 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt; 1. Empirical mean and standard deviation for each variable,
 #&gt;    plus standard error of the mean:
 #&gt; 
-#&gt;             Mean     SD Naive SE Time-series SE
-#&gt;  [1,]  0.0431372 0.1436  0.01436       0.014335
-#&gt;  [2,] -0.0078532 0.1181  0.01181       0.007146
-#&gt;  [3,]  0.0111113 0.1130  0.01130       0.011298
-#&gt;  [4,] -0.0154665 0.1239  0.01239       0.012070
-#&gt;  [5,]  0.0212101 0.1375  0.01375       0.015754
-#&gt;  [6,] -0.0067938 0.1179  0.01179       0.011792
-#&gt;  [7,] -0.0041117 0.1450  0.01450       0.012306
-#&gt;  [8,] -0.0147464 0.1248  0.01248       0.009993
-#&gt;  [9,] -0.0143717 0.1361  0.01361       0.017615
-#&gt; [10,]  0.0230310 0.1146  0.01146       0.011455
-#&gt; [11,]  0.0121916 0.1174  0.01174       0.030270
-#&gt; [12,]  0.0061483 0.1038  0.01038       0.023508
-#&gt; [13,] -0.0187666 0.1172  0.01172       0.006713
-#&gt; [14,] -0.0125043 0.1338  0.01338       0.011177
-#&gt; [15,]  0.0228419 0.1464  0.01464       0.008673
-#&gt; [16,]  0.0139750 0.1338  0.01338       0.013382
-#&gt; [17,] -0.0059985 0.1464  0.01464       0.011332
-#&gt; [18,]  0.0042399 0.1620  0.01620       0.016197
-#&gt; [19,] -0.0063142 0.1334  0.01334       0.015807
-#&gt; [20,]  0.0066145 0.1382  0.01382       0.013820
-#&gt; [21,] -0.0259612 0.1323  0.01323       0.026441
-#&gt; [22,]  0.0263646 0.1008  0.01008       0.010077
-#&gt; [23,] -0.0218779 0.1421  0.01421       0.014206
-#&gt; [24,]  0.0075987 0.1280  0.01280       0.009193
-#&gt; [25,] -0.0225057 0.1363  0.01363       0.014852
-#&gt; [26,]  0.0306662 0.1195  0.01195       0.011953
-#&gt; [27,]  0.0093436 0.1299  0.01299       0.012991
-#&gt; [28,] -0.0061100 0.1261  0.01261       0.012606
-#&gt; [29,]  0.0290711 0.1459  0.01459       0.020770
-#&gt; [30,] -0.0290261 0.1370  0.01370       0.016561
-#&gt; [31,] -0.0071216 0.1224  0.01224       0.014360
-#&gt; [32,] -0.0057590 0.1504  0.01504       0.014299
-#&gt; [33,]  0.0207969 0.1314  0.01314       0.012776
-#&gt; [34,]  0.0131830 0.1303  0.01303       0.015487
-#&gt; [35,] -0.0009248 0.1475  0.01475       0.014753
-#&gt; [36,]  0.0033581 0.1488  0.01488       0.014884
-#&gt; [37,]  0.0138021 0.1010  0.01010       0.010098
-#&gt; [38,] -0.0442372 0.1253  0.01253       0.021406
-#&gt; [39,]  0.0124567 0.1617  0.01617       0.009436
-#&gt; [40,] -0.0175471 0.1089  0.01089       0.009216
-#&gt; [41,]  0.0657642 0.1431  0.01431       0.022776
-#&gt; [42,] -0.0230670 0.1136  0.01136       0.011362
-#&gt; [43,] -0.0072778 0.1207  0.01207       0.012073
-#&gt; [44,]  0.0269758 0.1350  0.01350       0.020886
-#&gt; [45,]  0.0118502 0.1470  0.01470       0.016586
-#&gt; [46,] -0.0272223 0.1457  0.01457       0.008546
-#&gt; [47,] -0.0253090 0.1264  0.01264       0.018873
-#&gt; [48,]  0.0018242 0.1224  0.01224       0.015783
-#&gt; [49,]  0.0150610 0.1145  0.01145       0.011448
-#&gt; [50,] -0.0167126 0.1400  0.01400       0.013822
+#&gt;             Mean      SD Naive SE Time-series SE
+#&gt;  [1,]  4.308e-02 0.14345 0.014345       0.014345
+#&gt;  [2,] -9.930e-03 0.11625 0.011625       0.006957
+#&gt;  [3,]  1.539e-02 0.11176 0.011176       0.011176
+#&gt;  [4,] -1.429e-02 0.12334 0.012334       0.012221
+#&gt;  [5,]  2.713e-02 0.13537 0.013537       0.015250
+#&gt;  [6,] -4.756e-03 0.11794 0.011794       0.011794
+#&gt;  [7,] -3.103e-03 0.14510 0.014510       0.012436
+#&gt;  [8,] -1.195e-02 0.12472 0.012472       0.009212
+#&gt;  [9,] -1.124e-02 0.13576 0.013576       0.011595
+#&gt; [10,]  2.332e-02 0.11261 0.011261       0.011261
+#&gt; [11,]  1.095e-02 0.11562 0.011562       0.031118
+#&gt; [12,]  1.009e-02 0.10285 0.010285       0.021993
+#&gt; [13,] -1.859e-02 0.11594 0.011594       0.006469
+#&gt; [14,] -9.801e-03 0.13216 0.013216       0.011279
+#&gt; [15,]  2.269e-02 0.14603 0.014603       0.008618
+#&gt; [16,]  1.149e-02 0.13346 0.013346       0.013346
+#&gt; [17,] -2.095e-03 0.14589 0.014589       0.010693
+#&gt; [18,]  6.445e-05 0.16059 0.016059       0.016059
+#&gt; [19,] -1.157e-02 0.13378 0.013378       0.015931
+#&gt; [20,]  5.153e-03 0.13785 0.013785       0.013785
+#&gt; [21,] -2.546e-02 0.13290 0.013290       0.026351
+#&gt; [22,]  2.846e-02 0.09874 0.009874       0.009874
+#&gt; [23,] -2.558e-02 0.14154 0.014154       0.014154
+#&gt; [24,]  7.505e-03 0.12704 0.012704       0.008936
+#&gt; [25,] -2.163e-02 0.13618 0.013618       0.014871
+#&gt; [26,]  2.943e-02 0.11926 0.011926       0.011926
+#&gt; [27,]  1.049e-02 0.12854 0.012854       0.012854
+#&gt; [28,] -6.645e-03 0.12576 0.012576       0.012576
+#&gt; [29,]  2.872e-02 0.14595 0.014595       0.020808
+#&gt; [30,] -2.742e-02 0.13659 0.013659       0.016563
+#&gt; [31,] -6.311e-03 0.12140 0.012140       0.012140
+#&gt; [32,] -1.889e-03 0.15019 0.015019       0.014250
+#&gt; [33,]  1.883e-02 0.13167 0.013167       0.012799
+#&gt; [34,]  1.255e-02 0.13009 0.013009       0.015451
+#&gt; [35,] -3.728e-03 0.14663 0.014663       0.014663
+#&gt; [36,]  4.616e-03 0.14887 0.014887       0.014887
+#&gt; [37,]  2.124e-02 0.10002 0.010002       0.010002
+#&gt; [38,] -4.549e-02 0.12374 0.012374       0.021374
+#&gt; [39,]  9.933e-03 0.16081 0.016081       0.009965
+#&gt; [40,] -1.586e-02 0.10867 0.010867       0.009284
+#&gt; [41,]  6.442e-02 0.14348 0.014348       0.023058
+#&gt; [42,] -2.406e-02 0.11348 0.011348       0.011348
+#&gt; [43,] -1.029e-02 0.11951 0.011951       0.011951
+#&gt; [44,]  2.878e-02 0.13400 0.013400       0.020935
+#&gt; [45,]  9.827e-03 0.14552 0.014552       0.016413
+#&gt; [46,] -2.659e-02 0.14535 0.014535       0.008735
+#&gt; [47,] -2.526e-02 0.12488 0.012488       0.018793
+#&gt; [48,]  3.418e-03 0.12252 0.012252       0.015804
+#&gt; [49,]  1.477e-02 0.11477 0.011477       0.011477
+#&gt; [50,] -1.401e-02 0.13801 0.013801       0.013696
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;          2.5%      25%        50%     75%  97.5%
-#&gt; var1  -0.1843 -0.04586  0.0193710 0.11617 0.4207
-#&gt; var2  -0.1925 -0.09485 -0.0036036 0.05202 0.2049
-#&gt; var3  -0.2176 -0.06014  0.0113031 0.07461 0.2307
-#&gt; var4  -0.2365 -0.08148 -0.0167692 0.05815 0.2709
-#&gt; var5  -0.2871 -0.04161  0.0277224 0.10806 0.2646
-#&gt; var6  -0.2529 -0.07581 -0.0115506 0.06920 0.2220
-#&gt; var7  -0.3336 -0.06484  0.0001006 0.06501 0.2648
-#&gt; var8  -0.2699 -0.07531 -0.0180502 0.04647 0.2374
-#&gt; var9  -0.2477 -0.07675 -0.0054562 0.05513 0.2439
-#&gt; var10 -0.1814 -0.03203  0.0152090 0.09816 0.2295
-#&gt; var11 -0.1763 -0.05730  0.0058007 0.06393 0.2580
-#&gt; var12 -0.2052 -0.05355  0.0080482 0.06480 0.1800
-#&gt; var13 -0.2467 -0.08752 -0.0108117 0.03783 0.2275
-#&gt; var14 -0.3393 -0.06959  0.0002794 0.05348 0.2515
-#&gt; var15 -0.3448 -0.03854  0.0217707 0.10628 0.2797
-#&gt; var16 -0.2395 -0.04955  0.0040451 0.06155 0.3757
-#&gt; var17 -0.3025 -0.07452 -0.0090282 0.03534 0.3846
-#&gt; var18 -0.3653 -0.06998  0.0121234 0.08857 0.3235
-#&gt; var19 -0.2946 -0.05907  0.0036137 0.04494 0.2575
-#&gt; var20 -0.1964 -0.07843  0.0021014 0.04868 0.3258
-#&gt; var21 -0.3890 -0.07101 -0.0037823 0.04197 0.2069
-#&gt; var22 -0.1233 -0.04785  0.0151358 0.08072 0.2826
-#&gt; var23 -0.2978 -0.11630 -0.0112058 0.06088 0.2448
-#&gt; var24 -0.2850 -0.05753  0.0096743 0.07452 0.2701
-#&gt; var25 -0.3233 -0.09314 -0.0186240 0.06613 0.2499
-#&gt; var26 -0.1535 -0.03867  0.0108486 0.09550 0.2985
-#&gt; var27 -0.2210 -0.07555 -0.0009920 0.07786 0.2869
-#&gt; var28 -0.2573 -0.07661  0.0082855 0.06637 0.2455
-#&gt; var29 -0.1929 -0.04298  0.0157907 0.08765 0.3336
-#&gt; var30 -0.3257 -0.11349 -0.0203126 0.06022 0.2328
-#&gt; var31 -0.2253 -0.07902 -0.0212696 0.05992 0.2549
-#&gt; var32 -0.3018 -0.06806 -0.0102283 0.06363 0.2868
-#&gt; var33 -0.2928 -0.03408  0.0229801 0.08546 0.2841
-#&gt; var34 -0.1881 -0.06594 -0.0039055 0.06150 0.3360
-#&gt; var35 -0.3116 -0.06641  0.0038016 0.05648 0.2563
-#&gt; var36 -0.3359 -0.05912  0.0034301 0.06011 0.2886
-#&gt; var37 -0.1743 -0.04837  0.0110233 0.05966 0.2245
-#&gt; var38 -0.3457 -0.10804 -0.0285666 0.02769 0.1451
-#&gt; var39 -0.3061 -0.06925  0.0115361 0.08666 0.3571
-#&gt; var40 -0.2109 -0.07836 -0.0286475 0.04301 0.1916
-#&gt; var41 -0.1753 -0.01312  0.0298969 0.11670 0.4456
-#&gt; var42 -0.2957 -0.08598  0.0010500 0.05346 0.1877
-#&gt; var43 -0.2288 -0.08133 -0.0064399 0.05226 0.1996
-#&gt; var44 -0.2261 -0.02936  0.0083933 0.07068 0.3454
-#&gt; var45 -0.3024 -0.06069  0.0162212 0.07307 0.2781
-#&gt; var46 -0.2881 -0.09040 -0.0109645 0.04188 0.2321
-#&gt; var47 -0.2704 -0.09283 -0.0208573 0.04363 0.2380
-#&gt; var48 -0.2745 -0.06565  0.0187651 0.06758 0.2454
-#&gt; var49 -0.1827 -0.05538  0.0114068 0.07245 0.2513
-#&gt; var50 -0.2926 -0.08658 -0.0054293 0.05563 0.2489
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_alpha_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>alpha.target</span>,
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+#&gt; var1  -0.1843 -0.04235  0.0154375 0.11617 0.4207
+#&gt; var2  -0.1925 -0.08871 -0.0020798 0.04249 0.2049
+#&gt; var3  -0.2176 -0.05851  0.0201476 0.07461 0.2307
+#&gt; var4  -0.2365 -0.08148 -0.0156789 0.05474 0.2709
+#&gt; var5  -0.2871 -0.02213  0.0325184 0.10806 0.2646
+#&gt; var6  -0.2529 -0.07539 -0.0061064 0.06999 0.2220
+#&gt; var7  -0.3336 -0.05972 -0.0010995 0.06678 0.2648
+#&gt; var8  -0.2699 -0.06655 -0.0101961 0.04957 0.2374
+#&gt; var9  -0.2477 -0.06861  0.0002748 0.05683 0.2439
+#&gt; var10 -0.1814 -0.02584  0.0162499 0.08947 0.2295
+#&gt; var11 -0.1763 -0.05561  0.0068700 0.05968 0.2580
+#&gt; var12 -0.2052 -0.03647  0.0217601 0.06957 0.1800
+#&gt; var13 -0.2467 -0.08248 -0.0137523 0.03554 0.2275
+#&gt; var14 -0.3393 -0.06415  0.0024632 0.04996 0.2515
+#&gt; var15 -0.3448 -0.03588  0.0224160 0.10628 0.2798
+#&gt; var16 -0.2395 -0.05069  0.0032631 0.05007 0.3757
+#&gt; var17 -0.3025 -0.06783 -0.0090282 0.03837 0.3846
+#&gt; var18 -0.3653 -0.06505  0.0015047 0.07856 0.3235
+#&gt; var19 -0.2946 -0.05839 -0.0084691 0.04152 0.2575
+#&gt; var20 -0.1964 -0.07736 -0.0013997 0.04729 0.3258
+#&gt; var21 -0.3890 -0.07581 -0.0040711 0.04285 0.2069
+#&gt; var22 -0.1208 -0.04221  0.0149039 0.08072 0.2826
+#&gt; var23 -0.2978 -0.12491 -0.0164401 0.05908 0.2448
+#&gt; var24 -0.2850 -0.05753  0.0096742 0.06830 0.2701
+#&gt; var25 -0.3233 -0.09314 -0.0149986 0.06613 0.2499
+#&gt; var26 -0.1535 -0.04058  0.0045744 0.09250 0.2985
+#&gt; var27 -0.2210 -0.06810  0.0001733 0.07787 0.2869
+#&gt; var28 -0.2573 -0.07310  0.0066588 0.06520 0.2455
+#&gt; var29 -0.1929 -0.04750  0.0167967 0.07575 0.3336
+#&gt; var30 -0.3257 -0.10520 -0.0096029 0.05770 0.2328
+#&gt; var31 -0.2253 -0.07902 -0.0085864 0.05491 0.2549
+#&gt; var32 -0.3018 -0.05875  0.0017920 0.06533 0.2868
+#&gt; var33 -0.2928 -0.03620  0.0180325 0.08546 0.2841
+#&gt; var34 -0.1882 -0.06550 -0.0039886 0.06375 0.3361
+#&gt; var35 -0.3116 -0.06641 -0.0016244 0.05038 0.2563
+#&gt; var36 -0.3359 -0.05912  0.0054377 0.06011 0.2886
+#&gt; var37 -0.1743 -0.04546  0.0266217 0.08251 0.2245
+#&gt; var38 -0.3457 -0.10805 -0.0252271 0.01960 0.1451
+#&gt; var39 -0.3061 -0.06925  0.0041313 0.07968 0.3571
+#&gt; var40 -0.2109 -0.08042 -0.0157156 0.04259 0.1916
+#&gt; var41 -0.1753 -0.01239  0.0268197 0.11670 0.4456
+#&gt; var42 -0.2957 -0.08214 -0.0118687 0.04696 0.1877
+#&gt; var43 -0.2288 -0.07942 -0.0142551 0.04001 0.1996
+#&gt; var44 -0.2261 -0.02644  0.0156484 0.07068 0.3454
+#&gt; var45 -0.3024 -0.05854  0.0075135 0.07045 0.2781
+#&gt; var46 -0.2881 -0.08670 -0.0130576 0.04189 0.2321
+#&gt; var47 -0.2704 -0.08801 -0.0122664 0.04237 0.2380
+#&gt; var48 -0.2745 -0.06460  0.0209231 0.06758 0.2454
+#&gt; var49 -0.1827 -0.05740  0.0119442 0.07245 0.2513
+#&gt; var50 -0.2926 -0.05659 -0.0078154 0.05002 0.2489
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_alpha_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>alpha.target</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
 <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"alphas target"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"alphas estimated"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## Valpha</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)</div><div class='output co'>#&gt; 
 #&gt; Iterations = 101:200
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -515,22 +519,22 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;       0.017453       0.015947       0.001595       0.008894 
+#&gt;       0.017267       0.016117       0.001612       0.009094 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;     2.5%      25%      50%      75%    97.5% 
-#&gt; 0.001064 0.004432 0.011471 0.027100 0.053238 
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_Valpha_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/traceplot'>traceplot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)
-<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/densplot'>densplot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>Valpha.target</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+#&gt;      2.5%       25%       50%       75%     97.5% 
+#&gt; 0.0009188 0.0042343 0.0114715 0.0271008 0.0532380 
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_Valpha_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)
+<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Valpha</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>Valpha.target</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 
 <span class='co'>## beta_j</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,<span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)])</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)])</div><div class='output co'>#&gt; 
 #&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -540,30 +544,30 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;                     Mean     SD Naive SE Time-series SE
-#&gt; beta_(Intercept)  0.5783 0.2216  0.02216        0.03393
-#&gt; beta_x1          -0.2932 0.2448  0.02448        0.04053
-#&gt; beta_x2           0.8306 0.2424  0.02424        0.05984
+#&gt; beta_(Intercept)  0.6083 0.2656  0.02656        0.05162
+#&gt; beta_x1          -0.2837 0.2551  0.02551        0.04454
+#&gt; beta_x2           0.8596 0.2653  0.02653        0.07106
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;                     2.5%     25%     50%     75%  97.5%
-#&gt; beta_(Intercept)  0.1636  0.4281  0.5882  0.7269 1.0253
-#&gt; beta_x1          -0.7398 -0.4568 -0.2958 -0.1375 0.2728
-#&gt; beta_x2           0.4090  0.6534  0.8103  1.0244 1.2720
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>),<span class='fl'>2</span>))
+#&gt; beta_(Intercept)  0.1636  0.4329  0.5882  0.7675 1.1728
+#&gt; beta_x1          -0.7338 -0.4568 -0.3078 -0.1309 0.2728
+#&gt; beta_x2           0.4342  0.6608  0.8129  1.0354 1.4195
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>),<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
-  <span class='kw'>for</span> (<span class='no'>p</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)) {
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/traceplot'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/mcmc'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]))
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/densplot'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/mcmc'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]),
-    <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='no'>p</span>],<span class='st'>", species : "</span>,<span class='no'>j</span>))
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>beta.target</span>[<span class='no'>p</span>,<span class='no'>j</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+  <span class='kw'>for</span> (<span class='no'>p</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)) {
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]))
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]),
+    <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='no'>p</span>],<span class='st'>", species : "</span>,<span class='no'>j</span>))
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>beta.target</span>[<span class='no'>p</span>,<span class='no'>j</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
   }
 }
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## lambda_j</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_1</span>[,(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
 #&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -573,15 +577,15 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;            Mean     SD Naive SE Time-series SE
-#&gt; lambda_1 0.3724 0.3086  0.03086        0.09261
-#&gt; lambda_2 0.0000 0.0000  0.00000        0.00000
+#&gt; lambda_1 0.4041 0.3288  0.03288         0.1032
+#&gt; lambda_2 0.0000 0.0000  0.00000         0.0000
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
-#&gt;             2.5%    25%    50%    75% 97.5%
-#&gt; lambda_1 0.02572 0.1291 0.2727 0.5863 1.097
-#&gt; lambda_2 0.00000 0.0000 0.0000 0.0000 0.000
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_2</span>[,(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
+#&gt;             2.5%    25%   50%    75% 97.5%
+#&gt; lambda_1 0.02572 0.1318 0.291 0.6272 1.122
+#&gt; lambda_2 0.00000 0.0000 0.000 0.0000 0.000
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span>$<span class='no'>sp_2</span>[,(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)])</div><div class='output co'>#&gt; 
 #&gt; Iterations = 1:100
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -591,41 +595,41 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;            Mean     SD Naive SE Time-series SE
-#&gt; lambda_1 -1.432 0.5798  0.05798         0.2332
-#&gt; lambda_2  1.613 0.4270  0.04270         0.1684
+#&gt; lambda_1 -1.418 0.5710  0.05710         0.2726
+#&gt; lambda_2  1.535 0.3334  0.03334         0.1100
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;             2.5%    25%    50%    75%   97.5%
-#&gt; lambda_1 -2.7176 -1.756 -1.266 -1.018 -0.6708
-#&gt; lambda_2  0.7985  1.335  1.572  1.910  2.4730
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>n_latent</span>*<span class='fl'>2</span>,<span class='fl'>2</span>))
+#&gt; lambda_1 -2.7176 -1.719 -1.266 -1.018 -0.6708
+#&gt; lambda_2  0.7985  1.335  1.568  1.762  2.0650
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>n_latent</span>*<span class='fl'>2</span>,<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
   <span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/traceplot'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/mcmc'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]))
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/densplot'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/coda/topics/mcmc'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]),
-    <span class='kw'>main</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>],<span class='st'>",
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]))
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]),
+    <span class='kw'>main</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>],<span class='st'>",
     species : "</span>,<span class='no'>j</span>))
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>lambda.target</span>[<span class='no'>l</span>,<span class='no'>j</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>lambda.target</span>[<span class='no'>l</span>,<span class='no'>j</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
   }
 }
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## W latent variables</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Posteriors_lv_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lv_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.latent</span><span class='kw'>[[</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='no'>l</span>)]])<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
-<span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='no'>l</span>),
-<span class='kw'>xlab</span> <span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"W_"</span>, <span class='no'>l</span>, <span class='st'>" target"</span>), <span class='kw'>ylab</span> <span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"W_"</span>, <span class='no'>l</span>, <span class='st'>" estimated"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.latent</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='no'>l</span>)]])<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+<span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='no'>l</span>),
+<span class='kw'>xlab</span> <span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"W_"</span>, <span class='no'>l</span>, <span class='st'>" target"</span>), <span class='kw'>ylab</span> <span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"W_"</span>, <span class='no'>l</span>, <span class='st'>" estimated"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 }
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>## Deviance</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='output co'>#&gt; 
 #&gt; Iterations = 101:200
 #&gt; Thinning interval = 1 
 #&gt; Number of chains = 1 
@@ -635,75 +639,61 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;        124.686         10.015          1.001          2.341 
+#&gt;       125.3472         9.8941         0.9894         2.1777 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
-#&gt; 108.0 118.3 124.4 132.2 143.2 
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_probit_block-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; 107.9 119.0 125.2 132.2 143.2 
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_probit_block-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/pdf'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
 <span class='co'>## probit_theta</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)</div><div class='output co'>#&gt;        V1                V2                V3                V4         
-#&gt;  Min.   :-1.2046   Min.   :-7.7269   Min.   :-4.0859   Min.   :-8.5609  
-#&gt;  1st Qu.: 0.1373   1st Qu.:-0.5125   1st Qu.: 0.1048   1st Qu.:-3.9700  
-#&gt;  Median : 0.6305   Median : 2.4428   Median : 1.4401   Median :-2.0468  
-#&gt;  Mean   : 0.8484   Mean   : 1.8261   Mean   : 1.0136   Mean   :-0.3845  
-#&gt;  3rd Qu.: 1.5579   3rd Qu.: 4.7797   3rd Qu.: 1.9887   3rd Qu.: 3.0496  
-#&gt;  Max.   : 2.9850   Max.   : 9.5048   Max.   : 4.4639   Max.   :11.6020  
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)</div><div class='output co'>#&gt;        V1                V2                V3                V4         
+#&gt;  Min.   :-1.2237   Min.   :-7.4359   Min.   :-4.2382   Min.   :-8.6588  
+#&gt;  1st Qu.: 0.1423   1st Qu.:-0.7746   1st Qu.: 0.1154   1st Qu.:-4.2270  
+#&gt;  Median : 0.6601   Median : 2.4989   Median : 1.3139   Median :-2.1784  
+#&gt;  Mean   : 0.8734   Mean   : 1.8326   Mean   : 0.9386   Mean   :-0.4398  
+#&gt;  3rd Qu.: 1.5843   3rd Qu.: 4.7800   3rd Qu.: 1.8929   3rd Qu.: 2.9362  
+#&gt;  Max.   : 3.0757   Max.   : 9.5629   Max.   : 4.3062   Max.   :11.7626  
 #&gt;        V5        
-#&gt;  Min.   :-3.585  
-#&gt;  1st Qu.: 1.311  
-#&gt;  Median : 2.770  
-#&gt;  Mean   : 2.659  
-#&gt;  3rd Qu.: 4.129  
-#&gt;  Max.   : 9.080  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+#&gt;  Min.   :-3.571  
+#&gt;  1st Qu.: 1.271  
+#&gt;  Median : 2.909  
+#&gt;  Mean   : 2.598  
+#&gt;  3rd Qu.: 3.999  
+#&gt;  Max.   : 8.940  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>probit_theta_pred</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 
 <span class='co'>## Z</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)</div><div class='output co'>#&gt;        V1                V2               V3                V4         
-#&gt;  Min.   :-1.3913   Min.   :-7.784   Min.   :-4.1749   Min.   :-8.6331  
-#&gt;  1st Qu.:-0.2912   1st Qu.:-1.154   1st Qu.:-0.7409   1st Qu.:-4.2520  
-#&gt;  Median : 1.0528   Median : 2.584   Median : 1.6850   Median :-2.3357  
-#&gt;  Mean   : 0.8703   Mean   : 1.821   Mean   : 1.0308   Mean   :-0.4052  
-#&gt;  3rd Qu.: 1.6802   3rd Qu.: 4.904   3rd Qu.: 2.1735   3rd Qu.: 3.1269  
-#&gt;  Max.   : 2.8359   Max.   : 9.649   Max.   : 4.3779   Max.   :11.7596  
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)</div><div class='output co'>#&gt;        V1                V2               V3                V4         
+#&gt;  Min.   :-1.4034   Min.   :-7.498   Min.   :-4.2807   Min.   :-8.7563  
+#&gt;  1st Qu.:-0.2893   1st Qu.:-1.226   1st Qu.:-0.6764   1st Qu.:-4.4750  
+#&gt;  Median : 1.0952   Median : 2.726   Median : 1.5815   Median :-2.4109  
+#&gt;  Mean   : 0.8934   Mean   : 1.829   Mean   : 0.9552   Mean   :-0.4494  
+#&gt;  3rd Qu.: 1.7034   3rd Qu.: 4.781   3rd Qu.: 2.0995   3rd Qu.: 3.0698  
+#&gt;  Max.   : 2.8578   Max.   : 9.703   Max.   : 4.2482   Max.   :11.8927  
 #&gt;        V5        
-#&gt;  Min.   :-3.715  
-#&gt;  1st Qu.: 1.692  
-#&gt;  Median : 2.926  
-#&gt;  Mean   : 2.672  
-#&gt;  3rd Qu.: 4.074  
-#&gt;  Max.   : 9.171  </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/dev'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+#&gt;  Min.   :-3.658  
+#&gt;  1st Qu.: 1.698  
+#&gt;  Median : 2.994  
+#&gt;  Mean   : 2.619  
+#&gt;  3rd Qu.: 3.975  
+#&gt;  Max.   : 8.949  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod_jSDM_probit_block</span>$<span class='no'>Z_latent</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Jeanne Clement <a href='mailto:jeanne.clement16@laposte.net'>jeanne.clement16@laposte.net</a>
-  Ghislain Vieilledent <a href='mailto:ghislain.vieilledent@cirad.fr'>ghislain.vieilledent@cirad.fr</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -711,13 +701,16 @@ betas, so the variance covariance matrix used in this case is diagonal with the 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

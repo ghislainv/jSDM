@@ -15,21 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Calculate the residual correlation matrix from a LVM. — get_residual_cor" />
-
 <meta property="og:description" content="This function use coefficients \((\lambda_j^l) with j=1,\dots,n_species and l=1,\dots,n_latent\)$ corresponding to latent variables to calculate the variance-covariance matrix which controls correlation between species." />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -56,9 +63,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -109,7 +117,6 @@
   <a href="../news/index.html">Change log</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://twitter.com/ghislainv">
@@ -130,6 +137,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -141,13 +149,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>This function use coefficients \((\lambda_j^l) with j=1,\dots,n_species and l=1,\dots,n_latent\)$ corresponding to latent variables to calculate the variance-covariance matrix which controls correlation between species.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>get_residual_cor</span>(<span class='no'>mod</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -156,7 +162,7 @@
       <td><p>An object of class <code>"jSDM"</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p></p>
@@ -165,28 +171,27 @@
   <dt>cor.mean</dt><dd><p>Average over the MCMC samples of the residual correlation matrix.</p></dd>
   <dt>cor.median</dt><dd><p>Median over the MCMC samples of the residual correlation matrix.</p></dd>
 
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># frogs data</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
 
 <span class='co'># Arranging data</span>
 <span class='no'>PA_frogs</span> <span class='kw'>&lt;-</span> <span class='no'>frogs</span>[,<span class='fl'>4</span>:<span class='fl'>12</span>]
 
 <span class='co'># Normalized continuous variables</span>
-<span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
+<span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
 
 <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/jSDM/topics/jSDM_probit_block'>jSDM_probit_block</a></span> (
+<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='jSDM_probit_block.html'>jSDM_probit_block</a></span> (
   <span class='co'># Response variable </span>
-  <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
+  <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
   <span class='co'># Explanatory variables </span>
   <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
-  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>), <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
+  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>), <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
   <span class='co'># Chains</span>
   <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
   <span class='co'># Starting values</span>
@@ -214,60 +219,53 @@
 <span class='co'># Calcul of residual correlation between species </span>
 <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>get_residual_cor</span>(<span class='no'>mod_jSDM_block_frogs</span>)
 <span class='no'>result</span>$<span class='no'>cov.mean</span></div><div class='output co'>#&gt;             [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
-#&gt;  [1,]  2.1094146  0.6049887  1.6803696 -0.2902085  1.0686866  3.1321333
-#&gt;  [2,]  0.6049887  1.6290888  0.1443458 -0.1511217  0.9203042  2.2482014
-#&gt;  [3,]  1.6803696  0.1443458 17.0480202  0.4545173  0.4121805  4.4197175
-#&gt;  [4,] -0.2902085 -0.1511217  0.4545173  1.3106146 -0.2645391 -0.8490182
-#&gt;  [5,]  1.0686866  0.9203042  0.4121805 -0.2645391  2.8119077  3.9738901
-#&gt;  [6,]  3.1321333  2.2482014  4.4197175 -0.8490182  3.9738901 12.7291197
-#&gt;  [7,]  1.1555619  0.6641046  3.2416809 -0.2869268  1.1576897  3.9068572
-#&gt;  [8,] -0.4978846 -0.8298651  1.9366878  0.1990098 -1.3396568 -2.3951477
-#&gt;  [9,]  2.0179330  1.0529978  5.5300888 -0.4700303  1.7982727  6.3519265
-#&gt;             [,7]       [,8]       [,9]
-#&gt;  [1,]  1.1555619 -0.4978846  2.0179330
-#&gt;  [2,]  0.6641046 -0.8298651  1.0529978
-#&gt;  [3,]  3.2416809  1.9366878  5.5300888
-#&gt;  [4,] -0.2869268  0.1990098 -0.4700303
-#&gt;  [5,]  1.1576897 -1.3396568  1.7982727
-#&gt;  [6,]  3.9068572 -2.3951477  6.3519265
-#&gt;  [7,]  2.8359310 -0.3317406  2.6665920
-#&gt;  [8,] -0.3317406  2.8594448 -0.4549524
-#&gt;  [9,]  2.6665920 -0.4549524  5.6059601</div><div class='input'><span class='no'>result</span>$<span class='no'>cor.mean</span></div><div class='output co'>#&gt;             [,1]        [,2]       [,3]        [,4]        [,5]       [,6]
-#&gt;  [1,]  1.0000000  0.30842788 0.28601574 -0.14248122  0.40030486  0.5800490
-#&gt;  [2,]  0.3084279  1.00000000 0.02150611 -0.10483759  0.38031338  0.4736808
-#&gt;  [3,]  0.2860157  0.02150611 1.00000000  0.06613336  0.07171095  0.3217928
-#&gt;  [4,] -0.1424812 -0.10483759 0.06613336  1.00000000 -0.13092062 -0.2132863
-#&gt;  [5,]  0.4003049  0.38031338 0.07171095 -0.13092062  1.00000000  0.5955885
-#&gt;  [6,]  0.5800490  0.47368076 0.32179283 -0.21328628  0.59558849  1.0000000
-#&gt;  [7,]  0.4590221  0.30681757 0.48187427 -0.13761405  0.40841613  0.6574535
-#&gt;  [8,] -0.2067859 -0.32995391 0.28086403  0.12336673 -0.37787611 -0.3823407
-#&gt;  [9,]  0.5416423  0.34688270 0.59143252 -0.15392565  0.44857677  0.7570537
-#&gt;             [,7]       [,8]       [,9]
-#&gt;  [1,]  0.4590221 -0.2067859  0.5416423
-#&gt;  [2,]  0.3068176 -0.3299539  0.3468827
-#&gt;  [3,]  0.4818743  0.2808640  0.5914325
-#&gt;  [4,] -0.1376141  0.1233667 -0.1539257
-#&gt;  [5,]  0.4084161 -0.3778761  0.4485768
-#&gt;  [6,]  0.6574535 -0.3823407  0.7570537
-#&gt;  [7,]  1.0000000 -0.1398995  0.6697792
-#&gt;  [8,] -0.1398995  1.0000000 -0.1526944
-#&gt;  [9,]  0.6697792 -0.1526944  1.0000000</div><div class='input'>
+#&gt;  [1,]  2.3551112  0.8239935  2.1052904 -0.3507841  1.2021621  3.8558078
+#&gt;  [2,]  0.8239935  1.8272334  0.5904271 -0.2597248  0.8894171  2.8674488
+#&gt;  [3,]  2.1052904  0.5904271 20.7311972  1.0292152  0.3549552  6.3181062
+#&gt;  [4,] -0.3507841 -0.2597248  1.0292152  1.3684941 -0.4872256 -0.9791738
+#&gt;  [5,]  1.2021621  0.8894171  0.3549552 -0.4872256  2.5372793  3.6731333
+#&gt;  [6,]  3.8558078  2.8674488  6.3181062 -0.9791738  3.6731333 14.2586156
+#&gt;  [7,]  1.5328024  1.0646127  3.6002414 -0.3359843  1.4563700  5.0251945
+#&gt;  [8,] -0.2923408 -0.4705090  2.7213009  0.4442690 -0.7618521 -0.8521063
+#&gt;  [9,]  2.4599056  1.5004258  6.8235007 -0.3927507  1.9169597  7.6124580
+#&gt;             [,7]        [,8]        [,9]
+#&gt;  [1,]  1.5328024 -0.29234082  2.45990559
+#&gt;  [2,]  1.0646127 -0.47050903  1.50042585
+#&gt;  [3,]  3.6002414  2.72130093  6.82350066
+#&gt;  [4,] -0.3359843  0.44426903 -0.39275072
+#&gt;  [5,]  1.4563700 -0.76185213  1.91695975
+#&gt;  [6,]  5.0251945 -0.85210627  7.61245796
+#&gt;  [7,]  3.3366829 -0.22216370  3.23128319
+#&gt;  [8,] -0.2221637  2.26095721  0.05913121
+#&gt;  [9,]  3.2312832  0.05913121  6.42238689</div><div class='input'><span class='no'>result</span>$<span class='no'>cor.mean</span></div><div class='output co'>#&gt;             [,1]        [,2]       [,3]       [,4]        [,5]       [,6]
+#&gt;  [1,]  1.0000000  0.36511128 0.30054583 -0.1638748  0.42212704  0.6203819
+#&gt;  [2,]  0.3651113  1.00000000 0.07585097 -0.1676236  0.37014919  0.5073786
+#&gt;  [3,]  0.3005458  0.07585097 1.00000000  0.1863262  0.07228334  0.3427462
+#&gt;  [4,] -0.1638748 -0.16762364 0.18632617  1.0000000 -0.22988149 -0.2327351
+#&gt;  [5,]  0.4221270  0.37014919 0.07228334 -0.2298815  1.00000000  0.5640207
+#&gt;  [6,]  0.6203819  0.50737860 0.34274625 -0.2327351  0.56402074  1.0000000
+#&gt;  [7,]  0.5182177  0.39339770 0.44059132 -0.1440894  0.46643177  0.6991091
+#&gt;  [8,] -0.1369542 -0.22791790 0.35958020  0.2380008 -0.29463781 -0.2405098
+#&gt;  [9,]  0.5824762  0.40933518 0.59325460 -0.1155379  0.45364841  0.7809086
+#&gt;             [,7]        [,8]        [,9]
+#&gt;  [1,]  0.5182177 -0.13695420  0.58247618
+#&gt;  [2,]  0.3933977 -0.22791790  0.40933518
+#&gt;  [3,]  0.4405913  0.35958020  0.59325460
+#&gt;  [4,] -0.1440894  0.23800076 -0.11553787
+#&gt;  [5,]  0.4664318 -0.29463781  0.45364841
+#&gt;  [6,]  0.6991091 -0.24050977  0.78090857
+#&gt;  [7,]  1.0000000 -0.10702326  0.68503782
+#&gt;  [8,] -0.1070233  1.00000000 -0.05193787
+#&gt;  [9,]  0.6850378 -0.05193787  1.00000000</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Jeanne Clement <a href='mailto:jeanne.clement16@laposte.net'>jeanne.clement16@laposte.net</a>, adapted from function <code><a href='https://www.rdocumentation.org/packages/boral/topics/get.residual.cor'>boral::get.residual.cor()</a></code> written by Francis K. Hui <a href='mailto:fhui28@gmail.com'>fhui28@gmail.com</a>.</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -275,13 +273,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
