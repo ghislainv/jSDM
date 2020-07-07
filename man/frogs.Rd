@@ -6,7 +6,7 @@
 
 \title{frogs dataset}
 
-\description{Presence or absence of 9 species of frogs on 104 sites, 3 covariates   collected on those site and their coordinates.
+\description{Presence or absence of 9 species of frogs at 104 sites, 3 covariates collected  at these sites and their coordinates.
 }
 
 \format{

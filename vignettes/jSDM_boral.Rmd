@@ -151,9 +151,11 @@ abline(a=0,b=1,col='red')
 
 ```{r boral-mosquito, cache=TRUE}
 # Import center and reduce Mosquito dataset
-Env_mosquito <- read.csv("~/Code/data/Mosquito_Covar.csv", sep=",", header=T)
+data(mosquitos, package="jSDM")
+head(mosquitos)
+Env_mosquito <- mosquitos[,17:29]
 Env_mosquito <- cbind(scale(Env_mosquito[,1:4]), Env_mosquito[,5:13])
-PA_mosquito <- read.csv("~/Code/data/Mosquito_PA.csv", sep=",", header=T)
+PA_mosquito <- mosquitos[,1:16]
 
 # Fit the model 
 T1 <- Sys.time()
@@ -180,10 +182,10 @@ Deviance_boral_Mosquito <- -2*logL
 
 ```{r boral-eucalypts, cache=TRUE}
 # Import center and reduce Eucalypts dataset
-Env_Eucalypts <- read.csv("~/Code/data/Eucalypts_Covar.csv", sep=",", header=T)
-Env_Eucalypts <- cbind(scale(Env_Eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),Env_Eucalypts[,c("Sandiness","Loaminess")])
-colnames(Env_Eucalypts) <-c("VallyBotFlat","PPTann", "cvTemp","T0","Rockiness","Sandiness","Loaminess")
-PA_Eucalypts<- read.csv("~/Code/data/Eucalypts_PA.csv", sep=",", header=T)
+data(eucalypts, package="jSDM")
+head(eucalypts)
+Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),eucalypts[,c("Sandiness","Loaminess")])
+PA_Eucalypts <- eucalypts[,1:12]
 
 # Fit the model 
 T1 <- Sys.time()
@@ -209,10 +211,11 @@ Deviance_boral_Eucalypts <- -2*logL
 
 ```{r boral-frogs, cache=TRUE}
 # Import center and reduce Frogs dataset
-Frogs <- read.csv("~/Code/data/frogs.csv", sep=",", header=T)
-Env_Frogs <- cbind(scale(Frogs[,1]),Frogs[,2],scale(Frogs[,3]))
-colnames(Env_Frogs) <- colnames (Frogs[,1:3])
-PA_Frogs <- Frogs[,4:12]
+data(frogs, package="jSDM")
+head(frogs)
+Env_Frogs <- cbind(scale(frogs[,"Covariate_1"]),frogs[,"Covariate_2"],scale(frogs[,"Covariate_3"]))
+colnames(Env_Frogs) <- colnames(frogs[,1:3])
+PA_Frogs <- frogs[,4:12]
 
 # Fit the model
 T1 <- Sys.time()
@@ -239,10 +242,10 @@ Deviance_boral_Frogs <- -2*logL
 ```{r boral-fungi, cache=TRUE}
 
 # Import center and reduce fungi dataset
-Fungi <- read.csv("~/Code/data/Fungi.csv", sep=",", header=T)
-Env_Fungi <- cbind(scale(Fungi[,c("diam","epi","bark")]),Fungi[,c("dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")])
+data(fungi, package="jSDM")
+Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),fungi[,c("dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")])
 colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")
-PA_Fungi <- Fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut","phefer","phenig","phevit","poscae","triabi")]
+PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut","phefer","phenig","phevit","poscae","triabi")]
 
 # Fit the model 
 T1 <- Sys.time()

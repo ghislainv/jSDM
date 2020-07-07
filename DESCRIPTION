@@ -22,6 +22,7 @@ Description: Fits joint species distribution models ('jSDM')
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
     in C++. It uses 'Rcpp', 'Armadillo' and 'GSL' to maximize computation
     efficiency.
+Depends: R >= 3.5.0
 License: GPL-3 | file LICENSE
 URL: https://ecology.ghislainv.fr/jSDM, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues

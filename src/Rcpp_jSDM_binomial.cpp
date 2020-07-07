@@ -274,7 +274,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 # logit.theta <- X %*% beta.target
 # theta <- inv.logit(logit.theta)
 # Y <- rbinom(nsite,visits,theta)
-#     
+# 
 # # Data-sets
 # data.obs <- data.frame(Y,visits,x1,x2)
 # 
@@ -286,7 +286,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 # 
 # mf.suit <- model.frame(formula=~x1+x2, data=data.obs)
 # X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
-#     
+# 
 # # Call to C++ function
 # mod <- Rcpp_jSDM_binomial(
 #     ngibbs=ngibbs, nthin=nthin, nburn=nburn,
@@ -302,11 +302,11 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 # summary(MCMC)
 # mean(mod$Deviance)
 # plot(MCMC)
-#            
+# 
 # # GLM resolution to compare
 # mod.glm <- glm(cbind(Y,visits-Y)~x1+x2,family="binomial",data=data.obs)
 # summary(mod.glm)
-#           
+# 
 # # Predictions
 # plot(theta,mod$theta_latent, main="theta",
 #      xlab="obs", ylab="fitted")
