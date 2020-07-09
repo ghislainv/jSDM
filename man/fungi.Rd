@@ -45,7 +45,7 @@ Presence or absence of 11 species of fungi on dead-wood objects at 800 sites and
 }
 
 \source{
-Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) \emph{A comparison of joint species distribution models for presence-absence data.} Methods in Ecology and Evolution.}
+Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. \emph{Methods in Ecology and Evolution}.}
 
 \examples{
 data(fungi, package="jSDM")

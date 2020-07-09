@@ -47,7 +47,7 @@ This dataset records presence or absence at 458 sites of 12 eucalypts species, 7
 }
 
 \source{
-Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) \emph{A comparison of joint species distribution models for presence-absence data.} Methods in Ecology and Evolution.}
+Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. \emph{Methods in Ecology and Evolution}.}
 
 \examples{
 data(eucalypts, package="jSDM")
