@@ -133,7 +133,7 @@
     1 &amp; \text{if} \ z_{ij} &gt; 0 \\
     0 &amp;  \text{otherwise.}
     \end{cases}\]</span></p>
-<p>It can be easily shown that: <span class="math inline">\(y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\)</span>.</p>
+<p>It can be easily shown that: <span class="math inline">\(y_{ij} \sim \mathcal{B}ernouilli(\theta_{ij})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal.</p></li>
@@ -231,7 +231,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <h1 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r">
 <span class="co">## Valpha</span>
@@ -270,7 +270,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">n_latent</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
 }</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-7.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r">
@@ -280,7 +280,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <p><img src="jSDM_files/figure-html/plot-results-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r">
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_jSDM_block_frogs</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level1">
