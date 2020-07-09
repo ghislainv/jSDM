@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>frogs dataset — frogs • jSDM</title>
+<title>Distribution of Alpine plants in Aravo (Valloire, France) — aravo • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="frogs dataset — frogs" />
-<meta property="og:description" content="Presence or absence of 9 species of frogs at 104 sites, 3 covariates collected  at these sites and their coordinates." />
+<meta property="og:title" content="Distribution of Alpine plants in Aravo (Valloire, France) — aravo" />
+<meta property="og:description" content="This dataset describe the distribution of 82 species of Alpine plants in 75 sites. Species traits and environmental variables are also measured." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -143,48 +143,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>frogs dataset</h1>
+    <h1>Distribution of Alpine plants in Aravo (Valloire, France)</h1>
     
-    <div class="hidden name"><code>frogs.Rd</code></div>
+    <div class="hidden name"><code>aravo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Presence or absence of 9 species of frogs at 104 sites, 3 covariates collected  at these sites and their coordinates.</p>
+    <p>This dataset describe the distribution of 82 species of Alpine plants in 75 sites. Species traits and environmental variables are also measured.</p>
     </div>
 
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"aravo"</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>frogs</code> is a data frame with 104 observations on the following 14 variables.</p><dl'>
-    <dt><code>Species_</code></dt><dd><p>1 to 9 indicate by a 0 the absence of the species on one site and by a 1 its presence</p></dd> 
-    <dt><code>Covariates_</code></dt><dd><p>1 and 3 continuous variables</p></dd>
-    <dt><code>Covariates_</code></dt><dd><p>2 discrete variables</p></dd>
-    <dt><code>x</code></dt><dd><p>a numeric vector of first coordinates corresponding to each site</p></dd>
-    <dt><code>y</code></dt><dd><p>a numeric vector of second coordinates corresponding to each site</p></dd>
-  
+    <p>aravo is a list containing the following objects :</p><dl'>
+    <dt><code>spe</code></dt><dd><p>is a data.frame with the abundance values of 82 species (columns) in 75 sites (rows).</p></dd>
+    <dt><code>env</code></dt><dd><p>is a data.frame with the measurements of 6 environmental variables for the sites.</p></dd>
+    <dt><code>traits</code></dt><dd><p>is data.frame with the measurements of 8 traits for the species.</p></dd>
+    <dt><code>spe.names</code></dt><dd><p>is a vector with full species names.</p></dd>
+    
+</dl>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p></p><dl'>
+The environmental variables are : 
+ ll
+ <code>Aspect</code>  Relative south aspect (opposite of the sine of aspect with flat coded 0) <br />
+ <code>Slope</code>  Slope inclination (degrees) <br />
+    <code>Form</code>  Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity) <br />
+    <code>Snow</code>  Mean snowmelt date (Julian day) averaged over 1997-1999 <br />
+    <code>PhysD</code>  Physical disturbance, i.e., percentage of unvegetated soil due to physical processes <br />
+    <code>ZoogD</code>  Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high <br /> 
+The species traits for the plants are:
+ ll
+    <code>Height</code>  Vegetative height (cm) <br />
+    <code>Spread</code>  Maximum lateral spread of clonal plants (cm) <br />
+    <code>Angle</code>  Leaf elevation angle estimated at the middle of the lamina <br />
+    <code>Area</code>  Area of a single leaf <br />
+    <code>Thick</code>  Maximum thickness of a leaf cross section (avoiding the midrib) <br />
+    <code>SLA</code>  Specific leaf area <br />
+    <code>Nmass</code>  Mass-based leaf nitrogen content <br />
+    <code>Seed</code>  Seed mass <br />  
 </dl>
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p>Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>.</p>
+    <p>Choler, P. (2005) Consistent shifts in Alpine plant traits along a mesotopographical gradient. Arctic, Antarctic, and Alpine Research 37,444–453.</p>
+<p>Dray S, Dufour A (2007). The ade4 Package: Implementing the Duality Diagram for Ecologists. <em>Journal of Statistical Software</em>, 22(4), 1–20. doi: <a href='10.18637/jss.v022.i04'>10.18637/jss.v022.i04</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>frogs</span>)</div><div class='output co'>#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3 Species_4
-#&gt; 1    3.870111           0    0.045334         1         0         0         0
-#&gt; 2    3.326950           1    0.115903         0         0         0         0
-#&gt; 3    2.856729           1    0.147034         0         0         0         0
-#&gt; 4    1.623249           1    0.124283         0         0         0         0
-#&gt; 5    4.629685           1    0.081655         0         0         0         0
-#&gt; 6    0.698970           1    0.107048         0         0         0         0
-#&gt;   Species_5 Species_6 Species_7 Species_8 Species_9        y        x
-#&gt; 1         0         0         0         0         0 66.41479 9.256424
-#&gt; 2         0         1         0         0         0 67.03841 9.025588
-#&gt; 3         0         1         0         0         0 67.03855 9.029416
-#&gt; 4         0         1         0         0         0 67.04200 9.029745
-#&gt; 5         0         1         0         0         0 67.04439 9.026514
-#&gt; 6         0         0         0         0         0 67.03894 9.023580</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>aravo</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>aravo</span>)</div><div class='output co'>#&gt;           Length Class      Mode     
+#&gt; spe       82     data.frame list     
+#&gt; env        6     data.frame list     
+#&gt; traits     8     data.frame list     
+#&gt; spe.names 82     -none-     character</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
