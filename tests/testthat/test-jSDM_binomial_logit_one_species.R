@@ -1,4 +1,4 @@
-context("test-jSDM_binomial")
+context("test-jSDM_binomial_logit_one_species")
 
 #==================
 #== Data simulation
@@ -35,14 +35,14 @@ burnin <- 1000
 mcmc <- 1000
 thin <- 1
 nsamp <- mcmc/thin
-mod <- jSDM::jSDM_binomial(presences=data.obs$Y,
-                      trials=data.obs$visits,
-                      suitability=~x1+x2,
-                      data=data.obs,
-                      burnin=burnin, mcmc=mcmc, thin=thin,
-                      beta_start=0,
-                      mubeta=0, Vbeta=1.0E6,
-                      seed=1234, ropt=0.44, verbose=1)
+mod <- jSDM::jSDM_binomial_logit_one_species(presences=data.obs$Y,
+                                             trials=data.obs$visits,
+                                             suitability=~x1+x2,
+                                             data=data.obs,
+                                             burnin=burnin, mcmc=mcmc, thin=thin,
+                                             beta_start=0,
+                                             mu_beta=0, V_beta=1.0E6,
+                                             seed=1234, ropt=0.44, verbose=1)
 
 test_that("jSDM_binomial works", {
   expect_equal(sum(is.na(mod$theta_latent)),0)

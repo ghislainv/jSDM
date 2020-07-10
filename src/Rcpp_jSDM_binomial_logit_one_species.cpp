@@ -25,8 +25,8 @@ struct dens_par {
     int NP;
     int pos_beta;
     arma::mat X;
-    arma::vec mubeta;
-    arma::vec Vbeta;
+    arma::vec mu_beta;
+    arma::vec V_beta;
     arma::rowvec beta_run;
 };
 
@@ -56,7 +56,7 @@ double betadens (double beta_k, void *dens_data) {
         logL += R::dbinom(d->Y(n), d->T(n), theta, 1);
     }
     // logPosterior = logL + logPrior
-    double logP = logL + R::dnorm(beta_k, d->mubeta(k), std::sqrt(d->Vbeta(k)), 1);
+    double logP = logL + R::dnorm(beta_k, d->mu_beta(k), std::sqrt(d->V_beta(k)), 1);
     return logP;
 }
 
@@ -64,26 +64,26 @@ double betadens (double beta_k, void *dens_data) {
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
-                              arma::uvec Y, // Number of successes (presences)
-                              arma::uvec T, // Number of trials
-                              arma::mat X, // Suitability covariates
-                              arma::vec beta_start,
-                              arma::vec mubeta,
-                              arma::vec Vbeta,
-                              const int seed,
-                              const double ropt,
-                              const int verbose) {
-
+Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
+                                                arma::uvec Y, // Number of successes (presences)
+                                                arma::uvec T, // Number of trials
+                                                arma::mat X, // Suitability covariates
+                                                arma::vec beta_start,
+                                                arma::vec mu_beta,
+                                                arma::vec V_beta,
+                                                const int seed,
+                                                const double ropt,
+                                                const int verbose) {
+    
     ////////////////////////////////////////////////////////////////////////////////
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Defining and initializing objects
-
+    
     ////////////////////////////////////////
     // Initialize random number generator //
     gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
     gsl_rng_set(r, seed);
-
+    
     ///////////////////////////
     // Redefining constants //
     const int NGIBBS = ngibbs;
@@ -92,7 +92,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
     const int NSAMP = (NGIBBS-NBURN)/NTHIN;
     const int NOBS = X.n_rows;
     const int NP = X.n_cols;
-
+    
     ////////////////////////////////////////////
     // Declaring new objects to store results //
     /* Parameters */
@@ -102,7 +102,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
     arma::vec theta_latent; theta_latent.zeros(NOBS);
     /* Deviance */
     arma::vec Deviance; Deviance.zeros(NSAMP);
-
+    
     //////////////////////////////////////////////////////////
     // Set up and initialize structure for density function //
     dens_par dens_data;
@@ -116,32 +116,32 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
     dens_data.NP = NP;
     dens_data.pos_beta = 0;
     dens_data.X = X;
-    dens_data.mubeta = mubeta;
-    dens_data.Vbeta = Vbeta;
+    dens_data.mu_beta = mu_beta;
+    dens_data.V_beta = V_beta;
     dens_data.beta_run = beta_start.t();
-
+    
     ////////////////////////////////////////////////////////////
     // Proposal variance and acceptance for adaptive sampling //
-
+    
     // beta
     arma::vec sigmap_beta; sigmap_beta.ones(NP);
     arma::vec nA_beta; nA_beta.zeros(NP);
     arma::vec Ar_beta; Ar_beta.zeros(NP); // Acceptance rate
-
+    
     ////////////
     // Message//
     Rprintf("\nRunning the Gibbs sampler. It may be long, please keep cool :)\n\n");
     R_FlushConsole();
-
+    
     ///////////////////////////////////////////////////////////////////////////////////////
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Gibbs sampler
     
     for ( int g = 0; g < NGIBBS; g++ ) {
-
+        
         ////////////////////////////////////////////////
         // beta
-
+        
         for ( int p = 0; p < NP; p++ ) {
             dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
             double x_now = dens_data.beta_run(p);
@@ -156,11 +156,11 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
                 nA_beta(p)++;
             }
         }
-
-
+        
+        
         //////////////////////////////////////////////////
         // Deviance
-
+        
         // logLikelihood
         double logL = 0.0;
         for ( int n = 0; n < NOBS; n++ ) {
@@ -173,11 +173,11 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
             /* log Likelihood */
             logL += R::dbinom(dens_data.Y(n), dens_data.T(n), theta_run(n), 1);
         }
-
+        
         // Deviance
         double Deviance_run = -2 * logL;
-
-
+        
+        
         //////////////////////////////////////////////////
         // Output
         if ( ((g+1) > NBURN) && (((g+1) % NTHIN) == 0) ) {
@@ -188,8 +188,8 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
                 theta_latent(n) += theta_run(n) / NSAMP; // We compute the mean of NSAMP values
             }
         }
-
-
+        
+        
         ///////////////////////////////////////////////////////
         // Adaptive sampling (on the burnin period)
         const double ROPT = ropt;
@@ -212,8 +212,8 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
                 nA_beta(p) = 0.0; // We reinitialize the number of acceptance to zero
             }
         }
-
-
+        
+        
         //////////////////////////////////////////////////
         // Progress bar
         double Perc = 100 * (g+1) / (NGIBBS);
@@ -229,12 +229,12 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
                 R_FlushConsole();
             }
         }
-
-
+        
+        
         //////////////////////////////////////////////////
         // User interrupt
         R_CheckUserInterrupt(); // allow user interrupt
-
+        
     } // Gibbs sampler
     
     
@@ -248,7 +248,7 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
     
     return z;
     
-} // end hSDM_binomial function
+} // end Rcpp_jSDM_binomial_logit_one_species function
 
 // Test
 /*** R
@@ -288,13 +288,13 @@ Rcpp::List Rcpp_jSDM_binomial(const int ngibbs, int nthin, int nburn, // Number 
 # X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # 
 # # Call to C++ function
-# mod <- Rcpp_jSDM_binomial(
+# mod <- Rcpp_jSDM_binomial_logit_one_species(
 #     ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #     Y=data.obs$Y,
 #     T=data.obs$visits,
 #     X=X,
 #     beta_start=rep(0, 3),
-#     mubeta=rep(0, 3), Vbeta=rep(1.0E6, 3),
+#     mu_beta=rep(0, 3), V_beta=rep(1.0E6, 3),
 #     seed=1234, ropt=0.44, verbose=1)
 # 
 # # Parameter estimates

@@ -28,5 +28,5 @@ URL: https://ecology.ghislainv.fr/jSDM, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues
 LazyLoad: yes
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr

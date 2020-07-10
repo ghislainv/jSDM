@@ -24,7 +24,7 @@ vignettes/.*\.md
 ^\.travis\.yml$
 
 # vignettes
-#^vignettes/jSDM_boral\.Rmd$
+^vignettes/jSDM_boral\.Rmd$
 ^vignettes/jagsboralmodel\.txt$
 ^vignettes/proof\.Rmd$
 ^vignettes/.*_cache$

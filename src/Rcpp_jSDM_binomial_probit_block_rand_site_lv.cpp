@@ -22,21 +22,20 @@ using namespace std;
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn, 
-                                  arma::umat Y, 
-                                  arma::umat T, 
-                                  arma::mat X,
-                                  arma::mat param_start,
-                                  arma::mat Vparam,
-                                  arma::vec muparam,
-                                  arma::mat VW,
-                                  arma::mat W_start,
-                                  arma::vec alpha_start,
-                                  double Valpha_start,
-                                  double shape,
-                                  double rate,
-                                  const int seed,
-                                  const int verbose) {
+Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs, int nthin, int nburn, 
+                                                        arma::umat Y, 
+                                                        arma::mat X,
+                                                        arma::mat param_start,
+                                                        arma::mat V_param,
+                                                        arma::vec mu_param,
+                                                        arma::mat V_W,
+                                                        arma::mat W_start,
+                                                        arma::vec alpha_start,
+                                                        double V_alpha_start,
+                                                        double shape,
+                                                        double rate,
+                                                        const int seed,
+                                                        const int verbose) {
   
   ////////////////////////////////////////////////////////////////////////////////
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,7 +64,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
   arma::Cube<double> param; param.zeros(NSAMP, NSP, NP+NL);
   arma::Cube<double> W; W.zeros(NSAMP, NSITE, NL);
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
-  arma::vec Valpha; Valpha.zeros(NSAMP);
+  arma::vec V_alpha; V_alpha.zeros(NSAMP);
   /* Latent variable */
   arma::mat probit_theta_pred; probit_theta_pred.zeros(NSITE, NSP);
   arma::mat Z_latent; Z_latent.zeros(NSITE, NSP);
@@ -79,7 +78,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
   arma::mat param_run = param_start;
   // alpha vec of sites effects (nsite)
   arma::vec alpha_run = alpha_start;
-  double Valpha_run = Valpha_start;
+  double V_alpha_run = V_alpha_start;
   // w latent variables (nsite*nl)
   arma::mat W_run = W_start;
   // Z latent (nsite*nsp)
@@ -121,9 +120,9 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
     // Loop on species
     for (int j=0; j<NSP; j++) {
       // small_v
-      arma::vec small_v = inv(Vparam)*muparam + data.t()*(Z_run.col(j) - alpha_run);
+      arma::vec small_v = inv(V_param)*mu_param + data.t()*(Z_run.col(j) - alpha_run);
       // big_V
-      arma::mat big_V = inv(inv(Vparam)+data.t()*data);
+      arma::mat big_V = inv(inv(V_param)+data.t()*data);
       
       // Draw in the posterior distribution
       arma::vec param_prop = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
@@ -149,7 +148,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
       arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
       // big_V
-      arma::mat big_V = inv(inv(VW)+lambda_run*lambda_run.t());
+      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
       
       // small_v
       arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
@@ -171,7 +170,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
       double small_v = arma::sum(Z_run.row(i)-data.row(i)*param_run);
       
       // big_V
-      double big_V = 1/(1/Valpha_run + NSP);
+      double big_V = 1/(1/V_alpha_run + NSP);
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
@@ -181,11 +180,11 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
     }
     
     ////////////////////////////////////////////////
-    // Valpha
+    // V_alpha
     double shape_posterior = shape + 0.5*NSITE;
     double rate_posterior = rate + 0.5*sum;
     
-    Valpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
+    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -200,7 +199,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
         double theta = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
         
         /* log Likelihood */
-        logL += R::dbinom(Y(i,j), T(i,j), theta, 1);
+        logL += R::dbinom(Y(i,j), 1, theta, 1);
       } // loop on species
     } // loop on sites
     
@@ -220,7 +219,7 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
         }
       }
       alpha.row(isamp-1) = alpha_run.t();
-      Valpha(isamp-1) = Valpha_run;
+      V_alpha(isamp-1) = V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
     }
     
@@ -252,20 +251,20 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("param") = param,
                                           Rcpp::Named("W") = W,
                                           Rcpp::Named("alpha") = alpha,
-                                          Rcpp::Named("Valpha") = Valpha,
+                                          Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
                                           Rcpp::Named("Z_latent") = Z_latent,
                                           Rcpp::Named("probit_theta_pred") = probit_theta_pred );  
   return results;
   
-} // end Rcpp_jSDM_probit_block
+} // end Rcpp_jSDM_binomial_probit_block_rand_site_lv
 
 // Test
 /*** R
-# ===================================================
-# Data
-# ===================================================
-# 
+#===================================================
+#Data
+#===================================================
+
 # nsp<- 100
 # nsite <- 300
 # np <- 3
@@ -286,12 +285,11 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 # l.other <- runif(nsp*2-3,-2,2)
 # lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
 # param.target <- rbind(beta.target,lambda.target)
-# Valpha.target <- 0.5
-# alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
+# V_alpha.target <- 0.5
+# alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
-# visits <- matrix(1,nsite,nsp)
 # 
 # Y <- matrix (NA, nsite,nsp)
 # for (i in 1:nsite){
@@ -308,15 +306,14 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 # 
 # # Call to C++ function
 # # Iterations
-# nsamp <- 100
-# nburn <- 100
+# nsamp <- 1000
+# nburn <- 1000
 # nthin <- 1
 # ngibbs <- nsamp+nburn
-# mod <- Rcpp_jSDM_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                               Y=Y,T=visits,X=X,
-#                               param_start=param_start, Vparam=diag(c(rep(1.0E6,np),rep(10,nl))),
-#                               muparam = rep(0,np+nl), W_start=matrix(0,nsite,nl), VW=diag(rep(1,nl)),
-#                               alpha_start=rep(0,nsite), Valpha_start=1, shape=0.5, rate=0.0005,
+# mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#                               Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
+#                               mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
+#                               alpha_start=rep(0,nsite), V_alpha_start=1, shape=0.5, rate=0.0005,
 #                               seed=123, verbose=1)
 # 
 # # ===================================================
@@ -335,13 +332,13 @@ Rcpp::List Rcpp_jSDM_probit_block(const int ngibbs, int nthin, int nburn,
 # MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
 # plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="alpha.estimated")
 # abline(a=0,b=1,col='red')
-# ## Valpha
-# MCMC_Valpha <- coda::mcmc(mod$Valpha, start=nburn+1, end=ngibbs, thin=nthin)
-# summary(MCMC_Valpha)
+# ## V_alpha
+# MCMC_V_alpha <- coda::mcmc(mod$V_alpha, start=nburn+1, end=ngibbs, thin=nthin)
+# summary(MCMC_V_alpha)
 # par(mfrow=c(1,2))
-# coda::traceplot(MCMC_Valpha)
-# coda::densplot(MCMC_Valpha, main ="V_alpha" )
-# abline(v=Valpha.target,col='red')
+# coda::traceplot(MCMC_V_alpha)
+# coda::densplot(MCMC_V_alpha, main ="V_alpha" )
+# abline(v=V_alpha.target,col='red')
 # 
 # ## beta_j
 # par(mfrow=c(np,2))

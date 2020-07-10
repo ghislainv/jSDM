@@ -1,4 +1,4 @@
-context("test-jSDM_probit_block")
+context("test-jSDM_binomial_probit_block_rand_site_lv")
 
 #==================
 #== Data simulation
@@ -49,19 +49,19 @@ burnin <- 3000
 mcmc <- 3000
 thin <- 3
 nsamp <- mcmc/thin
-mod <- jSDM::jSDM_probit_block(presence_site_sp = Y ,
-                               site_suitability = ~ x1 + x2,
-                               site_data = X[,-1], n_latent=2,
-                               burnin=burnin, mcmc=mcmc, thin=thin,
-                               alpha_start=0, beta_start=0,
-                               lambda_start=0, W_start=0,
-                               V_alpha_start=1,
-                               shape=0.5, rate=0.0005,
-                               mu_beta=0, V_beta=1.0E6,
-                               mu_lambda=0, V_lambda=10,
-                               seed=1234, verbose=1)
+mod <- jSDM::jSDM_binomial_probit_block_rand_site_lv(presence_site_sp = Y ,
+                                                     site_suitability = ~ x1 + x2,
+                                                     site_data = X[,-1], n_latent=2,
+                                                     burnin=burnin, mcmc=mcmc, thin=thin,
+                                                     alpha_start=0, beta_start=0,
+                                                     lambda_start=0, W_start=0,
+                                                     V_alpha_start=1,
+                                                     shape=0.5, rate=0.0005,
+                                                     mu_beta=0, V_beta=1.0E6,
+                                                     mu_lambda=0, V_lambda=10,
+                                                     seed=1234, verbose=1)
 
-test_that("jSDM_probit_block works", {
+test_that("jSDM_binomial_probit_block_rand_site_lv works", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
   expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
@@ -76,8 +76,8 @@ test_that("jSDM_probit_block works", {
   expect_equal(dim(mod$Z_latent),c(nsite,nsp))
   expect_equal(sum(is.na(mod$probit_theta_pred)),0)
   expect_equal(dim(mod$probit_theta_pred),c(nsite,nsp))
-  expect_equal(sum(is.na(mod$mcmc.Valpha)),0)
-  expect_equal(dim(mod$mcmc.Valpha),c(nsamp,1))
+  expect_equal(sum(is.na(mod$mcmc.V_alpha)),0)
+  expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
 })

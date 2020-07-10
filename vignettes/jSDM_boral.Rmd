@@ -62,9 +62,9 @@ l.other <- runif(nsp*2-3,-2,2)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
 param.target <- rbind(beta.target,lambda.target)
 param.target=rbind(beta.target,lambda.target)
-Valpha.target=0.5
+V_alpha.target=0.5
 V=1
-alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
+alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 
 # Simulation of response data with probit link
 probit_theta=X %*% beta.target + W %*% lambda.target + alpha.target
@@ -96,8 +96,8 @@ kable(lambda.target[,1:15], digits=1)
 
 - $V_{\alpha}$: 
 
-```{r Valpha}
-Valpha.target
+```{r V_alpha}
+V_alpha.target
 ```
 
 ```{r boral-simulation, cache=TRUE}
@@ -276,7 +276,7 @@ library(jSDM)
 
 # Fit the model
 T1<-Sys.time() 
-mod_jSDM_block_sim <-  jSDM_probit_block (
+mod_jSDM_block_sim <-  jSDM_binomial_probit_block_rand_site_lv (
   presence_site_sp=Y, 
   site_suitability=~.,   
   site_data=as.data.frame(X[,-1]), n_latent=2,
@@ -300,11 +300,11 @@ RMSE_jSDM_block_sim=sqrt(sum(SE/(nsite*nsp)))
 # Result analysis
 # ===================================================
 
-## Valpha
+## V_alpha
 par(mfrow=c(1,2))
-coda::traceplot(mod_jSDM_block_sim$mcmc.Valpha, main="V_alpha")
-coda::densplot(mod_jSDM_block_sim$mcmc.Valpha, main="V_alpha")
-abline(v=Valpha.target,col='red')
+coda::traceplot(mod_jSDM_block_sim$mcmc.V_alpha, main="V_alpha")
+coda::densplot(mod_jSDM_block_sim$mcmc.V_alpha, main="V_alpha")
+abline(v=V_alpha.target,col='red')
 
 ## Deviance
 plot(mod_jSDM_block_sim$mcmc.Deviance, main="Deviance")
@@ -373,7 +373,7 @@ abline(a=0,b=1,col='red')
 ```{r jSDM-mosquito, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Mosquito <- jSDM_probit_block (
+mod_jSDM_block_Mosquito <- jSDM_binomial_probit_block_rand_site_lv (
   presence_site_sp=as.matrix(PA_mosquito), 
   site_suitability=~.,   
   site_data=Env_mosquito, n_latent=2,
@@ -392,7 +392,7 @@ T_jSDM_block_Mosquito <- difftime(T2,T1)
 ```{r jSDM-eucalypts, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Eucalypts <- jSDM_probit_block (
+mod_jSDM_block_Eucalypts <- jSDM_binomial_probit_block_rand_site_lv (
   presence_site_sp=as.matrix(PA_Eucalypts), 
   site_suitability=~.,   
   site_data=Env_Eucalypts, n_latent=2,
@@ -411,7 +411,7 @@ T_jSDM_block_Eucalypts <- difftime(T2,T1)
 ```{r jSDM-frogs, cache=TRUE}
 # Fit the model 
 T1 <- Sys.time()
-mod_jSDM_block_Frogs <- jSDM_probit_block (
+mod_jSDM_block_Frogs <- jSDM_binomial_probit_block_rand_site_lv (
   presence_site_sp=as.matrix(PA_Frogs), 
   site_suitability=~.,   
   site_data=as.data.frame(Env_Frogs), n_latent=2,
@@ -430,7 +430,7 @@ T_jSDM_block_Frogs <- difftime(T2,T1)
 ```{r jSDM-fungi, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Fungi <- jSDM_probit_block (
+mod_jSDM_block_Fungi <- jSDM_binomial_probit_block_rand_site_lv (
   presence_site_sp=as.matrix(PA_Fungi), 
   site_suitability=~.,   
   site_data=Env_Fungi, n_latent=2,
@@ -491,7 +491,7 @@ kable(result, digits =1)
 par(mfrow=c(1,2))
 plot(mod_boral_sim$row.coefs[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_sim$row.sigma[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.Valpha)[[1]]["Mean"],
+points(mod_boral_sim$row.sigma[[1]]$mean,summary(mod_jSDM_block_sim$mcmc.V_alpha)[[1]]["Mean"],
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 # Betas
@@ -543,7 +543,7 @@ np <- nrow(mod_jSDM_block_Mosquito$model_spec$beta_start)
 par(mfrow=c(1,2))
 plot(mod_boral_Mosquito$row.coefs[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Mosquito$row.sigma[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.Valpha)[[1]]["Mean"], pch=18, col ='red',cex=2.5)
+points(mod_boral_Mosquito$row.sigma[[1]]$mean,summary(mod_jSDM_block_Mosquito$mcmc.V_alpha)[[1]]["Mean"], pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
 # Betas
@@ -590,7 +590,7 @@ np <- nrow(mod_jSDM_block_Eucalypts$model_spec$beta_start)
 par(mfrow=(c(1,2)))
 plot(mod_boral_Eucalypts$row.coefs[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Eucalypts$row.sigma[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.Valpha)[[1]]["Mean"],
+points(mod_boral_Eucalypts$row.sigma[[1]]$mean,summary(mod_jSDM_block_Eucalypts$mcmc.V_alpha)[[1]]["Mean"],
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
@@ -639,7 +639,7 @@ np <- nrow(mod_jSDM_block_Frogs$model_spec$beta_start)
 par(mfrow=c(1,2))
 plot(mod_boral_Frogs$row.coefs[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Frogs$row.sigma[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.Valpha)[[1]]["Mean"],
+points(mod_boral_Frogs$row.sigma[[1]]$mean,summary(mod_jSDM_block_Frogs$mcmc.V_alpha)[[1]]["Mean"],
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
@@ -688,7 +688,7 @@ np <- nrow(mod_jSDM_block_Fungi$model_spec$beta_start)
 par(mfrow=c(1,2))
 plot(mod_boral_Fungi$row.coefs[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.alpha)[[1]][,"Mean"], xlab="alphas estimated by Boral", ylab="alphas estimated by jSDM", main="Site random effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Fungi$row.sigma[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.Valpha)[[1]]["Mean"],
+points(mod_boral_Fungi$row.sigma[[1]]$mean,summary(mod_jSDM_block_Fungi$mcmc.V_alpha)[[1]]["Mean"],
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
