@@ -6,17 +6,17 @@
 #' \code{jSDM} is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework. The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
 #' The package includes the following functions to fit various species distribution models :
 #' \tabular{llc}{
-#'  function \tab data type \tab fitted model \cr
+#' function \tab data type \tab fitted model \cr
 #' jSDM_binomial_logit_one_species \tab presence-absence \tab \deqn{y_n \sim \mathcal{B}inomial(\theta_n,t_n)}{y_n ~ Binomial(theta_n,t_n)} \deqn{logit(\theta_n) = X_n \beta}{logit(theta_n) = X_n beta} \cr
 #' jSDM_binomial_logit \tab presence-absence \tab  \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j}{logit(theta_ij) = X_i beta_j} \cr
-#' jSDM_binomial_logit_rand_site \tab presence-absence \tab   \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j}{logit(theta_ij) = X_i beta_j + alpha_i} where \eqn{ \alpha_i \sim \mathcal{N}(0,V_\alpha)}{alpha_i ~ N(0,V_alpha)} \cr
+#' jSDM_binomial_logit_rand_site \tab presence-absence \tab   \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j \\ \text{where}  \alpha_i \sim \mathcal{N}(0,V_\alpha)}{logit(theta_ij) = X_i beta_j + alpha_i where alpha_i ~ N(0,V_alpha)} \cr
 #' jSDM_binomial_logit_lv \tab presence-absence \tab  \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j + W_i \lambda_j}{logit(theta_ij) = X_i beta_j + W_i lambda_j} \cr
-#' jSDM_binomial_logit_rand_site_lv \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i}{logit(theta_ij) = X_i beta_j +  W_i lambda_j + alpha_i} where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{alpha_i ~ N(0,V_alpha)} \cr
+#' jSDM_binomial_logit_rand_site_lv \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{logit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i \text{where}  \alpha_i \sim \mathcal{N}(0,V_\alpha) }{logit(theta_ij) = X_i beta_j +  W_i lambda_j + alpha_i where alpha_i ~ N(0,V_alpha)} \cr
 #' jSDM_binomial_probit_block_one_species \tab presence-absence \tab \deqn{y_n \sim \mathcal{B}inomial(\theta_n,t_n)}{y_n ~ Binomial(theta_n,t_n)} \deqn{probit(\theta_n) = X_n \beta}{probit(theta_n) = X_n beta} \cr
 #' jSDM_binomial_probit_block \tab presence-absence \tab  \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j}{probit(theta_ij) = X_i beta_j} \cr
-#' jSDM_binomial_probit_block_rand_site \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j + \alpha_i}{probit(theta_ij) = X_i beta_j + alpha_i} where \eqn{ \alpha_i \sim \mathcal{N}(0,V_\alpha)}{alpha_i ~ N(0,V_alpha)} \cr
+#' jSDM_binomial_probit_block_rand_site \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j + \alpha_i \text{where}  \alpha_i \sim \mathcal{N}(0,V_\alpha)}{probit(theta_ij) = X_i beta_j + alpha_i where alpha_i ~ N(0,V_alpha)} \cr
 #' jSDM_binomial_probit_block_lv \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j + W_i \lambda_j}{probit(theta_ij) = X_i beta_j + W_i lambda_j} \cr
-#' jSDM_binomial_probit_block_rand_site_lv \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i}{probit(theta_ij) = X_i beta_j +  W_i lambda_j + alpha_i} where \eqn{ \alpha_i \sim \mathcal{N}(0,V_\alpha) }{ alpha_i ~ N(0,V_alpha)} \cr
+#' jSDM_binomial_probit_block_rand_site_lv \tab presence-absence \tab \deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)} \deqn{probit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i \text{where}  \alpha_i \sim \mathcal{N}(0,V_\alpha) }{probit(theta_ij) = X_i beta_j +  W_i lambda_j + alpha_i where alpha_i ~ N(0,V_alpha)}\cr
 #' }
 #' @details \tabular{ll}{
 #'    Package: \tab jSDM\cr
