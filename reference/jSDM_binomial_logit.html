@@ -197,8 +197,8 @@
     </tr>
     <tr>
       <th>trials</th>
-      <td><p>A vector indicating the number of trials for each site. \(t_i\) should be superior or equal to \(y_ij\), the number of successes for observation \(n\). If \(t_i
-=0\), then \(y_ij=0\).</p></td>
+      <td><p>A vector indicating the number of trials for each site. \(t_i\) should be superior or equal to \(y_{ij}\), the number of successes for observation \(n\). If \(t_i
+=0\), then \(y_{ij}=0\).</p></td>
     </tr>
     <tr>
       <th>beta_start</th>
@@ -206,11 +206,11 @@
     </tr>
     <tr>
       <th>mu_beta</th>
-      <td><p>Means of the priors for the \(\beta\) parameters of the suitability process. <code>mubeta</code> must be either a scalar or a p-length vector. If <code>mubeta</code> takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.</p></td>
+      <td><p>Means of the priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a p-length vector. If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.</p></td>
     </tr>
     <tr>
       <th>V_beta</th>
-      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process. <code>Vbeta</code> must be either a scalar or a p-length vector. If <code>Vbeta</code> takes a scalar value, then that value will serve as the prior variance for all of the betas. The default variance is large and set to 1.0E6 for an uninformative flat prior.</p></td>
+      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process. <code>V_beta</code> must be either a scalar or a p-length vector. If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the betas. The default variance is large and set to 1.0E6 for an uninformative flat prior.</p></td>
     </tr>
     <tr>
       <th>ropt</th>
@@ -230,7 +230,7 @@
 
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
 <tr><td>mcmc.betas</td><td>An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_ij P(y_ij|\beta_j,t_i))\), is also provided.</td></tr>
+<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))\), is also provided.</td></tr>
 <tr><td>theta_latent</td><td>Predictive posterior mean of the probability associated to the suitability process for each observation.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
 </table>
@@ -240,8 +240,8 @@
 
     <p>We model an ecological process where the presence or absence of species \(j\) on site \(i\) is explained by habitat suitability.</p>
 <p><b>Ecological process:</b>
-$$y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)$$
-$$logit(\theta_ij) = X_i \beta_j$$</p>
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+$$logit(\theta_{ij}) = X_i \beta_j$$</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -325,105 +325,16 @@ $$logit(\theta_ij) = X_i \beta_j$$</p>
 #&gt; **********:100.0%, mean accept. rates= beta:0.424 </div><div class='input'>
 <span class='co'>#== Outputs</span>
 <span class='co'># Parameter estimates</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc</span>)</div><div class='output co'>#&gt; Length  Class   Mode 
-#&gt;      0   NULL   NULL </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
-<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.betas</span><span class='kw'>[[</span><span class='no'>j</span>]])
+<span class='co'># summary(mod$mcmc)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
+<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.betas</span><span class='kw'>[[</span><span class='no'>j</span>]])
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>#= Predictions</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>theta_latent</span>)</div><div class='output co'>#&gt;        V1                V2                V3               V4        
-#&gt;  Min.   :0.01189   Min.   :0.02749   Min.   :0.1096   Min.   :0.1735  
-#&gt;  1st Qu.:0.16804   1st Qu.:0.24906   1st Qu.:0.7383   1st Qu.:0.6437  
-#&gt;  Median :0.46653   Median :0.43692   Median :0.8943   Median :0.8188  
-#&gt;  Mean   :0.46486   Mean   :0.45370   Mean   :0.8248   Mean   :0.7477  
-#&gt;  3rd Qu.:0.71815   3rd Qu.:0.67208   3rd Qu.:0.9594   3rd Qu.:0.9129  
-#&gt;  Max.   :0.98646   Max.   :0.96342   Max.   :0.9981   Max.   :0.9907  
-#&gt;        V5                 V6                V7                V8         
-#&gt;  Min.   :0.007143   Min.   :0.06378   Min.   :0.05565   Min.   :0.02258  
-#&gt;  1st Qu.:0.085340   1st Qu.:0.17524   1st Qu.:0.35258   1st Qu.:0.32288  
-#&gt;  Median :0.182008   Median :0.26033   Median :0.63202   Median :0.70753  
-#&gt;  Mean   :0.237880   Mean   :0.28566   Mean   :0.57927   Mean   :0.61435  
-#&gt;  3rd Qu.:0.368990   3rd Qu.:0.36642   3rd Qu.:0.81640   3rd Qu.:0.89322  
-#&gt;  Max.   :0.786053   Max.   :0.59430   Max.   :0.97563   Max.   :0.99642  
-#&gt;        V9              V10                V11              V12         
-#&gt;  Min.   :0.5916   Min.   :0.006826   Min.   :0.2897   Min.   :0.01741  
-#&gt;  1st Qu.:0.6411   1st Qu.:0.051886   1st Qu.:0.6014   1st Qu.:0.10272  
-#&gt;  Median :0.6553   Median :0.127312   Median :0.6992   Median :0.17735  
-#&gt;  Mean   :0.6561   Mean   :0.217602   Mean   :0.6777   Mean   :0.24354  
-#&gt;  3rd Qu.:0.6724   3rd Qu.:0.318720   3rd Qu.:0.7809   3rd Qu.:0.33579  
-#&gt;  Max.   :0.7084   Max.   :0.841786   Max.   :0.9037   Max.   :0.77955  
-#&gt;       V13                V14              V15              V16         
-#&gt;  Min.   :0.005176   Min.   :0.3596   Min.   :0.2009   Min.   :0.03823  
-#&gt;  1st Qu.:0.075956   1st Qu.:0.7722   1st Qu.:0.5886   1st Qu.:0.30232  
-#&gt;  Median :0.196991   Median :0.8793   Median :0.7759   Median :0.54471  
-#&gt;  Mean   :0.298754   Mean   :0.8342   Mean   :0.7191   Mean   :0.51158  
-#&gt;  3rd Qu.:0.488745   3rd Qu.:0.9358   3rd Qu.:0.8667   3rd Qu.:0.72298  
-#&gt;  Max.   :0.928115   Max.   :0.9811   Max.   :0.9792   Max.   :0.97276  
-#&gt;       V17              V18              V19                V20         
-#&gt;  Min.   :0.1140   Min.   :0.1245   Min.   :0.006405   Min.   :0.05687  
-#&gt;  1st Qu.:0.4921   1st Qu.:0.4575   1st Qu.:0.266173   1st Qu.:0.52997  
-#&gt;  Median :0.6651   Median :0.5955   Median :0.579495   Median :0.75055  
-#&gt;  Mean   :0.6256   Mean   :0.5946   Mean   :0.566148   Mean   :0.67468  
-#&gt;  3rd Qu.:0.7743   3rd Qu.:0.7687   3rd Qu.:0.888830   3rd Qu.:0.89240  
-#&gt;  Max.   :0.9243   Max.   :0.9522   Max.   :0.995116   Max.   :0.98030  
-#&gt;       V21              V22               V23              V24         
-#&gt;  Min.   :0.4624   Min.   :0.03499   Min.   :0.2006   Min.   :0.02809  
-#&gt;  1st Qu.:0.6420   1st Qu.:0.62484   1st Qu.:0.7539   1st Qu.:0.26245  
-#&gt;  Median :0.6973   Median :0.84852   Median :0.8851   Median :0.57457  
-#&gt;  Mean   :0.6872   Mean   :0.76098   Mean   :0.8248   Mean   :0.56573  
-#&gt;  3rd Qu.:0.7427   3rd Qu.:0.95756   3rd Qu.:0.9459   3rd Qu.:0.83649  
-#&gt;  Max.   :0.8250   Max.   :0.99878   Max.   :0.9955   Max.   :0.99641  
-#&gt;       V25                V26                V27               V28        
-#&gt;  Min.   :0.003868   Min.   :0.001485   Min.   :0.03491   Min.   :0.3031  
-#&gt;  1st Qu.:0.063579   1st Qu.:0.047743   1st Qu.:0.47109   1st Qu.:0.4934  
-#&gt;  Median :0.206370   Median :0.135325   Median :0.74244   Median :0.5756  
-#&gt;  Mean   :0.252622   Mean   :0.259797   Mean   :0.67507   Mean   :0.5794  
-#&gt;  3rd Qu.:0.400434   3rd Qu.:0.437626   3rd Qu.:0.90575   3rd Qu.:0.6696  
-#&gt;  Max.   :0.949173   Max.   :0.948166   Max.   :0.99462   Max.   :0.8104  
-#&gt;       V29              V30               V31              V32         
-#&gt;  Min.   :0.3801   Min.   :0.05452   Min.   :0.0312   Min.   :0.01368  
-#&gt;  1st Qu.:0.4201   1st Qu.:0.39083   1st Qu.:0.1262   1st Qu.:0.19822  
-#&gt;  Median :0.4330   Median :0.63861   Median :0.2380   Median :0.37180  
-#&gt;  Mean   :0.4356   Mean   :0.58799   Mean   :0.2791   Mean   :0.43096  
-#&gt;  3rd Qu.:0.4493   3rd Qu.:0.80640   3rd Qu.:0.3902   3rd Qu.:0.65383  
-#&gt;  Max.   :0.4903   Max.   :0.98298   Max.   :0.7979   Max.   :0.96817  
-#&gt;       V33               V34               V35                V36        
-#&gt;  Min.   :0.03278   Min.   :0.01056   Min.   :0.005001   Min.   :0.2039  
-#&gt;  1st Qu.:0.13744   1st Qu.:0.11082   1st Qu.:0.082877   1st Qu.:0.5398  
-#&gt;  Median :0.22203   Median :0.27015   Median :0.209350   Median :0.6714  
-#&gt;  Mean   :0.24335   Mean   :0.33939   Mean   :0.290996   Mean   :0.6559  
-#&gt;  3rd Qu.:0.33630   3rd Qu.:0.51896   3rd Qu.:0.444668   3rd Qu.:0.8039  
-#&gt;  Max.   :0.71866   Max.   :0.96299   Max.   :0.910645   Max.   :0.9395  
-#&gt;       V37              V38               V39               V40          
-#&gt;  Min.   :0.3891   Min.   :0.08557   Min.   :0.01459   Min.   :0.005639  
-#&gt;  1st Qu.:0.6445   1st Qu.:0.61068   1st Qu.:0.10751   1st Qu.:0.093956  
-#&gt;  Median :0.7417   Median :0.83852   Median :0.18350   Median :0.228584  
-#&gt;  Mean   :0.7223   Mean   :0.74698   Mean   :0.24707   Mean   :0.284651  
-#&gt;  3rd Qu.:0.8290   3rd Qu.:0.94057   3rd Qu.:0.36065   3rd Qu.:0.436654  
-#&gt;  Max.   :0.9546   Max.   :0.99026   Max.   :0.76709   Max.   :0.870387  
-#&gt;       V41               V42               V43               V44         
-#&gt;  Min.   :0.07902   Min.   :0.03726   Min.   :0.05471   Min.   :0.02966  
-#&gt;  1st Qu.:0.75053   1st Qu.:0.27446   1st Qu.:0.36421   1st Qu.:0.36543  
-#&gt;  Median :0.91386   Median :0.53099   Median :0.75833   Median :0.62285  
-#&gt;  Mean   :0.80195   Mean   :0.50661   Mean   :0.64839   Mean   :0.58156  
-#&gt;  3rd Qu.:0.97671   3rd Qu.:0.74141   3rd Qu.:0.93472   3rd Qu.:0.81111  
-#&gt;  Max.   :0.99913   Max.   :0.95676   Max.   :0.99821   Max.   :0.98873  
-#&gt;       V45              V46              V47               V48         
-#&gt;  Min.   :0.2473   Min.   :0.2886   Min.   :0.08397   Min.   :0.05871  
-#&gt;  1st Qu.:0.3154   1st Qu.:0.6635   1st Qu.:0.43736   1st Qu.:0.37928  
-#&gt;  Median :0.3500   Median :0.7688   Median :0.62131   Median :0.56854  
-#&gt;  Mean   :0.3477   Mean   :0.7454   Mean   :0.59091   Mean   :0.56224  
-#&gt;  3rd Qu.:0.3755   3rd Qu.:0.8709   3rd Qu.:0.76039   3rd Qu.:0.78005  
-#&gt;  Max.   :0.4609   Max.   :0.9653   Max.   :0.93297   Max.   :0.95929  
-#&gt;       V49                V50         
-#&gt;  Min.   :0.009912   Min.   :0.01176  
-#&gt;  1st Qu.:0.169306   1st Qu.:0.09296  
-#&gt;  Median :0.357989   Median :0.20631  
-#&gt;  Mean   :0.393204   Mean   :0.27290  
-#&gt;  3rd Qu.:0.619273   3rd Qu.:0.37610  
-#&gt;  Max.   :0.933579   Max.   :0.86295  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
+<span class='co'># summary(mod$theta_latent)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"theta"</span>,<span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 

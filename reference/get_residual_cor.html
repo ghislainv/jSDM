@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Calculate the residual correlation matrix from a latent variable model (LVM) — get_residual_cor" />
-<meta property="og:description" content="This function use coefficients \((\lambda_jl with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using jSDM package, to calculate the variance-covariance matrix which controls correlation between species." />
+<meta property="og:description" content="This function use coefficients \((\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using jSDM package, to calculate the variance-covariance matrix which controls correlation between species." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -149,7 +149,7 @@
     </div>
 
     <div class="ref-description">
-    <p>This function use coefficients \((\lambda_jl with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using <code>jSDM</code> package, to calculate the variance-covariance matrix which controls correlation between species.</p>
+    <p>This function use coefficients \((\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using <code>jSDM</code> package, to calculate the variance-covariance matrix which controls correlation between species.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_residual_cor</span>(<span class='no'>mod</span>)</pre>
@@ -176,11 +176,11 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies\) can be derived from the covariance in the latent variables such as :</p><table class='table'>
-<tr><td>\(\Sigma_ij\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr>
+<tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr>
 <tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr>
 </table>
 <p>then we compute correlations from covariances :
-$$R_ij = \Sigma_ij / \sqrt(\Sigma_ii\Sigma _jj)$$.</p>
+$$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code></p></div>
