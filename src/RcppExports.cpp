@@ -29,28 +29,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp_jSDM_binomial_logit_one_species
-Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, int nthin, int nburn, arma::uvec Y, arma::uvec T, arma::mat X, arma::vec beta_start, arma::vec mu_beta, arma::vec V_beta, const int seed, const double ropt, const int verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_one_species(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
-    Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
-    Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< arma::uvec >::type T(TSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type beta_start(beta_startSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu_beta(mu_betaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type V_beta(V_betaSEXP);
-    Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< const double >::type ropt(roptSEXP);
-    Rcpp::traits::input_parameter< const int >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_one_species(ngibbs, nthin, nburn, Y, T, X, beta_start, mu_beta, V_beta, seed, ropt, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 // Rcpp_jSDM_binomial_probit_block_rand_site_lv
 Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs, int nthin, int nburn, arma::umat Y, arma::mat X, arma::mat param_start, arma::mat V_param, arma::vec mu_param, arma::mat V_W, arma::mat W_start, arma::vec alpha_start, double V_alpha_start, double shape, double rate, const int seed, const int verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP param_startSEXP, SEXP V_paramSEXP, SEXP mu_paramSEXP, SEXP V_WSEXP, SEXP W_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP shapeSEXP, SEXP rateSEXP, SEXP seedSEXP, SEXP verboseSEXP) {
@@ -80,7 +58,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_jSDM_Rcpp_jSDM_binomial_logit", (DL_FUNC) &_jSDM_Rcpp_jSDM_binomial_logit, 12},
-    {"_jSDM_Rcpp_jSDM_binomial_logit_one_species", (DL_FUNC) &_jSDM_Rcpp_jSDM_binomial_logit_one_species, 12},
     {"_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv", (DL_FUNC) &_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv, 16},
     {NULL, NULL, 0}
 };
