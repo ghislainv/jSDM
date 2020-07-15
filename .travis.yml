@@ -11,6 +11,7 @@ r_packages:
   - pkgdown
   - covr
   - boral
+  - roxygen2
   
 after_success:
   - R CMD INSTALL .
