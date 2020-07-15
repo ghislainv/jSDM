@@ -33,11 +33,12 @@ reference:
 - title: Package
   desc: Package description
   contents:
-  - '`jSDM-package`'
 - title: jSDM
   desc: Functions for joint species distribution models
   contents:  
-  - '`jSDM_probit_block`'
+  - '`jSDM-package`'
+  - '`jSDM_binomial_logit`'
+  - '`jSDM_binomial_probit_block_rand_site_lv`'
 - title: Data
   desc: Data-sets used in examples
   contents:
@@ -45,14 +46,16 @@ reference:
   - '`mosquitos`'
   - '`eucalypts`'
   - '`fungi`'
+  - '`aravo`'
 - title: Test
-  desc: Simple binomial function for GSL tests
+  desc: Simple binomial functions for GSL tests
   contents:
-  - '`jSDM_binomial`'
+  - '`jSDM_binomial_logit_one_species`'
 - title: Miscellaneous
   desc: Miscellaneous functions
   contents:
   - '`logit`'
+  - '`inv_logit`'
   - '`get_residual_cor`'
   - '`plot_residual_cor`'
 - title: Predict

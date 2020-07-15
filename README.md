@@ -30,11 +30,40 @@ install.packages("jSDM")
 ```
 
 Or install the development version of **jSDM** from
-[GitHub](https://github.com/ghislainv/jSDM) with:
+[GitHub](https://github.com/ghislainv/jSDM)
+with:
 
 ``` r
 devtools::install_github("ghislainv/jSDM")
 ```
+
+<!-- ## Available functions  -->
+
+<!-- The package includes the following functions to fit various species distribution models :  -->
+
+<!-- |                function                |    data type     |                      fitted model                                 | -->
+
+<!-- |:---------------------------------------|-----------------:|-----------------------------------------------:| -->
+
+<!-- | jSDM_binomial_logit_one_species        | presence-absence |  $y_n \sim \mathcal{B}inomial(\theta_n, t_n)  where, / logit(\theta_n) = X_n \beta$ | -->
+
+<!-- `jSDM_binomial_logit`                    | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j$ | -->
+
+<!-- | jSDM_binomial_logit_rand_site          | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \  logit(\theta_{ij}) = X_i \beta_j \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
+
+<!-- | jSDM_binomial_logit_lv                 | presence-absence |   $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j$ | -->
+
+<!-- | jSDM_binomial_logit_rand_site_lv       | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_ij, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
+
+<!-- | jSDM_binomial_probit_block_one_species | presence-absence |  $y_n \sim \mathcal{B}inomial(\theta_n, t_n) \ where, \ probit(\theta_n) = X_n \beta$ | -->
+
+<!-- | jSDM_binomial_probit_block             | presence-absence |   $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j$ | -->
+
+<!-- | jSDM_binomial_probit_block_rand_site   | presence-absence | $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
+
+<!-- | jSDM_binomial_probit_block_lv          | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j$ | -->
+
+<!-- | `jSDM_binomial_probit_block_rand_site_lv` | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
 
 ## References
 
