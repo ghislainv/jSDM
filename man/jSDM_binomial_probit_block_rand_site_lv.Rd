@@ -121,7 +121,8 @@ x2 <- rnorm(nsite,0,1)
 X <- data.frame(Int=rep(1,nsite),x1=x1,x2=x2)
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 data <- cbind (X,W)
-beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
+                byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
@@ -147,22 +148,27 @@ for (i in 1:nsite){
 #== Site-occupancy model
 
 # Increase number of iterations (burnin and mcmc) to get convergence 
-mod <- jSDM_binomial_probit_block_rand_site_lv(# Chains
-                                               burnin=100, mcmc=100, thin=1,
-                                               # Response variable
-                                               presence_site_sp = Y ,
-                                               # Explanatory variables 
-                                               site_suitability = ~ x1 + x2,
-                                               site_data = X[,-1], n_latent=2,
-                                               # Starting values 
-                                               alpha_start=0, beta_start=0,
-                                               lambda_start=0, W_start=0,
-                                               V_alpha_start=1,
-                                               # Priors 
-                                               shape=0.5, rate=0.0005,
-                                               mu_beta=0, V_beta=1.0E6,
-                                               mu_lambda=0, V_lambda=10,
-                                               seed=1234, verbose=1)
+mod<-jSDM_binomial_probit_block_rand_site_lv(# Chains
+                                             burnin=100,
+                                             mcmc=100,
+                                             thin=1,
+                                             # Response variable
+                                             presence_site_sp = Y ,
+                                             # Explanatory variables 
+                                             site_suitability = ~.,
+                                             site_data = X[,-1],
+                                             n_latent=2,
+                                             # Starting values 
+                                             alpha_start=0,
+                                             beta_start=0,
+                                             lambda_start=0,
+                                             W_start=0,
+                                             V_alpha_start=1,
+                                             # Priors 
+                                             shape=0.5, rate=0.0005,
+                                             mu_beta=0, V_beta=1.0E6,
+                                             mu_lambda=0, V_lambda=10,
+                                             seed=1234, verbose=1)
 # ===================================================
 # Result analysis
 # ===================================================
@@ -195,10 +201,13 @@ pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit_block.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
   for (p in 1:ncol(X)) {
-    coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]))
-    coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
-    main = paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p],
-                 ", species : ",j))
+    coda::traceplot(coda::as.mcmc(
+    mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+    mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
+    main = paste(colnames(
+    mod$mcmc.sp[[paste0("sp_",j)]])[p],
+    ", species : ",j))
     abline(v=beta.target[p,j],col='red')
   }
 }
@@ -211,8 +220,10 @@ pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit_block.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
   for (l in 1:n_latent) {
-  coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
-  coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]), 
+  coda::traceplot(coda::as.mcmc(mod$mcmc.sp
+                                [[paste0("sp_",j)]][,ncol(X)+l]))
+  coda::densplot(coda::as.mcmc(mod$mcmc.sp
+                              [[paste0("sp_",j)]][,ncol(X)+l]), 
                  main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
                  [ncol(X)+l],", species : ",j))
  abline(v=lambda.target[l,j],col='red')
@@ -227,7 +238,8 @@ for (l in 1:n_latent) {
 plot(W[,l],
 summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
 main = paste0("Latent variable W_", l),
-xlab =paste0("W_", l, " target"), ylab =paste0("W_", l, " estimated"))
+xlab =paste0("W_", l, " target"),
+ylab =paste0("W_", l, " estimated"))
 abline(a=0,b=1,col='red')
 }
 dev.off()

@@ -47,10 +47,14 @@ mod <- jSDM_binomial_probit_block_rand_site_lv(# Response variable
                                               site_data = Env_frogs,
                                               n_latent=2,
                                               # Chains
-                                              burnin=100, mcmc=100, thin=1,
+                                              burnin=100,
+                                              mcmc=100,
+                                              thin=1,
                                               # Starting values
-                                              alpha_start=0, beta_start=0,
-                                              lambda_start=0, W_start=0,
+                                              alpha_start=0,
+                                              beta_start=0,
+                                              lambda_start=0,
+                                              W_start=0,
                                               V_alpha_start=1, 
                                               # Priors
                                               shape=0.5, rate=0.0005,
