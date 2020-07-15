@@ -24,9 +24,9 @@
 #' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.5 for weak informative prior.
 #' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.
 #' @param mu_beta Means of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a p-length vector. If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set to 0 for an uninformative prior.
-#' @param V_beta Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{Vbeta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the betas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 1.0E6 for an uninformative flat prior.
-#' @param mu_lambda Means of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{mulambda} must be either a scalar or a n_latent-length vector. If \code{mulambda} takes a scalar value, then that value will serve as the prior mean for all of the lambdas. The default value is set to 0 for an uninformative prior.
-#' @param V_lambda Variances of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{Vlambda} must be either a scalar or a \eqn{n_{latent} \times n_{latent}}{n_latent x n_latent} symmetric positive semi-definite square matrix. If \code{Vlambda} takes a scalar value, then that value will serve as the prior variance for all of the lambdas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 10 for an uninformative flat prior.
+#' @param V_beta Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the betas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 1.0E6 for an uninformative flat prior.
+#' @param mu_lambda Means of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{mu_lambda} must be either a scalar or a n_latent-length vector. If \code{mu_lambda} takes a scalar value, then that value will serve as the prior mean for all of the lambdas. The default value is set to 0 for an uninformative prior.
+#' @param V_lambda Variances of the Normal priors for the \eqn{\lambda}{lambda} parameters corresponding to the latent variables. \code{V_lambda} must be either a scalar or a \eqn{n_{latent} \times n_{latent}}{n_latent x n_latent} symmetric positive semi-definite square matrix. If \code{V_lambda} takes a scalar value, then that value will serve as the prior variance for all of the lambdas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 10 for an uninformative flat prior.
 #' @param seed The seed for the random number generator. Default to 1234.
 #' @param verbose A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
@@ -34,14 +34,14 @@
 #' mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect.\cr
 #' mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.\cr
 #' mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for betas and lambdas.\cr
-#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\Pi_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
 #' Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 #' probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 #' model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
 #' @details We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 #' \bold{Ecological process:}
-#' \deqn{y_ij \sim \mathcal{B}ernoulli(\theta_ij)}{y_ij ~ Bernoulli(\theta_ij)}
-#' \deqn{probit(\theta_ij) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
+#' \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij)}
+#' \deqn{probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
 #' where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
 #' @references \tabular{l}{
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
@@ -140,7 +140,7 @@
 #' #= Parameter estimates
 #' 
 #' ## alpha
-#' summary(mod$mcmc.alpha)
+#' # summary(mod$mcmc.alpha)
 #' pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_probit_block.pdf"))
 #' plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
 #'      xlab ="alphas target", ylab ="alphas estimated")
@@ -148,7 +148,7 @@
 #' dev.off()
 #' 
 #' ## Valpha
-#' summary(mod$mcmc.V_alpha)
+#' # summary(mod$mcmc.V_alpha)
 #' pdf(file=file.path(tempdir(), "Posteriors_Valpha_jSDM_probit_block.pdf"))
 #' par(mfrow=c(1,2))
 #' coda::traceplot(mod$mcmc.V_alpha)
@@ -157,7 +157,7 @@
 #' dev.off()
 #' 
 #' ## beta_j
-#' summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
+#' # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit_block.pdf"))
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
@@ -175,8 +175,8 @@
 #' dev.off()
 #' 
 #'## lambda_j
-#' summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
-#' summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
+#' # summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
+#' # summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
 #' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit_block.pdf"))
 #' par(mfrow=c(n_latent*2,2))
 #' for (j in 1:nsp) {
@@ -197,7 +197,7 @@
 #' par(mfrow=c(1,2))
 #' for (l in 1:n_latent) {
 #' plot(W[,l],
-#' summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+#' # summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
 #' main = paste0("Latent variable W_", l),
 #' xlab =paste0("W_", l, " target"),
 #' ylab =paste0("W_", l, " estimated"))
@@ -213,13 +213,13 @@
 #' 
 #' pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
 #' ## probit_theta
-#' summary(mod$probit_theta_pred)
+#' # summary(mod$probit_theta_pred)
 #' par(mfrow=c(1,1))
 #' plot(probit_theta,mod$probit_theta_pred)
 #' abline(a=0,b=1,col='red')
 #' 
 #' ## Z
-#' summary(mod$Z_latent)
+#' # summary(mod$Z_latent)
 #' plot(Z_true,mod$Z_latent)
 #' abline(a=0,b=1,col='red')
 #' dev.off()

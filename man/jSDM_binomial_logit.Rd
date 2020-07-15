@@ -33,14 +33,14 @@ jSDM_binomial_logit(
 
 \item{site_data}{data frame containing the model's explicative variables.}
 
-\item{trials}{A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_ij}, the number of successes for observation \eqn{n}. If \eqn{t_i
-=0}, then \eqn{y_ij=0}.}
+\item{trials}{A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}. If \eqn{t_i
+=0}, then \eqn{y_{ij}=0}{y_ij=0}.}
 
 \item{beta_start}{Starting values for beta parameters of the suitability process. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.}
 
-\item{mu_beta}{Means of the priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{mubeta} must be either a scalar or a p-length vector. If \code{mubeta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.}
+\item{mu_beta}{Means of the priors for the \eqn{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a p-length vector. If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.}
 
-\item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{beta} parameters of the suitability process. \code{Vbeta} must be either a scalar or a p-length vector. If \code{Vbeta} takes a scalar value, then that value will serve as the prior variance for all of the betas. The default variance is large and set to 1.0E6 for an uninformative flat prior.}
+\item{V_beta}{Variances of the Normal priors for the \eqn{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a p-length vector. If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the betas. The default variance is large and set to 1.0E6 for an uninformative flat prior.}
 
 \item{ropt}{Target acceptance rate for the adaptive Metropolis algorithm. Default to 0.44.}
 
@@ -51,7 +51,7 @@ jSDM_binomial_logit(
 \value{
 An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
 mcmc.betas \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}, with \eqn{D=-2\log(\prod_ij P(y_ij|\beta_j,t_i))}, is also provided. \cr
+mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))}{D=-2\log(\prod_ij P(y_ij|\beta_j,t_i))}, is also provided. \cr
 theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin. \cr
 }
@@ -63,8 +63,8 @@ The \code{jSDM_binomial_logit} function performs a Binomial logistic regression 
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 
 \bold{Ecological process:}
-\deqn{y_ij \sim \mathcal{B}inomial(\theta_ij,t_i)}{y_ij ~ Binomial(theta_ij,t_i)}
-\deqn{logit(\theta_ij) = X_i \beta_j}{logit(\theta_ij) = X_i \beta_j}
+\deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(theta_ij,t_i)}
+\deqn{logit(\theta_{ij}) = X_i \beta_j}{logit(\theta_ij) = X_i \beta_j}
 }
 \examples{
 #==============================================
@@ -124,14 +124,14 @@ mod <- jSDM_binomial_logit(# Chains
 
 #== Outputs
 # Parameter estimates
-summary(mod$mcmc)
+# summary(mod$mcmc)
 pdf(file=file.path(tempdir(), "Posteriors_jSDM_binomial.pdf"))
 plot(mod$mcmc.Deviance)
 for(j in 1:nsp) plot(mod$mcmc.betas[[j]])
 dev.off()
 
 #= Predictions
-summary(mod$theta_latent)
+# summary(mod$theta_latent)
 pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
 plot(theta, mod$theta_latent,
     main="theta",xlab="obs", ylab="fitted")

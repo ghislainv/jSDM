@@ -8,7 +8,7 @@
 #' @name get_residual_cor
 #' @aliases get_residual_cor
 #' @title Calculate the residual correlation matrix from a latent variable model (LVM)
-#' @description This function use coefficients \eqn{(\lambda_jl with j=1,\dots,n_species and l=1,\dots,n_latent)}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
+#' @description This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 #' @param mod An object of class \code{"jSDM"}
 #' @return results A list including : \tabular{ll}{
 #' cov.mean \tab Average over the MCMC samples of the variance-covariance matrix \cr 
@@ -18,10 +18,10 @@
 #' }
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies}{R=(R_ij) avec i=1,..., nspecies et j=1,..., nspecies} can be derived from the covariance in the latent variables such as : 
 #' \tabular{lll}{
-#' \eqn{\Sigma_ij}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= lambda_i .lambda_j' + 1} \tab if i=j \cr
-#'          \tab \eqn{= \lambda_i .\lambda_j'}{= lambda_i .lambda_j'} \tab else, \cr}
+#' \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
+#'          \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
 #' then we compute correlations from covariances :
-#'\deqn{R_ij = \Sigma_ij / \sqrt(\Sigma_ii\Sigma _jj)}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
+#'\deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
