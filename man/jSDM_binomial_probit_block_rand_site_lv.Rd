@@ -74,7 +74,7 @@ mcmc.alpha \tab An mcmc object that contains the posterior samples for alphas. T
 mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect.\cr
 mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.\cr
 mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for betas and lambdas.\cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{i,j} P(y_{i,j}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\Pi_{i,j} P(y_{i,j}|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\Pi_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
 Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
@@ -85,8 +85,8 @@ The \code{jSDM_binomial_probit_block_rand_site_lv} function performs a Binomial 
 \details{
 We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 \bold{Ecological process:}
-\deqn{y_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j})}{y_{i,j} ~ Bernoulli(\theta_{i,j})}
-\deqn{probit(\theta_{i,j}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
+\deqn{y_ij \sim \mathcal{B}ernoulli(\theta_ij)}{y_ij ~ Bernoulli(\theta_ij)}
+\deqn{probit(\theta_ij) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
 where \deqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
 }
 \examples{
@@ -131,7 +131,8 @@ param.target <- rbind(beta.target,lambda.target)
 V_alpha.target <- 0.5
 V <- 1
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-probit_theta <- as.matrix(X) \%*\% beta.target + W \%*\% lambda.target + alpha.target
+probit_theta <- as.matrix(X) \%*\% beta.target 
++ W \%*\% lambda.target + alpha.target
 e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 Z_true <- probit_theta + e
 Y <- matrix (NA, nsite,nsp)
@@ -196,7 +197,8 @@ for (j in 1:nsp) {
   for (p in 1:ncol(X)) {
     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]))
     coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
-    main = paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p],", species : ",j))
+    main = paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p],
+                 ", species : ",j))
     abline(v=beta.target[p,j],col='red')
   }
 }
@@ -211,8 +213,8 @@ for (j in 1:nsp) {
   for (l in 1:n_latent) {
   coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
   coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]), 
-                 main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l],",
-                 species : ",j))
+                 main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+                 [ncol(X)+l],", species : ",j))
  abline(v=lambda.target[l,j],col='red')
   }
 }

@@ -187,7 +187,7 @@ check.T.binomial <- function (T,nobs) { # = This version of the function assumes
 
 check.Y.binomial <- function (Y,T) {
   if(!is.numeric(Y)) {
-    cat("Error: 'presences' must be a vector of numeric values.\n")
+    cat("Error: 'presences' must be a vector or a matrix of numeric values.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }

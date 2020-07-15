@@ -37,13 +37,14 @@ library(jSDM)
  # Normalized continuous variables
  Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
  colnames(Env_frogs) <- colnames(frogs[,1:3])
+ Env_frogs <- as.data.frame(Env_frogs)
  # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
 mod <- jSDM_binomial_probit_block_rand_site_lv(# Response variable 
-                                              presence_site_sp = as.matrix(PA_frogs), 
+                                              presence_site_sp = PA_frogs, 
                                               # Explanatory variables 
                                               site_suitability = ~.,   
-                                              site_data = as.data.frame(Env_frogs),
+                                              site_data = Env_frogs,
                                               n_latent=2,
                                               # Chains
                                               burnin=100, mcmc=100, thin=1,
