@@ -129,12 +129,13 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========
   
   #= Response
-  Y <- presences
+  Y <- as.vector(presences)
   nobs <- length(Y)
   T <- trials
   #= Suitability
   mf.suit <- model.frame(formula=suitability,data=as.data.frame(data))
   X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
+  X <- as.matrix(X)
   np <- ncol(X)
   #= Iterations
   ngibbs <- mcmc+burnin

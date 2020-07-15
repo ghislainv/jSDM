@@ -108,22 +108,27 @@
 #'#== Site-occupancy model
 #'
 #'# Increase number of iterations (burnin and mcmc) to get convergence 
-#' mod <- jSDM_binomial_probit_block_rand_site_lv(# Chains
-#'                                                burnin=100, mcmc=100, thin=1,
-#'                                                # Response variable
-#'                                                presence_site_sp = Y ,
-#'                                                # Explanatory variables 
-#'                                                site_suitability = ~ x1 + x2,
-#'                                                site_data = X[,-1], n_latent=2,
-#'                                                # Starting values 
-#'                                                alpha_start=0, beta_start=0,
-#'                                                lambda_start=0, W_start=0,
-#'                                                V_alpha_start=1,
-#'                                                # Priors 
-#'                                                shape=0.5, rate=0.0005,
-#'                                                mu_beta=0, V_beta=1.0E6,
-#'                                                mu_lambda=0, V_lambda=10,
-#'                                                seed=1234, verbose=1)
+#' mod<-jSDM_binomial_probit_block_rand_site_lv(# Chains
+#'                                              burnin=100,
+#'                                              mcmc=100,
+#'                                              thin=1,
+#'                                              # Response variable
+#'                                              presence_site_sp = Y ,
+#'                                              # Explanatory variables 
+#'                                              site_suitability = ~.,
+#'                                              site_data = X[,-1],
+#'                                              n_latent=2,
+#'                                              # Starting values 
+#'                                              alpha_start=0,
+#'                                              beta_start=0,
+#'                                              lambda_start=0,
+#'                                              W_start=0,
+#'                                              V_alpha_start=1,
+#'                                              # Priors 
+#'                                              shape=0.5, rate=0.0005,
+#'                                              mu_beta=0, V_beta=1.0E6,
+#'                                              mu_lambda=0, V_lambda=10,
+#'                                              seed=1234, verbose=1)
 #' # ===================================================
 #' # Result analysis
 #' # ===================================================
@@ -156,10 +161,13 @@
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
 #'   for (p in 1:ncol(X)) {
-#'     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]))
-#'     coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
-#'     main = paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p],
-#'                  ", species : ",j))
+#'     coda::traceplot(coda::as.mcmc(
+#'     mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+#'     coda::densplot(coda::as.mcmc(
+#'     mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
+#'     main = paste(colnames(
+#'     mod$mcmc.sp[[paste0("sp_",j)]])[p],
+#'     ", species : ",j))
 #'     abline(v=beta.target[p,j],col='red')
 #'   }
 #' }
