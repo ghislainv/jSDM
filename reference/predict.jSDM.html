@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Predict method for models fitted with jSDM — predict.jSDM" />
-<meta property="og:description" content="Predicted values for models fitted with jSDM" />
+<meta property="og:description" content="Prediction of species probabilities of occurrence from models fitted using the jSDM package" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -144,17 +144,24 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Predict method for models fitted with jSDM</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/predict.jSDM.R'><code>R/predict.jSDM.R</code></a></small>
     <div class="hidden name"><code>predict.jSDM.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Predicted values for models fitted with jSDM</p>
+    <p>Prediction of species probabilities of occurrence from models fitted using the jSDM package</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for jSDM</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>Id_species</span>, <span class='no'>Id_sites</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"mean"</span>,
-  <span class='kw'>probs</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>,<span class='fl'>0.975</span>), <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(
+  <span class='no'>object</span>,
+  <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>Id_species</span>,
+  <span class='no'>Id_sites</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"mean"</span>,
+  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>),
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,7 +172,7 @@
     </tr>
     <tr>
       <th>newdata</th>
-      <td><p>An optional data frame in which to look for variables with which to predict. If omitted, the fitted values are used.</p></td>
+      <td><p>An optional data frame in which explanatory variables can be searched for prediction. If omitted, the adjusted values are used.</p></td>
     </tr>
     <tr>
       <th>Id_species</th>
@@ -177,11 +184,17 @@
     </tr>
     <tr>
       <th>type</th>
-      <td><p>Type of prediction. Can be <code>"mean"</code> for predictive posterior mean, <code>"quantile"</code> for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see <code>probs</code> argument) or <code>"posterior"</code> for the full predictive posterior for each prediction. Using <code>"quantile"</code> or <code>"posterior"</code> might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.</p></td>
+      <td><p>Type of prediction. Can be :</p><table class='table'>
+<tr><td><code>"mean"</code> for predictive posterior mean,</td></tr>
+<tr><td><code>"quantile"</code> for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see <code>probs</code> argument),</td></tr>
+<tr><td><code>"posterior"</code> for the full predictive posterior for each prediction.</td></tr>
+<tr><td></td></tr>
+</table>
+<p>Using <code>"quantile"</code> or <code>"posterior"</code> might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.</p></td>
     </tr>
     <tr>
       <th>probs</th>
-      <td><p>Numeric vector of probabilities with values in [0,1] and used when <code>type="quantile"</code>.</p></td>
+      <td><p>Numeric vector of probabilities with values in \([0,1]\), used when <code>type="quantile"</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -194,40 +207,42 @@
     <p>Return a vector for the predictive posterior mean when <code>type="mean"</code>, a data-frame with the mean and quantiles when <code>type="quantile"</code> or an <code>mcmc</code> object (see <code>coda</code> package) with posterior distribution for each prediction when <code>type="posterior"</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM</a></code></p></div>
+    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>jSDM</span>)
 <span class='co'># frogs data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-
 <span class='co'># Arranging data</span>
 <span class='no'>PA_frogs</span> <span class='kw'>&lt;-</span> <span class='no'>frogs</span>[,<span class='fl'>4</span>:<span class='fl'>12</span>]
-
 <span class='co'># Normalized continuous variables</span>
 <span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
-
 <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='jSDM_probit_block.html'>jSDM_probit_block</a></span>(
-  <span class='co'># Response variable </span>
-  <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
-  <span class='co'># Explanatory variables </span>
-  <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
-  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>), <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
-  <span class='co'># Chains</span>
-  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
-  <span class='co'># Starting values</span>
-  <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
-  <span class='co'># Priors</span>
-  <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
-  <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
-  <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
-  <span class='co'># Various </span>
-  <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+<span class='no'>mod</span><span class='kw'>&lt;-</span><span class='fu'><a href='jSDM_binomial_probit_block_rand_site_lv.html'>jSDM_binomial_probit_block_rand_site_lv</a></span>(<span class='co'># Response variable </span>
+                                           <span class='kw'>presence_site_sp</span> <span class='kw'>=</span>
+                                           <span class='no'>PA_frogs</span>,
+                                           <span class='co'># Explanatory variables </span>
+                                           <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
+                                           <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>Env_frogs</span>,
+                                           <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
+                                           <span class='co'># Chains</span>
+                                           <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                           <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                           <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                           <span class='co'># Starting values</span>
+                                           <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                           <span class='co'># Priors</span>
+                                           <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
+                                           <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
+                                           <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
+                                           <span class='co'># Various </span>
+                                           <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
 #&gt; **********:10.0% 
@@ -247,10 +262,11 @@
 <span class='no'>Id_species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>PA_frogs</span>), <span class='fl'>5</span>)
 
 <span class='co'># Predictions </span>
-<span class='no'>theta_pred</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'>predict.jSDM</span>(<span class='no'>mod_jSDM_block_frogs</span>,
-  <span class='kw'>Id_species</span><span class='kw'>=</span><span class='no'>Id_species</span>, <span class='kw'>Id_sites</span><span class='kw'>=</span><span class='no'>Id_sites</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"mean"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span>(<span class='no'>theta_pred</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Predicted theta with simulated covariates"</span>)</div><div class='img'><img src='predict.jSDM-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+<span class='no'>theta_pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>mod</span>,
+                     <span class='kw'>Id_species</span><span class='kw'>=</span><span class='no'>Id_species</span>,
+                     <span class='kw'>Id_sites</span><span class='kw'>=</span><span class='no'>Id_sites</span>,
+                     <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"mean"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span>(<span class='no'>theta_pred</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Predicted theta with simulated covariates"</span>)</div><div class='img'><img src='predict.jSDM-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

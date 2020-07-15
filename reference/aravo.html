@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generalized logit function — logit • jSDM</title>
+<title>Distribution of Alpine plants in Aravo (Valloire, France) — aravo • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Generalized logit function — logit" />
-<meta property="og:description" content="Compute generalized logit function." />
+<meta property="og:title" content="Distribution of Alpine plants in Aravo (Valloire, France) — aravo" />
+<meta property="og:description" content="This dataset describe the distribution of 82 species of Alpine plants in 75 sites. Species traits and environmental variables are also measured." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -143,131 +143,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generalized logit function</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/logit.R'><code>R/logit.R</code></a></small>
-    <div class="hidden name"><code>logit.Rd</code></div>
+    <h1>Distribution of Alpine plants in Aravo (Valloire, France)</h1>
+    
+    <div class="hidden name"><code>aravo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute generalized logit function.</p>
+    <p>This dataset describe the distribution of 82 species of Alpine plants in 75 sites. Species traits and environmental variables are also measured.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>logit</span>(<span class='no'>x</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"aravo"</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>value(s) to be transformed</p></td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td><p>Lower end of logit interval</p></td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td><p>Upper end of logit interval</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>y Transformed value(s).</p>
+    <p>aravo is a list containing the following objects :</p><dl'>
+    <dt><code>spe</code></dt><dd><p>is a data.frame with the abundance values of 82 species (columns) in 75 sites (rows).</p></dd>
+    <dt><code>env</code></dt><dd><p>is a data.frame with the measurements of 6 environmental variables for the sites.</p></dd>
+    <dt><code>traits</code></dt><dd><p>is data.frame with the measurements of 8 traits for the species.</p></dd>
+    <dt><code>spe.names</code></dt><dd><p>is a vector with full species names.</p></dd>
+    
+</dl>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The generalized logit function takes values on [min, max] and transforms them to span [-Inf,Inf] it is defined as:
-$$y = log(\frac{p}{(1-p)})$$ 
-$$where$$
-$$p=\frac{(x-min)}{(max-min)}$$</p>
+    <p></p><dl'>
+The environmental variables are : 
+ ll
+ <code>Aspect</code>  Relative south aspect (opposite of the sine of aspect with flat coded 0) <br />
+ <code>Slope</code>  Slope inclination (degrees) <br />
+    <code>Form</code>  Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity) <br />
+    <code>Snow</code>  Mean snowmelt date (Julian day) averaged over 1997-1999 <br />
+    <code>PhysD</code>  Physical disturbance, i.e., percentage of unvegetated soil due to physical processes <br />
+    <code>ZoogD</code>  Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high <br /> 
+The species traits for the plants are:
+ ll
+    <code>Height</code>  Vegetative height (cm) <br />
+    <code>Spread</code>  Maximum lateral spread of clonal plants (cm) <br />
+    <code>Angle</code>  Leaf elevation angle estimated at the middle of the lamina <br />
+    <code>Area</code>  Area of a single leaf <br />
+    <code>Thick</code>  Maximum thickness of a leaf cross section (avoiding the midrib) <br />
+    <code>SLA</code>  Specific leaf area <br />
+    <code>Nmass</code>  Mass-based leaf nitrogen content <br />
+    <code>Seed</code>  Seed mass <br />  
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Choler, P. (2005) Consistent shifts in Alpine plant traits along a mesotopographical gradient. Arctic, Antarctic, and Alpine Research 37,444–453.</p>
+<p>Dray S, Dufour A (2007). The ade4 Package: Implementing the Duality Diagram for Ecologists. <em>Journal of Statistical Software</em>, 22(4), 1–20. doi: <a href='10.18637/jss.v022.i04'>10.18637/jss.v022.i04</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>10</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fl'>0.25</span>)
-<span class='no'>xt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'>logit</span>(<span class='no'>x</span>, <span class='kw'>min</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>x</span>,<span class='no'>xt</span>)</div><div class='output co'>#&gt;           x         xt
-#&gt;  [1,]  0.00       -Inf
-#&gt;  [2,]  0.25 -3.6635616
-#&gt;  [3,]  0.50 -2.9444390
-#&gt;  [4,]  0.75 -2.5123056
-#&gt;  [5,]  1.00 -2.1972246
-#&gt;  [6,]  1.25 -1.9459101
-#&gt;  [7,]  1.50 -1.7346011
-#&gt;  [8,]  1.75 -1.5505974
-#&gt;  [9,]  2.00 -1.3862944
-#&gt; [10,]  2.25 -1.2367626
-#&gt; [11,]  2.50 -1.0986123
-#&gt; [12,]  2.75 -0.9694006
-#&gt; [13,]  3.00 -0.8472979
-#&gt; [14,]  3.25 -0.7308875
-#&gt; [15,]  3.50 -0.6190392
-#&gt; [16,]  3.75 -0.5108256
-#&gt; [17,]  4.00 -0.4054651
-#&gt; [18,]  4.25 -0.3022809
-#&gt; [19,]  4.50 -0.2006707
-#&gt; [20,]  4.75 -0.1000835
-#&gt; [21,]  5.00  0.0000000
-#&gt; [22,]  5.25  0.1000835
-#&gt; [23,]  5.50  0.2006707
-#&gt; [24,]  5.75  0.3022809
-#&gt; [25,]  6.00  0.4054651
-#&gt; [26,]  6.25  0.5108256
-#&gt; [27,]  6.50  0.6190392
-#&gt; [28,]  6.75  0.7308875
-#&gt; [29,]  7.00  0.8472979
-#&gt; [30,]  7.25  0.9694006
-#&gt; [31,]  7.50  1.0986123
-#&gt; [32,]  7.75  1.2367626
-#&gt; [33,]  8.00  1.3862944
-#&gt; [34,]  8.25  1.5505974
-#&gt; [35,]  8.50  1.7346011
-#&gt; [36,]  8.75  1.9459101
-#&gt; [37,]  9.00  2.1972246
-#&gt; [38,]  9.25  2.5123056
-#&gt; [39,]  9.50  2.9444390
-#&gt; [40,]  9.75  3.6635616
-#&gt; [41,] 10.00        Inf</div><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='inv_logit.html'>inv_logit</a></span>(<span class='no'>xt</span>, <span class='kw'>min</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>x</span>,<span class='no'>xt</span>,<span class='no'>y</span>)</div><div class='output co'>#&gt;           x         xt     y
-#&gt;  [1,]  0.00       -Inf  0.00
-#&gt;  [2,]  0.25 -3.6635616  0.25
-#&gt;  [3,]  0.50 -2.9444390  0.50
-#&gt;  [4,]  0.75 -2.5123056  0.75
-#&gt;  [5,]  1.00 -2.1972246  1.00
-#&gt;  [6,]  1.25 -1.9459101  1.25
-#&gt;  [7,]  1.50 -1.7346011  1.50
-#&gt;  [8,]  1.75 -1.5505974  1.75
-#&gt;  [9,]  2.00 -1.3862944  2.00
-#&gt; [10,]  2.25 -1.2367626  2.25
-#&gt; [11,]  2.50 -1.0986123  2.50
-#&gt; [12,]  2.75 -0.9694006  2.75
-#&gt; [13,]  3.00 -0.8472979  3.00
-#&gt; [14,]  3.25 -0.7308875  3.25
-#&gt; [15,]  3.50 -0.6190392  3.50
-#&gt; [16,]  3.75 -0.5108256  3.75
-#&gt; [17,]  4.00 -0.4054651  4.00
-#&gt; [18,]  4.25 -0.3022809  4.25
-#&gt; [19,]  4.50 -0.2006707  4.50
-#&gt; [20,]  4.75 -0.1000835  4.75
-#&gt; [21,]  5.00  0.0000000  5.00
-#&gt; [22,]  5.25  0.1000835  5.25
-#&gt; [23,]  5.50  0.2006707  5.50
-#&gt; [24,]  5.75  0.3022809  5.75
-#&gt; [25,]  6.00  0.4054651  6.00
-#&gt; [26,]  6.25  0.5108256  6.25
-#&gt; [27,]  6.50  0.6190392  6.50
-#&gt; [28,]  6.75  0.7308875  6.75
-#&gt; [29,]  7.00  0.8472979  7.00
-#&gt; [30,]  7.25  0.9694006  7.25
-#&gt; [31,]  7.50  1.0986123  7.50
-#&gt; [32,]  7.75  1.2367626  7.75
-#&gt; [33,]  8.00  1.3862944  8.00
-#&gt; [34,]  8.25  1.5505974  8.25
-#&gt; [35,]  8.50  1.7346011  8.50
-#&gt; [36,]  8.75  1.9459101  8.75
-#&gt; [37,]  9.00  2.1972246  9.00
-#&gt; [38,]  9.25  2.5123056  9.25
-#&gt; [39,]  9.50  2.9444390  9.50
-#&gt; [40,]  9.75  3.6635616  9.75
-#&gt; [41,] 10.00        Inf 10.00</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>aravo</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>aravo</span>)</div><div class='output co'>#&gt;           Length Class      Mode     
+#&gt; spe       82     data.frame list     
+#&gt; env        6     data.frame list     
+#&gt; traits     8     data.frame list     
+#&gt; spe.names 82     -none-     character</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

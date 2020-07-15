@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot the residual correlation matrix from a LVM. — plot_residual_cor • jSDM</title>
+<title>Plot the residual correlation matrix from a latent variable model (LVM). — plot_residual_cor • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Plot the residual correlation matrix from a LVM. — plot_residual_cor" />
-<meta property="og:description" content="Plot the posterior mean estimator of residual correlation matrix reordered by first principal component." />
+<meta property="og:title" content="Plot the residual correlation matrix from a latent variable model (LVM). — plot_residual_cor" />
+<meta property="og:description" content="Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using corrplot function from the package of the same name." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -143,16 +143,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot the residual correlation matrix from a LVM.</h1>
-    
+    <h1>Plot the residual correlation matrix from a latent variable model (LVM).</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/plot_residual_cor.R'><code>R/plot_residual_cor.R</code></a></small>
     <div class="hidden name"><code>plot_residual_cor.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot the posterior mean estimator of residual correlation matrix reordered by first principal component.</p>
+    <p>Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using <code>corrplot</code> function from the package of the same name.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_residual_cor</span>(<span class='no'>mod</span>)</pre>
+    <pre class="usage"><span class='fu'>plot_residual_cor</span>(
+  <span class='no'>mod</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Residual Correlation Matrix from LVM"</span>,
+  <span class='kw'>diag</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"lower"</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"color"</span>,
+  <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>1</span>),
+  <span class='kw'>tl.srt</span> <span class='kw'>=</span> <span class='fl'>45</span>,
+  <span class='kw'>tl.cex</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,41 +171,91 @@
       <th>mod</th>
       <td><p>An object of class <code>"jSDM"</code>.</p></td>
     </tr>
+    <tr>
+      <th>title</th>
+      <td><p>Character, title of the graph.</p></td>
+    </tr>
+    <tr>
+      <th>diag</th>
+      <td><p>Logical, whether display the correlation coefficients on the principal diagonal.</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Character, the visualization method of correlation matrix to be used. Currently, it supports seven methods, named "circle" (default), "square", "ellipse", "number", "pie", "shade" and "color".</p></td>
+    </tr>
+    <tr>
+      <th>mar</th>
+      <td><p>See <code><a href='https://rdrr.io/r/graphics/par.html'>par</a></code></p></td>
+    </tr>
+    <tr>
+      <th>tl.srt</th>
+      <td><p>Numeric, for text label string rotation in degrees, see <code><a href='https://rdrr.io/r/graphics/text.html'>text</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>tl.cex</th>
+      <td><p>Numeric, for the size of text label (variable names).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to <code><a href='https://rdrr.io/pkg/corrplot/man/corrplot.html'>corrplot</a></code> function</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Displays a reordered correlation matrix</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+<table class='table'>
+<tr><td>Taiyun Wei and Viliam Simko (2017). R package "corrplot": Visualization of a Correlation Matrix (Version 0.84)</td></tr>
+<tr><td>Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. <em>Trends in Ecology &amp; Evolution</em>, 30, 766-779.</td></tr>
+<tr><td></td></tr>
+</table>
+
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/corrplot/man/corrplot.html'>corrplot</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>jSDM</span>)
 <span class='co'># frogs data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-
 <span class='co'># Arranging data</span>
 <span class='no'>PA_frogs</span> <span class='kw'>&lt;-</span> <span class='no'>frogs</span>[,<span class='fl'>4</span>:<span class='fl'>12</span>]
-
 <span class='co'># Normalized continuous variables</span>
-<span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
-
+ <span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
+ <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
 <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='no'>mod_jSDM_block_frogs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'><a href='jSDM_probit_block.html'>jSDM_probit_block</a></span> (
-  <span class='co'># Response variable </span>
-  <span class='kw'>presence_site_sp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>PA_frogs</span>),
-  <span class='co'># Explanatory variables </span>
-  <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
-  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>), <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
-  <span class='co'># Chains</span>
-  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
-  <span class='co'># Starting values</span>
-  <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
-  <span class='co'># Priors</span>
-  <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
-  <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
-  <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
-  <span class='co'># Various </span>
-  <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+<span class='no'>mod</span><span class='kw'>&lt;-</span><span class='fu'><a href='jSDM_binomial_probit_block_rand_site_lv.html'>jSDM_binomial_probit_block_rand_site_lv</a></span>(<span class='co'># Response variable </span>
+                                           <span class='kw'>presence_site_sp</span> <span class='kw'>=</span>
+                                           <span class='no'>PA_frogs</span>,
+                                           <span class='co'># Explanatory variables </span>
+                                           <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
+                                           <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>Env_frogs</span>,
+                                           <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
+                                           <span class='co'># Chains</span>
+                                           <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                           <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                           <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                           <span class='co'># Starting values</span>
+                                           <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                           <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                           <span class='co'># Priors</span>
+                                           <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
+                                           <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
+                                           <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
+                                           <span class='co'># Various </span>
+                                           <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
 #&gt; **********:10.0% 
@@ -207,10 +267,8 @@
 #&gt; **********:70.0% 
 #&gt; **********:80.0% 
 #&gt; **********:90.0% 
-#&gt; **********:100.0% </div><div class='input'>
-<span class='co'># Representation of residual correlation between species </span>
-<span class='kw pkg'>jSDM</span><span class='kw ns'>::</span><span class='fu'>plot_residual_cor</span>(<span class='no'>mod_jSDM_block_frogs</span>)</div><div class='img'><img src='plot_residual_cor-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+#&gt; **********:100.0% </div><div class='input'><span class='co'># Representation of residual correlation between species </span>
+<span class='fu'>plot_residual_cor</span>(<span class='no'>mod</span>)</div><div class='img'><img src='plot_residual_cor-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
