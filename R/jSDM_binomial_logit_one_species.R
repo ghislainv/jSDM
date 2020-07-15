@@ -44,7 +44,7 @@
 #'#== Data simulation
 #'
 #'#= Number of sites
-#' nsite <- 50
+#' nsite <- 200
 #'#= Set seed for repeatability
 #'seed <- 1234
 #'
@@ -169,8 +169,9 @@ jSDM_binomial_logit_one_species <- function (# Chains
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_binomial_logit_one_species(ngibbs, nthin, nburn,
-                                              as.vector(Y), T, as.matrix(X), beta_start, mu_beta, V_beta,
-                                              seed, ropt, verbose)
+                                              Y=as.vector(Y), T=T, X=as.matrix(X),
+                                              beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
+                                              seed=seed, ropt=ropt, verbose=verbose)
   
   #= Matrix of MCMC samples
   Matrix <- cbind(mod$beta, mod$Deviance)

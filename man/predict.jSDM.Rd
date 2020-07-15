@@ -23,9 +23,10 @@
 
 \item{Id_sites}{An vector of integer indicating for which sites the probabilities of presence of specified species will be predicted.}
 
-\item{type}{Type of prediction. Can be \code{"mean"} for predictive posterior mean,
-\code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument)
-or \code{"posterior"} for the full predictive posterior for each prediction.
+\item{type}{Type of prediction. Can be : \tabular{l}{
+\code{"mean"} for predictive posterior mean, \cr
+\code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument), \cr
+\code{"posterior"} for the full predictive posterior for each prediction. \cr }
 Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.}
 
 \item{probs}{Numeric vector of probabilities with values in \eqn{[0,1]}, used when \code{type="quantile"}.}
