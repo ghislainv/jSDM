@@ -44,7 +44,7 @@
 #'#== Data simulation
 #'
 #'#= Number of sites
-#' nsite <- 100
+#' nsite <- 50
 #'#= Set seed for repeatability
 #'seed <- 1234
 #'
@@ -67,11 +67,15 @@
 #'#= Site-occupancy model
 #'
 #' mod <- jSDM_binomial_logit_one_species(# Chains 
-#'                                        burnin=100, mcmc=100, thin=1,
+#'                                        burnin=100,
+#'                                        mcmc=100,
+#'                                        thin=1,
 #'                                        # Response variable 
-#'                                        presences=Y, trials=visits,
+#'                                        presences=Y,
+#'                                        trials=visits,
 #'                                        # Explanatory variables
-#'                                        suitability=~x1+x2, data=X,
+#'                                        suitability=~x1+x2,
+#'                                        data=X,
 #'                                        # Starting values 
 #'                                        beta_start=0,
 #'                                        # Prior hyperparameters
@@ -90,7 +94,8 @@
 #'#= Predictions
 #'summary(mod$theta_latent)
 #'pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
-#'plot(theta, mod$theta_latent, main="theta",xlab="obs", ylab="fitted")
+#'plot(theta, mod$theta_latent,
+#'     main="theta",xlab="obs", ylab="fitted")
 #' abline(a=0 ,b=1, col="red")
 #' dev.off()
 #' @references \tabular{l}{
@@ -129,13 +134,12 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========
   
   #= Response
-  Y <- as.vector(presences)
+  Y <- presences
   nobs <- length(Y)
   T <- trials
   #= Suitability
   mf.suit <- model.frame(formula=suitability,data=as.data.frame(data))
   X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
-  X <- as.matrix(X)
   np <- ncol(X)
   #= Iterations
   ngibbs <- mcmc+burnin
@@ -147,7 +151,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
   # Check data
   #==========
   check.T.binomial(T,nobs)
-  check.Y.binomial(Y,T)
+  check.Y.binomial(as.vector(Y),T)
   check.X(X,nobs)
   
   #========
@@ -165,7 +169,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_binomial_logit_one_species(ngibbs, nthin, nburn,
-                                              Y, T, X, beta_start, mu_beta, V_beta,
+                                              as.vector(Y), T, as.matrix(X), beta_start, mu_beta, V_beta,
                                               seed, ropt, verbose)
   
   #= Matrix of MCMC samples

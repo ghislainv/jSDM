@@ -73,11 +73,15 @@
 #'#= Site-occupancy model
 #'
 #' mod <- jSDM_binomial_logit(# Chains
-#'                            burnin=100, mcmc=100, thin=1,
+#'                            burnin=100,
+#'                            mcmc=100,
+#'                            thin=1,
 #'                            # Response variable 
-#'                            presence_site_sp=Y, trials=visits,
+#'                            presence_site_sp=Y,
+#'                            trials=visits,
 #'                            # Explanatory variables
-#'                            site_suitability=~x1+x2, site_data=X,
+#'                            site_suitability=~x1+x2,
+#'                            site_data=X,
 #'                            # Starting values 
 #'                            beta_start=0,
 #'                            # Priors 
@@ -96,7 +100,8 @@
 #'#= Predictions
 #'summary(mod$theta_latent)
 #'pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
-#'plot(theta, mod$theta_latent, main="theta",xlab="obs", ylab="fitted")
+#'plot(theta, mod$theta_latent,
+#'     main="theta",xlab="obs", ylab="fitted")
 #' abline(a=0 ,b=1, col="red")
 #' dev.off()
 #'@references \tabular{l}{
@@ -154,7 +159,7 @@ jSDM_binomial_logit <- function(# Iteration
   #==========
   check.T.binomial(T, nsite)
   check.Y.binomial(c(as.matrix(Y)), replicate(nsp,T))
-  check.X(X, nsite)
+  check.X(as.matrix(X), nsite)
   
   #========
   # Initial starting values for M-H
