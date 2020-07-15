@@ -42,7 +42,7 @@
 #' \bold{Ecological process:}
 #' \deqn{y_ij \sim \mathcal{B}ernoulli(\theta_ij)}{y_ij ~ Bernoulli(\theta_ij)}
 #' \deqn{probit(\theta_ij) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
-#' where \deqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
+#' where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
 #' @references \tabular{l}{
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
 #' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}

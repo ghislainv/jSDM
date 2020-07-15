@@ -87,7 +87,7 @@ We model an ecological process where the presence or absence of the species is e
 \bold{Ecological process:}
 \deqn{y_ij \sim \mathcal{B}ernoulli(\theta_ij)}{y_ij ~ Bernoulli(\theta_ij)}
 \deqn{probit(\theta_ij) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
-where \deqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
+where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
 }
 \examples{
 #==============================================
