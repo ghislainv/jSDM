@@ -23,9 +23,12 @@
 
 \item{Id_sites}{An vector of integer indicating for which sites the probabilities of presence of specified species will be predicted.}
 
-\item{type}{Type of prediction. Can be \code{"mean"} for predictive posterior mean, \code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument) or \code{"posterior"} for the full predictive posterior for each prediction. Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.}
+\item{type}{Type of prediction. Can be \code{"mean"} for predictive posterior mean,
+\code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument)
+or \code{"posterior"} for the full predictive posterior for each prediction.
+Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.}
 
-\item{probs}{Numeric vector of probabilities with values in [0,1] and used when \code{type="quantile"}.}
+\item{probs}{Numeric vector of probabilities with values in \eqn{[0,1]}, used when \code{type="quantile"}.}
 
 \item{...}{Further arguments passed to or from other methods.}
 }
@@ -47,8 +50,8 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
 mod<-jSDM_binomial_probit_block_rand_site_lv(# Response variable 
-                                           presence_site_sp
-                                           = PA_frogs, 
+                                           presence_site_sp = 
+                                           PA_frogs, 
                                            # Explanatory variables 
                                            site_suitability = ~.,   
                                            site_data = Env_frogs,

@@ -208,7 +208,7 @@ jSDM_binomial_logit <- function(# Iteration
                  theta_latent=mod$theta_latent,
                  model_spec=model_spec)
   
-  class(output) <- c("jSDM","list")
+  class(output) <- "jSDM"
   # return S3 object output belonging to class jSDM
   # acting like list
   return(output)

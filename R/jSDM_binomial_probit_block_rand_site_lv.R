@@ -254,7 +254,7 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
   nobs <- nsite*nsp
   T <- matrix(1, nsite, nsp)
   #= Suitability
-  mf.suit <- model.frame(formula=site_suitability, data=site_data)
+  mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
   
@@ -345,7 +345,7 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
                  probit_theta_pred=mod$probit_theta_pred,
                  model_spec=model_spec)
   
-  class(output) <- c("jSDM","list")
+  class(output) <- "jSDM"
   return(output)
   
 }

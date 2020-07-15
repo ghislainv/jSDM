@@ -38,7 +38,8 @@
 #'  # Parameter inference
 #'# Increase the number of iterations to reach MCMC convergence
 #'mod <- jSDM_binomial_probit_block_rand_site_lv(# Response variable 
-#'                                               presence_site_sp = PA_frogs, 
+#'                                               presence_site_sp = 
+#'                                               PA_frogs, 
 #'                                               # Explanatory variables 
 #'                                               site_suitability = ~.,   
 #'                                               site_data = Env_frogs,

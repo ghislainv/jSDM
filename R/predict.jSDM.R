@@ -13,8 +13,11 @@
 #'@param newdata An optional data frame in which explanatory variables can be searched for prediction. If omitted, the adjusted values are used.
 #'@param Id_species An vector of character or integer indicating for which species the probabilities of presence on chosen sites will be predicted.
 #'@param Id_sites An vector of integer indicating for which sites the probabilities of presence of specified species will be predicted.
-#'@param type Type of prediction. Can be \code{"mean"} for predictive posterior mean, \code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument) or \code{"posterior"} for the full predictive posterior for each prediction. Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.
-#'@param probs Numeric vector of probabilities with values in [0,1] and used when \code{type="quantile"}.
+#'@param type Type of prediction. Can be \code{"mean"} for predictive posterior mean,
+#' \code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument)
+#' or \code{"posterior"} for the full predictive posterior for each prediction.
+#' Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.
+#'@param probs Numeric vector of probabilities with values in \eqn{[0,1]}, used when \code{type="quantile"}.
 #'@param ... Further arguments passed to or from other methods.
 #' @return Return a vector for the predictive posterior mean when \code{type="mean"}, a data-frame with the mean and quantiles when \code{type="quantile"} or an \code{mcmc} object (see \code{coda} package) with posterior distribution for each prediction when \code{type="posterior"}.
 #' @author \tabular{l}{
@@ -33,8 +36,8 @@
 #'# Parameter inference
 #'# Increase the number of iterations to reach MCMC convergence
 #'mod<-jSDM_binomial_probit_block_rand_site_lv(# Response variable 
-#'                                            presence_site_sp
-#'                                            = PA_frogs, 
+#'                                            presence_site_sp = 
+#'                                            PA_frogs, 
 #'                                            # Explanatory variables 
 #'                                            site_suitability = ~.,   
 #'                                            site_data = Env_frogs,
@@ -71,7 +74,8 @@
 #' @keywords prediction predictive posterior credible interval
 #' @export predict.jSDM
 #' @export 
-
+#' 
+#' 
 predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean", probs=c(0.025,0.975), ...) {
   
   ##= Check
@@ -91,7 +95,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     newdata <- model.spec$site_data[Id_sites,]
   }
   suitability <- model.spec$site_suitability
-  mf.pred <- model.frame(formula=suitability,data=newdata)
+  mf.pred <- model.frame(formula=suitability,data=as.data.frame(newdata))
   X.pred <- model.matrix(attr(mf.pred,"terms"),data=mf.pred)
   npred <- nrow(X.pred)
   
