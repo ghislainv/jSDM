@@ -33,10 +33,10 @@ reference:
 - title: Package
   desc: Package description
   contents:
+  - '`jSDM-package`'
 - title: jSDM
   desc: Functions for joint species distribution models
   contents:  
-  - '`jSDM-package`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_binomial_probit_block_rand_site_lv`'
 - title: Data
