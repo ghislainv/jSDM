@@ -451,7 +451,7 @@ $$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$$
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lv_jSDM_probit_block.pdf"</span>))
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
 <span class='co'># summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],</span>
 <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='no'>l</span>),
 <span class='kw'>xlab</span> <span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"W_"</span>, <span class='no'>l</span>, <span class='st'>" target"</span>),
@@ -477,19 +477,19 @@ $$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$$
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
 #&gt; 49.16 59.60 68.29 80.42 94.07 
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_probit_block_lv-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_probit_block_lv-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
 <span class='co'>## probit_theta</span>
 <span class='co'># summary(mod$probit_theta_pred)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod</span>$<span class='no'>probit_theta_pred</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod</span>$<span class='no'>probit_theta_pred</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 
 <span class='co'>## Z</span>
 <span class='co'># summary(mod$Z_latent)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod</span>$<span class='no'>Z_latent</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod</span>$<span class='no'>Z_latent</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div></pre>
