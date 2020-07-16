@@ -245,7 +245,7 @@
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
 <tr><td>mcmc.latent</td><td>A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.</td></tr>
 <tr><td>mcmc.sp</td><td>A list by species of mcmc objects that contains the posterior samples for betas and lambdas.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</td></tr>
+<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, W_i))\), is also provided.</td></tr>
 <tr><td>Z_latent</td><td>Predictive posterior mean of the latent variable Z.</td></tr>
 <tr><td>probit_theta_pred</td><td>Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
@@ -257,7 +257,7 @@
     <p>We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 <b>Ecological process:</b>
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
-$$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i $$
+$$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$$
 #' @references</p><table class='table'>
 <tr><td>Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. <em>Biometrika</em>, 85, 347-361.</td></tr>
 <tr><td>Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. <em>Trends in Ecology &amp; Evolution</em>, 30, 766-779.</td></tr>
