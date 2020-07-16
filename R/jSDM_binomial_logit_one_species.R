@@ -139,10 +139,10 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========
   
   #= Response
-  Y <- presence_site_sp
+  Y <- as.vector(presence_site_sp)
   nobs <- length(Y)
   if(!is.null(trials)){
-  T <- trials
+  T <- as.vector(trials)
   } else {
     T <- rep(1,nobs)
   }
@@ -159,8 +159,8 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========== 
   # Check data
   #==========
-  check.T.binomial(as.vector(T),nobs)
-  check.Y.binomial(as.vector(Y),as.vector(T))
+  check.T.binomial(T,nobs)
+  check.Y.binomial(Y,T)
   check.X(X,nobs)
   
   #========
@@ -178,7 +178,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_binomial_logit_one_species(ngibbs, nthin, nburn,
-                                              Y=as.vector(Y), T=as.vector(T), X=as.matrix(X),
+                                              Y=Y, T=T, X=as.matrix(X),
                                               beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
                                               seed=seed, ropt=ropt, verbose=verbose)
   
