@@ -22,12 +22,12 @@ using namespace std;
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs, int nthin, int nburn, 
-                                                        arma::umat Y, 
-                                                        arma::mat X,
-                                                        arma::mat param_start,
-                                                        arma::mat V_param,
-                                                        arma::vec mu_param,
+Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const int nthin,const int nburn, 
+                                                        const arma::umat &Y, 
+                                                        const arma::mat &X,
+                                                        const arma::mat &param_start,
+                                                        const arma::mat &V_param,
+                                                        const arma::vec &mu_param,
                                                         arma::mat V_W,
                                                         arma::mat W_start,
                                                         arma::vec alpha_start,

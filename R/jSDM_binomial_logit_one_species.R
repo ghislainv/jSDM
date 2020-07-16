@@ -201,6 +201,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
                  model_spec=model_spec)
   
   class(output) <- "jSDM"
+  print("end")
   # return S3 object output belonging to class jSDM
   # acting like list
   return(output)

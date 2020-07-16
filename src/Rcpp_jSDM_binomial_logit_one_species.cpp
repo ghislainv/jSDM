@@ -64,10 +64,10 @@ double betadens (double beta_k, void *dens_data) {
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
-                                                arma::uvec Y, // Number of successes (presences)
-                                                arma::uvec T, // Number of trials
-                                                arma::mat X, // Suitability covariates
+Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, const int nthin, const int nburn, // Number of iterations, burning and samples
+                                                const arma::uvec &Y, // Number of successes (presences)
+                                                const arma::uvec &T, // Number of trials
+                                                const arma::mat &X, // Suitability covariates
                                                 arma::vec beta_start,
                                                 arma::vec mu_beta,
                                                 arma::vec V_beta,
@@ -242,11 +242,12 @@ Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, int nthin, int
     gsl_rng_free(r);
     
     // Return results as a Rcpp::List
-    Rcpp::List z = Rcpp::List::create(Rcpp::Named("beta") = beta,
-                                      Rcpp::Named("Deviance") = Deviance,
-                                      Rcpp::Named("theta_latent") = theta_latent);
+    Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
+                                            Rcpp::Named("Deviance") = Deviance,
+                                            Rcpp::Named("theta_latent") = theta_latent);
+    Rprintf("End");
     
-    return z;
+    return results;
     
 } // end Rcpp_jSDM_binomial_logit_one_species function
 

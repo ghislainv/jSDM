@@ -58,10 +58,10 @@ double betaspdens (double beta_jk, void *dens_data) {
 
 // [[Rcpp::export]]
 Rcpp::List  Rcpp_jSDM_binomial_logit(
-    const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
-    arma::umat Y, // Number of successes (presences)
-    arma::uvec T, // Number of trials
-    arma::mat X, // Suitability covariates
+    const int ngibbs, const int nthin, const int nburn, // Number of iterations, burning and samples
+    const arma::umat &Y, // Number of successes (presences)
+    const arma::uvec &T, // Number of trials
+    const arma::mat &X, // Suitability covariates
     arma::mat beta_start,//beta
     arma::vec mu_beta,
     arma::vec V_beta,
@@ -248,11 +248,11 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   gsl_rng_free(r);
   
   // Return results as a Rcpp::List
-  Rcpp::List w = Rcpp::List::create(Rcpp::Named("beta") = beta,
-                                    Rcpp::Named("Deviance") = Deviance,
-                                    Rcpp::Named("theta_latent") = theta_latent);
+  Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
+                                          Rcpp::Named("Deviance") = Deviance,
+                                          Rcpp::Named("theta_latent") = theta_latent);
   
-  return w;
+  return results;
   
 }// end Rcpp_jSDM_binomial_logit  function
 
