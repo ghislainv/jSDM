@@ -5,10 +5,10 @@
 ## license         :GPLv3
 ## ==============================================================================
 
-#' @name jSDM_binomial_probit_block_rand_site_lv
-#' @aliases jSDM_binomial_probit_block_rand_site_lv
+#' @name jSDM_binomial_probit_block_lv
+#' @aliases jSDM_binomial_probit_block_lv
 #' @title Binomial probit regression model
-#' @description The \code{jSDM_binomial_probit_block_rand_site_lv} function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+#' @description The \code{jSDM_binomial_probit_block_lv} function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
@@ -18,11 +18,7 @@
 #' @param site_data A data frame containing the model's explicative variables by site.
 #' @param beta_start Starting values for beta parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.
 #' @param lambda_start Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal. If \code{lambda_start} takes a scalar value, then that value will serve for all of the lambdas except those concerned by the constraints explained above.
-#' @param W_start Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix. If \code{W_start} takes a scalar value, then that value will serve for all of the Ws.
-#' @param alpha_start Starting values for random site effect parameters must be either a scalar or a nsite-length vector. If \code{alpha_start} takes a scalar value, then that value will serve for all of the alphas.
-#' @param V_alpha_start Starting value for variance of random site effect must be a stricly positive scalar.
-#' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.5 for weak informative prior.
-#' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}. Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.
+#' @param W_start Starting values for latent variables must be either a scalar or a \eqn{n_{site} \times n_{latent}}{n_site x n_latent} matrix. If \code{W_start} takes a scalar value, then that value will serve for all of the Ws.
 #' @param mu_beta Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a p-length vector. If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set to 0 for an uninformative prior.
 #' @param V_beta Variances of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix. If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the betas, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. The default variance is large and set to 1.0E6 for an uninformative flat prior.
 #' @param mu_lambda Means of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables. \code{mu_lambda} must be either a scalar or a n_latent-length vector. If \code{mu_lambda} takes a scalar value, then that value will serve as the prior mean for all of the lambdas. The default value is set to 0 for an uninformative prior.
@@ -30,20 +26,17 @@
 #' @param seed The seed for the random number generator. Default to 1234.
 #' @param verbose A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
-#' mcmc.alpha \tab An mcmc object that contains the posterior samples for alphas. This object can be summarized by functions provided by the coda package.\cr
-#' mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect.\cr
 #' mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.\cr
 #' mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for betas and lambdas.\cr
-#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij | \beta_j, \lambda_j, \alpha_i, W_i))}, is also provided.\cr 
 #' Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 #' probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 #' model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
 #' @details We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij)}
-#' \deqn{probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
-#' where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
-#' @references \tabular{l}{
+#' \deqn{probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j }
+#' #' @references \tabular{l}{
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
 #' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}
 #' @author \tabular{l}{
@@ -52,7 +45,7 @@
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}}
 #' @examples
 #'#==============================================
-#'# jSDM_binomial_probit_block_rand_site_lv()
+#'# jSDM_binomial_probit_block_lv()
 #'# Example with simulated data
 #'#==============================================
 #'
@@ -90,11 +83,9 @@
 #'lambda.target <- t(matrix(c(l.diag[1],l.zero,
 #'l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 #'param.target <- rbind(beta.target,lambda.target)
-#'V_alpha.target <- 0.5
 #'V <- 1
-#'alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 #'probit_theta <- as.matrix(X) %*% beta.target 
-#' + W %*% lambda.target + alpha.target
+#' + W %*% lambda.target 
 #'e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 #'Z_true <- probit_theta + e
 #' Y <- matrix (NA, nsite,nsp)
@@ -109,27 +100,24 @@
 #'#== Site-occupancy model
 #'
 #'# Increase number of iterations (burnin and mcmc) to get convergence 
-#' mod<-jSDM_binomial_probit_block_rand_site_lv(# Chains
-#'                                              burnin=100,
-#'                                              mcmc=100,
-#'                                              thin=1,
-#'                                              # Response variable
-#'                                              presence_site_sp = Y ,
-#'                                              # Explanatory variables 
-#'                                              site_suitability = ~.,
-#'                                              site_data = X[,-1],
-#'                                              n_latent=2,
-#'                                              # Starting values 
-#'                                              alpha_start=0,
-#'                                              beta_start=0,
-#'                                              lambda_start=0,
-#'                                              W_start=0,
-#'                                              V_alpha_start=1,
-#'                                              # Priors 
-#'                                              shape=0.5, rate=0.0005,
-#'                                              mu_beta=0, V_beta=1.0E6,
-#'                                              mu_lambda=0, V_lambda=10,
-#'                                              seed=1234, verbose=1)
+#' mod<-jSDM_binomial_probit_block_lv(# Chains
+#'                                    burnin=100,
+#'                                    mcmc=100,
+#'                                    thin=1,
+#'                                    # Response variable
+#'                                    presence_site_sp = Y ,
+#'                                    # Explanatory variables 
+#'                                    site_suitability = ~x1+x2,
+#'                                    site_data = X,
+#'                                    n_latent=2,
+#'                                    # Starting values 
+#'                                    beta_start=0,
+#'                                    lambda_start=0,
+#'                                    W_start=0,
+#'                                    # Priors 
+#'                                    mu_beta=0, V_beta=1.0E6,
+#'                                    mu_lambda=0, V_lambda=10,
+#'                                    seed=1234, verbose=1)
 #' # ===================================================
 #' # Result analysis
 #' # ===================================================
@@ -138,24 +126,6 @@
 #' #== Outputs
 #' 
 #' #= Parameter estimates
-#' 
-#' ## alpha
-#' # summary(mod$mcmc.alpha)
-#' pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_probit_block.pdf"))
-#' plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
-#'      xlab ="alphas target", ylab ="alphas estimated")
-#' abline(a=0,b=1,col='red')
-#' dev.off()
-#' 
-#' ## Valpha
-#' # summary(mod$mcmc.V_alpha)
-#' pdf(file=file.path(tempdir(), "Posteriors_Valpha_jSDM_probit_block.pdf"))
-#' par(mfrow=c(1,2))
-#' coda::traceplot(mod$mcmc.V_alpha)
-#' coda::densplot(mod$mcmc.V_alpha)
-#' abline(v=V_alpha.target,col='red')
-#' dev.off()
-#' 
 #' ## beta_j
 #' # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit_block.pdf"))
@@ -226,15 +196,14 @@
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
 
-jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suitability,
-                                                     site_data, n_latent=2,
-                                                     burnin=5000, mcmc=15000, thin=10,
-                                                     lambda_start=0, W_start=0,
-                                                     beta_start=0, alpha_start=0,
-                                                     V_alpha_start=1, shape=0.5, rate=0.0005,
-                                                     mu_beta=0, V_beta=1.0E6,
-                                                     mu_lambda=0, V_lambda=10,
-                                                     seed=1234, verbose=1)
+jSDM_binomial_probit_block_lv <- function (presence_site_sp, site_suitability,
+                                           site_data, n_latent=2,
+                                           burnin=5000, mcmc=15000, thin=10,
+                                           lambda_start=0, W_start=0,
+                                           beta_start=0, 
+                                           mu_beta=0, V_beta=1.0E6,
+                                           mu_lambda=0, V_lambda=10,
+                                           seed=1234, verbose=1)
   
 {   
   #========
@@ -276,7 +245,6 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
   #========
   beta_start <- form.beta.start.sp(beta_start, np, nsp)
   lambda_start <- form.lambda.start.sp(lambda_start, n_latent, nsp)
-  alpha_start <- form.alpha.start.sp(alpha_start, nsite)
   W_start <-form.W.start.sp(W_start, nsite, n_latent)
   param_start = rbind(beta_start,lambda_start)
   
@@ -290,23 +258,18 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
   Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
   muparam <- c(mubeta,mulambda)
   V_W <- diag(rep(1,n_latent))
-  V_alpha_start <- check.Valpha(V_alpha_start)
   
   #========
   # call Rcpp function
   #========
-  mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                      Y=as.matrix(Y), X=as.matrix(X),
-                                                      param_start= param_start, V_param=Vparam, mu_param = muparam,
-                                                      W_start=W_start, V_W=V_W,
-                                                      alpha_start=alpha_start, V_alpha_start=V_alpha_start,
-                                                      shape = shape, rate = rate,
-                                                      seed=seed, verbose=verbose)
+  mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                            Y=as.matrix(Y), X=as.matrix(X),
+                                            param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                            W_start=W_start, V_W=V_W,
+                                            seed=seed, verbose=verbose)
   
   #= Transform Sample list in an MCMC object
   MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)
-  MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-  MCMC.V_alpha <- coda::mcmc(mod$V_alpha,start=nburn+1,end=ngibbs,thin=nthin)
   MCMC.sp <- list()
   for (j in 1:nsp) {
     ## beta_j
@@ -332,14 +295,12 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
                      burnin=burnin, mcmc=mcmc, thin=thin,
                      beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                      lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
-                     alpha_start=alpha_start, V_alpha_start=V_alpha_start, shape=shape, rate=rate,
                      W_start=W_start, V_W=V_W,
                      family="binomial", link="logit",
                      seed=seed, verbose=verbose)
   
   #= Output
   output <- list(mcmc.Deviance=MCMC.Deviance,
-                 mcmc.alpha = MCMC.alpha, mcmc.V_alpha = MCMC.V_alpha,
                  mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
                  Z_latent=mod$Z_latent, 
                  probit_theta_pred=mod$probit_theta_pred,
