@@ -26,19 +26,16 @@ theta <- inv_logit(logit.theta)
 set.seed(seed)
 Y <- rbinom(nsite,visits,theta)
 
-#= Data-sets
-data.obs <- data.frame(Y,visits,x1,x2)
-
 #==================
 #== Fit the model 
-burnin <- 1000
-mcmc <- 1000
+burnin <- 100
+mcmc <- 100
 thin <- 1
 nsamp <- mcmc/thin
-mod <- jSDM::jSDM_binomial_logit_one_species(presence_site_sp=data.obs$Y,
-                                             trials=data.obs$visits,
+mod <- jSDM_binomial_logit_one_species(presence_site_sp=Y,
+                                             trials=visits,
                                              site_suitability=~x1+x2,
-                                             site_data=data.obs,
+                                             site_data=X,
                                              burnin=burnin, mcmc=mcmc, thin=thin,
                                              beta_start=0,
                                              mu_beta=0, V_beta=1.0E6,
