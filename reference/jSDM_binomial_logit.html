@@ -327,14 +327,14 @@ $$logit(\theta_{ij}) = X_i \beta_j$$</p>
 <span class='co'># Parameter estimates</span>
 <span class='co'># summary(mod$mcmc)</span>
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
-<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.betas</span><span class='kw'>[[</span><span class='no'>j</span>]])
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
+<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.betas</span><span class='kw'>[[</span><span class='no'>j</span>]])
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"theta"</span>,<span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
