@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_logit_one_species.R
 \name{jSDM_binomial_logit_one_species}
 \alias{jSDM_binomial_logit_one_species}
-\title{Binomial logistic regression joint species distribution model}
+\title{Binomial logistic regression species distribution model}
 \usage{
 jSDM_binomial_logit_one_species(
   burnin = 5000,
@@ -59,7 +59,7 @@ model_spec \tab Various attributes of the model fitted, including the response a
 The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 }
 \details{
-We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
+We model an ecological process where the presence or absence of the species on site \eqn{i} is explained by habitat suitability.
 
 \bold{Ecological process:}
 \deqn{y_n \sim \mathcal{B}inomial(\theta_n,t_n)}{y_n ~ Binomial(\theta_n,t_n)}
@@ -133,6 +133,7 @@ plot(theta, mod$theta_latent,
     main="theta",xlab="obs", ylab="fitted")
 abline(a=0 ,b=1, col="red")
 dev.off()
+
 }
 \references{
 \tabular{l}{

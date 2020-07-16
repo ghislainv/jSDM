@@ -5,7 +5,9 @@
 ## license         :GPLv3
 ## ==============================================================================
 
-#' Binomial logistic regression joint species distribution model
+#' @name jSDM_binomial_logit_one_species
+#' @aliases jSDM_binomial_logit_one_species
+#' @title Binomial logistic regression species distribution model
 #' @description The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
@@ -26,7 +28,7 @@
 #' theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr
 #' model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin. \cr
 #' }
-#' @details   We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
+#' @details   We model an ecological process where the presence or absence of the species on site \eqn{i} is explained by habitat suitability.
 #'
 #' \bold{Ecological process:}
 #' \deqn{y_n \sim \mathcal{B}inomial(\theta_n,t_n)}{y_n ~ Binomial(\theta_n,t_n)}
@@ -41,7 +43,7 @@
 #'#=================
 #'#== Load libraries
 #'library(jSDM)
-#' library(coda)
+#'library(coda)
 #'#==================
 #'#== Data simulation
 #'
@@ -100,6 +102,7 @@
 #'     main="theta",xlab="obs", ylab="fitted")
 #' abline(a=0 ,b=1, col="red")
 #' dev.off()
+#' 
 #' @references \tabular{l}{
 #' Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.\cr
 #'Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. \emph{Ecological Applications}, 16, 33-50.\cr
@@ -183,7 +186,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
   Matrix <- cbind(mod$beta, mod$Deviance)
   names.fixed <- paste("beta_",colnames(X),sep="")
   colnames(Matrix) <- c(names.fixed,"Deviance")
-  
+  print("end")
   #= Transform Sample list in an MCMC object
   MCMC <- coda::mcmc(Matrix,start=nburn+1,end=ngibbs,thin=nthin)
   
@@ -201,7 +204,6 @@ jSDM_binomial_logit_one_species <- function (# Chains
                  model_spec=model_spec)
   
   class(output) <- "jSDM"
-  print("end")
   # return S3 object output belonging to class jSDM
   # acting like list
   return(output)

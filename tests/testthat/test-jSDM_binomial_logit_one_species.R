@@ -33,13 +33,13 @@ mcmc <- 100
 thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM_binomial_logit_one_species(presence_site_sp=Y,
-                                             trials=visits,
-                                             site_suitability=~x1+x2,
-                                             site_data=X,
-                                             burnin=burnin, mcmc=mcmc, thin=thin,
-                                             beta_start=0,
-                                             mu_beta=0, V_beta=1.0E6,
-                                             seed=1234, ropt=0.44, verbose=1)
+                                       trials=visits,
+                                       site_suitability=~x1+x2,
+                                       site_data=X,
+                                       burnin=burnin, mcmc=mcmc, thin=thin,
+                                       beta_start=0,
+                                       mu_beta=0, V_beta=1.0E6,
+                                       seed=1234, ropt=0.44, verbose=1)
 
 test_that("jSDM_binomial_logit_one_species works", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
