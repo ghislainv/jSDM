@@ -245,8 +245,6 @@ Rcpp::List Rcpp_jSDM_binomial_logit_one_species(const int ngibbs, const int nthi
     Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
                                             Rcpp::Named("Deviance") = Deviance,
                                             Rcpp::Named("theta_latent") = theta_latent);
-    Rprintf("End");
-    
     return results;
     
 } // end Rcpp_jSDM_binomial_logit_one_species function

@@ -159,8 +159,8 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========== 
   # Check data
   #==========
-  check.T.binomial(T,nobs)
-  check.Y.binomial(as.vector(Y),T)
+  check.T.binomial(as.vector(T),nobs)
+  check.Y.binomial(as.vector(Y),as.vector(T))
   check.X(X,nobs)
   
   #========
