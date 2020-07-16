@@ -137,12 +137,15 @@ jSDM_binomial_logit <- function(# Iteration
   #========
   
   #= Response
-  Y <- presence_site_sp
+  Y <- as.matrix(presence_site_sp)
   nsp <- ncol(Y)
   nsite <- nrow(Y)
   nobs <- nsite*nsp
-  T <- trials
-  
+  if(!is.null(trials)){
+    T <- as.vector(trials)
+  } else {
+    T <- rep(1,nobs)
+  }  
   #= Suitability
   mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
@@ -176,7 +179,7 @@ jSDM_binomial_logit <- function(# Iteration
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_binomial_logit(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                  Y=as.matrix(Y),T=as.vector(T), X=as.matrix(X),
+                                  Y=Y,T=T, X=as.matrix(X),
                                   beta_start=beta_start, mu_beta = mu_beta, V_beta=V_beta,
                                   ropt=ropt, seed=seed, verbose=verbose)
   
