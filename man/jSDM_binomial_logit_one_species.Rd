@@ -8,10 +8,10 @@ jSDM_binomial_logit_one_species(
   burnin = 5000,
   mcmc = 10000,
   thin = 10,
-  presences,
+  presence_site_sp,
   trials,
-  suitability,
-  data,
+  site_suitability,
+  site_data,
   beta_start,
   mu_beta = 0,
   V_beta = 1e+06,
@@ -27,14 +27,14 @@ jSDM_binomial_logit_one_species(
 
 \item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
 
-\item{presences}{A vector indicating the number of successes (or presences) for each observation..}
+\item{presence_site_sp}{A vector indicating the number of successes (or presences) for each observation..}
 
 \item{trials}{A vector indicating the number of trials for each observation. \eqn{t_n} should be superior or equal to \eqn{y_n}, the number of successes for observation \eqn{n}. If \eqn{t_n
 =0}, then \eqn{y_n=0}.}
 
-\item{suitability}{A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.}
+\item{site_suitability}{A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.}
 
-\item{data}{data frame containing the model's explicative variables.}
+\item{site_data}{data frame containing the model's explicative variables.}
 
 \item{beta_start}{Starting values for beta parameters of the suitability process. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.}
 
@@ -106,11 +106,11 @@ mod <- jSDM_binomial_logit_one_species(# Chains
                                        mcmc=100,
                                        thin=1,
                                        # Response variable 
-                                       presences=Y,
+                                       presence_site_sp=Y,
                                        trials=visits,
                                        # Explanatory variables
-                                       suitability=~x1+x2,
-                                       data=X,
+                                       site_suitability=~x1+x2,
+                                       site_data=X,
                                        # Starting values 
                                        beta_start=0,
                                        # Prior hyperparameters

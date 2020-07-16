@@ -10,9 +10,9 @@
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
-#' @param presences A vector indicating the number of successes (or presences) for each observation..
-#' @param suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
-#' @param data data frame containing the model's explicative variables.
+#' @param presence_site_sp A vector indicating the number of successes (or presences) for each observation..
+#' @param site_suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
+#' @param site_data data frame containing the model's explicative variables.
 #' @param trials A vector indicating the number of trials for each observation. \eqn{t_n} should be superior or equal to \eqn{y_n}, the number of successes for observation \eqn{n}. If \eqn{t_n
 #' =0}, then \eqn{y_n=0}.
 #' @param beta_start Starting values for beta parameters of the suitability process. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.
@@ -73,11 +73,11 @@
 #'                                        mcmc=100,
 #'                                        thin=1,
 #'                                        # Response variable 
-#'                                        presences=Y,
+#'                                        presence_site_sp=Y,
 #'                                        trials=visits,
 #'                                        # Explanatory variables
-#'                                        suitability=~x1+x2,
-#'                                        data=X,
+#'                                        site_suitability=~x1+x2,
+#'                                        site_data=X,
 #'                                        # Starting values 
 #'                                        beta_start=0,
 #'                                        # Prior hyperparameters
@@ -114,12 +114,12 @@
 jSDM_binomial_logit_one_species <- function (# Chains
                                              burnin=5000, mcmc=10000, thin=10,
                                              # Response variable
-                                             presences, trials,
+                                             presence_site_sp, trials,
                                              # Explanatory variables 
-                                             suitability, data,
+                                             site_suitability, site_data,
                                              # Starting values
                                              beta_start,
-                                             # Prior
+                                             # Priors
                                              mu_beta=0, V_beta=1.0E6,
                                              # Various
                                              seed=1234, ropt=0.44, verbose=1)
@@ -136,11 +136,11 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #========
   
   #= Response
-  Y <- presences
+  Y <- presence_site_sp
   nobs <- length(Y)
   T <- trials
   #= Suitability
-  mf.suit <- model.frame(formula=suitability,data=as.data.frame(data))
+  mf.suit <- model.frame(formula=site_suitability,data=as.data.frame(site_data))
   X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
   np <- ncol(X)
   #= Iterations
@@ -184,9 +184,9 @@ jSDM_binomial_logit_one_species <- function (# Chains
   MCMC <- coda::mcmc(Matrix,start=nburn+1,end=ngibbs,thin=nthin)
   
   #= Model specification
-  model_spec <- list(presences=presences, trials=trials,
-                     suitability=suitability,
-                     data=data,
+  model_spec <- list(presences=presence_site_sp, trials=trials,
+                     site_suitability=site_suitability,
+                     site_data=site_data,
                      burnin=burnin, mcmc=mcmc, thin=thin,
                      beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
                      family="binomial", link="logit",

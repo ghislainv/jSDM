@@ -133,6 +133,9 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       ##= Matrix of MCMC parameters
       if(is.null(model.spec$n_latent)){
         beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
+        if(nsp==1){
+          beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+        }
       }
       if(!is.null(model.spec$n_latent)){
         beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
@@ -175,6 +178,9 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       
       if(is.null(model.spec$n_latent)){
         beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
+        if(nsp==1){
+          beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+        }
       }
       
       if(!is.null(model.spec$n_latent)){
