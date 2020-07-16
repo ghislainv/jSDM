@@ -229,7 +229,7 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
-<tr><td>mcmc.betas</td><td>An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package.</td></tr>
+<tr><td>mcmc.sp</td><td>An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package.</td></tr>
 <tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))\), is also provided.</td></tr>
 <tr><td>theta_latent</td><td>Predictive posterior mean of the probability associated to the suitability process for each observation.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
@@ -328,7 +328,7 @@ $$logit(\theta_{ij}) = X_i \beta_j$$</p>
 <span class='co'># summary(mod$mcmc)</span>
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
-<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.betas</span><span class='kw'>[[</span><span class='no'>j</span>]])
+<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='no'>j</span>]])
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
 <span class='co'>#= Predictions</span>

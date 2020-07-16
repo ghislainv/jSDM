@@ -153,13 +153,13 @@
     </div>
 
     <pre class="usage"><span class='fu'>jSDM_binomial_probit_block_rand_site_lv</span>(
+  <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
+  <span class='kw'>mcmc</span> <span class='kw'>=</span> <span class='fl'>15000</span>,
+  <span class='kw'>thin</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='no'>presence_site_sp</span>,
   <span class='no'>site_suitability</span>,
   <span class='no'>site_data</span>,
   <span class='kw'>n_latent</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
-  <span class='kw'>mcmc</span> <span class='kw'>=</span> <span class='fl'>15000</span>,
-  <span class='kw'>thin</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='kw'>lambda_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>W_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>beta_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -179,6 +179,18 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>burnin</th>
+      <td><p>The number of burnin iterations for the sampler.</p></td>
+    </tr>
+    <tr>
+      <th>mcmc</th>
+      <td><p>The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to <code>burnin+mcmc</code>.<code>burnin+mcmc</code> must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.</p></td>
+    </tr>
+    <tr>
+      <th>thin</th>
+      <td><p>The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.</p></td>
+    </tr>
+    <tr>
       <th>presence_site_sp</th>
       <td><p>A matrix \(n_{site} \times n_{species}\) indicating the presence by a 1 (or the absence by a 0) of each species on each site.</p></td>
     </tr>
@@ -193,18 +205,6 @@
     <tr>
       <th>n_latent</th>
       <td><p>An integer indicating the number of latent variables.</p></td>
-    </tr>
-    <tr>
-      <th>burnin</th>
-      <td><p>The number of burnin iterations for the sampler.</p></td>
-    </tr>
-    <tr>
-      <th>mcmc</th>
-      <td><p>The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to <code>burnin+mcmc</code>.<code>burnin+mcmc</code> must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.</p></td>
-    </tr>
-    <tr>
-      <th>thin</th>
-      <td><p>The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.</p></td>
     </tr>
     <tr>
       <th>lambda_start</th>
@@ -279,7 +279,7 @@
     <p>We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 <b>Ecological process:</b>
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
-$$probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i $$
+$$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i $$
 where \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
