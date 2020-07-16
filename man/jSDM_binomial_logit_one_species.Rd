@@ -6,13 +6,13 @@
 \usage{
 jSDM_binomial_logit_one_species(
   burnin = 5000,
-  mcmc = 10000,
-  thin = 10,
+  mcmc = 5000,
+  thin = 5,
   presence_site_sp,
-  trials,
+  trials = NULL,
   site_suitability,
   site_data,
-  beta_start,
+  beta_start = 0,
   mu_beta = 0,
   V_beta = 1e+06,
   seed = 1234,

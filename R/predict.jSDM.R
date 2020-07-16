@@ -65,8 +65,8 @@
 #'# Select site and species for predictions
 #'## 30 sites
 #'Id_sites <- sample.int(nrow(PA_frogs), 30)
-#' ## 5 species
-#' Id_species <- sample(colnames(PA_frogs), 5)
+#'## 5 species
+#'Id_species <- sample(colnames(PA_frogs), 5)
 #' 
 #'# Predictions 
 #'theta_pred <- predict(mod,
@@ -105,7 +105,6 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   ##= Model parameters
   np <- ncol(X.pred)
   nsp <- length(Id_species)
-  species <- colnames(model.spec$presences)
   if (is.character(Id_species)) {
     num_species <- rep(0,nsp)
     for(j in 1:nsp) {
@@ -132,9 +131,11 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       term <- rep(0, npred)
       ##= Matrix of MCMC parameters
       if(is.null(model.spec$n_latent)){
-        beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
-        if(nsp==1){
+        if(length(model.spec$beta_start)==np){
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+        }
+        else{
+          beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
         }
       }
       if(!is.null(model.spec$n_latent)){
@@ -153,7 +154,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         }
         
         beta_j <- beta_j.mat[t,]
-        link.term <- X.pred %*% beta_j
+        link.term <- X.pred %*% as.vector(beta_j)
         
         if(!is.null(model.spec$n_latent)){
           link.term <- link.term + W.mat %*% lambda_j 
@@ -177,9 +178,11 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       term <- matrix(0,nsamp,npred)
       
       if(is.null(model.spec$n_latent)){
-        beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
-        if(nsp==1){
+        if(length(model.spec$beta_start)==np){
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+        }
+        else{
+          beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
         }
       }
       
@@ -200,7 +203,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         }
         
         beta_j <- beta_j.mat[t,]
-        link.term <- X.pred %*% beta_j
+        link.term <- X.pred %*% as.vector(beta_j)
         if(!is.null(model.spec$n_latent)){
           link.term <- link.term + W.mat %*% lambda_j
         }

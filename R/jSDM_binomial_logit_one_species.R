@@ -112,13 +112,13 @@
 #' @export
 #'
 jSDM_binomial_logit_one_species <- function (# Chains
-                                             burnin=5000, mcmc=10000, thin=10,
+                                             burnin=5000, mcmc=5000, thin=5,
                                              # Response variable
-                                             presence_site_sp, trials,
+                                             presence_site_sp, trials=NULL,
                                              # Explanatory variables 
                                              site_suitability, site_data,
                                              # Starting values
-                                             beta_start,
+                                             beta_start = 0,
                                              # Priors
                                              mu_beta=0, V_beta=1.0E6,
                                              # Various
@@ -138,7 +138,11 @@ jSDM_binomial_logit_one_species <- function (# Chains
   #= Response
   Y <- presence_site_sp
   nobs <- length(Y)
+  if(!is.null(trials)){
   T <- trials
+  } else {
+    T <- rep(1,nobs)
+  }
   #= Suitability
   mf.suit <- model.frame(formula=site_suitability,data=as.data.frame(site_data))
   X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
@@ -171,7 +175,7 @@ jSDM_binomial_logit_one_species <- function (# Chains
   # call Rcpp function
   #========
   mod <- Rcpp_jSDM_binomial_logit_one_species(ngibbs, nthin, nburn,
-                                              Y=as.vector(Y), T=T, X=as.matrix(X),
+                                              Y=as.vector(Y), T=as.vector(T), X=as.matrix(X),
                                               beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
                                               seed=seed, ropt=ropt, verbose=verbose)
   
