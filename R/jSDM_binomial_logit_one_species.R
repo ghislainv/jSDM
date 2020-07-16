@@ -87,14 +87,14 @@
 #'
 #' #== Outputs
 #' # Parameter estimates
-#'summary(mod$mcmc)
+#' #summary(mod$mcmc)
 #'pdf(file=file.path(tempdir(), "Posteriors_jSDM_binomial.pdf"))
 #'plot(mod$mcmc[,"Deviance"])
 #'plot(mod$mcmc[,grepl("beta", colnames(mod$mcmc))])
 #'dev.off()
 #' 
 #'#= Predictions
-#'summary(mod$theta_latent)
+#' #summary(mod$theta_latent)
 #'pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
 #'plot(theta, mod$theta_latent,
 #'     main="theta",xlab="obs", ylab="fitted")
