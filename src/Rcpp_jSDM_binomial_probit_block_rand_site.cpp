@@ -69,7 +69,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
   /////////////////////////////////////
   // Initializing running parameters //
   
-  //  mat of species effects parameters and coefficients for latent variables (nl+np,nsp)
+  //  mat of species effects parameters
   arma::mat beta_run = beta_start;
   // alpha vec of sites effects (nsite)
   arma::vec alpha_run = alpha_start;
@@ -106,7 +106,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
     
     
     //////////////////////////////////
-    // mat param: Gibbs algorithm //
+    // mat beta : Gibbs algorithm //
     
     // Loop on species
     for (int j=0; j<NSP; j++) {
@@ -152,7 +152,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
     double logL = 0.0;
     for ( int i = 0; i < NSITE; i++ ) {
       for ( int j = 0; j < NSP; j++ ) {
-        // probit(theta_ij) = X_i*beta_j + W_i*lambda_j + alpha_i 
+        // probit(theta_ij) = X_i*beta_j + alpha_i 
         probit_theta_run(i,j) = arma::as_scalar(X.row(i)*beta_run.col(j) + alpha_run(i));
         // link function probit is the inverse of N(0,1) repartition function 
         double theta = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
@@ -225,7 +225,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 # nsp<- 100
 # nsite <- 300
 # np <- 3
-# nl <- 2
 # seed <- 123
 # set.seed(seed)
 # 

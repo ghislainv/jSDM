@@ -58,7 +58,7 @@ An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
 mcmc.alpha \tab An mcmc object that contains the posterior samples for alphas. This object can be summarized by functions provided by the coda package.\cr
 mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect.\cr
 mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for betas.\cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j, \alpha_i))}{D=-2log(\prod_ij P(y_ij|\beta_j, \alpha_i))}, is also provided.\cr 
 Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}

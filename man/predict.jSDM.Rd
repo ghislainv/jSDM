@@ -89,7 +89,7 @@ theta_pred <- predict(mod,
 hist(theta_pred, main="Predicted theta with simulated covariates")
 }
 \seealso{
-\code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
+\code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
 }
 \author{
 \tabular{l}{

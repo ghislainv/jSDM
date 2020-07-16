@@ -28,14 +28,14 @@
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
 #' mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables Ws.\cr
 #' mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for betas and lambdas.\cr
-#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij | \beta_j, \lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+#' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, W_i))}{D=-2log(\prod_ij P(y_ij | \beta_j, \lambda_j, W_i))}, is also provided.\cr 
 #' Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 #' probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 #' model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
 #' @details We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij)}
-#' \deqn{probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_ij) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j }
+#' \deqn{probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{probit(\theta_ij) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j }
 #' #' @references \tabular{l}{
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
 #' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}
@@ -296,7 +296,7 @@ jSDM_binomial_probit_block_lv <- function (burnin=5000, mcmc=15000, thin=10,
                      beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                      lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                      W_start=W_start, V_W=V_W,
-                     family="binomial", link="logit",
+                     family="binomial", link="probit",
                      seed=seed, verbose=verbose)
   
   #= Output

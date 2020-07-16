@@ -69,6 +69,8 @@ mod <- jSDM_binomial_probit_block_rand_site_lv(# Response variable
  result$cor.mean
 }
 \seealso{
+\code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
+
 \code{\link[stats]{cov2cor}}
 }
 \author{

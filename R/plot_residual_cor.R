@@ -22,6 +22,8 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
+# \code{\link{jSDM_binomial_logit_lv}} \code{\link{jSDM_binomial_logit_rand_site_lv}}
 #' @examples 
 #' library(jSDM)
 #' # frogs data

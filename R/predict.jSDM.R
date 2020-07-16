@@ -25,7 +25,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
 # \code{\link{jSDM_binomial_logit_one_species}}
 #' @examples 
 #' library(jSDM)

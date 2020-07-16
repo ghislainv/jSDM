@@ -334,7 +334,7 @@ jSDM_binomial_probit_block_rand_site_lv <- function (burnin=5000, mcmc=15000, th
                      lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                      alpha_start=alpha_start, V_alpha_start=V_alpha_start, shape=shape, rate=rate,
                      W_start=W_start, V_W=V_W,
-                     family="binomial", link="logit",
+                     family="binomial", link="probit",
                      seed=seed, verbose=verbose)
   
   #= Output
