@@ -9,6 +9,10 @@ Rcpp_jSDM_binomial_probit_block_lv <- function(ngibbs, nthin, nburn, Y, X, param
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_block_rand_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose)
+}
+
 Rcpp_jSDM_binomial_probit_block_rand_site_lv <- function(ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose)
 }

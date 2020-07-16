@@ -5,13 +5,13 @@
 \title{Binomial probit regression model}
 \usage{
 jSDM_binomial_probit_block_lv(
+  burnin = 5000,
+  mcmc = 15000,
+  thin = 10,
   presence_site_sp,
   site_suitability,
   site_data,
   n_latent = 2,
-  burnin = 5000,
-  mcmc = 15000,
-  thin = 10,
   lambda_start = 0,
   W_start = 0,
   beta_start = 0,
@@ -24,6 +24,12 @@ jSDM_binomial_probit_block_lv(
 )
 }
 \arguments{
+\item{burnin}{The number of burnin iterations for the sampler.}
+
+\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
+
+\item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
+
 \item{presence_site_sp}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the presence by a 1 (or the absence by a 0) of each species on each site.}
 
 \item{site_suitability}{A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.}
@@ -31,12 +37,6 @@ jSDM_binomial_probit_block_lv(
 \item{site_data}{A data frame containing the model's explicative variables by site.}
 
 \item{n_latent}{An integer indicating the number of latent variables.}
-
-\item{burnin}{The number of burnin iterations for the sampler.}
-
-\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
-
-\item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
 
 \item{lambda_start}{Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal. If \code{lambda_start} takes a scalar value, then that value will serve for all of the lambdas except those concerned by the constraints explained above.}
 
@@ -72,7 +72,7 @@ The \code{jSDM_binomial_probit_block_lv} function performs a Binomial probit reg
 We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 \bold{Ecological process:}
 \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij)}
-\deqn{probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j }
+\deqn{probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_ij) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j }
 #' @references \tabular{l}{
 Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
 Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}

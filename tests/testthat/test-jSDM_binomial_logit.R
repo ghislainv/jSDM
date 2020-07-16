@@ -48,9 +48,9 @@ mod <- jSDM_binomial_logit(# Chains
 test_that("jSDM_binomial_logit works", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
-  expect_equal(unique(lapply(mod$mcmc.betas,dim))[[1]],c(nsamp,np))
-  expect_equal(length(mod$mcmc.betas),nsp)
-  expect_equal(sum(is.na(mod$mcmc.betas)),0)
+  expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,np))
+  expect_equal(length(mod$mcmc.sp),nsp)
+  expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
 })

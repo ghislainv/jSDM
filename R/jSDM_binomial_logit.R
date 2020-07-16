@@ -24,7 +24,7 @@
 #' @param ropt Target acceptance rate for the adaptive Metropolis algorithm. Default to 0.44.
 #' @param verbose A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
-#' mcmc.betas \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
+#' mcmc.sp \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
 #' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))}{D=-2\log(\prod_ij P(y_ij|\beta_j,t_i))}, is also provided. \cr
 #' theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr
 #' model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin. \cr
@@ -94,7 +94,7 @@
 #' # summary(mod$mcmc)
 #'pdf(file=file.path(tempdir(), "Posteriors_jSDM_binomial.pdf"))
 #'plot(mod$mcmc.Deviance)
-#'for(j in 1:nsp) plot(mod$mcmc.betas[[j]])
+#'for(j in 1:nsp) plot(mod$mcmc.sp[[j]])
 #'dev.off()
 #' 
 #'#= Predictions
@@ -117,13 +117,13 @@
 #' 
 
 jSDM_binomial_logit <- function(# Iteration
-  burnin=5000, mcmc=10000, thin=5,
-  # Data and suitability process
-  presence_site_sp, site_suitability, site_data, trials,
-  # Prior and starting values
-  beta_start=0, mu_beta=0, V_beta=1.0E6,
-  # Various 
-  ropt=0.44, seed=1234, verbose=1)
+                               burnin=5000, mcmc=10000, thin=5,
+                               # Data and suitability process
+                               presence_site_sp, site_suitability, site_data, trials,
+                               # Prior and starting values
+                               beta_start=0, mu_beta=0, V_beta=1.0E6,
+                               # Various 
+                               ropt=0.44, seed=1234, verbose=1)
   
 {   
   #========
@@ -189,14 +189,13 @@ jSDM_binomial_logit <- function(# Iteration
   #= Transform Sample list in an MCMC object
   MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)
   colnames(MCMC.Deviance) <- "Deviance"
-  MCMC.betas <- list()
+  MCMC.sp <- list()
   for (j in 1:nsp) {
     ## beta_j
     MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
     colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-    MCMC.betas[[paste0("sp_",j)]] <- MCMC.beta_j
+    MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
   }
-  MCMC.betas <- coda::as.mcmc(MCMC.betas, start=nburn+1, end=ngibbs, thin=nthin)
   #= Model specification, site_suitability,
   model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
                      presences=presence_site_sp,
@@ -207,7 +206,7 @@ jSDM_binomial_logit <- function(# Iteration
                      ropt=ropt, seed=seed, verbose=verbose)
   
   #= Output
-  output <- list(mcmc.betas= MCMC.betas, mcmc.Deviance=MCMC.Deviance,
+  output <- list(mcmc.sp= MCMC.sp, mcmc.Deviance=MCMC.Deviance,
                  theta_latent=mod$theta_latent,
                  model_spec=model_spec)
   

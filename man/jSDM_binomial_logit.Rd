@@ -50,7 +50,7 @@ jSDM_binomial_logit(
 }
 \value{
 An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
-mcmc.betas \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
+mcmc.sp \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
 mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))}{D=-2\log(\prod_ij P(y_ij|\beta_j,t_i))}, is also provided. \cr
 theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin. \cr
@@ -127,7 +127,7 @@ mod <- jSDM_binomial_logit(# Chains
 # summary(mod$mcmc)
 pdf(file=file.path(tempdir(), "Posteriors_jSDM_binomial.pdf"))
 plot(mod$mcmc.Deviance)
-for(j in 1:nsp) plot(mod$mcmc.betas[[j]])
+for(j in 1:nsp) plot(mod$mcmc.sp[[j]])
 dev.off()
 
 #= Predictions

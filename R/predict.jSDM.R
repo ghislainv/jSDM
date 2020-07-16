@@ -25,7 +25,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}} 
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block_lv}} \code{\link{jSDM_binomial_probit_block_rand_site}} \code{\link{jSDM_binomial_probit_block_rand_site_lv}}
 # \code{\link{jSDM_binomial_logit_one_species}}
 #' @examples 
 #' library(jSDM)
@@ -135,7 +135,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
         }
         else{
-          beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
+          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
         }
       }
       if(!is.null(model.spec$n_latent)){
@@ -182,7 +182,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
         }
         else{
-          beta_j.mat <- as.matrix(object$mcmc.betas[[paste0("sp_",num_species[j])]])
+          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
         }
       }
       

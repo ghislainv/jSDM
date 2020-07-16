@@ -41,7 +41,7 @@
 #' @details We model an ecological process where the presence or absence of the species is explained by habitat suitability.
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij)}
-#' \deqn{probit(\theta_{ij}) = \beta_0j + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_i) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
+#' \deqn{probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i }{probit(\theta_ij) = \beta_0j + X_i x \beta_j +  W_i x \lambda_j + \alpha_i}
 #' where \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)}
 #' @references \tabular{l}{
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
@@ -226,9 +226,9 @@
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
 
-jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suitability,
+jSDM_binomial_probit_block_rand_site_lv <- function (burnin=5000, mcmc=15000, thin=10,
+                                                     presence_site_sp, site_suitability,
                                                      site_data, n_latent=2,
-                                                     burnin=5000, mcmc=15000, thin=10,
                                                      lambda_start=0, W_start=0,
                                                      beta_start=0, alpha_start=0,
                                                      V_alpha_start=1, shape=0.5, rate=0.0005,
@@ -346,8 +346,9 @@ jSDM_binomial_probit_block_rand_site_lv <- function (presence_site_sp, site_suit
                  model_spec=model_spec)
   
   class(output) <- "jSDM"
+  # return S3 object output belonging to class jSDM
+  # acting like list
   return(output)
-  
 }
 
 # End
