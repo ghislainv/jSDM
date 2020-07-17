@@ -7,7 +7,7 @@
 
 #' @name jSDM_binomial_probit_block_rand_site_lv
 #' @aliases jSDM_binomial_probit_block_rand_site_lv
-#' @title Binomial probit regression model
+#' @title Binomial probit regression to fit joint species distribution model
 #' @description The \code{jSDM_binomial_probit_block_rand_site_lv} function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
@@ -197,10 +197,9 @@
 #' par(mfrow=c(1,2))
 #' for (l in 1:n_latent) {
 #' plot(W[,l],
-#' # summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+#' summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
 #' main = paste0("Latent variable W_", l),
-#' xlab =paste0("W_", l, " target"),
-#' ylab =paste0("W_", l, " estimated"))
+#' xlab ="obs", ylab ="fitted")
 #' abline(a=0,b=1,col='red')
 #' }
 #' dev.off()

@@ -7,7 +7,7 @@
 
 #' @name jSDM_binomial_logit
 #' @aliases jSDM_binomial_logit
-#' @title Binomial logistic regression joint species distribution model
+#' @title Binomial logistic regression to fit joint species distribution model
 #' @description The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
@@ -17,7 +17,7 @@
 #' @param site_data data frame containing the model's explicative variables.
 #' @param trials A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}. If \eqn{t_i
 #' =0}, then \eqn{y_{ij}=0}{y_ij=0}.
-#' @param beta_start Starting values for beta parameters of the suitability process. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.
+#' @param beta_start Starting values for beta parameters of the suitability process must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. If \code{beta_start} takes a scalar value, then that value will serve for all of the betas.
 #' @param mu_beta Means of the priors for the \eqn{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a p-length vector. If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.
 #' @param V_beta Variances of the Normal priors for the \eqn{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a p-length vector. If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the betas. The default variance is large and set to 1.0E6 for an uninformative flat prior.
 #' @param seed The seed for the random number generator. Default to 1234.
@@ -33,7 +33,7 @@
 #'
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(theta_ij,t_i)}
-#' \deqn{logit(\theta_{ij}) = X_i \beta_j}{logit(\theta_ij) = X_i \beta_j}
+#' \deqn{logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{logit(\theta_ij) = \beta_{0j} + X_i \beta_j}
 #' @examples #==============================================
 #'# jSDM_binomial_logit()
 #'# Example with simulated data

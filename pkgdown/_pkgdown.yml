@@ -38,6 +38,10 @@ reference:
   desc: Functions for joint species distribution models
   contents:  
   - '`jSDM_binomial_logit`'
+  - '`jSDM_binomial_logit_lv`'
+  - '`jSDM_binomial_probit_block`'
+  - '`jSDM_binomial_probit_block_lv`'
+  - '`jSDM_binomial_probit_block_rand_site`'
   - '`jSDM_binomial_probit_block_rand_site_lv`'
 - title: Data
   desc: Data-sets used in examples

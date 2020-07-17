@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_probit_block_rand_site.R
 \name{jSDM_binomial_probit_block_rand_site}
 \alias{jSDM_binomial_probit_block_rand_site}
-\title{Binomial probit regression model}
+\title{Binomial probit regression to fit joint species distribution model}
 \usage{
 jSDM_binomial_probit_block_rand_site(
   burnin = 5000,

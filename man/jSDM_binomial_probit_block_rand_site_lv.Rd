@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_probit_block_rand_site_lv.R
 \name{jSDM_binomial_probit_block_rand_site_lv}
 \alias{jSDM_binomial_probit_block_rand_site_lv}
-\title{Binomial probit regression model}
+\title{Binomial probit regression to fit joint species distribution model}
 \usage{
 jSDM_binomial_probit_block_rand_site_lv(
   burnin = 5000,
@@ -236,10 +236,9 @@ pdf(file=file.path(tempdir(), "Posteriors_lv_jSDM_probit_block.pdf"))
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
 plot(W[,l],
-# summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
 main = paste0("Latent variable W_", l),
-xlab =paste0("W_", l, " target"),
-ylab =paste0("W_", l, " estimated"))
+xlab ="obs", ylab ="fitted")
 abline(a=0,b=1,col='red')
 }
 dev.off()

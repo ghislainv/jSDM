@@ -19,8 +19,8 @@ struct dens_par {
   arma::mat X;
   int pos_beta;
   int sp_beta;
-  arma::mat mu_beta;
-  arma::mat V_beta;
+  arma::vec mu_beta;
+  arma::vec V_beta;
   arma::mat beta_run;
 };
 

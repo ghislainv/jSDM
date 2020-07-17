@@ -225,7 +225,7 @@ check.U <- function (U,nobs) {
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  if (!all(U>=0 & U<=1)) {
+  if (!all(U>=0 && U<=1)) {
     cat("Error: 'alteration' must be in the interval [0,1].\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
@@ -415,7 +415,7 @@ form.beta.start <- function (beta.start,np) {
   if (sum(is.na(beta.start))>0) { 
     beta.start <- rep(0,np)
   }
-  else if(!is.na(beta.start)[1] & length(beta.start)!=np) {
+  else if(!is.na(beta.start)[1] && length(beta.start)!=np) {
     beta.start <- rep(beta.start[1],np) 
   }
   else if(length(beta.start)!=np) {
@@ -430,7 +430,7 @@ form.gamma.start <- function (gamma.start,nq) {
   if (sum(is.na(gamma.start))>0) { 
     gamma.start <- rep(0,nq)
   }
-  else if(!is.na(gamma.start)[1] & length(gamma.start)!=nq) {
+  else if(!is.na(gamma.start)[1] && length(gamma.start)!=nq) {
     gamma.start <- rep(gamma.start[1],nq)  
   }
   else if(length(gamma.start)!=nq) {
@@ -559,7 +559,7 @@ check.Vrho.max <- function (Vrho.max) {
 }
 
 form.priorVrho <- function (priorVrho) {
-  if (is.numeric(priorVrho[1]) & priorVrho[1] > 0.0) {
+  if (is.numeric(priorVrho[1]) && priorVrho[1] > 0.0) {
     priorVrho <- priorVrho[1]
   }
   else if (priorVrho=="Uniform") {
@@ -618,7 +618,7 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
       lambda.start.mat[i, i] <- 1
     }
   }
-  else if(is.scalar(lambda.start) & !is.na(lambda.start)) {
+  else if(is.scalar(lambda.start) && !is.na(lambda.start)) {
     lambda.start.mat <- matrix(lambda.start, n_latent, nsp)
     for (i in 1:n_latent) {
       if (lambda.start > 0) {
@@ -637,12 +637,13 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
     stop("Error: lambda.start not conformable.\n")
   }
   else if(sum(dim(lambda.start) != c(n_latent, nsp)) == 0) {
+    lambda.start.mat <- lambda.start
     for (i in 1:n_latent) {
       if (lambda.start.mat[i, i]<=0) {
         stop("Error: lambda must be positive on the diagonal.\n")
       }
       for (j in 1:n_latent) {
-        if (i > j & lambda.start.mat[i, j] != 0) {
+        if (i > j && lambda.start.mat[i, j] != 0) {
           stop("Error: lambda must be constrained to zero on lower diagonal.\n")
         }
       }
@@ -655,7 +656,7 @@ form.alpha.start.sp <- function (alpha.start, nsite) {
   if (sum(is.na(alpha.start))>0) { 
     alpha.start <- rep(0, nsite)
   }
-  else if(is.scalar(alpha.start) & !is.na(alpha.start)) {
+  else if(is.scalar(alpha.start) && !is.na(alpha.start)) {
     alpha.start <- rep(alpha.start, nsite) 
   }
   else if(length(alpha.start) != nsite ) {
@@ -668,7 +669,7 @@ form.W.start.sp <- function (W.start, nsite, n_latent) {
   if (sum(is.na(W.start))>0) { 
     W.start.mat <- matrix(0, nsite, n_latent)
   }
-  else if(is.scalar(W.start) & !is.na(W.start)) {
+  else if(is.scalar(W.start) && !is.na(W.start)) {
     W.start.mat <- matrix(W.start, nsite, n_latent) 
   }
   else if(sum(dim(W.start) != c(nsite, n_latent)) > 0) {
@@ -750,18 +751,41 @@ check.mulambda <- function(mulambda, n_latent) {
 }
 
 check.Vlambda.mat <- function(Vlambda, n_latent) {
-  if (!all(Vlambda>0)) {
+  if (!all(Vlambda>0) && sum(is.na(Vlambda))!=0) {
     cat("Error: Vlambda should be strictly positive.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
   if (is.null(dim(Vlambda))) {
-    Vlambda <- diag(rep(Vlambda,n_latent))
+    if(is.scalar(Vlambda)){
+      Vlambda <- diag(rep(Vlambda,n_latent))
+    }
+    if(is.vector(Vlambda) && length(Vlambda)==n_latent){
+      Vlambda <- diag(Vlambda)
+    }
   }
   else if (sum(dim(Vlambda) != c(n_latent, n_latent)) > 0) {
     cat("Error: Vlambda not conformable.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
+  }
+  return(Vlambda)
+}
+
+check.Vlambda <- function(Vlambda, n_latent) {
+  if (!all(Vlambda>0) && sum(is.na(Vlambda))!=0) {
+    cat("Error: Vlambda should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.", call.=FALSE)
+  }
+  if (is.scalar(Vlambda)) {
+    Vlambda <- rep(Vlambda,n_latent)
+  }
+  else if (length(Vlambda)!=n_latent){
+    cat("Error: Vlambda not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",call.=FALSE)
+  }
+  if(!is.null(dim(Vlambda)) && length(Vlambda)==n_latent){
+    Vlambda <- as.vector(Vlambda)
   }
   return(Vlambda)
 }
