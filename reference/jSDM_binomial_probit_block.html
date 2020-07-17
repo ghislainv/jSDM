@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Binomial probit regression model — jSDM_binomial_probit_block • jSDM</title>
+<title>Binomial probit regression to fit joint species distribution model — jSDM_binomial_probit_block • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Binomial probit regression model — jSDM_binomial_probit_block" />
+<meta property="og:title" content="Binomial probit regression to fit joint species distribution model — jSDM_binomial_probit_block" />
 <meta property="og:description" content="The jSDM_binomial_probit_block function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters." />
 <meta property="og:image" content="/logo.png" />
 
@@ -143,7 +143,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Binomial probit regression model</h1>
+    <h1>Binomial probit regression to fit joint species distribution model</h1>
     <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/jSDM_binomial_probit_block.R'><code>R/jSDM_binomial_probit_block.R</code></a></small>
     <div class="hidden name"><code>jSDM_binomial_probit_block.Rd</code></div>
     </div>
@@ -356,19 +356,19 @@ $$probit(\theta_{ij}) = \beta_{0j} + X_i \beta_j$$</p>
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
 #&gt; 166.5 171.0 173.3 175.2 181.6 
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_probit_block-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_probit_block-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
 <span class='co'>## probit_theta</span>
 <span class='co'># summary(mod$probit_theta_pred)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod</span>$<span class='no'>probit_theta_pred</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>probit_theta</span>,<span class='no'>mod</span>$<span class='no'>probit_theta_pred</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 
 <span class='co'>## Z</span>
 <span class='co'># summary(mod$Z_latent)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod</span>$<span class='no'>Z_latent</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>Z_true</span>,<span class='no'>mod</span>$<span class='no'>Z_latent</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div></pre>
