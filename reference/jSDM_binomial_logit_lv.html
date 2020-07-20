@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Binomial logistic regression to fit joint species distribution model with latent variables — jSDM_binomial_logit_lv • jSDM</title>
+<title>Binomial logistic regression with latent variables — jSDM_binomial_logit_lv • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Binomial logistic regression to fit joint species distribution model with latent variables — jSDM_binomial_logit_lv" />
+<meta property="og:title" content="Binomial logistic regression with latent variables — jSDM_binomial_logit_lv" />
 <meta property="og:description" content="The jSDM_binomial_logit_lv function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters." />
 <meta property="og:image" content="/logo.png" />
 
@@ -143,7 +143,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Binomial logistic regression to fit joint species distribution model with latent variables</h1>
+    <h1>Binomial logistic regression with latent variables</h1>
     <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/jSDM_binomial_logit_lv.R'><code>R/jSDM_binomial_logit_lv.R</code></a></small>
     <div class="hidden name"><code>jSDM_binomial_logit_lv.Rd</code></div>
     </div>
@@ -255,7 +255,7 @@
 
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
 <tr><td>mcmc.sp</td><td>An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))\), is also provided.</td></tr>
+<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i,\lambda_j, W_i))\), is also provided.</td></tr>
 <tr><td>theta_latent</td><td>Predictive posterior mean of the probability associated to the suitability process for each observation.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
 </table>
