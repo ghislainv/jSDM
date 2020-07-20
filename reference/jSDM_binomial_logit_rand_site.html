@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Binomial logistic regression — jSDM_binomial_logit • jSDM</title>
+<title>Binomial logistic regression with latent variables and random site effect — jSDM_binomial_logit_rand_site • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Binomial logistic regression — jSDM_binomial_logit" />
-<meta property="og:description" content="The jSDM_binomial_logit function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters." />
+<meta property="og:title" content="Binomial logistic regression with latent variables and random site effect — jSDM_binomial_logit_rand_site" />
+<meta property="og:description" content="The jSDM_binomial_logit_rand_site function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -143,16 +143,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Binomial logistic regression</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/jSDM_binomial_logit.R'><code>R/jSDM_binomial_logit.R</code></a></small>
-    <div class="hidden name"><code>jSDM_binomial_logit.Rd</code></div>
+    <h1>Binomial logistic regression with latent variables and random site effect</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/jSDM_binomial_logit_rand_site.R'><code>R/jSDM_binomial_logit_rand_site.R</code></a></small>
+    <div class="hidden name"><code>jSDM_binomial_logit_rand_site.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The <code>jSDM_binomial_logit</code> function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.</p>
+    <p>The <code>jSDM_binomial_logit_rand_site</code> function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>jSDM_binomial_logit</span>(
+    <pre class="usage"><span class='fu'>jSDM_binomial_logit_rand_site</span>(
   <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
   <span class='kw'>mcmc</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
   <span class='kw'>thin</span> <span class='kw'>=</span> <span class='fl'>5</span>,
@@ -161,6 +161,10 @@
   <span class='no'>site_data</span>,
   <span class='no'>trials</span>,
   <span class='kw'>beta_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>alpha_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>V_alpha_start</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>5e-04</span>,
   <span class='kw'>mu_beta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>V_beta</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>,
   <span class='kw'>ropt</span> <span class='kw'>=</span> <span class='fl'>0.44</span>,
@@ -205,6 +209,22 @@
       <td><p>Starting values for beta parameters of the suitability process must be either a scalar or a \(p \times n_{species}\) matrix. If <code>beta_start</code> takes a scalar value, then that value will serve for all of the betas.</p></td>
     </tr>
     <tr>
+      <th>alpha_start</th>
+      <td><p>Starting values for random site effect parameters must be either a scalar or a nsite-length vector. If <code>alpha_start</code> takes a scalar value, then that value will serve for all of the alphas.</p></td>
+    </tr>
+    <tr>
+      <th>V_alpha_start</th>
+      <td><p>Starting value for variance of random site effect must be a stricly positive scalar.</p></td>
+    </tr>
+    <tr>
+      <th>shape</th>
+      <td><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>. Must be a stricly positive scalar. Default to 0.5 for weak informative prior.</p></td>
+    </tr>
+    <tr>
+      <th>rate</th>
+      <td><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>. Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.</p></td>
+    </tr>
+    <tr>
       <th>mu_beta</th>
       <td><p>Means of the priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a p-length vector. If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the betas. The default value is set for an uninformative prior.</p></td>
     </tr>
@@ -230,7 +250,7 @@
 
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
 <tr><td>mcmc.sp</td><td>An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i))\), is also provided.</td></tr>
+<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i, \alpha_i))\), is also provided.</td></tr>
 <tr><td>theta_latent</td><td>Predictive posterior mean of the probability associated to the suitability process for each observation.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function and family, trial sizes, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
 </table>
@@ -241,7 +261,8 @@
     <p>We model an ecological process where the presence or absence of species \(j\) on site \(i\) is explained by habitat suitability.</p>
 <p><b>Ecological process:</b>
 $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
-$$logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j$$</p>
+$$logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + \alpha_i$$
+where \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -258,7 +279,7 @@ $$logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j$$</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#==============================================</span>
-<span class='co'># jSDM_binomial_logit()</span>
+<span class='co'># jSDM_binomial_logit_rand_site()</span>
 <span class='co'># Example with simulated data</span>
 <span class='co'>#==============================================</span>
 
@@ -288,49 +309,107 @@ $$logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j$$</p>
 <span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='no'>nsite</span>),<span class='no'>x1</span>,<span class='no'>x2</span>)
 <span class='no'>np</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)
 <span class='no'>beta.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='no'>nsp</span>*<span class='no'>np</span>,-<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>)
-<span class='no'>logit.theta</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>beta.target</span>)
+<span class='no'>V_alpha.target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.5</span>
+<span class='no'>alpha.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>V_alpha.target</span>))
+<span class='no'>logit.theta</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>beta.target</span>) + <span class='no'>alpha.target</span>
 <span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='inv_logit.html'>inv_logit</a></span>(<span class='no'>logit.theta</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>theta</span>, <span class='fl'>2</span>, <span class='no'>rbinom</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='no'>nsite</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='no'>visits</span>)
 
 <span class='co'>#= Site-occupancy model</span>
 
-<span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_binomial_logit</span>(<span class='co'># Chains</span>
-                           <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
-                           <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
-                           <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
-                           <span class='co'># Response variable </span>
-                           <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>Y</span>,
-                           <span class='kw'>trials</span><span class='kw'>=</span><span class='no'>visits</span>,
-                           <span class='co'># Explanatory variables</span>
-                           <span class='kw'>site_suitability</span><span class='kw'>=</span>~<span class='no'>x1</span>+<span class='no'>x2</span>,
-                           <span class='kw'>site_data</span><span class='kw'>=</span><span class='no'>X</span>,
-                           <span class='co'># Starting values </span>
-                           <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-                           <span class='co'># Priors </span>
-                           <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
-                           <span class='co'># Various</span>
-                           <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>ropt</span><span class='kw'>=</span><span class='fl'>0.44</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+<span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_binomial_logit_rand_site</span>(<span class='co'># Chains</span>
+                                     <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                     <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
+                                     <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                     <span class='co'># Response variable </span>
+                                     <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>Y</span>,
+                                     <span class='kw'>trials</span><span class='kw'>=</span><span class='no'>visits</span>,
+                                     <span class='co'># Explanatory variables</span>
+                                     <span class='kw'>site_suitability</span><span class='kw'>=</span>~<span class='no'>x1</span>+<span class='no'>x2</span>,
+                                     <span class='kw'>site_data</span><span class='kw'>=</span><span class='no'>X</span>,
+                                     <span class='co'># Starting values </span>
+                                     <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                     <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                     <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                     <span class='co'># Priors </span>
+                                     <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>,
+                                     <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
+                                     <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>,
+                                     <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
+                                     <span class='co'># Various</span>
+                                     <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>,
+                                     <span class='kw'>ropt</span><span class='kw'>=</span><span class='fl'>0.44</span>,
+                                     <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.262 
-#&gt; **********:20.0%, mean accept. rates= beta:0.271 
-#&gt; **********:30.0%, mean accept. rates= beta:0.365 
-#&gt; **********:40.0%, mean accept. rates= beta:0.419 
-#&gt; **********:50.0%, mean accept. rates= beta:0.436 
-#&gt; **********:60.0%, mean accept. rates= beta:0.441 
-#&gt; **********:70.0%, mean accept. rates= beta:0.438 
-#&gt; **********:80.0%, mean accept. rates= beta:0.441 
-#&gt; **********:90.0%, mean accept. rates= beta:0.429 
-#&gt; **********:100.0%, mean accept. rates= beta:0.424 </div><div class='input'>
+#&gt; **********:10.0%, mean accept. rates= beta:0.250 alpha:0.290
+#&gt; **********:20.0%, mean accept. rates= beta:0.285 alpha:0.351
+#&gt; **********:30.0%, mean accept. rates= beta:0.378 alpha:0.398
+#&gt; **********:40.0%, mean accept. rates= beta:0.417 alpha:0.421
+#&gt; **********:50.0%, mean accept. rates= beta:0.438 alpha:0.442
+#&gt; **********:60.0%, mean accept. rates= beta:0.418 alpha:0.465
+#&gt; **********:70.0%, mean accept. rates= beta:0.433 alpha:0.445
+#&gt; **********:80.0%, mean accept. rates= beta:0.439 alpha:0.429
+#&gt; **********:90.0%, mean accept. rates= beta:0.435 alpha:0.439
+#&gt; **********:100.0%, mean accept. rates= beta:0.431 alpha:0.449</div><div class='input'><span class='co'>#==========</span>
 <span class='co'>#== Outputs</span>
-<span class='co'># Parameter estimates</span>
-<span class='co'># summary(mod$mcmc)</span>
-<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_jSDM_binomial.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)
-<span class='kw'>for</span>(<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='no'>j</span>]])
+
+<span class='co'>#= Parameter estimates</span>
+
+<span class='co'>## alpha</span>
+<span class='co'># summary(mod$mcmc.alpha)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_alpha_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+     <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"alphas target"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"alphas estimated"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
 #&gt;   2 </div><div class='input'>
+<span class='co'>## Valpha</span>
+<span class='co'># summary(mod$mcmc.V_alpha)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_Valpha_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.V_alpha</span>)
+<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.V_alpha</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>V_alpha.target</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+#&gt;   2 </div><div class='input'>
+<span class='co'>## beta_j</span>
+<span class='co'># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>),<span class='fl'>2</span>))
+<span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
+  <span class='kw'>for</span> (<span class='no'>p</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)) {
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
+    <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]))
+    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
+    <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]),
+    <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(
+    <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='no'>p</span>],
+    <span class='st'>", species : "</span>,<span class='no'>j</span>))
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>beta.target</span>[<span class='no'>j</span>,<span class='no'>p</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+  }
+}
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
+#&gt;   2 </div><div class='input'>
+<span class='co'>## Deviance</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='output co'>#&gt; 
+#&gt; Iterations = 101:200
+#&gt; Thinning interval = 1 
+#&gt; Number of chains = 1 
+#&gt; Sample size per chain = 100 
+#&gt; 
+#&gt; 1. Empirical mean and standard deviation for each variable,
+#&gt;    plus standard error of the mean:
+#&gt; 
+#&gt;           Mean             SD       Naive SE Time-series SE 
+#&gt;       8096.641         19.701          1.970          2.672 
+#&gt; 
+#&gt; 2. Quantiles for each variable:
+#&gt; 
+#&gt;  2.5%   25%   50%   75% 97.5% 
+#&gt;  8064  8082  8094  8113  8133 
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_logit_rand_site-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
 <span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Pred-Init.pdf"</span>))
@@ -338,7 +417,8 @@ $$logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j$$</p>
     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"theta"</span>,<span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)
 <span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
-#&gt;   2 </div></pre>
+#&gt;   2 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
