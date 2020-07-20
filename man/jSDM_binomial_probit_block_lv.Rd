@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_probit_block_lv.R
 \name{jSDM_binomial_probit_block_lv}
 \alias{jSDM_binomial_probit_block_lv}
-\title{Binomial probit regression model to fit joint species distribution model with latent variables}
+\title{Binomial probit regression model with latent variables}
 \usage{
 jSDM_binomial_probit_block_lv(
   burnin = 5000,

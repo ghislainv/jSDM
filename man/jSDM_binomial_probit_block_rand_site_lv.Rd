@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_probit_block_rand_site_lv.R
 \name{jSDM_binomial_probit_block_rand_site_lv}
 \alias{jSDM_binomial_probit_block_rand_site_lv}
-\title{Binomial probit regression to fit joint species distribution model}
+\title{Binomial probit regression with latent variables and random site effect}
 \usage{
 jSDM_binomial_probit_block_rand_site_lv(
   burnin = 5000,

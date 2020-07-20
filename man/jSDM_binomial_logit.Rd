@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_logit.R
 \name{jSDM_binomial_logit}
 \alias{jSDM_binomial_logit}
-\title{Binomial logistic regression to fit joint species distribution model}
+\title{Binomial logistic regression}
 \usage{
 jSDM_binomial_logit(
   burnin = 5000,

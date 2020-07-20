@@ -7,7 +7,7 @@
 
 #' @name jSDM_binomial_logit
 #' @aliases jSDM_binomial_logit
-#' @title Binomial logistic regression to fit joint species distribution model
+#' @title Binomial logistic regression 
 #' @description The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
