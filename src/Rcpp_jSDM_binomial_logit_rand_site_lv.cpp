@@ -42,8 +42,8 @@ struct dens_par {
   arma::rowvec alpha_run;
 };
 
-/* betadens_rand_site */
-double betadens_rand_site (double beta_jk, void *dens_data) {
+/* betadens_lv */
+double betadens_lv (double beta_jk, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -74,8 +74,8 @@ double betadens_rand_site (double beta_jk, void *dens_data) {
   return logP;
 }
 
-/* lambdadens_rand_site */
-double lambdadens_rand_site (double lambda_jq, void *dens_data) {
+/* lambdadens_lv */
+double lambdadens_lv (double lambda_jq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -106,7 +106,7 @@ double lambdadens_rand_site (double lambda_jq, void *dens_data) {
   return logP;
 }
 
-double lambdaUdens_rand_site (double lambda_jq, void *dens_data) {
+double lambdaUdens_lv (double lambda_jq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -137,8 +137,8 @@ double lambdaUdens_rand_site (double lambda_jq, void *dens_data) {
   return logP;
 }
 
-/* Wdens_rand_site */
-double Wdens_rand_site (double W_iq, void *dens_data) {
+/* Wdens_lv */
+double Wdens_lv (double W_iq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -351,8 +351,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.pos_W = q; // Specifying the rank of the latent variable of interest
         double x_now = dens_data.W_run(i,q);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_W(i,q));
-        double p_now = Wdens_rand_site(x_now, &dens_data);
-        double p_prop = Wdens_rand_site(x_prop, &dens_data);
+        double p_now = Wdens_lv(x_now, &dens_data);
+        double p_prop = Wdens_lv(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -384,8 +384,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(j,p));
-        double p_now = betadens_rand_site(x_now, &dens_data);
-        double p_prop = betadens_rand_site(x_prop, &dens_data);
+        double p_now = betadens_lv(x_now, &dens_data);
+        double p_prop = betadens_lv(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -402,8 +402,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q < j ) {
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmaq_lambda(j,q));
-          double p_now = lambdadens_rand_site(x_now, &dens_data);
-          double p_prop = lambdadens_rand_site(x_prop, &dens_data);
+          double p_now = lambdadens_lv(x_now, &dens_data);
+          double p_prop = lambdadens_lv(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
@@ -415,8 +415,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q == j) { 
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_lambda(j,q));
-          double p_now = lambdaUdens_rand_site(x_now, &dens_data);
-          double p_prop = lambdaUdens_rand_site(x_prop, &dens_data);
+          double p_now = lambdaUdens_lv(x_now, &dens_data);
+          double p_prop = lambdaUdens_lv(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
