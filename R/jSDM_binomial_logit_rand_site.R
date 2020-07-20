@@ -28,6 +28,8 @@
 #' @param ropt Target acceptance rate for the adaptive Metropolis algorithm. Default to 0.44.
 #' @param verbose A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
+#' mcmc.alpha \tab An mcmc object that contains the posterior samples for alphas. This object can be summarized by functions provided by the coda package.\cr
+#' mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect.\cr
 #' mcmc.sp \tab An mcmc object that contains the posterior sample of estimated species effects. This object can be summarized by functions provided by the coda package. \cr
 #' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,t_i, \alpha_i))}{D=-2\log(\prod_ij P(y_ij|\beta_j,t_i, \alpha_i))}, is also provided. \cr
 #' theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr

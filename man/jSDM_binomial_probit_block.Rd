@@ -83,10 +83,10 @@ nsite <- 50
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- data.frame(Int=rep(1,nsite),x1=x1,x2=x2)
-beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
-                byrow=TRUE, nrow=nsp))
+beta.target <- matrix(runif(nsp*ncol(X),-2,2),
+                byrow=TRUE, nrow=nsp)
 V <- 1
-probit_theta <- as.matrix(X) \%*\% beta.target 
+probit_theta <- as.matrix(X) \%*\% t(beta.target) 
 e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
 Z_true <- probit_theta + e
 Y <- matrix (NA, nsite,nsp)
@@ -136,7 +136,7 @@ for (j in 1:nsp) {
     main = paste(colnames(
     mod$mcmc.sp[[paste0("sp_",j)]])[p],
     ", species : ",j))
-    abline(v=beta.target[p,j],col='red')
+    abline(v=beta.target[j,p],col='red')
   }
 }
 dev.off()
