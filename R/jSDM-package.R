@@ -9,24 +9,25 @@
 #' \itemize{
 #'   
 #'   \item{ \code{\link{jSDM_binomial_probit_block}} : 
-#'     
-#'     \bold{Ecological process:}
-#'   \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
-#'   where \tabular{ll}{
-#'     if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{probit(\theta_ij) = \beta_0j + X_i \beta_j} \cr
-#'     if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{probit(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
-#'     if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{probit(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-#'     if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{probit(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-#'   }}
-#'   \item{ \code{\link{jSDM_binomial_logit}} : 
-#'   
-#'   \bold{Ecological process : }
-#' \deqn{y_{ij} \sim \mathcal{B}\text{inomial}(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+#'
+#' \bold{Ecological process:}
+#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
 #' where \tabular{ll}{
-#'  if \code{n_latent=0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{logit(\theta_ij) = \beta_0j + X_i \beta_j} \cr
-#'  if \code{n_latent>0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{logit(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
-#'  if \code{n_latent=0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{logit(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-#'  if \code{n_latent>0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{logit(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+#'  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+#'  if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#' }}
+#' 
+#'   \item{ \code{\link{jSDM_binomial_logit}} : 
+#'
+#' \bold{Ecological process : }
+#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+#' where \tabular{ll}{
+#'  if \code{n_latent=0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+#'  if \code{n_latent>0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+#'  if \code{n_latent=0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent>0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }}
 #' }
 #' @details \tabular{ll}{
