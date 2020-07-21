@@ -342,15 +342,25 @@
 
 <span class="co"># Fit the model</span>
 <span class="no">T1</span><span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_sim</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span> (
-  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="no">Y</span>,
-  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
-  <span class="kw">site_data</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">X</span>[,-<span class="fl">1</span>]), <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+<span class="no">mod_jSDM_block_sim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains</span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">5000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">5</span>,
-  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="co"># Response variable</span>
+  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="no">Y</span>,
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">x1</span>+<span class="no">x2</span>,
+  <span class="kw">site_data</span><span class="kw">=</span><span class="no">X</span>,
+  <span class="co"># Model specification</span>
+  <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>,
+  <span class="co"># Starting values</span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors </span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
   <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
   <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
   <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="no">T2</span><span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
 <span class="no">T_jSDM_block_sim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span>(<span class="no">T2</span>, <span class="no">T1</span>)
@@ -435,15 +445,25 @@
 <a href="#mosquito-dataset-1" class="anchor"></a><span class="header-section-number">2.2</span> Mosquito dataset</h2>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="co"># Fit the model</span>
 <span class="no">T1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_Mosquito</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span> (
-  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_mosquito</span>),
-  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
-  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_mosquito</span>, <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+<span class="no">mod_jSDM_block_Mosquito</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains </span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">5000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">5</span>,
-  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="co"># Response variable </span>
+  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="no">PA_mosquito</span>,
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
+  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_mosquito</span>,
+  <span class="co"># Model specification</span>
+  <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>, <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+  <span class="co"># Starting values </span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors </span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
   <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
   <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
   <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="no">T2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
 <span class="no">T_jSDM_block_Mosquito</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span>(<span class="no">T2</span>,<span class="no">T1</span>)</pre></body></html></div>
@@ -453,15 +473,25 @@
 <a href="#eucalypts-dataset-1" class="anchor"></a><span class="header-section-number">2.3</span> Eucalypts dataset</h2>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="co"># Fit the model</span>
 <span class="no">T1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_Eucalypts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span> (
-  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_Eucalypts</span>),
-  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
-  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_Eucalypts</span>, <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+<span class="no">mod_jSDM_block_Eucalypts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains</span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">5000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">5</span>,
-  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="co"># Response variable </span>
+  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="no">PA_Eucalypts</span>,
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
+  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_Eucalypts</span>,
+  <span class="co"># Model specification</span>
+  <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>,
+  <span class="co"># Starting values </span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors </span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
   <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
   <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
   <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="no">T2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
 <span class="no">T_jSDM_block_Eucalypts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span>(<span class="no">T2</span>,<span class="no">T1</span>)</pre></body></html></div>
@@ -471,15 +501,25 @@
 <a href="#frogs-dataset-1" class="anchor"></a><span class="header-section-number">2.4</span> Frogs dataset</h2>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Fit the model </span>
 <span class="no">T1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_Frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span> (
-  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_Frogs</span>),
-  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
-  <span class="kw">site_data</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">Env_Frogs</span>), <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+<span class="no">mod_jSDM_block_Frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains</span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">5000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">5</span>,
-  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="co"># Response variable </span>
+  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_Frogs</span>),
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
+  <span class="kw">site_data</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">Env_Frogs</span>),
+  <span class="co"># Model specification </span>
+  <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>,
+  <span class="co"># Starting values </span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors </span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
   <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
   <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
   <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="no">T2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
 <span class="no">T_jSDM_block_Frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span>(<span class="no">T2</span>,<span class="no">T1</span>)</pre></body></html></div>
@@ -489,15 +529,25 @@
 <a href="#fungi-dataset-1" class="anchor"></a><span class="header-section-number">2.5</span> Fungi dataset</h2>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="co"># Fit the model</span>
 <span class="no">T1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_Fungi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span> (
-  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_Fungi</span>),
-  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
-  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_Fungi</span>, <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
+<span class="no">mod_jSDM_block_Fungi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains </span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">5000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">5</span>,
-  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="co"># Response variable </span>
+  <span class="kw">presence_site_sp</span><span class="kw">=</span><span class="no">PA_Fungi</span>,
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span><span class="kw">=</span>~<span class="no">.</span>,
+  <span class="kw">site_data</span><span class="kw">=</span><span class="no">Env_Fungi</span>,
+  <span class="co"># Model specification</span>
+  <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>,
+  <span class="co"># Starting values </span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors </span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
   <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
   <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
   <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="no">T2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
 <span class="no">T_jSDM_block_Fungi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span>(<span class="no">T2</span>,<span class="no">T1</span>)</pre></body></html></div>

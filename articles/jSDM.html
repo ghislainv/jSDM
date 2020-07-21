@@ -193,23 +193,26 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
 <p>We use the <code>jSDM_probit_block()</code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">T1</span><span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">mod_jSDM_block_frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_rand_site_lv.html">jSDM_binomial_probit_block_rand_site_lv</a></span>(<span class="co"># Chains</span>
-                                                                <span class="kw">burnin</span><span class="kw">=</span><span class="fl">100</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">100</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">1</span>,
-                                                                <span class="co"># Response variable </span>
-                                                                <span class="kw">presence_site_sp</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">PA_frogs</span>),
-                                                                <span class="co"># Explanatory variables </span>
-                                                                <span class="kw">site_suitability</span> <span class="kw">=</span> ~<span class="no">.</span>,
-                                                                <span class="kw">site_data</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">Env_frogs</span>), <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>,
-                                                                <span class="co"># Starting values</span>
-                                                                <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
-                                                                <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
-                                                                <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
-                                                                <span class="co"># Priors</span>
-                                                                <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
-                                                                <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
-                                                                <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
-                                                                <span class="co"># Various </span>
-                                                                <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
+<span class="no">mod_jSDM_block_frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
+  <span class="co"># Chains</span>
+  <span class="kw">burnin</span><span class="kw">=</span><span class="fl">100</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">100</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Response variable </span>
+  <span class="kw">presence_site_sp</span> <span class="kw">=</span> <span class="no">PA_frogs</span>,
+  <span class="co"># Explanatory variables </span>
+  <span class="kw">site_suitability</span> <span class="kw">=</span> ~<span class="no">.</span>,
+  <span class="kw">site_data</span> <span class="kw">=</span> <span class="no">Env_frogs</span>,
+  <span class="co"># Model specification </span>
+  <span class="kw">n_latent</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">site_effect</span><span class="kw">=</span><span class="st">"random"</span>,
+  <span class="co"># Starting values</span>
+  <span class="kw">alpha_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">beta_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">lambda_start</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">W_start</span><span class="kw">=</span><span class="fl">0</span>,
+  <span class="kw">V_alpha_start</span><span class="kw">=</span><span class="fl">1</span>,
+  <span class="co"># Priors</span>
+  <span class="kw">shape</span><span class="kw">=</span><span class="fl">0.5</span>, <span class="kw">rate</span><span class="kw">=</span><span class="fl">0.0005</span>,
+  <span class="kw">mu_beta</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_beta</span><span class="kw">=</span><span class="fl">1.0E6</span>,
+  <span class="kw">mu_lambda</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">V_lambda</span><span class="kw">=</span><span class="fl">10</span>,
+  <span class="co"># Various </span>
+  <span class="kw">seed</span><span class="kw">=</span><span class="fl">1234</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">1</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="co">#&gt; </span>

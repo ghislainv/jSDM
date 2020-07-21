@@ -47,17 +47,25 @@
 
 
 <meta property="og:title" content="joint species distribution models — jSDM-package" />
-<meta property="og:description" content="jSDM is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework. The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+<meta property="og:description" content="jSDM is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+#'
 The package includes the following functions to fit various species distribution models :
-functiondata typefitted model
-jSDM_binomial_logitpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j\)
-jSDM_binomial_logit_rand_sitepresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j   \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)
-jSDM_binomial_logit_lvpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j\)
-jSDM_binomial_logit_rand_site_lvpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_ij, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)
-jSDM_binomial_probit_blockpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j\)
-jSDM_binomial_probit_block_rand_sitepresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)
-jSDM_binomial_probit_block_lvpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j\)
-jSDM_binomial_probit_block_rand_site_lvpresence-absence\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)
+jSDM_binomial_probit_block : Ecological process:
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+where 
+if n_latent=0 and site_effect=&quot;none&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)
+if n_latent&amp;gt;0 and site_effect=&quot;none&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)
+if n_latent=0 and site_effect=&quot;random&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
+if n_latent&amp;gt;0 and site_effect=&quot;random&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
+
+jSDM_binomial_logit : Ecological process : 
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+where 
+if n_latent=0 and site_effect=&quot;none&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)
+if n_latent&amp;gt;0 and site_effect=&quot;none&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)
+if n_latent=0 and site_effect=&quot;random&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
+if n_latent&amp;gt;0 and site_effect=&quot;random&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
 
 
 " />
@@ -162,19 +170,27 @@ jSDM_binomial_probit_block_rand_site_lvpresence-absence\(y_{ij} \sim \mathcal{B}
     </div>
 
     <div class="ref-description">
-    <p><code>jSDM</code> is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework. The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.</p>
-<p>The package includes the following functions to fit various species distribution models :</p><table class='table'>
-<tr><td>function</td><td>data type</td><td>fitted model</td></tr>
-<tr><td><code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_logit_rand_site.html'>jSDM_binomial_logit_rand_site</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j   \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_logit_lv.html'>jSDM_binomial_logit_lv</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_logit_rand_site_lv.html'>jSDM_binomial_logit_rand_site_lv</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_ij, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_probit_block_rand_site.html'>jSDM_binomial_probit_block_rand_site</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_probit_block_lv.html'>jSDM_binomial_probit_block_lv</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j\)</td></tr>
-<tr><td><code><a href='jSDM_binomial_probit_block_rand_site_lv.html'>jSDM_binomial_probit_block_rand_site_lv</a></code></td><td>presence-absence</td><td>\(y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</td></tr>
-</table>
-
+    <p><code>jSDM</code> is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+#'
+The package includes the following functions to fit various species distribution models :</p><ul>
+<li><p><code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> : <b>Ecological process:</b>
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+where <table class='table'>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+</table></p></li>
+<li><p><code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code> : <b>Ecological process : </b>
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+where <table class='table'>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+</table></p></li>
+</ul>
 
     </div>
 
