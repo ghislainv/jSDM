@@ -134,9 +134,9 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 100
+nsite <- 50
 #= Number of species
-nsp <- 50
+nsp <- 5
 #= Set seed for repeatability
 seed <- 1234
 
