@@ -276,15 +276,25 @@ library(jSDM)
 
 # Fit the model
 T1<-Sys.time() 
-mod_jSDM_block_sim <-  jSDM_binomial_probit_block_rand_site_lv (
-  presence_site_sp=Y, 
-  site_suitability=~.,   
-  site_data=as.data.frame(X[,-1]), n_latent=2,
+mod_jSDM_block_sim <- jSDM_binomial_probit_block(
+  # Chains
   burnin=10000, mcmc=5000, thin=5,
-  alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
-  V_alpha_start=1, shape=0.5, rate=0.0005,
+  # Response variable
+  presence_site_sp=Y, 
+  # Explanatory variables 
+  site_suitability=~x1+x2,   
+  site_data=X,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1, 
+  # Priors 
+  shape=0.5, rate=0.0005,
   mu_beta=0, V_beta=1.0E6,
   mu_lambda=0, V_lambda=10,
+  # Various 
   seed=1234, verbose=1)
 T2<-Sys.time() 
 T_jSDM_block_sim=difftime(T2, T1)
@@ -373,15 +383,25 @@ abline(a=0,b=1,col='red')
 ```{r jSDM-mosquito, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Mosquito <- jSDM_binomial_probit_block_rand_site_lv (
-  presence_site_sp=as.matrix(PA_mosquito), 
-  site_suitability=~.,   
-  site_data=Env_mosquito, n_latent=2,
+mod_jSDM_block_Mosquito <- jSDM_binomial_probit_block(
+  # Chains 
   burnin=10000, mcmc=5000, thin=5,
-  alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
-  V_alpha_start=1, shape=0.5, rate=0.0005,
+  # Response variable 
+  presence_site_sp=PA_mosquito, 
+  # Explanatory variables 
+  site_suitability=~.,   
+  site_data=Env_mosquito,
+  # Model specification
+  site_effect="random", n_latent=2,
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
   mu_beta=0, V_beta=1.0E6,
   mu_lambda=0, V_lambda=10,
+  # Various 
   seed=1234, verbose=1)
 T2 <- Sys.time()
 T_jSDM_block_Mosquito <- difftime(T2,T1)
@@ -392,15 +412,25 @@ T_jSDM_block_Mosquito <- difftime(T2,T1)
 ```{r jSDM-eucalypts, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Eucalypts <- jSDM_binomial_probit_block_rand_site_lv (
-  presence_site_sp=as.matrix(PA_Eucalypts), 
-  site_suitability=~.,   
-  site_data=Env_Eucalypts, n_latent=2,
+mod_jSDM_block_Eucalypts <- jSDM_binomial_probit_block(
+  # Chains
   burnin=10000, mcmc=5000, thin=5,
-  alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
-  V_alpha_start=1, shape=0.5, rate=0.0005,
+  # Response variable 
+  presence_site_sp=PA_Eucalypts,
+  # Explanatory variables 
+  site_suitability=~.,   
+  site_data=Env_Eucalypts,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
   mu_beta=0, V_beta=1.0E6,
   mu_lambda=0, V_lambda=10,
+  # Various 
   seed=1234, verbose=1)
 T2 <- Sys.time()
 T_jSDM_block_Eucalypts <- difftime(T2,T1)
@@ -411,15 +441,25 @@ T_jSDM_block_Eucalypts <- difftime(T2,T1)
 ```{r jSDM-frogs, cache=TRUE}
 # Fit the model 
 T1 <- Sys.time()
-mod_jSDM_block_Frogs <- jSDM_binomial_probit_block_rand_site_lv (
-  presence_site_sp=as.matrix(PA_Frogs), 
-  site_suitability=~.,   
-  site_data=as.data.frame(Env_Frogs), n_latent=2,
+mod_jSDM_block_Frogs <- jSDM_binomial_probit_block(
+  # Chains
   burnin=10000, mcmc=5000, thin=5,
-  alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
-  V_alpha_start=1, shape=0.5, rate=0.0005,
+  # Response variable 
+  presence_site_sp=as.matrix(PA_Frogs), 
+  # Explanatory variables 
+  site_suitability=~.,   
+  site_data=as.data.frame(Env_Frogs),
+  # Model specification 
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
   mu_beta=0, V_beta=1.0E6,
   mu_lambda=0, V_lambda=10,
+  # Various 
   seed=1234, verbose=1)
 T2 <- Sys.time()
 T_jSDM_block_Frogs <- difftime(T2,T1)
@@ -430,15 +470,25 @@ T_jSDM_block_Frogs <- difftime(T2,T1)
 ```{r jSDM-fungi, cache=TRUE}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_block_Fungi <- jSDM_binomial_probit_block_rand_site_lv (
-  presence_site_sp=as.matrix(PA_Fungi), 
-  site_suitability=~.,   
-  site_data=Env_Fungi, n_latent=2,
+mod_jSDM_block_Fungi <- jSDM_binomial_probit_block(
+  # Chains 
   burnin=10000, mcmc=5000, thin=5,
-  alpha_start=0, beta_start=0, lambda_start=0, W_start=0,
-  V_alpha_start=1, shape=0.5, rate=0.0005,
+  # Response variable 
+  presence_site_sp=PA_Fungi, 
+  # Explanatory variables 
+  site_suitability=~.,   
+  site_data=Env_Fungi,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
   mu_beta=0, V_beta=1.0E6,
   mu_lambda=0, V_lambda=10,
+  # Various 
   seed=1234, verbose=1)
 T2 <- Sys.time()
 T_jSDM_block_Fungi <- difftime(T2,T1)

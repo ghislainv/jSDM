@@ -113,23 +113,26 @@ We use the `jSDM_probit_block()` function to fit the jSDM (increase the number o
 
 ```{r jSDM, cache=TRUE}
 T1<- Sys.time()
-mod_jSDM_block_frogs <- jSDM_binomial_probit_block_rand_site_lv(# Chains
-                                                                burnin=100, mcmc=100, thin=1,
-                                                                # Response variable 
-                                                                presence_site_sp = as.matrix(PA_frogs), 
-                                                                # Explanatory variables 
-                                                                site_suitability = ~.,   
-                                                                site_data = as.data.frame(Env_frogs), n_latent=2,
-                                                                # Starting values
-                                                                alpha_start=0, beta_start=0,
-                                                                lambda_start=0, W_start=0,
-                                                                V_alpha_start=1, 
-                                                                # Priors
-                                                                shape=0.5, rate=0.0005,
-                                                                mu_beta=0, V_beta=1.0E6,
-                                                                mu_lambda=0, V_lambda=10,
-                                                                # Various 
-                                                                seed=1234, verbose=1)
+mod_jSDM_block_frogs <- jSDM_binomial_probit_block(
+  # Chains
+  burnin=100, mcmc=100, thin=1,
+  # Response variable 
+  presence_site_sp = PA_frogs, 
+  # Explanatory variables 
+  site_suitability = ~.,   
+  site_data = Env_frogs,
+  # Model specification 
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha_start=1, 
+  # Priors
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=1.0E6,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=1234, verbose=1)
 T2 <- Sys.time()
 ```
 

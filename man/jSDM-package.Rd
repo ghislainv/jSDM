@@ -5,18 +5,33 @@
 \alias{jSDM-package}
 \title{joint species distribution models}
 \description{
-\code{jSDM} is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework. The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+\code{jSDM} is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
 
-  The package includes the following functions to fit various species distribution models : \tabular{llc}{
-  function \tab data type \tab fitted model \cr
-  \code{\link{jSDM_binomial_logit}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j}{y_ij ~ Binomial(\theta_ij, t_i) where, logit(\theta_ij) = X_i \beta_j} \cr
-  \code{\link{jSDM_binomial_logit_rand_site}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j   \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})}{y_ij ~ Binomial(\theta_ij, t_i) where, logit(\theta_ij) = X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-  \code{\link{jSDM_binomial_logit_lv}} \tab presence-absence \tab   \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j}{y_ij ~ Binomial(\theta_ij, t_i) where, logit(\theta_ij) = X_i \beta_j + W_i \lambda_j} \cr
-  \code{\link{jSDM_binomial_logit_rand_site_lv}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_ij, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})}{y_ij ~ Binomial(\theta_ij, t_i) where, logit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-  \code{\link{jSDM_binomial_probit_block}} \tab presence-absence \tab   \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j}{y_ij ~ Binomial(\theta_ij, t_i) where, probit(\theta_ij) = X_i \beta_j} \cr
-  \code{\link{jSDM_binomial_probit_block_rand_site}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})}{y_ij ~ Binomial(\theta_ij, t_i) where, probit(\theta_ij) = X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
-  \code{\link{jSDM_binomial_probit_block_lv}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j}{y_ij ~ Binomial(\theta_ij, t_i) where, probit(\theta_ij) = X_i \beta_j + W_i \lambda_j} \cr
- \code{\link{jSDM_binomial_probit_block_rand_site_lv}} \tab presence-absence \tab  \eqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})}{y_ij ~ Binomial(\theta_ij, t_i) where, probit(\theta_ij) = X_i \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr }
+The package includes the following functions to fit various species distribution models :
+\itemize{
+  
+  \item{ \code{\link{jSDM_binomial_probit_block}} : 
+    
+    \bold{Ecological process:}
+  \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+  where \tabular{ll}{
+    if \code{n_latent=0} and \code{site_effect="none"} \tab \eqn{\text{probit}(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{probit(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+    if \code{n_latent>0} and \code{site_effect="none"} \tab \eqn{\text{probit}(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{probit(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+    if \code{n_latent=0} and \code{site_effect="random"} \tab \eqn{\text{probit}(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{probit(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
+    if \code{n_latent>0} and \code{site_effect="random"} \tab \eqn{\text{probit}(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{probit(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
+  }}
+  \item{ \code{\link{jSDM_binomial_logit}} : 
+  
+  \bold{Ecological process : }
+\deqn{y_{ij} \sim \mathcal{B}\text{inomial}(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+where \tabular{ll}{
+ if \code{n_latent=0} and \code{site_effect="none"} \tab \eqn{\logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{logit(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+ if \code{n_latent>0} and \code{site_effect="none"} \tab \eqn{\logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{logit(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+ if \code{n_latent=0} and \code{site_effect="random"} \tab \eqn{\logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{logit(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent>0} and \code{site_effect="random"} \tab \eqn{\logit(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i \text{ and } \alpha_i \sim \mathcal{N}(0,V_\alpha)}{logit(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i and \alpha_i ~ N(0,V_\alpha)} \cr
+}}
+}
 }
 \details{
 \tabular{ll}{
