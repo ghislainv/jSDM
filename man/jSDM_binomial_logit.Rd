@@ -135,9 +135,9 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 50
+nsite <- 150
 #= Number of species
-nsp <- 5
+nsp <- 20
 #= Set seed for repeatability
 seed <- 1234
 
@@ -159,12 +159,12 @@ l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*2-3,-2,2)
 lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],
-l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
+                          l.diag[2],l.other[-1]),
+                        byrow=TRUE, nrow=nsp)
 beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
 V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-logit.theta <- X \%*\% t(beta.target) + W \%*\% t(lambda.target) 
-+ alpha.target 
+logit.theta <- X \%*\% t(beta.target) + W \%*\% t(lambda.target) + alpha.target
 theta <- inv_logit(logit.theta)
 set.seed(seed)
 Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
@@ -172,69 +172,55 @@ Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
 #= Site-occupancy model
 
 mod <- jSDM_binomial_logit(# Chains
-                           burnin=100,
-                           mcmc=100,
-                           thin=1,
-                           # Response variable
-                           presence_site_sp=Y,
-                           trials=visits,
-                           # Explanatory variables
-                           site_suitability=~x1+x2,
-                           site_data=X,
-                           n_latent=n_latent,
-                           site_effect="random",
-                           # Starting values
-                           beta_start=0,
-                           lambda_start=0,
-                           W_start=0, 
-                           alpha_start=0,
-                           V_alpha_start=1,
-                           # Priors
-                           shape=0.5,
-                           rate=0.0005,
-                           mu_beta=0,
-                           V_beta=1.0E6,
-                           mu_lambda=0,
-                           V_lambda=10,
-                           # Various
-                           seed=1234,
-                           ropt=0.44,
-                           verbose=1)
+  burnin=100,
+  mcmc=100,
+  thin=1,
+  # Response variable
+  presence_site_sp=Y,
+  trials=visits,
+  # Explanatory variables
+  site_suitability=~x1+x2,
+  site_data=X,
+  n_latent=n_latent,
+  site_effect="random",
+  # Starting values
+  beta_start=0,
+  lambda_start=0,
+  W_start=0,
+  alpha_start=0,
+  V_alpha_start=1,
+  # Priors
+  shape=0.5,
+  rate=0.0005,
+  mu_beta=0,
+  V_beta=1.0E6,
+  mu_lambda=0,
+  V_lambda=10,
+  # Various
+  seed=1234,
+  ropt=0.44,
+  verbose=1)
 #==========
 #== Outputs
 
 #= Parameter estimates
 
-## alpha
-# summary(mod$mcmc.alpha)
-pdf(file=file.path(tempdir(), "Posteriors_alpha_jSDM_logit_block.pdf"))
-plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
-     xlab ="alphas target", ylab ="alphas estimated")
-abline(a=0,b=1,col='red')
-dev.off()
-
-## Valpha
-# summary(mod$mcmc.V_alpha)
-pdf(file=file.path(tempdir(), "Posteriors_Valpha_jSDM_logit_block.pdf"))
-par(mfrow=c(1,2))
-coda::traceplot(mod$mcmc.V_alpha)
-coda::densplot(mod$mcmc.V_alpha)
-abline(v=V_alpha.target,col='red')
-dev.off()
-
 ## beta_j
 # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
+mean_beta <- matrix(0,nsp,np)
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_logit_block.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
+  mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
+                         2, mean)
   for (p in 1:ncol(X)) {
     coda::traceplot(coda::as.mcmc(
-    mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
     coda::densplot(coda::as.mcmc(
-    mod$mcmc.sp[[paste0("sp_",j)]][,p]), 
-    main = paste(colnames(
-    mod$mcmc.sp[[paste0("sp_",j)]])[p],
-    ", species : ",j))
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        ", species : ",j))
     abline(v=beta.target[j,p],col='red')
   }
 }
@@ -243,44 +229,70 @@ dev.off()
 ## lambda_j
 # summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
 # summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
+mean_lambda <- matrix(0,nsp,n_latent)
 pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_logit_block.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
+  mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+                           [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
   for (l in 1:n_latent) {
-  coda::traceplot(coda::as.mcmc(mod$mcmc.sp
-                                [[paste0("sp_",j)]][,ncol(X)+l]))
-  coda::densplot(coda::as.mcmc(mod$mcmc.sp
-                              [[paste0("sp_",j)]][,ncol(X)+l]), 
-                 main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
-                 [ncol(X)+l],", species : ",j))
- abline(v=lambda.target[j,l],col='red')
+    coda::traceplot(coda::as.mcmc(mod$mcmc.sp
+                                  [[paste0("sp_",j)]][,ncol(X)+l]))
+    coda::densplot(coda::as.mcmc(mod$mcmc.sp
+                                 [[paste0("sp_",j)]][,ncol(X)+l]),
+                   main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+                              [ncol(X)+l],", species : ",j))
+    abline(v=lambda.target[j,l],col='red')
   }
 }
 dev.off()
 
+# Species effects beta and factor loadings lambda
+par(mfrow=c(1,2))
+plot(beta.target, mean_beta,
+     main="species effect beta",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+plot(lambda.target, mean_lambda,
+     main="factor loadings lambda",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+
 ## W latent variables
-pdf(file=file.path(tempdir(), "Posteriors_lv_jSDM_logit_block.pdf"))
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-plot(W[,l],
-summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
-main = paste0("Latent variable W_", l),
-xlab ="obs", ylab ="fitted")
-abline(a=0,b=1,col='red')
+  plot(W[,l],
+       summary(mod$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+       main = paste0("Latent variable W_", l),
+       xlab ="obs", ylab ="fitted")
+  abline(a=0,b=1,col='red')
 }
-dev.off()
+
+## alpha
+# summary(mod$mcmc.alpha)
+par(mfrow=c(1,1))
+plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
+     xlab ="obs", ylab ="fitted", main="site effect alpha")
+abline(a=0,b=1,col='red')
+
+## Valpha
+# summary(mod$mcmc.V_alpha)
+par(mfrow=c(1,2))
+coda::traceplot(mod$mcmc.V_alpha)
+coda::densplot(mod$mcmc.V_alpha)
+abline(v=V_alpha.target,col='red')
 
 ## Deviance
-summary(mod$mcmc.Deviance)
+# summary(mod$mcmc.Deviance)
 plot(mod$mcmc.Deviance)
 
 #= Predictions
 # summary(mod$theta_latent)
-pdf(file=file.path(tempdir(), "Pred-Init.pdf"))
+par(mfrow=c(1,1))
 plot(theta, mod$theta_latent,
-    main="theta",xlab="obs", ylab="fitted")
+     main="Probabilities of occurence theta",
+     xlab="obs", ylab="fitted")
 abline(a=0 ,b=1, col="red")
-dev.off()
 }
 \references{
 \tabular{l}{
