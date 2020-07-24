@@ -24,14 +24,12 @@ struct dens_par {
   arma::mat beta_run;
   //alpha
   int site_alpha; 
-  double V_alpha_run;
-  double shape;
-  double rate;
+  double V_alpha;
   arma::rowvec alpha_run;
 };
 
-/* betadens_rand_site */
-double betadens_rand_site (double beta_jk, void *dens_data) {
+/* betadens_fixed_site */
+double betadens_fixed_site (double beta_jk, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -61,7 +59,7 @@ double betadens_rand_site (double beta_jk, void *dens_data) {
 
 /* alphadens_lv */
 
-double alphadens_rand_site(double alpha_i, void *dens_data) {
+double alphadens_fixed_site(double alpha_i, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -82,7 +80,7 @@ double alphadens_rand_site(double alpha_i, void *dens_data) {
   } // loop on species
   
   // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha_run),1);
+  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha),1);
   return logP;
 }
 
@@ -90,18 +88,16 @@ double alphadens_rand_site(double alpha_i, void *dens_data) {
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
+Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
     const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
     const arma::uvec &T, // Number of trials
     const arma::mat &X, // Suitability covariates
     arma::mat beta_start,
     arma::vec alpha_start,//alpha
-    double V_alpha_start,
+    double V_alpha,
     arma::vec mu_beta, // Priors 
     arma::vec V_beta,
-    double shape,
-    double rate,
     const int seed, // Various 
     const double ropt,
     const int verbose) {
@@ -123,13 +119,12 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   const int NSITE = X.n_rows;
   const int NP = X.n_cols;
   const int NSP = Y.n_cols;
-
+  
   ////////////////////////////////////////////
   // Declaring new objects to store results //
   /* Parameters */
   arma::Cube<double> beta; beta.zeros(NSAMP, NSP, NP);
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
-  arma::vec V_alpha; V_alpha.zeros(NSAMP);
   /* Latent variable */
   arma::mat theta_run; theta_run.zeros(NSITE, NSP);
   arma::mat theta_latent; theta_latent.zeros(NSITE, NSP);
@@ -157,9 +152,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   dens_data.beta_run = beta_start;
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.shape = shape;
-  dens_data.rate = rate;
-  dens_data.V_alpha_run = V_alpha_start;
+  dens_data.V_alpha = V_alpha;
   dens_data.alpha_run = alpha_start.t();
   
   ////////////////////////////////////////////////////////////
@@ -169,7 +162,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   arma::mat sigmap_beta; sigmap_beta.ones(NSP,NP);
   arma::mat nA_beta; nA_beta.zeros(NSP,NP);
   arma::mat Ar_beta; Ar_beta.zeros(NSP,NP); // Acceptance rate
-
+  
   // alpha
   arma::vec sigma_alpha; sigma_alpha.ones(NSITE);
   arma::vec nA_alpha; nA_alpha.zeros(NSITE);
@@ -190,8 +183,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
       dens_data.site_alpha = i; // Specifying the site 
       double x_now = dens_data.alpha_run(i);
       double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_rand_site(x_now, &dens_data);
-      double p_prop = alphadens_rand_site(x_prop, &dens_data);
+      double p_now = alphadens_fixed_site(x_now, &dens_data);
+      double p_prop = alphadens_fixed_site(x_prop, &dens_data);
       double ratio = std::exp(p_prop - p_now); // ratio
       double z = gsl_rng_uniform(r);
       // Actualization
@@ -199,18 +192,14 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
         dens_data.alpha_run(i) = x_prop;
         nA_alpha(i)++;
       } 
-    } // loop on sites
-    
-    // V_alpha
-    double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
-    double shape_posterior = dens_data.shape + 0.5*NSITE;
-    double rate_posterior = dens_data.rate + 0.5*sum;
-    
-    dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
-    
+    } // loop on sites 
     
     // center alpha 
-    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
+    dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
+    
+    // constraints of identifiability on alpha
+    dens_data.alpha_run(0) = 0.0;
+    
     
     for ( int j = 0; j < NSP; j++ ) {
       // beta
@@ -219,8 +208,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(j,p));
-        double p_now = betadens_rand_site(x_now, &dens_data);
-        double p_prop = betadens_rand_site(x_prop, &dens_data);
+        double p_now = betadens_fixed_site(x_now, &dens_data);
+        double p_prop = betadens_fixed_site(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -230,7 +219,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
         } 
       } // loop on rank of parameters
     } // loop on species
-
+    
     
     ///////////////
     // Deviance //
@@ -266,7 +255,6 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
         }//loop on sites
       }// loop on species
       alpha.row(isamp-1) = dens_data.alpha_run;
-      V_alpha(isamp-1) = dens_data.V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
     }
     
@@ -345,21 +333,20 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   // Return results as a Rcpp::List
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
                                           Rcpp::Named("alpha") = alpha,
-                                          Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
                                           Rcpp::Named("theta_latent") = theta_latent);
   
   return results;
   
-}// end Rcpp_jSDM_binomial_logit_rand_site function
+}// end Rcpp_jSDM_binomial_logit_fixed_site function
 
 // Test
 /*** R
 # library(coda)
 # library(jSDM)
 # 
-# nsp <- 100
-# nsite <- 300
+# nsp <- 50
+# nsite <- 200
 # seed <- 1234
 # set.seed(seed)
 # visits<- rpois(nsite,3)
@@ -371,41 +358,34 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
 # X <- cbind(rep(1,nsite),x1,x2)
 # np <- ncol(X)
 # beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
-# V_alpha.target <- 0.5
-# alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
+# alpha.target <- runif(nsite,-2,2)
+# alpha.target[1] <- 0
 # logit.theta <- X %*% t(beta.target) + alpha.target
 # theta <- inv_logit(logit.theta)
 # Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
 # 
 # # Iterations
-# nsamp <- 1000
-# nburn <- 1000
-# nthin <- 1
+# nsamp <- 5000
+# nburn <- 5000
+# nthin <- 5
 # ngibbs <- nsamp+nburn
 # 
 # # Call to C++ function
-# mod <- Rcpp_jSDM_binomial_logit_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+# mod <- Rcpp_jSDM_binomial_logit_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                           Y=Y, T=visits, X=X,
 #                                           beta_start=matrix(0,np,nsp),
 #                                           alpha_start=rep(0,nsite),
-#                                           V_alpha_start=1, shape = 0.5, rate = 0.0005,
-#                                           mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+#                                           V_alpha=10, mu_beta=rep(0,np),
+#                                           V_beta=rep(1.0E6,np),
 #                                           seed=1234, ropt=0.44, verbose=1)
 # 
 # # Parameter estimates
 # ##alpha
-# par(mfrow=c(1,3),oma=c(1, 0, 1.4, 0))
+# par(mfrow=c(1,1),oma=c(1, 0, 1.4, 0))
 # MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
 # plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="fitted",
-#      xlab="obs",main="alpha",cex.main=1.4)
+#      xlab="obs",main="Fixed site effect alpha",cex.main=1.4)
 # abline(a=0,b=1,col='red')
-# ##V_alpha
-# title(main="Random site effect and its variance",outer=T,cex.main=1.8)
-# MCMC_V_alpha <- coda::mcmc(mod$V_alpha, start=nburn+1, end=ngibbs, thin=nthin)
-# coda::traceplot(MCMC_V_alpha,main="Trace V_alpha",cex.main=1.4)
-# coda::densplot(MCMC_V_alpha,main="Density V_alpha",cex.main=1.4)
-# abline(v=V_alpha.target,col='red')
-# legend("topright", lty=1, col='red',legend="V_alpha obs",cex=0.8)
 # 
 # ## species effect beta
 # par(mfrow=c(np,2))

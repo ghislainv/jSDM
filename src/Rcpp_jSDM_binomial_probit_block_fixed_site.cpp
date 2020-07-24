@@ -22,18 +22,16 @@ using namespace std;
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int nthin,const int nburn, 
-                                                     const arma::umat &Y, 
-                                                     const arma::mat &X,
-                                                     const arma::mat &beta_start,
-                                                     const arma::mat &V_beta,
-                                                     const arma::vec &mu_beta,
-                                                     arma::vec alpha_start,
-                                                     double V_alpha_start,
-                                                     double shape,
-                                                     double rate,
-                                                     const int seed,
-                                                     const int verbose) {
+Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int nthin,const int nburn, 
+                                                      const arma::umat &Y, 
+                                                      const arma::mat &X,
+                                                      const arma::mat &beta_start,
+                                                      const arma::mat &V_beta,
+                                                      const arma::vec &mu_beta,
+                                                      arma::vec alpha_start,
+                                                      double V_alpha,
+                                                      const int seed,
+                                                      const int verbose) {
   
   ////////////////////////////////////////////////////////////////////////////////
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,8 +57,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
   /* Parameters */
   arma::Cube<double> beta; beta.zeros(NSAMP, NSP, NP);
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
-  arma::vec V_alpha; V_alpha.zeros(NSAMP);
-  /* Latent variable */
+  /* Prediction */
   arma::mat probit_theta_pred; probit_theta_pred.zeros(NSITE, NSP);
   arma::mat Z_latent; Z_latent.zeros(NSITE, NSP);
   /* Deviance */
@@ -73,7 +70,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
   arma::mat beta_run = beta_start;
   // alpha vec of sites effects (nsite)
   arma::vec alpha_run = alpha_start;
-  double V_alpha_run = V_alpha_start;
   // Z latent (nsite*nsp)
   arma::mat Z_run; Z_run.zeros(NSITE,NSP);
   // probit_theta_ij = X_i*beta_j + alpha_i
@@ -128,19 +124,17 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
       double small_v = arma::sum(Z_run.row(i)-X.row(i)*beta_run);
       
       // big_V
-      double big_V = 1/(1/V_alpha_run + NSP);
+      double big_V = 1/(1/V_alpha + NSP);
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
-    ////////////////////////////////////////////////
-    // V_alpha
-    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
-    double shape_posterior = shape + 0.5*NSITE;
-    double rate_posterior = rate + 0.5*sum;
+    // center alpha 
+    alpha_run = alpha_run - arma::mean(alpha_run);
     
-    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
+    // constraints of identifiability on alpha
+    alpha_run(0) = 0.0;
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -174,7 +168,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
         }
       }
       alpha.row(isamp-1) = alpha_run.t();
-      V_alpha(isamp-1) = V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
     }
     
@@ -205,7 +198,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
   // Return results as a Rcpp::List
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
                                           Rcpp::Named("alpha") = alpha,
-                                          Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
                                           Rcpp::Named("Z_latent") = Z_latent,
                                           Rcpp::Named("probit_theta_pred") = probit_theta_pred );  
@@ -215,13 +207,14 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 
 // Test
 /*** R
-# #===================================================
-# #Data
-# #===================================================
+#===================================================
+#Data
+#===================================================
 # 
 # nsp<- 50
 # nsite <- 200
 # np <- 3
+# nl <- 2
 # seed <- 123
 # set.seed(seed)
 # 
@@ -231,8 +224,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 # X <- cbind(rep(1,nsite),x1,x2)
 # colnames(X) <- c("Int","x1","x2")
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-# V_alpha.target <- 0.5
-# alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
+# alpha.target <- runif(nsite,-2,2)
+# alpha.target[1] <- 0
 # probit_theta <- X %*% beta.target + alpha.target
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
@@ -245,35 +238,28 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 #   }
 # }
 # 
+# 
 # # Call to C++ function
 # # Iterations
 # nsamp <- 5000
 # nburn <- 5000
 # nthin <- 5
 # ngibbs <- nsamp+nburn
-# mod <- Rcpp_jSDM_binomial_probit_block_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                                  Y=Y, X=X, beta_start=matrix(0,np,nsp), alpha_start=rep(0,nsite),
-#                                                  V_beta=diag(rep(1.0E6,np)), mu_beta = rep(0,np),
-#                                                  V_alpha_start=1, shape=0.5, rate=0.0005,
-#                                                  seed=123, verbose=1)
+# mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#                                                   Y=Y, X=X, beta_start=matrix(0,np,nsp), V_beta=diag(rep(1.0E6,np)),
+#                                                   mu_beta = rep(0,np),
+#                                                   alpha_start=rep(0,nsite), V_alpha=10,
+#                                                   seed=123, verbose=1)
 # 
 # # ===================================================
 # # Result analysis
 # # ===================================================
 # 
-# # Parameter estimates
 # ## alpha
 # par(mfrow=c(1,1))
 # MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
-# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="alpha.estimated")
+# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="fitted", xlab="obs", main="alpha")
 # abline(a=0,b=1,col='red')
-# ## V_alpha
-# MCMC_V_alpha <- coda::mcmc(mod$V_alpha, start=nburn+1, end=ngibbs, thin=nthin)
-# summary(MCMC_V_alpha)
-# par(mfrow=c(1,2))
-# coda::traceplot(MCMC_V_alpha)
-# coda::densplot(MCMC_V_alpha, main ="V_alpha" )
-# abline(v=V_alpha.target,col='red')
 # 
 # ## beta_j
 # par(mfrow=c(np,2))
@@ -282,7 +268,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 #   mean_beta[j,] <-apply(mod$beta[,j,],2,mean)
 #   if(j<5){
 #     for (p in 1:np) {
-#       MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+#       MCMC.betaj <- coda::mcmc(mod$beta[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
 #       summary(MCMC.betaj)
 #       coda::traceplot(MCMC.betaj[,p])
 #       coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
@@ -290,15 +276,18 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
 #     }
 #   }
 # }
-# ## Species effect beta and loading factors lambda
+# 
+# ## Species effect beta 
 # par(mfrow=c(1,1),oma=c(1, 0, 1, 0))
 # plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
 # title("Fixed species effects", outer = T)
 # abline(a=0,b=1,col='red')
-# # Deviance
+# 
+# ## Deviance
 # mean(mod$Deviance)
 # ## Prediction
 # # probit_theta
+# par(mfrow=c(1,2))
 # plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
 # abline(a=0,b=1,col='red')
 # # Z

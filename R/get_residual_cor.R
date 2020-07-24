@@ -54,7 +54,7 @@
 #'                                   beta_start=0,
 #'                                   lambda_start=0,
 #'                                   W_start=0,
-#'                                   V_alpha_start=1,
+#'                                   V_alpha=1,
 #'                                   # Priors
 #'                                   shape=0.5, rate=0.0005,
 #'                                   mu_beta=0, V_beta=1.0E6,
@@ -73,7 +73,7 @@
 
 # Calculate the residual correlation matrix from a LVM
 get_residual_cor <- function(mod) {
-  if (is.null(mod$model_spec$n_latent)) {
+  if (mod$model_spec$n_latent==0) {
     cat("Error: The jSDM class object provided is not a latent variable model (LVM).\n
         The lambdas parameters needed to compute the residual correlation matrix have not been estimated. \n")
     stop("Please fit a LVM on your data and call ", calling.function(), " again.",

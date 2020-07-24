@@ -586,10 +586,13 @@ is.scalar <- function(x) {
 }
 
 form.beta.start.sp <- function (beta.start, np, nsp) {
+  if (sum(dim(beta.start) != c(np,nsp))==0 && sum(is.na(beta.start))==0) { 
+    beta.start.mat <- beta.start 
+  }
   if (sum(is.na(beta.start))>0) { 
     beta.start.mat <- matrix(0, np, nsp)
   }
-  else if(is.scalar(beta.start) & !is.na(beta.start)) {
+  else if(is.scalar(beta.start) && !is.na(beta.start)) {
     beta.start.mat <- matrix(beta.start, np, nsp) 
   }
   else if(sum(dim(beta.start) != c(np, nsp)) > 0) {
@@ -602,7 +605,7 @@ form.b.start <- function (b.start, nd) {
   if (sum(is.na(b.start))>0) { 
     b.start.vec <- rep(0,nd)
   }
-  else if(is.scalar(b.start) & !is.na(b.start)) {
+  else if(is.scalar(b.start) && !is.na(b.start)) {
     b.start.vec <- rep(b.start, nd) 
   }
   else if(sum(length(b.start) != nd) > 0) {
@@ -636,7 +639,7 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
   else if(sum(dim(lambda.start) != c(n_latent, nsp)) > 0) {
     stop("Error: lambda.start not conformable.\n")
   }
-  else if(sum(dim(lambda.start) != c(n_latent, nsp)) == 0) {
+  else if(sum(dim(lambda.start) != c(n_latent, nsp)) == 0 && sum(is.na(lambda.start))==0) {
     lambda.start.mat <- lambda.start
     for (i in 1:n_latent) {
       if (lambda.start.mat[i, i]<=0) {
@@ -666,6 +669,9 @@ form.alpha.start.sp <- function (alpha.start, nsite) {
 }
 
 form.W.start.sp <- function (W.start, nsite, n_latent) {
+  if (sum(dim(W.start) == c(nsite, n_latent))==2 && sum(is.na(W.start))==0) { 
+    W.start.mat <- W.start
+  }
   if (sum(is.na(W.start))>0) { 
     W.start.mat <- matrix(0, nsite, n_latent)
   }

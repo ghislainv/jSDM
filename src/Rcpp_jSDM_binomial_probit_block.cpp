@@ -183,9 +183,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # #Data
 # #===================================================
 # 
-# nsp<- 100
-# nsite <- 300
-# np <- 3
+# nsp<- 50
+# nsite <- 200
 # seed <- 123
 # set.seed(seed)
 # 
@@ -193,6 +192,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # x1 <- rnorm(nsite,0,1)
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
+# np <- ncol(X)
 # colnames(X) <- c("Int","x1","x2")
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 # probit_theta <- X %*% beta.target
@@ -209,13 +209,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # 
 # # Call to C++ function
 # # Iterations
-# nsamp <- 1000
-# nburn <- 1000
-# nthin <- 1
+# nsamp <- 5000
+# nburn <- 5000
+# nthin <- 5
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                        Y=Y, X=X, beta_start=matrix(0,np,nsp), 
-#                                        V_beta=diag(rep(1.0E6,np)), mu_beta = rep(0,np), 
+#                                        Y=Y, X=X, beta_start=matrix(0,np,nsp),
+#                                        V_beta=diag(rep(1.0E6,np)), mu_beta = rep(0,np),
 #                                        seed=123, verbose=1)
 # 
 # # ===================================================
@@ -223,25 +223,37 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # # ===================================================
 # 
 # # Parameter estimates
-# ## probit_theta
-# par(mfrow=c(1,1))
-# plot(probit_theta,mod$probit_theta_pred)
-# abline(a=0,b=1,col='red')
-# ## Z
-# plot(Z_true,mod$Z_latent)
-# abline(a=0,b=1,col='red')
+# # Parameter estimates
 # 
 # ## beta_j
 # par(mfrow=c(np,2))
-# for (j in 1:4) {
-#   for (p in 1:np) {
-#     MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
-#     summary(MCMC.betaj)
-#     coda::traceplot(MCMC.betaj[,p])
-#     coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
-#     abline(v=beta.target[p,j],col='red')
+# mean_beta <- matrix(0,nsp,np)
+# for (j in 1:nsp) {
+#   mean_beta[j,] <-apply(mod$beta[,j,],2,mean)
+#   if(j<5){
+#     for (p in 1:np) {
+#       MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+#       summary(MCMC.betaj)
+#       coda::traceplot(MCMC.betaj[,p])
+#       coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
+#       abline(v=beta.target[p,j],col='red')
+#     }
 #   }
 # }
+# 
+# ## Species effect beta
+# par(mfrow=c(1,1),oma=c(1, 0, 1, 0))
+# plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
+# title("Fixed species effects", outer = T)
+# abline(a=0,b=1,col='red')
+# 
 # ## Deviance
 # mean(mod$Deviance)
+# ## Prediction
+# # probit_theta
+# plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
+# abline(a=0,b=1,col='red')
+# # Z
+# plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
+# abline(a=0,b=1,col='red')
 */

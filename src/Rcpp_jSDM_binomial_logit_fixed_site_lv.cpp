@@ -36,14 +36,12 @@ struct dens_par {
   arma::mat W_run;
   //alpha
   int site_alpha; 
-  double V_alpha_run;
-  double shape;
-  double rate;
+  double V_alpha;
   arma::rowvec alpha_run;
 };
 
-/* betadens_lv */
-double betadens_lv (double beta_jk, void *dens_data) {
+/* betadens_fixed_site_lv */
+double betadens_fixed_site_lv (double beta_jk, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -74,8 +72,8 @@ double betadens_lv (double beta_jk, void *dens_data) {
   return logP;
 }
 
-/* lambdadens_lv */
-double lambdadens_lv (double lambda_jq, void *dens_data) {
+/* lambdadens_fixed_site_lv */
+double lambdadens_fixed_site_lv (double lambda_jq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -106,7 +104,7 @@ double lambdadens_lv (double lambda_jq, void *dens_data) {
   return logP;
 }
 
-double lambdaUdens_lv (double lambda_jq, void *dens_data) {
+double lambdaUdens_fixed_site_lv (double lambda_jq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -137,8 +135,8 @@ double lambdaUdens_lv (double lambda_jq, void *dens_data) {
   return logP;
 }
 
-/* Wdens_lv */
-double Wdens_lv (double W_iq, void *dens_data) {
+/* Wdens_fixed_site_lv */
+double Wdens_fixed_site_lv (double W_iq, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -169,9 +167,9 @@ double Wdens_lv (double W_iq, void *dens_data) {
   return logP;
 }
 
-/* alphadens_lv */
+/* alphadens_fixed_site_lv */
 
-double alphadens_lv (double alpha_i, void *dens_data) {
+double alphadens_fixed_site_lv (double alpha_i, void *dens_data) {
   // Pointer to the structure: d
   dens_par *d;
   d = static_cast<dens_par *> (dens_data);
@@ -195,7 +193,7 @@ double alphadens_lv (double alpha_i, void *dens_data) {
   } // loop on species
   
   // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha_run),1);
+  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha),1);
   return logP;
 }
 
@@ -203,7 +201,7 @@ double alphadens_lv (double alpha_i, void *dens_data) {
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
+Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
     const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
     const arma::uvec &T, // Number of trials
@@ -212,14 +210,12 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
     arma::mat lambda_start,
     arma::mat beta_start,
     arma::vec alpha_start,//alpha
-    double V_alpha_start,
+    double V_alpha,
     arma::vec mu_beta, // Priors 
     arma::vec V_beta,
     arma::vec mu_lambda,
     arma::vec V_lambda,
     arma::vec V_W,
-    double shape,
-    double rate,
     const int seed, // Various 
     const double ropt,
     const int verbose) {
@@ -250,7 +246,6 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
   arma::Cube<double> lambda; lambda.zeros(NSAMP, NSP, NL);
   arma::Cube<double> W; W.zeros(NSAMP, NSITE, NL);
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
-  arma::vec V_alpha; V_alpha.zeros(NSAMP);
   /* Latent variable */
   arma::mat theta_run; theta_run.zeros(NSITE, NSP);
   arma::mat theta_latent; theta_latent.zeros(NSITE, NSP);
@@ -290,9 +285,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
   dens_data.W_run = W_start;
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.shape = shape;
-  dens_data.rate = rate;
-  dens_data.V_alpha_run = V_alpha_start;
+  dens_data.V_alpha = V_alpha;
   dens_data.alpha_run = alpha_start.t();
   
   ////////////////////////////////////////////////////////////
@@ -333,8 +326,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
       dens_data.site_alpha = i; // Specifying the site 
       double x_now = dens_data.alpha_run(i);
       double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_lv(x_now, &dens_data);
-      double p_prop = alphadens_lv(x_prop, &dens_data);
+      double p_now = alphadens_fixed_site_lv(x_now, &dens_data);
+      double p_prop = alphadens_fixed_site_lv(x_prop, &dens_data);
       double ratio = std::exp(p_prop - p_now); // ratio
       double z = gsl_rng_uniform(r);
       // Actualization
@@ -342,15 +335,15 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.alpha_run(i) = x_prop;
         nA_alpha(i)++;
       } 
-
+      
       // W
       dens_data.site_W = i; // Specifying the site
       for ( int q = 0; q < NL; q++ ) {
         dens_data.pos_W = q; // Specifying the rank of the latent variable of interest
         double x_now = dens_data.W_run(i,q);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_W(i,q));
-        double p_now = Wdens_lv(x_now, &dens_data);
-        double p_prop = Wdens_lv(x_prop, &dens_data);
+        double p_now = Wdens_fixed_site_lv(x_now, &dens_data);
+        double p_prop = Wdens_fixed_site_lv(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -362,14 +355,10 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
     } // loop on sites 
     
     // center alpha 
-    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run); 
+    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
     
-    // V_alpha
-    double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
-    double shape_posterior = dens_data.shape + 0.5*NSITE;
-    double rate_posterior = dens_data.rate + 0.5*sum;
-    
-    dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
+    // constraints of identifiability on alpha
+    dens_data.alpha_run(0) = 0.0;
     
     // Centering and reducing W_i 
     for ( int q = 0; q < NL; q++ ) {
@@ -384,8 +373,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(j,p));
-        double p_now = betadens_lv(x_now, &dens_data);
-        double p_prop = betadens_lv(x_prop, &dens_data);
+        double p_now = betadens_fixed_site_lv(x_now, &dens_data);
+        double p_prop = betadens_fixed_site_lv(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -402,8 +391,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q < j ) {
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmaq_lambda(j,q));
-          double p_now = lambdadens_lv(x_now, &dens_data);
-          double p_prop = lambdadens_lv(x_prop, &dens_data);
+          double p_now = lambdadens_fixed_site_lv(x_now, &dens_data);
+          double p_prop = lambdadens_fixed_site_lv(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
@@ -415,8 +404,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q == j) { 
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_lambda(j,q));
-          double p_now = lambdaUdens_lv(x_now, &dens_data);
-          double p_prop = lambdaUdens_lv(x_prop, &dens_data);
+          double p_now = lambdaUdens_fixed_site_lv(x_now, &dens_data);
+          double p_prop = lambdaUdens_fixed_site_lv(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
@@ -470,7 +459,6 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         }//loop on sites
       }// loop on species
       alpha.row(isamp-1) = dens_data.alpha_run;
-      V_alpha(isamp-1) = dens_data.V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
     }
     
@@ -580,138 +568,130 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
                                           Rcpp::Named("lambda") = lambda,
                                           Rcpp::Named("W") = W,
                                           Rcpp::Named("alpha") = alpha,
-                                          Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
                                           Rcpp::Named("theta_latent") = theta_latent);
   
   return results;
   
-}// end Rcpp_jSDM_binomial_logit_rand_site_lv function
+}// end Rcpp_jSDM_binomial_logit_fixed_site_lv function
 
 // Test
 /*** R
-# library(coda)
-# library(jSDM)
-# 
-# nsp <- 100
-# nsite <- 300
-# seed <- 1234
-# set.seed(seed)
-# visits<- rpois(nsite,3)
-# visits[visits==0] <- 1
-# 
-# # Ecological process (suitability)
-# x1 <- rnorm(nsite,0,1)
-# x2 <- rnorm(nsite,0,1)
-# X <- cbind(rep(1,nsite),x1,x2)
-# np <- ncol(X)
-# set.seed(2*seed)
-# W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-# nl <- ncol(W)
-# l.zero <- 0
-# l.diag <- runif(2,0,2)
-# l.other <- runif(nsp*2-3,-2,2)
-# lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp)
-# beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
-# V_alpha.target <- 0.5
-# alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-# logit.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
-# theta <- inv_logit(logit.theta)
-# Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
-# 
-# # Iterations
-# nsamp <- 5000
-# nburn <- 5000
-# nthin <- 5
-# ngibbs <- nsamp+nburn
-# 
-# # Call to C++ function
-# mod <- Rcpp_jSDM_binomial_logit_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                              Y=Y, T=visits, X=X,
-#                                              beta_start=matrix(0,np,nsp),
-#                                              lambda_start=matrix(0,nl,nsp),
-#                                              W_start=matrix(0,nsite,nl), alpha_start=rep(0,nsite),
-#                                              V_alpha_start=1, shape = 0.5, rate = 0.0005,
-#                                              mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
-#                                              mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
-#                                              V_W=rep(1,nl),
-#                                              seed=1234, ropt=0.44, verbose=1)
-# 
-# # Parameter estimates
-# ##alpha
-# par(mfrow=c(1,3),oma=c(1, 0, 1.4, 0))
-# MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
-# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="fitted",
-#      xlab="obs",main="alpha",cex.main=1.4)
-# abline(a=0,b=1,col='red')
-# ##V_alpha
-# title(main="Random site effect and its variance",outer=T,cex.main=1.8)
-# MCMC_V_alpha <- coda::mcmc(mod$V_alpha, start=nburn+1, end=ngibbs, thin=nthin)
-# coda::traceplot(MCMC_V_alpha,main="Trace V_alpha",cex.main=1.4)
-# coda::densplot(MCMC_V_alpha,main="Density V_alpha",cex.main=1.4)
-# abline(v=V_alpha.target,col='red')
-# legend("topright", lty=1, col='red',legend="V_alpha obs",cex=0.8)
-# 
-# ## species effect beta
-# par(mfrow=c(np,2))
-# for (j in 1:4) {
-#   for (p in 1:np) {
-#     MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
-#     summary(MCMC.betaj)
-#     coda::traceplot(MCMC.betaj[,p])
-#     coda::densplot(MCMC.betaj[,p], main = paste0("beta",p, " sp", j))
-#     abline(v=beta.target[j,p],col='red')
-#   }
-# }
-# ## lambda_j
-# par(mfrow=c(nl*2,2))
-# for (j in 1:4) {
-#   for (l in 1:nl) {
-#     MCMC.lambdaj <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)
-#     summary(MCMC.lambdaj)
-#     coda::traceplot(MCMC.lambdaj[,l])
-#     coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
-#     abline(v=lambda.target[j,l],col='red')
-#   }
-# }
-# mean_beta <- matrix(0,nsp,np)
-# mean_lambda <- matrix(0,nsp,nl)
-# mean_beta <-apply(mod$beta,c(2,3),mean)
-# mean_lambda <- apply(mod$lambda,c(2,3),mean)
-# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# plot(beta.target,mean_beta, xlab="obs", ylab="fitted",main="beta")
-# title("Fixed species effects", outer = T)
-# abline(a=0,b=1,col='red')
-# plot(lambda.target,mean_lambda, xlab="obs", ylab="fitted",main="lambda")
-# abline(a=0,b=1,col='red')
-# 
-# ## W latent variables
-# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-# MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
-#      main="W1")
-# title("Variables latentes", outer = T)
-# abline(a=0,b=1,col='red')
-# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
-#      main="W2")
-# abline(a=0,b=1,col='red')
-# 
-# ## Deviance
-# mean(mod$Deviance)
-# 
-# # Predictions
-# ##logit_theta
-# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# logit_theta_pred <- apply(mod$theta_latent,c(1,2),logit)
-# plot(logit.theta,logit_theta_pred, ylab ="fitted",
-#      xlab="obs", main="logit(theta)")
-# title(main="Probabilities of occurrence",outer=T)
-# abline(a=0,b=1,col='red')
-# ##theta
-# plot(theta,mod$theta_latent,ylab ="fitted",
-#      xlab="obs", main="theta")
-# abline(a=0,b=1,col='red')
+  library(coda)
+  library(jSDM)
+
+  nsp <- 100
+  nsite <- 300
+  seed <- 1234
+  set.seed(seed)
+  visits<- rpois(nsite,3)
+  visits[visits==0] <- 1
+
+  # Ecological process (suitability)
+  x1 <- rnorm(nsite,0,1)
+  x2 <- rnorm(nsite,0,1)
+  X <- cbind(rep(1,nsite),x1,x2)
+  np <- ncol(X)
+  set.seed(2*seed)
+  W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+  nl <- ncol(W)
+  l.zero <- 0
+  l.diag <- runif(2,0,2)
+  l.other <- runif(nsp*2-3,-2,2)
+  lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp)
+  beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+  alpha.target <- runif(nsite,-2,2)
+  alpha.target[1] <- 0
+  logit.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
+  theta <- inv_logit(logit.theta)
+  Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
+
+  # Iterations
+  nsamp <- 5000
+  nburn <- 10000
+  nthin <- 5
+  ngibbs <- nsamp+nburn
+
+  # Call to C++ function
+  mod <- Rcpp_jSDM_binomial_logit_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                               Y=Y, T=visits, X=X,
+                                               beta_start=matrix(0,np,nsp),
+                                               lambda_start=matrix(0,nl,nsp),
+                                               W_start=matrix(0,nsite,nl),
+                                               alpha_start=rep(0,nsite), V_alpha=10,
+                                               mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+                                               mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
+                                               V_W=rep(1,nl),
+                                               seed=1234, ropt=0.44, verbose=1)
+
+  # Parameter estimates
+  ##alpha
+  par(mfrow=c(1,1),oma=c(1, 0, 1.4, 0))
+  MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
+  plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"], ylab ="fitted",
+       xlab="obs",main="Fixed site effect alpha",cex.main=1.4)
+  abline(a=0,b=1,col='red')
+
+  ## species effect beta
+  par(mfrow=c(np,2))
+  for (j in 1:4) {
+    for (p in 1:np) {
+      MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      summary(MCMC.betaj)
+      coda::traceplot(MCMC.betaj[,p])
+      coda::densplot(MCMC.betaj[,p], main = paste0("beta",p, " sp", j))
+      abline(v=beta.target[j,p],col='red')
+    }
+  }
+  ## lambda_j
+  par(mfrow=c(nl*2,2))
+  for (j in 1:4) {
+    for (l in 1:nl) {
+      MCMC.lambdaj <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      summary(MCMC.lambdaj)
+      coda::traceplot(MCMC.lambdaj[,l])
+      coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
+      abline(v=lambda.target[j,l],col='red')
+    }
+  }
+  mean_beta <- matrix(0,nsp,np)
+  mean_lambda <- matrix(0,nsp,nl)
+  mean_beta <-apply(mod$beta,c(2,3),mean)
+  mean_lambda <- apply(mod$lambda,c(2,3),mean)
+  par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+  plot(beta.target,mean_beta, xlab="obs", ylab="fitted",main="beta")
+  title("Fixed species effects", outer = T)
+  abline(a=0,b=1,col='red')
+  plot(lambda.target,mean_lambda, xlab="obs", ylab="fitted",main="lambda")
+  abline(a=0,b=1,col='red')
+
+  ## W latent variables
+  par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+  MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
+  MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
+  plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
+       main="W1")
+  title("Variables latentes", outer = T)
+  abline(a=0,b=1,col='red')
+  plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
+       main="W2")
+  abline(a=0,b=1,col='red')
+
+  ## Deviance
+  mean(mod$Deviance)
+
+  # Predictions
+  ##logit_theta
+  par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+  logit_theta_pred <- apply(mod$theta_latent,c(1,2),logit)
+  plot(logit.theta,logit_theta_pred, ylab ="fitted",
+       xlab="obs", main="logit(theta)")
+  title(main="Probabilities of occurrence",outer=T)
+  abline(a=0,b=1,col='red')
+  ##theta
+  plot(theta,mod$theta_latent,ylab ="fitted",
+       xlab="obs", main="theta")
+  abline(a=0,b=1,col='red')
 
 */
 

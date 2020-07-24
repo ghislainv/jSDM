@@ -227,8 +227,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # #Data
 # #===================================================
 # 
-# nsp<- 100
-# nsite <- 300
+# nsp<- 50
+# nsite <- 200
 # np <- 3
 # nl <- 2
 # seed <- 123
@@ -266,9 +266,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # 
 # # Call to C++ function
 # # Iterations
-# nsamp <- 1000
-# nburn <- 1000
-# nthin <- 1
+# nsamp <- 5000
+# nburn <- 5000
+# nthin <- 5
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                           Y=Y, X=X,
@@ -282,44 +282,60 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # # ===================================================
 # 
 # # Parameter estimates
-# ## probit_theta
-# par(mfrow=c(1,1))
-# plot(probit_theta,mod$probit_theta_pred)
-# abline(a=0,b=1,col='red')
-# ## Z
-# plot(Z_true,mod$Z_latent)
-# abline(a=0,b=1,col='red')
 # ## beta_j
 # par(mfrow=c(np,2))
-# for (j in 1:4) {
-#   for (p in 1:np) {
-#     MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
-#     summary(MCMC.betaj)
-#     coda::traceplot(MCMC.betaj[,p])
-#     coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
-#     abline(v=beta.target[p,j],col='red')
+# mean_beta <- matrix(0,nsp,np)
+# for (j in 1:nsp) {
+#   mean_beta[j,] <-apply(mod$param[,j,1:np],2,mean)
+#   if(j<5){
+#     for (p in 1:np) {
+#       MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+#       summary(MCMC.betaj)
+#       coda::traceplot(MCMC.betaj[,p])
+#       coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
+#       abline(v=beta.target[p,j],col='red')
+#     }
 #   }
 # }
 # ## lambda_j
 # par(mfrow=c(nl*2,2))
-# for (j in 1:4) {
-#   for (l in 1:nl) {
-#     MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
-#     summary(MCMC.lambdaj)
-#     coda::traceplot(MCMC.lambdaj[,l])
-#     coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
-#     abline(v=lambda.target[l,j],col='red')
+# mean_lambda <- matrix(0,nsp,nl)
+# for (j in 1:nsp) {
+#   mean_lambda[j,] <- apply(mod$param[,j,(np+1):(nl+np)],2,mean)
+#   if(j<5){
+#     for (l in 1:nl) {
+#       MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
+#       summary(MCMC.lambdaj)
+#       coda::traceplot(MCMC.lambdaj[,l])
+#       coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
+#       abline(v=lambda.target[l,j],col='red')
+#     }
 #   }
 # }
 # 
+# ## Species effect beta and loading factors lambda
+# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+# plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
+# title("Fixed species effects", outer = T)
+# abline(a=0,b=1,col='red')
+# plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
+# abline(a=0,b=1,col='red')
+# 
 # ## W latent variables
-# par(mfrow=c(1,1))
+# par(mfrow=c(1,2))
 # MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
 # MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"])
+# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_1")
 # abline(a=0,b=1,col='red')
-# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"])
+# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_2")
 # abline(a=0,b=1,col='red')
 # ## Deviance
 # mean(mod$Deviance)
+# ## Prediction
+# # probit_theta
+# plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
+# abline(a=0,b=1,col='red')
+# # Z
+# plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
+# abline(a=0,b=1,col='red')
 */

@@ -275,7 +275,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_lv(
   
   for ( int g = 0; g < NGIBBS; g++ ) {
     
-      for ( int i = 0; i < NSITE; i++ ) {
+    for ( int i = 0; i < NSITE; i++ ) {
       // W
       dens_data.site_W = i; // Specifying the site
       for ( int q = 0; q < NL; q++ ) {

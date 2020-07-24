@@ -56,7 +56,7 @@ mod <- jSDM_binomial_probit_block(# Response variable
                                   beta_start=0,
                                   lambda_start=0,
                                   W_start=0,
-                                  V_alpha_start=1,
+                                  V_alpha=1,
                                   # Priors
                                   shape=0.5, rate=0.0005,
                                   mu_beta=0, V_beta=1.0E6,

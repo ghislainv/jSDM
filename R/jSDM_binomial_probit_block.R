@@ -16,23 +16,21 @@
 #' @param site_suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
 #' @param site_data A data frame containing the model's explicative variables by site.
 #' @param n_latent An integer which specifies the number of latent variables to generate. Defaults to \code{0}.
-#' @param site_effect A string indicating whether row effects are included as random effects (\code{"random"}) or not included (\code{"none"}) in the model. 
+#' @param site_effect A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
+#'  If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 #'  If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to \code{"none"}.
-# as fixed effects (\code{"fixed"}), If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 #' @param beta_start Starting values for beta parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. If \code{beta_start} takes a scalar value, then that value will serve for all of the \eqn{\beta} parameters.
-#' @param lambda_start Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal, unused if \code{n_latent=0}.
+#' @param lambda_start Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal, ignored if \code{n_latent=0}.
 #'  If \code{lambda_start} takes a scalar value, then that value will serve for all of the \eqn{\lambda} parameters except those concerned by the constraints explained above.
-#' @param W_start Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix, unused if \code{n_latent=0}.
+#' @param W_start Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix, ignored if \code{n_latent=0}.
 #'  If \code{W_start} takes a scalar value, then that value will serve for all of the \eqn{W_{il}}{W_il} with \eqn{i=1,\ldots,n_{site}}{l=1,...,n_site} and \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}.
-#' @param alpha_start Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, unused if \code{site_effect="none"}.
+#' @param alpha_start Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 #'  If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.
-#' @param V_alpha_start Starting value for variance of random site effect must be a stricly positive scalar, unused if \code{site_effect="none"}.
-#' # and if \code{site_effect="fixed"}
-#' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, unused if \code{site_effect="none"}. 
+#' @param V_alpha Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
+#' Must be a stricly positive scalar, ignored if \code{site_effect="none"}.
+#' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 #' Must be a stricly positive scalar. Default to 0.5 for weak informative prior.
-#' # and if \code{site_effect="fixed"}
-#' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, unused if \code{site_effect="none"}. 
-#' # and if \code{site_effect="fixed"}
+#' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 #' Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.
 #' @param mu_beta Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{p}-length vector.
 #'  If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters. The default value is set to 0 for an uninformative prior.
@@ -49,7 +47,7 @@
 #' @param verbose A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.
 #' @return An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
 #' mcmc.alpha \tab An mcmc object that contains the posterior samples for for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.\cr
-#' mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"}.\cr
+#' mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or \code{site_effect="fixed"}.\cr
 #' mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.\cr
 #' mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.\cr
 #' mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
@@ -64,7 +62,9 @@
 #' where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
-#'  if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} \cr
+#'  if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
 #'  if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }
 #' @references \tabular{l}{
@@ -148,7 +148,7 @@
 #'   beta_start=0,
 #'   lambda_start=0,
 #'   W_start=0,
-#'   V_alpha_start=1,
+#'   V_alpha=1,
 #'   # Priors
 #'   shape=0.5, rate=0.0005,
 #'   mu_beta=0, V_beta=1.0E6,
@@ -266,7 +266,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
                                        site_effect="none",
                                        lambda_start=0, W_start=0,
                                        beta_start=0, alpha_start=0,
-                                       V_alpha_start=1, shape=0.5, rate=0.0005,
+                                       V_alpha=1, shape=0.5, rate=0.0005,
                                        mu_beta=0, V_beta=1.0E6,
                                        mu_lambda=0, V_lambda=10,
                                        seed=1234, verbose=1)
@@ -298,9 +298,9 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   nburn <- burnin
   nsamp <- mcmc/thin
   
-  #========== 
+  #============ 
   # Check data
-  #==========
+  #============
   check.T.binomial(c(T), nobs)
   check.Y.binomial(c(as.matrix(Y)), c(T))
   check.X(X, nsite)
@@ -321,7 +321,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                           Y=as.matrix(Y), X=as.matrix(X),
+                                           Y=Y, X=as.matrix(X),
                                            beta_start=beta_start,
                                            V_beta=Vbeta, mu_beta = mubeta,
                                            seed=seed, verbose=verbose)
@@ -361,6 +361,12 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   }
   
   if(n_latent>0 && site_effect=="none"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
     #========
     # Initial starting values for M-H
     #========
@@ -384,7 +390,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                              Y=as.matrix(Y), X=as.matrix(X),
+                                              Y=Y, X=as.matrix(X),
                                               param_start= param_start, V_param=Vparam, mu_param = muparam,
                                               W_start=W_start, V_W=V_W,
                                               seed=seed, verbose=verbose)
@@ -435,7 +441,13 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     
   }
   
-  if(n_latent==0 && site_effect=="random"){
+  if(n_latent==0 && site_effect=="fixed"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
     #========
     # Initial starting values for M-H
     #========
@@ -447,15 +459,81 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     mubeta <- check.mubeta(mu_beta,np)
     Vbeta <- check.Vbeta.mat(V_beta,np)
-    V_alpha_start <- check.Valpha(V_alpha_start)
+    V_alpha <- check.Valpha(V_alpha)
+    
+    #========
+    # call Rcpp function
+    #========
+    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                     Y=Y, X=as.matrix(X),
+                                                     beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
+                                                     alpha_start=alpha_start, V_alpha=V_alpha,
+                                                     seed=seed, verbose=verbose)
+    
+    #= Transform Sample list in an MCMC object
+    MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
+    colnames(MCMC.Deviance) <- "Deviance"
+    MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
+    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    MCMC.sp <- list()
+    for (j in 1:nsp) {
+      ## beta_j
+      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
+      MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+    }
+    
+    if(is.null(colnames(Y))){
+      colnames(Y) <- paste0("species_",1:ncol(Y))
+    }
+    
+    #= Model specification, site_suitability,
+    model_spec <- list(presences=Y,
+                       site_suitability=site_suitability,
+                       site_data=site_data, n_latent=n_latent,
+                       burnin=burnin, mcmc=mcmc, thin=thin,
+                       beta_start=beta_start, alpha_start=alpha_start,
+                       V_alpha=V_alpha, site_effect=site_effect,
+                       mu_beta=mubeta, V_beta=Vbeta, 
+                       family="binomial", link="probit",
+                       seed=seed, verbose=verbose)
+    
+    #= Output
+    output <- list(mcmc.Deviance=MCMC.Deviance,
+                   mcmc.alpha = MCMC.alpha,
+                   mcmc.sp = MCMC.sp,
+                   Z_latent=mod$Z_latent, 
+                   probit_theta_pred=mod$probit_theta_pred,
+                   model_spec=model_spec)
+  }
+  
+  if(n_latent==0 && site_effect=="random"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
+    #========
+    # Initial starting values for M-H
+    #========
+    beta_start <- form.beta.start.sp(beta_start, np, nsp)
+    alpha_start <- form.alpha.start.sp(alpha_start, nsite)
+    
+    #========
+    # Form and check priors
+    #========
+    mubeta <- check.mubeta(mu_beta,np)
+    Vbeta <- check.Vbeta.mat(V_beta,np)
+    V_alpha <- check.Valpha(V_alpha)
     
     #========
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=as.matrix(Y), X=as.matrix(X),
+                                                     Y=Y, X=as.matrix(X),
                                                      beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
-                                                     alpha_start=alpha_start, V_alpha_start=V_alpha_start,
+                                                     alpha_start=alpha_start, V_alpha_start=V_alpha,
                                                      shape = shape, rate = rate,
                                                      seed=seed, verbose=verbose)
     
@@ -484,7 +562,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
                        site_data=site_data, n_latent=n_latent,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, alpha_start=alpha_start,
-                       V_alpha_start=V_alpha_start, shape=shape, rate=rate,
+                       V_alpha_start=V_alpha, shape=shape, rate=rate,
                        site_effect=site_effect, mu_beta=mubeta, V_beta=Vbeta, 
                        family="binomial", link="probit",
                        seed=seed, verbose=verbose)
@@ -498,7 +576,13 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
                    model_spec=model_spec)
   }
   
-  if(n_latent>0 && site_effect=="random"){
+  if(n_latent>0 && site_effect=="fixed"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
     #========
     # Initial starting values for M-H
     #========
@@ -518,16 +602,101 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
     muparam <- c(mubeta,mulambda)
     V_W <- diag(rep(1,n_latent))
-    V_alpha_start <- check.Valpha(V_alpha_start)
+    V_alpha <- check.Valpha(V_alpha)
+    
+    #========
+    # call Rcpp function
+    #========
+    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                        Y=Y, X=as.matrix(X),
+                                                        param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                                        W_start=W_start, V_W=V_W,
+                                                        alpha_start=alpha_start, V_alpha=V_alpha,
+                                                        seed=seed, verbose=verbose)
+    
+    #= Transform Sample list in an MCMC object
+    MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
+    colnames(MCMC.Deviance) <- "Deviance"
+    MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
+    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    MCMC.sp <- list()
+    for (j in 1:nsp) {
+      ## beta_j
+      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
+      ## lambda_j
+      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
+      
+      MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+    }
+    ## W latent variables 
+    MCMC.latent <- list()
+    for (l in 1:n_latent) {
+      MCMC.lv_l <- coda::mcmc(mod$W[,,l], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
+    }
+    
+    if(is.null(colnames(Y))){
+      colnames(Y) <- paste0("species_",1:ncol(Y))
+    }
+    #= Model specification, site_suitability,
+    model_spec <- list(presences=Y,
+                       site_suitability=site_suitability,
+                       site_data=site_data, n_latent=n_latent,
+                       burnin=burnin, mcmc=mcmc, thin=thin,
+                       beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                       lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
+                       alpha_start=alpha_start, V_alpha=V_alpha,
+                       site_effect=site_effect, W_start=W_start, V_W=V_W,
+                       family="binomial", link="probit",
+                       seed=seed, verbose=verbose)
+    
+    #= Output
+    output <- list(mcmc.Deviance=MCMC.Deviance,
+                   mcmc.alpha = MCMC.alpha, 
+                   mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
+                   Z_latent=mod$Z_latent, 
+                   probit_theta_pred=mod$probit_theta_pred,
+                   model_spec=model_spec)
+  }
+  
+  if(n_latent>0 && site_effect=="random"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
+    #========
+    # Initial starting values for M-H
+    #========
+    beta_start <- form.beta.start.sp(beta_start, np, nsp)
+    lambda_start <- form.lambda.start.sp(lambda_start, n_latent, nsp)
+    alpha_start <- form.alpha.start.sp(alpha_start, nsite)
+    W_start <-form.W.start.sp(W_start, nsite, n_latent)
+    param_start = rbind(beta_start,lambda_start)
+    
+    #========
+    # Form and check priors
+    #========
+    mubeta <- check.mubeta(mu_beta,np)
+    Vbeta <- check.Vbeta.mat(V_beta,np)
+    mulambda <- check.mubeta(mu_lambda,n_latent)
+    Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
+    Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
+    muparam <- c(mubeta,mulambda)
+    V_W <- diag(rep(1,n_latent))
+    V_alpha <- check.Valpha(V_alpha)
     
     #========
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                        Y=as.matrix(Y), X=as.matrix(X),
+                                                        Y=Y, X=as.matrix(X),
                                                         param_start= param_start, V_param=Vparam, mu_param = muparam,
                                                         W_start=W_start, V_W=V_W,
-                                                        alpha_start=alpha_start, V_alpha_start=V_alpha_start,
+                                                        alpha_start=alpha_start, V_alpha_start=V_alpha,
                                                         shape = shape, rate = rate,
                                                         seed=seed, verbose=verbose)
     
@@ -566,7 +735,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
-                       alpha_start=alpha_start, V_alpha_start=V_alpha_start, shape=shape, rate=rate,
+                       alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                        site_effect=site_effect, W_start=W_start, V_W=V_W,
                        family="binomial", link="probit",
                        seed=seed, verbose=verbose)
