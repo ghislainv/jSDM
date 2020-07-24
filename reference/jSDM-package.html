@@ -56,7 +56,9 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where 
 if n_latent=0 and site_effect=&quot;none&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)
 if n_latent&amp;gt;0 and site_effect=&quot;none&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)
-if n_latent=0 and site_effect=&quot;random&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
+if n_latent=0 and site_effect=&quot;fixed&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
+if n_latent&amp;gt;0 and site_effect=&quot;fixed&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)
+if n_latent=0 and site_effect=&quot;random&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)
 if n_latent&amp;gt;0 and site_effect=&quot;random&quot;probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
 
 jSDM_binomial_logit : Ecological process : 
@@ -64,6 +66,8 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where 
 if n_latent=0 and site_effect=&quot;none&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)
 if n_latent&amp;gt;0 and site_effect=&quot;none&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)
+if n_latent=0 and site_effect=&quot;fixed&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)
+if n_latent&amp;gt;0 and site_effect=&quot;fixed&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)
 if n_latent=0 and site_effect=&quot;random&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
 if n_latent&amp;gt;0 and site_effect=&quot;random&quot;logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)
 
@@ -179,7 +183,9 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where <table class='table'>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table></p></li>
 <li><p><code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code> : <b>Ecological process : </b>
@@ -187,6 +193,8 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where <table class='table'>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table></p></li>

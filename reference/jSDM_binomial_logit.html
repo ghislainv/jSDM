@@ -166,7 +166,7 @@
   <span class='kw'>lambda_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>W_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>alpha_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>V_alpha_start</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>V_alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>5e-04</span>,
   <span class='kw'>mu_beta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -216,7 +216,8 @@
     </tr>
     <tr>
       <th>site_effect</th>
-      <td><p>A string indicating whether row effects are included as random effects (<code>"random"</code>) or not included (<code>"none"</code>) in the model. 
+      <td><p>A string indicating whether row effects are included as fixed effects (<code>"fixed"</code>), as random effects (<code>"random"</code>), or not included (<code>"none"</code>) in the model. 
+If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to <code>"none"</code>.</p></td>
     </tr>
     <tr>
@@ -226,32 +227,32 @@ If <code>beta_start</code> takes a scalar value, then that value will serve for 
     </tr>
     <tr>
       <th>lambda_start</th>
-      <td><p>Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \(n_{latent} \times n_{species}\) upper triangular matrix with strictly positive values on the diagonal, unused if <code>n_latent=0</code>. 
+      <td><p>Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \(n_{latent} \times n_{species}\) upper triangular matrix with strictly positive values on the diagonal, ignored if <code>n_latent=0</code>. 
 If <code>lambda_start</code> takes a scalar value, then that value will serve for all of the \(\lambda\) parameters except those concerned by the constraints explained above.</p></td>
     </tr>
     <tr>
       <th>W_start</th>
-      <td><p>Starting values for latent variables must be either a scalar or a \(nsite \times n_latent\) matrix, unused if <code>n_latent=0</code>. 
+      <td><p>Starting values for latent variables must be either a scalar or a \(nsite \times n_latent\) matrix, ignored if <code>n_latent=0</code>. 
 If <code>W_start</code> takes a scalar value, then that value will serve for all of the \(W_{il}\) with \(i=1,\ldots,n_{site}\) and \(l=1,\ldots,n_{latent}\).</p></td>
     </tr>
     <tr>
       <th>alpha_start</th>
-      <td><p>Starting values for random site effect parameters must be either a scalar or a nsite-length vector, unused if <code>site_effect="none"</code>. 
+      <td><p>Starting values for random site effect parameters must be either a scalar or a nsite-length vector, ignored if <code>site_effect="none"</code>. 
 If <code>alpha_start</code> takes a scalar value, then that value will serve for all of the \(\alpha\) parameters.</p></td>
     </tr>
     <tr>
-      <th>V_alpha_start</th>
-      <td><p>Starting value for variance of random site effect must be a stricly positive scalar, unused if <code>site_effect="none"</code>.
-# and if <code>site_effect="fixed"</code></p></td>
+      <th>V_alpha</th>
+      <td><p>Starting value for variance of random site effect if <code>site_effect="random"</code> or constant variance of the Normal prior for the fixed site effect if <code>site_effect="fixed"</code>.
+Must be a stricly positive scalar, ignored if <code>site_effect="none"</code>.</p></td>
     </tr>
     <tr>
       <th>shape</th>
-      <td><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, unused if <code>site_effect="none"</code>. 
+      <td><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>. 
 Must be a stricly positive scalar. Default to 0.5 for weak informative prior.</p></td>
     </tr>
     <tr>
       <th>rate</th>
-      <td><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, unused if <code>site_effect="none"</code>. 
+      <td><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>.
 Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.</p></td>
     </tr>
     <tr>
@@ -269,13 +270,13 @@ The default variance is large and set to 1.0E6 for an uninformative flat prior.<
     </tr>
     <tr>
       <th>mu_lambda</th>
-      <td><p>Means of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, unused if <code>n_latent=0</code>. 
+      <td><p>Means of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, ignored if <code>n_latent=0</code>. 
 <code>mu_lambda</code> must be either a scalar or a \(n_{latent}\)-length vector. If <code>mu_lambda</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\lambda\) parameters.
 The default value is set to 0 for an uninformative prior.</p></td>
     </tr>
     <tr>
       <th>V_lambda</th>
-      <td><p>Variances of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, unused if <code>n_latent=0</code>. 
+      <td><p>Variances of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, ignored if <code>n_latent=0</code>. 
 <code>V_lambda</code> must be either a scalar or a \(n_{latent}\)-length positive vector. 
 If <code>V_lambda</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\lambda\) parameters. The default variance is large and set to 10 for an uninformative flat prior.</p></td>
     </tr>
@@ -297,7 +298,7 @@ If <code>V_lambda</code> takes a scalar value, then that value will serve as the
 
     <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
 <tr><td>mcmc.alpha</td><td>An mcmc object that contains the posterior samples for site effects \(\alpha_i\), not returned if <code>site_effect="none"</code>.</td></tr>
-<tr><td>mcmc.V_alpha</td><td>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code>.</td></tr>
+<tr><td>mcmc.V_alpha</td><td>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code> or  <code>site_effect="fixed"</code>.</td></tr>
 <tr><td>mcmc.latent</td><td>A list by latent variable of mcmc objects that contains the posterior samples for latent variables \(W_l\) with \(l=1,\ldots,n_{latent}\), not returned if <code>n_latent=0</code>.</td></tr>
 <tr><td>mcmc.sp</td><td>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_j\) and \(\lambda_j\) if <code>n_latent&gt;0</code>.</td></tr>
 <tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</td></tr>
@@ -313,6 +314,8 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where</p><table class='table'>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table>
@@ -381,10 +384,10 @@ where</p><table class='table'>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>theta</span>, <span class='fl'>2</span>, <span class='no'>rbinom</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='no'>nsite</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='no'>visits</span>)
 
 <span class='co'>#= Site-occupancy model</span>
-
+<span class='co'># Increase number of iterations (burnin and mcmc) to get convergence</span>
 <span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_binomial_logit</span>(<span class='co'># Chains</span>
-  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
-  <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
+  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>200</span>,
+  <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>200</span>,
   <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
   <span class='co'># Response variable</span>
   <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>Y</span>,
@@ -399,7 +402,7 @@ where</p><table class='table'>
   <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>,
   <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
   <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_alpha_start</span><span class='kw'>=</span><span class='fl'>1</span>,
+  <span class='kw'>V_alpha</span><span class='kw'>=</span><span class='fl'>1</span>,
   <span class='co'># Priors</span>
   <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>,
   <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
@@ -413,16 +416,16 @@ where</p><table class='table'>
   <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.228 lambda:0.199 W:0.514 alpha:0.353
-#&gt; **********:20.0%, mean accept. rates= beta:0.271 lambda:0.272 W:0.378 alpha:0.453
-#&gt; **********:30.0%, mean accept. rates= beta:0.363 lambda:0.333 W:0.381 alpha:0.440
-#&gt; **********:40.0%, mean accept. rates= beta:0.391 lambda:0.405 W:0.406 alpha:0.455
-#&gt; **********:50.0%, mean accept. rates= beta:0.423 lambda:0.459 W:0.443 alpha:0.445
-#&gt; **********:60.0%, mean accept. rates= beta:0.425 lambda:0.429 W:0.432 alpha:0.473
-#&gt; **********:70.0%, mean accept. rates= beta:0.452 lambda:0.462 W:0.444 alpha:0.460
-#&gt; **********:80.0%, mean accept. rates= beta:0.408 lambda:0.437 W:0.445 alpha:0.456
-#&gt; **********:90.0%, mean accept. rates= beta:0.431 lambda:0.426 W:0.439 alpha:0.480
-#&gt; **********:100.0%, mean accept. rates= beta:0.432 lambda:0.454 W:0.441 alpha:0.456</div><div class='input'><span class='co'>#==========</span>
+#&gt; **********:10.0%, mean accept. rates= beta:0.211 lambda:0.197 W:0.482 alpha:0.362
+#&gt; **********:20.0%, mean accept. rates= beta:0.268 lambda:0.267 W:0.367 alpha:0.452
+#&gt; **********:30.0%, mean accept. rates= beta:0.346 lambda:0.360 W:0.402 alpha:0.447
+#&gt; **********:40.0%, mean accept. rates= beta:0.413 lambda:0.420 W:0.433 alpha:0.444
+#&gt; **********:50.0%, mean accept. rates= beta:0.446 lambda:0.426 W:0.432 alpha:0.448
+#&gt; **********:60.0%, mean accept. rates= beta:0.450 lambda:0.439 W:0.435 alpha:0.457
+#&gt; **********:70.0%, mean accept. rates= beta:0.438 lambda:0.431 W:0.433 alpha:0.443
+#&gt; **********:80.0%, mean accept. rates= beta:0.443 lambda:0.460 W:0.432 alpha:0.449
+#&gt; **********:90.0%, mean accept. rates= beta:0.430 lambda:0.447 W:0.438 alpha:0.457
+#&gt; **********:100.0%, mean accept. rates= beta:0.453 lambda:0.446 W:0.437 alpha:0.448</div><div class='input'><span class='co'>#==========</span>
 <span class='co'>#== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>
@@ -471,17 +474,17 @@ where</p><table class='table'>
 #&gt;   2 </div><div class='input'>
 <span class='co'># Species effects beta and factor loadings lambda</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>beta.target</span>, <span class='no'>mean_beta</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beta.target</span>, <span class='no'>mean_beta</span>,
      <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"species effect beta"</span>,
      <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>lambda.target</span>, <span class='no'>mean_lambda</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>lambda.target</span>, <span class='no'>mean_lambda</span>,
      <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"factor loadings lambda"</span>,
      <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='jSDM_binomial_logit-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## W latent variables</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
        <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.latent</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='no'>l</span>)]])<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
        <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='no'>l</span>),
        <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)
@@ -490,7 +493,7 @@ where</p><table class='table'>
 <span class='co'>## alpha</span>
 <span class='co'># summary(mod$mcmc.alpha)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
      <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"site effect alpha"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='jSDM_binomial_logit-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Valpha</span>
 <span class='co'># summary(mod$mcmc.V_alpha)</span>
@@ -499,11 +502,11 @@ where</p><table class='table'>
 <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.V_alpha</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>V_alpha.target</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='jSDM_binomial_logit-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Deviance</span>
 <span class='co'># summary(mod$mcmc.Deviance)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_logit-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_logit-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
      <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Probabilities of occurence theta"</span>,
      <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)</div><div class='img'><img src='jSDM_binomial_logit-6.png' alt='' width='700' height='433' /></div></pre>
   </div>
