@@ -232,6 +232,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 // Test
 /*** R
 # library(coda)
+# library(jSDM)
 # 
 # inv.logit <- function(x, min=0, max=1) {
 #     p <- exp(x)/(1+exp(x))

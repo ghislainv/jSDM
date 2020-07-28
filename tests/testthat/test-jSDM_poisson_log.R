@@ -5,7 +5,7 @@ context("test-jSDM_poisson_log")
 
 # Data simulation
 #= Number of sites
-nsite <- 150
+nsite <- 50
 #= Number of species
 nsp <- 1
 #= Set seed for repeatability
@@ -57,9 +57,9 @@ test_that("jSDM_poisson_log works with one species", {
 
 # Data simulation
 #= Number of sites
-nsite <- 150
+nsite <- 50
 #= Number of species
-nsp <- 50
+nsp <- 5
 #= Set seed for repeatability
 seed <- 1234
 

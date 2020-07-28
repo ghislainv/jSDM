@@ -169,7 +169,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
     } // loop on sites 
     
     // center alpha 
-    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run); 
+    dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run); 
     
     // V_alpha
     double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
@@ -400,8 +400,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
 # library(coda)
 # library(jSDM)
 # 
-# nsp <- 100
-# nsite <- 300
+# nsp <- 50
+# nsite <- 150
 # seed <- 1234
 # set.seed(seed)
 # visits<- rpois(nsite,3)
@@ -492,7 +492,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
 # plot(lambda.target,mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-## W latent variables
+# # W latent variables
 # par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
 # mean_W <- apply(mod$W, c(2,3), mean)
 # plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
@@ -500,8 +500,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
 # title("Variables latentes", outer = T)
 # plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-#
-# # lambda * W 
+# 
+# # lambda * W
 # par(mfrow=c(1,1))
 # plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
 #      xlab="obs", ylab= "fitted", main="W_i.lambda_j")

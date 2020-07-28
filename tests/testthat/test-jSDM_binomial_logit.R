@@ -5,7 +5,7 @@ context("test-jSDM_binomial_logit")
 
 # Data simulation
 #= Number of sites
-nsite <- 150
+nsite <- 50
 #= Number of species
 nsp <- 1
 #= Set seed for repeatability
@@ -59,9 +59,9 @@ test_that("jSDM_binomial_logit works with one species", {
 
 # Data simulation
 #= Number of sites
-nsite <- 150
+nsite <- 50
 #= Number of species
-nsp <- 20
+nsp <- 5
 #= Set seed for repeatability
 seed <- 1234
 #= Number of visits associated to each site

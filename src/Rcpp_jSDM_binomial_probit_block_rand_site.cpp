@@ -134,6 +134,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
+    // center alpha 
+    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run); 
+    
     ////////////////////////////////////////////////
     // V_alpha
     double sum = arma::as_scalar(alpha_run.t()*alpha_run);

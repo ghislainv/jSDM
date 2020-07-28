@@ -135,16 +135,15 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
       } 
     } // loop on sites
     
+    // center alpha 
+    dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
+    
     // V_alpha
     double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
     double shape_posterior = dens_data.shape + 0.5*NSITE;
     double rate_posterior = dens_data.rate + 0.5*sum;
     
     dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
-    
-    
-    // center alpha 
-    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
     
     for ( int j = 0; j < NSP; j++ ) {
       // beta
@@ -292,8 +291,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
 # library(coda)
 # library(jSDM)
 # 
-# nsp <- 100
-# nsite <- 300
+# nsp <- 50
+# nsite <- 150
 # seed <- 1234
 # set.seed(seed)
 # visits<- rpois(nsite,3)

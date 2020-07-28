@@ -85,7 +85,7 @@
 #' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 150
+#' nsite <- 100
 #' #= Number of species
 #' nsp <- 20
 #' #= Set seed for repeatability
