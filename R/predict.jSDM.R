@@ -25,7 +25,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block}}
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_poisson_log}}
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -89,7 +89,8 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   ##= Link function probit for family=="binomial"
   if( model.spec$link=="probit") inv.link <- function (x) {pnorm(x)}
-  if( model.spec$link=="logit") inv.link <- inv_logit
+  if( model.spec$link=="logit") inv.link <- function (x) {inv_logit(x)}
+  if( model.spec$link=="log") inv.link <- function (x) {exp(x)}
   
   ##= Matrix for predictions
   if (is.null(newdata)) {

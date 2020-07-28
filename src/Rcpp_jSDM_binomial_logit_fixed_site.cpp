@@ -6,84 +6,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
 
-/* dens_par */
-struct dens_par {
-  // Data 
-  int NSITE;
-  int NSP;
-  arma::umat Y;
-  arma::uvec T;
-  // Suitability 
-  // beta
-  int NP;
-  arma::mat X;
-  int pos_beta;
-  int sp_beta;
-  arma::vec mu_beta;
-  arma::vec V_beta;
-  arma::mat beta_run;
-  //alpha
-  int site_alpha; 
-  double V_alpha;
-  arma::rowvec alpha_run;
-};
-
-/* betadens_fixed_site */
-double betadens_fixed_site (double beta_jk, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the rank and the species of the parameter of interest
-  int k = d->pos_beta;
-  int j = d->sp_beta;
-  // logLikelihood
-  double logL = 0.0;
-  for ( int i = 0; i < d->NSITE; i++ ) {
-    /* theta */
-    double Xpart_theta = 0.0;
-    for ( int p = 0; p < d->NP; p++ ) {
-      if ( p != k ) {
-        Xpart_theta += d->X(i,p) * d->beta_run(p,j);
-      }
-    }
-    Xpart_theta += d->X(i,k) * beta_jk +  d->alpha_run(i);
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on sites 
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(beta_jk, d->mu_beta(k), std::sqrt(d->V_beta(k)), 1);
-  return logP;
-}
-
-/* alphadens_lv */
-
-double alphadens_fixed_site(double alpha_i, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the site of the parameter of interest
-  int i = d->site_alpha;
-  // logLikelihood
-  double logL = 0.0;
-  /* theta */
-  for ( int j = 0; j < d->NSP; j++ ) {
-    double Xpart_theta = 0.0;
-    for ( int p = 0; p < d->NP; p++ ) {
-      Xpart_theta += d->X(i,p) * d->beta_run(p,j); 
-    } 
-    Xpart_theta += alpha_i; 
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on species
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha),1);
-  return logP;
-}
-
 /* ************************ */
 /* Gibbs sampler function */
 
@@ -119,6 +41,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
   const int NSITE = X.n_rows;
   const int NP = X.n_cols;
   const int NSP = Y.n_cols;
+  const int NL=0;
   
   ////////////////////////////////////////////
   // Declaring new objects to store results //
@@ -137,6 +60,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
   // Data 
   dens_data.NSITE = NSITE;
   dens_data.NSP = NSP;
+  dens_data.NL = NL;
   // Y
   dens_data.Y = Y;
   // T
@@ -152,8 +76,19 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
   dens_data.beta_run = beta_start;
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.V_alpha = V_alpha;
+  dens_data.V_alpha_run = V_alpha;
   dens_data.alpha_run = alpha_start.t();
+  // lambda 
+  dens_data.pos_lambda = NA_REAL;
+  dens_data.sp_lambda = NA_REAL;
+  dens_data.mu_lambda = NA_REAL;
+  dens_data.V_lambda = NA_REAL;
+  dens_data.lambda_run = NA_REAL;
+  // W
+  dens_data.site_W = NA_REAL;
+  dens_data.pos_W = NA_REAL;
+  dens_data.V_W = NA_REAL;
+  dens_data.W_run = NA_REAL;
   
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //
@@ -183,8 +118,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
       dens_data.site_alpha = i; // Specifying the site 
       double x_now = dens_data.alpha_run(i);
       double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_fixed_site(x_now, &dens_data);
-      double p_prop = alphadens_fixed_site(x_prop, &dens_data);
+      double p_now = alphadens_logit(x_now, &dens_data);
+      double p_prop = alphadens_logit(x_prop, &dens_data);
       double ratio = std::exp(p_prop - p_now); // ratio
       double z = gsl_rng_uniform(r);
       // Actualization
@@ -208,8 +143,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(j,p));
-        double p_now = betadens_fixed_site(x_now, &dens_data);
-        double p_prop = betadens_fixed_site(x_prop, &dens_data);
+        double p_now = betadens_logit(x_now, &dens_data);
+        double p_prop = betadens_logit(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization

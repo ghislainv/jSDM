@@ -3,12 +3,21 @@
 #' @aliases jSDM-package
 #' @title joint species distribution models
 #' @description \code{jSDM} is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+#'
 #' The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
-#' #'
+#'
 #' The package includes the following functions to fit various species distribution models :
+#' 
+#' \tabular{ll}{
+#'    function \tab data-type \cr
+#'    jSDM_binomial_logit \tab presence-absence \cr
+#'    jSDM_binomial_probit_block \tab presence-absence \cr
+#'    jSDM_poisson_log \tab abundance \cr }
+#'    
 #' \itemize{
 #'   
 #'   \item{ \code{\link{jSDM_binomial_probit_block}} : 
+#'
 #'
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
@@ -23,6 +32,7 @@
 #' 
 #'   \item{ \code{\link{jSDM_binomial_logit}} : 
 #'
+#'
 #' \bold{Ecological process : }
 #' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
 #' where \tabular{ll}{
@@ -32,6 +42,20 @@
 #'  if \code{n_latent>0} and \code{site_effect="fixed"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
 #'  if \code{n_latent=0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #'  if \code{n_latent>0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#' }}
+#' 
+#' \item{ \code{\link{jSDM_poisson_log}} : 
+#'
+#'
+#' \bold{Ecological process : }
+#' \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij Poisson(\theta_ij),}
+#' where \tabular{ll}{
+#'  if \code{n_latent=0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+#'  if \code{n_latent>0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+#'  if \code{n_latent=0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
+#'  if \code{n_latent>0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
+#'  if \code{n_latent=0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }}
 #' }
 #' @details \tabular{ll}{

@@ -8,7 +8,8 @@
 #' @name jSDM_binomial_probit_block
 #' @aliases jSDM_binomial_probit_block
 #' @title Binomial probit regression 
-#' @description The \code{jSDM_binomial_probit_block} function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+#' @description The \code{jSDM_binomial_probit_block} function performs a Binomial probit regression in a Bayesian framework. 
+#' The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
@@ -73,7 +74,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr> \cr
 #' Jeanne Clément <jeanne.clement16@laposte.net> \cr }
-#' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}}
+#' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}}  
 #' @examples
 #' #==============================================
 #' # jSDM_binomial_probit_block()

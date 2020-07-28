@@ -6,199 +6,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
 
-/* dens_par */
-struct dens_par {
-  // Data 
-  int NSITE;
-  int NSP;
-  arma::umat Y;
-  arma::uvec T;
-  // Suitability 
-  // beta
-  int NP;
-  arma::mat X;
-  int pos_beta;
-  int sp_beta;
-  arma::vec mu_beta;
-  arma::vec V_beta;
-  arma::mat beta_run;
-  // lambda
-  int NL; 
-  int pos_lambda;
-  int sp_lambda;
-  arma::vec mu_lambda;
-  arma::vec V_lambda;
-  arma::mat lambda_run;
-  // W
-  int site_W;
-  int pos_W;
-  arma::vec V_W;
-  arma::mat W_run;
-  //alpha
-  int site_alpha; 
-  double V_alpha_run;
-  double shape;
-  double rate;
-  arma::rowvec alpha_run;
-};
-
-/* betadens_lv */
-double betadens_lv (double beta_jk, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the rank and the species of the parameter of interest
-  int k = d->pos_beta;
-  int j = d->sp_beta;
-  // logLikelihood
-  double logL = 0.0;
-  for ( int i = 0; i < d->NSITE; i++ ) {
-    /* theta */
-    double Xpart_theta = 0.0;
-    for ( int p = 0; p < d->NP; p++ ) {
-      if ( p != k ) {
-        Xpart_theta += d->X(i,p) * d->beta_run(p,j);
-      }
-    }
-    for ( int q = 0; q < d->NL; q++ ) {
-      Xpart_theta += d->W_run(i,q) * d->lambda_run(q,j);
-    } 
-    Xpart_theta += d->X(i,k) * beta_jk +  d->alpha_run(i);
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on sites 
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(beta_jk, d->mu_beta(k), std::sqrt(d->V_beta(k)), 1);
-  return logP;
-}
-
-/* lambdadens_lv */
-double lambdadens_lv (double lambda_jq, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the rank and the species of the parameter of interest
-  int q = d->pos_lambda;
-  int j = d->sp_lambda;
-  // logLikelihood
-  double logL = 0.0;
-  for ( int i = 0; i < d->NSITE; i++ ) {
-    /* theta */
-    double Xpart_theta = 0.0;
-    for ( int p = 0;  p < d->NP; p++ ) {
-      Xpart_theta += d->X(i,p) * d->beta_run(p,j);
-    }
-    for ( int l = 0;  l < d->NL; l++ ) {
-      if(l != q) {
-        Xpart_theta += d->W_run(i,l)* d->lambda_run(l,j);
-      }
-    }
-    Xpart_theta += d->W_run(i,q) * lambda_jq +  d->alpha_run(i);
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on sites 
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(lambda_jq, d->mu_lambda(q), std::sqrt(d->V_lambda(q)), 1);
-  return logP;
-}
-
-double lambdaUdens_lv (double lambda_jq, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the rank and the species of the parameter of interest
-  int q = d->pos_lambda;
-  int j = d->sp_lambda;
-  // logLikelihood
-  double logL = 0.0;
-  for ( int i = 0; i < d->NSITE; i++ ) {
-    /* theta */
-    double Xpart_theta = 0.0;
-    for ( int p = 0;  p < d->NP; p++ ) {
-      Xpart_theta += d->X(i,p) * d->beta_run(p,j);
-    }
-    for ( int l = 0;  l < d->NL; l++ ) {
-      if(l != q) {
-        Xpart_theta += d->W_run(i,l)* d->lambda_run(l,j);
-      }
-    }
-    Xpart_theta += d->W_run(i,q) * lambda_jq +  d->alpha_run(i);
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on sites 
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dunif(lambda_jq, d->mu_lambda(q), d->V_lambda(q), 1);
-  return logP;
-}
-
-/* Wdens_lv */
-double Wdens_lv (double W_iq, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the rank and the species of the parameter of interest
-  int i = d->site_W;
-  int q = d->pos_W;
-  // logLikelihood
-  double logL = 0.0;
-  for ( int j = 0; j < d->NSP; j++ ) {
-    /* theta */
-    double Xpart_theta = 0.0;
-    for ( int p = 0;  p < d->NP; p++ ) {
-      Xpart_theta += d->X(i,p) * d->beta_run(p,j);
-    }
-    for ( int l = 0;  l < d->NL; l++ ) {
-      if(l != q) {
-        Xpart_theta += d->W_run(i,l)* d->lambda_run(l,j);
-      }
-    }
-    Xpart_theta += W_iq * d->lambda_run(q,j) +  d->alpha_run(i)  ;
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on species
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(W_iq, 0, std::sqrt(d->V_W(q)), 1);
-  return logP;
-}
-
-/* alphadens_lv */
-
-double alphadens_lv (double alpha_i, void *dens_data) {
-  // Pointer to the structure: d
-  dens_par *d;
-  d = static_cast<dens_par *> (dens_data);
-  // Indicating the site of the parameter of interest
-  int i = d->site_alpha;
-  // logLikelihood
-  double logL = 0.0;
-  /* theta */
-  for ( int j = 0; j < d->NSP; j++ ) {
-    double Xpart_theta = 0.0;
-    for ( int p = 0; p < d->NP; p++ ) {
-      Xpart_theta += d->X(i,p) * d->beta_run(p,j); 
-    } 
-    for ( int q = 0; q < d->NL; q++ ) {
-      Xpart_theta += d->W_run(i,q) * d->lambda_run(q,j);
-    } 
-    Xpart_theta += alpha_i; 
-    double theta = invlogit(Xpart_theta);
-    /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i), theta, 1);
-  } // loop on species
-  
-  // logPosterior = logL + logPrior
-  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha_run),1);
-  return logP;
-}
-
 /* ************************ */
 /* Gibbs sampler function */
 
@@ -333,8 +140,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
       dens_data.site_alpha = i; // Specifying the site 
       double x_now = dens_data.alpha_run(i);
       double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_lv(x_now, &dens_data);
-      double p_prop = alphadens_lv(x_prop, &dens_data);
+      double p_now = alphadens_logit(x_now, &dens_data);
+      double p_prop = alphadens_logit(x_prop, &dens_data);
       double ratio = std::exp(p_prop - p_now); // ratio
       double z = gsl_rng_uniform(r);
       // Actualization
@@ -349,8 +156,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.pos_W = q; // Specifying the rank of the latent variable of interest
         double x_now = dens_data.W_run(i,q);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_W(i,q));
-        double p_now = Wdens_lv(x_now, &dens_data);
-        double p_prop = Wdens_lv(x_prop, &dens_data);
+        double p_now = Wdens_logit(x_now, &dens_data);
+        double p_prop = Wdens_logit(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -384,8 +191,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(j,p));
-        double p_now = betadens_lv(x_now, &dens_data);
-        double p_prop = betadens_lv(x_prop, &dens_data);
+        double p_now = betadens_logit(x_now, &dens_data);
+        double p_prop = betadens_logit(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -402,8 +209,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q < j ) {
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmaq_lambda(j,q));
-          double p_now = lambdadens_lv(x_now, &dens_data);
-          double p_prop = lambdadens_lv(x_prop, &dens_data);
+          double p_now = lambdadens_logit(x_now, &dens_data);
+          double p_prop = lambdadens_logit(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
@@ -415,8 +222,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
         if (q == j) { 
           double x_now = dens_data.lambda_run(q,j);
           double x_prop = x_now + gsl_ran_gaussian_ziggurat(r,sigmaq_lambda(j,q));
-          double p_now = lambdaUdens_lv(x_now, &dens_data);
-          double p_prop = lambdaUdens_lv(x_prop, &dens_data);
+          double p_now = lambdaUdens_logit(x_now, &dens_data);
+          double p_prop = lambdaUdens_logit(x_prop, &dens_data);
           double ratio = std::exp(p_prop - p_now); // ratio
           double z = gsl_rng_uniform(r);
           // Actualization
@@ -685,16 +492,19 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site_lv(
 # plot(lambda.target,mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-# ## W latent variables
+## W latent variables
 # par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-# MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
-#      main="W1")
-# title("Variables latentes", outer = T)
+# mean_W <- apply(mod$W, c(2,3), mean)
+# plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"],xlab="obs", ylab= "fitted",
-#      main="W2")
+# title("Variables latentes", outer = T)
+# plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
+# abline(a=0,b=1,col='red')
+#
+# # lambda * W 
+# par(mfrow=c(1,1))
+# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
+#      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
 # abline(a=0,b=1,col='red')
 # 
 # ## Deviance

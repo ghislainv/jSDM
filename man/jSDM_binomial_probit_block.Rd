@@ -99,7 +99,8 @@ model_spec \tab Various attributes of the model fitted, including the response a
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
 \description{
-The \code{jSDM_binomial_probit_block} function performs a Binomial probit regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+The \code{jSDM_binomial_probit_block} function performs a Binomial probit regression in a Bayesian framework. 
+The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 }
 \details{
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
@@ -305,7 +306,7 @@ Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{
 Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}
 }
 \seealso{
-\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}}
+\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}}
 }
 \author{
 \tabular{l}{

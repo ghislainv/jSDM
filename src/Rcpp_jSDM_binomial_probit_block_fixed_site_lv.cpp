@@ -256,126 +256,131 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
 
 // Test
 /*** R
-#===================================================
-#Data
-#===================================================
-
-nsp<- 50
-nsite <- 200
-np <- 3
-nl <- 2
-seed <- 123
-set.seed(seed)
-
-# Ecological process (suitability)
-x1 <- rnorm(nsite,0,1)
-x2 <- rnorm(nsite,0,1)
-X <- cbind(rep(1,nsite),x1,x2)
-colnames(X) <- c("Int","x1","x2")
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-data = cbind (X,W)
-beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*2-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
-alpha.target <- runif(nsite,-2,2)
-alpha.target[1] <- 0
-probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
-e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
-Z_true <- probit_theta + e
-
-Y <- matrix (NA, nsite,nsp)
-for (i in 1:nsite){
-  for (j in 1:nsp){
-    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
-    else {Y[i,j] <- 0}
-  }
-}
-
-param_start=matrix(0,np+nl,nsp)
-for (i in 1:nl){
-  param_start[np+i,i] = 1
-}
-
-# Call to C++ function
-# Iterations
-nsamp <- 5000
-nburn <- 5000
-nthin <- 5
-ngibbs <- nsamp+nburn
-mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
-                                                     mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
-                                                     alpha_start=rep(0,nsite), V_alpha=10,
-                                                     seed=123, verbose=1)
-
-# ===================================================
-# Result analysis
-# ===================================================
-
-## alpha
-par(mfrow=c(1,1))
-MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
-plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"],
-     ylab ="fitted", xlab="obs", main="Fixed site effect alpha")
-abline(a=0,b=1,col='red')
-
-## beta_j
-par(mfrow=c(np,2))
-mean_beta <- matrix(0,nsp,np)
-for (j in 1:nsp) {
-  mean_beta[j,] <-apply(mod$param[,j,1:np],2,mean)
-  if(j<5){
-    for (p in 1:np) {
-      MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
-      summary(MCMC.betaj)
-      coda::traceplot(MCMC.betaj[,p])
-      coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
-      abline(v=beta.target[p,j],col='red')
-    }
-  }
-}
-## lambda_j
-par(mfrow=c(nl*2,2))
-mean_lambda <- matrix(0,nsp,nl)
-for (j in 1:nsp) {
-  mean_lambda[j,] <- apply(mod$param[,j,(np+1):(nl+np)],2,mean)
-  if(j<5){
-    for (l in 1:nl) {
-      MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
-      summary(MCMC.lambdaj)
-      coda::traceplot(MCMC.lambdaj[,l])
-      coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
-      abline(v=lambda.target[l,j],col='red')
-    }
-  }
-}
-
-## Species effect beta and loading factors lambda
-par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
-title("Fixed species effects", outer = T)
-abline(a=0,b=1,col='red')
-plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
-abline(a=0,b=1,col='red')
-
+# #===================================================
+# #Data
+# #===================================================
+# 
+# nsp<- 50
+# nsite <- 200
+# np <- 3
+# nl <- 2
+# seed <- 123
+# set.seed(seed)
+# 
+# # Ecological process (suitability)
+# x1 <- rnorm(nsite,0,1)
+# x2 <- rnorm(nsite,0,1)
+# X <- cbind(rep(1,nsite),x1,x2)
+# colnames(X) <- c("Int","x1","x2")
+# W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+# data = cbind (X,W)
+# beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+# l.zero <- 0
+# l.diag <- runif(2,0,2)
+# l.other <- runif(nsp*2-3,-2,2)
+# lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
+# param.target <- rbind(beta.target,lambda.target)
+# alpha.target <- runif(nsite,-2,2)
+# alpha.target[1] <- 0
+# probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
+# e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
+# Z_true <- probit_theta + e
+# 
+# Y <- matrix (NA, nsite,nsp)
+# for (i in 1:nsite){
+#   for (j in 1:nsp){
+#     if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
+#     else {Y[i,j] <- 0}
+#   }
+# }
+# 
+# param_start=matrix(0,np+nl,nsp)
+# for (i in 1:nl){
+#   param_start[np+i,i] = 1
+# }
+# 
+# # Call to C++ function
+# # Iterations
+# nsamp <- 5000
+# nburn <- 5000
+# nthin <- 5
+# ngibbs <- nsamp+nburn
+# mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#                                                      Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
+#                                                      mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
+#                                                      alpha_start=rep(0,nsite), V_alpha=10,
+#                                                      seed=123, verbose=1)
+# 
+# # ===================================================
+# # Result analysis
+# # ===================================================
+# 
+# ## alpha
+# par(mfrow=c(1,1))
+# MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
+# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"],
+#      ylab ="fitted", xlab="obs", main="Fixed site effect alpha")
+# abline(a=0,b=1,col='red')
+# 
+# ## beta_j
+# par(mfrow=c(np,2))
+# mean_beta <- matrix(0,nsp,np)
+# for (j in 1:nsp) {
+#   mean_beta[j,] <-apply(mod$param[,j,1:np],2,mean)
+#   if(j<5){
+#     for (p in 1:np) {
+#       MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+#       summary(MCMC.betaj)
+#       coda::traceplot(MCMC.betaj[,p])
+#       coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
+#       abline(v=beta.target[p,j],col='red')
+#     }
+#   }
+# }
+# ## lambda_j
+# par(mfrow=c(nl*2,2))
+# mean_lambda <- matrix(0,nsp,nl)
+# for (j in 1:nsp) {
+#   mean_lambda[j,] <- apply(mod$param[,j,(np+1):(nl+np)],2,mean)
+#   if(j<5){
+#     for (l in 1:nl) {
+#       MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
+#       summary(MCMC.lambdaj)
+#       coda::traceplot(MCMC.lambdaj[,l])
+#       coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
+#       abline(v=lambda.target[l,j],col='red')
+#     }
+#   }
+# }
+# 
+# ## Species effect beta and loading factors lambda
+# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+# plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
+# title("Fixed species effects", outer = T)
+# abline(a=0,b=1,col='red')
+# plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
+# abline(a=0,b=1,col='red')
+# 
 ## W latent variables
-par(mfrow=c(1,2))
-MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_1")
-abline(a=0,b=1,col='red')
-plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_2")
-abline(a=0,b=1,col='red')
-## Deviance
-mean(mod$Deviance)
-## Prediction
-# probit_theta
-plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
-abline(a=0,b=1,col='red')
-# Z
-plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
-abline(a=0,b=1,col='red')
-*/
+# par(mfrow=c(1,2))
+# mean_W <- apply(mod$W, c(2,3), mean)
+# plot(W[,1],mean_W[,1])
+# abline(a=0,b=1,col='red')
+# plot(W[,2],mean_W[,2])
+# abline(a=0,b=1,col='red')
+#
+# # lambda * W 
+# par(mfrow=c(1,1))
+# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda))
+# abline(a=0,b=1,col='red')
+# 
+# ## Deviance
+# mean(mod$Deviance)
+# ## Prediction
+# # probit_theta
+# plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
+# abline(a=0,b=1,col='red')
+# # Z
+# plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
+# abline(a=0,b=1,col='red')
+# */

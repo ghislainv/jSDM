@@ -11,8 +11,54 @@
 #include <gsl/gsl_matrix.h>
 #include <cmath>
 
+/* dens_par.h */
+struct dens_par {
+  // Data 
+  int NSITE;
+  int NSP;
+  arma::umat Y;
+  arma::uvec T;
+  // Suitability 
+  // beta
+  int NP;
+  arma::mat X;
+  int pos_beta;
+  int sp_beta;
+  arma::vec mu_beta;
+  arma::vec V_beta;
+  arma::mat beta_run;
+  // lambda
+  int NL; 
+  int pos_lambda;
+  int sp_lambda;
+  arma::vec mu_lambda;
+  arma::vec V_lambda;
+  arma::mat lambda_run;
+  // W
+  int site_W;
+  int pos_W;
+  arma::vec V_W;
+  arma::mat W_run;
+  //alpha
+  int site_alpha; 
+  double V_alpha_run;
+  double shape;
+  double rate;
+  arma::rowvec alpha_run;
+};
 
 // Prototype of useful functions
+/* dens_logit */
+double betadens_logit (double beta_jk, void *dens_data);
+double lambdadens_logit (double lambda_jq, void *dens_data);
+double lambdaUdens_logit (double lambda_jq, void *dens_data);
+double alphadens_logit(double alpha_i, void *dens_data);
+double Wdens_logit (double W_iq, void *dens_data);
+double betadens_pois (double beta_jk, void *dens_data);
+double lambdadens_pois (double lambda_jq, void *dens_data);
+double lambdaUdens_pois (double lambda_jq, void *dens_data);
+double alphadens_pois(double alpha_i, void *dens_data);
+double Wdens_pois (double W_iq, void *dens_data);
 arma::mat chol_decomp (arma::mat V);
 int my_gsl_ran_multivariate_gaussian (const gsl_rng * r, const gsl_vector * mu, 
                                       const gsl_matrix * L, gsl_vector * result);

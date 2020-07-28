@@ -10,10 +10,9 @@
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List  Rcpp_jSDM_binomial_logit(
+Rcpp::List  Rcpp_jSDM_poisson_log(
     const int ngibbs, const int nthin, const int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
-    const arma::uvec &T, // Number of trials
     const arma::mat &X, // Suitability covariates
     arma::mat beta_start,//beta
     arma::vec mu_beta,
@@ -51,7 +50,6 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   /* Deviance */
   arma::vec Deviance; Deviance.zeros(NSAMP);
   
-  
   //////////////////////////////////////////////////////////
   // Set up and initialize structure for density function //
   dens_par dens_data;
@@ -62,7 +60,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   // Y
   dens_data.Y = Y;
   // T
-  dens_data.T = T;
+  dens_data.T = NA_REAL;
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
@@ -73,8 +71,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   dens_data.V_beta = V_beta;
   dens_data.beta_run = beta_start;
   // lambda 
-  dens_data.pos_lambda = NA_REAL;
-  dens_data.sp_lambda = NA_REAL;
+  dens_data.pos_lambda =  NA_REAL;
+  dens_data.sp_lambda =  NA_REAL;
   dens_data.mu_lambda = NA_REAL;
   dens_data.V_lambda = NA_REAL;
   dens_data.lambda_run = NA_REAL;
@@ -84,12 +82,11 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   dens_data.V_W = NA_REAL;
   dens_data.W_run = NA_REAL;
   // alpha
-  dens_data.site_alpha = NA_REAL;
+  dens_data.site_alpha =  NA_REAL;
   dens_data.shape = NA_REAL;
   dens_data.rate = NA_REAL;
   dens_data.V_alpha_run = NA_REAL;
   dens_data.alpha_run = NA_REAL;
-  
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //
   
@@ -107,7 +104,6 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   // Gibbs sampler //
   
   for ( int g = 0; g < NGIBBS; g++ ) {
-    
     for ( int j = 0; j < NSP; j++ ) {
       // beta
       dens_data.sp_beta = j; // Specifying the species
@@ -115,8 +111,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
         dens_data.pos_beta = p; // Specifying the rank of the parameter of interest
         double x_now = dens_data.beta_run(p,j);
         double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigmap_beta(p,j));
-        double p_now = betadens_logit(x_now, &dens_data);
-        double p_prop = betadens_logit(x_prop, &dens_data);
+        double p_now = betadens_pois(x_now, &dens_data);
+        double p_prop = betadens_pois(x_prop, &dens_data);
         double ratio = std::exp(p_prop - p_now); // ratio
         double z = gsl_rng_uniform(r);
         // Actualization
@@ -135,13 +131,13 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
     for ( int i = 0; i < NSITE; i++ ) {
       for ( int j = 0; j < NSP; j++ ) {
         /* theta */
-        double Xpart_theta = 0.0;
+        double log_mu = 0.0;
         for ( int p = 0; p < NP; p++ ) {
-          Xpart_theta += dens_data.X(i,p) * dens_data.beta_run(p,j);
+          log_mu += dens_data.X(i,p) * dens_data.beta_run(p,j);
         }
-        theta_run(i,j) = invlogit(Xpart_theta);
+        theta_run(i,j) = std::exp(log_mu);
         /* log Likelihood */
-        logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
+        logL += R::dpois(dens_data.Y(i,j), theta_run(i,j), 1);
       } // loop on species
     } // loop on sites
     
@@ -205,7 +201,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
           } // loop on rank of parameters
         } // loop on species
         
-       Rprintf(":%.1f%%, mean accept. rates= beta:%.3f \n",
+        Rprintf(":%.1f%%, mean accept. rates= beta:%.3f \n",
                 Perc, mAr_beta);
         R_FlushConsole();
       }
@@ -227,33 +223,25 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   
   return results;
   
-}// end Rcpp_jSDM_binomial_logit  function
+}// end Rcpp_jSDM_poisson_log  function
 
 // Test
 /*** R
 # library(coda)
-# 
-# inv.logit <- function(x, min=0, max=1) {
-#     p <- exp(x)/(1+exp(x))
-#     p <- ifelse( is.na(p) & !is.na(x), 1, p ) # fix problems with +Inf
-#     p * (max-min) + min
-# }
 # nsp <- 100
 # nsite <- 300
-# seed <- 1234
+# seed <- 123
 # set.seed(seed)
-# visits<- rpois(nsite,3)
-# visits[visits==0] <- 1
 # 
 # # Ecological process (suitability)
 # x1 <- rnorm(nsite,0,1)
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
 # np <- ncol(X)
-# beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
-# logit.theta <- X %*% t(beta.target)
-# theta <- inv.logit(logit.theta)
-# Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
+# beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
+# log.theta <- X %*% t(beta.target)
+# theta <- exp(log.theta)
+# Y <- apply(theta, 2, rpois, n=nsite)
 # 
 # # Iterations
 # nsamp <- 1000
@@ -262,11 +250,9 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 # ngibbs <- nsamp+nburn
 # 
 # # Call to C++ function
-# mod <- Rcpp_jSDM_binomial_logit(
+# mod <- Rcpp_jSDM_poisson_log(
 #     ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#     Y=Y,
-#     T=visits,
-#     X=X,
+#     Y=Y, X=X,
 #     beta_start=matrix(0,np,nsp),
 #     mu_beta=matrix(0,np), V_beta=rep(1.0E6,np),
 #     seed=1234, ropt=0.44, verbose=1)
@@ -283,7 +269,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 #     abline(v=beta.target[j,p],col='red')
 #    }
 # }
-# par(mfrow=c(1,2))
+# par(mfrow=c(1,1))
 # mean_betas <- matrix(0,nsp,np)
 # mean_betas <-apply(mod$beta,c(2,3),mean)
 # plot(beta.target,mean_betas, xlab="obs", ylab="fitted",main="beta")
@@ -293,9 +279,17 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 # mean(mod$Deviance)
 # 
 # # Predictions
-# plot(theta,mod$theta_latent, main="theta",
-#      xlab="obs", ylab="fitted")
-# abline(a=0,b=1,col="red")
+# ##log_theta
+# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+# log_theta_pred <- apply(mod$theta_latent,c(1,2),log)
+# plot(log.theta,log_theta_pred, ylab ="fitted",
+#      xlab="obs", main="log(theta)")
+# title(main="Probabilities of occurrence",outer=T)
+# abline(a=0,b=1,col='red')
+# ##theta
+# plot(theta,mod$theta_latent,ylab ="fitted",
+#      xlab="obs", main="theta")
+# abline(a=0,b=1,col='red')
 */
 
 ////////////////////////////////////////////////////////////////////

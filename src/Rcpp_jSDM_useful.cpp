@@ -15,6 +15,7 @@
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_sf_erf.h>
+#include "Rcpp_jSDM_useful.h"
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -23,102 +24,446 @@
 using namespace arma;
 using namespace std;
 
+/******************/
+/* Function logit */
+double logit (double x) {
+  return std::log(x) - std::log(1-x);
+}
+
+/*********************/
+/* Function invlogit */
+double invlogit (double x) {
+  if (x > 0) {
+    return 1 / (1 + std::exp(-x));
+  }
+  else {
+    return std::exp(x) / (1 + std::exp(x));
+  }
+}
+
+/* betadens_logit */
+double betadens_logit (double beta_jk, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int k = d->pos_beta;
+  int j = d->sp_beta;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double logit_theta = 0.0;
+    for ( int p = 0; p < d->NP; p++ ) {
+      if ( p != k ) {
+        logit_theta += d->X(i,p) * d->beta_run(p,j);
+      }
+    }
+    if(d->NL>0){
+      for ( int q = 0; q < d->NL; q++ ) {
+        logit_theta += d->W_run(i,q) * d->lambda_run(q,j);
+      } 
+    }
+    if(arma::is_finite(d->alpha_run)){
+      logit_theta +=  d->alpha_run(i);
+    }
+    logit_theta += d->X(i,k) * beta_jk;
+    double theta = invlogit(logit_theta);
+    /* log Likelihood */
+    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(beta_jk, d->mu_beta(k), std::sqrt(d->V_beta(k)), 1);
+  return logP;
+}
+
+/* lambdadens_logit */
+double lambdadens_logit (double lambda_jq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int q = d->pos_lambda;
+  int j = d->sp_lambda;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double logit_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      logit_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      logit_theta +=  d->alpha_run(i);
+    }
+    logit_theta += d->W_run(i,q) * lambda_jq;
+    double theta = invlogit(logit_theta);
+    /* log Likelihood */
+    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(lambda_jq, d->mu_lambda(q), std::sqrt(d->V_lambda(q)), 1);
+  return logP;
+}
+
+double lambdaUdens_logit (double lambda_jq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int q = d->pos_lambda;
+  int j = d->sp_lambda;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double logit_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      logit_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      logit_theta +=  d->alpha_run(i);
+    }
+    logit_theta += d->W_run(i,q) * lambda_jq;
+    double theta = invlogit(logit_theta);
+    /* log Likelihood */
+    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dunif(lambda_jq, d->mu_lambda(q), d->V_lambda(q), 1);
+  return logP;
+}
+
+/* alphadens_logit */
+double alphadens_logit(double alpha_i, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the site of the parameter of interest
+  int i = d->site_alpha;
+  // logLikelihood
+  double logL = 0.0;
+  /* theta */
+  for ( int j = 0; j < d->NSP; j++ ) {
+    double logit_theta = 0.0;
+    for ( int p = 0; p < d->NP; p++ ) {
+      logit_theta += d->X(i,p) * d->beta_run(p,j); 
+    } 
+    if(d->NL>0){
+      for ( int q = 0; q < d->NL; q++ ) {
+        logit_theta += d->W_run(i,q) * d->lambda_run(q,j);
+      } 
+    }
+    logit_theta += alpha_i; 
+    double theta = invlogit(logit_theta);
+    /* log Likelihood */
+    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+  } // loop on species
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha_run),1);
+  return logP;
+}
+
+/* Wdens_logit */
+double Wdens_logit (double W_iq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int i = d->site_W;
+  int q = d->pos_W;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int j = 0; j < d->NSP; j++ ) {
+    /* theta */
+    double logit_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      logit_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      logit_theta +=  d->alpha_run(i);
+    }
+    logit_theta += W_iq * d->lambda_run(q,j) ;
+    double theta = invlogit(logit_theta);
+    /* log Likelihood */
+    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+  } // loop on species
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(W_iq, 0, std::sqrt(d->V_W(q)), 1);
+  return logP;
+}
+
+/* betadens_pois */
+double betadens_pois (double beta_jk, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int k = d->pos_beta;
+  int j = d->sp_beta;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double log_theta = 0.0;
+    for ( int p = 0; p < d->NP; p++ ) {
+      if ( p != k ) {
+        log_theta += d->X(i,p) * d->beta_run(p,j);
+      }
+    }
+    if(d->NL>0){
+      for ( int q = 0; q < d->NL; q++ ) {
+        log_theta += d->W_run(i,q) * d->lambda_run(q,j);
+      } 
+    }
+    if(arma::is_finite(d->alpha_run)){
+      log_theta +=  d->alpha_run(i);
+    }
+    log_theta += d->X(i,k) * beta_jk;
+    double theta = exp(log_theta);
+    /* log Likelihood */
+    logL += R::dpois(d->Y(i,j), theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(beta_jk, d->mu_beta(k), std::sqrt(d->V_beta(k)), 1);
+  return logP;
+}
+
+/* lambdadens_pois */
+double lambdadens_pois (double lambda_jq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int q = d->pos_lambda;
+  int j = d->sp_lambda;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double log_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      log_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        log_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      log_theta +=  d->alpha_run(i);
+    }
+    log_theta += d->W_run(i,q) * lambda_jq;
+    double theta = exp(log_theta);
+    /* log Likelihood */
+    logL += R::dpois(d->Y(i,j), theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(lambda_jq, d->mu_lambda(q), std::sqrt(d->V_lambda(q)), 1);
+  return logP;
+}
+
+double lambdaUdens_pois (double lambda_jq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int q = d->pos_lambda;
+  int j = d->sp_lambda;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int i = 0; i < d->NSITE; i++ ) {
+    /* theta */
+    double log_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      log_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        log_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      log_theta +=  d->alpha_run(i);
+    }
+    log_theta += d->W_run(i,q) * lambda_jq;
+    double theta = exp(log_theta);
+    /* log Likelihood */
+    logL += R::dpois(d->Y(i,j), theta, 1);
+  } // loop on sites 
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dunif(lambda_jq, d->mu_lambda(q), d->V_lambda(q), 1);
+  return logP;
+}
+
+/* alphadens_pois */
+double alphadens_pois(double alpha_i, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the site of the parameter of interest
+  int i = d->site_alpha;
+  // logLikelihood
+  double logL = 0.0;
+  /* theta */
+  for ( int j = 0; j < d->NSP; j++ ) {
+    double log_theta = 0.0;
+    for ( int p = 0; p < d->NP; p++ ) {
+      log_theta += d->X(i,p) * d->beta_run(p,j); 
+    } 
+    if(d->NL>0){
+      for ( int q = 0; q < d->NL; q++ ) {
+        log_theta += d->W_run(i,q) * d->lambda_run(q,j);
+      } 
+    }
+    log_theta += alpha_i; 
+    double theta = exp(log_theta);
+    /* log Likelihood */
+    logL += R::dpois(d->Y(i,j), theta, 1);
+  } // loop on species
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(alpha_i, 0, std::sqrt(d->V_alpha_run),1);
+  return logP;
+}
+
+/* Wdens_pois */
+double Wdens_pois (double W_iq, void *dens_data) {
+  // Pointer to the structure: d
+  dens_par *d;
+  d = static_cast<dens_par *> (dens_data);
+  // Indicating the rank and the species of the parameter of interest
+  int i = d->site_W;
+  int q = d->pos_W;
+  // logLikelihood
+  double logL = 0.0;
+  for ( int j = 0; j < d->NSP; j++ ) {
+    /* theta */
+    double log_theta = 0.0;
+    for ( int p = 0;  p < d->NP; p++ ) {
+      log_theta += d->X(i,p) * d->beta_run(p,j);
+    }
+    for ( int l = 0;  l < d->NL; l++ ) {
+      if(l != q) {
+        log_theta += d->W_run(i,l)* d->lambda_run(l,j);
+      }
+    }
+    if(arma::is_finite(d->alpha_run)){
+      log_theta +=  d->alpha_run(i);
+    }
+    log_theta += W_iq * d->lambda_run(q,j) ;
+    double theta = exp(log_theta);
+    /* log Likelihood */
+    logL += R::dpois(d->Y(i,j), theta, 1);
+  } // loop on species
+  
+  // logPosterior = logL + logPrior
+  double logP = logL + R::dnorm(W_iq, 0, std::sqrt(d->V_W(q)), 1);
+  return logP;
+}
+
 //* ************************************************************ */
 /* GSL mvgaussian */
 int my_gsl_ran_multivariate_gaussian (const gsl_rng * r, const gsl_vector * mu, 
                                       const gsl_matrix * L, gsl_vector * result) {
-	const size_t M = L->size1;
-	const size_t N = L->size2;
-	
-	if (M != N) {
-		GSL_ERROR("requires square matrix", GSL_ENOTSQR);
-	}
-	else if (mu->size != M) {
-		GSL_ERROR("incompatible dimension of mean vector with variance-covariance matrix", GSL_EBADLEN);
-	}
-	else if (result->size != M) {
-		GSL_ERROR("incompatible dimension of result vector", GSL_EBADLEN);
-	}
-	else {
-		size_t i;
-		for (i = 0; i < M; ++i) {
-			gsl_vector_set(result, i, gsl_ran_ugaussian(r));
-		}
-		gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, L, result);
-		gsl_vector_add(result, mu);
-		return GSL_SUCCESS;
-	}
+  const size_t M = L->size1;
+  const size_t N = L->size2;
+  
+  if (M != N) {
+    GSL_ERROR("requires square matrix", GSL_ENOTSQR);
+  }
+  else if (mu->size != M) {
+    GSL_ERROR("incompatible dimension of mean vector with variance-covariance matrix", GSL_EBADLEN);
+  }
+  else if (result->size != M) {
+    GSL_ERROR("incompatible dimension of result vector", GSL_EBADLEN);
+  }
+  else {
+    size_t i;
+    for (i = 0; i < M; ++i) {
+      gsl_vector_set(result, i, gsl_ran_ugaussian(r));
+    }
+    gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, L, result);
+    gsl_vector_add(result, mu);
+    return GSL_SUCCESS;
+  }
 }
 
 
 //* ************************************************************ */
 /* chol_decomp */
 arma::mat chol_decomp(arma::mat V) {
-	// Cholesky decomposition
-	arma::mat L = arma::chol(V, "lower"); 
-	return L;
+  // Cholesky decomposition
+  arma::mat L = arma::chol(V, "lower"); 
+  return L;
 }
 
 /* ************************************************************ */
 /* arma_mvgauss */
 arma::vec arma_mvgauss(const gsl_rng* r, const arma::vec mu,
                        const arma::mat L) {
-	
-	// gsl vector mu
-	gsl_vector *gsl_mu = gsl_vector_alloc(mu.n_elem);
-	int size_mu = mu.n_elem;
-	for (int i=0; i < size_mu; i++) {
-		gsl_vector_set(gsl_mu, i, mu(i));
-	}
-	
-	// gsl matrix L
-	gsl_matrix *gsl_L = gsl_matrix_alloc(L.n_rows, L.n_cols);
-	int nrows_L =  L.n_rows;
-	int ncols_L =  L.n_cols;
-	for (int i=0; i < nrows_L; i++) {
-		for (int j=0; j < ncols_L; j++) {
-			gsl_matrix_set(gsl_L, i, j, L(i,j));
-		}
-	}
-	
-	// gsl vector R
-	gsl_vector *gsl_R = gsl_vector_alloc(mu.n_elem);
-	gsl_vector_set_zero(gsl_R);
-	
-	// Call to gsl_ran_multivariate_gaussian
-	my_gsl_ran_multivariate_gaussian(r, gsl_mu, gsl_L, gsl_R);
-	
-	// arma vec R
-	arma::vec R; R.zeros(gsl_R->size);
-	int size_R = gsl_R->size;
-	for (int i=0; i < size_R; i++) {
-		R(i) = gsl_vector_get(gsl_R, i);
-	} 
-	
-	// free the memory
-	gsl_vector_free(gsl_mu);
-	gsl_matrix_free(gsl_L);
-	gsl_vector_free(gsl_R);
-	
-	// Return result
-	return R;
-}
-
-/******************/
-/* Function logit */
-double logit (double x) {
-	return std::log(x) - std::log(1-x);
-}
-
-/*********************/
-/* Function invlogit */
-double invlogit (double x) {
-	if (x > 0) {
-		return 1 / (1 + std::exp(-x));
-	}
-	else {
-		return std::exp(x) / (1 + std::exp(x));
-	}
+  
+  // gsl vector mu
+  gsl_vector *gsl_mu = gsl_vector_alloc(mu.n_elem);
+  int size_mu = mu.n_elem;
+  for (int i=0; i < size_mu; i++) {
+    gsl_vector_set(gsl_mu, i, mu(i));
+  }
+  
+  // gsl matrix L
+  gsl_matrix *gsl_L = gsl_matrix_alloc(L.n_rows, L.n_cols);
+  int nrows_L =  L.n_rows;
+  int ncols_L =  L.n_cols;
+  for (int i=0; i < nrows_L; i++) {
+    for (int j=0; j < ncols_L; j++) {
+      gsl_matrix_set(gsl_L, i, j, L(i,j));
+    }
+  }
+  
+  // gsl vector R
+  gsl_vector *gsl_R = gsl_vector_alloc(mu.n_elem);
+  gsl_vector_set_zero(gsl_R);
+  
+  // Call to gsl_ran_multivariate_gaussian
+  my_gsl_ran_multivariate_gaussian(r, gsl_mu, gsl_L, gsl_R);
+  
+  // arma vec R
+  arma::vec R; R.zeros(gsl_R->size);
+  int size_R = gsl_R->size;
+  for (int i=0; i < size_R; i++) {
+    R(i) = gsl_vector_get(gsl_R, i);
+  } 
+  
+  // free the memory
+  gsl_vector_free(gsl_mu);
+  gsl_matrix_free(gsl_L);
+  gsl_vector_free(gsl_R);
+  
+  // Return result
+  return R;
 }
 
 //------------------------------------------------------------

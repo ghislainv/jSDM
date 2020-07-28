@@ -49,3 +49,27 @@ Rcpp_jSDM_binomial_probit_block_rand_site_lv <- function(ngibbs, nthin, nburn, Y
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose)
 }
 
+Rcpp_jSDM_poisson_log <- function(ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log`, ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose)
+}
+
+Rcpp_jSDM_poisson_log_fixed_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_alpha, mu_beta, V_beta, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log_fixed_site`, ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_alpha, mu_beta, V_beta, seed, ropt, verbose)
+}
+
+Rcpp_jSDM_poisson_log_fixed_site_lv <- function(ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, alpha_start, V_alpha, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log_fixed_site_lv`, ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, alpha_start, V_alpha, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose)
+}
+
+Rcpp_jSDM_poisson_log_lv <- function(ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log_lv`, ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose)
+}
+
+Rcpp_jSDM_poisson_log_rand_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, shape, rate, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log_rand_site`, ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, shape, rate, seed, ropt, verbose)
+}
+
+Rcpp_jSDM_poisson_log_rand_site_lv <- function(ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, shape, rate, seed, ropt, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_poisson_log_rand_site_lv`, ngibbs, nthin, nburn, Y, X, W_start, lambda_start, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, shape, rate, seed, ropt, verbose)
+}
+

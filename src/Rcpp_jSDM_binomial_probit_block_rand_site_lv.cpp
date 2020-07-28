@@ -370,14 +370,21 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-# ## W latent variables
-# par(mfrow=c(1,2))
-# MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-# MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_1")
+## W latent variables
+# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
+# mean_W <- apply(mod$W, c(2,3), mean)
+# plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="W_2")
+# title("Variables latentes", outer = T)
+# plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
+#
+# # lambda * W 
+# par(mfrow=c(1,1))
+# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
+#      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
+# abline(a=0,b=1,col='red')
+# 
 # ## Deviance
 # mean(mod$Deviance)
 # ## Prediction

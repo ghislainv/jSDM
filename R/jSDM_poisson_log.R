@@ -5,18 +5,17 @@
 ## license         :GPLv3
 ## ==============================================================================
 
-#' @name jSDM_binomial_logit
-#' @aliases jSDM_binomial_logit
-#' @title Binomial logistic regression 
-#' @description The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
+#' @name jSDM_poisson_log
+#' @aliases jSDM_poisson_log 
+#' @title Poisson regression with log link function 
+#' @description The \code{jSDM_poisson_log} function performs a Poisson regression with log link function in a Bayesian framework. 
+#' The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
 #' @param presence_site_sp A vector indicating the number of successes (or presences) and the absence by a zero for each species at studied sites.
 #' @param site_suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
 #' @param site_data data frame containing the model's explicative variables.
-#' @param trials A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}.
-#'  If \eqn{t_i=0}, then \eqn{y_{ij}=0}{y_ij=0}.
 #' @param n_latent An integer which specifies the number of latent variables to generate. Defaults to \code{0}.
 #' @param site_effect A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 #'  If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
@@ -63,17 +62,17 @@
 #' @details We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 #'
 #' \bold{Ecological process : }
-#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+#' \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij ~ Poisson(\theta_ij),}
 #' where \tabular{ll}{
-#'  if \code{n_latent=0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
-#'  if \code{n_latent>0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
-#'  if \code{n_latent=0} and \code{site_effect="fixed"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
-#'  if \code{n_latent>0} and \code{site_effect="fixed"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
-#'  if \code{n_latent=0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
-#'  if \code{n_latent>0} and \code{site_effect="random"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent=0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
+#'  if \code{n_latent>0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
+#'  if \code{n_latent=0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
+#'  if \code{n_latent>0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
+#'  if \code{n_latent=0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+#'  if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }
 #' @examples #==============================================
-#' # jSDM_binomial_logit()
+#' # jSDM_poisson_log ()
 #' # Example with simulated data
 #' #==============================================
 #' 
@@ -90,11 +89,6 @@
 #' nsp <- 20
 #' #= Set seed for repeatability
 #' seed <- 1234
-#' 
-#' #= Number of visits associated to each site
-#' set.seed(seed)
-#' visits <- rpois(nsite,3)
-#' visits[visits==0] <- 1
 #' 
 #' #= Ecological process (suitability)
 #' x1 <- rnorm(nsite,0,1)
@@ -114,51 +108,50 @@
 #' beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
 #' V_alpha.target <- 0.5
 #' alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-#' logit.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
-#' theta <- inv_logit(logit.theta)
+#' log.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
+#' theta <- exp(log.theta)
 #' set.seed(seed)
-#' Y <- apply(theta, 2, rbinom, n=nsite, size=visits)
+#' Y <- apply(theta, 2, rpois, n=nsite)
 #' 
 #' #= Site-occupancy model
 #' # Increase number of iterations (burnin and mcmc) to get convergence
-#' mod <- jSDM_binomial_logit(# Chains
-#'   burnin=200,
-#'   mcmc=200,
-#'   thin=1,
-#'   # Response variable
-#'   presence_site_sp=Y,
-#'   trials=visits,
-#'   # Explanatory variables
-#'   site_suitability=~x1+x2,
-#'   site_data=X,
-#'   n_latent=n_latent,
-#'   site_effect="random",
-#'   # Starting values
-#'   beta_start=0,
-#'   lambda_start=0,
-#'   W_start=0,
-#'   alpha_start=0,
-#'   V_alpha=1,
-#'   # Priors
-#'   shape=0.5,
-#'   rate=0.0005,
-#'   mu_beta=0,
-#'   V_beta=1.0E6,
-#'   mu_lambda=0,
-#'   V_lambda=10,
-#'   # Various
-#'   seed=1234,
-#'   ropt=0.44,
-#'   verbose=1)
-#' #==========
-#' #== Outputs
+#' mod <- jSDM_poisson_log(# Chains
+#'                         burnin=200,
+#'                         mcmc=200,
+#'                         thin=1,
+#'                         # Response variable
+#'                         presence_site_sp=Y,
+#'                         # Explanatory variables
+#'                         site_suitability=~x1+x2,
+#'                         site_data=X,
+#'                         n_latent=n_latent,
+#'                         site_effect="random",
+#'                         # Starting values
+#'                         beta_start=0,
+#'                         lambda_start=0,
+#'                         W_start=0,
+#'                         alpha_start=0,
+#'                         V_alpha=1,
+#'                         # Priors
+#'                         shape=0.5,
+#'                         rate=0.0005,
+#'                         mu_beta=0,
+#'                         V_beta=1.0E6,
+#'                         mu_lambda=0,
+#'                         V_lambda=10,
+#'                         # Various
+#'                         seed=1234,
+#'                         ropt=0.44,
+#'                         verbose=1)
+#' #' #==========
+#' #' #== Outputs
 #' 
 #' #= Parameter estimates
 #' 
 #' ## beta_j
 #' # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 #' mean_beta <- matrix(0,nsp,np)
-#' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_logit.pdf"))
+#' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_log.pdf"))
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
 #'   mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
@@ -180,7 +173,7 @@
 #' # summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
 #' # summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
 #' mean_lambda <- matrix(0,nsp,n_latent)
-#' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_logit.pdf"))
+#' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_log.pdf"))
 #' par(mfrow=c(n_latent*2,2))
 #' for (j in 1:nsp) {
 #'   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
@@ -251,14 +244,14 @@
 #'  Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit_block}}
-#' @keywords multivariate logistic regression model binomial biodiversity MCMC, Metropolis algorithm 
+#' @keywords multivariate logistic regression model poisson biodiversity MCMC, Metropolis algorithm 
 #' @export
 #' 
 
-jSDM_binomial_logit <- function(# Iteration
+jSDM_poisson_log  <- function(# Iteration
   burnin=5000, mcmc=10000, thin=5,
   # Data and suitability process
-  presence_site_sp, site_suitability, site_data, trials,
+  presence_site_sp, site_suitability, site_data,
   n_latent=0, site_effect="none",
   # Starting values
   beta_start=0, 
@@ -289,11 +282,7 @@ jSDM_binomial_logit <- function(# Iteration
   nsp <- ncol(Y)
   nsite <- nrow(Y)
   nobs <- nsite*nsp
-  if(!is.null(trials)){
-    T <- as.vector(trials)
-  } else {
-    T <- rep(1,nobs)
-  }  
+
   #= Suitability
   mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
@@ -308,8 +297,7 @@ jSDM_binomial_logit <- function(# Iteration
   #========== 
   # Check data
   #==========
-  check.T.binomial(T, nsite)
-  check.Y.binomial(c(Y), replicate(nsp,T))
+  check.Y.poisson(Y)
   check.X(as.matrix(X), nsite)
   
   if(n_latent==0 && site_effect=="none"){
@@ -327,8 +315,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                    Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log (ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                    Y=Y, X=as.matrix(X),
                                     beta_start=beta_start, mu_beta = mu_beta, V_beta=V_beta,
                                     ropt=ropt, seed=seed, verbose=verbose)
     
@@ -351,11 +339,11 @@ jSDM_binomial_logit <- function(# Iteration
     }
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y,
                        site_suitability=site_suitability,
                        site_data=site_data, n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
-                       site_effect=site_effect, family="binomial", link="logit",
+                       site_effect=site_effect, family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
@@ -391,8 +379,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                       Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                       Y=Y, X=as.matrix(X),
                                        beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
                                        lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                        W_start = W_start, V_W = V_W,
@@ -413,7 +401,7 @@ jSDM_binomial_logit <- function(# Iteration
       
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
     }
-
+    
     ## W latent variables 
     MCMC.latent <- list()
     for (l in 1:n_latent) {
@@ -427,13 +415,13 @@ jSDM_binomial_logit <- function(# Iteration
     
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y,
                        site_suitability=site_suitability,
                        site_data=site_data, n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                        W_start=W_start, V_W=V_W,
-                       site_effect=site_effect, family="binomial", link="logit",
+                       site_effect=site_effect, family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
@@ -466,8 +454,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                              Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                              Y=Y, X=as.matrix(X),
                                               beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
                                               alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                                               ropt=ropt, seed=seed, verbose=verbose)
@@ -495,12 +483,12 @@ jSDM_binomial_logit <- function(# Iteration
     }
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y,
                        site_suitability=site_suitability,
                        site_data=site_data,  n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
-                       site_effect=site_effect, family="binomial", link="logit",
+                       site_effect=site_effect, family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
@@ -533,8 +521,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                               Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                               Y=Y, X=as.matrix(X),
                                                beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
                                                alpha_start=alpha_start, V_alpha=V_alpha, 
                                                ropt=ropt, seed=seed, verbose=verbose)
@@ -560,12 +548,12 @@ jSDM_binomial_logit <- function(# Iteration
     }
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y,
                        site_suitability=site_suitability,
                        site_data=site_data,  n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        alpha_start=alpha_start, V_alpha=V_alpha, 
-                       site_effect=site_effect, family="binomial", link="logit",
+                       site_effect=site_effect, family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
@@ -603,8 +591,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                  Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                  Y=Y, X=as.matrix(X),
                                                   beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
                                                   lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                                   W_start = W_start, V_W = V_W,
@@ -643,14 +631,14 @@ jSDM_binomial_logit <- function(# Iteration
     
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y,
                        site_suitability=site_suitability,
                        site_data=site_data, n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                        W_start=W_start, V_W=V_W,
                        alpha_start=alpha_start, V_alpha=V_alpha, site_effect=site_effect,
-                       family="binomial", link="logit",
+                       family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
@@ -689,8 +677,8 @@ jSDM_binomial_logit <- function(# Iteration
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_logit_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                 Y=Y,T=T, X=as.matrix(X),
+    mod <- Rcpp_jSDM_poisson_log_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                 Y=Y, X=as.matrix(X),
                                                  beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
                                                  lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                                  W_start = W_start, V_W = V_W,
@@ -731,14 +719,14 @@ jSDM_binomial_logit <- function(# Iteration
     
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, trials=T, 
+                       presences=Y, 
                        site_suitability=site_suitability,
                        site_data=site_data, n_latent=n_latent,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                        W_start=W_start, V_W=V_W,
                        alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
-                       site_effect=site_effect, family="binomial", link="logit",
+                       site_effect=site_effect, family="poisson", link="log",
                        ropt=ropt, seed=seed, verbose=verbose)
     
     #= Output
