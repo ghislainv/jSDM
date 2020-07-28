@@ -2,12 +2,6 @@
 
 language: r
 
-jobs:
-  include:
-    - os: linux
-      dist: bionic
-    - os: windows
-  
 cache: packages
 
 apt_packages:
@@ -31,7 +25,7 @@ r:
   
 deploy:
   provider: pages
-  cleanup: true
+  cleanup: false 
   token: $GITHUB_PAT
   keep_history: true
   local_dir: docs
