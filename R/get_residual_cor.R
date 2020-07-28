@@ -66,7 +66,7 @@
 #'  result$cov.mean
 #'  result$cor.mean
 #' @keywords stats::cov2cor
-#' @seealso \code{\link[stats]{cov2cor}}
+#' @seealso \code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}} 
 #' @importFrom stats cov2cor
 #' @export
 
