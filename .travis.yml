@@ -1,6 +1,13 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
+
+jobs:
+  include:
+    - os: linux
+      dist: bionic
+    - os: windows
+  
 cache: packages
 
 apt_packages:
@@ -25,8 +32,8 @@ r:
 deploy:
   provider: pages
   cleanup: true
-  github-token: $GITHUB_PAT
-  keep-history: true
-  local-dir: docs
+  token: $GITHUB_PAT
+  keep_history: true
+  local_dir: docs
   on:
     branch: master
