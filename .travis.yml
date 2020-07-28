@@ -1,7 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-
 cache: packages
 
 apt_packages:
@@ -25,8 +24,8 @@ r:
   
 deploy:
   provider: pages
-  cleanup: false 
-  token: $GITHUB_PAT
+  skip_cleanup: true
+  github_token: $GITHUB_PAT
   keep_history: true
   local_dir: docs
   on:
