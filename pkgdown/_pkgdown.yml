@@ -37,12 +37,10 @@ reference:
 - title: jSDM
   desc: Functions for joint species distribution models
   contents:  
-  - '`jSDM_binomial_logit`'
-  - '`jSDM_binomial_logit_lv`'
   - '`jSDM_binomial_probit_block`'
-  - '`jSDM_binomial_probit_block_lv`'
-  - '`jSDM_binomial_probit_block_rand_site`'
-  - '`jSDM_binomial_probit_block_rand_site_lv`'
+  - '`jSDM_binomial_logit`'
+  - '`jSDM_poisson_log'
+
 - title: Data
   desc: Data-sets used in examples
   contents:
@@ -51,10 +49,7 @@ reference:
   - '`eucalypts`'
   - '`fungi`'
   - '`aravo`'
-- title: Test
-  desc: Simple binomial functions for GSL tests
-  contents:
-  - '`jSDM_binomial_logit_one_species`'
+
 - title: Miscellaneous
   desc: Miscellaneous functions
   contents:

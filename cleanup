@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 rm -rvf	src/*.o src/*.so src/symbols.rds \
     	vignettes/auto/ \
