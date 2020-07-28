@@ -24,6 +24,7 @@ r:
   
 deploy:
   provider: pages
+  skip_cleanup: true
   token: $GITHUB_PAT
   keep_history: true
   local_dir: docs
