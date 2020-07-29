@@ -142,6 +142,7 @@ nsp <- 20
 seed <- 1234
 
 #= Ecological process (suitability)
+set.seed(seed)
 x1 <- rnorm(nsite,0,1)
 set.seed(2*seed)
 x2 <- rnorm(nsite,0,1)
@@ -161,7 +162,6 @@ V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 log.theta <- X \%*\% t(beta.target) + W \%*\% t(lambda.target) + alpha.target
 theta <- exp(log.theta)
-set.seed(seed)
 Y <- apply(theta, 2, rpois, n=nsite)
 
 #= Site-occupancy model
