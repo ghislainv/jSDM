@@ -304,7 +304,7 @@ Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building st
 }
 }
 \seealso{
-\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit_block}}
+\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit_block}}  \code{\link{jSDM_poisson_log}}
 }
 \author{
 \tabular{l}{

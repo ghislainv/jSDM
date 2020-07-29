@@ -39,7 +39,7 @@ reference:
   contents:  
   - '`jSDM_binomial_probit_block`'
   - '`jSDM_binomial_logit`'
-  - '`jSDM_poisson_log'
+  - '`jSDM_poisson_log`'
 
 - title: Data
   desc: Data-sets used in examples

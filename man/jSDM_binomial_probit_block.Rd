@@ -306,7 +306,7 @@ Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{
 Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}
 }
 \seealso{
-\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}}
+\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}}
 }
 \author{
 \tabular{l}{

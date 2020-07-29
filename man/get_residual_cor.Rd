@@ -71,7 +71,7 @@ mod <- jSDM_binomial_probit_block(# Response variable
 \seealso{
 \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}}
 
-\code{\link[stats]{cov2cor}}
+\code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}}
 }
 \author{
 \tabular{l}{

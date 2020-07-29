@@ -86,7 +86,7 @@ Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Ta
 }
 }
 \seealso{
-\code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}}
+\code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}}
 
 \code{\link[corrplot]{corrplot}}
 }
