@@ -84,7 +84,7 @@
 #' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 100
+#' nsite <- 80
 #' #= Number of species
 #' nsp <- 20
 #' #= Set seed for repeatability
@@ -100,12 +100,12 @@
 #' W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 #' n_latent <- ncol(W)
 #' l.zero <- 0
-#' l.diag <- runif(2,0,2)
-#' l.other <- runif(nsp*2-3,-2,2)
+#' l.diag <- runif(2,0,1)
+#' l.other <- runif(nsp*2-3,-1,1)
 #' lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],
 #'                           l.diag[2],l.other[-1]),
 #'                         byrow=TRUE, nrow=nsp)
-#' beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+#' beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 #' V_alpha.target <- 0.5
 #' alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 #' log.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
@@ -116,8 +116,8 @@
 #' #= Site-occupancy model
 #' # Increase number of iterations (burnin and mcmc) to get convergence
 #' mod <- jSDM_poisson_log(# Chains
-#'                         burnin=200,
-#'                         mcmc=200,
+#'                         burnin=300,
+#'                         mcmc=300,
 #'                         thin=1,
 #'                         # Response variable
 #'                         presence_site_sp=Y,
@@ -213,14 +213,12 @@
 #' 
 #' ## alpha
 #' # summary(mod$mcmc.alpha)
-#' par(mfrow=c(1,1))
+#' par(mfrow=c(1,3))
 #' plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
 #'      xlab ="obs", ylab ="fitted", main="site effect alpha")
 #' abline(a=0,b=1,col='red')
-#' 
 #' ## Valpha
 #' # summary(mod$mcmc.V_alpha)
-#' par(mfrow=c(1,2))
 #' coda::traceplot(mod$mcmc.V_alpha)
 #' coda::densplot(mod$mcmc.V_alpha)
 #' abline(v=V_alpha.target,col='red')
@@ -231,12 +229,16 @@
 #' 
 #' #= Predictions
 #' # summary(mod$theta_latent)
-#' par(mfrow=c(1,1))
-#' plot(theta, mod$theta_latent,
-#'      main="Probabilities of occurence theta",
+#' par(mfrow=c(1,2))
+#' plot(log.theta, apply(mod$theta_latent,c(1,2),log),
+#'      main="log(theta)",
 #'      xlab="obs", ylab="fitted")
 #' abline(a=0 ,b=1, col="red")
-#'@references \tabular{l}{
+#' plot(theta, mod$theta_latent,
+#'      main="Expected abundance theta",
+#'      xlab="obs", ylab="fitted")
+#' abline(a=0 ,b=1, col="red")
+#' @references \tabular{l}{
 #' Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.\cr
 #'Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. \emph{Ecological Applications}, 16, 33-50.\cr
 #'}

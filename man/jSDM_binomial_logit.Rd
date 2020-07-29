@@ -273,14 +273,12 @@ for (l in 1:n_latent) {
 
 ## alpha
 # summary(mod$mcmc.alpha)
-par(mfrow=c(1,1))
+par(mfrow=c(1,3))
 plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
      xlab ="obs", ylab ="fitted", main="site effect alpha")
 abline(a=0,b=1,col='red')
-
 ## Valpha
 # summary(mod$mcmc.V_alpha)
-par(mfrow=c(1,2))
 coda::traceplot(mod$mcmc.V_alpha)
 coda::densplot(mod$mcmc.V_alpha)
 abline(v=V_alpha.target,col='red')
@@ -291,7 +289,11 @@ plot(mod$mcmc.Deviance)
 
 #= Predictions
 # summary(mod$theta_latent)
-par(mfrow=c(1,1))
+par(mfrow=c(1,2))
+plot(logit.theta, apply(mod$theta_latent,c(1,2),logit),
+     main="logit(theta)",
+     xlab="obs", ylab="fitted")
+abline(a=0 ,b=1, col="red")
 plot(theta, mod$theta_latent,
      main="Probabilities of occurence theta",
      xlab="obs", ylab="fitted")

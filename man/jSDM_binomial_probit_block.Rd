@@ -175,8 +175,8 @@ for (i in 1:nsite){
 
 # Increase number of iterations (burnin and mcmc) to get convergence
 mod<-jSDM_binomial_probit_block(# Iteration
-  burnin=100,
-  mcmc=100,
+  burnin=200,
+  mcmc=200,
   thin=1,
   # Response variable
   presence_site_sp=Y,
@@ -270,13 +270,11 @@ for (l in 1:n_latent) {
 
 ## alpha
 # summary(mod$mcmc.alpha)
-par(mfrow=c(1,1))
+par(mfrow=c(1,3))
 plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
      xlab ="obs", ylab ="fitted", main="site effect alpha")
 abline(a=0,b=1,col='red')
-
 ## Valpha
-par(mfrow=c(1,2))
 coda::traceplot(mod$mcmc.V_alpha)
 coda::densplot(mod$mcmc.V_alpha)
 abline(v=V_alpha.target,col='red')
@@ -289,7 +287,7 @@ plot(mod$mcmc.Deviance)
 
 ## probit_theta
 # summary(mod$probit_theta_pred)
-par(mfrow=c(1,1))
+par(mfrow=c(1,2))
 plot(probit_theta,mod$probit_theta_pred,
      main="probit(theta)",xlab="obs",ylab="fitted")
 abline(a=0,b=1,col='red')
