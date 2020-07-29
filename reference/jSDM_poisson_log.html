@@ -352,6 +352,7 @@ where</p><table class='table'>
 <span class='no'>seed</span> <span class='kw'>&lt;-</span> <span class='fl'>1234</span>
 
 <span class='co'>#= Ecological process (suitability)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
 <span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2</span>*<span class='no'>seed</span>)
 <span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
@@ -371,7 +372,6 @@ where</p><table class='table'>
 <span class='no'>alpha.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>V_alpha.target</span>))
 <span class='no'>log.theta</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>beta.target</span>) + <span class='no'>W</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>lambda.target</span>) + <span class='no'>alpha.target</span>
 <span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>log.theta</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>theta</span>, <span class='fl'>2</span>, <span class='no'>rpois</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='no'>nsite</span>)
 
 <span class='co'>#= Site-occupancy model</span>
@@ -406,16 +406,16 @@ where</p><table class='table'>
                         <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.121 lambda:0.113 W:0.401 alpha:0.230
-#&gt; **********:20.0%, mean accept. rates= beta:0.164 lambda:0.151 W:0.334 alpha:0.291
-#&gt; **********:30.0%, mean accept. rates= beta:0.239 lambda:0.227 W:0.360 alpha:0.338
-#&gt; **********:40.0%, mean accept. rates= beta:0.328 lambda:0.320 W:0.419 alpha:0.413
-#&gt; **********:50.0%, mean accept. rates= beta:0.383 lambda:0.371 W:0.423 alpha:0.428
-#&gt; **********:60.0%, mean accept. rates= beta:0.420 lambda:0.404 W:0.432 alpha:0.449
-#&gt; **********:70.0%, mean accept. rates= beta:0.424 lambda:0.415 W:0.428 alpha:0.450
-#&gt; **********:80.0%, mean accept. rates= beta:0.423 lambda:0.403 W:0.427 alpha:0.438
-#&gt; **********:90.0%, mean accept. rates= beta:0.417 lambda:0.406 W:0.426 alpha:0.449
-#&gt; **********:100.0%, mean accept. rates= beta:0.424 lambda:0.403 W:0.413 alpha:0.454</div><div class='input'><span class='co'>#' #==========</span>
+#&gt; **********:10.0%, mean accept. rates= beta:0.124 lambda:0.126 W:0.365 alpha:0.227
+#&gt; **********:20.0%, mean accept. rates= beta:0.169 lambda:0.168 W:0.314 alpha:0.277
+#&gt; **********:30.0%, mean accept. rates= beta:0.263 lambda:0.243 W:0.360 alpha:0.345
+#&gt; **********:40.0%, mean accept. rates= beta:0.358 lambda:0.334 W:0.435 alpha:0.393
+#&gt; **********:50.0%, mean accept. rates= beta:0.383 lambda:0.401 W:0.425 alpha:0.436
+#&gt; **********:60.0%, mean accept. rates= beta:0.423 lambda:0.404 W:0.426 alpha:0.463
+#&gt; **********:70.0%, mean accept. rates= beta:0.419 lambda:0.418 W:0.451 alpha:0.434
+#&gt; **********:80.0%, mean accept. rates= beta:0.424 lambda:0.413 W:0.450 alpha:0.436
+#&gt; **********:90.0%, mean accept. rates= beta:0.422 lambda:0.422 W:0.446 alpha:0.450
+#&gt; **********:100.0%, mean accept. rates= beta:0.415 lambda:0.432 W:0.440 alpha:0.452</div><div class='input'><span class='co'>#' #==========</span>
 <span class='co'>#' #== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>
