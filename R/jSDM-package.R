@@ -13,8 +13,7 @@
 #'    License: \tab GPL-3 \cr
 #'    LazyLoad: \tab yes\cr }
 #'    
-#' @details 
-#' The package includes the following functions to fit various species distribution models :
+#' @details The package includes the following functions to fit various species distribution models :
 #' 
 #' \tabular{ll}{
 #'    function \tab data-type \cr
