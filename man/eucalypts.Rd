@@ -17,7 +17,7 @@ This dataset records presence or absence at 458 sites of 12 eucalypts species, 7
   
   \describe{
   
-    12 eucalypts species including which presence on sites is indicated by a 1 and absence by a 0 : 
+    12 eucalypts species which presence on sites is indicated by a 1 and absence by a 0 : 
     
     \item{\code{ALA}}{a binary vector indicating the occurrence of the species E. alaticaulis}
     \item{\code{ARE}}{a binary vector indicating the occurrence of the species E. arenacea}

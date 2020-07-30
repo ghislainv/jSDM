@@ -24,6 +24,7 @@ The environmental variables are :
     \code{Snow} \tab Mean snowmelt date (Julian day) averaged over 1997-1999 \cr
     \code{PhysD} \tab Physical disturbance, i.e., percentage of unvegetated soil due to physical processes \cr
     \code{ZoogD} \tab Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high \cr }
+    
 The species traits for the plants are:
  \tabular{ll}{
     \code{Height} \tab Vegetative height (cm) \cr
