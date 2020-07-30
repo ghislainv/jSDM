@@ -27,20 +27,20 @@ Abundance of 35 Oribatid mites morphospecies named :
     5 covariates collected on the 70 sites and their coordinates : 
     
     \tabular{ll}{
-    \code{SubsDens} \tab \cr
-    \tab a numeric vector indicating the substrate density (g/L) \cr
-    \code{WatrCont} \tab \cr
-    \tab a numeric vector indicating the water content of the substrate (g/L) \cr
-    \code{Substrate} \tab  \cr
-        \tab a categorical vector indicating substrate type using a 7-level unordered factor : \code{Sphagn1}, \code{Sphagn2}, \code{Sphagn3}, \code{Sphagn}, \code{Litter}, \code{Barepeat} and \code{Interface}. \cr
-    \code{Shrub} \tab \cr
-        \tab a categorical vector indicating shrub density using a 3-level ordered factor : \code{None}, \code{Few} and \code{Many} \cr
-    \code{Topo} \tab  \cr
-    \tab a categorical vector indicating microtopography using a factor with levels \code{Blanket} and \code{Hummock} \cr
-    \code{x} \tab  \cr 
-            \tab a numeric vector indicating first coordinates of sampling sites \cr
-    \code{y} \tab  \cr 
-    \tab a numeric vector indicating second coordinates of sampling sites \cr 
+    \bold{\code{SubsDens}} \tab   a numeric vector indicating the substrate density (g/L)\cr
+    \tab \cr
+    \bold{\code{WatrCont}} \tab  a numeric vector indicating the water content of the substrate (g/L) \cr
+    \tab \cr
+    \bold{\code{Substrate}} \tab  a categorical vector indicating substrate type using a 7-level unordered factor : \code{Sphagn1}, \code{Sphagn2}, \code{Sphagn3}, \code{Sphagn}, \code{Litter}, \code{Barepeat} and \code{Interface}. \cr
+        \tab  \cr
+    \bold{\code{Shrub}} \tab a categorical vector indicating shrub density using a 3-level ordered factor : \code{None}, \code{Few} and \code{Many} \cr
+        \tab  \cr
+    \bold{\code{Topo}} \tab  a categorical vector indicating microtopography using a factor with levels \code{Blanket} and \code{Hummock} \cr
+    \tab  \cr
+    \bold{\code{x}} \tab  a numeric vector indicating first coordinates of sampling sites \cr 
+            \tab \cr
+    \bold{\code{y}} \tab  a numeric vector indicating second coordinates of sampling sites  \cr 
+    \tab \cr 
 }
 }
 

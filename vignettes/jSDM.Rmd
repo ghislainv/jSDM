@@ -31,12 +31,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. In this vignette, we illustrate the use of the `jSDM` R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models. Package's functions are developped in a hierarchical Bayesian framework and use conjugate priors to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
+Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. 
 
-Below, we show an example of the use of `jSDM` for fitting species distribution model to abundance data for 9 frog's species. Model types available in `jSDM` are not limited to those described in this example. `jSDM` includes various model types for occurrence data: 
+In this vignette, we illustrate the use of the `jSDM` R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data and various explanatory variables) to fit jSDMs models.
 
-# Definition of the model 
+Package's functions are developped in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
 
+
+# Bernoulli probit regression 
+
+## Definition of the model 
 
 Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
@@ -71,7 +75,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
 
-# Data-set
+## Data-set
 
 (ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
 
@@ -107,13 +111,13 @@ Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
 colnames(Env_frogs) <- colnames(frogs[,1:3])
 ```
 
-# Parameter inference
+## Parameter inference
 
-We use the `jSDM_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM, cache=TRUE}
 T1<- Sys.time()
-mod_jSDM_block_frogs <- jSDM_binomial_probit_block(
+mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
   # Chains
   burnin=100, mcmc=100, thin=1,
   # Response variable 
@@ -136,38 +140,38 @@ mod_jSDM_block_frogs <- jSDM_binomial_probit_block(
 T2 <- Sys.time()
 ```
 
-# Analysis of the results
+## Analysis of the results
 
 ```{r plot-results}
 ## alpha_i of the first two sites
-plot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.alpha[,1:2]))
+plot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.alpha[,1:2]))
 
 ## V_alpha
 par(mfrow=c(1,2))
-coda::traceplot(mod_jSDM_block_frogs$mcmc.V_alpha, main="V_alpha")
-coda::densplot(mod_jSDM_block_frogs$mcmc.V_alpha, main="V_alpha")
+coda::traceplot(mod_frogs_jSDM_probit$mcmc.V_alpha, main="V_alpha")
+coda::densplot(mod_frogs_jSDM_probit$mcmc.V_alpha, main="V_alpha")
 
-np <- nrow(mod_jSDM_block_frogs$model_spec$beta_start)
+np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
 
 ## beta_j of the first two species
 par(mfrow=c(np,2))
 for (j in 1:2) {
   for (p in 1:np) {
-      coda::traceplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]))
-      coda::densplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,p]), 
-main = paste(colnames(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]])[p],
+      coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,p]))
+      coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,p]), 
+main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]])[p],
 ", species : ",j))
   }
 }
 
 ## lambda_j of the first two species
-n_latent <- mod_jSDM_block_frogs$model_spec$n_latent
+n_latent <- mod_frogs_jSDM_probit$model_spec$n_latent
 par(mfrow=c(n_latent*2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
-      coda::traceplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,np+l]))
-      coda::densplot(coda::as.mcmc(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
-      main = paste(colnames(mod_jSDM_block_frogs$mcmc.sp[[paste0("sp_",j)]])[np+l],
+      coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,np+l]))
+      coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
+      main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]])[np+l],
       ", species : ",j))
     }
   }
@@ -175,19 +179,19 @@ for (j in 1:2) {
 ## Latent variables W_i for the first two sites
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-  plot(mod_jSDM_block_frogs$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
+  plot(mod_frogs_jSDM_probit$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
 }
 
 ## probit_theta
 par (mfrow=c(1,1))
-hist(mod_jSDM_block_frogs$probit_theta_pred, main = "Predicted probit theta", xlab ="predicted probit theta")
+hist(mod_frogs_jSDM_probit$probit_theta_pred, main = "Predicted probit theta", xlab ="predicted probit theta")
 
 ## Deviance
-plot(mod_jSDM_block_frogs$mcmc.Deviance,main = "Deviance")
+plot(mod_frogs_jSDM_probit$mcmc.Deviance,main = "Deviance")
 
 ```
 
-# Matrice of correlations 
+## Matrice of correlations 
 
  After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
  $$\Sigma_{ij} = \begin{cases}
@@ -197,12 +201,12 @@ plot(mod_jSDM_block_frogs$mcmc.Deviance,main = "Deviance")
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 ```{r correlation-matrix}
-plot_residual_cor(mod_jSDM_block_frogs)
+plot_residual_cor(mod_frogs_jSDM_probit)
 ```
 
-# Predictions 
+## Predictions 
 
-We use the `predict()` function.
+We use the `predict()` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions}
 # Sites and species concerned by predictions :
@@ -211,8 +215,8 @@ Id_sites <- sample.int(nrow(PA_frogs), 50)
 ## All species 
 Id_species <- colnames(PA_frogs)
 # Simulate new observations of covariates on those sites 
-simdata <- matrix(nrow=50, ncol = ncol(mod_jSDM_block_frogs$model_spec$site_data))
-colnames(simdata) <- colnames(mod_jSDM_block_frogs$model_spec$site_data)
+simdata <- matrix(nrow=50, ncol = ncol(mod_frogs_jSDM_probit$model_spec$site_data))
+colnames(simdata) <- colnames(mod_frogs_jSDM_probit$model_spec$site_data)
 rownames(simdata) <- Id_sites
 simdata <- as.data.frame(simdata)
 simdata$Covariate_1 <- rnorm(50)
@@ -220,9 +224,206 @@ simdata$Covariate_3 <- rnorm(50)
 simdata$Covariate_2 <- rbinom(50,1,0.5)
 
 # Predictions 
-theta_pred <- predict(mod_jSDM_block_frogs, newdata=simdata, Id_species=Id_species,
+theta_pred <- predict(mod_frogs_jSDM_probit, newdata=simdata, Id_species=Id_species,
 						   Id_sites=Id_sites, type="mean")
 hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
 ```
+
+
+# Binomial logistic regression 
+
+## Definition of the model 
+
+Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
+
+$$ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j $$
+     
+- Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
+
+- Response variable: $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ with:
+
+$$y_{ij}=\begin{cases}
+    0 & \text{ if species $j$ is absent on the site $i$}\\
+    1 &  \text{ if species  $j$ is present on the site $i$}.
+    \end{cases}$$
+    
+- Latent variable $z_{ij} = \alpha_i + \beta_{0j} + X_i.\beta_j + W_i.\lambda_j + \epsilon_{i,j}$, with $\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)$ and such that:
+
+$$y_{ij}=\begin{cases}
+    1 & \text{if} \ z_{ij} > 0 \\
+    0 &  \text{otherwise.}
+    \end{cases}$$
+    
+It can be easily shown that: $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$. 
+
+- Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+
+- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
+The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
+
+- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10^6)$ for all betas. 
+
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+
+
+## Data-set
+
+(ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
+
+```{r frog-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-frog)"}
+knitr::include_graphics("figures/Litoria_ewingii.jpg")
+```
+
+We first load the `jSDM` library.
+
+```{r libraries}
+# Load libraries
+library(jSDM)
+```
+
+This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The data is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
+
+```{r frogs-data}
+# frogs data
+data(frogs, package="jSDM")
+head(frogs)
+```
+
+We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.
+
+We also normalize the continuous explicative variables to facilitate MCMC convergence. 
+
+```{r arranging-data}
+# data.obs
+PA_frogs <- frogs[,4:12]
+
+# Normalized continuous variables
+Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
+colnames(Env_frogs) <- colnames(frogs[,1:3])
+```
+
+## Parameter inference
+
+We use the `jSDM_binomial_logit()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+
+```{r jSDM, cache=TRUE}
+T1<- Sys.time()
+mod_frogs_jSDM_logit <- jSDM_binomial_logit(
+  # Chains
+  burnin=100, mcmc=100, thin=1,
+  # Response variable 
+  presence_site_sp = PA_frogs, 
+  # Explanatory variables 
+  site_suitability = ~.,   
+  site_data = Env_frogs,
+  # Model specification 
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1, 
+  # Priors
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=1.0E6,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  ropt=0.44,
+  seed=1234, verbose=1)
+T2 <- Sys.time()
+```
+
+## Analysis of the results
+
+```{r plot-results}
+## alpha_i of the first two sites
+plot(coda::as.mcmc(mod_frogs_jSDM_logit$mcmc.alpha[,1:2]))
+
+## V_alpha
+par(mfrow=c(1,2))
+coda::traceplot(mod_frogs_jSDM_logit$mcmc.V_alpha, main="V_alpha")
+coda::densplot(mod_frogs_jSDM_logit$mcmc.V_alpha, main="V_alpha")
+
+np <- nrow(mod_frogs_jSDM_logit$model_spec$beta_start)
+
+## beta_j of the first two species
+par(mfrow=c(np,2))
+for (j in 1:2) {
+  for (p in 1:np) {
+      coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,p]))
+      coda::densplot(coda::as.mcmc(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,p]), 
+main = paste(colnames(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]])[p],
+", species : ",j))
+  }
+}
+
+## lambda_j of the first two species
+n_latent <- mod_frogs_jSDM_logit$model_spec$n_latent
+par(mfrow=c(n_latent*2,2))
+for (j in 1:2) {
+  for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,np+l]))
+      coda::densplot(coda::as.mcmc(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
+      main = paste(colnames(mod_frogs_jSDM_logit$mcmc.sp[[paste0("sp_",j)]])[np+l],
+      ", species : ",j))
+    }
+  }
+
+## Latent variables W_i for the first two sites
+par(mfrow=c(1,2))
+for (l in 1:n_latent) {
+  plot(mod_frogs_jSDM_logit$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
+}
+
+## probit_theta
+par (mfrow=c(1,1))
+hist(mod_frogs_jSDM_logit$probit_theta_pred, main = "Predicted probit theta", xlab ="predicted probit theta")
+
+## Deviance
+plot(mod_frogs_jSDM_logit$mcmc.Deviance,main = "Deviance")
+
+```
+
+## Matrice of correlations 
+
+ After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+ $$\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
+ \end{cases}$$, then we compute correlations from covariances :
+  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
+```{r correlation-matrix}
+plot_residual_cor(mod_frogs_jSDM_logit)
+```
+
+## Predictions 
+
+We use the `predict()` S3 method on the `mod_frogs_jSDM_logit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+
+```{r predictions}
+# Sites and species concerned by predictions :
+## 50 sites among the 104
+Id_sites <- sample.int(nrow(PA_frogs), 50)
+## All species 
+Id_species <- colnames(PA_frogs)
+# Simulate new observations of covariates on those sites 
+simdata <- matrix(nrow=50, ncol = ncol(mod_frogs_jSDM_logit$model_spec$site_data))
+colnames(simdata) <- colnames(mod_frogs_jSDM_logit$model_spec$site_data)
+rownames(simdata) <- Id_sites
+simdata <- as.data.frame(simdata)
+simdata$Covariate_1 <- rnorm(50)
+simdata$Covariate_3 <- rnorm(50)
+simdata$Covariate_2 <- rbinom(50,1,0.5)
+
+# Predictions 
+theta_pred <- predict(mod_frogs_jSDM_logit, newdata=simdata, Id_species=Id_species,
+						   Id_sites=Id_sites, type="mean")
+hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
+```
+
+
+
+# Poisson log-linear regression 
 
 # References
