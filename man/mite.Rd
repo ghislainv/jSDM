@@ -9,7 +9,7 @@ This example data set is composed of 70 cores of mostly Sphagnum mosses collecte
 
 The whole sampling area was 2.5 m x 10 m in size and thirty-five taxa were recognized as species, though many were not given a species name, owing to the incomplete stage of systematic knowledge of the North American Oribatid fauna.
 
-The data set comprises the abundances of 35 morphospecies, 5 substrate and micritopographic variables, and the x-y Cartesian coordinates of the of the 70 sampling sites. 
+The data set comprises the abundances of 35 morphospecies, 5 substrate and micritopographic variables, and the x-y Cartesian coordinates of the 70 sampling sites. 
 
 See Borcard et al. (1992, 1994) for details.
 }
@@ -18,22 +18,30 @@ See Borcard et al. (1992, 1994) for details.
 }
 
 \usage{data("mite")}
-\format{
-  A data frame with 70 observations on the following 42 variables.
-  
-  \describe{
-\item{\code{Abundance of 35 Oribatid mites morphospecies named:}}{Brachy, PHTH, HPAV, RARD, SSTR, Protopl, MEGR, MPRO, TVIE, HMIN, HMIN2, NPRA, TVEL, ONOV, SUCT, LCIL, Oribatl1, Ceratoz1, PWIL, Galumna1, Stgncrs2, HRUF, Trhypch1, PPEL, NCOR, SLAT, FSET, Lepidzts, Eupelops, Miniglmn, LRUG, PLAG2, Ceratoz3, Oppiminu, Trimalc2.}
+\format{ A data frame with 70 observations on the following 42 variables.
+
+Abundance of 35 Oribatid mites morphospecies named : 
+
+\code{Brachy}, \code{PHTH}, \code{HPAV}, \code{RARD}, \code{SSTR}, \code{Protopl}, \code{MEGR}, \code{MPRO}, \code{TVIE}, \code{HMIN},\code{HMIN2}, \code{NPRA}, \code{TVEL}, \code{ONOV}, \code{SUCT}, \code{LCIL}, \code{Oribatl1}, \code{Ceratoz1}, \code{PWIL}, \code{Galumna1}, \code{Stgncrs2}, \code{HRUF}, \code{Trhypch1}, \code{PPEL}, \code{NCOR}, \code{SLAT}, \code{FSET}, \code{Lepidzts}, \code{Eupelops}, \code{Miniglmn}, \code{LRUG}, \code{PLAG2}, \code{Ceratoz3}, \code{Oppiminu} and \code{Trimalc2}.
     
     5 covariates collected on the 70 sites and their coordinates : 
-
-    \item{\code{SubsDens}}{a numeric vector indicating the substrate density (g/L)}
-    \item{\code{WatrCont}}{a numeric vector indicating the water content of the substrate (g/L)}
-    \item{\code{Substrate}}{a categorical vector indicating substrate type using a 7-level unordered factor:Sphagn1, Sphagn2, Sphagn3, Sphagn, Litter, Barepeat and Interface.}
-    \item{\code{Shrub}}{a categorical vector indicating shrub density using a 3-level ordered factor: None, Few and Many}
-    \item{\code{Topo}}{a categorical vector indicating microtopography using a factor with levels Blanket and Hummock}
-    \item{\code{x}}{a numeric vector indicating first coordinates of sampling sites}
-    \item{\code{y}}{a numeric vector indicating second coordinates of sampling sites}
-  }
+    
+    \tabular{ll}{
+    \code{SubsDens} \tab \cr
+    \tab a numeric vector indicating the substrate density (g/L) \cr
+    \code{WatrCont} \tab \cr
+    \tab a numeric vector indicating the water content of the substrate (g/L) \cr
+    \code{Substrate} \tab  \cr
+        \tab a categorical vector indicating substrate type using a 7-level unordered factor : \code{Sphagn1}, \code{Sphagn2}, \code{Sphagn3}, \code{Sphagn}, \code{Litter}, \code{Barepeat} and \code{Interface}. \cr
+    \code{Shrub} \tab \cr
+        \tab a categorical vector indicating shrub density using a 3-level ordered factor : \code{None}, \code{Few} and \code{Many} \cr
+    \code{Topo} \tab  \cr
+    \tab a categorical vector indicating microtopography using a factor with levels \code{Blanket} and \code{Hummock} \cr
+    \code{x} \tab  \cr 
+            \tab a numeric vector indicating first coordinates of sampling sites \cr
+    \code{y} \tab  \cr 
+    \tab a numeric vector indicating second coordinates of sampling sites \cr 
+}
 }
 
 \source{ Pierre Legendre  }
