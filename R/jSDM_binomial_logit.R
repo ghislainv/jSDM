@@ -16,7 +16,7 @@
 #' @param site_suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
 #' @param site_data data frame containing the model's explicative variables.
 #' @param trials A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}.
-#'  If \eqn{t_i=0}, then \eqn{y_{ij}=0}{y_ij=0}.
+#'  If \eqn{t_i=0}, then \eqn{y_{ij}=0}{y_ij=0}. The default is one visit by site.
 #' @param n_latent An integer which specifies the number of latent variables to generate. Defaults to \code{0}.
 #' @param site_effect A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 #'  If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
@@ -260,7 +260,8 @@
 jSDM_binomial_logit <- function(# Iteration
   burnin=5000, mcmc=10000, thin=5,
   # Data and suitability process
-  presence_site_sp, site_suitability, site_data, trials,
+  presence_site_sp, site_suitability,
+  site_data, trials=NULL,
   n_latent=0, site_effect="none",
   # Starting values
   beta_start=0, 

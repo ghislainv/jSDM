@@ -11,7 +11,7 @@ jSDM_binomial_logit(
   presence_site_sp,
   site_suitability,
   site_data,
-  trials,
+  trials = NULL,
   n_latent = 0,
   site_effect = "none",
   beta_start = 0,
@@ -44,7 +44,7 @@ jSDM_binomial_logit(
 \item{site_data}{data frame containing the model's explicative variables.}
 
 \item{trials}{A vector indicating the number of trials for each site. \eqn{t_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}.
-If \eqn{t_i=0}, then \eqn{y_{ij}=0}{y_ij=0}.}
+If \eqn{t_i=0}, then \eqn{y_{ij}=0}{y_ij=0}. The default is one visit by site.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 

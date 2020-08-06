@@ -1,8 +1,8 @@
-\name{mite}
-\alias{mite}
+\name{mites}
+\alias{mites}
 \docType{data}
 
-\title{mite dataset}
+\title{mites dataset}
 
 \description{
 This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of Université de Montréal, Québec, Canada in June 1989. 
@@ -17,7 +17,7 @@ See Borcard et al. (1992, 1994) for details.
 \details{ Oribatid mites (Acari: Oribatida) are a very diversified group of small (0.2–1.2 mm) soil-dwelling, mostly microphytophagous and detritivorous arthropods. A well aerated soil or a complex substrate like Sphagnum mosses present in bogs and wet forests can harbour up to several hundred thousand individuals per square metre. Local assemblages are sometimes composed of over a hundred species, including many rare ones. This diversity makes oribatid mites an interesting target group to study community–environment relationships at very local scales.
 }
 
-\usage{data("mite")}
+\usage{data("mites")}
 \format{ A data frame with 70 observations on the following 42 variables.
 
 Abundance of 35 Oribatid mites morphospecies named : 
@@ -57,8 +57,8 @@ Borcard, D. and Legendre, P. (2002) All-scale spatial analysis of ecological dat
 
 
 \examples{
-data(mite, package="jSDM")
-head(mite)
+data(mites, package="jSDM")
+head(mites)
 }
 
 \keyword{datasets}
