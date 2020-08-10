@@ -35,6 +35,9 @@ knitr::opts_chunk$set(
 # Bernoulli distribution with probit link function 
 
 ## Model definition
+
+According to the article @Albert1993, a possible model is to assume the existence of an underlying latent variable related to our observed binary variable using the following proposition :
+
 - Proposition
 
 $$ 
@@ -74,6 +77,19 @@ $$\begin{aligned}
 & = \mathbb{P}(\epsilon_{i,j} > \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 & = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}$$
+
+with the following definition : 
+
+- Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+
+- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
+The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
+
+- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10^6)$ for all betas. 
+
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+
 
 ## Conjugate priors 
 ### Fixed species effects
@@ -163,9 +179,30 @@ p(\sigma^2 \ | \ x) & \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 & \propto {(\sigma^2)}^{-\left(\underbrace{\frac{n}{2}+a}_{a'}+1\right)}\exp\left(-\frac{1}{\sigma^2}\underbrace{\left(b+\frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2\right)}_{b'}\right)
 \end{aligned}$$
 
+## Gibbs sampler principle 
+
+In the Bayesian framework, Gibbs' algorithm produces a realization of the parameter $\theta=(\theta_),\ldots,\theta_m)$ according to the *a posteriori* law $\Pi(\theta \ | \ x)$ as soon as we are able to express the conditional laws: $\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)$ for $i =1,\ldots,m$.  
+
+**Gibbs sampling** consists of: 
+
+- **Initialization** : arbitrary choice of $\theta^{(0)}= (\theta_1^{(0)},\dots,\theta_m^{(0)})$.
+
+- **Iteration $t$** : Genererate $\theta^{(t)}$ as follows :
+
+  * $\theta_1^{(t)} \sim \Pi\left(\theta_1 \ | \theta_2^{(t-1)},\dots, \theta_m^{(t-1)}, x \right)$
+  
+  * $\theta_2^{(t)} \sim \Pi\left((\theta_2 \ | \ (\theta_1^{(t)},  \theta_3^{(t-1)},\ldots,\theta_m^{(t-1)},x\right)$
+  * $\theta_m^{(t)} \sim \Pi\left(\theta_m \ | \ \theta_1^{(t)}, \ldots, \theta_{m-1}^{(t)},x\right)$
+
+Successive iterations of this algorithm generate the states of a Markov chain $\{\theta^{(t)}, t > 0\}$ to values in $\mathbb{\R}^{m}$, we show that this chain admits an invariant measure which is the *a posteriori* law.  
+
+For a sufficiently large number of iterations, the vector $\theta$ obtained can thus be considered as a realization of the joint *a posteriori* law $\Pi(\theta | \x)$. 
+
+Consequently, the implementation of a Gibbs sampler requires the knowledge of the *a posteriori* distributions of each of the parameters conditionally to the other parameters of the model, which can be deduced from the conjugated priors formulas in the case of the probit model but are not explicitly expressible in the case where a logit or log link function is used.
+
 ## Gibbs sampler using conjuate priors 
 
-The algorithm used to estimate the parameters of the probit model is therefore as follows:
+The algorithm used in \link{\code{jSDM_binomial_probit_block}} function to estimate the parameters of the probit model is therefore as follows:
 
 - Define the constants $N_{Gibbs}$, $N_{burn}$, $N_{thin}$ such that $N_{Gibbs}$ corresponds to the number of iterations performed by the Gibbs sampler,  $N_{burn}$ to the number of iterations required for burn-in or warm-up time and $N_{samp} = \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}$ to the number of estimated values retained for each parameter. Indeed, the estimated parameters are recorded at certain iterations, in order to obtain a sample of $N_{samp}$ values distributed according to the $a \ posteriori$ distribution for each of the parameters.
 
@@ -173,14 +210,14 @@ Initialize all parameters to $0$ for example, except the diagonal values of $\La
 
 - Gibbs sampler: at each iteration $t$ for $t=1,\ldots,N_{Gibbs}$ we repeat each of these steps :
 
-  * Generate the \textbf{latent variable} $Z^{(t)}=\left(Z_{ij}^{(t)}\right)_{i=1,\ldots,I}^{j=1,\ldots,J}$ such that
+  * Generate the **latent variable** $Z^{(t)}=\left(Z_{ij}^{(t)}\right)_{i=1,\ldots,I}^{j=1,\ldots,J}$ such that
 $$Z_{ij}^{(t)} \sim  \begin{cases} 
 \mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 & \text{ if } y_{ij } =0 \\ 
 \mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ left truncated by } 0 &        \text{ if } y_{ij} =1
 \end{cases}$$
 ,  the latent variable is thus initialized at the first iteration by generating it according to these centered normal laws.
 
-  * Generate the \textbf{fixed species effects} $P_j^{(t)}=(\beta_{j0}^{(t)},\beta_{j1}^{(t)} \ldots, \beta_{jp}^{(t)},\lambda_{j1}^{(t)},\ldots, \lambda_{jq}^{(t)})'$ for $j=1,\ldots,J$ such as : 
+  * Generate the **fixed species effects** $P_j^{(t)}=(\beta_{j0}^{(t)},\beta_{j1}^{(t)} \ldots, \beta_{jp}^{(t)},\lambda_{j1}^{(t)},\ldots, \lambda_{jq}^{(t)})'$ for $j=1,\ldots,J$ such as : 
 $$P_j^{(t)} \ | \ Z^{(t)}, W_1^{(t-1)}, \alpha_1^{(t-1)}, \ldots, W_I^{(t−1)}, \alpha_I^{(t-1)} \sim \mathcal{N}_{p+q+1}(m^\star,V^\star) \text{, with }$$
 $$m^\star = (V^{-1} + {D^{(t)}}'D^{(t)})^{-1}(V^{-1}m + {D^{(t)}}'Z^\star_j) \text{ and } V^\star = \left(V^{-1}+{D^{(t)}}'D^{(t)}\right)^{-1},$$
 $$\text{ where } Z_j^\star =(Z_{1j}^\star,\ldots,Z_{Ij}^\star)' \text{ such as } Z^\star_{ij} = Z_{ij}^{(t)}-\alpha_i^{(t-1)}.$$
@@ -192,16 +229,155 @@ $$P_{jp+1+l}^{(t)} = \lambda_{jl}^{(t)} \leftarrow \begin{cases}
 \end{cases}$$ 
 We define $P^{(t)}=\left( P_1^{(t)} | \ldots | P_J^{(t)} \right)$.  
 
-  * Generate the \textbf{latent variables} (or unmeasured predictors) $W_i^{(t)}$ for $i=1,\ldots,I$ according to : $$W_i^{(t)} \ | \ Z^{(t)}, P^{(t)},  \alpha_i^{(t-1)} \sim \mathcal{N}_{q} \left((I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}({\Lambda^{(t)}}'Z_i^{\star \star}),(I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}\right),$$
+  * Generate the **latent variables** (or unmeasured predictors) $W_i^{(t)}$ for $i=1,\ldots,I$ according to : $$W_i^{(t)} \ | \ Z^{(t)}, P^{(t)},  \alpha_i^{(t-1)} \sim \mathcal{N}_{q} \left((I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}({\Lambda^{(t)}}'Z_i^{\star \star}),(I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}\right),$$
 $$\text{ where } Z_i^{\star \star} =(Z_{i1}^{\star \star},\ldots,Z_{iJ}^{\star \star}) \text{ such as } Z_{ij}^{\star \star } = Z_{ij}^{(t)}-\alpha_i^{(t-1)} − \beta_{j0}^{(t)} - X_i\beta_j^{(t)}.$$ We define $D_i^{(t)} = \left(1,X_{i1},\ldots,X_{ip},W_{i1}^{(t)}, \ldots, W_{iq}^{(t)} \right)$.
 
-  * Generate the \textbf{random site effects} $\alpha_i^{(t)}$ for $i=1,\ldots,I$ selon :
+  * Generate the **random site effects** $\alpha_i^{(t)}$ for $i=1,\ldots,I$ selon :
 $$ \alpha_i | \ Z^{(t)}, P^{(t)},W_i^{(t)} \sim \mathcal{N}\left(\dfrac{ \sum_{j=1}^J Z_{ij}^{(t)} - D_i^{(t)}P_j^{(t)}}{{V_{\alpha}^{(t-1)}}^{-1} + J} , \left( \frac{1}{V_{\alpha}^{(t-1)}}+ J \right)^{-1}  \right)$$
 
-  * Generate the \textbf{variance of random site effects} $V_\alpha^{(t)}$ according to: $$V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)$$
+  * Generate the **variance of random site effects** $V_\alpha^{(t)}$ according to: $$V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)$$
 
 # Binomial distribution with logit link function
 
+## Model definition 
+
+In the same way as for the probit model, the logit model can be defined by means of a latent variable: $Z_{ij}= \alpha_i + \beta_{j0} + X_i\beta_j + W_i\lambda_j + \epsilon_{ij}$ for $i=1,\ldots,I$ et $j=1,\ldots,J$, with $\epsilon_{ij} \sim \mathrm{logistique}(0,1)$ *iid* and such as: 
+$$y_{ij}=
+\begin{cases}
+1 & \text{ if } Z_{ij} > 0 \\
+0 &  \text{ else }
+\end{cases}$$ 
+However in this case the *a priori* distributions of the latent variable and the parameters are not conjugated, we are not able to use the properties of the conjugated priors, so modelling using a latent variable is irrelevant.    
+In this case it is assumed that $$y_{ij} \ | \theta_{ij} \sim \mathcal{B}inomial(n_i,\theta_{ij})$$, with
+$\mathrm{probit(\theta_{ij})} = \alpha_i + \beta_{j0}+X_i\beta_j+ W_i\lambda_j$ and $n_i$ the number of visits to the site $i$.    
+Therefore, the parameters of this model will be sampled by estimating their conditional *a posteriori* distributions using an adaptive Metropolis algorithm. 
+
+## Priors used
+
+An *a priori* distribution is determined for each of the parameters of the model :  
+$$\begin{array}{lll}
+V_{\alpha} & \sim & \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005) \text{ with } \mathrm{rate}=\frac{1}{\mathrm{scale}}, \\
+\beta_{jk} & \sim & \mathcal{N}(0,10^6)  \text{ for } j=1,\ldots,J \text{ and } k=1,\ldots,p, \\
+\lambda_{jl} & \sim & \begin{cases}
+\mathcal{N}(0,10) & \text{if } l < j \\
+\mathcal{U}(0,10) &  \text{if } l=j \\
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  & \text{if } l>j
+\end{cases} \\
+\quad &  \quad & \text{ for } j=1,\ldots,J \text{ and } l=1,\ldots,q.
+\end{array}$$
+
+## Adaptive Metropolis algorithm principle 
+
+This algorithm belongs to the MCMC methods and allows to obtain a realization of the parameter $\theta=(\theta_1,\ldots,,\theta_m)$ according to their conditional *a posteriori* distributions $\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)$, for $i =1,\ldots,m$ known to within a multiplicative constant.  
+It is called adaptive because the variance of the conditional instrumental density used is adapted according to the number of acceptances in the last iterations. 
+
+- **Initialization** : $\theta^{(0)}= (\theta_1^{(0)},\ldots,\theta_m^{(0)})$ arbitrarily set, the acceptance numbers $(n^A_{i})_{i=1,\ldots,m}$ are initialized at $0$ and the variances $(\sigma^2_i)_{i=1,\ldots,m}$ are initialized at $1$.
+
+- **Iteration t** : for $i=1,\ldots,m$
+
+  * Generate $\theta_i^\star \sim q(\theta_i^{(t-1)},.)$, with conditional instrumental density
+$q(\theta_i^{(t-1)},\theta_i^\star)$ symmetric, we will choose a law $\mathcal{N}(\theta_i^{(t-1)},{\sigma^2_{i}})$ for example.
+  
+  * Calculate the probability of acceptance : 
+  $$\gamma=  min\left(1,\dfrac{\Pi\left(\theta_i^\star \ | \ \theta_1^{(t-1)},\dots,\theta_{i-1}^{(t-1)},\theta_{i+1}^{(t-1)},\ldots,\theta_m^{(t-1)}, x \right)}{\Pi\left(\theta_i^{(t-1)} \ | \ \theta_1^{(t-1)},\dots,\theta_{i-1}^{ (t-1)},\theta_{i+1}^{(t-1)},\ldots,\theta_m^{(t-1)},x\right)}\right)$$.
+  
+  * $$\theta_i^{(t)} =  
+  \begin{cases} 
+  \theta_i^\star & \text{ with probability } \gamma \\
+  &\text{ if we are in this case the acceptance number becomes : } n^A_{i} \leftarrow n^A_{i} +1 \\
+  \theta_i^{(t-1)} & \text{ with probability } 1-\gamma. \\
+  \end{cases}$$
+
+- **During the burn-in**, every  $\mathrm{DIV}$ iteration, with
+$$\mathrm{DIV} =  \begin{cases} 
+100 & \text{ if } N_{Gibbs} \geq 1000 \\
+\dfrac{N_{Gibbs}}{10}& \text{ else }  \\
+\end{cases}$$
+, where $N_{Gibbs}$ is the total number of iterations performed.   
+The variances are modified as a function of the acceptance numbers as follows for $i=1,\ldots,m$ : 
+
+  * The acceptance rate is calculated : $r^A_{i} = \dfrac{ n^A_i}{\mathrm{DIV}}$.
+  
+  * The variances are adapted according to the acceptance rate and a fixed constant $R_{opt}$ : 
+    $$\sigma_i \leftarrow \begin{cases}  
+  \sigma_i\left(2-\dfrac{1-r^A_i}{1-R_{opt}}\right) & \text{ if } r^A_{i} \geq R_{opt} \\ \\
+  \dfrac{\sigma_i}{2-\dfrac{1-r^A_i}{1-R_{opt}}} & \text{ else }
+  \end{cases}$$  
+  
+  * We reset the acceptance numbers : $n^A_i \leftarrow 0$.  
+  
+- Every $\dfrac{N_{Gibbs}}{10}$ iteration, average acceptance rates are calculated and displayed $m^A = \dfrac{1}{m}\sum\limits_{i=1,\ldots,m}r^A_i$.
+
+## Gibbs sampler using adaptative Metropolis algorithm 
+
+An adaptive Metropolis algorithm is used to sample the model parameters according to their conditional *a posteriori* distributions estimated to within one multiplicative constant.
+First we define the $f$ function that calculates the likelihood of the model as a function of the estimated parameters:    
+$$ f : \lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i \rightarrow  f(\lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i)=\mathrm{L}(\theta_{ij})$$
+- Compute $\mathrm{logit}(\theta_{ij})= \alpha_i + \beta_{j0} + X_i\beta_j + W_i\lambda_j$.
+
+- Compute $\theta_{ij}= \dfrac{1}{1+\exp\left(-\mathrm{logit}(\theta_{ij})\right)}$.
+
+- Return $\mathrm{L}(\theta_{ij})= p(y_{ij} \ | \ \theta_{ij},n_i)= \dbinom{n_i}{y_{ij}}(\theta_{ij})^{y_{ij}}(1-\theta_{ij})^{n_i-y_{ij}}$.
+
+We repeat those steps for $i=1,\ldots,I$ et $j=1,\ldots,J$, and then we define $\theta = \left(\theta{ij}\right)_{i=1,\ldots I}^{j= 1,\ldots,J}$.  
+This allows us to calculate the likelihood of the model: $\mathrm{L}(\theta)= \prod\limits_{\substack{1\leq i\leq I \\   1 \leq j\leq I}}\mathrm{L}(\theta_{ij})$.  
+
+According to Bayes' formula we have $$\mathrm{p}(\theta \ |  \ Y) \propto \Pi(\theta) \mathrm{L}(\theta).$$
+We thus use the following relations to approach the conditional *a posteriori* densities of each of the parameters with $\Pi(.)$ the densities corresponding to their *a priori* laws.
+$$\begin{aligned}
+& p(\beta_{jk} \ |  \ \beta_{j0},\beta_{j1},\ldots,\beta_{jk-1},\beta_{jk+1},\ldots,\beta_{jp}, \lambda_j,\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto \Pi(\beta_{jk})\prod\limits_{1\leq i\leq I}  \mathrm{L}(\theta_{ij})\\
+&p(\lambda_{jl} \ |  \ \lambda_{j1},\ldots,\lambda_{jl-1},\lambda_{jl+1},\ldots,\lambda_{jq}, \beta_j,\beta_{j0},\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto  \Pi(\lambda_{jl}) \prod\limits_{1\leq i \leq I}\mathrm{L}(\theta_{ij})\\
+&p(W_{il} \ |  \ W_{i1},\ldots,W_{il-1},W_{il+1},\ldots,W_{iq},\alpha_i,\beta_{10},\ldots,\beta_{J0},\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_J,Y) \propto \Pi(W_{il}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
+&p(\alpha_i \ |  \ W_i,\beta_{10},\ldots,\beta_{J0},\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_j,V_{\alpha},Y) \propto \Pi(\alpha_i \ | \ V_{\alpha}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
+& \text{, for $i=1,\ldots,I$, $j=1,\ldots,J$, $k=1,\ldots,p$ and $l=1,\ldots,q$. 
+}
+\end{aligned}$$
+
+The algorithm implemented on the basis of @Rosenthal2009 and @Roberts2001 articles, to estimate the parameters of the logit model is the following :
+
+- Definition of constants $N_{Gibbs}$, $N_{burn}$, $N_{thin}$ and $R_{opt}$ such that $N_{Gibbs}$ corresponds to the number of iterations performed by the algorithm, $N_{burn}$ to the number of iterations required for the burn-in or warm-up time,   
+$N_{samp}= \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}$ corresponding to the number of estimated values retained for each parameter. Indeed we record the estimated parameters at certain iterations in order to obtain $N_{samp}$ values, allowing us to represent a $a \ posteriori$ distribution for each parameter.  
+We set $R_{opt}$ the optimal acceptance ratio used in the adaptive Metropolis algorithms implemented for each parameter of the model. 
+
+- Initialize all parameters to $0$ for example, except the diagonal values of $\Lambda$ initialized at $1$ and $V_{\alpha}^{(0)}=1$. The acceptance number of each parameter is initialized to $0$ and the variances of their conditional instrumental densities take the value $1$.
+
+- **Gibbs sampler** at each iteration $t$ for $t=1,\ldots,N_{Gibbs}$ we repeat each of these steps:
+
+  * Generate the **random site effects** $\alpha_i^{(t)}$ for $i=1,\ldots,I$ according to an adaptive Metropolis algorithm that simulates $\alpha_i^\star \sim \mathcal{N}(\alpha_i^{(t-1)},\sigma_{\alpha_i}^2)$ and then calculates the acceptance rate as follows:  
+$$\gamma =min\left(1, \ \dfrac{\Pi\left(\alpha_i^\star \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(\alpha_i^\star, W_i^{(t-1)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}{\Pi\left(\alpha_i^{(t-1)} \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(\alpha_i^{(t-1)}, W_i^{(t-1)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).$$
+  
+  * Generate the **variance of random site effects** $V_\alpha^{(t)}$ according to: $$V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)$$
+
+  * Generate the **latent variables** (or unmeasured predictors) $W_{il}^{(t)}$ for $i=1,\ldots,I$ and $l=1,\ldots,q$ according to an adaptive Metropolis algorithm that simulates $W_{il}^\star \sim \mathcal{N}(W_{il}^{(t-1)}, \sigma_{W_{il}}^2)$and then calculates the acceptance rate as follows:
+
+$$\gamma = min\left(1,\ \dfrac{\Pi\left(W_{il}^\star\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^\star, \alpha_i^{(t)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)},X_i,y_{ij},n_i\right)} {\Pi\left(W_{il}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^{(t-1)}, \alpha_i^{(t)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).$$
+
+  * Generate the **fixed species effects** $\beta_{jk}^{(t)}$ for $j=1,\ldots,J$ and $k=0,\ldots,p$ using an adaptive Metropolis algorithm that simulates $\beta_{jk}^\star \sim \mathcal{N}(\beta_{jk}^{(t-1)}, \sigma_{\beta_{jk}}^2)$ and then calculates the acceptance rate as follows:
+
+$$\gamma = min\left(1,\dfrac{\Pi\left(\beta_{jk}^\star\right)\prod\limits_{1\leq i\leq I}f\left(\beta_{j0}^{(t)},\small{\ldots},\beta_{jk-1}^{(t)},\beta_{jk}^\star,\beta_{jk+1}^{(t-1)},\small{\ldots}, \beta_{jp}^{(t-1)},\lambda_j^{(t-1)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)} {\Pi\left(\beta_{jk}^{(t-1)}\right)\prod\limits_{1\leq i\leq I}f\left(\beta_{j0}^{(t)},\small{\ldots},\beta_{jk-1}^{(t)},\beta_{jk}^{(t-1)},\beta_{jk+1}^{(t-1)},\small{\ldots}, \beta_{jp}^{(t-1)},\lambda_j^{(t-1)}, \alpha_1^{(t)},W_1^{(t)}, \small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)}\right).$$
+
+  * Generate the **loading factors related to latent variables** $\lambda_{jl}^{(t)}$ for $j=1,\ldots,J$ and $l=1,\ldots,q$ according to an adaptive Metropolis algorithm for $l \leq  j$, simulating $\lambda_{jl}^\star \sim \mathcal{N}(\lambda_{jl}^{(t-1)},\sigma_{\lambda_{jl}}^2)$ and then calculating the acceptance rate as follows: : 
+$$\gamma = min\left(1,\dfrac{\Pi\left(\lambda_{jl}^\star\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^\star,\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_{j0}^{(t)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)} {\Pi\left(\lambda_{jl}^{(t-1)}\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^{(t-1)},\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_{j0}^{(t)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)}\right).$$
+In the case of $l>j$, we put $\lambda_{jl}^{(t)} = 0$. 
+
 # Poisson distribution with log link function 
 
+## Model definition 
 
+In this case, it is assumed that $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$, with
+$\mathrm{log}(\theta_{ij})  = \alpha_i + \beta_{j0}+X_i\beta_j+ W_i\lambda_j$.   
+
+We therefore consider abundance data with a response variable noted : $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ such as :
+
+$$y_{ij}=\begin{cases}
+    0 & \text{if species $j$ has been observed as absent at site $i$}\\
+    n &  \text{if $n$ individuals of the species $j$ have been observed at the site $i$}.
+    \end{cases}$$
+
+## Gibbs sampler using adaptative Metropolis algorithm 
+
+In this case, we cannot use the properties of the conjugate priors, therefore, the parameters of this model will be sampled by estimating their conditional *a posteriori* distributions using an adaptive Metropolis algorithm in the Gibbs sampler, in the same way as for the logit model.
+
+We use the same algorithm as before, replacing the logit link function by a log link function and the binomial distribution by a poisson's law to calculate the likelihood of the model 
+
+# References

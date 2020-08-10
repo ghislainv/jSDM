@@ -63,7 +63,7 @@
 #' @details We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 #'
 #' \bold{Ecological process : }
-#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(t_i, \theta_ij),}
 #' where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab logit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr

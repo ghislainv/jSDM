@@ -245,7 +245,7 @@ $$ \mathrm{logit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j
 
 - Response variable: $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ with:
 
-$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i)$$. 
+$$y_{ij} \sim \mathcal{B}inomial(t_i, \theta_{ij})$$. 
 
 $$y_{ij}=\begin{cases}
     0 & \text{if species $j$ has been observed as absent during each visits at site $i$}\\
@@ -426,7 +426,7 @@ hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted the
 
 $$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j $$
      
-- Link function logit: $\mathrm{log}: p \rightarrow \log(p)$. 
+- Link function logarithm : $\mathrm{log}: p \rightarrow \log(p)$. 
 
 - Response variable: $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ with:
 
@@ -451,7 +451,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-mites) **_Oribatid mites_** [@Borcard1994].
 
-```{r mites-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-birds)"}
+```{r mites-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-mites)"}
 knitr::include_graphics("figures/Oribatid_mites.jpg")
 ```
 
