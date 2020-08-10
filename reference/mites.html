@@ -112,7 +112,7 @@ See Borcard et al. (1992, 1994) for details." />
       <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
     </li>
     <li>
-      <a href="../articles/proof.html">Mathematical proof</a>
+      <a href="../articles/proof.html">Bayesian inference methods</a>
     </li>
   </ul>
 </li>
@@ -168,18 +168,18 @@ See Borcard et al. (1992, 1994) for details." />
 
     <p>A data frame with 70 observations on the following 42 variables.</p>
 <p>Abundance of 35 Oribatid mites morphospecies named :</p>
-<p><code>Brachy</code>, <code>PHTH</code>, <code>HPAV</code>, <code>RARD</code>, <code>SSTR</code>, <code>Protopl</code>, <code>MEGR</code>, <code>MPRO</code>, <code>TVIE</code>, <code>HMIN</code>,<code>HMIN2</code>, <code>NPRA</code>, <code>TVEL</code>, <code>ONOV</code>, <code>SUCT</code>, <code>LCIL</code>, <code>Oribatl1</code>, <code>Ceratoz1</code>, <code>PWIL</code>, <code>Galumna1</code>, <code>Stgncrs2</code>, <code>HRUF</code>, <code>Trhypch1</code>, <code>PPEL</code>, <code>NCOR</code>, <code>SLAT</code>, <code>FSET</code>, <code>Lepidzts</code>, <code>Eupelops</code>, <code>Miniglmn</code>, <code>LRUG</code>, <code>PLAG2</code>, <code>Ceratoz3</code>, <code>Oppiminu</code> and <code>Trimalc2</code>.</p>    
+<p><code>Brachy</code>, <code>PHTH</code>, <code>HPAV</code>, <code>RARD</code>, <code>SSTR</code>, <code>Protopl</code>, <code>MEGR</code>, <code>MPRO</code>, <code>TVIE</code>, <code>HMIN</code>,<code>HMIN2</code>, <code>NPRA</code>, <code>TVEL</code>, <code>ONOV</code>, <code>SUCT</code>, <code>LCIL</code>, <code>Oribatul1</code>, <code>Ceratoz1</code>, <code>PWIL</code>, <code>Galumna1</code>, <code>Steganacarus2</code>, <code>HRUF</code>, <code>Trhypochth1</code>, <code>PPEL</code>, <code>NCOR</code>, <code>SLAT</code>, <code>FSET</code>, <code>Lepidozetes</code>, <code>Eupelops</code>, <code>Minigalumna</code>, <code>LRUG</code>, <code>PLAG2</code>, <code>Ceratoz3</code>, <code>Oppia.minus</code> and <code>Trimalaco2</code>.</p>    
 <p>5 covariates collected on the 70 sites and their coordinates :</p>    
 <p></p><table class='table'>
-<tr><td><b><code>SubsDens</code></b></td><td>a numeric vector indicating the substrate density (g/L)</td></tr>
+<tr><td><b><code>substrate</code></b></td><td>a categorical vector indicating substrate type using a 7-level unordered factor : <code>sph1</code>, <code>sph2</code>, <code>sph3</code>, <code>sph4</code>, <code>litter</code>, <code>peat</code> and <code>inter</code> for interface.</td></tr>
 <tr><td></td><td></td></tr>
-<tr><td><b><code>WatrCont</code></b></td><td>a numeric vector indicating the water content of the substrate (g/L)</td></tr>
+<tr><td><b><code>shrubs</code></b></td><td>a categorical vector indicating shrub density using a 3-level ordered factor : <code>None</code>, <code>Few</code> and <code>Many</code></td></tr>
 <tr><td></td><td></td></tr>
-<tr><td><b><code>Substrate</code></b></td><td>a categorical vector indicating substrate type using a 7-level unordered factor : <code>Sphagn1</code>, <code>Sphagn2</code>, <code>Sphagn3</code>, <code>Sphagn</code>, <code>Litter</code>, <code>Barepeat</code> and <code>Interface</code>.</td></tr>
+<tr><td><b><code>topo</code></b></td><td>a categorical vector indicating microtopography using a factor with levels <code>blanket</code> and <code>hummock</code></td></tr>
 <tr><td></td><td></td></tr>
-<tr><td><b><code>Shrub</code></b></td><td>a categorical vector indicating shrub density using a 3-level ordered factor : <code>None</code>, <code>Few</code> and <code>Many</code></td></tr>
+<tr><td><b><code>density</code></b></td><td>a numeric vector indicating the substrate density (g/L)</td></tr>
 <tr><td></td><td></td></tr>
-<tr><td><b><code>Topo</code></b></td><td>a categorical vector indicating microtopography using a factor with levels <code>Blanket</code> and <code>Hummock</code></td></tr>
+<tr><td><b><code>water</code></b></td><td>a numeric vector indicating the water content of the substrate (g/L)</td></tr>
 <tr><td></td><td></td></tr>
 <tr><td><b><code>x</code></b></td><td>a numeric vector indicating first coordinates of sampling sites</td></tr>
 <tr><td></td><td></td></tr>

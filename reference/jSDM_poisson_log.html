@@ -110,7 +110,7 @@ The function calls a Gibbs sampler written in C++ code which uses an adaptive Me
       <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
     </li>
     <li>
-      <a href="../articles/proof.html">Mathematical proof</a>
+      <a href="../articles/proof.html">Bayesian inference methods</a>
     </li>
   </ul>
 </li>
@@ -345,7 +345,7 @@ where</p><table class='table'>
 <span class='co'>#== Data simulation</span>
 
 <span class='co'>#= Number of sites</span>
-<span class='no'>nsite</span> <span class='kw'>&lt;-</span> <span class='fl'>80</span>
+<span class='no'>nsite</span> <span class='kw'>&lt;-</span> <span class='fl'>60</span>
 <span class='co'>#= Number of species</span>
 <span class='no'>nsp</span> <span class='kw'>&lt;-</span> <span class='fl'>20</span>
 <span class='co'>#= Set seed for repeatability</span>
@@ -377,8 +377,8 @@ where</p><table class='table'>
 <span class='co'>#= Site-occupancy model</span>
 <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence</span>
 <span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_poisson_log</span>(<span class='co'># Chains</span>
-                        <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>300</span>,
-                        <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>300</span>,
+                        <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>200</span>,
+                        <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>200</span>,
                         <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
                         <span class='co'># Response variable</span>
                         <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>Y</span>,
@@ -406,16 +406,16 @@ where</p><table class='table'>
                         <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.124 lambda:0.126 W:0.365 alpha:0.227
-#&gt; **********:20.0%, mean accept. rates= beta:0.169 lambda:0.168 W:0.314 alpha:0.277
-#&gt; **********:30.0%, mean accept. rates= beta:0.263 lambda:0.243 W:0.360 alpha:0.345
-#&gt; **********:40.0%, mean accept. rates= beta:0.358 lambda:0.334 W:0.435 alpha:0.393
-#&gt; **********:50.0%, mean accept. rates= beta:0.383 lambda:0.401 W:0.425 alpha:0.436
-#&gt; **********:60.0%, mean accept. rates= beta:0.423 lambda:0.404 W:0.426 alpha:0.463
-#&gt; **********:70.0%, mean accept. rates= beta:0.419 lambda:0.418 W:0.451 alpha:0.434
-#&gt; **********:80.0%, mean accept. rates= beta:0.424 lambda:0.413 W:0.450 alpha:0.436
-#&gt; **********:90.0%, mean accept. rates= beta:0.422 lambda:0.422 W:0.446 alpha:0.450
-#&gt; **********:100.0%, mean accept. rates= beta:0.415 lambda:0.432 W:0.440 alpha:0.452</div><div class='input'><span class='co'>#' #==========</span>
+#&gt; **********:10.0%, mean accept. rates= beta:0.152 lambda:0.136 W:0.329 alpha:0.217
+#&gt; **********:20.0%, mean accept. rates= beta:0.187 lambda:0.181 W:0.327 alpha:0.272
+#&gt; **********:30.0%, mean accept. rates= beta:0.267 lambda:0.278 W:0.355 alpha:0.348
+#&gt; **********:40.0%, mean accept. rates= beta:0.345 lambda:0.347 W:0.410 alpha:0.398
+#&gt; **********:50.0%, mean accept. rates= beta:0.386 lambda:0.392 W:0.420 alpha:0.400
+#&gt; **********:60.0%, mean accept. rates= beta:0.439 lambda:0.425 W:0.433 alpha:0.452
+#&gt; **********:70.0%, mean accept. rates= beta:0.451 lambda:0.447 W:0.427 alpha:0.460
+#&gt; **********:80.0%, mean accept. rates= beta:0.436 lambda:0.403 W:0.409 alpha:0.447
+#&gt; **********:90.0%, mean accept. rates= beta:0.440 lambda:0.428 W:0.401 alpha:0.448
+#&gt; **********:100.0%, mean accept. rates= beta:0.456 lambda:0.439 W:0.380 alpha:0.445</div><div class='input'><span class='co'>#' #==========</span>
 <span class='co'>#' #== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>
