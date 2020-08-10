@@ -238,7 +238,7 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <h2 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">1.4</span> Analysis of the results</h2>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -277,7 +277,7 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">n_latent</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
+  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
 }</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r">
@@ -289,7 +289,7 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div class="sourceCode" id="cb11"><html><body><pre class="r">
 
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level2">
@@ -340,7 +340,7 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <li><p>Link function logit: <span class="math inline">\(\mathrm{logit}: p \rightarrow \log(\frac{p}{1-p})\)</span>.</p></li>
 <li><p>Response variable: <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
 </ul>
-<p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i)\]</span>.</p>
+<p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(t_i, \theta_{ij})\]</span>.</p>
 <p><span class="math display">\[y_{ij}=\begin{cases}
     0 &amp; \text{if species $j$ has been observed as absent during each visits at site $i$}\\
     n &amp;  \text{if species $j$ has been observed as present during $n$ visits at site $i$ ($n \leq t_i$)}.
@@ -427,7 +427,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <h2 class="hasAnchor">
 <a href="#analysis-of-the-results-1" class="anchor"></a><span class="header-section-number">2.4</span> Analysis of the results</h2>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-logit-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -466,7 +466,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">n_latent</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
+  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
 }</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-logit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-logit-7.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r">
@@ -477,7 +477,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <p><img src="jSDM_files/figure-html/plot-results-logit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r">
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-logit-9.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations-1" class="section level2">
@@ -525,7 +525,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <a href="#definition-of-the-model-2" class="anchor"></a><span class="header-section-number">3.1</span> Definition of the model</h2>
 <p><span class="math display">\[ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j \]</span></p>
 <ul>
-<li><p>Link function logit: <span class="math inline">\(\mathrm{log}: p \rightarrow \log(p)\)</span>.</p></li>
+<li><p>Link function logarithm : <span class="math inline">\(\mathrm{log}: p \rightarrow \log(p)\)</span>.</p></li>
 <li><p>Response variable: <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
 </ul>
 <p><span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij})\]</span>.</p>
@@ -548,8 +548,8 @@ The corresponding regression coefficients for each species <span class="math inl
 
 <div class="figure" style="text-align: center">
 <span id="fig:mites-picture"></span>
-<img src="figures/Oribatid_mites.jpg" alt="Swiss Breeding Bird Atlas (Kéry &amp; Schmid 2006)." width="500" height="400"><p class="caption">
-Figure 3.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006">2006</a>)</span>.
+<img src="figures/Oribatid_mites.jpg" alt="Oribatid mites (Borcard &amp; Legendre 1994)." width="500" height="400"><p class="caption">
+Figure 3.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Borcard &amp; Legendre <a href="#ref-Borcard1994">1994</a>)</span>.
 </p>
 </div>
 <p>This data-set is available in the <code>jSDM</code> R package. It can be loaded with the <code>data</code> command. The  data-set is in “wide” format: each line is a site and the abundance data are in columns.</p>
@@ -648,7 +648,7 @@ Figure 3.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="cit
 <h2 class="hasAnchor">
 <a href="#analysis-of-the-results-2" class="anchor"></a><span class="header-section-number">3.4</span> Analysis of the results</h2>
 <div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-log-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb30"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -685,7 +685,7 @@ Figure 3.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="cit
 <span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">n_latent</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
+  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]][,<span class="fl">1</span>:<span class="fl">2</span>], <span class="kw">main</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>))
 }</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-log-8.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-log-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb34"><html><body><pre class="r">
@@ -696,7 +696,7 @@ Figure 3.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="cit
 <p><img src="jSDM_files/figure-html/plot-results-log-10.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb35"><html><body><pre class="r">
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.Deviance</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="st">"Deviance"</span>)</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-log-11.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations-2" class="section level2">
