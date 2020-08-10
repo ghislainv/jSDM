@@ -84,7 +84,7 @@
 #' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 80
+#' nsite <- 60
 #' #= Number of species
 #' nsp <- 20
 #' #= Set seed for repeatability
@@ -116,8 +116,8 @@
 #' #= Site-occupancy model
 #' # Increase number of iterations (burnin and mcmc) to get convergence
 #' mod <- jSDM_poisson_log(# Chains
-#'                         burnin=300,
-#'                         mcmc=300,
+#'                         burnin=200,
+#'                         mcmc=200,
 #'                         thin=1,
 #'                         # Response variable
 #'                         presence_site_sp=Y,

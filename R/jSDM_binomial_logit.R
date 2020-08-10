@@ -295,7 +295,7 @@ jSDM_binomial_logit <- function(# Iteration
   if(!is.null(trials)){
     T <- as.vector(trials)
   } else {
-    T <- rep(1,nobs)
+    T <- rep(1,nsite)
   }  
   #= Suitability
   mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))

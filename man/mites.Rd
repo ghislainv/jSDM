@@ -22,21 +22,21 @@ See Borcard et al. (1992, 1994) for details.
 
 Abundance of 35 Oribatid mites morphospecies named : 
 
-\code{Brachy}, \code{PHTH}, \code{HPAV}, \code{RARD}, \code{SSTR}, \code{Protopl}, \code{MEGR}, \code{MPRO}, \code{TVIE}, \code{HMIN},\code{HMIN2}, \code{NPRA}, \code{TVEL}, \code{ONOV}, \code{SUCT}, \code{LCIL}, \code{Oribatl1}, \code{Ceratoz1}, \code{PWIL}, \code{Galumna1}, \code{Stgncrs2}, \code{HRUF}, \code{Trhypch1}, \code{PPEL}, \code{NCOR}, \code{SLAT}, \code{FSET}, \code{Lepidzts}, \code{Eupelops}, \code{Miniglmn}, \code{LRUG}, \code{PLAG2}, \code{Ceratoz3}, \code{Oppiminu} and \code{Trimalc2}.
+\code{Brachy}, \code{PHTH}, \code{HPAV}, \code{RARD}, \code{SSTR}, \code{Protopl}, \code{MEGR}, \code{MPRO}, \code{TVIE}, \code{HMIN},\code{HMIN2}, \code{NPRA}, \code{TVEL}, \code{ONOV}, \code{SUCT}, \code{LCIL}, \code{Oribatul1}, \code{Ceratoz1}, \code{PWIL}, \code{Galumna1}, \code{Steganacarus2}, \code{HRUF}, \code{Trhypochth1}, \code{PPEL}, \code{NCOR}, \code{SLAT}, \code{FSET}, \code{Lepidozetes}, \code{Eupelops}, \code{Minigalumna}, \code{LRUG}, \code{PLAG2}, \code{Ceratoz3}, \code{Oppia.minus} and \code{Trimalaco2}.
     
     5 covariates collected on the 70 sites and their coordinates : 
     
     \tabular{ll}{
-    \bold{\code{SubsDens}} \tab   a numeric vector indicating the substrate density (g/L)\cr
-    \tab \cr
-    \bold{\code{WatrCont}} \tab  a numeric vector indicating the water content of the substrate (g/L) \cr
-    \tab \cr
-    \bold{\code{Substrate}} \tab  a categorical vector indicating substrate type using a 7-level unordered factor : \code{Sphagn1}, \code{Sphagn2}, \code{Sphagn3}, \code{Sphagn}, \code{Litter}, \code{Barepeat} and \code{Interface}. \cr
-        \tab  \cr
-    \bold{\code{Shrub}} \tab a categorical vector indicating shrub density using a 3-level ordered factor : \code{None}, \code{Few} and \code{Many} \cr
-        \tab  \cr
-    \bold{\code{Topo}} \tab  a categorical vector indicating microtopography using a factor with levels \code{Blanket} and \code{Hummock} \cr
+    \bold{\code{substrate}} \tab  a categorical vector indicating substrate type using a 7-level unordered factor : \code{sph1}, \code{sph2}, \code{sph3}, \code{sph4}, \code{litter}, \code{peat} and \code{inter} for interface. \cr
     \tab  \cr
+    \bold{\code{shrubs}} \tab a categorical vector indicating shrub density using a 3-level ordered factor : \code{None}, \code{Few} and \code{Many} \cr
+    \tab  \cr
+    \bold{\code{topo}} \tab  a categorical vector indicating microtopography using a factor with levels \code{blanket} and \code{hummock} \cr
+    \tab  \cr
+    \bold{\code{density}} \tab   a numeric vector indicating the substrate density (g/L)\cr
+    \tab \cr
+    \bold{\code{water}} \tab  a numeric vector indicating the water content of the substrate (g/L) \cr
+    \tab \cr
     \bold{\code{x}} \tab  a numeric vector indicating first coordinates of sampling sites \cr 
             \tab \cr
     \bold{\code{y}} \tab  a numeric vector indicating second coordinates of sampling sites  \cr 

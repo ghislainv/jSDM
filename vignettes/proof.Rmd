@@ -1,5 +1,5 @@
 ---
-title: "Mathematical proof"
+title: "Bayesian inference methods"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -32,11 +32,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Bernoulli distribution with probit link 
+# Bernoulli distribution with probit link function 
 
+## Model definition
 - Proposition
 
-$$
+$$ 
 \begin{aligned}
 &z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j},\\
 &\text{ with } \epsilon_{i,j} \sim \mathcal{N}(0,1) \ \forall i,j  \text{ and such as : } \\
@@ -74,7 +75,8 @@ $$\begin{aligned}
 & = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}$$
 
-# Fixed species effects
+## Conjugate priors 
+### Fixed species effects
 
 - Proposition
 
@@ -108,7 +110,7 @@ p(\beta \ | \ Y) & \propto  p(Y \ | \ \beta) \ p(\beta) \\
 
 Actually, we use that proposition to estimate lambdas and betas in a single block. So, we consider $Z'_{i,j} = \beta_{0j} + X_i'\beta_j+ W_i'\lambda_j +\epsilon_{i,j}$. 
 
-# Random site effects
+### Random site effects
 
 - Proposition
 
@@ -137,7 +139,7 @@ p(\theta \ | \ x) & \propto  p(x \ | \ \theta) \ p(\theta) \\
 & \propto \exp\left(-\frac{1}{2({\tau_0}^{-2}+\sigma^{-2})^{-1}}\left(\theta^2 -2\theta \frac{\mu_0{\tau_0}^{-2}+ x\sigma^{-2}}{{\tau_0}^{-2}+\sigma^{-2}}\right)\right)\\
 \end{aligned}$$
 
-# Random site effect variance
+### Random site effect variance
 
 - Proposition
 
@@ -160,4 +162,46 @@ p(\sigma^2 \ | \ x) & \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 & \propto  \frac{1}{(2\pi\sigma^2)^{\frac{n}{2}}}\exp\left(-\frac{1}{2\sigma^2}(x-\theta)'(x-\theta)\right)\frac{b^a}{\Gamma(a)}{(\sigma^2)}^{-(a+1)}\exp\left(-\frac{b}{\sigma^2}\right) \\
 & \propto {(\sigma^2)}^{-\left(\underbrace{\frac{n}{2}+a}_{a'}+1\right)}\exp\left(-\frac{1}{\sigma^2}\underbrace{\left(b+\frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2\right)}_{b'}\right)
 \end{aligned}$$
+
+## Gibbs sampler using conjuate priors 
+
+The algorithm used to estimate the parameters of the probit model is therefore as follows:
+
+- Define the constants $N_{Gibbs}$, $N_{burn}$, $N_{thin}$ such that $N_{Gibbs}$ corresponds to the number of iterations performed by the Gibbs sampler,  $N_{burn}$ to the number of iterations required for burn-in or warm-up time and $N_{samp} = \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}$ to the number of estimated values retained for each parameter. Indeed, the estimated parameters are recorded at certain iterations, in order to obtain a sample of $N_{samp}$ values distributed according to the $a \ posteriori$ distribution for each of the parameters.
+
+Initialize all parameters to $0$ for example, except the diagonal values of $\Lambda$ initialized at $1$ and $V_{\alpha}^{(0)}=1$.
+
+- Gibbs sampler: at each iteration $t$ for $t=1,\ldots,N_{Gibbs}$ we repeat each of these steps :
+
+  * Generate the \textbf{latent variable} $Z^{(t)}=\left(Z_{ij}^{(t)}\right)_{i=1,\ldots,I}^{j=1,\ldots,J}$ such that
+$$Z_{ij}^{(t)} \sim  \begin{cases} 
+\mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 & \text{ if } y_{ij } =0 \\ 
+\mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ left truncated by } 0 &        \text{ if } y_{ij} =1
+\end{cases}$$
+,  the latent variable is thus initialized at the first iteration by generating it according to these centered normal laws.
+
+  * Generate the \textbf{fixed species effects} $P_j^{(t)}=(\beta_{j0}^{(t)},\beta_{j1}^{(t)} \ldots, \beta_{jp}^{(t)},\lambda_{j1}^{(t)},\ldots, \lambda_{jq}^{(t)})'$ for $j=1,\ldots,J$ such as : 
+$$P_j^{(t)} \ | \ Z^{(t)}, W_1^{(t-1)}, \alpha_1^{(t-1)}, \ldots, W_I^{(t−1)}, \alpha_I^{(t-1)} \sim \mathcal{N}_{p+q+1}(m^\star,V^\star) \text{, with }$$
+$$m^\star = (V^{-1} + {D^{(t)}}'D^{(t)})^{-1}(V^{-1}m + {D^{(t)}}'Z^\star_j) \text{ and } V^\star = \left(V^{-1}+{D^{(t)}}'D^{(t)}\right)^{-1},$$
+$$\text{ where } Z_j^\star =(Z_{1j}^\star,\ldots,Z_{Ij}^\star)' \text{ such as } Z^\star_{ij} = Z_{ij}^{(t)}-\alpha_i^{(t-1)}.$$
+In order to constrain the diagonal values of $\Lambda =\left(\lambda_{jl}\right)_{j=1,\ldots,J}^{l=1,\ldots,q}$ to positive values and make the matrix lower triangular,
+the values of the randomly simulated $P^{(t)}$ are modified according to the following conditions:
+$$P_{jp+1+l}^{(t)} = \lambda_{jl}^{(t)} \leftarrow \begin{cases}
+0 & \text{ if } l>j \\
+\lambda_{jl}^{(t-1)} & \text{ if } l=j \text{ and } \lambda_{jl}^{(t)} < 0.
+\end{cases}$$ 
+We define $P^{(t)}=\left( P_1^{(t)} | \ldots | P_J^{(t)} \right)$.  
+
+  * Generate the \textbf{latent variables} (or unmeasured predictors) $W_i^{(t)}$ for $i=1,\ldots,I$ according to : $$W_i^{(t)} \ | \ Z^{(t)}, P^{(t)},  \alpha_i^{(t-1)} \sim \mathcal{N}_{q} \left((I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}({\Lambda^{(t)}}'Z_i^{\star \star}),(I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}\right),$$
+$$\text{ where } Z_i^{\star \star} =(Z_{i1}^{\star \star},\ldots,Z_{iJ}^{\star \star}) \text{ such as } Z_{ij}^{\star \star } = Z_{ij}^{(t)}-\alpha_i^{(t-1)} − \beta_{j0}^{(t)} - X_i\beta_j^{(t)}.$$ We define $D_i^{(t)} = \left(1,X_{i1},\ldots,X_{ip},W_{i1}^{(t)}, \ldots, W_{iq}^{(t)} \right)$.
+
+  * Generate the \textbf{random site effects} $\alpha_i^{(t)}$ for $i=1,\ldots,I$ selon :
+$$ \alpha_i | \ Z^{(t)}, P^{(t)},W_i^{(t)} \sim \mathcal{N}\left(\dfrac{ \sum_{j=1}^J Z_{ij}^{(t)} - D_i^{(t)}P_j^{(t)}}{{V_{\alpha}^{(t-1)}}^{-1} + J} , \left( \frac{1}{V_{\alpha}^{(t-1)}}+ J \right)^{-1}  \right)$$
+
+  * Generate the \textbf{variance of random site effects} $V_\alpha^{(t)}$ according to: $$V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)$$
+
+# Binomial distribution with logit link function
+
+# Poisson distribution with log link function 
+
 

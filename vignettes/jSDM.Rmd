@@ -89,7 +89,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
 
-```{r frog-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-frog)"}
+```{r frog-picture, echo=FALSE, out.width=400, out.height=300, fig.cap="(ref:cap-frog)"}
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
@@ -186,8 +186,10 @@ for (l in 1:n_latent) {
 }
 
 ## probit_theta
-par (mfrow=c(1,1))
+par (mfrow=c(2,1))
 hist(mod_frogs_jSDM_probit$probit_theta_pred, main = "Predicted probit theta", xlab ="predicted probit theta")
+hist(pnorm(mod_frogs_jSDM_probit$probit_theta_pred), main = "Predicted theta", xlab ="predicted theta")
+
 
 ## Deviance
 plot(mod_frogs_jSDM_probit$mcmc.Deviance,main = "Deviance")
@@ -247,7 +249,7 @@ $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i)$$.
 
 $$y_{ij}=\begin{cases}
     0 & \text{if species $j$ has been observed as absent during each visits at site $i$}\\
-    $n$ &  \text{if species $j$ has been observed as present during $n$ visits at site $i$ ($n \leq t_i$)}.
+    n &  \text{if species $j$ has been observed as present during $n$ visits at site $i$ ($n \leq t_i$)}.
     \end{cases}$$
     
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
@@ -265,7 +267,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-birds) **_Swiss Breeding Bird Atlas_** [@Kery2006].
 
-```{r birds-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-birds)"}
+```{r birds-picture, echo=FALSE, out.width=600, out.height=300, fig.cap="(ref:cap-birds)"}
 knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 
@@ -280,7 +282,8 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 ```{r birds-data}
 # frogs data
 data(birds, package="jSDM")
-head(birds)
+# Too large to display
+#head(birds) 
 ```
 
 We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.
@@ -292,7 +295,7 @@ We also normalize the continuous explicative variables to facilitate MCMC conver
 PA_birds <- birds[,1:158]
 
 # Normalized continuous variables
-Env_birds <- as.data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
+Env_birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
 colnames(Env_birds) <- c("elev","rlength","forest","nsurvey")
 ```
 
@@ -369,8 +372,9 @@ for (l in 1:n_latent) {
   plot(mod_birds_jSDM_logit$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
 }
 
-## probit_theta
-par (mfrow=c(1,1))
+## theta
+par (mfrow=c(2,1))
+hist(logit(mod_birds_jSDM_logit$theta_latent), main = "Predicted logit theta", xlab ="predicted logit theta")
 hist(mod_birds_jSDM_logit$theta_latent, main = "Predicted theta", xlab ="predicted theta")
 
 ## Deviance
@@ -430,7 +434,7 @@ $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$.
 
 $$y_{ij}=\begin{cases}
     0 & \text{if species $j$ has been observed as absent at site $i$}\\
-    $n$ &  \text{if $n$ individuals of the species $j$ have been observed at the site $i$}.
+    n &  \text{if $n$ individuals of the species $j$ have been observed at the site $i$}.
     \end{cases}$$
     
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
@@ -443,5 +447,162 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
+## Data-set
+
+(ref:cap-mites) **_Oribatid mites_** [@Borcard1994].
+
+```{r mites-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-birds)"}
+knitr::include_graphics("figures/Oribatid_mites.jpg")
+```
+
+This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The \link{\code{mites}} data-set is in "wide" format: each line is a site and the abundance data are in columns.
+
+This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of Université de Montréal, Québec, Canada in June 1989. 
+
+The whole sampling area was 2.5 m x 10 m in size and thirty-five taxa were recognized as species, though many were not given a species name, owing to the incomplete stage of systematic knowledge of the North American Oribatid fauna.
+
+The data set comprises the abundances of 35 morphospecies, 5 substrate and micritopographic variables, and the x-y Cartesian coordinates of the 70 sampling sites. 
+
+See Borcard et al. (1992, 1994) for details.
+
+
+```{r mites-data}
+# frogs data
+data(mites, package="jSDM")
+head(mites)
+```
+
+We rearrange the data in two data-sets: a first one for the abundance observations for each species (columns) at each site (rows), and a second one for the site characteristics.
+
+We also normalize the continuous explicative variables to facilitate MCMC convergence. 
+
+```{r arranging-mites-data}
+# data.obs
+PA_mites <- mites[,1:35]
+
+# Normalized continuous variables
+Env_mites  <- cbind(scale(mites[,c("density","water")]), mites[,c("substrate", "shrubs", "topo")])
+str(Env_mites)
+```
+
+## Parameter inference
+
+We use the `jSDM_poisson_log()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+
+```{r jSDM-log, cache=TRUE}
+T1<- Sys.time()
+mod_mites_jSDM_log <- jSDM_poisson_log(
+  # Chains
+  burnin=100, mcmc=100, thin=1,
+  # Response variable 
+  presence_site_sp=PA_mites, 
+  # Explanatory variables 
+  site_suitability = ~.,   
+  site_data = Env_mites,
+  # Model specification 
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1, 
+  # Priors
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=1.0E6,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  ropt=0.44,
+  seed=1234, verbose=1)
+T2 <- Sys.time()
+```
+
+## Analysis of the results
+
+```{r plot-results-log}
+## alpha_i of the first two sites
+plot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.alpha[,1:2]))
+
+## V_alpha
+par(mfrow=c(1,2))
+coda::traceplot(mod_mites_jSDM_log$mcmc.V_alpha, main="V_alpha")
+coda::densplot(mod_mites_jSDM_log$mcmc.V_alpha, main="V_alpha")
+
+np <- nrow(mod_mites_jSDM_log$model_spec$beta_start)
+
+## beta_j of the first two species
+par(mfrow=c(3,2))
+  for (p in 1:np) {
+      coda::traceplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]][,p]))
+      coda::densplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]][,p]), 
+main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]])[p],
+", species : ",1))
+  }
+
+## lambda_j of the first two species
+n_latent <- mod_mites_jSDM_log$model_spec$n_latent
+par(mfrow=c(n_latent*2,2))
+for (j in 1:2) {
+  for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]][,np+l]))
+      coda::densplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
+      main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]])[np+l],
+      ", species : ",j))
+    }
+  }
+
+## Latent variables W_i for the first two sites
+par(mfrow=c(1,2))
+for (l in 1:n_latent) {
+  plot(mod_mites_jSDM_log$mcmc.latent[[paste0("lv_",l)]][,1:2], main = paste0("Latent variable W_", l))
+}
+
+## probit_theta
+par (mfrow=c(2,1))
+hist(log(mod_mites_jSDM_log$theta_latent), main = "Predicted log theta", xlab ="predicted log theta")
+hist(mod_mites_jSDM_log$theta_latent, main = "Predicted theta", xlab ="predicted theta")
+
+## Deviance
+plot(mod_mites_jSDM_log$mcmc.Deviance,main = "Deviance")
+
+```
+
+## Matrice of correlations 
+
+ After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+ $$\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
+ \end{cases}$$, then we compute correlations from covariances :
+  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
+```{r correlation-matrix-log}
+plot_residual_cor(mod_mites_jSDM_log, tl.cex=0.5)
+```
+
+## Predictions 
+
+We use the `predict()` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+
+```{r predictions-log}
+# Sites and species concerned by predictions :
+## 50 sites among the 104
+Id_sites <- sample.int(nrow(PA_mites), 40)
+## All species 
+Id_species <- colnames(PA_mites)
+# Simulate new observations of covariates on those sites 
+simdata <- matrix(nrow=40, ncol = ncol(mod_mites_jSDM_log$model_spec$site_data))
+colnames(simdata) <- colnames(mod_mites_jSDM_log$model_spec$site_data)
+rownames(simdata) <- Id_sites
+simdata <- as.data.frame(simdata)
+simdata$density <- rnorm(40)
+simdata$water <- rnorm(40)
+simdata$substrate <- sample(c("inter", "litter", "peat", "sph1", "sph2", "sph3", "sph4"), 40, replace=T)
+simdata$shrubs <- sample(c("none","many", "few"), 40, replace=T)
+simdata$topo <- sample(c("blanket","hummock"), 40, replace=T)
+
+# Predictions 
+theta_pred <- predict(mod_mites_jSDM_log, newdata=simdata, Id_species=Id_species,
+						   Id_sites=Id_sites, type="mean")
+hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
+```
 
 # References
