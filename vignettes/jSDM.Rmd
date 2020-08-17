@@ -280,7 +280,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 
 
 ```{r birds-data}
-# frogs data
+# birds data
 data(birds, package="jSDM")
 # Too large to display
 #head(birds) 
@@ -297,6 +297,7 @@ PA_birds <- birds[,1:158]
 # Normalized continuous variables
 Env_birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
 colnames(Env_birds) <- c("elev","rlength","forest","nsurvey")
+str(Env_birds)
 ```
 
 ## Parameter inference
@@ -467,7 +468,7 @@ See Borcard et al. (1992, 1994) for details.
 
 
 ```{r mites-data}
-# frogs data
+# mites data
 data(mites, package="jSDM")
 head(mites)
 ```

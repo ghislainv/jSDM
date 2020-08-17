@@ -78,7 +78,7 @@ $$\begin{aligned}
 & = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}$$
 
-with the following definition : 
+with the following parameters and priors : 
 
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
@@ -194,9 +194,9 @@ In the Bayesian framework, Gibbs' algorithm produces a realization of the parame
   * $\theta_2^{(t)} \sim \Pi\left((\theta_2 \ | \ (\theta_1^{(t)},  \theta_3^{(t-1)},\ldots,\theta_m^{(t-1)},x\right)$
   * $\theta_m^{(t)} \sim \Pi\left(\theta_m \ | \ \theta_1^{(t)}, \ldots, \theta_{m-1}^{(t)},x\right)$
 
-Successive iterations of this algorithm generate the states of a Markov chain $\{\theta^{(t)}, t > 0\}$ to values in $\mathbb{\R}^{m}$, we show that this chain admits an invariant measure which is the *a posteriori* law.  
+Successive iterations of this algorithm generate the states of a Markov chain $\{\theta^{(t)}, t > 0\}$ to values in $\mathbb{R}^{m}$, we show that this chain admits an invariant measure which is the *a posteriori* law.  
 
-For a sufficiently large number of iterations, the vector $\theta$ obtained can thus be considered as a realization of the joint *a posteriori* law $\Pi(\theta | \x)$. 
+For a sufficiently large number of iterations, the vector $\theta$ obtained can thus be considered as a realization of the joint *a posteriori* law $\Pi(\theta \ | \ x)$. 
 
 Consequently, the implementation of a Gibbs sampler requires the knowledge of the *a posteriori* distributions of each of the parameters conditionally to the other parameters of the model, which can be deduced from the conjugated priors formulas in the case of the probit model but are not explicitly expressible in the case where a logit or log link function is used.
 
@@ -311,6 +311,7 @@ The variances are modified as a function of the acceptance numbers as follows fo
 ## Gibbs sampler using adaptative Metropolis algorithm 
 
 An adaptive Metropolis algorithm is used to sample the model parameters according to their conditional *a posteriori* distributions estimated to within one multiplicative constant.
+
 First we define the $f$ function that calculates the likelihood of the model as a function of the estimated parameters:    
 $$ f : \lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i \rightarrow  f(\lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i)=\mathrm{L}(\theta_{ij})$$
 - Compute $\mathrm{logit}(\theta_{ij})= \alpha_i + \beta_{j0} + X_i\beta_j + W_i\lambda_j$.
@@ -333,7 +334,7 @@ $$\begin{aligned}
 }
 \end{aligned}$$
 
-The algorithm implemented on the basis of @Rosenthal2009 and @Roberts2001 articles, to estimate the parameters of the logit model is the following :
+The algorithm implemented in \link{\code{jSDM_binomial_logit}} on the basis of @Rosenthal2009 and @Roberts2001 articles, to estimate the parameters of the logit model is the following :
 
 - Definition of constants $N_{Gibbs}$, $N_{burn}$, $N_{thin}$ and $R_{opt}$ such that $N_{Gibbs}$ corresponds to the number of iterations performed by the algorithm, $N_{burn}$ to the number of iterations required for the burn-in or warm-up time,   
 $N_{samp}= \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}$ corresponding to the number of estimated values retained for each parameter. Indeed we record the estimated parameters at certain iterations in order to obtain $N_{samp}$ values, allowing us to represent a $a \ posteriori$ distribution for each parameter.  
@@ -364,6 +365,8 @@ In the case of $l>j$, we put $\lambda_{jl}^{(t)} = 0$.
 
 ## Model definition 
 
+According to the article @Hui2016, we can use the Poisson distribution for the analysis of multivariate abundance data, with estimation performed using Bayesian Markov chain Monte Carlo methods.
+
 In this case, it is assumed that $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$, with
 $\mathrm{log}(\theta_{ij})  = \alpha_i + \beta_{j0}+X_i\beta_j+ W_i\lambda_j$.   
 
@@ -378,6 +381,6 @@ $$y_{ij}=\begin{cases}
 
 In this case, we cannot use the properties of the conjugate priors, therefore, the parameters of this model will be sampled by estimating their conditional *a posteriori* distributions using an adaptive Metropolis algorithm in the Gibbs sampler, in the same way as for the logit model.
 
-We use the same algorithm as before, replacing the logit link function by a log link function and the binomial distribution by a poisson's law to calculate the likelihood of the model 
+We use the same algorithm as before by replacing the logit link function by a log link function and the binomial distribution by a poisson's law to calculate the likelihood of the model in the function \link{\code{jSDM_poisson_log}}. 
 
 # References
