@@ -368,7 +368,7 @@ Figure 2.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="cit
 <p>The Swiss breeding bird survey (“Monitoring Häufige Brutvögel” MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). Surveys are conducted along a transect that does not change over the years.</p>
 <p>The data set  contains the 2014 data, except for one quadrat not surveyed in 2014.
 It lists 158 bird species named in Latin and whose occurrences are expressed as the number of visits during which the species was observed on each site , with the exception of 13 species not surveyed in 2014 :</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="co"># frogs data</span>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="co"># birds data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">birds</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"jSDM"</span>)
 <span class="co"># Too large to display</span>
 <span class="co">#head(birds) </span></pre></body></html></div>
@@ -379,7 +379,13 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 
 <span class="co"># Normalized continuous variables</span>
 <span class="no">Env_birds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(<span class="no">birds</span>[,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"elev"</span>,<span class="st">"rlength"</span>,<span class="st">"forest"</span>)]), <span class="no">birds</span>[,<span class="st">"nsurvey"</span>]))
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Env_birds</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"elev"</span>,<span class="st">"rlength"</span>,<span class="st">"forest"</span>,<span class="st">"nsurvey"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Env_birds</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"elev"</span>,<span class="st">"rlength"</span>,<span class="st">"forest"</span>,<span class="st">"nsurvey"</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">Env_birds</span>)
+<span class="co">#&gt; 'data.frame':    266 obs. of  4 variables:</span>
+<span class="co">#&gt;  $ elev   : num  -1.1564 -1.1564 -0.2205 -0.3765 -0.0645 ...</span>
+<span class="co">#&gt;  $ rlength: num  1.017 0.296 -0.665 -0.505 0.216 ...</span>
+<span class="co">#&gt;  $ forest : num  -1.15211 -0.5013 -0.10358 -0.93518 0.00489 ...</span>
+<span class="co">#&gt;  $ nsurvey: num  3 3 3 3 3 3 3 3 3 3 ...</span></pre></body></html></div>
 </div>
 <div id="parameter-inference-1" class="section level2">
 <h2 class="hasAnchor">
@@ -557,7 +563,7 @@ Figure 3.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <p>The whole sampling area was 2.5 m x 10 m in size and thirty-five taxa were recognized as species, though many were not given a species name, owing to the incomplete stage of systematic knowledge of the North American Oribatid fauna.</p>
 <p>The data set comprises the abundances of 35 morphospecies, 5 substrate and micritopographic variables, and the x-y Cartesian coordinates of the 70 sampling sites.</p>
 <p>See Borcard et al. (1992, 1994) for details.</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="co"># frogs data</span>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="co"># mites data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">mites</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">mites</span>)
 <span class="co">#&gt;   Brachy PHTH HPAV RARD SSTR Protopl MEGR MPRO TVIE HMIN HMIN2 NPRA TVEL ONOV</span>
