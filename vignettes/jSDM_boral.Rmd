@@ -788,13 +788,13 @@ Deviance_jSDM_Mites <- mean(mod_jSDM_Mites$mcmc.Deviance)
 
 
 save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, Deviance_boral_sim, T_jSDM_Mosquitos, Deviance_jSDM_Mosquitos ,T_jSDM_Eucalypts, Deviance_jSDM_Eucalypts, T_jSDM_Frogs, Deviance_jSDM_Frogs,T_jSDM_Fungi, Deviance_jSDM_Fungi, T_jSDM_Birds, Deviance_jSDM_Birds, T_jSDM_Mites, Deviance_jSDM_Mites, T_boral_Mosquitos, Deviance_boral_Mosquitos, T_boral_Eucalypts, Deviance_boral_Eucalypts, T_boral_Frogs, Deviance_boral_Frogs, T_boral_Fungi, Deviance_boral_Fungi, T_boral_Birds, Deviance_boral_Birds, T_boral_Mites, Deviance_boral_Mites,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM-boral-comparison.rda")
+file="~/Documents/jSDM/vignettes/jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
 ```
 
 ## Compilation time and deviance 
 
 ```{r time, eval=TRUE, echo=FALSE}
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM-boral-comparison.rda")
+load(file="~/Documents/jSDM/vignettes/jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_boral_sim, T_boral_Mosquitos, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi,
