@@ -24,7 +24,7 @@ vignette: >
 knitr::opts_chunk$set(
 fig.align="center",
 fig.width=8, fig.height=6,
-cache=TRUE,
+cache=FALSE,
 collapse=TRUE,
 comment="#>",
 highlight=TRUE,
@@ -38,6 +38,7 @@ eval=FALSE
 library(jSDM)
 library(knitr)
 library(kableExtra)
+setwd("~/Documents/jSDM/vignettes/")
 # Mosquitos dataset
 data("mosquitos")
 Env_Mosquitos <- mosquitos[,17:29]
@@ -139,7 +140,7 @@ for (i in 1:nsite){
 - $\beta_{target}$:
 
 ```{r beta, eval=TRUE, echo=FALSE}
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_simulation.RData")
+load(file="jSDM_boral_cache/boral_simulation.RData")
 colnames(beta.target) <- paste(rep("sp",nsp),1:nsp,sep="")
 kable(beta.target[,1:15], digits=1)%>%
   kable_styling(bootstrap_options="striped",latex_options=c("HOLD_position","striped"), position="center", full_width=FALSE)
@@ -185,11 +186,11 @@ save(np, nl, nsp, nsite, beta.target, lambda.target, alpha.target,
      V_alpha.target, X, W, probit_theta, Z_true, Y, T_boral_sim,
      mod_boral_sim, probit_theta_pred_sim,
      RMSE_boral_sim, Deviance_boral_sim,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_simulation.RData")
+     file="jSDM_boral_cache/boral_simulation.RData")
 ```
 
 ```{r boral-simulation-plot,eval=FALSE}
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_simulation.RData")
+load(file="jSDM_boral_cache/boral_simulation.RData")
 
 ## Fixed species effect beta
 par(mfrow=c(1,2))
@@ -254,7 +255,7 @@ Deviance_boral_Mosquitos <- -2*logL
 
 save(T_boral_Mosquitos, mod_boral_Mosquitos,
      probit_theta_pred_Mosquitos, Deviance_boral_Mosquitos,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mosquitos.RData")
+     file="jSDM_boral_cache/boral_Mosquitos.RData")
 ```
 
 
@@ -288,7 +289,7 @@ Deviance_boral_Eucalypts <- -2*logL
 
 save(T_boral_Eucalypts, mod_boral_Eucalypts,
      probit_theta_pred_Eucalypts, Deviance_boral_Eucalypts,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Eucalypts.RData")
+     file="jSDM_boral_cache/boral_Eucalypts.RData")
 ```
 
 ## Frogs dataset
@@ -322,7 +323,7 @@ Deviance_boral_Frogs <- -2*logL
 
 save(T_boral_Frogs, mod_boral_Frogs,
      probit_theta_pred_Frogs, Deviance_boral_Frogs,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Frogs.RData")
+     file="jSDM_boral_cache/boral_Frogs.RData")
 ```
 
 ## Fungi dataset
@@ -356,7 +357,7 @@ Deviance_boral_Fungi <- -2*logL
 
 save(T_boral_Fungi, mod_boral_Fungi,
      probit_theta_pred_Fungi, Deviance_boral_Fungi,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Fungi.RData")
+     file="jSDM_boral_cache/boral_Fungi.RData")
 ```
 
 ## Birds dataset
@@ -394,7 +395,7 @@ Deviance_boral_Birds <- -2*logL
 
 save(T_boral_Birds, mod_boral_Birds,
      probit_theta_pred_Birds, Deviance_boral_Birds,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Birds.RData")
+     file="jSDM_boral_cache/boral_Birds.RData")
 ```
 
 ## Mites dataset
@@ -429,7 +430,7 @@ Deviance_boral_Mites <- -2*logL
 
 save(T_boral_Mites, mod_boral_Mites,
      log_theta_pred_Mites, Deviance_boral_Mites,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mites.RData")
+     file="jSDM_boral_cache/boral_Mites.RData")
 ```
 
 
@@ -470,12 +471,12 @@ SE=(probit_theta-mod_jSDM_sim$probit_theta_pred)^2
 RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
 
 save(T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_simulation.RData")
+     file="jSDM_boral_cache/jSDM_simulation.RData")
 ```
 
 ```{r jSDM-simulation-plot}
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_simulation.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_simulation.RData")
+load(file="jSDM_boral_cache/jSDM_simulation.RData")
+load(file="jSDM_boral_cache/boral_simulation.RData")
 # ===================================================
 # Result analysis
 # ===================================================
@@ -589,7 +590,7 @@ mod_jSDM_Mosquitos <- jSDM_binomial_probit_block(
 T2 <- Sys.time()
 T_jSDM_Mosquitos <- difftime(T2,T1)
 save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Mosquitos.RData")
+     file="jSDM_boral_cache/jSDM_Mosquitos.RData")
 ```
 
 ## Eucalypts dataset
@@ -620,7 +621,7 @@ mod_jSDM_Eucalypts <- jSDM_binomial_probit_block(
 T2 <- Sys.time()
 T_jSDM_Eucalypts <- difftime(T2,T1)
 save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Eucalypts.RData")
+     file="jSDM_boral_cache/jSDM_Eucalypts.RData")
 ```
 
 ## Frogs dataset
@@ -651,7 +652,7 @@ mod_jSDM_Frogs <- jSDM_binomial_probit_block(
 T2 <- Sys.time()
 T_jSDM_Frogs <- difftime(T2,T1)
 save(T_jSDM_Frogs, mod_jSDM_Frogs,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Frogs.RData")
+     file="jSDM_boral_cache/jSDM_Frogs.RData")
 ```
 
 ## Fungi dataset
@@ -682,7 +683,7 @@ mod_jSDM_Fungi <- jSDM_binomial_probit_block(
 T2 <- Sys.time()
 T_jSDM_Fungi <- difftime(T2,T1)
 save(T_jSDM_Fungi, mod_jSDM_Fungi,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Fungi.RData")
+     file="jSDM_boral_cache/jSDM_Fungi.RData")
 ```
 
 ## Birds dataset
@@ -715,7 +716,7 @@ mod_jSDM_Birds <- jSDM_binomial_logit(
 T2 <- Sys.time()
 T_jSDM_Birds <- difftime(T2,T1)
 save(T_jSDM_Birds, mod_jSDM_Birds,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Birds.RData")
+     file="jSDM_boral_cache/jSDM_Birds.RData")
 ```
 
 
@@ -748,7 +749,7 @@ mod_jSDM_Mites <- jSDM_poisson_log(
 T2 <- Sys.time()
 T_jSDM_Mites <- difftime(T2,T1)
 save(T_jSDM_Mites, mod_jSDM_Mites,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Mites.RData")
+     file="jSDM_boral_cache/jSDM_Mites.RData")
 ```
 
 # Comparison
@@ -757,26 +758,26 @@ save(T_jSDM_Mites, mod_jSDM_Mites,
 library(jSDM)
 library(boral)
 # Simulated dataset
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_simulation.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_simulation.RData")
+load(file="jSDM_boral_cache/boral_simulation.RData")
+load(file="jSDM_boral_cache/jSDM_simulation.RData")
 # Mosquitos dataset
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mosquitos.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Mosquitos.RData")
+load(file="jSDM_boral_cache/boral_Mosquitos.RData")
+load(file="jSDM_boral_cache/jSDM_Mosquitos.RData")
 # Eucalypts dataset
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Eucalypts.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Eucalypts.RData")
+load(file="jSDM_boral_cache/boral_Eucalypts.RData")
+load(file="jSDM_boral_cache/jSDM_Eucalypts.RData")
 # Frogs dataset 
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Frogs.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Frogs.RData")
+load(file="jSDM_boral_cache/boral_Frogs.RData")
+load(file="jSDM_boral_cache/jSDM_Frogs.RData")
 # Fungi dataset 
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Fungi.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Fungi.RData")
+load(file="jSDM_boral_cache/boral_Fungi.RData")
+load(file="jSDM_boral_cache/jSDM_Fungi.RData")
 # Birds dataset
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Birds.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Birds.RData")
+load(file="jSDM_boral_cache/boral_Birds.RData")
+load(file="jSDM_boral_cache/jSDM_Birds.RData")
 # Mites dataset
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mites.RData")
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_cache/jSDM_Mites.RData")
+load(file="jSDM_boral_cache/boral_Mites.RData")
+load(file="jSDM_boral_cache/jSDM_Mites.RData")
 Deviance_jSDM_sim<- mean(mod_jSDM_sim$mcmc.Deviance)
 Deviance_jSDM_Mosquitos <- mean(mod_jSDM_Mosquitos$mcmc.Deviance)
 Deviance_jSDM_Eucalypts <- mean(mod_jSDM_Eucalypts$mcmc.Deviance)
@@ -788,13 +789,13 @@ Deviance_jSDM_Mites <- mean(mod_jSDM_Mites$mcmc.Deviance)
 
 
 save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, Deviance_boral_sim, T_jSDM_Mosquitos, Deviance_jSDM_Mosquitos ,T_jSDM_Eucalypts, Deviance_jSDM_Eucalypts, T_jSDM_Frogs, Deviance_jSDM_Frogs,T_jSDM_Fungi, Deviance_jSDM_Fungi, T_jSDM_Birds, Deviance_jSDM_Birds, T_jSDM_Mites, Deviance_jSDM_Mites, T_boral_Mosquitos, Deviance_boral_Mosquitos, T_boral_Eucalypts, Deviance_boral_Eucalypts, T_boral_Frogs, Deviance_boral_Frogs, T_boral_Fungi, Deviance_boral_Fungi, T_boral_Birds, Deviance_boral_Birds, T_boral_Mites, Deviance_boral_Mites,
-file="~/Documents/jSDM/vignettes/jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
+file="jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
 ```
 
 ## Compilation time and deviance 
 
 ```{r time, eval=TRUE, echo=FALSE}
-load(file="~/Documents/jSDM/vignettes/jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
+load(file="jSDM_boral_files/figure-html/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_boral_sim, T_boral_Mosquitos, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi,
