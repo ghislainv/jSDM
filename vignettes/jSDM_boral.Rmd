@@ -225,8 +225,6 @@ plot(probit_theta,probit_theta_pred_sim, main="probit(theta)", xlab ="obs", ylab
 abline(a=0,b=1,col='red')
 ```
 
-![](jSDM_boral_files/boral-simulation-plot-1.png)
-
 
 ```{r boral-simulation-plot2, echo=FALSE, eval=TRUE, out.width=900}
 knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-1.png")
