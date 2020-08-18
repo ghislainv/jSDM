@@ -9,7 +9,6 @@ apt_packages:
 
 r_packages:
   - pkgdown
-  - kableExtra
   - covr
   - boral
   

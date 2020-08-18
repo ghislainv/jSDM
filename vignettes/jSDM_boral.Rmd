@@ -226,7 +226,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r boral-simulation-plot2, echo=FALSE, eval=TRUE, out.width=900}
+```{r boral-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-1.png")
 knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-2.png")
 knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-3.png")
@@ -561,7 +561,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-simulation-plot2, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-3.png")
@@ -904,7 +904,7 @@ plot(probit_theta_pred_sim, mod_jSDM_sim$probit_theta_pred, xlab="fitted by bora
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-3.png")
@@ -963,7 +963,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-3.png")
@@ -1022,7 +1022,7 @@ plot(probit_theta_pred_Eucalypts, mod_jSDM_Eucalypts$probit_theta_pred, xlab="fi
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-3.png")
@@ -1082,7 +1082,7 @@ plot(probit_theta_pred_Frogs, mod_jSDM_Frogs$probit_theta_pred, xlab="fitted by 
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-frogs-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-frogs-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-3.png")
@@ -1142,7 +1142,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-fungi-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-fungi-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-3.png")
@@ -1203,7 +1203,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-birds-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-birds-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-3.png")
@@ -1264,7 +1264,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mites-plot, echo=FALSE, eval=TRUE, out.width=900}
+```{r jSDM-boral-mites-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-1.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-2.png")
 knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-3.png")
