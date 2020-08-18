@@ -38,7 +38,7 @@ eval=FALSE
 library(jSDM)
 library(knitr)
 library(kableExtra)
-setwd("~/Documents/jSDM/vignettes/")
+#setwd("~/Documents/jSDM/vignettes/")
 # Mosquitos dataset
 data("mosquitos")
 Env_Mosquitos <- mosquitos[,17:29]
