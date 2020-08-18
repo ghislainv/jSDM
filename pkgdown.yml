@@ -3,7 +3,6 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   jSDM: jSDM.html
-  jSDM_boral: jSDM_boral.html
   proof: proof.html
-last_built: 2020-08-18T00:31Z
+last_built: 2020-08-18T00:57Z
 

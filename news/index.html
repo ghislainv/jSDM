@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>fungi dataset — fungi • jSDM</title>
+<title>Changelog • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,7 @@
 
 
 
-<meta property="og:title" content="fungi dataset — fungi" />
-<meta property="og:description" content="Presence or absence of 11 species of fungi on dead-wood objects at 800 sites and 12 covariates collected at these sites." />
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -67,7 +66,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -140,85 +139,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>fungi dataset</h1>
-    
-    <div class="hidden name"><code>fungi.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/ghislainv/jSDM/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>Presence or absence of 11 species of fungi on dead-wood objects at 800 sites and 12 covariates collected at these sites.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"fungi"</span>)</pre>
-
-
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A data frame with 800 observations on the following 23 variables :</p><dl'>
-  
-  11 fungi species which presence on sites is indicated by a 1 and absence by a 0 :
-    <dt><code>antser</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>antsin</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>astfer</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>fompin</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>hetpar</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>junlut</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>phefer</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>phenig</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>phevit</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>poscae</code></dt><dd><p>a binary vector</p></dd>
-    <dt><code>triabi</code></dt><dd><p>a binary vector</p></dd>
-    
-   12 covariates collected on the 800 sites : 
-
-    <dt><code>diam</code></dt><dd><p>a numeric vector indicating the diameter of dead-wood object</p></dd>
-    <dt><code>dc1</code></dt><dd><p>a binary vector indicating if the decay class is 1 measured in the scale 1, 2, 3, 4, 5 (from freshly  decayed to almost completely decayed)</p></dd>
-    <dt><code>dc2</code></dt><dd><p>a binary vector indicating if the decay class is 2</p></dd>
-    <dt><code>dc3</code></dt><dd><p>a binary vector indicating if the decay class is 3</p></dd>
-    <dt><code>dc4</code></dt><dd><p>a binary vector indicating if the decay class is 4</p></dd>
-    <dt><code>dc5</code></dt><dd><p>a binary vector indicating if the decay class is 5</p></dd>
-    <dt><code>quality3</code></dt><dd><p>a binary vector indicating if the quality is level 3</p></dd>
-    <dt><code>quality4</code></dt><dd><p>a binary vector indicating if the quality is level 4</p></dd>
-    <dt><code>ground3</code></dt><dd><p>a binary vector indicating if the ground contact is level 3 as 2 = no ground contact, 3 = less than half of the log in ground contact and 4 = more than half of the log in ground contact</p></dd>
-    <dt><code>ground4</code></dt><dd><p>a binary vector a binary vector indicating if the ground contact is level 4</p></dd>
-    <dt><code>epi</code></dt><dd><p>a numeric vector indicating the epiphyte cover</p></dd>
-    <dt><code>bark</code></dt><dd><p>a numeric vector indicating the bark cover</p></dd>
-  
-</dl>
-
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p>Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>fungi</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>fungi</span>)</div><div class='output co'>#&gt;   antser antsin astfer fompin hetpar junlut phefer phenig phevit poscae triabi
-#&gt; 1      0      0      0      0      0      0      1      0      0      0      0
-#&gt; 2      0      0      0      0      0      0      0      0      0      0      0
-#&gt; 3      0      0      0      0      0      0      0      0      1      0      0
-#&gt; 4      0      0      0      0      0      0      0      0      1      0      0
-#&gt; 5      0      0      0      0      0      0      0      0      0      0      0
-#&gt; 6      0      0      0      0      0      0      0      0      0      0      0
-#&gt;         diam dc1 dc2 dc3 dc4 dc5 quality3 quality4 ground3 ground4        epi
-#&gt; 1  1.3699426   1   0   0   0   0        0        1       0       1 -0.6626584
-#&gt; 2 -0.2083835   0   0   0   0   0        1        0       0       0 -0.6626584
-#&gt; 3  0.2435434   0   0   0   0   0        0        1       0       1 -0.3568567
-#&gt; 4  0.8040889   1   0   0   0   0        0        1       0       0 -0.6626584
-#&gt; 5 -0.5927520   0   0   0   0   0        0        1       0       0 -0.6626584
-#&gt; 6 -0.8227620   0   0   1   0   0        0        0       0       1 -0.3568567
-#&gt;         bark
-#&gt; 1  0.5297272
-#&gt; 2  1.2511949
-#&gt; 3 -1.0334527
-#&gt; 4 -0.9132081
-#&gt; 5  1.2511949
-#&gt; 6  1.2511949</div></pre>
+    <div id="jsdm-0-1-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#jsdm-0-1-0" class="anchor"></a>jSDM 0.1.0<small> 2019-07-02 </small>
+</h1>
+<ul>
+<li>First version of the jSDM R package</li>
+<li>Use of Rcpp and C++ code for Gibbs sampling</li>
+<li>Use of GSL (RcppGSL) for random draws</li>
+<li>Use of Armadillo (RcppArmadillo) for vector and matrix operations</li>
+<li>Functions to fit models from Warton et al. 2014 <em>Trends in Ecology and Evolution</em> (<a href="doi:10.1016/j.tree.2015.09.007" class="uri">doi:10.1016/j.tree.2015.09.007</a>).</li>
+<li>We use <code>pkgdown</code> to build package website.</li>
+<li>Package website available on GitHub: <a href="https://ecology.ghislainv.fr/jSDM" class="uri">https://ecology.ghislainv.fr/jSDM</a>.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
