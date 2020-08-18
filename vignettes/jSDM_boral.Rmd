@@ -26,7 +26,7 @@ editor_options:
 knitr::opts_chunk$set(
 fig.align="center",
 fig.width=8, fig.height=6,
-cache=TRUE,
+cache=FALSE,
 collapse=TRUE,
 comment="#>",
 highlight=TRUE,
