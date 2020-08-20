@@ -7,7 +7,7 @@
 \title{mosquitos dataset}
 
 \description{
-Presence or absence AT 167 sites of 16 species that constitute the aquatic faunal community studied, 13 covariates collected at these sites and their coordinates.}
+Presence or absence at 167 sites of 16 species that constitute the aquatic faunal community studied, 13 covariates collected at these sites and their coordinates.}
 
 \usage{data("mosquitos")}
 

@@ -379,7 +379,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     mubeta <- check.mubeta(mu_beta,np)
     Vbeta <- check.Vbeta.mat(V_beta,np)
-    mulambda <- check.mubeta(mu_lambda,n_latent)
+    mulambda <- check.mulambda(mu_lambda,n_latent)
     Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
     Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
     muparam <- c(mubeta,mulambda)
@@ -596,7 +596,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     mubeta <- check.mubeta(mu_beta,np)
     Vbeta <- check.Vbeta.mat(V_beta,np)
-    mulambda <- check.mubeta(mu_lambda,n_latent)
+    mulambda <- check.mulambda(mu_lambda,n_latent)
     Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
     Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
     muparam <- c(mubeta,mulambda)
@@ -681,7 +681,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     mubeta <- check.mubeta(mu_beta,np)
     Vbeta <- check.Vbeta.mat(V_beta,np)
-    mulambda <- check.mubeta(mu_lambda,n_latent)
+    mulambda <- check.mulambda(mu_lambda,n_latent)
     Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
     Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
     muparam <- c(mubeta,mulambda)

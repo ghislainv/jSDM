@@ -41,31 +41,38 @@ library(jSDM)
 library(boral)
 # Mosquitos dataset
 data("mosquitos")
+PA_Mosquitos <- mosquitos[,1:16]
 Env_Mosquitos <- mosquitos[,17:29]
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Mosquitos))
 X_Mosquitos <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Eucalypts dataset
 data("eucalypts")
+PA_Eucalypts <- eucalypts[,1:12]
 Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),eucalypts[,c("Sandiness","Loaminess")])
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Eucalypts))
 X_Eucalypts <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Frogs dataset
 data("frogs")
+PA_Frogs <- frogs[,4:12]
 Env_Frogs <- cbind(scale(frogs[,"Covariate_1"]),frogs[,"Covariate_2"],scale(frogs[,"Covariate_3"]))
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Frogs))
 X_Frogs <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Fungi dataset
 data("fungi")
+PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut",
+                     "phefer","phenig","phevit","poscae","triabi")]
 Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),fungi[,c("dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")])
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Fungi))
 X_Fungi <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Birds dataset
 data("birds")
+PA_Birds <- birds[,1:158]
 Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")])))
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Birds))
 X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Mites dataset
 data("mites")
+PA_Mites <- mites[,1:35]
 # Normalized continuous variables
 Env_Mites  <- cbind(scale(mites[,c("density","water")]), mites[,c("substrate", "shrubs", "topo")])
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Mites))
@@ -75,9 +82,9 @@ datasets <- data.frame(matrix(NA,8,7),row.names=c("n.site","n.species","n.latent
 colnames(datasets) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 datasets["n.site",] <- c(300,nrow(frogs),nrow(eucalypts), nrow(frogs), nrow(fungi), nrow(birds), nrow(mites))
 datasets["n.X.coefs",] <- c(3,ncol(X_Mosquitos),ncol(X_Eucalypts),ncol(X_Frogs),ncol(X_Fungi),ncol(X_Birds), ncol(X_Mites))
-datasets["n.species",] <- c(100,c(ncol(frogs),ncol(eucalypts), ncol(frogs), ncol(fungi), ncol(birds), ncol(mites))-c(ncol(Env_Mosquitos),ncol(Env_Eucalypts),ncol(Env_Frogs),ncol(Env_Fungi),ncol(Env_Birds), ncol(Env_Mites)))
+datasets["n.species",] <- c(100,ncol(PA_Mosquitos),ncol(PA_Eucalypts),ncol(PA_Frogs),ncol(PA_Fungi),ncol(PA_Birds), ncol(PA_Mites))
 datasets["n.latent",] <- 2
-datasets["n.mcmc",] <- 35000
+datasets["n.mcmc",] <- 15000
 datasets["n.param",] <- datasets["n.site",]*(1+datasets["n.latent",])+1+datasets["n.species",]*(1+datasets["n.X.coefs",]+datasets["n.latent",])-1
 datasets["n.obs",] <- datasets["n.site",]*datasets["n.species",] 
 sp_pictures <- c("figures/des.jpg",
@@ -215,11 +222,12 @@ abline(a=0,b=1,col='red')
 
 
 ```{r boral-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_files/boral-simulation-plot-4.png")
+knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-1.png")
+knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-2.png")
+knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-3.png")
+knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-4.png")
 ```
+
 ## Mosquitos dataset
 
 ```{r boral-mosquito, eval=FALSE}
@@ -606,16 +614,16 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-4.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-5.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-6.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-7.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-8.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-9.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-simulation-plot-10.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-4.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-5.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-6.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-7.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-8.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-9.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-10.png")
 
 ```
 
@@ -841,13 +849,13 @@ Deviance_jSDM_Fungi <- mean(mod_jSDM_Fungi$mcmc.Deviance)
 Deviance_jSDM_Birds <- mean(mod_jSDM_Birds$mcmc.Deviance)
 Deviance_jSDM_Mites <- mean(mod_jSDM_Mites$mcmc.Deviance)
 save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, Deviance_boral_sim, T_jSDM_Mosquitos, Deviance_jSDM_Mosquitos ,T_jSDM_Eucalypts, Deviance_jSDM_Eucalypts, T_jSDM_Frogs, Deviance_jSDM_Frogs,T_jSDM_Fungi, Deviance_jSDM_Fungi, T_jSDM_Birds, Deviance_jSDM_Birds, T_jSDM_Mites, Deviance_jSDM_Mites, T_boral_Mosquitos, Deviance_boral_Mosquitos, T_boral_Eucalypts, Deviance_boral_Eucalypts, T_boral_Frogs, Deviance_boral_Frogs, T_boral_Fungi, Deviance_boral_Fungi, T_boral_Birds, Deviance_boral_Birds, T_boral_Mites, Deviance_boral_Mites,
-     file="jSDM_boral_files/jSDM-boral-comparison.rda")
+     file="jSDM_boral_figures/jSDM-boral-comparison.rda")
 ```
 
 ## Compilation time and deviance 
 
-```{r time-deviance, echo=FALSE, eval=TRUE}
-load("jSDM_boral_files/jSDM-boral-comparison.rda")
+```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
+load("jSDM_boral_figures/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_boral_sim, T_boral_Mosquitos, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi,
@@ -869,14 +877,15 @@ sp_pictures <- c("figures/des.jpg",
                  "figures/Frogs_.jpg","figures/Fungi_.jpg",
                  "figures/birds.jpg",
                  "figures/oribatid-mites.png")
-result[5,] <- sprintf('![](%s){height="100px" width="100px"}',sp_pictures)
+result[5,] <- sprintf('![](%s){height="80px" width="80px"}',sp_pictures)
 kable(result)%>%
-  kable_styling(bootstrap_options="striped",latex_options=c("HOLD_position","striped"), position="center", full_width=FALSE)
+  kable_styling(bootstrap_options="striped",latex_options=c("HOLD_position","striped"), full_width=FALSE)
 ```
 
 jSDM is **`r min_ratio` to `r max_ratio`** times faster than boral/jags.
 
 ## Root-Mean-Square Error (RMSE) for simulated data
+
 Computed for $\text{probit}(\theta_{ij})$ with the simulated data-set.
 ```{r RMSE, eval=TRUE, echo=FALSE}
 result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
@@ -884,7 +893,9 @@ colnames(result) <- c("boral","jSDM")
 result$boral <- RMSE_boral_sim
 result$jSDM <- RMSE_jSDM_sim
 kable(result, digits =1) %>%
-  kable_styling(bootstrap_options = "striped", full_width = F, position="left")
+  kable_styling(bootstrap_options = "striped", 
+                latex_options= c("HOLD_position","striped"),
+                full_width = FALSE)
 ```
 
 ## Estimated  Parameters
@@ -941,9 +952,9 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-simulation-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-3.png")
 ```
 
 ### Mosquitos dataset
@@ -1000,9 +1011,9 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mosquitos-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-3.png")
 ```
 
 ### Eucalypts dataset
@@ -1059,9 +1070,9 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-Eucalypts-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-3.png")
 ```
 
 ### Frogs dataset
@@ -1119,9 +1130,9 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-frogs-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-frogs-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-3.png")
 ```
 
 ### Fungi dataset
@@ -1179,9 +1190,9 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-fungi-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-fungi-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-3.png")
 ```
 
 ### Birds dataset
@@ -1240,9 +1251,9 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-birds-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-birds-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-3.png")
 ```
 
 ### Mites dataset
@@ -1301,8 +1312,8 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-mites-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-1.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-2.png")
-knitr::include_graphics("jSDM_boral_files/jSDM-boral-mites-3.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-1.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-2.png")
+knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-3.png")
 ```
 

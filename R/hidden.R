@@ -466,18 +466,6 @@ check.Vrho.start <- function (Vrho.start) {
 #
 # =======================================================================
 
-check.mubeta <- function(mubeta, np) {
-  if (is.null(dim(mubeta))) {
-    mubeta <- rep(mubeta,np) 
-  }
-  else if (length(mubeta)!=np) {
-    cat("Error: mubeta not conformable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(mubeta)
-}
-
 check.Vbeta <- function(Vbeta, np) {
   if (!all(Vbeta>0)) {
     cat("Error: Vbeta should be strictly positive.\n")
@@ -577,7 +565,7 @@ form.priorVrho <- function (priorVrho) {
 
 # =======================================================================
 #
-# Check and form starting parameters for jSDM_probit_block
+# Check and form starting parameters for jSDM_binomial_probit_block
 #
 # =======================================================================
 
@@ -647,7 +635,7 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
       }
       for (j in 1:n_latent) {
         if (i > j && lambda.start.mat[i, j] != 0) {
-          stop("Error: lambda must be constrained to zero on lower diagonal.\n")
+          stop("Error: lambda_start must be an upper triangular matrix, values should be constrained to zero on lower diagonal.\n")
         }
       }
     }
@@ -684,11 +672,16 @@ form.W.start.sp <- function (W.start, nsite, n_latent) {
   return(W.start.mat)
 }
 #==================================================================
-# Check and form priors for jSDM_probit_block
+# Check and form priors for jSDM_binomial_probit_block
 #==================================================================
 check.mubeta <- function(mubeta, np) {
   if (is.null(dim(mubeta))) {
-    mubeta <- rep(mubeta,np) 
+    if(is.scalar(mubeta)){
+      mubeta <- rep(mubeta,np) 
+    }
+    else if(is.vector(mubeta) && length(mubeta)==np){
+      mubeta <- mubeta
+    }
   }
   else if (length(mubeta)!=np) {
     cat("Error: mubeta not conformable.\n")
@@ -699,20 +692,33 @@ check.mubeta <- function(mubeta, np) {
 }
 
 check.Vbeta.mat <- function(Vbeta, np) {
-  if (!all(Vbeta>0)) {
-    cat("Error: Vbeta should be strictly positive.\n")
+  if (sum(dim(Vbeta)==c(np,np))==2) {
+    if (!all(diag(Vbeta)>0) && sum(is.na(Vbeta))!=0) {
+      cat("Error: V_beta should be strictly positive on diagonal.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
+    Vbeta.mat <- Vbeta
+  }
+  else if (!all(Vbeta>0) && sum(is.na(Vbeta))!=0) {
+    cat("Error: V_beta should be strictly positive.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
   if (is.null(dim(Vbeta))) {
-    Vbeta <- diag(rep(Vbeta,np))
+    if(is.scalar(Vbeta)){
+      Vbeta.mat <- diag(rep(Vbeta,np))
+    }
+    else if(is.vector(Vbeta) && length(Vbeta)==np){
+      Vbeta.mat <- diag(Vbeta)
+    }
   }
   else if (sum(dim(Vbeta) != c(np, np)) > 0) {
-    cat("Error: Vbeta not conformable.\n")
+    cat("Error: V_beta not conformable.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  return(Vbeta)
+  return(Vbeta.mat)
 }
 
 check.mub <- function(mub, nd) {
@@ -746,7 +752,12 @@ check.Vb.mat <- function(Vb, nd) {
 
 check.mulambda <- function(mulambda, n_latent) {
   if (is.null(dim(mulambda))) {
-    mulambda <- rep(mulambda,n_latent) 
+    if(is.scalar(mulambda)){
+      mulambda <- rep(mulambda,n_latent)
+    }
+    else if(is.vector(mulambda) && length(mulambda)==n_latent){
+      mulambda <- mulambda
+    }
   }
   else if (length(mulambda)!=n_latent) {
     cat("Error: mulambda not conformable.\n")
@@ -757,17 +768,26 @@ check.mulambda <- function(mulambda, n_latent) {
 }
 
 check.Vlambda.mat <- function(Vlambda, n_latent) {
-  if (!all(Vlambda>0) && sum(is.na(Vlambda))!=0) {
+  
+  if (sum(dim(Vlambda)==c(n_latent,n_latent))==2) {
+    if (!all(diag(Vlambda)>0) && sum(is.na(Vlambda))!=0) {
+      cat("Error: V_lambda should be strictly positive on diagonal.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
+    Vlambda.mat <- Vlambda
+  }
+  else if (!all(Vlambda>0) && sum(is.na(Vlambda))!=0) {
     cat("Error: Vlambda should be strictly positive.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
   if (is.null(dim(Vlambda))) {
     if(is.scalar(Vlambda)){
-      Vlambda <- diag(rep(Vlambda,n_latent))
+      Vlambda.mat <- diag(rep(Vlambda,n_latent))
     }
-    if(is.vector(Vlambda) && length(Vlambda)==n_latent){
-      Vlambda <- diag(Vlambda)
+    else if(is.vector(Vlambda) && length(Vlambda)==n_latent){
+      Vlambda.mat <- diag(Vlambda)
     }
   }
   else if (sum(dim(Vlambda) != c(n_latent, n_latent)) > 0) {
@@ -775,7 +795,7 @@ check.Vlambda.mat <- function(Vlambda, n_latent) {
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  return(Vlambda)
+  return(Vlambda.mat)
 }
 
 check.Vlambda <- function(Vlambda, n_latent) {
