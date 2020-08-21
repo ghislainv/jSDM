@@ -3,7 +3,10 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   jSDM: jSDM.html
+  jSDM_binomial_logit: jSDM_binomial_logit.html
+  jSDM_binomial_probit_block: jSDM_binomial_probit_block.html
   jSDM_boral: jSDM_boral.html
+  jSDM_poisson_log: jSDM_poisson_log.html
   proof: proof.html
-last_built: 2020-08-20T20:03Z
+last_built: 2020-08-21T16:12Z
 
