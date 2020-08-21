@@ -1,5 +1,5 @@
 ---
-title: "Get started with jSDM"
+title: "Bernoulli probit regression"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
  %\VignetteEngine{knitr::rmarkdown}
- %\VignetteIndexEntry{Get started with jSDM}
+ %\VignetteIndexEntry{Bernoulli probit regression}
  %\VignetteEncoding{UTF-8}
 ---
  
@@ -29,95 +29,6 @@ collapse = TRUE,
 comment = "#>",
 highlight = TRUE
 )
-```
-
-# jSDM package 
-
-`jSDM` is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
-
-The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
-
-|Package: |jSDM |
-|:------|:-----|
-| Type: |Package|
-|Version: |0.1.1|
-|Date: |2019-01-11|
-|License:|GPL-3|
-|LazyLoad:|yes| 
-
-The package includes the following functions to fit various species distribution models :
-
-| function | data-type |
-|:---------|:----------|
-| '`jSDM_binomial_logit`' | presence-absence |
-| '`jSDM_binomial_probit_block`' | presence-absence |
-| '`jSDM_poisson_log`' | abundance |
-
-* '`jSDM_binomial_probit_block`' : 
-
-**Ecological process:**
-
-$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),$$ 
-where
-
-| conditions                                   | model specification                              |
-|:---------------------------------------------|:-------------------------------------------------|
-| if '`n_latent=0`' and '`site_effect="none"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j$ |
-| if '`n_latent>0`' and '`site_effect="none"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
-| if '`n_latent=0`' and '`site_effect="random"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-| if '`n_latent>0`' and '`site_effect="fixed"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
-| if '`n_latent=0`' and '`site_effect="fixed"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
-| if '`n_latent>0`' and '`site_effect="random"`' | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-
-* '`jSDM_binomial_logit`' : 
-
-**Ecological process : **
-
-$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),$$
-where 
-
-| conditions                              | model specification                                  |
-|:----------------------------------------|:-----------------------------------------------------|
-| if '`n_latent=0`' and '`site_effect="none"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j$ |
-| if '`n_latent>0`' and '`site_effect="none"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
-| if '`n_latent=0`' and '`site_effect="fixed"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
-| if '`n_latent>0`' and '`site_effect="fixed"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$  |
-| if '`n_latent=0`' and '`site_effect="random"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$|
-| if '`n_latent>0`' and '`site_effect="random"`' | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-
-* '`jSDM_poisson_log`' : 
-
-**Ecological process : **
-
-$$y_{ij} \sim \mathcal{P}oisson(\theta_{ij}),$$
-
-where
-
-| conditions                              | model specification                                  |
-|:----------------------------------------|:-----------------------------------------------------|
-| if '`n_latent=0`' and '`site_effect="none"`' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j$ |
-| if '`n_latent>0`' and '`site_effect="none"`' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
-| if '`n_latent=0`' and '`site_effect="fixed"`' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
-| if '`n_latent>0`' and '`site_effect="fixed"`' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
-| if '`n_latent=0`' and '`site_effect="random"`' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-| if '`n_latent>0`' and '`site_effect="random"`'' | log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-
-
-
-
-Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. 
-
-In this vignette, we illustrate the use of the `jSDM` R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models.
-
-Package's functions are developped in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
-
-Model types available in `jSDM` are not limited to those described in this example. `jSDM` includes various model types for occurrence and abundance data: 
-
-We first load the `jSDM` library.
-
-```{r libraries}
-# Load libraries
-library(jSDM)
 ```
 
 # Bernoulli probit regression 
@@ -170,6 +81,7 @@ knitr::include_graphics("figures/Litoria_ewingii.jpg")
 This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The \link{`frogs}} dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
 
 ```{r frogs-data}
+library(jSDM)
 # frogs data
 data(frogs, package="jSDM")
 head(frogs)
@@ -221,7 +133,7 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
 np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
 
 ## beta_j of the first two species
-par(mfrow=c(np,2))
+par(mfrow=c(2,2))
 for (j in 1:2) {
   for (p in 1:np) {
     coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,p]))
@@ -233,7 +145,7 @@ for (j in 1:2) {
 
 ## lambda_j of the first two species
 n_latent <- mod_frogs_jSDM_probit$model_spec$n_latent
-par(mfrow=c(n_latent*2,2))
+par(mfrow=c(2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
     coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,np+l]))

@@ -125,6 +125,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     term.pred <- matrix(0, npred, nsp)
     colnames(term.pred) <- species[num_species]
     rownames(term.pred) <- Id_sites
+    
     ##= Loop on species
     for(j in 1:nsp) {
       term <- rep(0, npred)
@@ -144,18 +145,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       
       ##= Loop on samples
       for (t in 1:nsamp) {
+        
+        beta_j <- beta_j.mat[t,]
+        link.term <- X.pred %*% as.vector(beta_j)
+        
         if(model.spec$n_latent > 0){
           W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
           for(l in 2:nl) {
             W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
           }
           lambda_j <- lambda_j.mat[t,]
-        }
-        
-        beta_j <- beta_j.mat[t,]
-        link.term <- X.pred %*% as.vector(beta_j)
-        
-        if(model.spec$n_latent > 0){
           link.term <- link.term + W.mat %*% lambda_j 
         }
         
@@ -193,22 +192,23 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       
       ##= Loop on samples
       for (t in 1:nsamp) {
+
+        beta_j <- beta_j.mat[t,]
+        link.term <- X.pred %*% as.vector(beta_j)
+        
         if(model.spec$n_latent > 0){
           W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
           for(l in 2:nl) {
             W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
           }
           lambda_j <- lambda_j.mat[t,]
-        }
-        
-        beta_j <- beta_j.mat[t,]
-        link.term <- X.pred %*% as.vector(beta_j)
-        if(model.spec$n_latent > 0){
           link.term <- link.term + W.mat %*% lambda_j
         }
+        
         if(!is.null(model.spec$alpha_start)){
           link.term <- link.term + as.matrix(object$mcmc.alpha[t,Id_sites])
         }
+        
         term[t,] <-  inv.link(link.term)
       }
       
