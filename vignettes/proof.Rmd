@@ -92,6 +92,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 
 ## Conjugate priors 
+
 ### Fixed species effects
 
 - Proposition

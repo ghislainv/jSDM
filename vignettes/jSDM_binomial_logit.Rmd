@@ -34,6 +34,8 @@ highlight = TRUE
 
 # Definition of the model 
 
+Referring to the models used in the articles @Albert1993 and @Warton2015, we define the following model :
+
 $$ \mathrm{logit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j $$
      
 - Link function logit: $\mathrm{logit}: p \rightarrow \log(\frac{p}{1-p})$. 
@@ -58,7 +60,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
 
-# Data-set
+# Occurence data-set
 
 (ref:cap-birds) **_Swiss Breeding Bird Atlas_** [@Kery2006].
 
@@ -66,11 +68,12 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 
-This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The data is in "wide" format: each line is a site and the occurrence data are in columns.
+This data-set is available in the `jSDM-package`. It can be loaded with the `data` command. The `birds` data-set is in "wide" format: each line is a site and the occurrence data are in columns.
 
-The Swiss breeding bird survey ("Monitoring Häufige Brutvögel" MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). Surveys are conducted along a transect that does not change over the years. 
+The Swiss breeding bird survey ("Monitoring Häufige Brutvögel" MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). 
+Surveys are conducted along a transect that does not change over the years. 
 
-The data set \link{\code{\birds}} contains the 2014 data, except for one quadrat not surveyed in 2014. 
+The data-set contains the 2014 data, except for one quadrat not surveyed in 2014. 
 It lists 158 bird species named in Latin and whose occurrences are expressed as the number of visits during which the species was observed on each site , with the exception of 13 species not surveyed in 2014 :
 
 
@@ -98,7 +101,7 @@ str(Env_birds)
 
 # Parameter inference
 
-We use the `jSDM_binomial_logit()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_logit` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-logit}
 mod_birds_jSDM_logit <- jSDM_binomial_logit(
@@ -190,13 +193,15 @@ hist(mod_birds_jSDM_logit$theta_latent, main = "Predicted theta", xlab ="predict
  \end{cases}$$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
+We use the function `plot_residual_cor` to compute and display the residual correlation matrix between species : 
+
 ```{r correlation-matrix-logit}
 plot_residual_cor(mod_birds_jSDM_logit, tl.cex=0.3)
 ```
 
 # Predictions 
 
-We use the `predict()` S3 method on the `mod_birds_jSDM_logit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict.jSDM` S3 method on the `mod_birds_jSDM_logit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-logit}
 # Sites and species concerned by predictions :

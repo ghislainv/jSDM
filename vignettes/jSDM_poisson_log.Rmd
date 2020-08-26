@@ -35,6 +35,8 @@ highlight = TRUE
 
 # Definition of the model 
 
+Referring to the models used in the articles @Hui2016, we define the following model : 
+
 $$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j $$
      
 - Link function logarithm : $\mathrm{log}: p \rightarrow \log(p)$. 
@@ -66,7 +68,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/Oribatid_mites.jpg")
 ```
 
-This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The \link{\code{mites}} data-set is in "wide" format: each line is a site and the abundance data are in columns.
+This data-set is available in the `jSDM-package`. It can be loaded with the `data` command. The `mites` data-set is in "wide" format: each line is a site and the abundance data are in columns.
 
 This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of Université de Montréal, Québec, Canada in June 1989. 
 
@@ -101,7 +103,7 @@ str(Env_mites)
 
 # Parameter inference
 
-We use the `jSDM_poisson_log()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_poisson_log` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-log}
 mod_mites_jSDM_log <- jSDM_poisson_log(
@@ -189,13 +191,15 @@ hist(mod_mites_jSDM_log$theta_latent, main = "Predicted theta", xlab ="predicted
  \end{cases}$$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
+We use the function `plot_residual_cor` to compute and display the residual correlation matrix between species :
+
 ```{r correlation-matrix-log}
 plot_residual_cor(mod_mites_jSDM_log, tl.cex=0.5)
 ```
 
 # Predictions 
 
-We use the `predict()` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict.jSDM` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-log}
 # Sites and species concerned by predictions :
