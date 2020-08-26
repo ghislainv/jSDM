@@ -120,13 +120,9 @@
 
     
     
-<div id="bernoulli-probit-regression" class="section level1">
+<div id="definition-of-the-model" class="section level1">
 <h1 class="hasAnchor">
-<a href="#bernoulli-probit-regression" class="anchor"></a><span class="header-section-number">1</span> Bernoulli probit regression</h1>
-<p>Below, we show an example of the use of ‘<code>jSDM-package</code>’ for fitting species distribution model to occurence data for 9 frog’s species.</p>
-<div id="definition-of-the-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1.1</span> Definition of the model</h2>
+<a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
 <p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span>, we define the following model :</p>
 <p><span class="math display">\[ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j \]</span></p>
 <ul>
@@ -154,17 +150,17 @@ The corresponding regression coefficients for each species <span class="math inl
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div id="occurrence-data-set" class="section level2">
-<h2 class="hasAnchor">
-<a href="#occurrence-data-set" class="anchor"></a><span class="header-section-number">1.2</span> Occurrence data-set</h2>
+<div id="occurrence-data-set" class="section level1">
+<h1 class="hasAnchor">
+<a href="#occurrence-data-set" class="anchor"></a><span class="header-section-number">2</span> Occurrence data-set</h1>
 
 <div class="figure" style="text-align: center">
 <span id="fig:frog-picture"></span>
 <img src="figures/Litoria_ewingii.jpg" alt="Litoria ewingii (Wilkinson et al. 2019)." width="400" height="300"><p class="caption">
-Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
+Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in the ‘<code>jSDM-package</code>’. It can be loaded with the <code>data</code> command. The ‘<code>frogs</code>’ dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
+<p>This data-set is available in the <code>jSDM-package</code> R package. It can be loaded with the <code>data</code> command. The <code>frogs</code> dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">jSDM</span>)
 <span class="co">#&gt; ##</span>
 <span class="co">#&gt; ## jSDM R package </span>
@@ -197,9 +193,9 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="no">Env_frogs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(<span class="no">frogs</span>[,<span class="fl">1</span>]),<span class="no">frogs</span>[,<span class="fl">2</span>],<span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(<span class="no">frogs</span>[,<span class="fl">3</span>]))
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Env_frogs</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">frogs</span>[,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
 </div>
-<div id="parameter-inference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#parameter-inference" class="anchor"></a><span class="header-section-number">1.3</span> Parameter inference</h2>
+<div id="parameter-inference" class="section level1">
+<h1 class="hasAnchor">
+<a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
 <p>We use the <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">mod_frogs_jSDM_probit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
   <span class="co"># Chains</span>
@@ -235,9 +231,9 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">#&gt; **********:90.0% </span>
 <span class="co">#&gt; **********:100.0%</span></pre></body></html></div>
 </div>
-<div id="analysis-of-the-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">1.4</span> Analysis of the results</h2>
+<div id="analysis-of-the-results" class="section level1">
+<h1 class="hasAnchor">
+<a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">np</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">model_spec</span>$<span class="no">beta_start</span>)
 
 <span class="co">## beta_j of the first two species</span>
@@ -278,7 +274,7 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <p><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -298,9 +294,9 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
      <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Predicted theta"</span>, <span class="kw">xlab</span> <span class="kw">=</span><span class="st">"predicted theta"</span>)</pre></body></html></div>
 <p><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-11.png" width="576" style="display: block; margin: auto;"></p>
 </div>
-<div id="matrice-of-correlations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#matrice-of-correlations" class="anchor"></a><span class="header-section-number">1.5</span> Matrice of correlations</h2>
+<div id="matrice-of-correlations" class="section level1">
+<h1 class="hasAnchor">
+<a href="#matrice-of-correlations" class="anchor"></a><span class="header-section-number">5</span> Matrice of correlations</h1>
 <p>After fitting the jSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can be derived from the covariance in the latent variables such as :
 <span class="math display">\[\Sigma_{ij} = \begin{cases}
 \lambda_i .\lambda_j^T &amp; \text{ if } i \neq j \\
@@ -311,9 +307,9 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(<span class="no">mod_frogs_jSDM_probit</span>)</pre></body></html></div>
 <p><img src="jSDM_binomial_probit_block_files/figure-html/correlation-matrix-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
-<div id="predictions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#predictions" class="anchor"></a><span class="header-section-number">1.6</span> Predictions</h2>
+<div id="predictions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
 <p>We use the <code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code> S3 method on the <code>mod_frogs_jSDM_probit</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># Sites and species concerned by predictions :</span>
 <span class="co">## 50 sites among the 104</span>
@@ -334,7 +330,6 @@ Figure 1.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
                       <span class="kw">Id_sites</span><span class="kw">=</span><span class="no">Id_sites</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"mean"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">theta_pred</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Predicted theta with simulated data"</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"predicted theta"</span>)</pre></body></html></div>
 <p><img src="jSDM_binomial_probit_block_files/figure-html/predictions-probit-1.png" width="576" style="display: block; margin: auto;"></p>
-</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

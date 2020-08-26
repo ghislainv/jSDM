@@ -291,7 +291,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_mites_jSDM_log</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -325,7 +325,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <div id="predictions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
-<p>We use the <code>predict(&lt;jSDM&gt;)</code> S3 method on the <code>mod_mites_jSDM_log</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
+<p>We use the <code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code> S3 method on the <code>mod_mites_jSDM_log</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># Sites and species concerned by predictions :</span>
 <span class="co">## 35 sites among the 70</span>
 <span class="no">Id_sites</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">PA_mites</span>), <span class="fl">35</span>)
