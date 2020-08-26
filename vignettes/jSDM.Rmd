@@ -49,11 +49,11 @@ The package includes the following functions to fit various species distribution
 
 | function | data-type |
 |:---------|:----------|
-| `jSDM_binomial_logit` | presence-absence |
-| `jSDM_binomial_probit_block` | presence-absence |
-| `jSDM_poisson_log` | abundance |
+| `jSDM_binomial_logit()` | presence-absence |
+| `jSDM_binomial_probit_block()` | presence-absence |
+| `jSDM_poisson_log()` | abundance |
 
-* `jSDM_binomial_probit_block` : 
+* `jSDM_binomial_probit_block()` : 
 
 **Ecological process:**
 
@@ -69,7 +69,7 @@ where
 | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
 | if `n_latent>0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
-* `jSDM_binomial_logit` : 
+* `jSDM_binomial_logit()` : 
 
 **Ecological process : **
 
@@ -85,7 +85,7 @@ where
 | if `n_latent=0` and `site_effect="random"` | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$|
 | if `n_latent>0` and `site_effect="random"` | logit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
-* `jSDM_poisson_log` : 
+* `jSDM_poisson_log()` : 
 
 **Ecological process : **
 
@@ -190,7 +190,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 ## Parameter inference
 
-We use the `jSDM_binomial_probit_block` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-probit}
 mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
@@ -282,7 +282,7 @@ $$\Sigma_{ij} = \begin{cases}
 \end{cases}$$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
-We use the function `plot_residual_cor` to compute and display the residual correlation matrix between species :
+We use the function `plot_residual_cor()` to compute and display the residual correlation matrix between species :
 
 ```{r correlation-matrix-probit}
 plot_residual_cor(mod_frogs_jSDM_probit)
@@ -290,7 +290,7 @@ plot_residual_cor(mod_frogs_jSDM_probit)
 
 ## Predictions 
 
-We use the `predict.jSDM` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict(<jSDM>)` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-probit}
 # Sites and species concerned by predictions :

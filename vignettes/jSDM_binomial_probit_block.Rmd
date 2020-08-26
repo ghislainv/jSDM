@@ -33,7 +33,7 @@ highlight = TRUE
 
 # Bernoulli probit regression 
 
-Below, we show an example of the use of `jSDM` for fitting species distribution model to occurence data for 9 frog's species.
+Below, we show an example of the use of '`jSDM-package`' for fitting species distribution model to occurence data for 9 frog's species.
 
 ## Definition of the model 
 
@@ -78,7 +78,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
-This data-set is available in the `jSDM` R package. It can be loaded with the `data` command. The \link{`frogs}} dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
+This data-set is available in the '`jSDM-package`'. It can be loaded with the `data` command. The '`frogs`' dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
 
 ```{r frogs-data}
 library(jSDM)
@@ -187,12 +187,14 @@ hist(pnorm(mod_frogs_jSDM_probit$probit_theta_pred),
 
 ## Matrice of correlations 
 
-After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
 $$\Sigma_{ij} = \begin{cases}
 \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
 \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
 \end{cases}$$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
+We use the `plot_residual_cor()` function to compute and display  the residual correlation matrix :
 
 ```{r correlation-matrix-probit}
 plot_residual_cor(mod_frogs_jSDM_probit)
@@ -200,7 +202,7 @@ plot_residual_cor(mod_frogs_jSDM_probit)
 
 ## Predictions 
 
-We use the `predict()` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict.jSDM()` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-probit}
 # Sites and species concerned by predictions :

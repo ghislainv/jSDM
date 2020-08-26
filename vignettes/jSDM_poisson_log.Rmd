@@ -103,7 +103,7 @@ str(Env_mites)
 
 # Parameter inference
 
-We use the `jSDM_poisson_log` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_poisson_log()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-log}
 mod_mites_jSDM_log <- jSDM_poisson_log(
@@ -184,14 +184,14 @@ hist(mod_mites_jSDM_log$theta_latent, main = "Predicted theta", xlab ="predicted
 
 # Matrice of correlations 
 
- After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+ After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
  $$\Sigma_{ij} = \begin{cases}
  \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
   \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
  \end{cases}$$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
-We use the function `plot_residual_cor` to compute and display the residual correlation matrix between species :
+We use the function `plot_residual_cor()` to compute and display the residual correlation matrix between species :
 
 ```{r correlation-matrix-log}
 plot_residual_cor(mod_mites_jSDM_log, tl.cex=0.5)
@@ -199,7 +199,7 @@ plot_residual_cor(mod_mites_jSDM_log, tl.cex=0.5)
 
 # Predictions 
 
-We use the `predict.jSDM` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict(<jSDM>)` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-log}
 # Sites and species concerned by predictions :

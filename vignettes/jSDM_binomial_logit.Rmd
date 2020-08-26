@@ -101,7 +101,7 @@ str(Env_birds)
 
 # Parameter inference
 
-We use the `jSDM_binomial_logit` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_logit()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-logit}
 mod_birds_jSDM_logit <- jSDM_binomial_logit(
@@ -193,7 +193,7 @@ hist(mod_birds_jSDM_logit$theta_latent, main = "Predicted theta", xlab ="predict
  \end{cases}$$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
-We use the function `plot_residual_cor` to compute and display the residual correlation matrix between species : 
+We use the function `plot_residual_cor()` to compute and display the residual correlation matrix between species : 
 
 ```{r correlation-matrix-logit}
 plot_residual_cor(mod_birds_jSDM_logit, tl.cex=0.3)
@@ -201,7 +201,7 @@ plot_residual_cor(mod_birds_jSDM_logit, tl.cex=0.3)
 
 # Predictions 
 
-We use the `predict.jSDM` S3 method on the `mod_birds_jSDM_logit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict.jSDM()` S3 method on the `mod_birds_jSDM_logit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-logit}
 # Sites and species concerned by predictions :
