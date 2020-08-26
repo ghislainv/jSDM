@@ -215,7 +215,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
-<p>We use the <code>jSDM_poisson_log</code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
+<p>We use the <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">mod_mites_jSDM_log</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log</a></span>(
   <span class="co"># Chains</span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">1000</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">1000</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">1</span>,
@@ -312,20 +312,20 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <div id="matrice-of-correlations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#matrice-of-correlations" class="anchor"></a><span class="header-section-number">5</span> Matrice of correlations</h1>
-<p>After fitting the jSDM with latent variables, the <strong>fullspecies residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can bederived from the covariance in the latent variables such as :
+<p>After fitting the jSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can bederived from the covariance in the latent variables such as :
 <span class="math display">\[\Sigma_{ij} = \begin{cases}
  \lambda_i .\lambda_j^T &amp; \text{ if } i \neq j \\
   \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
  \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
-<p>We use the function <code>plot_residual_cor</code> to compute and display the residual correlation matrix between species :</p>
+<p>We use the function <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(<span class="no">mod_mites_jSDM_log</span>, <span class="kw">tl.cex</span><span class="kw">=</span><span class="fl">0.5</span>)</pre></body></html></div>
 <p><img src="jSDM_poisson_log_files/figure-html/correlation-matrix-log-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="predictions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
-<p>We use the <code>predict.jSDM</code> S3 method on the <code>mod_mites_jSDM_log</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
+<p>We use the <code>predict(&lt;jSDM&gt;)</code> S3 method on the <code>mod_mites_jSDM_log</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># Sites and species concerned by predictions :</span>
 <span class="co">## 35 sites among the 70</span>
 <span class="no">Id_sites</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">PA_mites</span>), <span class="fl">35</span>)
