@@ -123,6 +123,7 @@
 <div id="definition-of-the-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
+<p>Referring to the models used in the articles <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span> and <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span>, we define the following model :</p>
 <p><span class="math display">\[ \mathrm{logit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j \]</span></p>
 <ul>
 <li><p>Link function logit: <span class="math inline">\(\mathrm{logit}: p \rightarrow \log(\frac{p}{1-p})\)</span>.</p></li>
@@ -142,9 +143,9 @@ The corresponding regression coefficients for each species <span class="math inl
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div id="data-set" class="section level1">
+<div id="occurence-data-set" class="section level1">
 <h1 class="hasAnchor">
-<a href="#data-set" class="anchor"></a><span class="header-section-number">2</span> Data-set</h1>
+<a href="#occurence-data-set" class="anchor"></a><span class="header-section-number">2</span> Occurence data-set</h1>
 
 <div class="figure" style="text-align: center">
 <span id="fig:birds-picture"></span>
@@ -152,9 +153,10 @@ The corresponding regression coefficients for each species <span class="math inl
 Figure 2.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006">2006</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in the <code>jSDM</code> R package. It can be loaded with the <code>data</code> command. The data is in “wide” format: each line is a site and the occurrence data are in columns.</p>
-<p>The Swiss breeding bird survey (“Monitoring Häufige Brutvögel” MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). Surveys are conducted along a transect that does not change over the years.</p>
-<p>The data set  contains the 2014 data, except for one quadrat not surveyed in 2014.
+<p>This data-set is available in the <code>jSDM-package</code>. It can be loaded with the <code>data</code> command. The <code>birds</code> data-set is in “wide” format: each line is a site and the occurrence data are in columns.</p>
+<p>The Swiss breeding bird survey (“Monitoring Häufige Brutvögel” MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line).
+Surveys are conducted along a transect that does not change over the years.</p>
+<p>The data-set contains the 2014 data, except for one quadrat not surveyed in 2014.
 It lists 158 bird species named in Latin and whose occurrences are expressed as the number of visits during which the species was observed on each site , with the exception of 13 species not surveyed in 2014 :</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">jSDM</span>)
 <span class="co">#&gt; ##</span>
@@ -184,7 +186,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
-<p>We use the <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
+<p>We use the <code>jSDM_binomial_logit</code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">mod_birds_jSDM_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit</a></span>(
   <span class="co"># Chains</span>
   <span class="kw">burnin</span><span class="kw">=</span><span class="fl">500</span>, <span class="kw">mcmc</span><span class="kw">=</span><span class="fl">500</span>, <span class="kw">thin</span><span class="kw">=</span><span class="fl">1</span>,
@@ -291,13 +293,14 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
   \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
  \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
+<p>We use the function <code>plot_residual_cor</code> to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(<span class="no">mod_birds_jSDM_logit</span>, <span class="kw">tl.cex</span><span class="kw">=</span><span class="fl">0.3</span>)</pre></body></html></div>
 <p><img src="jSDM_binomial_logit_files/figure-html/correlation-matrix-logit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="predictions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
-<p>We use the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> S3 method on the <code>mod_birds_jSDM_logit</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
+<p>We use the <code>predict.jSDM</code> S3 method on the <code>mod_birds_jSDM_logit</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># Sites and species concerned by predictions :</span>
 <span class="co">## 100 sites among the 266</span>
 <span class="no">Id_sites</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">PA_birds</span>), <span class="fl">100</span>)
@@ -322,8 +325,14 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
+<div id="ref-Albert1993">
+<p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
+</div>
 <div id="ref-Kery2006">
 <p>Kéry, M. &amp; Schmid, H. (2006) Estimating species richness: Calibrating a large avian monitoring programme. <em>Journal of Applied Ecology</em>, <strong>43</strong>, 101–110.</p>
+</div>
+<div id="ref-Warton2015">
+<p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
 </div>
 </div>
 </div>
