@@ -153,7 +153,7 @@ The corresponding regression coefficients for each species <span class="math inl
 Figure 2.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006">2006</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in the . It can be loaded with the \link{ command. The <code>birds</code> data-set is in “wide” format: each line is a site and the occurrence data are in columns.</p>
+<p>This data-set is available in the <code>jSDM-package</code>. It can be loaded with the <code>data</code> command. The <code>birds</code> data-set is in “wide” format: each line is a site and the occurrence data are in columns.</p>
 <p>The Swiss breeding bird survey (“Monitoring Häufige Brutvögel” MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line).
 Surveys are conducted along a transect that does not change over the years.</p>
 <p>The data-set contains the 2014 data, except for one quadrat not surveyed in 2014.
@@ -266,7 +266,7 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <p><img src="jSDM_binomial_logit_files/figure-html/plot-results-logit-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_logit_files/figure-html/plot-results-logit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_birds_jSDM_logit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_binomial_logit_files/figure-html/plot-results-logit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="co">## V_alpha</span>

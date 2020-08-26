@@ -176,8 +176,7 @@
 </table>
 <ul>
 <li>
-<code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> :</li>
-</ul>
+<p><code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> :</p>
 <p><strong>Ecological process:</strong></p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),\]</span>
 where</p>
@@ -229,10 +228,9 @@ where</p>
 </tr>
 </tbody>
 </table>
-<ul>
+</li>
 <li>
-<code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> :</li>
-</ul>
+<p><code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> :</p>
 <p><strong>Ecological process : </strong></p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),\]</span>
 where</p>
@@ -284,10 +282,9 @@ where</p>
 </tr>
 </tbody>
 </table>
-<ul>
+</li>
 <li>
-<code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> :</li>
-</ul>
+<p><code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> :</p>
 <p><strong>Ecological process : </strong></p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij}),\]</span></p>
 <p>where</p>
@@ -339,10 +336,12 @@ where</p>
 </tr>
 </tbody>
 </table>
+</li>
+</ul>
 <p>Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>)</span>. jSDM is becoming an increasingly popular statistical method in conservation biology.</p>
-<p>In this vignette, we illustrate the use of the <code>jSDM-package</code> wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models.</p>
+<p>In this vignette, we illustrate the use of the [<code>jSDM-package</code>] wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models.</p>
 <p>Package’s functions are developped in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model’s parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity.</p>
-<p>Model types available in <code>jSDM-package</code> are not limited to those described in this example. <code>jSDM</code> includes various model types for occurrence and abundance data:</p>
+<p>Model types available in [<code>jSDM-package</code>] are not limited to those described in this example. <code>jSDM</code> includes various model types for occurrence and abundance data:</p>
 <p>We first load the <code>jSDM</code> library.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># Load libraries</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">jSDM</span>)
@@ -396,7 +395,7 @@ The corresponding regression coefficients for each species <span class="math inl
 Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in [‘jSDM’][jSDM-package] R package. It can be loaded with the [<code>data</code>][utils::data] command. The [frogs] dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
+<p>This data-set is available in [‘jSDM’][jSDM-package] R package. It can be loaded with the [<code>data</code>][utils::data] command. The [<code>frogs</code>] dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># frogs data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">frogs</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">frogs</span>)
@@ -426,7 +425,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div id="parameter-inference" class="section level2">
 <h2 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">2.3</span> Parameter inference</h2>
-<p>We use the [<code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code>][jSDM_binomial_probit_block()]
+<p>We use the [<code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code>]
 function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mod_frogs_jSDM_probit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span>(
   <span class="co"># Chains</span>
@@ -505,7 +504,7 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <p><img src="jSDM_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
@@ -534,14 +533,14 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
 \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
-<p>We use the function [<code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code>][plot_residual_cor()] to compute and display the residual correlation matrix between species :</p>
+<p>We use the function [<code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code>] to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(<span class="no">mod_frogs_jSDM_probit</span>)</pre></body></html></div>
 <p><img src="jSDM_files/figure-html/correlation-matrix-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="predictions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">2.6</span> Predictions</h2>
-<p>We use the [<code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code>][predict.jSDM()] S3 method on the <code>mod_frogs_jSDM_probit</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
+<p>We use the [<code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code>] S3 method on the <code>mod_frogs_jSDM_probit</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="co"># Sites and species concerned by predictions :</span>
 <span class="co">## 50 sites among the 104</span>
 <span class="no">Id_sites</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">PA_frogs</span>), <span class="fl">50</span>)
