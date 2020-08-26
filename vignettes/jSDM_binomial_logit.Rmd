@@ -68,7 +68,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 
-This data-set is available in the \link{\code{jSDM-package}}. It can be loaded with the \link{\code{utils::data} command. The `birds` data-set is in "wide" format: each line is a site and the occurrence data are in columns.
+This data-set is available in the `jSDM-package`. It can be loaded with the `data` command. The `birds` data-set is in "wide" format: each line is a site and the occurrence data are in columns.
 
 The Swiss breeding bird survey ("Monitoring Häufige Brutvögel" MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). 
 Surveys are conducted along a transect that does not change over the years. 
