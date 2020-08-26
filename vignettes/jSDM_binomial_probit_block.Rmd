@@ -31,11 +31,7 @@ highlight = TRUE
 )
 ```
 
-# Bernoulli probit regression 
-
-Below, we show an example of the use of '`jSDM-package`' for fitting species distribution model to occurence data for 9 frog's species.
-
-## Definition of the model 
+# Definition of the model 
 
 Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
@@ -70,7 +66,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
 
-## Occurrence data-set
+# Occurrence data-set
 
 (ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
 
@@ -78,7 +74,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
-This data-set is available in the '`jSDM-package`'. It can be loaded with the `data` command. The '`frogs`' dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
+This data-set is available in the `jSDM-package` R package. It can be loaded with the `data` command. The `frogs` dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
 
 ```{r frogs-data}
 library(jSDM)
@@ -100,7 +96,7 @@ Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
 colnames(Env_frogs) <- colnames(frogs[,1:3])
 ```
 
-## Parameter inference
+# Parameter inference
 
 We use the `jSDM_binomial_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
@@ -127,7 +123,7 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
   seed=1234, verbose=1)
 ```
 
-## Analysis of the results
+# Analysis of the results
 
 ```{r plot-results-probit}
 np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
@@ -185,7 +181,7 @@ hist(pnorm(mod_frogs_jSDM_probit$probit_theta_pred),
      main = "Predicted theta", xlab ="predicted theta")
 ```
 
-## Matrice of correlations 
+# Matrice of correlations 
 
 After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
 $$\Sigma_{ij} = \begin{cases}
@@ -200,7 +196,7 @@ We use the `plot_residual_cor()` function to compute and display  the residual c
 plot_residual_cor(mod_frogs_jSDM_probit)
 ```
 
-## Predictions 
+# Predictions 
 
 We use the `predict.jSDM()` S3 method on the `mod_frogs_jSDM_probit` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 

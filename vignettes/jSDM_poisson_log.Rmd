@@ -199,7 +199,7 @@ plot_residual_cor(mod_mites_jSDM_log, tl.cex=0.5)
 
 # Predictions 
 
-We use the `predict(<jSDM>)` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+We use the `predict.jSDM()` S3 method on the `mod_mites_jSDM_log` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
 
 ```{r predictions-log}
 # Sites and species concerned by predictions :
