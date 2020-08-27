@@ -74,7 +74,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
-This data-set is available in the `jSDM-package` R package. It can be loaded with the `data` command. The `frogs` dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
+This data-set is available in the [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) R package. It can be loaded with the `data()` command. The [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset is in "wide" format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates. 
 
 ```{r frogs-data}
 library(jSDM)

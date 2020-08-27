@@ -5,8 +5,8 @@
 * New function `jSDM_poisson_log()` for fitting joint species distribution models from abundance data inspired by Hui and Francis K. C. 2016 _Methods in Ecology and Evolution_ (doi:10.1111/2041-210X.12514).
 * New `jSDM_binomial_logit()` function for fitting joint species distribution models from presence-absence data at multiple-visited sites using a bayesian inference method inspired by Albert, James H. and Chib Siddhartha 1993 _Journal of the American Statistical Association_ (doi:10.1080/01621459.1993.10476321).
 * Functions to fit models in which site effects are included as fixed effects, as random effects or not included and with or without latent variables.
-* Complete '`jSDM-package`' documentation 
-* Add datasets (`mosquitos`, `fungi`, `eucalypts`, `birds`, `mites`, `aravo`). 
+* Complete [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) documentation 
+* Add datasets ([`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html), [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html), [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html), [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html), [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html), [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html)). 
 * Three new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression" and “Binomial logistic regression”) are available.
 * Complete vignette "Comparison jSDM-boral". 
 * New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM>.

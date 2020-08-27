@@ -68,7 +68,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 knitr::include_graphics("figures/Oribatid_mites.jpg")
 ```
 
-This data-set is available in the `jSDM-package`. It can be loaded with the `data` command. The `mites` data-set is in "wide" format: each line is a site and the abundance data are in columns.
+This data-set is available in the [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html). It can be loaded with the `data()` command. The [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) data-set is in "wide" format: each line is a site and the abundance data are in columns.
 
 This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of Université de Montréal, Québec, Canada in June 1989. 
 
