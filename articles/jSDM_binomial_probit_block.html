@@ -160,7 +160,7 @@ The corresponding regression coefficients for each species <span class="math inl
 Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in the <code>jSDM-package</code> R package. It can be loaded with the <code>data</code> command. The <code>frogs</code> dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
+<p>This data-set is available in the <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html"><code>jSDM-package</code></a> R package. It can be loaded with the <code><a href="https://rdrr.io/r/utils/data.html">data()</a></code> command. The <a href="https://ecology.ghislainv.fr/jSDM/reference/frogs.html"><code>frogs</code></a> dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">jSDM</span>)
 <span class="co">#&gt; ##</span>
 <span class="co">#&gt; ## jSDM R package </span>
@@ -274,7 +274,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <p><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_frogs_jSDM_probit</span>$<span class="no">mcmc.alpha</span>[,<span class="fl">1</span>:<span class="fl">2</span>]))</pre></body></html></div>
 <p><img src="jSDM_binomial_probit_block_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="co">## V_alpha</span>
