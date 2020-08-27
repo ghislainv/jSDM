@@ -1,0 +1,246 @@
+## JAGS model written for boral version 1.9 on 2020-08-26 18:28:51 ##
+
+model{
+	 ## Data Level ## 
+	 for(i in 1:n) {
+		 for(j in 1:p) { 
+		 eta[i,j] <- inprod(lv.coefs[j,2:(num.lv+1)],lvs[i,]) + row.coefs[i] + inprod(X.coefs[j,],X[i,])
+		 }
+		 y[i,1] ~ dbin(ilogit(lv.coefs[1,1] + eta[i,1]), visits[i])
+
+		 y[i,2] ~ dbin(ilogit(lv.coefs[2,1] + eta[i,2]), visits[i])
+
+		 y[i,3] ~ dbin(ilogit(lv.coefs[3,1] + eta[i,3]), visits[i])
+
+		 y[i,4] ~ dbin(ilogit(lv.coefs[4,1] + eta[i,4]), visits[i])
+
+		 y[i,5] ~ dbin(ilogit(lv.coefs[5,1] + eta[i,5]), visits[i])
+
+		 y[i,6] ~ dbin(ilogit(lv.coefs[6,1] + eta[i,6]), visits[i])
+
+		 y[i,7] ~ dbin(ilogit(lv.coefs[7,1] + eta[i,7]), visits[i])
+
+		 y[i,8] ~ dbin(ilogit(lv.coefs[8,1] + eta[i,8]), visits[i])
+
+		 y[i,9] ~ dbin(ilogit(lv.coefs[9,1] + eta[i,9]), visits[i])
+
+		 y[i,10] ~ dbin(ilogit(lv.coefs[10,1] + eta[i,10]), visits[i])
+
+		 y[i,11] ~ dbin(ilogit(lv.coefs[11,1] + eta[i,11]), visits[i])
+
+		 y[i,12] ~ dbin(ilogit(lv.coefs[12,1] + eta[i,12]), visits[i])
+
+		 y[i,13] ~ dbin(ilogit(lv.coefs[13,1] + eta[i,13]), visits[i])
+
+		 y[i,14] ~ dbin(ilogit(lv.coefs[14,1] + eta[i,14]), visits[i])
+
+		 y[i,15] ~ dbin(ilogit(lv.coefs[15,1] + eta[i,15]), visits[i])
+
+		 y[i,16] ~ dbin(ilogit(lv.coefs[16,1] + eta[i,16]), visits[i])
+
+		 y[i,17] ~ dbin(ilogit(lv.coefs[17,1] + eta[i,17]), visits[i])
+
+		 y[i,18] ~ dbin(ilogit(lv.coefs[18,1] + eta[i,18]), visits[i])
+
+		 y[i,19] ~ dbin(ilogit(lv.coefs[19,1] + eta[i,19]), visits[i])
+
+		 y[i,20] ~ dbin(ilogit(lv.coefs[20,1] + eta[i,20]), visits[i])
+
+		 y[i,21] ~ dbin(ilogit(lv.coefs[21,1] + eta[i,21]), visits[i])
+
+		 y[i,22] ~ dbin(ilogit(lv.coefs[22,1] + eta[i,22]), visits[i])
+
+		 y[i,23] ~ dbin(ilogit(lv.coefs[23,1] + eta[i,23]), visits[i])
+
+		 y[i,24] ~ dbin(ilogit(lv.coefs[24,1] + eta[i,24]), visits[i])
+
+		 y[i,25] ~ dbin(ilogit(lv.coefs[25,1] + eta[i,25]), visits[i])
+
+		 y[i,26] ~ dbin(ilogit(lv.coefs[26,1] + eta[i,26]), visits[i])
+
+		 y[i,27] ~ dbin(ilogit(lv.coefs[27,1] + eta[i,27]), visits[i])
+
+		 y[i,28] ~ dbin(ilogit(lv.coefs[28,1] + eta[i,28]), visits[i])
+
+		 y[i,29] ~ dbin(ilogit(lv.coefs[29,1] + eta[i,29]), visits[i])
+
+		 y[i,30] ~ dbin(ilogit(lv.coefs[30,1] + eta[i,30]), visits[i])
+
+		 y[i,31] ~ dbin(ilogit(lv.coefs[31,1] + eta[i,31]), visits[i])
+
+		 y[i,32] ~ dbin(ilogit(lv.coefs[32,1] + eta[i,32]), visits[i])
+
+		 y[i,33] ~ dbin(ilogit(lv.coefs[33,1] + eta[i,33]), visits[i])
+
+		 y[i,34] ~ dbin(ilogit(lv.coefs[34,1] + eta[i,34]), visits[i])
+
+		 y[i,35] ~ dbin(ilogit(lv.coefs[35,1] + eta[i,35]), visits[i])
+
+		 y[i,36] ~ dbin(ilogit(lv.coefs[36,1] + eta[i,36]), visits[i])
+
+		 y[i,37] ~ dbin(ilogit(lv.coefs[37,1] + eta[i,37]), visits[i])
+
+		 y[i,38] ~ dbin(ilogit(lv.coefs[38,1] + eta[i,38]), visits[i])
+
+		 y[i,39] ~ dbin(ilogit(lv.coefs[39,1] + eta[i,39]), visits[i])
+
+		 y[i,40] ~ dbin(ilogit(lv.coefs[40,1] + eta[i,40]), visits[i])
+
+		 y[i,41] ~ dbin(ilogit(lv.coefs[41,1] + eta[i,41]), visits[i])
+
+		 y[i,42] ~ dbin(ilogit(lv.coefs[42,1] + eta[i,42]), visits[i])
+
+		 y[i,43] ~ dbin(ilogit(lv.coefs[43,1] + eta[i,43]), visits[i])
+
+		 y[i,44] ~ dbin(ilogit(lv.coefs[44,1] + eta[i,44]), visits[i])
+
+		 y[i,45] ~ dbin(ilogit(lv.coefs[45,1] + eta[i,45]), visits[i])
+
+		 y[i,46] ~ dbin(ilogit(lv.coefs[46,1] + eta[i,46]), visits[i])
+
+		 y[i,47] ~ dbin(ilogit(lv.coefs[47,1] + eta[i,47]), visits[i])
+
+		 y[i,48] ~ dbin(ilogit(lv.coefs[48,1] + eta[i,48]), visits[i])
+
+		 y[i,49] ~ dbin(ilogit(lv.coefs[49,1] + eta[i,49]), visits[i])
+
+		 y[i,50] ~ dbin(ilogit(lv.coefs[50,1] + eta[i,50]), visits[i])
+
+		 y[i,51] ~ dbin(ilogit(lv.coefs[51,1] + eta[i,51]), visits[i])
+
+		 y[i,52] ~ dbin(ilogit(lv.coefs[52,1] + eta[i,52]), visits[i])
+
+		 y[i,53] ~ dbin(ilogit(lv.coefs[53,1] + eta[i,53]), visits[i])
+
+		 y[i,54] ~ dbin(ilogit(lv.coefs[54,1] + eta[i,54]), visits[i])
+
+		 y[i,55] ~ dbin(ilogit(lv.coefs[55,1] + eta[i,55]), visits[i])
+
+		 y[i,56] ~ dbin(ilogit(lv.coefs[56,1] + eta[i,56]), visits[i])
+
+		 y[i,57] ~ dbin(ilogit(lv.coefs[57,1] + eta[i,57]), visits[i])
+
+		 y[i,58] ~ dbin(ilogit(lv.coefs[58,1] + eta[i,58]), visits[i])
+
+		 y[i,59] ~ dbin(ilogit(lv.coefs[59,1] + eta[i,59]), visits[i])
+
+		 y[i,60] ~ dbin(ilogit(lv.coefs[60,1] + eta[i,60]), visits[i])
+
+		 y[i,61] ~ dbin(ilogit(lv.coefs[61,1] + eta[i,61]), visits[i])
+
+		 y[i,62] ~ dbin(ilogit(lv.coefs[62,1] + eta[i,62]), visits[i])
+
+		 y[i,63] ~ dbin(ilogit(lv.coefs[63,1] + eta[i,63]), visits[i])
+
+		 y[i,64] ~ dbin(ilogit(lv.coefs[64,1] + eta[i,64]), visits[i])
+
+		 y[i,65] ~ dbin(ilogit(lv.coefs[65,1] + eta[i,65]), visits[i])
+
+		 y[i,66] ~ dbin(ilogit(lv.coefs[66,1] + eta[i,66]), visits[i])
+
+		 y[i,67] ~ dbin(ilogit(lv.coefs[67,1] + eta[i,67]), visits[i])
+
+		 y[i,68] ~ dbin(ilogit(lv.coefs[68,1] + eta[i,68]), visits[i])
+
+		 y[i,69] ~ dbin(ilogit(lv.coefs[69,1] + eta[i,69]), visits[i])
+
+		 y[i,70] ~ dbin(ilogit(lv.coefs[70,1] + eta[i,70]), visits[i])
+
+		 y[i,71] ~ dbin(ilogit(lv.coefs[71,1] + eta[i,71]), visits[i])
+
+		 y[i,72] ~ dbin(ilogit(lv.coefs[72,1] + eta[i,72]), visits[i])
+
+		 y[i,73] ~ dbin(ilogit(lv.coefs[73,1] + eta[i,73]), visits[i])
+
+		 y[i,74] ~ dbin(ilogit(lv.coefs[74,1] + eta[i,74]), visits[i])
+
+		 y[i,75] ~ dbin(ilogit(lv.coefs[75,1] + eta[i,75]), visits[i])
+
+		 y[i,76] ~ dbin(ilogit(lv.coefs[76,1] + eta[i,76]), visits[i])
+
+		 y[i,77] ~ dbin(ilogit(lv.coefs[77,1] + eta[i,77]), visits[i])
+
+		 y[i,78] ~ dbin(ilogit(lv.coefs[78,1] + eta[i,78]), visits[i])
+
+		 y[i,79] ~ dbin(ilogit(lv.coefs[79,1] + eta[i,79]), visits[i])
+
+		 y[i,80] ~ dbin(ilogit(lv.coefs[80,1] + eta[i,80]), visits[i])
+
+		 y[i,81] ~ dbin(ilogit(lv.coefs[81,1] + eta[i,81]), visits[i])
+
+		 y[i,82] ~ dbin(ilogit(lv.coefs[82,1] + eta[i,82]), visits[i])
+
+		 y[i,83] ~ dbin(ilogit(lv.coefs[83,1] + eta[i,83]), visits[i])
+
+		 y[i,84] ~ dbin(ilogit(lv.coefs[84,1] + eta[i,84]), visits[i])
+
+		 y[i,85] ~ dbin(ilogit(lv.coefs[85,1] + eta[i,85]), visits[i])
+
+		 y[i,86] ~ dbin(ilogit(lv.coefs[86,1] + eta[i,86]), visits[i])
+
+		 y[i,87] ~ dbin(ilogit(lv.coefs[87,1] + eta[i,87]), visits[i])
+
+		 y[i,88] ~ dbin(ilogit(lv.coefs[88,1] + eta[i,88]), visits[i])
+
+		 y[i,89] ~ dbin(ilogit(lv.coefs[89,1] + eta[i,89]), visits[i])
+
+		 y[i,90] ~ dbin(ilogit(lv.coefs[90,1] + eta[i,90]), visits[i])
+
+		 y[i,91] ~ dbin(ilogit(lv.coefs[91,1] + eta[i,91]), visits[i])
+
+		 y[i,92] ~ dbin(ilogit(lv.coefs[92,1] + eta[i,92]), visits[i])
+
+		 y[i,93] ~ dbin(ilogit(lv.coefs[93,1] + eta[i,93]), visits[i])
+
+		 y[i,94] ~ dbin(ilogit(lv.coefs[94,1] + eta[i,94]), visits[i])
+
+		 y[i,95] ~ dbin(ilogit(lv.coefs[95,1] + eta[i,95]), visits[i])
+
+		 y[i,96] ~ dbin(ilogit(lv.coefs[96,1] + eta[i,96]), visits[i])
+
+		 y[i,97] ~ dbin(ilogit(lv.coefs[97,1] + eta[i,97]), visits[i])
+
+		 y[i,98] ~ dbin(ilogit(lv.coefs[98,1] + eta[i,98]), visits[i])
+
+		 y[i,99] ~ dbin(ilogit(lv.coefs[99,1] + eta[i,99]), visits[i])
+
+		 y[i,100] ~ dbin(ilogit(lv.coefs[100,1] + eta[i,100]), visits[i])
+
+		 y[i,101] ~ dbin(ilogit(lv.coefs[101,1] + eta[i,101]), visits[i])
+
+		 y[i,102] ~ dbin(ilogit(lv.coefs[102,1] + eta[i,102]), visits[i])
+
+		 y[i,103] ~ dbin(ilogit(lv.coefs[103,1] + eta[i,103]), visits[i])
+
+		 y[i,104] ~ dbin(ilogit(lv.coefs[104,1] + eta[i,104]), visits[i])
+
+		 y[i,105] ~ dbin(ilogit(lv.coefs[105,1] + eta[i,105]), visits[i])
+
+		 y[i,106] ~ dbin(ilogit(lv.coefs[106,1] + eta[i,106]), visits[i])
+
+		 y[i,107] ~ dbin(ilogit(lv.coefs[107,1] + eta[i,107]), visits[i])
+
+		 y[i,108] ~ dbin(ilogit(lv.coefs[108,1] + eta[i,108]), visits[i])
+
+		 y[i,109] ~ dbin(ilogit(lv.coefs[109,1] + eta[i,109]), visits[i])
+
+		 y[i,110] ~ dbin(ilogit(lv.coefs[110,1] + eta[i,110]), visits[i])
+  }
+	 ## Latent variables ##
+	 for(i in 1:n) { for(k in 1:num.lv) { lvs[i,k] ~ dnorm(0,1) } } 
+
+	 ## Process level and priors ##
+	 for(j in 1:p) { lv.coefs[j,1] ~ dnorm(0,0.1) } ## Separate species intercepts
+
+	 for(i in 1:n) { row.coefs[i] ~ dnorm(0, pow(row.sigma,-2)) } 
+	 row.sigma ~ dunif(0,30)
+
+	 for(i in 1:(num.lv-1)) { for(j in (i+2):(num.lv+1)) { lv.coefs[i,j] <- 0 } } ## Constraints to 0 on upper diagonal
+	 for(i in 1:num.lv) { lv.coefs[i,i+1] ~ dnorm(0,0.1)I(0,) } ## Sign constraints on diagonal elements
+	 for(i in 2:num.lv) { for(j in 2:i) { lv.coefs[i,j] ~ dnorm(0,0.1) } } ## Free lower diagonals
+	 for(i in (num.lv+1):p) { for(j in 2:(num.lv+1)) { lv.coefs[i,j] ~ dnorm(0,0.1) } } ## All other elements
+
+	 for(j in 1:p) { X.coefs[j,1] ~ dnorm(0,0.1) } 
+	 for(j in 1:p) { X.coefs[j,2] ~ dnorm(0,0.1) } 
+	 for(j in 1:p) { X.coefs[j,3] ~ dnorm(0,0.1) } 
+	 }

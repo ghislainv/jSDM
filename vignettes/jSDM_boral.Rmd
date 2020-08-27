@@ -24,7 +24,7 @@ vignette: >
 knitr::opts_chunk$set(
   fig.align="center",
   fig.width=8, fig.height=6,
-  cache=FALSE,
+  cache=TRUE,
   collapse=TRUE,
   comment="#>",
   highlight=TRUE,
@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 ```
 
 # Data-sets
-
+ 
 ```{r data-sets, echo=FALSE, eval=TRUE}
 library(knitr)
 library(kableExtra)
@@ -67,26 +67,34 @@ X_Fungi <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Birds dataset
 data("birds")
 PA_Birds <- birds[,1:158]
-Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")])))
-mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Birds))
+# Remove species with less than 5 presences
+rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
+PA_Birds <- PA_Birds[, -rare_sp]
+Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
+mf.suit <- model.frame(formula=~elev+rlength+forest, data=as.data.frame(Env_Birds))
 X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Mites dataset
 data("mites")
 PA_Mites <- mites[,1:35]
+# Remove species with less than 10 presences
+rare_sp <- which(apply(PA_Mites >0, 2, sum) < 10) 
+PA_Mites <- PA_Mites[, -rare_sp]
 # Normalized continuous variables
 Env_Mites  <- cbind(scale(mites[,c("density","water")]), mites[,c("substrate", "shrubs", "topo")])
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Mites))
 X_Mites <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 
-datasets <- data.frame(matrix(NA,8,7),row.names=c("n.site","n.species","n.latent","n.X.coefs", "n.obs", "n.param", "n.mcmc",""))
+datasets <- data.frame(matrix(NA,10,7),row.names=c("data type", "distribution", "n.site","n.species","n.latent","n.X.coefs", "n.obs",  "n.param", "n.mcmc",""))
 colnames(datasets) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 datasets["n.site",] <- c(300,nrow(frogs),nrow(eucalypts), nrow(frogs), nrow(fungi), nrow(birds), nrow(mites))
 datasets["n.X.coefs",] <- c(3,ncol(X_Mosquitos),ncol(X_Eucalypts),ncol(X_Frogs),ncol(X_Fungi),ncol(X_Birds), ncol(X_Mites))
 datasets["n.species",] <- c(100,ncol(PA_Mosquitos),ncol(PA_Eucalypts),ncol(PA_Frogs),ncol(PA_Fungi),ncol(PA_Birds), ncol(PA_Mites))
 datasets["n.latent",] <- 2
+datasets["n.obs",] <- datasets["n.site",]*datasets["n.species",] 
 datasets["n.mcmc",] <- 15000
 datasets["n.param",] <- datasets["n.site",]*(1+datasets["n.latent",])+1+datasets["n.species",]*(1+datasets["n.X.coefs",]+datasets["n.latent",])-1
-datasets["n.obs",] <- datasets["n.site",]*datasets["n.species",] 
+datasets["data type",] <-c("presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","abundance")
+datasets["distribution",] <- c("bernoulli", "bernoulli","bernoulli","bernoulli","bernoulli","binomial","poisson")
 sp_pictures <- c("figures/des.jpg",
                  "figures/Mosquitos_.jpg","figures/Eucalyptus_.jpg",
                  "figures/Frogs_.jpg","figures/Fungi_.jpg",
@@ -158,10 +166,10 @@ T2<-Sys.time()
 T_boral_sim=difftime(T2, T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_sim <- mod_boral_sim$row.coefs$ID1$mean 
-+ X[,-1] %*% t(mod_boral_sim$X.coefs.mean)
-+ mod_boral_sim$lv.coefs.mean[,"beta0"] 
-+ mod_boral_sim$lv.mean%*%t(mod_boral_sim$lv.coefs.mean[,-1])
+probit_theta_pred_sim <- mod_boral_sim$row.coefs$ID1$mean + 
+  X[,-1] %*% t(mod_boral_sim$X.coefs.mean) + 
+  X[,1] %*% mod_boral_sim$lv.coefs.mean[,"beta0"] + 
+  mod_boral_sim$lv.mean%*%t(mod_boral_sim$lv.coefs.mean[,-1])
 # RMSE
 SE=(probit_theta-probit_theta_pred_sim)^2
 RMSE_boral_sim=sqrt(sum(SE/(nsite*nsp)))
@@ -189,11 +197,11 @@ load(file="jSDM_boral_cache/boral_simulation.RData")
 par(mfrow=c(1,2))
 plot(t(beta.target),
      cbind(mod_boral_sim$lv.coefs.mean[,1],mod_boral_sim$X.coefs.mean),
-     xlab="beta target", ylab="means of estimated beta") 
+     xlab="obs", ylab="fitted", main="Fixed species effect beta") 
 abline(a=0,b=1,col='red')
 ## factor loadings lambda_j
 plot(t(lambda.target),mod_boral_sim$lv.coefs.mean[,-1],
-     xlab="lambda target", ylab="means of estimated lambda") 
+     xlab="obs", ylab="fitted", main="Loading factors lambda") 
 abline(a=0,b=1,col='red')
 ## Latent variable W 
 par(mfrow=c(1,2))
@@ -209,7 +217,7 @@ plot(alpha.target, mod_boral_sim$row.coefs$ID1$mean,
      xlab="obs", ylab="fitted")
 abline(a=0,b=1,col='red')
 points(V_alpha.target, mod_boral_sim$row.sigma$ID1["mean"],
-       pch=17, col='blue', cex=1.5)
+       pch=17, col='red', cex=1.5)
 legend("topleft", legend="V_alpha", pch=17, col='blue')
 title("Random site effect alpha and its variance")
 
@@ -221,11 +229,11 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r boral-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_figures/boral-simulation-plot-4.png")
+```{r boral-simulation-plot2, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-3.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-4.png")
 ```
 
 ## Mosquitos dataset
@@ -250,10 +258,9 @@ T_boral_Mosquitos <- difftime(T2,T1)
 
 # Predicted probit(theta) 
 probit_theta_pred_Mosquitos <- mod_boral_Mosquitos$row.coefs[[1]]$mean +
-  as.matrix(Env_Mosquitos) %*% t(mod_boral_Mosquitos$X.coefs.mean)
-+ mod_boral_Mosquitos$lv.coefs.mean[,"beta0"]
-+ mod_boral_Mosquitos$lv.mean%*% 
-  t(mod_boral_Mosquitos$lv.coefs.mean[,-1])
+  as.matrix(Env_Mosquitos) %*% t(mod_boral_Mosquitos$X.coefs.mean) +
+  matrix(1,nrow=nrow(PA_Mosquitos), ncol=1)%*%mod_boral_Mosquitos$lv.coefs.mean[,"beta0"] + 
+  mod_boral_Mosquitos$lv.mean%*% t(mod_boral_Mosquitos$lv.coefs.mean[,-1])
 
 # Deviance
 logL=0
@@ -291,11 +298,10 @@ T2 <- Sys.time()
 T_boral_Eucalypts <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Eucalypts <- mod_boral_Eucalypts$row.coefs[[1]]$mean
-+ as.matrix(Env_Eucalypts) %*% t(mod_boral_Eucalypts$X.coefs.mean)
-+ mod_boral_Eucalypts$lv.coefs.mean[,"beta0"]
-+ mod_boral_Eucalypts$lv.mean%*%
-  t(mod_boral_Eucalypts$lv.coefs.mean[,-1])
+probit_theta_pred_Eucalypts <- mod_boral_Eucalypts$row.coefs[[1]]$mean + 
+  as.matrix(Env_Eucalypts) %*% t(mod_boral_Eucalypts$X.coefs.mean) + 
+  matrix(1,nrow=nrow(PA_Eucalypts),ncol=1)%*%mod_boral_Eucalypts$lv.coefs.mean[,"beta0"] + 
+  mod_boral_Eucalypts$lv.mean%*%t(mod_boral_Eucalypts$lv.coefs.mean[,-1])
 
 # Deviance
 logL=0
@@ -334,10 +340,10 @@ T2 <- Sys.time()
 T_boral_Frogs <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Frogs <- mod_boral_Frogs$row.coefs[[1]]$mean
-+ as.matrix(Env_Frogs) %*% t(mod_boral_Frogs$X.coefs.mean)
-+ mod_boral_Frogs$lv.coefs.mean[,"beta0"]
-+ mod_boral_Frogs$lv.mean%*%t(mod_boral_Frogs$lv.coefs.mean[,-1])
+probit_theta_pred_Frogs <- mod_boral_Frogs$row.coefs[[1]]$mean + 
+  as.matrix(Env_Frogs) %*% t(mod_boral_Frogs$X.coefs.mean) +
+  matrix(1,nrow=nrow(PA_Frogs), ncol=1)%*%mod_boral_Frogs$lv.coefs.mean[,"beta0"] + 
+  mod_boral_Frogs$lv.mean%*%t(mod_boral_Frogs$lv.coefs.mean[,-1])
 
 # Deviance
 logL=0
@@ -379,7 +385,10 @@ T2 <- Sys.time()
 T_boral_Fungi <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Fungi=mod_boral_Fungi$row.coefs[[1]]$mean + as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean)  + mod_boral_Fungi$lv.coefs.mean[,"beta0"] + mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
+probit_theta_pred_Fungi <- mod_boral_Fungi$row.coefs[[1]]$mean +
+  as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean) + 
+  matrix(1,nrow=nrow(PA_Fungi), ncol=1)%*%mod_boral_Fungi$lv.coefs.mean[,"beta0"] + 
+  mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
 
 # Deviance
 logL=0
@@ -403,44 +412,76 @@ save(T_boral_Fungi, mod_boral_Fungi,
 data(birds, package="jSDM")
 # data.obs
 PA_Birds <- birds[,1:158]
+# Remove species with less than 5 presences
+rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
+PA_Birds <- PA_Birds[, -rare_sp]
 # Normalized continuous variables
 Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]),
                               birds[,"nsurvey"]))
 colnames(Env_Birds) <- c("elev","rlength","forest","nsurvey")
+# Compute design matrix
 mf.suit <- model.frame(formula=~elev+rlength+forest-1, data=Env_Birds)
 X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
-
+# Number of latent variables 
+num.lv <- 2
 # Fit the model 
+library(jagsUI)
 T1 <- Sys.time()
 # Number of trials by site impossible to specify, trial.size either equal to a single element, or a vector of length equal to the number of columns in y
-mod_boral_Birds <- boral(y=PA_Birds, X=X_Birds,
-                         lv.control=list(num.lv=2), family="binomial",
-                         trial.size=max(Env_Birds$nsurvey),
-                         row.eff="random", hypparams=c(100,10,100,30),
-                         mcmc.control=list(n.burnin=10000, n.iteration=15000,
-                                           n.thin=5,seed=123))
+# mod_boral_Birds <- boral(y=PA_Birds, X=X_Birds,
+#                          lv.control=list(num.lv=2), family="binomial",
+#                          trial.size=max(Env_Birds$nsurvey),
+#                          row.eff="random", hypparams=c(100,10,100,30),
+#                          mcmc.control=list(n.burnin=10000, n.iteration=15000,
+#                                            n.thin=5,seed=123))
+# JAGS model in vignettes/jagsboralmodel.txt modified to specify the number of trials by site
+# Data needed to fit the model 
+jags.data <- list(y=as.matrix(PA_Birds), n=nrow(PA_Birds), p=ncol(PA_Birds),
+                  X=as.matrix(X_Birds), visits=Env_Birds$nsurvey, num.lv = 2)
+# Starting values 
+gen.inits <- function() {  
+	alpha <- rep(0,nrow(PA_Birds))
+	Valpha <- 1
+	beta <- matrix(0, ncol(PA_Birds), ncol(X_Birds))
+	lambda <- matrix(0, ncol(PA_Birds),num.lv +1)
+	for (j in 1:ncol(PA_Birds)){
+	  for (k in 1:num.lv){
+	    lambda[k,k+1] <- 1
+	    if(j<k) {
+	      lambda[j,k+1] <- NA
+	    }
+	  }
+	}
+	W <- matrix(0, nrow(PA_Birds), num.lv)
+	list("X.coefs"=beta,"row.coefs"=alpha,"row.sigma"=Valpha,"lvs"=W, "lv.coefs" = lambda) 
+	}
+# Fit JAGS model 
+mod_boral_Birds <- jagsUI::jags(data = jags.data, inits <- gen.inits,
+                                parameters.to.save = c("X.coefs","row.coefs",
+                                                       "row.sigma","lvs", "lv.coefs"),
+                                model.file = "jagsboralmodel.txt",
+                                n.chains = 1, n.iter=15000, n.burnin = 10000, n.thin = 5)
 T2 <- Sys.time()
 T_boral_Birds <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Birds <- mod_boral_Birds$row.coefs[[1]]$mean
-+ as.matrix(X_Birds) %*% t(mod_boral_Birds$X.coefs.mean)
-+ mod_boral_Birds$lv.coefs.mean[,"beta0"]
-+ mod_boral_Birds$lv.mean%*%t(mod_boral_Birds$lv.coefs.mean[,-1])
+logit_theta_pred_Birds <- c(mod_boral_Birds$mean$row.coefs) +
+  as.matrix(X_Birds) %*% t(as.matrix(mod_boral_Birds$mean$X.coefs)) + 
+  matrix(1,nrow=nrow(PA_Birds), ncol=1)%*% mod_boral_Birds$mean$lv.coefs[,1] + 
+  mod_boral_Birds$mean$lvs%*%t(mod_boral_Birds$mean$lv.coefs[,-1])
 
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Birds)){
   for (j in 1:ncol(PA_Birds)){
-    theta <- min(pnorm(probit_theta_pred_Birds[i,j])
-                 ,0.9999999999999999)
-    logL= logL + dbinom(PA_Birds[i,j],3,theta,1)  
+    theta <- inv_logit(logit_theta_pred_Birds[i,j])
+    logL= logL + dbinom(PA_Birds[i,j],Env_Birds$nsurvey[i],theta,1)  
   }
 }
 Deviance_boral_Birds <- -2*logL
-
+# mod_boral_Birds$mean$deviance
 save(T_boral_Birds, mod_boral_Birds,
-     probit_theta_pred_Birds, Deviance_boral_Birds,
+     logit_theta_pred_Birds, Deviance_boral_Birds,
      file="jSDM_boral_cache/boral_Birds.RData")
 ```
 
@@ -451,6 +492,9 @@ save(T_boral_Birds, mod_boral_Birds,
 data(mites, package="jSDM")
 # data.obs
 PA_Mites <- mites[,1:35]
+# Remove species with less than 10 presences
+rare_sp <- which(apply(PA_Mites>0, 2, sum) < 10) 
+PA_Mites <- PA_Mites[, -rare_sp]
 # Normalized continuous variables
 Env_Mites  <- cbind(scale(mites[,c("density","water")]),
                     mites[,c("substrate", "shrubs", "topo")])
@@ -467,11 +511,10 @@ T2 <- Sys.time()
 T_boral_Mites <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-log_theta_pred_Mites <- mod_boral_Mites$row.coefs[[1]]$mean
-+ as.matrix(X_Mites[,-1]) %*% t(mod_boral_Mites$X.coefs.mean)
-+ mod_boral_Mites$lv.coefs.mean[,"beta0"]
-+ mod_boral_Mites$lv.mean%*%t(mod_boral_Mites$lv.coefs.mean[,-1])
-
+log_theta_pred_Mites <- as.matrix(X_Mites[,-1]) %*% t(mod_boral_Mites$X.coefs.mean) +
+  matrix(1,nrow=nrow(PA_Mites), ncol=1)%*%mod_boral_Mites$lv.coefs.mean[,"beta0"] + 
+  mod_boral_Mites$lv.mean%*%t(mod_boral_Mites$lv.coefs.mean[,-1]) +
+  c(mod_boral_Mites$row.coefs[[1]]$mean)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Mites)){
@@ -484,7 +527,7 @@ Deviance_boral_Mites <- -2*logL
 
 save(T_boral_Mites, mod_boral_Mites,
      log_theta_pred_Mites, Deviance_boral_Mites,
-     file="jSDM_boral_cache/boral_Mites.RData")
+     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mites.RData")
 ```
 
 
@@ -613,17 +656,17 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-simulation-plot2, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-4.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-5.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-6.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-7.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-8.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-9.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-simulation-plot-10.png")
+```{r jSDM-simulation-plot2, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-3.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-4.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-5.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-6.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-7.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-8.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-9.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-10.png")
 
 ```
 
@@ -841,21 +884,47 @@ load(file="jSDM_boral_cache/jSDM_Birds.RData")
 # Mites dataset
 load(file="jSDM_boral_cache/boral_Mites.RData")
 load(file="jSDM_boral_cache/jSDM_Mites.RData")
-Deviance_jSDM_sim<- mean(mod_jSDM_sim$mcmc.Deviance)
-Deviance_jSDM_Mosquitos <- mean(mod_jSDM_Mosquitos$mcmc.Deviance)
-Deviance_jSDM_Eucalypts <- mean(mod_jSDM_Eucalypts$mcmc.Deviance)
-Deviance_jSDM_Frogs <- mean(mod_jSDM_Frogs$mcmc.Deviance)
-Deviance_jSDM_Fungi <- mean(mod_jSDM_Fungi$mcmc.Deviance)
-Deviance_jSDM_Birds <- mean(mod_jSDM_Birds$mcmc.Deviance)
-Deviance_jSDM_Mites <- mean(mod_jSDM_Mites$mcmc.Deviance)
+logL=0
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    theta <- pnorm(mod_jSDM_sim$probit_theta_pred[i,j])
+    logL=logL + dbinom(Y[i,j],1,theta,1)  
+  }
+}
+Deviance_jSDM_sim<- -2*logL
+for( suffix in c("Mosquitos","Eucalypts","Frogs","Fungi")){
+logL=0
+for (i in 1:nrow(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv))){
+  for (j in 1:ncol(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv))){
+    theta <- pnorm(eval(parse(text=paste0("mod_jSDM_", suffix, "$probit_theta_pred[i,j]")), env=.GlobalEnv))
+    logL=logL + dbinom(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv)[i,j],1,theta,1)  
+  }
+}
+assign(paste0("Deviance_jSDM_", suffix), -2*logL)
+}
+logL=0
+for (i in 1:nrow(PA_Birds)){
+  for (j in 1:ncol(PA_Birds)){
+    logL=logL + dbinom(PA_Birds[i,j],birds$nsurvey[i],mod_jSDM_Birds$theta_latent[i,j],1)  
+  }
+}
+Deviance_jSDM_Birds<- -2*logL
+
+logL=0
+for (i in 1:nrow(PA_Mites)){
+  for (j in 1:ncol(PA_Mites)){
+    logL=logL + dpois(PA_Mites[i,j],mod_jSDM_Mites$theta_latent[i,j],1)  
+  }
+}
+Deviance_jSDM_Mites<- -2*logL
 save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, Deviance_boral_sim, T_jSDM_Mosquitos, Deviance_jSDM_Mosquitos ,T_jSDM_Eucalypts, Deviance_jSDM_Eucalypts, T_jSDM_Frogs, Deviance_jSDM_Frogs,T_jSDM_Fungi, Deviance_jSDM_Fungi, T_jSDM_Birds, Deviance_jSDM_Birds, T_jSDM_Mites, Deviance_jSDM_Mites, T_boral_Mosquitos, Deviance_boral_Mosquitos, T_boral_Eucalypts, Deviance_boral_Eucalypts, T_boral_Frogs, Deviance_boral_Frogs, T_boral_Fungi, Deviance_boral_Fungi, T_boral_Birds, Deviance_boral_Birds, T_boral_Mites, Deviance_boral_Mites,
-     file="jSDM_boral_figures/jSDM-boral-comparison.rda")
+     file="jSDM_boral_files/jSDM-boral-comparison.rda")
 ```
 
 ## Compilation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
-load("jSDM_boral_figures/jSDM-boral-comparison.rda")
+load("jSDM_boral_files/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_boral_sim, T_boral_Mosquitos, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi,
@@ -922,7 +991,7 @@ for (j in 1:nsp){
 }
 boral_beta <- cbind(mod_boral_sim$lv.coefs.mean[,"beta0"],mod_boral_sim$X.coefs.mean)
 
-plot(boral_beta,jSDM_beta, xlab="fitted by boral", ylab="fitted by jSDM", main="Species fixed effect beta")
+plot(boral_beta,jSDM_beta, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -951,10 +1020,10 @@ plot(probit_theta_pred_sim, mod_jSDM_sim$probit_theta_pred, xlab="fitted by bora
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-simulation-3.png")
+```{r jSDM-boral-simulation-plot, echo=FALSE, eval=T, out.width=800}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-3.png")
 ```
 
 ### Mosquitos dataset
@@ -993,7 +1062,7 @@ for (j in 1:nsp){
 }
 boral_lambda <- mod_boral_Mosquitos$lv.coefs.mean[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1010,10 +1079,10 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mosquitos-3.png")
+```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=T, out.width=800}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-3.png")
 ```
 
 ### Eucalypts dataset
@@ -1052,7 +1121,7 @@ for (j in 1:nsp){
 }
 boral_lambda <- mod_boral_Eucalypts$lv.coefs.mean[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1069,10 +1138,10 @@ plot(probit_theta_pred_Eucalypts, mod_jSDM_Eucalypts$probit_theta_pred, xlab="fi
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-Eucalypts-3.png")
+```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=T, out.width=800}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-3.png")
 ```
 
 ### Frogs dataset
@@ -1112,7 +1181,7 @@ for (j in 1:nsp){
 }
 boral_lambda <- mod_boral_Frogs$lv.coefs.mean[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1129,10 +1198,10 @@ plot(probit_theta_pred_Frogs, mod_jSDM_Frogs$probit_theta_pred, xlab="fitted by 
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-frogs-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-frogs-3.png")
+```{r jSDM-boral-frogs-plot, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-3.png")
 ```
 
 ### Fungi dataset
@@ -1172,7 +1241,7 @@ for (j in 1:nsp){
 }
 boral_lambda <- mod_boral_Fungi$lv.coefs.mean[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1189,20 +1258,20 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-fungi-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-fungi-3.png")
+```{r jSDM-boral-fungi-plot, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-3.png")
 ```
 
 ### Birds dataset
 
 ```{r jSDM-boral-birds, echo=FALSE}
-# Import center and reduce birds dataset
-data(birds, package="jSDM")
 # data.obs
 PA_Birds <- birds[,1:158]
-
+# Remove species with less than 5 presences
+rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
+PA_Birds <- PA_Birds[, -rare_sp]
 print(paste(nrow(PA_Birds),"sites and ",ncol(PA_Birds)," species"),quote = FALSE)
 nsp <- ncol(mod_jSDM_Birds$model_spec$presences)
 nsite <- nrow(mod_jSDM_Birds$model_spec$presences)
@@ -1210,9 +1279,9 @@ nl <- mod_jSDM_Birds$model_spec$n_latent
 np <- nrow(mod_jSDM_Birds$model_spec$beta_start)
 # Alpha et V_alpha
 par(mfrow=c(1,2))
-plot(mod_boral_Birds$row.coefs[[1]]$mean,apply(mod_jSDM_Birds$mcmc.alpha,2,mean), xlab="fitted by boral", ylab="fitted by jSDM", main="Random site effect alpha")
+plot(mod_boral_Birds$mean$row.coefs,apply(mod_jSDM_Birds$mcmc.alpha,2,mean), xlab="fitted by boral", ylab="fitted by jSDM", main="Random site effect alpha")
 abline(a=0,b=1,col='red')
-points(mod_boral_Birds$row.sigma$ID1["mean"],apply(mod_jSDM_Birds$mcmc.V_alpha,2,mean),
+points(mod_boral_Birds$mean$row.sigma,apply(mod_jSDM_Birds$mcmc.V_alpha,2,mean),
        pch=18, col ='red',cex=2.5)
 legend("bottomright", legend=c("V_alpha"), pch =18 , col ='red',pt.cex =2, cex=1.2)
 
@@ -1221,7 +1290,7 @@ jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
   jSDM_beta[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
 }
-boral_beta <- cbind(mod_boral_Birds$lv.coefs.mean[,"beta0"],mod_boral_Birds$X.coefs.mean)
+boral_beta <- cbind(mod_boral_Birds$mean$lv.coefs[,1],mod_boral_Birds$mean$X.coefs)
 
 plot(boral_beta,jSDM_beta, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
@@ -1231,9 +1300,9 @@ jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
   jSDM_lambda[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
 }
-boral_lambda <- mod_boral_Birds$lv.coefs.mean[,-1]
+boral_lambda <- mod_boral_Birds$mean$lv.coefs[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1241,29 +1310,27 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Birds$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
-plot(mod_boral_Birds$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
+plot(mod_boral_Birds$mean$lvs, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
 abline(a=0,b=1,col='red')
 # Predictions 
 par(mfrow=c(1,1))
-plot(logit(pnorm(probit_theta_pred_Birds)), logit(mod_jSDM_Birds$theta_latent), xlab="fitted by boral", ylab="fitted by jSDM", main="logit(theta)")
+plot(logit_theta_pred_Birds, logit(mod_jSDM_Birds$theta_latent), xlab="fitted by boral", ylab="fitted by jSDM", main="logit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-birds-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-birds-3.png")
+```{r jSDM-boral-birds-plot, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-3.png")
 ```
 
 ### Mites dataset
 
 ```{r jSDM-boral-mites, echo=FALSE}
-# Import center and reduce mites dataset
-data(mites, package="jSDM")
-# data.obs
-PA_Mites <- mites[,1:35]
-
+# Remove species with less than 10 presences
+rare_sp <- which(apply(PA_Mites>0, 2, sum) < 10) 
+PA_Mites <- PA_Mites[, -rare_sp]
 print(paste(nrow(PA_Mites),"sites and ",ncol(PA_Mites)," species"),quote = FALSE)
 nsp <- ncol(mod_jSDM_Mites$model_spec$presences)
 nsite <- nrow(mod_jSDM_Mites$model_spec$presences)
@@ -1294,7 +1361,7 @@ for (j in 1:nsp){
 }
 boral_lambda <- mod_boral_Mites$lv.coefs.mean[,-1]
 
-plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Fixed species effect lambda")
+plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1306,14 +1373,14 @@ plot(mod_boral_Mites$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by 
 abline(a=0,b=1,col='red')
 # Predictions 
 par(mfrow=c(1,1))
-plot(log_theta_pred_Mites, log(mod_jSDM_Mites$theta_latent), xlab="fitted by boral", ylab="fitted by jSDM", main="log(theta)")
+plot(log_theta_pred_Mites, apply(mod_jSDM_Mites$theta_latent,c(1,2),log), xlab="fitted by boral", ylab="fitted by jSDM", main="log(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mites-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-1.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-2.png")
-knitr::include_graphics("jSDM_boral_figures/jSDM-boral-mites-3.png")
+```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800, eval=T}
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-1.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-2.png")
+knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-3.png")
 ```
 
