@@ -502,25 +502,25 @@ n.mcmc
 
 <span class="co">## Fixed species effect beta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">beta.target</span>),
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">beta.target</span>),
      <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">mod_boral_sim</span>$<span class="no">lv.coefs.mean</span>[,<span class="fl">1</span>],<span class="no">mod_boral_sim</span>$<span class="no">X.coefs.mean</span>),
      <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Fixed species effect beta"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 <span class="co">## factor loadings lambda_j</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">lambda.target</span>),<span class="no">mod_boral_sim</span>$<span class="no">lv.coefs.mean</span>[,-<span class="fl">1</span>],
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">lambda.target</span>),<span class="no">mod_boral_sim</span>$<span class="no">lv.coefs.mean</span>[,-<span class="fl">1</span>],
      <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Loading factors lambda"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 <span class="co">## Latent variable W </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">nl</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">W</span>[,<span class="no">l</span>],<span class="no">mod_boral_sim</span>$<span class="no">lv.mean</span>[,<span class="no">l</span>],
+  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">W</span>[,<span class="no">l</span>],<span class="no">mod_boral_sim</span>$<span class="no">lv.mean</span>[,<span class="no">l</span>],
        <span class="kw">main</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>),
        <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>)
   <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 }
 <span class="co">## alpha </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">alpha.target</span>, <span class="no">mod_boral_sim</span>$<span class="no">row.coefs</span>$<span class="no">ID1</span>$<span class="no">mean</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">alpha.target</span>, <span class="no">mod_boral_sim</span>$<span class="no">row.coefs</span>$<span class="no">ID1</span>$<span class="no">mean</span>,
      <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="no">V_alpha.target</span>, <span class="no">mod_boral_sim</span>$<span class="no">row.sigma</span>$<span class="no">ID1</span>[<span class="st">"mean"</span>],
@@ -530,7 +530,7 @@ n.mcmc
 
 <span class="co">## Prediction</span>
 <span class="co"># probit_theta_pred </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">probit_theta</span>,<span class="no">probit_theta_pred_sim</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">probit_theta</span>,<span class="no">probit_theta_pred_sim</span>,
      <span class="kw">main</span><span class="kw">=</span><span class="st">"probit(theta)"</span>, <span class="kw">xlab</span> <span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)</pre></body></html></div>
 <p><img src="jSDM_boral_files/figure-html/boral-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-4.png" width="800" style="display: block; margin: auto;"></p>
@@ -873,7 +873,7 @@ n.mcmc
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">X</span>),<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">j</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">nsp</span>) {
   <span class="kw">for</span> (<span class="no">p</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">X</span>)) {
-    <span class="no">mean_beta</span>[<span class="no">j</span>,<span class="no">p</span>] <span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][<span class="no">j</span>,<span class="no">p</span>])
+    <span class="no">mean_beta</span>[<span class="no">j</span>,<span class="no">p</span>] <span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][,<span class="no">p</span>])
     <span class="kw">if</span> (<span class="no">j</span> <span class="kw">&lt;</span> <span class="fl">3</span>){
       <span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][,<span class="no">p</span>]))
       <span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][,<span class="no">p</span>]),
@@ -889,7 +889,7 @@ n.mcmc
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">nl</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">j</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">nsp</span>) {
   <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">nl</span>) {
-    <span class="no">mean_lambda</span>[<span class="no">j</span>,<span class="no">l</span>] <span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][<span class="no">j</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">X</span>)+<span class="no">l</span>])
+    <span class="no">mean_lambda</span>[<span class="no">j</span>,<span class="no">l</span>] <span class="kw">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">X</span>)+<span class="no">l</span>])
 
     <span class="kw">if</span> (<span class="no">j</span> <span class="kw">&lt;</span> <span class="fl">3</span>){
       <span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw pkg">coda</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.sp</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="no">j</span>)]][,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">X</span>)+<span class="no">l</span>]))
@@ -901,17 +901,17 @@ n.mcmc
   }
 }
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">beta.target</span>),<span class="no">mean_beta</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">beta.target</span>),<span class="no">mean_beta</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>,
      <span class="kw">main</span><span class="kw">=</span><span class="st">"Fixed species effect beta"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">lambda.target</span>),<span class="no">mean_lambda</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">lambda.target</span>),<span class="no">mean_lambda</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>,
      <span class="kw">main</span><span class="kw">=</span><span class="st">"Loading factors lambda"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 
 <span class="co">## W latent variables</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">l</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">nl</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">W</span>[,<span class="no">l</span>],<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]],<span class="fl">2</span>,<span class="no">mean</span>),
+  <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">W</span>[,<span class="no">l</span>],<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.latent</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="no">l</span>)]],<span class="fl">2</span>,<span class="no">mean</span>),
        <span class="kw">main</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="no">l</span>), <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>)
   <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 }
@@ -924,22 +924,25 @@ n.mcmc
 
 <span class="co">## alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">alpha.target</span>,<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.alpha</span>,<span class="fl">2</span>,<span class="no">mean</span>),
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">alpha.target</span>,<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.alpha</span>,<span class="fl">2</span>,<span class="no">mean</span>),
      <span class="kw">xlab</span><span class="kw">=</span> <span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Random site effect alpha"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 
+<span class="no">SE</span><span class="kw">=</span>(<span class="no">probit_theta</span>-<span class="no">mod_jSDM_sim</span>$<span class="no">probit_theta_pred</span>)^<span class="fl">2</span>
+<span class="no">RMSE_jSDM_sim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">SE</span>/(<span class="no">nsite</span>*<span class="no">nsp</span>)))
+
 
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.Deviance</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Deviance"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mod_jSDM_sim</span>$<span class="no">mcmc.Deviance</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"Deviance"</span>)
 
 <span class="co">#= Predictions</span>
 <span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">probit_theta</span>,<span class="no">mod_jSDM_sim</span>$<span class="no">probit_theta_pred</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">probit_theta</span>,<span class="no">mod_jSDM_sim</span>$<span class="no">probit_theta_pred</span>,
      <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>,<span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"probit(theta)"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)
 <span class="co">## Z</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">Z_true</span>,<span class="no">mod_jSDM_sim</span>$<span class="no">Z_latent</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">Z_true</span>,<span class="no">mod_jSDM_sim</span>$<span class="no">Z_latent</span>,
      <span class="kw">xlab</span><span class="kw">=</span><span class="st">"obs"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"fitted"</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"latent variable Z"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">a</span><span class="kw">=</span><span class="fl">0</span>,<span class="kw">b</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>)</pre></body></html></div>
 <p><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-7.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-8.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-9.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-10.png" width="800" style="display: block; margin: auto;"></p>
@@ -1314,10 +1317,10 @@ jSDM
 RMSE
 </td>
 <td style="text-align:right;">
-0.6
+0.55
 </td>
 <td style="text-align:right;">
-0.6
+0.57
 </td>
 </tr></tbody>
 </table>
