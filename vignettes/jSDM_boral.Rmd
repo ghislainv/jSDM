@@ -584,7 +584,7 @@ mean_beta <- matrix(0,nsp,np)
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
   for (p in 1:ncol(X)) {
-    mean_beta[j,p] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][j,p])
+    mean_beta[j,p] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p])
     if (j < 3){
       coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]))
       coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]), 
@@ -600,7 +600,7 @@ mean_lambda <- matrix(0,nsp,nl)
 par(mfrow=c(nl,2))
 for (j in 1:nsp) {
   for (l in 1:nl) {
-    mean_lambda[j,l] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][j,ncol(X)+l])
+    mean_lambda[j,l] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
     
     if (j < 3){
       coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
@@ -638,6 +638,9 @@ par(mfrow=c(1,1))
 plot(alpha.target,apply(mod_jSDM_sim$mcmc.alpha,2,mean),
      xlab= "obs", ylab="fitted", main="Random site effect alpha")
 abline(a=0,b=1,col='red')
+
+SE=(probit_theta-mod_jSDM_sim$probit_theta_pred)^2
+RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
 
 
 ## Deviance
@@ -961,7 +964,7 @@ result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("boral","jSDM")
 result$boral <- RMSE_boral_sim
 result$jSDM <- RMSE_jSDM_sim
-kable(result, digits =1) %>%
+kable(result, digits=2) %>%
   kable_styling(bootstrap_options = "striped", 
                 latex_options= c("HOLD_position","striped"),
                 full_width = FALSE)
@@ -1378,7 +1381,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800, eval=T}
+```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800,eval=T}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-3.png")

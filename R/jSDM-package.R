@@ -24,7 +24,7 @@
 #' \itemize{
 #'   
 #' \item{ \code{\link{jSDM_binomial_probit_block}} : \cr
-#' 
+#' \cr
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
 #' where \tabular{ll}{
@@ -37,7 +37,7 @@
 #' }}
 #' 
 #'\item{ \code{\link{jSDM_binomial_logit}} : \cr
-#'
+#' \cr
 #' \bold{Ecological process : }
 #' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
 #' where \tabular{ll}{
@@ -50,7 +50,7 @@
 #' }}
 #' 
 #' \item{ \code{\link{jSDM_poisson_log}} : \cr
-#' 
+#' \cr
 #' \bold{Ecological process : }
 #' \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij Poisson(\theta_ij),}
 #' where \tabular{ll}{
