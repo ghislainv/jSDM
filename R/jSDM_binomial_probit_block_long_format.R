@@ -5,17 +5,22 @@
 ## license         :GPLv3
 ## ==============================================================================
 
-#' @name jSDM_binomial_probit_block
-#' @aliases jSDM_binomial_probit_block
-#' @title Binomial probit regression 
-#' @description The \code{jSDM_binomial_probit_block} function performs a Binomial probit regression in a Bayesian framework. 
+#' @name jSDM_binomial_probit_block_long_format
+#' @aliases jSDM_binomial_probit_block_long_format
+#' @title Binomial probit regression on long format data 
+#' @description The \code{jSDM_binomial_probit_block_long_format} function performs a Binomial probit regression in a Bayesian framework. 
 #' The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
-#' @param presence_site_sp A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the presence by a 1 (or the absence by a 0) of each species on each site.
+#' @param data A \code{data.frame} with at least the following columns :  
+#' \tabular{ll}{
+#' \code{Y} \tab \eqn{n_{obs}}{n_obs}-length vector indicating the presence by a 1 (or absence by a 0) of the species observed during each visit of the sites. \cr
+#' \code{site} \tab numerc or character \eqn{n_{obs}}{n_obs}-length vector indicating the visited site (sites can be visited several times). \cr
+#' \code{species} \tab numerc or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed (species may not have been recorded at all sites) \cr 
+#' \code{X1,...,Xp} \tab columns of explicative variables for the suitability process of the model \cr
+#' }
 #' @param site_suitability A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.
-#' @param site_data A data frame containing the model's explicative variables by site.
 #' @param n_latent An integer which specifies the number of latent variables to generate. Defaults to \code{0}.
 #' @param site_effect A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 #'  If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
@@ -59,7 +64,7 @@
 #' @details We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 #'
 #' \bold{Ecological process:}
-#' \deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+#' \deqn{y_{n} \sim \mathcal{B}ernoulli(\theta_{n})}{y_n ~ Bernoulli(\theta_n)}
 #' where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
@@ -74,10 +79,10 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr> \cr
 #' Jeanne Clément <jeanne.clement16@laposte.net> \cr }
-#' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
+#' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
 #' @examples
 #' #==============================================
-#' # jSDM_binomial_probit_block()
+#' # jSDM_binomial_probit_block_long_format()
 #' # Example with simulated data
 #' #==============================================
 #' 
@@ -89,14 +94,14 @@
 #' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 150
+#' nsite <- 100
 #' 
 #' #= Set seed for repeatability
 #' seed <- 1234
 #' set.seed(seed)
 #' 
-#' #= Number of species
-#' nsp<- 20
+#' #' #= Number of species
+#' nsp <- 30
 #' 
 #' #= Number of latent variables
 #' n_latent <- 2
@@ -105,43 +110,51 @@
 #' x1 <- rnorm(nsite,0,1)
 #' x2 <- rnorm(nsite,0,1)
 #' X <- cbind(rep(1,nsite),x1,x2)
+#' colnames(X) <- c("Int","x1","x2")
+#' np <- ncol(X)
 #' W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-#' data <- cbind (X,W)
-#' beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
-#'                         byrow=TRUE, nrow=nsp))
+#' beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 #' l.zero <- 0
 #' l.diag <- runif(2,0,2)
-#' l.other <- runif(nsp*n_latent-3,-2,2)
-#' lambda.target <- t(matrix(c(l.diag[1],l.zero,
-#'                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
+#' l.other <- runif(nsp*2-3,-2,2)
+#'lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]),
+#'                          byrow=TRUE, nrow=nsp))
 #' param.target <- rbind(beta.target,lambda.target)
 #' V_alpha.target <- 0.5
-#' V <- 1
 #' alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-#' probit_theta<-X%*%beta.target + W%*%lambda.target + alpha.target
-#' e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+#' probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
+#' # Supplementary observation (each site have been visited twice)
+#' # Environmental variables at the time of the second visit
+#' X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
+#' probit_theta_supObs <- X_supObs%*%beta.target + W%*%lambda.target + alpha.target
+#' probit_theta <- c(probit_theta, probit_theta_supObs)
+#' nobs <- length(probit_theta)
+#' e <- rnorm(nobs,0,1)
 #' Z_true <- probit_theta + e
-#' Y <- matrix (NA, nsite,nsp)
-#' for (i in 1:nsite){
-#'   for (j in 1:nsp){
-#'     if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
-#'     else {Y[i,j] <- 0}
-#'   }
+#' Y<-rep(0,nobs)
+#' for (n in 1:nobs){
+#'   if ( Z_true[n] > 0) {Y[n] <- 1}
 #' }
+#' Id_site <- rep(1:nsite,nsp)
+#' Id_sp <- rep(1:nsp,each=nsite)
+#' data <- data.frame(site=rep(Id_site,2), species=rep(Id_sp,2), Y=Y,
+#'                    x1=c(rep(x1,nsp),rep(X_supObs[,2],nsp)),
+#'                    x2=c(rep(x2,nsp),rep(X_supObs[,3],nsp)))
+#' # missing observation
+#' data <- data[-1,]
 #' 
 #' #==================================
 #' #== Site-occupancy model
 #' 
 #' # Increase number of iterations (burnin and mcmc) to get convergence
-#' mod<-jSDM_binomial_probit_block(# Iteration
+#' mod<-jSDM_binomial_probit_block_long_format( # Iteration
 #'   burnin=200,
 #'   mcmc=200,
 #'   thin=1,
 #'   # Response variable
-#'   presence_site_sp=Y,
+#'   data=data,
 #'   # Explanatory variables
 #'   site_suitability=~x1+x2,
-#'   site_data = X,
 #'   n_latent=2,
 #'   site_effect="random",
 #'   # Starting values
@@ -155,12 +168,6 @@
 #'   mu_beta=0, V_beta=1.0E6,
 #'   mu_lambda=0, V_lambda=10,
 #'   seed=1234, verbose=1)
-#' # ===================================================
-#' # Result analysis
-#' # ===================================================
-#' 
-#' #==========
-#' #== Outputs
 #' 
 #' #= Parameter estimates
 #' 
@@ -171,7 +178,7 @@
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
 #'   mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
-#'                          [,1:ncol(X)], 2, mean)  
+#'                          [,1:ncol(X)], 2, mean)
 #'   for (p in 1:ncol(X)){
 #'     coda::traceplot(coda::as.mcmc(
 #'       mod$mcmc.sp[[paste0("sp_",j)]][,p]))
@@ -193,7 +200,7 @@
 #' par(mfrow=c(n_latent*2,2))
 #' for (j in 1:nsp) {
 #'   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
-#'                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)  
+#'                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
 #'   for (l in 1:n_latent) {
 #'     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
 #'                                   [,ncol(X)+l]))
@@ -205,7 +212,7 @@
 #'   }
 #' }
 #' dev.off()
-#'
+#' 
 #' # Species effects beta and factor loadings lambda
 #' par(mfrow=c(1,2))
 #' plot(t(beta.target), mean_beta,
@@ -234,12 +241,12 @@
 #'      xlab ="obs", ylab ="fitted", main="site effect alpha")
 #' abline(a=0,b=1,col='red')
 #' ## Valpha
-#' coda::traceplot(mod$mcmc.V_alpha)
-#' coda::densplot(mod$mcmc.V_alpha)
+#' coda::traceplot(mod$mcmc.V_alpha, main="Trace V_alpha")
+#' coda::densplot(mod$mcmc.V_alpha,main="Density V_alpha")
 #' abline(v=V_alpha.target,col='red')
 #' 
 #' ## Deviance
-#' summary(mod$mcmc.Deviance)
+#' #summary(mod$mcmc.Deviance)
 #' plot(mod$mcmc.Deviance)
 #' 
 #' #= Predictions
@@ -247,28 +254,30 @@
 #' ## probit_theta
 #' # summary(mod$probit_theta_pred)
 #' par(mfrow=c(1,2))
-#' plot(probit_theta,mod$probit_theta_pred,
+#' plot(probit_theta[-1],mod$probit_theta_pred,
 #'      main="probit(theta)",xlab="obs",ylab="fitted")
 #' abline(a=0,b=1,col='red')
 #' 
 #' ## Z
 #' # summary(mod$Z_latent)
-#' plot(Z_true,mod$Z_latent,
+#' plot(Z_true[-1],mod$Z_latent,
 #'      main="Z_latent", xlab="obs", ylab="fitted")
 #' abline(a=0,b=1,col='red')
+#' 
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
 
-jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
-                                       presence_site_sp, site_suitability,
-                                       site_data, n_latent=0,
-                                       site_effect="none",
-                                       lambda_start=0, W_start=0,
-                                       beta_start=0, alpha_start=0,
-                                       V_alpha=1, shape=0.5, rate=0.0005,
-                                       mu_beta=0, V_beta=1.0E6,
-                                       mu_lambda=0, V_lambda=10,
-                                       seed=1234, verbose=1)
+jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_latent=0,
+                                                   site_effect="none",
+                                                   burnin=5000, mcmc=10000, thin=10,
+                                                   alpha_start=0, beta_start=0,
+                                                   lambda_start=0, W_start=0,
+                                                   V_alpha=1,
+                                                   shape=0.5, rate=0.0005,
+                                                   mu_beta=0, V_beta=1.0E6,
+                                                   mu_lambda=0, V_lambda=10,
+                                                   seed=1234, verbose=1)
+  
 {   
   #========
   # Basic checks
@@ -276,20 +285,63 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   check.mcmc.parameters(burnin, mcmc, thin)
   check.verbose(verbose)
   
+  #===================
+  # Defining constants
+  #===================
+  nsp <- length(unique(data$species))
+  nsite <- length(unique(data$site))
+  nobs <- nrow(data)
+  
   #======== 
   # Form response, covariate matrices and model parameters
   #========
-  
   #= Response
-  Y <- as.matrix(presence_site_sp)
-  nsp <- ncol(Y)
-  nsite <- nrow(Y)
-  nobs <- nsite*nsp
-  T <- matrix(1, nsite, nsp)
+  Y <- data$Y
+  Id_sp <- rep(0,nrow(data))
+  if(is.numeric(data$species)){
+    if(min(data$species)==1 && max(data$species)==nsp){
+      Id_sp <- data$species - 1
+    }
+    else if(min(data$species)==0 && max(data$species)==(nsp-1)){
+      Id_sp <- data$species
+    }
+  }else{
+    data$species <- as.character(data$species)
+    for (j in 1:length(unique(data$species))) {
+      Id_sp[grepl(unique(data$species)[j],data$species)] <- j
+    }
+  }
+  Id_site <- rep(0,nrow(data))
+  if(is.numeric(data$site)) {
+    if(min(data$site)==1 && max(data$site)==nsite){
+      Id_site <- data$site - 1
+    }
+    if(min(data$site)==0 && max(data$site)==(nsite-1)){
+      Id_site <- data$site
+    }
+  }else{
+    data$site <- as.character(data$site)
+    for (i in 1:length(unique(data$site))) {
+      Id_site[grepl(unique(data$site)[i],data$site)] <- i
+    }
+  }
+  
   #= Suitability
-  mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))
+  if(site_suitability==~.) site_suitability <- ~. - site - species - Y 
+  mf.suit <- model.frame(formula=site_suitability, data=data)
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
+  
+  if(nrow(unique(X))==nsite){
+    n_visit <- rep(1,nobs)
+  } else {
+    n_visit <- rep(0,nobs)
+    for (n in 1:nobs){
+      Id_obs <- which(Id_sp[n]==Id_sp & Id_site[n]==Id_site)
+      n_visit[Id_obs] <- 1:length(Id_obs)
+    }
+  }
+  data$n_visit <- n_visit 
   
   #= Iterations
   ngibbs <- mcmc+burnin
@@ -297,12 +349,12 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   nburn <- burnin
   nsamp <- mcmc/thin
   
-  #============ 
+  #========== 
   # Check data
-  #============
-  check.T.binomial(c(T), nobs)
-  check.Y.binomial(c(Y), c(T))
-  check.X(X, nsite)
+  #==========
+  check.T.binomial(n_visit, nobs)
+  check.Y.binomial(Y, n_visit)
+  check.X(X, nobs)
   
   if(n_latent==0 && site_effect=="none"){
     #========
@@ -319,11 +371,11 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                           Y=Y, X=X,
-                                           beta_start=beta_start,
-                                           V_beta=Vbeta, mu_beta = mubeta,
-                                           seed=seed, verbose=verbose)
+    mod <- Rcpp_jSDM_binomial_probit_block_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                       Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                       beta_start=beta_start,
+                                                       V_beta=Vbeta, mu_beta = mubeta,
+                                                       seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -336,15 +388,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
-                       presences=Y, n_latent=n_latent, 
+                       data=data, n_latent=n_latent, 
                        site_suitability=site_suitability,
-                       site_data=site_data, 
                        beta_start=beta_start, 
                        mu_beta=mubeta, V_beta=Vbeta,
                        site_effect=site_effect,
@@ -388,11 +435,11 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                              Y=Y, X=X,
-                                              param_start= param_start, V_param=Vparam, mu_param = muparam,
-                                              W_start=W_start, V_W=V_W,
-                                              seed=seed, verbose=verbose)
+    mod <- Rcpp_jSDM_binomial_probit_block_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                          Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                          param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                                          W_start=W_start, V_W=V_W,
+                                                          seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -415,14 +462,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    
     #= Model specification, site_suitability,
-    model_spec <- list(presences=Y,
+    model_spec <- list(data=data,
                        site_suitability=site_suitability,
-                       site_data=site_data, n_latent=n_latent,
+                       n_latent=n_latent,
                        site_effect=site_effect,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
@@ -463,11 +506,11 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=Y, X=X,
-                                                     beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
-                                                     alpha_start=alpha_start, V_alpha=V_alpha,
-                                                     seed=seed, verbose=verbose)
+    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                                  Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                  beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
+                                                                  alpha_start=alpha_start, V_alpha=V_alpha,
+                                                                  seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -482,14 +525,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    
     #= Model specification, site_suitability,
-    model_spec <- list(presences=Y,
+    model_spec <- list(data=data,
                        site_suitability=site_suitability,
-                       site_data=site_data, n_latent=n_latent,
+                       n_latent=n_latent,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, alpha_start=alpha_start,
                        V_alpha=V_alpha, site_effect=site_effect,
@@ -529,12 +568,12 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=Y, X=X,
-                                                     beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
-                                                     alpha_start=alpha_start, V_alpha_start=V_alpha,
-                                                     shape = shape, rate = rate,
-                                                     seed=seed, verbose=verbose)
+    mod <- Rcpp_jSDM_binomial_probit_block_rand_site_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                                 Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                 beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
+                                                                 alpha_start=alpha_start, V_alpha_start=V_alpha,
+                                                                 shape = shape, rate = rate,
+                                                                 seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -550,15 +589,12 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
+
     
     #= Model specification, site_suitability,
-    model_spec <- list(presences=Y,
+    model_spec <- list(data=data,
                        site_suitability=site_suitability,
-                       site_data=site_data, n_latent=n_latent,
+                       n_latent=n_latent,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, alpha_start=alpha_start,
                        V_alpha_start=V_alpha, shape=shape, rate=rate,
@@ -575,90 +611,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
                    model_spec=model_spec)
   }
   
-  if(n_latent>0 && site_effect=="fixed"){
-    
-    if (nsp==1) {
-      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
-      stop("Please respecify and call ", calling.function(), " again.",
-           call.=FALSE)
-    }
-    #========
-    # Initial starting values for M-H
-    #========
-    beta_start <- form.beta.start.sp(beta_start, np, nsp)
-    lambda_start <- form.lambda.start.sp(lambda_start, n_latent, nsp)
-    alpha_start <- form.alpha.start.sp(alpha_start, nsite)
-    W_start <-form.W.start.sp(W_start, nsite, n_latent)
-    param_start = rbind(beta_start,lambda_start)
-    
-    #========
-    # Form and check priors
-    #========
-    mubeta <- check.mubeta(mu_beta,np)
-    Vbeta <- check.Vbeta.mat(V_beta,np)
-    mulambda <- check.mulambda(mu_lambda,n_latent)
-    Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
-    Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
-    muparam <- c(mubeta,mulambda)
-    V_W <- diag(rep(1,n_latent))
-    V_alpha <- check.Valpha(V_alpha)
-    
-    #========
-    # call Rcpp function
-    #========
-    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                        Y=Y, X=X,
-                                                        param_start= param_start, V_param=Vparam, mu_param = muparam,
-                                                        W_start=W_start, V_W=V_W,
-                                                        alpha_start=alpha_start, V_alpha=V_alpha,
-                                                        seed=seed, verbose=verbose)
-    
-    #= Transform Sample list in an MCMC object
-    MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
-    colnames(MCMC.Deviance) <- "Deviance"
-    MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
-    MCMC.sp <- list()
-    for (j in 1:nsp) {
-      ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
-      colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-      ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
-      colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
-      
-      MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
-    }
-    ## W latent variables 
-    MCMC.latent <- list()
-    for (l in 1:n_latent) {
-      MCMC.lv_l <- coda::mcmc(mod$W[,,l], start=nburn+1, end=ngibbs, thin=nthin)
-      MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    #= Model specification, site_suitability,
-    model_spec <- list(presences=Y,
-                       site_suitability=site_suitability,
-                       site_data=site_data, n_latent=n_latent,
-                       burnin=burnin, mcmc=mcmc, thin=thin,
-                       beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
-                       lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
-                       alpha_start=alpha_start, V_alpha=V_alpha,
-                       site_effect=site_effect, W_start=W_start, V_W=V_W,
-                       family="binomial", link="probit",
-                       seed=seed, verbose=verbose)
-    
-    #= Output
-    output <- list(mcmc.Deviance=MCMC.Deviance,
-                   mcmc.alpha = MCMC.alpha, 
-                   mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
-                   Z_latent=mod$Z_latent, 
-                   probit_theta_pred=mod$probit_theta_pred,
-                   model_spec=model_spec)
-  }
   
   if(n_latent>0 && site_effect=="random"){
     
@@ -667,6 +619,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
     }
+    
     #========
     # Initial starting values for M-H
     #========
@@ -681,23 +634,25 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     #========
     mubeta <- check.mubeta(mu_beta,np)
     Vbeta <- check.Vbeta.mat(V_beta,np)
-    mulambda <- check.mulambda(mu_lambda,n_latent)
+    mulambda <- check.mubeta(mu_lambda,n_latent)
     Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
     Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
     muparam <- c(mubeta,mulambda)
     V_W <- diag(rep(1,n_latent))
-    V_alpha <- check.Valpha(V_alpha)
+    V_alpha_start <- check.Valpha(V_alpha)
     
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                        Y=Y, X=X,
-                                                        param_start= param_start, V_param=Vparam, mu_param = muparam,
-                                                        W_start=W_start, V_W=V_W,
-                                                        alpha_start=alpha_start, V_alpha_start=V_alpha,
-                                                        shape = shape, rate = rate,
-                                                        seed=seed, verbose=verbose)
+    mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                                    Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                    param_start= param_start,
+                                                                    V_param=Vparam, mu_param = muparam,
+                                                                    W_start=W_start, V_W=V_W,
+                                                                    alpha_start=alpha_start,
+                                                                    V_alpha_start=V_alpha_start,
+                                                                    shape = shape, rate = rate,
+                                                                    seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -724,24 +679,105 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
     #= Model specification, site_suitability,
-    model_spec <- list(presences=Y,
-                       site_suitability=site_suitability,
-                       site_data=site_data, n_latent=n_latent,
+    model_spec <- list(data=data,
+                       site_suitability=site_suitability, n_latent=n_latent,
                        burnin=burnin, mcmc=mcmc, thin=thin,
                        beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                        lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
-                       alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
-                       site_effect=site_effect, W_start=W_start, V_W=V_W,
+                       alpha_start=alpha_start, V_alpha_start=V_alpha_start, 
+                       shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
                        family="binomial", link="probit",
-                       seed=seed, verbose=verbose)
+                       seed=seed)
     
     #= Output
     output <- list(mcmc.Deviance=MCMC.Deviance,
                    mcmc.alpha = MCMC.alpha, mcmc.V_alpha = MCMC.V_alpha,
+                   mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
+                   Z_latent=mod$Z_latent, 
+                   probit_theta_pred=mod$probit_theta_pred,
+                   model_spec=model_spec)
+    
+  }
+  
+  if(n_latent>0 && site_effect=="fixed"){
+    
+    if (nsp==1) {
+      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n
+        site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+      stop("Please respecify and call ", calling.function(), " again.",
+           call.=FALSE)
+    }
+    
+    #========
+    # Initial starting values for M-H
+    #========
+    beta_start <- form.beta.start.sp(beta_start, np, nsp)
+    lambda_start <- form.lambda.start.sp(lambda_start, n_latent, nsp)
+    alpha_start <- form.alpha.start.sp(alpha_start, nsite)
+    W_start <-form.W.start.sp(W_start, nsite, n_latent)
+    param_start = rbind(beta_start,lambda_start)
+    
+    #========
+    # Form and check priors
+    #========
+    mubeta <- check.mubeta(mu_beta,np)
+    Vbeta <- check.Vbeta.mat(V_beta,np)
+    mulambda <- check.mulambda(mu_lambda,n_latent)
+    Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
+    Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
+    muparam <- c(mubeta,mulambda)
+    V_W <- diag(rep(1,n_latent))
+    V_alpha <- check.Valpha(V_alpha)
+    
+    
+    #========
+    # call Rcpp function
+    #========
+    mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+                                                                     Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                     param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                                                     W_start=W_start, V_W=V_W,
+                                                                     alpha_start=alpha_start, V_alpha=V_alpha,
+                                                                     seed=seed, verbose=verbose)
+    
+    #= Transform Sample list in an MCMC object
+    MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
+    colnames(MCMC.Deviance) <- "Deviance"
+    MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
+    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    MCMC.sp <- list()
+    for (j in 1:nsp) {
+      ## beta_j
+      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
+      ## lambda_j
+      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
+      
+      MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+    }
+    ## W latent variables 
+    MCMC.latent <- list()
+    for (l in 1:n_latent) {
+      MCMC.lv_l <- coda::mcmc(mod$W[,,l], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
+    }
+    
+    #= Model specification, site_suitability,
+    model_spec <- list(data=data,
+                       site_suitability=site_suitability, n_latent=n_latent,
+                       burnin=burnin, mcmc=mcmc, thin=thin,
+                       beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                       lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
+                       alpha_start=alpha_start, V_alpha=V_alpha, 
+                       shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
+                       family="binomial", link="probit",
+                       seed=seed)
+    
+    #= Output
+    output <- list(mcmc.Deviance=MCMC.Deviance,
+                   mcmc.alpha = MCMC.alpha,
                    mcmc.sp = MCMC.sp, mcmc.latent = MCMC.latent,
                    Z_latent=mod$Z_latent, 
                    probit_theta_pred=mod$probit_theta_pred,
@@ -751,7 +787,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   class(output) <- "jSDM"
   # return S3 object output belonging to class jSDM
   # acting like list
-  return(output)
+  return(output) 
 }
 
 # End

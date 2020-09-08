@@ -258,7 +258,7 @@
 #' 
 
 jSDM_binomial_logit <- function(# Iteration
-  burnin=5000, mcmc=10000, thin=5,
+  burnin=5000, mcmc=10000, thin=10,
   # Data and suitability process
   presence_site_sp, site_suitability,
   site_data, trials=NULL,

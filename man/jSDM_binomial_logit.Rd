@@ -7,7 +7,7 @@
 jSDM_binomial_logit(
   burnin = 5000,
   mcmc = 10000,
-  thin = 5,
+  thin = 10,
   presence_site_sp,
   site_suitability,
   site_data,

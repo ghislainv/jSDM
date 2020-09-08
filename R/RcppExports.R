@@ -33,20 +33,44 @@ Rcpp_jSDM_binomial_probit_block_fixed_site <- function(ngibbs, nthin, nburn, Y, 
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_fixed_site`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_block_fixed_site_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_fixed_site_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha, seed, verbose)
+}
+
 Rcpp_jSDM_binomial_probit_block_fixed_site_lv <- function(ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_fixed_site_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha, seed, verbose)
+}
+
+Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha, seed, verbose)
+}
+
+Rcpp_jSDM_binomial_probit_block_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, seed, verbose)
 }
 
 Rcpp_jSDM_binomial_probit_block_lv <- function(ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_block_lv_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_lv_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, seed, verbose)
+}
+
 Rcpp_jSDM_binomial_probit_block_rand_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_block_rand_site_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape, rate, seed, verbose)
+}
+
 Rcpp_jSDM_binomial_probit_block_rand_site_lv <- function(ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv`, ngibbs, nthin, nburn, Y, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose)
+}
+
+Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format <- function(ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose)
 }
 
 Rcpp_jSDM_poisson_log <- function(ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose) {
