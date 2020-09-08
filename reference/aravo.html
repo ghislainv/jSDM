@@ -166,7 +166,7 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>aravo is a list containing the following objects :</p><dl'>
+    <p>aravo is a list containing the following objects :</p><dl>
     <dt><code>spe</code></dt><dd><p>is a data.frame with the abundance values of 82 species (columns) in 75 sites (rows).</p></dd>
     <dt><code>env</code></dt><dd><p>is a data.frame with the measurements of 6 environmental variables for the sites.</p></dd>
     <dt><code>traits</code></dt><dd><p>is data.frame with the measurements of 8 traits for the species.</p></dd>
@@ -176,7 +176,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p></p><dl'>
+    <p></p><dl>
 The environmental variables are : 
  ll
  <code>Aspect</code>  Relative south aspect (opposite of the sine of aspect with flat coded 0) <br />
@@ -204,8 +204,9 @@ The species traits for the plants are:
 <p>Dray S, Dufour A (2007). The ade4 Package: Implementing the Duality Diagram for Ecologists. <em>Journal of Statistical Software</em>, 22(4), 1–20. doi: <a href='10.18637/jss.v022.i04'>10.18637/jss.v022.i04</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>aravo</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>aravo</span>)</div><div class='output co'>#&gt;           Length Class      Mode     
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>aravo</span>, package=<span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>aravo</span>)
+</div><div class='output co'>#&gt;           Length Class      Mode     
 #&gt; spe       82     data.frame list     
 #&gt; env        6     data.frame list     
 #&gt; traits     8     data.frame list     
@@ -225,7 +226,7 @@ The species traits for the plants are:
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

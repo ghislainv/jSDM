@@ -364,8 +364,9 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>birds</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>birds</span>)</div><div class='output co'>#&gt;   Tachybaptus ruficollis Podiceps cristatus Ardea cinerea Ixobrychus minutus
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>birds</span>, package=<span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>birds</span>)
+</div><div class='output co'>#&gt;   Tachybaptus ruficollis Podiceps cristatus Ardea cinerea Ixobrychus minutus
 #&gt; 1                      0                  0             0                  0
 #&gt; 2                      0                  0             0                  0
 #&gt; 3                      0                  0             0                  0
@@ -645,7 +646,8 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 #&gt; 4                    0   Q004 934942  95276  950     4.5       3      9   293
 #&gt; 5                    0   Q005 934942 111276 1150     5.4       3     35    77
 #&gt; 6                    0   Q006 946942  95276  550     3.6       3      2   361</div><div class='input'><span class='co'># find species not recorded in 2014</span>
-<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>birds</span>[,<span class='fl'>1</span>:<span class='fl'>158</span>])<span class='kw'>==</span><span class='fl'>0</span>)</div><div class='output co'>#&gt;        Ixobrychus minutus         Charadrius dubius                 Tyto alba 
+<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='kw'>birds</span>[,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>158</span>])<span class='op'>==</span><span class='fl'>0</span>)
+</div><div class='output co'>#&gt;        Ixobrychus minutus         Charadrius dubius                 Tyto alba 
 #&gt;                         4                        31                        41 
 #&gt;                 Bubo bubo             Athene noctua               Upupa epops 
 #&gt;                        43                        45                        52 
@@ -670,7 +672,7 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

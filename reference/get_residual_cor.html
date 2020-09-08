@@ -161,7 +161,7 @@
     <p>This function use coefficients \((\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using <code>jSDM</code> package, to calculate the variance-covariance matrix which controls correlation between species.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_residual_cor</span>(<span class='no'>mod</span>)</pre>
+    <pre class="usage"><span class='fu'>get_residual_cor</span>(<span class='kw'>mod</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,42 +194,53 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 
     <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p>
 <p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code>  <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    
+<table class='table'>
+<tr><td>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</td></tr>
+<tr><td>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</td></tr>
+<tr><td></td></tr>
+</table>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>jSDM</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://ecology.ghislainv.fr/jSDM'>jSDM</a></span>)
 <span class='co'># frogs data</span>
- <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
+ <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>frogs</span>, package=<span class='st'>"jSDM"</span>)
  <span class='co'># Arranging data</span>
- <span class='no'>PA_frogs</span> <span class='kw'>&lt;-</span> <span class='no'>frogs</span>[,<span class='fl'>4</span>:<span class='fl'>12</span>]
+ <span class='kw'>PA_frogs</span> <span class='op'>&lt;-</span> <span class='kw'>frogs</span>[,<span class='fl'>4</span><span class='op'>:</span><span class='fl'>12</span>]
  <span class='co'># Normalized continuous variables</span>
- <span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>]),<span class='no'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>frogs</span>[,<span class='fl'>3</span>]))
- <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Env_frogs</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>frogs</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>])
- <span class='no'>Env_frogs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Env_frogs</span>)
+ <span class='kw'>Env_frogs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='kw'>frogs</span>[,<span class='fl'>1</span>]),<span class='kw'>frogs</span>[,<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='kw'>frogs</span>[,<span class='fl'>3</span>]))
+ <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>Env_frogs</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>frogs</span>[,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>])
+ <span class='kw'>Env_frogs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>Env_frogs</span>)
  <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></span>(<span class='co'># Response variable</span>
-                                  <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>PA_frogs</span>,
+<span class='kw'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></span>(<span class='co'># Response variable</span>
+                                  presence_site_sp=<span class='kw'>PA_frogs</span>,
                                   <span class='co'># Explanatory variables</span>
-                                  <span class='kw'>site_suitability</span> <span class='kw'>=</span> ~<span class='no'>.</span>,
-                                  <span class='kw'>site_data</span> <span class='kw'>=</span> <span class='no'>Env_frogs</span>,
-                                  <span class='kw'>n_latent</span><span class='kw'>=</span><span class='fl'>2</span>,
-                                  <span class='kw'>site_effect</span><span class='kw'>=</span><span class='st'>"random"</span>,
+                                  site_suitability = <span class='op'>~</span><span class='kw'>.</span>,
+                                  site_data = <span class='kw'>Env_frogs</span>,
+                                  n_latent=<span class='fl'>2</span>,
+                                  site_effect=<span class='st'>"random"</span>,
                                   <span class='co'># Chains</span>
-                                  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>100</span>,
-                                  <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>100</span>,
-                                  <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                  burnin=<span class='fl'>100</span>,
+                                  mcmc=<span class='fl'>100</span>,
+                                  thin=<span class='fl'>1</span>,
                                   <span class='co'># Starting values</span>
-                                  <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-                                  <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-                                  <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-                                  <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-                                  <span class='kw'>V_alpha</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                  alpha_start=<span class='fl'>0</span>,
+                                  beta_start=<span class='fl'>0</span>,
+                                  lambda_start=<span class='fl'>0</span>,
+                                  W_start=<span class='fl'>0</span>,
+                                  V_alpha=<span class='fl'>1</span>,
                                   <span class='co'># Priors</span>
-                                  <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>, <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
-                                  <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
-                                  <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
+                                  shape=<span class='fl'>0.5</span>, rate=<span class='fl'>0.0005</span>,
+                                  mu_beta=<span class='fl'>0</span>, V_beta=<span class='fl'>1.0E6</span>,
+                                  mu_lambda=<span class='fl'>0</span>, V_lambda=<span class='fl'>10</span>,
                                   <span class='co'># Various</span>
-                                  <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+                                  seed=<span class='fl'>1234</span>, verbose=<span class='fl'>1</span>)
+</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
 #&gt; **********:10.0% 
@@ -242,8 +253,9 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 #&gt; **********:80.0% 
 #&gt; **********:90.0% 
 #&gt; **********:100.0% </div><div class='input'><span class='co'># Calcul of residual correlation between species </span>
- <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>get_residual_cor</span>(<span class='no'>mod</span>)
- <span class='no'>result</span>$<span class='no'>cov.mean</span></div><div class='output co'>#&gt;             [,1]       [,2]       [,3]       [,4]       [,5]      [,6]
+ <span class='kw'>result</span> <span class='op'>&lt;-</span> <span class='fu'>get_residual_cor</span>(<span class='kw'>mod</span>)
+ <span class='kw'>result</span><span class='op'>$</span><span class='kw'>cov.mean</span>
+</div><div class='output co'>#&gt;             [,1]       [,2]       [,3]       [,4]       [,5]      [,6]
 #&gt;  [1,]  2.3079891  0.7471740  1.6803794 -0.4037165  1.1899267  3.275969
 #&gt;  [2,]  0.7471740  1.8296132 -0.0652573 -0.5490315  0.8148569  2.327582
 #&gt;  [3,]  1.6803794 -0.0652573 16.8915634  1.5741158  1.0809211  3.282450
@@ -262,7 +274,8 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 #&gt;  [6,]  3.9449701 -2.3345522  5.4792103
 #&gt;  [7,]  3.1294777 -0.5921022  2.8210637
 #&gt;  [8,] -0.5921022  2.4809059 -0.4384975
-#&gt;  [9,]  2.8210637 -0.4384975  5.7418445</div><div class='input'> <span class='no'>result</span>$<span class='no'>cor.mean</span></div><div class='output co'>#&gt;             [,1]        [,2]        [,3]        [,4]       [,5]       [,6]
+#&gt;  [9,]  2.8210637 -0.4384975  5.7418445</div><div class='input'> <span class='kw'>result</span><span class='op'>$</span><span class='kw'>cor.mean</span>
+</div><div class='output co'>#&gt;             [,1]        [,2]        [,3]        [,4]       [,5]       [,6]
 #&gt;  [1,]  1.0000000  0.33277477  0.27850383 -0.18257340  0.4456666  0.6013028
 #&gt;  [2,]  0.3327748  1.00000000 -0.01437364 -0.26125254  0.3571910  0.4933452
 #&gt;  [3,]  0.2785038 -0.01437364  1.00000000  0.28850792  0.1795431  0.2670346
@@ -297,7 +310,7 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

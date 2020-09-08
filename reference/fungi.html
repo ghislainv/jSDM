@@ -166,7 +166,7 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 800 observations on the following 23 variables :</p><dl'>
+    <p>A data frame with 800 observations on the following 23 variables :</p><dl>
   
   11 fungi species which presence on sites is indicated by a 1 and absence by a 0 :
     <dt><code>antser</code></dt><dd><p>a binary vector</p></dd>
@@ -203,8 +203,9 @@
     <p>Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>fungi</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>fungi</span>)</div><div class='output co'>#&gt;   antser antsin astfer fompin hetpar junlut phefer phenig phevit poscae triabi
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>fungi</span>, package=<span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>fungi</span>)
+</div><div class='output co'>#&gt;   antser antsin astfer fompin hetpar junlut phefer phenig phevit poscae triabi
 #&gt; 1      0      0      0      0      0      0      1      0      0      0      0
 #&gt; 2      0      0      0      0      0      0      0      0      0      0      0
 #&gt; 3      0      0      0      0      0      0      0      0      1      0      0
@@ -240,7 +241,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

@@ -165,7 +165,7 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>frogs</code> is a data frame with 104 observations on the following 14 variables.</p><dl'>
+    <p><code>frogs</code> is a data frame with 104 observations on the following 14 variables.</p><dl>
     <dt><code>Species_</code></dt><dd><p>1 to 9 indicate by a 0 the absence of the species on one site and by a 1 its presence</p></dd> 
     <dt><code>Covariates_</code></dt><dd><p>1 and 3 continuous variables</p></dd>
     <dt><code>Covariates_</code></dt><dd><p>2 discrete variables</p></dd>
@@ -179,8 +179,9 @@
     <p>Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>frogs</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>frogs</span>)</div><div class='output co'>#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3 Species_4
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>frogs</span>, package=<span class='st'>"jSDM"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>frogs</span>)
+</div><div class='output co'>#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3 Species_4
 #&gt; 1    3.870111           0    0.045334         1         0         0         0
 #&gt; 2    3.326950           1    0.115903         0         0         0         0
 #&gt; 3    2.856729           1    0.147034         0         0         0         0
@@ -209,7 +210,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

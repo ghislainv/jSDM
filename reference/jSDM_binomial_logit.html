@@ -162,29 +162,29 @@
     </div>
 
     <pre class="usage"><span class='fu'>jSDM_binomial_logit</span>(
-  <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
-  <span class='kw'>mcmc</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>thin</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='no'>presence_site_sp</span>,
-  <span class='no'>site_suitability</span>,
-  <span class='no'>site_data</span>,
-  <span class='kw'>trials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_latent</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>site_effect</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>beta_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>lambda_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>W_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>alpha_start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>V_alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>5e-04</span>,
-  <span class='kw'>mu_beta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>V_beta</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>,
-  <span class='kw'>mu_lambda</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>V_lambda</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>ropt</span> <span class='kw'>=</span> <span class='fl'>0.44</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1234</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>1</span>
+  burnin = <span class='fl'>5000</span>,
+  mcmc = <span class='fl'>10000</span>,
+  thin = <span class='fl'>10</span>,
+  <span class='kw'>presence_site_sp</span>,
+  <span class='kw'>site_suitability</span>,
+  <span class='kw'>site_data</span>,
+  trials = <span class='kw'>NULL</span>,
+  n_latent = <span class='fl'>0</span>,
+  site_effect = <span class='st'>"none"</span>,
+  beta_start = <span class='fl'>0</span>,
+  lambda_start = <span class='fl'>0</span>,
+  W_start = <span class='fl'>0</span>,
+  alpha_start = <span class='fl'>0</span>,
+  V_alpha = <span class='fl'>1</span>,
+  shape = <span class='fl'>0.5</span>,
+  rate = <span class='fl'>5e-04</span>,
+  mu_beta = <span class='fl'>0</span>,
+  V_beta = <span class='fl'>1e+06</span>,
+  mu_lambda = <span class='fl'>0</span>,
+  V_lambda = <span class='fl'>10</span>,
+  ropt = <span class='fl'>0.44</span>,
+  seed = <span class='fl'>1234</span>,
+  verbose = <span class='fl'>1</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -343,6 +343,16 @@ where</p><table class='table'>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/coda/man/plot.mcmc.html'>plot.mcmc</a></code>, <code><a href='https://rdrr.io/pkg/coda/man/summary.mcmc.html'>summary.mcmc</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    
+<table class='table'>
+<tr><td>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</td></tr>
+<tr><td>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</td></tr>
+<tr><td></td></tr>
+</table>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#==============================================</span>
@@ -352,77 +362,78 @@ where</p><table class='table'>
 
 <span class='co'>#=================</span>
 <span class='co'>#== Load libraries</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>jSDM</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://ecology.ghislainv.fr/jSDM'>jSDM</a></span>)
 
 <span class='co'>#==================</span>
 <span class='co'>#== Data simulation</span>
 
 <span class='co'>#= Number of sites</span>
-<span class='no'>nsite</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='kw'>nsite</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
 <span class='co'>#= Number of species</span>
-<span class='no'>nsp</span> <span class='kw'>&lt;-</span> <span class='fl'>20</span>
+<span class='kw'>nsp</span> <span class='op'>&lt;-</span> <span class='fl'>20</span>
 <span class='co'>#= Set seed for repeatability</span>
-<span class='no'>seed</span> <span class='kw'>&lt;-</span> <span class='fl'>1234</span>
+<span class='kw'>seed</span> <span class='op'>&lt;-</span> <span class='fl'>1234</span>
 
 <span class='co'>#= Number of visits associated to each site</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
-<span class='no'>visits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='no'>nsite</span>,<span class='fl'>3</span>)
-<span class='no'>visits</span>[<span class='no'>visits</span><span class='kw'>==</span><span class='fl'>0</span>] <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='kw'>seed</span>)
+<span class='kw'>visits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>nsite</span>,<span class='fl'>3</span>)
+<span class='kw'>visits</span>[<span class='kw'>visits</span><span class='op'>==</span><span class='fl'>0</span>] <span class='op'>&lt;-</span> <span class='fl'>1</span>
 
 <span class='co'>#= Ecological process (suitability)</span>
-<span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2</span>*<span class='no'>seed</span>)
-<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='no'>nsite</span>),<span class='no'>x1</span>,<span class='no'>x2</span>)
-<span class='no'>np</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>3</span>*<span class='no'>seed</span>)
-<span class='no'>W</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
-<span class='no'>n_latent</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>W</span>)
-<span class='no'>l.zero</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>
-<span class='no'>l.diag</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>2</span>)
-<span class='no'>l.other</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='no'>nsp</span>*<span class='fl'>2</span>-<span class='fl'>3</span>,-<span class='fl'>2</span>,<span class='fl'>2</span>)
-<span class='no'>lambda.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>l.diag</span>[<span class='fl'>1</span>],<span class='no'>l.zero</span>,<span class='no'>l.other</span>[<span class='fl'>1</span>],
-                          <span class='no'>l.diag</span>[<span class='fl'>2</span>],<span class='no'>l.other</span>[-<span class='fl'>1</span>]),
-                        <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>)
-<span class='no'>beta.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='no'>nsp</span>*<span class='no'>np</span>,-<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nrow</span><span class='kw'>=</span><span class='no'>nsp</span>)
-<span class='no'>V_alpha.target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.5</span>
-<span class='no'>alpha.target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>V_alpha.target</span>))
-<span class='no'>logit.theta</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>beta.target</span>) + <span class='no'>W</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>lambda.target</span>) + <span class='no'>alpha.target</span>
-<span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='inv_logit.html'>inv_logit</a></span>(<span class='no'>logit.theta</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='no'>seed</span>)
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>theta</span>, <span class='fl'>2</span>, <span class='no'>rbinom</span>, <span class='kw'>n</span><span class='kw'>=</span><span class='no'>nsite</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='no'>visits</span>)
+<span class='kw'>x1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2</span><span class='op'>*</span><span class='kw'>seed</span>)
+<span class='kw'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
+<span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='kw'>nsite</span>),<span class='kw'>x1</span>,<span class='kw'>x2</span>)
+<span class='kw'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>3</span><span class='op'>*</span><span class='kw'>seed</span>)
+<span class='kw'>W</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
+<span class='kw'>n_latent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>W</span>)
+<span class='kw'>l.zero</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
+<span class='kw'>l.diag</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>2</span>)
+<span class='kw'>l.other</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='kw'>nsp</span><span class='op'>*</span><span class='fl'>2</span><span class='op'>-</span><span class='fl'>3</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span>)
+<span class='kw'>lambda.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>l.diag</span>[<span class='fl'>1</span>],<span class='kw'>l.zero</span>,<span class='kw'>l.other</span>[<span class='fl'>1</span>],
+                          <span class='kw'>l.diag</span>[<span class='fl'>2</span>],<span class='kw'>l.other</span>[<span class='op'>-</span><span class='fl'>1</span>]),
+                        byrow=<span class='fl'>TRUE</span>, nrow=<span class='kw'>nsp</span>)
+<span class='kw'>beta.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='kw'>nsp</span><span class='op'>*</span><span class='kw'>np</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span>), byrow=<span class='fl'>TRUE</span>, nrow=<span class='kw'>nsp</span>)
+<span class='kw'>V_alpha.target</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
+<span class='kw'>alpha.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='kw'>V_alpha.target</span>))
+<span class='kw'>logit.theta</span> <span class='op'>&lt;-</span> <span class='kw'>X</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>beta.target</span>) <span class='op'>+</span> <span class='kw'>W</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>lambda.target</span>) <span class='op'>+</span> <span class='kw'>alpha.target</span>
+<span class='kw'>theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='inv_logit.html'>inv_logit</a></span>(<span class='kw'>logit.theta</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='kw'>seed</span>)
+<span class='kw'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>theta</span>, <span class='fl'>2</span>, <span class='kw'>rbinom</span>, n=<span class='kw'>nsite</span>, size=<span class='kw'>visits</span>)
 
 <span class='co'>#= Site-occupancy model</span>
 <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence</span>
-<span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'>jSDM_binomial_logit</span>(<span class='co'># Chains</span>
-  <span class='kw'>burnin</span><span class='kw'>=</span><span class='fl'>200</span>,
-  <span class='kw'>mcmc</span><span class='kw'>=</span><span class='fl'>200</span>,
-  <span class='kw'>thin</span><span class='kw'>=</span><span class='fl'>1</span>,
+<span class='kw'>mod</span> <span class='op'>&lt;-</span> <span class='fu'>jSDM_binomial_logit</span>(<span class='co'># Chains</span>
+  burnin=<span class='fl'>200</span>,
+  mcmc=<span class='fl'>200</span>,
+  thin=<span class='fl'>1</span>,
   <span class='co'># Response variable</span>
-  <span class='kw'>presence_site_sp</span><span class='kw'>=</span><span class='no'>Y</span>,
-  <span class='kw'>trials</span><span class='kw'>=</span><span class='no'>visits</span>,
+  presence_site_sp=<span class='kw'>Y</span>,
+  trials=<span class='kw'>visits</span>,
   <span class='co'># Explanatory variables</span>
-  <span class='kw'>site_suitability</span><span class='kw'>=</span>~<span class='no'>x1</span>+<span class='no'>x2</span>,
-  <span class='kw'>site_data</span><span class='kw'>=</span><span class='no'>X</span>,
-  <span class='kw'>n_latent</span><span class='kw'>=</span><span class='no'>n_latent</span>,
-  <span class='kw'>site_effect</span><span class='kw'>=</span><span class='st'>"random"</span>,
+  site_suitability=<span class='op'>~</span><span class='kw'>x1</span><span class='op'>+</span><span class='kw'>x2</span>,
+  site_data=<span class='kw'>X</span>,
+  n_latent=<span class='kw'>n_latent</span>,
+  site_effect=<span class='st'>"random"</span>,
   <span class='co'># Starting values</span>
-  <span class='kw'>beta_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>lambda_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>W_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>alpha_start</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_alpha</span><span class='kw'>=</span><span class='fl'>1</span>,
+  beta_start=<span class='fl'>0</span>,
+  lambda_start=<span class='fl'>0</span>,
+  W_start=<span class='fl'>0</span>,
+  alpha_start=<span class='fl'>0</span>,
+  V_alpha=<span class='fl'>1</span>,
   <span class='co'># Priors</span>
-  <span class='kw'>shape</span><span class='kw'>=</span><span class='fl'>0.5</span>,
-  <span class='kw'>rate</span><span class='kw'>=</span><span class='fl'>0.0005</span>,
-  <span class='kw'>mu_beta</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_beta</span><span class='kw'>=</span><span class='fl'>1.0E6</span>,
-  <span class='kw'>mu_lambda</span><span class='kw'>=</span><span class='fl'>0</span>,
-  <span class='kw'>V_lambda</span><span class='kw'>=</span><span class='fl'>10</span>,
+  shape=<span class='fl'>0.5</span>,
+  rate=<span class='fl'>0.0005</span>,
+  mu_beta=<span class='fl'>0</span>,
+  V_beta=<span class='fl'>1.0E6</span>,
+  mu_lambda=<span class='fl'>0</span>,
+  V_lambda=<span class='fl'>10</span>,
   <span class='co'># Various</span>
-  <span class='kw'>seed</span><span class='kw'>=</span><span class='fl'>1234</span>,
-  <span class='kw'>ropt</span><span class='kw'>=</span><span class='fl'>0.44</span>,
-  <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+  seed=<span class='fl'>1234</span>,
+  ropt=<span class='fl'>0.44</span>,
+  verbose=<span class='fl'>1</span>)
+</div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
 #&gt; **********:10.0%, mean accept. rates= beta:0.250 lambda:0.231 W:0.429 alpha:0.337
@@ -441,87 +452,97 @@ where</p><table class='table'>
 
 <span class='co'>## beta_j</span>
 <span class='co'># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span>
-<span class='no'>mean_beta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='no'>nsp</span>,<span class='no'>np</span>)
-<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_logit.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>),<span class='fl'>2</span>))
-<span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
-  <span class='no'>mean_beta</span>[<span class='no'>j</span>,] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)],
-                         <span class='fl'>2</span>, <span class='no'>mean</span>)
-  <span class='kw'>for</span> (<span class='no'>p</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)) {
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
-      <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]))
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
-      <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='no'>p</span>]),
-      <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(
-        <span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])[<span class='no'>p</span>],
-        <span class='st'>", species : "</span>,<span class='no'>j</span>))
-    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>beta.target</span>[<span class='no'>j</span>,<span class='no'>p</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='kw'>mean_beta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nsp</span>,<span class='kw'>np</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(file=<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_logit.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>),<span class='fl'>2</span>))
+<span class='co'>for</span> (<span class='kw'>j</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsp</span>) {
+  <span class='kw'>mean_beta</span>[<span class='kw'>j</span>,] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)],
+                         <span class='fl'>2</span>, <span class='kw'>mean</span>)
+  <span class='co'>for</span> (<span class='kw'>p</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)) {
+    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
+      <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='kw'>p</span>]))
+    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
+      <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='kw'>p</span>]),
+      main = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(
+        <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]])[<span class='kw'>p</span>],
+        <span class='st'>", species : "</span>,<span class='kw'>j</span>))
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>beta.target</span>[<span class='kw'>j</span>,<span class='kw'>p</span>],col=<span class='st'>'red'</span>)
   }
 }
-<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
-#&gt;   2 </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()
+</div><div class='output co'>#&gt; agg_png 
+#&gt;       2 </div><div class='input'>
 <span class='co'>## lambda_j</span>
 <span class='co'># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span>
 <span class='co'># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span>
-<span class='no'>mean_lambda</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='no'>nsp</span>,<span class='no'>n_latent</span>)
-<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(<span class='kw'>file</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_logit.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>n_latent</span>*<span class='fl'>2</span>,<span class='fl'>2</span>))
-<span class='kw'>for</span> (<span class='no'>j</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>nsp</span>) {
-  <span class='no'>mean_lambda</span>[<span class='no'>j</span>,] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]]
-                           [,(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='fl'>1</span>):(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>n_latent</span>)], <span class='fl'>2</span>, <span class='no'>mean</span>)
-  <span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span>
-                                  <span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]))
-    <span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span>
-                                 <span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>]),
-                   <span class='kw'>main</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.sp</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='no'>j</span>)]])
-                              [<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>X</span>)+<span class='no'>l</span>],<span class='st'>", species : "</span>,<span class='no'>j</span>))
-    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>lambda.target</span>[<span class='no'>j</span>,<span class='no'>l</span>],<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='kw'>mean_lambda</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nsp</span>,<span class='kw'>n_latent</span>)
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(file=<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_logit.pdf"</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>n_latent</span><span class='op'>*</span><span class='fl'>2</span>,<span class='fl'>2</span>))
+<span class='co'>for</span> (<span class='kw'>j</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsp</span>) {
+  <span class='kw'>mean_lambda</span>[<span class='kw'>j</span>,] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]]
+                           [,(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='fl'>1</span>)<span class='op'>:</span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>n_latent</span>)], <span class='fl'>2</span>, <span class='kw'>mean</span>)
+  <span class='co'>for</span> (<span class='kw'>l</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>n_latent</span>) {
+    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>
+                                  [[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>]))
+    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>
+                                 [[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>]),
+                   main=<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]])
+                              [<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>],<span class='st'>", species : "</span>,<span class='kw'>j</span>))
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>lambda.target</span>[<span class='kw'>j</span>,<span class='kw'>l</span>],col=<span class='st'>'red'</span>)
   }
 }
-<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()</div><div class='output co'>#&gt; pdf 
-#&gt;   2 </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()
+</div><div class='output co'>#&gt; agg_png 
+#&gt;       2 </div><div class='input'>
 <span class='co'># Species effects beta and factor loadings lambda</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beta.target</span>, <span class='no'>mean_beta</span>,
-     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"species effect beta"</span>,
-     <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>lambda.target</span>, <span class='no'>mean_lambda</span>,
-     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"factor loadings lambda"</span>,
-     <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='jSDM_binomial_logit-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>beta.target</span>, <span class='kw'>mean_beta</span>,
+     main=<span class='st'>"species effect beta"</span>,
+     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>lambda.target</span>, <span class='kw'>mean_lambda</span>,
+     main=<span class='st'>"factor loadings lambda"</span>,
+     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
+</div><div class='img'><img src='jSDM_binomial_logit-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## W latent variables</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='kw'>for</span> (<span class='no'>l</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n_latent</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>W</span>[,<span class='no'>l</span>],
-       <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.latent</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='no'>l</span>)]])<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
-       <span class='kw'>main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='no'>l</span>),
-       <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>)
-  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
-}</div><div class='img'><img src='jSDM_binomial_logit-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='co'>for</span> (<span class='kw'>l</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>n_latent</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>W</span>[,<span class='kw'>l</span>],
+       <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.latent</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='kw'>l</span>)]])[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+       main = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='kw'>l</span>),
+       xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
+}
+</div><div class='img'><img src='jSDM_binomial_logit-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## alpha</span>
 <span class='co'># summary(mod$mcmc.alpha)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.alpha</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
-     <span class='kw'>xlab</span> <span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span><span class='st'>"fitted"</span>, <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"site effect alpha"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.alpha</span>)[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>, main=<span class='st'>"site effect alpha"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
 <span class='co'>## Valpha</span>
 <span class='co'># summary(mod$mcmc.V_alpha)</span>
-<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.V_alpha</span>)
-<span class='kw pkg'>coda</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.V_alpha</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>v</span><span class='kw'>=</span><span class='no'>V_alpha.target</span>,<span class='kw'>col</span><span class='kw'>=</span><span class='st'>'red'</span>)</div><div class='img'><img src='jSDM_binomial_logit-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.V_alpha</span>)
+<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.V_alpha</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>V_alpha.target</span>,col=<span class='st'>'red'</span>)
+</div><div class='img'><img src='jSDM_binomial_logit-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Deviance</span>
 <span class='co'># summary(mod$mcmc.Deviance)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>mod</span>$<span class='no'>mcmc.Deviance</span>)</div><div class='img'><img src='jSDM_binomial_logit-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.Deviance</span>)
+</div><div class='img'><img src='jSDM_binomial_logit-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>logit.theta</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>mod</span>$<span class='no'>theta_latent</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>),<span class='no'>logit</span>),
-     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"logit(theta)"</span>,
-     <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>theta</span>, <span class='no'>mod</span>$<span class='no'>theta_latent</span>,
-     <span class='kw'>main</span><span class='kw'>=</span><span class='st'>"Probabilities of occurence theta"</span>,
-     <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"obs"</span>, <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"fitted"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>0</span> ,<span class='kw'>b</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)</div><div class='img'><img src='jSDM_binomial_logit-5.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>logit.theta</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>),<span class='kw'>logit</span>),
+     main=<span class='st'>"logit(theta)"</span>,
+     xlab=<span class='st'>"obs"</span>, ylab=<span class='st'>"fitted"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span> ,b=<span class='fl'>1</span>, col=<span class='st'>"red"</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>theta</span>, <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,
+     main=<span class='st'>"Probabilities of occurence theta"</span>,
+     xlab=<span class='st'>"obs"</span>, ylab=<span class='st'>"fitted"</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span> ,b=<span class='fl'>1</span>, col=<span class='st'>"red"</span>)
+</div><div class='img'><img src='jSDM_binomial_logit-5.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -537,7 +558,7 @@ where</p><table class='table'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
