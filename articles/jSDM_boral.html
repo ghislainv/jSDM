@@ -509,25 +509,25 @@ n.mcmc
 
 <span class="co">## Fixed species effect beta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">beta.target</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">beta.target</span>),
      <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">lv.coefs.mean</span>[,<span class="fl">1</span>],<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">X.coefs.mean</span>),
      xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, main=<span class="st">"Fixed species effect beta"</span>) 
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 <span class="co">## factor loadings lambda_j</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">lambda.target</span>),<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">lv.coefs.mean</span>[,<span class="op">-</span><span class="fl">1</span>],
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">lambda.target</span>),<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">lv.coefs.mean</span>[,<span class="op">-</span><span class="fl">1</span>],
      xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, main=<span class="st">"Loading factors lambda"</span>) 
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 <span class="co">## Latent variable W </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="co">for</span> (<span class="kw">l</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="kw">nl</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">W</span>[,<span class="kw">l</span>],<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">lv.mean</span>[,<span class="kw">l</span>],
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">W</span>[,<span class="kw">l</span>],<span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">lv.mean</span>[,<span class="kw">l</span>],
        main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="kw">l</span>),
        xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>)
   <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 }
 <span class="co">## alpha </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">alpha.target</span>, <span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">row.coefs</span><span class="op">$</span><span class="kw">ID1</span><span class="op">$</span><span class="kw">mean</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">alpha.target</span>, <span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">row.coefs</span><span class="op">$</span><span class="kw">ID1</span><span class="op">$</span><span class="kw">mean</span>,
      xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">V_alpha.target</span>, <span class="kw">mod_boral_sim</span><span class="op">$</span><span class="kw">row.sigma</span><span class="op">$</span><span class="kw">ID1</span>[<span class="st">"mean"</span>],
@@ -537,7 +537,7 @@ n.mcmc
 
 <span class="co">## Prediction</span>
 <span class="co"># probit_theta_pred </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta</span>,<span class="kw">probit_theta_pred_sim</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta</span>,<span class="kw">probit_theta_pred_sim</span>,
      main=<span class="st">"probit(theta)"</span>, xlab =<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 </pre></div>
@@ -924,17 +924,17 @@ n.mcmc
   }
 }
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">beta.target</span>),<span class="kw">mean_beta</span>, xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, 
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">beta.target</span>),<span class="kw">mean_beta</span>, xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, 
      main=<span class="st">"Fixed species effect beta"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">lambda.target</span>),<span class="kw">mean_lambda</span>, xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, 
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">lambda.target</span>),<span class="kw">mean_lambda</span>, xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, 
      main=<span class="st">"Loading factors lambda"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 
 <span class="co">## W latent variables</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
 <span class="co">for</span> (<span class="kw">l</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="kw">nl</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">W</span>[,<span class="kw">l</span>],<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.latent</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="kw">l</span>)]],<span class="fl">2</span>,<span class="kw">mean</span>),
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">W</span>[,<span class="kw">l</span>],<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.latent</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="kw">l</span>)]],<span class="fl">2</span>,<span class="kw">mean</span>),
        main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="kw">l</span>), xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>)
   <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 }
@@ -947,7 +947,7 @@ n.mcmc
 
 <span class="co">## alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">alpha.target</span>,<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.alpha</span>,<span class="fl">2</span>,<span class="kw">mean</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">alpha.target</span>,<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.alpha</span>,<span class="fl">2</span>,<span class="kw">mean</span>),
      xlab= <span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, main=<span class="st">"Random site effect alpha"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 
@@ -956,16 +956,16 @@ n.mcmc
 
 
 <span class="co">## Deviance</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.Deviance</span>, main=<span class="st">"Deviance"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">mcmc.Deviance</span>, main=<span class="st">"Deviance"</span>)
 
 <span class="co">#= Predictions</span>
 <span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta</span>,<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">probit_theta_pred</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta</span>,<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">probit_theta_pred</span>,
      xlab=<span class="st">"obs"</span>,ylab=<span class="st">"fitted"</span>, main=<span class="st">"probit(theta)"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 <span class="co">## Z</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">Z_true</span>,<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">Z_latent</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">Z_true</span>,<span class="kw">mod_jSDM_sim</span><span class="op">$</span><span class="kw">Z_latent</span>,
      xlab=<span class="st">"obs"</span>, ylab=<span class="st">"fitted"</span>, main=<span class="st">"latent variable Z"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>,b=<span class="fl">1</span>,col=<span class="st">'red'</span>)
 </pre></div>
