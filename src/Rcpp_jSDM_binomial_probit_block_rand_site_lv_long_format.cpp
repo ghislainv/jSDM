@@ -61,7 +61,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
   const int NL = W_start.n_cols; 
   const int NOBS = Y.n_elem;
   
-  
   ///////////////////////////////////////////
   // Declaring new objects to store results //
   /* Parameters */
@@ -96,6 +95,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
   // Small fixed vectors indexed on i (site) or j (species) for data access
   arma::field<arma::uvec> rowId_site(NSITE); 
   arma::field<arma::uvec> rowId_sp(NSP); 
+  
   for (int i=0; i<NSITE; i++) {
     rowId_site[i] = arma::find(Id_site==i);
   }

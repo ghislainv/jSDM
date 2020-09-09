@@ -267,7 +267,7 @@
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
 
-jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_latent=0,
+jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_latent=2,
                                                    site_effect="none",
                                                    burnin=5000, mcmc=10000, thin=10,
                                                    alpha_start=0, beta_start=0,
@@ -307,8 +307,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     }
   }else{
     data$species <- as.character(data$species)
-    for (j in 1:length(unique(data$species))) {
-      Id_sp[grepl(unique(data$species)[j],data$species)] <- j
+    for (j in 0:(nsp-1)) {
+      Id_sp[grepl(unique(data$species)[j+1],data$species)] <- j
     }
   }
   Id_site <- rep(0,nrow(data))
@@ -321,13 +321,13 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     }
   }else{
     data$site <- as.character(data$site)
-    for (i in 1:length(unique(data$site))) {
-      Id_site[grepl(unique(data$site)[i],data$site)] <- i
+    for (i in 0:(nsite-1)) {
+      Id_site[grepl(unique(data$site)[i+1],data$site)] <- i
     }
   }
   
   #= Suitability
-  if(site_suitability==~.) site_suitability <- ~. - site - species - Y 
+  if(site_suitability==~.) site_suitability <- ~. - site - species - Y
   mf.suit <- model.frame(formula=site_suitability, data=data)
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
