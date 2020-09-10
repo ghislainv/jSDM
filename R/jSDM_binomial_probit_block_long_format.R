@@ -267,7 +267,7 @@
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
 
-jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_latent=2,
+jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_latent=0,
                                                    site_effect="none",
                                                    burnin=5000, mcmc=10000, thin=10,
                                                    alpha_start=0, beta_start=0,
@@ -296,7 +296,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
   # Form response, covariate matrices and model parameters
   #========
   #= Response
-  Y <- data$Y
+  Y <- as.vector(data$Y)
   Id_sp <- rep(0,nrow(data))
   if(is.numeric(data$species)){
     if(min(data$species)==1 && max(data$species)==nsp){
@@ -307,8 +307,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     }
   }else{
     data$species <- as.character(data$species)
-    for (j in 0:(nsp-1)) {
-      Id_sp[grepl(unique(data$species)[j+1],data$species)] <- j
+    for (j in 1:nsp) {
+      Id_sp[grepl(unique(data$species)[j],data$species)] <- j-1
     }
   }
   Id_site <- rep(0,nrow(data))
@@ -321,16 +321,18 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     }
   }else{
     data$site <- as.character(data$site)
-    for (i in 0:(nsite-1)) {
-      Id_site[grepl(unique(data$site)[i+1],data$site)] <- i
+    for (i in 1:nsite) {
+      Id_site[grepl(unique(data$site)[i],data$site)] <- i-1
     }
   }
   
   #= Suitability
-  if(site_suitability==~.) site_suitability <- ~. - site - species - Y
-  mf.suit <- model.frame(formula=site_suitability, data=data)
+  suitability <- site_suitability 
+  if(site_suitability==~.) suitability <- ~. - site - species - Y
+  mf.suit <- model.frame(formula=suitability, data=data)
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
+  if(site_suitability==~. - site - species - Y) site_suitability <- ~.
   
   if(nrow(unique(X))==nsite){
     n_visit <- rep(1,nobs)
@@ -341,8 +343,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       n_visit[Id_obs] <- 1:length(Id_obs)
     }
   }
-  data$n_visit <- n_visit 
-  
+
   #= Iterations
   ngibbs <- mcmc+burnin
   nthin <- thin
@@ -372,7 +373,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                       Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                       Y=Y, X=as.matrix(X),
+                                                       Id_sp=Id_sp, Id_site=Id_site,
                                                        beta_start=beta_start,
                                                        V_beta=Vbeta, mu_beta = mubeta,
                                                        seed=seed, verbose=verbose)
@@ -436,7 +438,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                          Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                          Y=Y, X=as.matrix(X),
+                                                          Id_sp=Id_sp, Id_site=Id_site,
                                                           param_start= param_start, V_param=Vparam, mu_param = muparam,
                                                           W_start=W_start, V_W=V_W,
                                                           seed=seed, verbose=verbose)
@@ -507,7 +510,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                                  Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                  Y=Y, X=as.matrix(X),
+                                                                  Id_sp=Id_sp, Id_site=Id_site,
                                                                   beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
                                                                   alpha_start=alpha_start, V_alpha=V_alpha,
                                                                   seed=seed, verbose=verbose)
@@ -569,7 +573,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                                 Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                 Y=Y, X=as.matrix(X),
+                                                                 Id_sp=Id_sp, Id_site=Id_site,
                                                                  beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
                                                                  alpha_start=alpha_start, V_alpha_start=V_alpha,
                                                                  shape = shape, rate = rate,
@@ -645,7 +650,8 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                                    Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
+                                                                    Y=Y, X=as.matrix(X),
+                                                                    Id_sp=Id_sp, Id_site=Id_site,
                                                                     param_start= param_start,
                                                                     V_param=Vparam, mu_param = muparam,
                                                                     W_start=W_start, V_W=V_W,
@@ -735,8 +741,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                                     Y=Y, X=X, Id_sp=Id_sp, Id_site=Id_site,
-                                                                     param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                                                     Y=Y, X=as.matrix(X),
+                                                                     Id_sp=Id_sp, Id_site=Id_site,
+                                                                     param_start= param_start,
+                                                                     V_param=Vparam, mu_param = muparam,
                                                                      W_start=W_start, V_W=V_W,
                                                                      alpha_start=alpha_start, V_alpha=V_alpha,
                                                                      seed=seed, verbose=verbose)

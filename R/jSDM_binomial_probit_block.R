@@ -320,7 +320,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                           Y=Y, X=X,
+                                           Y=Y, X=as.matrix(X),
                                            beta_start=beta_start,
                                            V_beta=Vbeta, mu_beta = mubeta,
                                            seed=seed, verbose=verbose)
@@ -389,7 +389,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                              Y=Y, X=X,
+                                              Y=Y, X=as.matrix(X),
                                               param_start= param_start, V_param=Vparam, mu_param = muparam,
                                               W_start=W_start, V_W=V_W,
                                               seed=seed, verbose=verbose)
@@ -464,7 +464,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=Y, X=X,
+                                                     Y=Y, X=as.matrix(X),
                                                      beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
                                                      alpha_start=alpha_start, V_alpha=V_alpha,
                                                      seed=seed, verbose=verbose)
@@ -530,7 +530,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                     Y=Y, X=X,
+                                                     Y=Y, X=as.matrix(X),
                                                      beta_start=beta_start, V_beta=Vbeta, mu_beta = mubeta,
                                                      alpha_start=alpha_start, V_alpha_start=V_alpha,
                                                      shape = shape, rate = rate,
@@ -607,7 +607,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                        Y=Y, X=X,
+                                                        Y=Y, X=as.matrix(X),
                                                         param_start= param_start, V_param=Vparam, mu_param = muparam,
                                                         W_start=W_start, V_W=V_W,
                                                         alpha_start=alpha_start, V_alpha=V_alpha,
@@ -692,7 +692,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     # call Rcpp function
     #========
     mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-                                                        Y=Y, X=X,
+                                                        Y=Y, X=as.matrix(X),
                                                         param_start= param_start, V_param=Vparam, mu_param = muparam,
                                                         W_start=W_start, V_W=V_W,
                                                         alpha_start=alpha_start, V_alpha_start=V_alpha,

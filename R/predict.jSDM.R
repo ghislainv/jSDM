@@ -84,7 +84,12 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   ##= Model specifications
   model.spec <- object$model_spec
+  if(!is.null(model.spec$presences)){
   species <- colnames(model.spec$presences)
+  }
+  if(!is.null(model.spec$data)){
+    species <- unique(model.spec$data$species)
+  }
   
   ##= Link function probit for family=="binomial"
   if( model.spec$link=="probit") inv.link <- function (x) {pnorm(x)}
@@ -92,9 +97,21 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   if( model.spec$link=="log") inv.link <- function (x) {exp(x)}
   
   ##= Matrix for predictions
-  if (is.null(newdata)) {
+    if(is.null(newdata) && !is.null(model.spec$site_data)){
     newdata <- model.spec$site_data[Id_sites,]
-  }
+    }
+    if(!is.null(model.spec$data)){
+    nobs <- length(Id_sites)
+    if (is.null(newdata)){
+      for (i in 1:nobs){
+        rowId_site <- which(model.spec$data$site==Id_sites[i] & model.spec$data$species==Id_species[i])
+        newdata <- rbind(newdata, model.spec$data[rowId_site,!c(grepl("Y",colnames(model.spec$data)) | grepl("species",colnames(model.spec$data)) | grepl("site",colnames(model.spec$data)))])
+      }
+    }
+    }
+  newdata <- data.frame(newdata)
+  
+  # Suitability process
   suitability <- model.spec$site_suitability
   mf.pred <- model.frame(formula=suitability,data=as.data.frame(newdata))
   X.pred <- model.matrix(attr(mf.pred,"terms"),data=mf.pred)
@@ -102,23 +119,36 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   ##= Model parameters
   np <- ncol(X.pred)
-  nsp <- length(Id_species)
-  if (is.character(Id_species)) {
+  nsp <- length(unique(Id_species))
+  if(model.spec$n_latent > 0){
+    nl <- model.spec$n_latent
+  }
+  if (is.character(Id_species) || is.factor(Id_species)) {
+    if(!is.null(model.spec$presences)){
     num_species <- rep(0,nsp)
     for(j in 1:nsp) {
       num_species[j] <- which(species == Id_species[j])
     }
+    }
+    if(!is.null(model.spec$data)){
+    num_species <- rep(0,npred)
+    for(i in 1:nobs) {
+      num_species[i] <- which(species == Id_species[i])
+    }
+    }
   }
+  
   if (is.numeric(Id_species)) {
     num_species <- Id_species
   }
-  if(model.spec$n_latent > 0){
-    nl <- model.spec$n_latent
-  }
+  
+  # Chains parameters 
   ngibbs <- model.spec$mcmc + model.spec$burnin
   nthin <- model.spec$thin
   nburn <- model.spec$burnin
   nsamp <- model.spec$mcmc/nthin
+  
+  if(!is.null(model.spec$presences)){
   ##= Posterior mean
   if (type=="mean") {
     term.pred <- matrix(0, npred, nsp)
@@ -129,7 +159,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     for(j in 1:nsp) {
       term <- rep(0, npred)
       ##= Matrix of MCMC parameters
-      if(is.null(model.spec$n_latent)){
+      if(model.spec$n_latent==0){
         if(length(model.spec$beta_start)==np){
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
         }
@@ -174,7 +204,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     for(j in 1:nsp) {
       term <- matrix(0,nsamp,npred)
       
-      if(is.null(model.spec$n_latent)){
+      if(model.spec$n_latent==0){
         if(length(model.spec$beta_start)==np){
           beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
         }
@@ -225,7 +255,113 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
       }
     }
   }
+  }
   
+  if(!is.null(model.spec$data)){
+    ##= Posterior mean
+    if (type=="mean") {
+      term.pred <- rep(0,nobs)
+      ##= Loop on species
+      for(i in 1:nobs) {
+        term <- 0
+        ##= Matrix of MCMC parameters
+        if(model.spec$n_latent==0){
+          if(length(model.spec$beta_start)==np){
+            beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+          }
+          else{
+            beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+          }
+        }
+        if(model.spec$n_latent > 0){
+          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
+        }
+        
+        ##= Loop on samples
+        for (t in 1:nsamp) {
+          
+          beta_j <- beta_j.mat[t,]
+          link.term <- X.pred[i,] %*% as.vector(beta_j)
+          
+          if(model.spec$n_latent > 0){
+            W_i <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites[i]])
+            for(l in 2:nl) {
+              W_i <- cbind(W_i, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites[i]]))
+            }
+            lambda_j <- lambda_j.mat[t,]
+            link.term <- link.term + W_i %*% lambda_j 
+          }
+          
+          if(!is.null(model.spec$alpha_start)){
+            link.term <- link.term + object$mcmc.alpha[t,Id_sites[i]]
+          }
+          
+          term <- term + inv.link(link.term)
+        }
+        term.pred[i]<- as.numeric(term/nsamp)
+      }
+    }
+    
+    ##= Full posterior
+    if (type %in% c("quantile","posterior")) {
+      term.pred <- list()
+      ##= Loop on species
+      for(j in 1:nsp) {
+        term <- matrix(0,nsamp,npred)
+        
+        if(model.spec$n_latent==0){
+          if(length(model.spec$beta_start)==np){
+            beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+          }
+          else{
+            beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+          }
+        }
+        
+        if(model.spec$n_latent > 0){
+          ##= Matrix of MCMC parameters
+          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
+        }
+        
+        ##= Loop on samples
+        for (t in 1:nsamp) {
+          
+          beta_j <- beta_j.mat[t,]
+          link.term <- X.pred %*% as.vector(beta_j)
+          
+          if(model.spec$n_latent > 0){
+            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
+            for(l in 2:nl) {
+              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
+            }
+            lambda_j <- lambda_j.mat[t,]
+            link.term <- link.term + W.mat %*% lambda_j
+          }
+          
+          if(!is.null(model.spec$alpha_start)){
+            link.term <- link.term + as.matrix(object$mcmc.alpha[t,Id_sites])
+          }
+          
+          term[t,] <-  inv.link(link.term)
+        }
+        
+        if (type=="quantile") {
+          term.mean <- apply(term,2,mean)
+          term.quant <- apply(term,2,quantile,probs)
+          term.pred[[Id_species[j]]] <- as.data.frame(t(rbind(term.mean,term.quant)))
+          names(term.pred[[Id_species[j]]])[1] <- c("mean")
+          rownames(term.pred[[Id_species[j]]]) <- Id_sites
+        }
+        
+        if (type=="posterior") {
+          term.pred[[Id_species[j]]] <- coda::mcmc(term,start=nburn+1,end=ngibbs,thin=nthin)
+          colnames(term.pred[[Id_species[j]]]) <- Id_sites
+        }
+      }
+    }
+  }
   ## Output
   return(term.pred)
 }

@@ -69,15 +69,17 @@
 #' @importFrom corrplot corrplot
 #' @export 
 
-
-
 ## Plot of residual correlation matrix (posterior mean estimator, and reordered by first principal component)
 plot_residual_cor <- function(mod, title = "Residual Correlation Matrix from LVM", diag = F, type = "lower",
                               method = "color",  mar = c(1,1,3,1), tl.srt = 45, tl.cex = 0.5, ...) {
   lv2.cor <- get_residual_cor(mod)
   lv2.cor$reorder.cor.mean <- corrplot::corrMatOrder(lv2.cor$cor.mean, order = "FPC", hclust.method = "average")
+  if(!is.null(mod$model_spec$presences)){
   rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- colnames(mod$model_spec$presences)
-  
+  }
+  if(!is.null(mod$model_spec$data)){
+    rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- unique(mod$model_spec$data$species)
+  }
   par(cex=1, cex.main=1.5)
   corrplot::corrplot(lv2.cor$cor.mean[lv2.cor$reorder.cor.mean,lv2.cor$reorder.cor.mean], diag = diag,
                      type = type, title = title, mar = mar, method = method , tl.srt = tl.srt, tl.cex = tl.cex, ...)

@@ -79,8 +79,14 @@ get_residual_cor <- function(mod) {
     stop("Please fit a LVM on your data and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  n.species <- ncol(mod$model_spec$presences)
-  n.sites <- nrow(mod$model_spec$presences)
+  if(!is.null(mod$model_spec$presences)){
+    n.species <- ncol(mod$model_spec$presences)
+    n.sites <- nrow(mod$model_spec$presences)
+  }
+  if(!is.null(mod$model_spec$data)){
+    n.species <- length(unique(mod$model_spec$data$species))
+    n.sites <- length(unique(mod$model_spec$data$site))
+  }
   n.mcmc <- nrow(mod$mcmc.latent[[1]])
   n.lv <- length(mod$mcmc.latent)
   n.X.coeff <- nrow(mod$model_spec$beta_start)
