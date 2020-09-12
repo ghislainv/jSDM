@@ -118,7 +118,7 @@ for (j in 1:nsp) {
 }
 T2 <- Sys.time()
 T_BayesComm <- difftime(T2,T1)
-save(beta_est_bayescomm, T_BayesComm, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+save(beta_est_bayescomm, T_BayesComm, file="SDM_jSDM_files/BayesComm.rda")
 ```
 
 
@@ -147,7 +147,7 @@ for (j in 1:nsp) {
 Z_BayesComm <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm_lv <- difftime(T2,T1)
-save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="SDM_jSDM_files/BayesComm_lv.rda")
 ```
 
 ```{r plot-BayesComm_lv, eval=FALSE}
@@ -238,11 +238,11 @@ mod_probit <-
 # Stop cluster
 stopCluster(clust)
 save(mod_probit,
-     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit.rda")
+     file="SDM_jSDM_files/mod_probit.rda")
 ```
 
 ```{r output-probit}
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit.rda")
+load(file="SDM_jSDM_files/mod_probit.rda")
 # Output
 length(mod_probit)
 m1 <- mod_probit[[1]]
@@ -276,7 +276,7 @@ deviance_m1 <- mean(m1$mcmc.Deviance)
 **Comparison with BayesComm**
 
 ```{r BayesComm-comparison}
-load("~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+load("SDM_jSDM_files/BayesComm.rda")
 beta_est_m1 <- data.frame(matrix(unlist(beta_m1), ncol=3, byrow=T))
 names(beta_est_m1) <- c("intercept","snow","snow2")
 beta_est_m1$sp <- names(pres_data)
@@ -356,12 +356,12 @@ mod_probit_randsite <-
 # Stop cluster
 stopCluster(clust)
 save(mod_probit_randsite,
-     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite.rda")
+     file="SDM_jSDM_files/mod_probit_randsite.rda")
 ```
 
 ```{r output-probit-randsite}
 # Output
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite.rda")
+load(file="SDM_jSDM_files/mod_probit_randsite.rda")
 length(mod_probit_randsite)
 m2 <- mod_probit_randsite[[1]]
 str(m2, max.level = 1)
@@ -455,11 +455,11 @@ mod_probit_lv <-
 
 # Stop cluster
 stopCluster(clust)
-save(mod_probit_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_lv.rda")
+save(mod_probit_lv, file="SDM_jSDM_files/mod_probit_lv.rda")
 ```
 
 ```{r output-probit-lv}
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_lv.rda")
+load(file="SDM_jSDM_files/mod_probit_lv.rda")
 # Output
 m3 <- mod_probit_lv[[1]]
 str(m3, max.level = 1)
@@ -487,7 +487,7 @@ deviance_m3 <- colMeans(m3$mcmc.Deviance)
 *Comparison with BayesComm*
 
 ```{r BayesComm-comparison-lv}
-load("~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+load("SDM_jSDM_files/BayesComm_lv.rda")
 beta_est_m3 <- data.frame(matrix(unlist(lapply(param_m3,"[",1:np)), ncol=3, byrow=T))
 names(beta_est_m3) <- c("intercept","snow","snow2")
 beta_est_m3$sp <- names(pres_data)
@@ -573,11 +573,11 @@ mod_probit_randsite_lv <-
 stopCluster(clust)
 
 save(mod_probit_randsite_lv,
-     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite_lv.rda")
+     file="SDM_jSDM_files/mod_probit_randsite_lv.rda")
 ```
 
 ```{r output-probit-randiste-lv}
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite_lv.rda")
+load(file="SDM_jSDM_files/mod_probit_randsite_lv.rda")
 # Output
 m4 <- mod_probit_randsite_lv[[1]]
 str(m4, max.level = 1)
