@@ -118,17 +118,20 @@ for (j in 1:nsp) {
 }
 T2 <- Sys.time()
 T_BayesComm <- difftime(T2,T1)
-save(beta_est_bayescomm, T_BayesComm, mod_BayesComm, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+save(beta_est_bayescomm, T_BayesComm, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
 ```
 
 
-```{r plot-BayesComm}
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+```{r plot-BayesComm, eval=FALSE}
 library(BayesComm)
 head(beta_est_bayescomm)
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 plot(mod_BayesComm, chain="B$Agro.rupe")
 title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+```
+
+```{r plot2-BayesComm, echo=FALSE}
+knitr::include_graphics("SDM_jSDM_files/figure-html/plot-BayesComm-1.png")
 ```
 
 ### Model **with** latent variables 
@@ -141,19 +144,24 @@ beta_est_bayescomm_lv <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, 
 for (j in 1:nsp) {
   beta_est_bayescomm_lv[j, 2:4] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
 }
+Z_BayesComm <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm_lv <- difftime(T2,T1)
-save(beta_est_bayescomm_lv, T_BayesComm_lv, mod_BayesComm_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
 ```
 
-```{r plot-BayesComm_lv}
-load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+```{r plot-BayesComm_lv, eval=FALSE}
 library(BayesComm)
 head(beta_est_bayescomm_lv)
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 plot(mod_BayesComm_lv, chain="B$Agro.rupe")
 title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
 ```
+
+```{r plot2-BayesComm_lv, echo=FALSE}
+knitr::include_graphics("SDM_jSDM_files/figure-html/plot-BayesComm_lv-1.png")
+```
+
 ## Binomial model for presence-absence data
 
 We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
@@ -495,7 +503,7 @@ abline(a=0, b=1, col="red")
 plot(beta_est_bayescomm_lv$snow2, beta_est_m1$snow2,
      main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 
-plot(apply(mod_BayesComm_lv$trace$z,c(2,3), mean), m3$Z_latent)
+plot(Z_BayesComm, m3$Z_latent)
 abline(a=0, b=1, col="red")
 ```
 
