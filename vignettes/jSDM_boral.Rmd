@@ -86,13 +86,13 @@ X_Mites <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 
 datasets <- data.frame(matrix(NA,10,7),row.names=c("data type", "distribution", "n.site","n.species","n.latent","n.X.coefs", "n.obs",  "n.param", "n.mcmc",""))
 colnames(datasets) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
-datasets["n.site",] <- c(300,nrow(frogs),nrow(eucalypts), nrow(frogs), nrow(fungi), nrow(birds), nrow(mites))
+datasets["n.site",] <- c(300,nrow(mosquitos),nrow(eucalypts), nrow(frogs), nrow(fungi), nrow(birds), nrow(mites))
 datasets["n.X.coefs",] <- c(3,ncol(X_Mosquitos),ncol(X_Eucalypts),ncol(X_Frogs),ncol(X_Fungi),ncol(X_Birds), ncol(X_Mites))
 datasets["n.species",] <- c(100,ncol(PA_Mosquitos),ncol(PA_Eucalypts),ncol(PA_Frogs),ncol(PA_Fungi),ncol(PA_Birds), ncol(PA_Mites))
 datasets["n.latent",] <- 2
 datasets["n.obs",] <- datasets["n.site",]*datasets["n.species",] 
 datasets["n.mcmc",] <- 15000
-datasets["n.param",] <- datasets["n.site",]*(1+datasets["n.latent",])+1+datasets["n.species",]*(1+datasets["n.X.coefs",]+datasets["n.latent",])-1
+datasets["n.param",] <- datasets["n.site",]*(1+datasets["n.latent",])+1+datasets["n.species",]*(datasets["n.X.coefs",]+datasets["n.latent",])-1
 datasets["data type",] <-c("presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","abundance")
 datasets["distribution",] <- c("bernoulli", "bernoulli","bernoulli","bernoulli","bernoulli","binomial","poisson")
 sp_pictures <- c("figures/des.jpg",

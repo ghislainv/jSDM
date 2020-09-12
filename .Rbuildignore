@@ -7,9 +7,9 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^NEWS\.Rmd$
-^vignettes/figure/.*$
+#^vignettes/figure/.*$
 ^vignettes/cache/.*$
-vignettes/.*_files/
+#vignettes/.*_files/
 vignettes/.*\.html
 vignettes/.*\.md
 ^.git$
@@ -24,7 +24,7 @@ vignettes/.*\.md
 ^\.travis\.yml$
 
 # vignettes
-^vignettes/jSDM_boral\.Rmd$
+^vignettes/Madagascar\.Rmd$
 ^vignettes/jagsboralmodel\.txt$
 ^vignettes/proof\.Rmd$
 ^vignettes/.*_cache$

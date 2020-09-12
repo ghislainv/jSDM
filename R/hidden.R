@@ -580,7 +580,7 @@ form.beta.start.sp <- function (beta.start, np, nsp) {
   if (sum(is.na(beta.start))>0) { 
     beta.start.mat <- matrix(0, np, nsp)
   }
-  else if(is.scalar(beta.start) && !is.na(beta.start)) {
+  else if(is.scalar(beta.start) && sum(is.na(beta.start))==0) {
     beta.start.mat <- matrix(beta.start, np, nsp) 
   }
   else if(sum(dim(beta.start) != c(np, nsp)) > 0) {
@@ -609,7 +609,7 @@ form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
       lambda.start.mat[i, i] <- 1
     }
   }
-  else if(is.scalar(lambda.start) && !is.na(lambda.start)) {
+  else if(is.scalar(lambda.start) && sum(is.na(lambda.start))==0) {
     lambda.start.mat <- matrix(lambda.start, n_latent, nsp)
     for (i in 1:n_latent) {
       if (lambda.start > 0) {

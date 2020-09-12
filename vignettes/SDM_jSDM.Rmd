@@ -1,0 +1,744 @@
+---
+title: "Comparing SDMs and JSDMs"
+output:
+  bookdown::html_document2:
+  #base_format: rmarkdown::html_vignette
+  #highlight: tango
+  number_sections: true
+toc: true
+toc_float: true
+fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteIndexEntry{Comparing SDMs and JSDMs}
+ %\VignetteEncoding{UTF-8}
+ %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
+---
+  
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+knitr::opts_chunk$set(
+  fig.align = "center",
+  fig.width = 6, fig.height = 6,
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  eval=TRUE,
+  highlight = TRUE
+)
+```
+
+# Dataset
+
+## Presence-absence of alpine plants
+
+(ref:cap-alpine-plant) **_Alpine plants_** [@Choler2005].
+
+```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)"}
+knitr::include_graphics("figures/alpine_plants.png")
+```
+
+We consider alpine plants in Aravo (Valloire), south east France [@Choler2005]. The data are available from the R package `ade4` [@Dray2007]. The original dataset includes abundance data for 82 species in 75 sites.
+
+```{r aravo}
+library(jSDM)
+data(aravo)
+aravo$spe[1:5, 1:5]
+head(aravo$env)
+```
+
+We transform abundance into presence-absence data and remove species with less than 5 presences. We also look at the number of observations per site.
+
+```{r presence-data}
+# Transform abundance into presence-absence
+pres_data <- aravo$spe
+pres_data[pres_data > 0] <- 1
+# Remove species with less than 5 presences
+rare_sp <- which(apply(pres_data, 2, sum) < 5)
+pres_data <- pres_data[, -rare_sp]
+# Number of sites and species
+nsite <- dim(pres_data)[1]
+nsite
+nsp <- dim(pres_data)[2]
+nsp
+# Number of observations per site
+nobs_site <- apply(pres_data, 1, sum)
+nobs_site
+# Number of observations per species
+nobs_sp <- apply(pres_data, 2, sum)
+nobs_sp
+```
+
+## Environmental variables
+
+The environmental variables are:
+
+- **Aspect**: Relative south aspect (opposite of the sine of aspect with flat coded 0).
+- **Slope**: Slope inclination (degrees).
+- **Form**: Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity).
+- **Snow**: Mean snowmelt date (Julian day) averaged over 1997-1999.
+- **PhysD**: Physical disturbance, i.e., percentage of unvegetated soil due to physical processes.
+- **ZoogD**: Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high.
+
+As a first approach, we just select the "Snow" variable considering a quadratic orthogonal polynomial.
+
+```{r env-data}
+p <- poly(aravo$env$Snow, 2)
+env_data <- data.frame(cbind(1, p))
+names(env_data) <- c("int", "snow", "snow2")
+head(env_data)
+# Number of environmental variables plus intercept
+np <- ncol(env_data)
+```
+
+
+# Fitting species distribution models
+
+## BayesComm
+
+### Model **without** latent variables
+
+```{r BayesComm, eval=FALSE}
+# R is diagonal
+library(BayesComm)
+T1 <- Sys.time()
+mod_BayesComm <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="environment", its=60000, thin=30, burn=30000)
+# Estimates
+beta_est_bayescomm <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+for (j in 1:nsp) {
+  beta_est_bayescomm[j, 2:4] <- as.numeric(summary(mod_BayesComm, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+}
+T2 <- Sys.time()
+T_BayesComm <- difftime(T2,T1)
+save(beta_est_bayescomm, T_BayesComm, mod_BayesComm, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+```
+
+
+```{r plot-BayesComm}
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+library(BayesComm)
+head(beta_est_bayescomm)
+par(mfrow=c(1,1), oma=c(0,0,2,0))
+plot(mod_BayesComm, chain="B$Agro.rupe")
+title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+```
+
+### Model **with** latent variables 
+
+```{r BayesComm_community, eval=F}
+T1 <- Sys.time()
+mod_BayesComm_lv <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="full", its=60000, thin=30, burn=30000)
+# Estimates
+beta_est_bayescomm_lv <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+for (j in 1:nsp) {
+  beta_est_bayescomm_lv[j, 2:4] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+}
+T2 <- Sys.time()
+T_BayesComm_lv <- difftime(T2,T1)
+save(beta_est_bayescomm_lv, T_BayesComm_lv, mod_BayesComm_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+```
+
+```{r plot-BayesComm_lv}
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+library(BayesComm)
+head(beta_est_bayescomm_lv)
+par(mfrow=c(1,1), oma=c(0,0,2,0))
+plot(mod_BayesComm_lv, chain="B$Agro.rupe")
+title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+```
+## Binomial model for presence-absence data
+
+We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
+
+$$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
+  
+  $$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
+  
+  - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
+- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
+- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
+
+This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
+
+## Binomial model with probit link
+
+In a first step, we consider binomial models with a probit link. We compare models without and with latent variables.
+
+### Model **without** latent variables 
+
+#### Model **without** site effect 
+
+We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
+
+```{r chains-probit, eval=FALSE}
+## Load libraries
+require(doParallel)
+require(foreach)
+
+## Make a cluster for parallel MCMCs
+nchains <- 2
+ncores <- nchains ## One core for each MCMC chains
+clust <- makeCluster(ncores)
+registerDoParallel(clust)
+
+# Starting values for two chains
+beta_start <- list(1, -1)
+#formatting of starting parameters generated by the function 
+# Seeds
+seed_mcmc <- list(1234, 4321)
+```
+
+
+```{r mod-probit, eval=FALSE}
+library(jSDM)
+# Model with foreach and doPar call
+mod_probit <-
+  foreach (i = 1:nchains) %dopar% {
+    # Infering model parameters
+    mod <- jSDM::jSDM_binomial_probit_block(
+      # Iterations
+      mcmc = 30000,
+      thin = 30,
+      burnin = 30000,
+      # Data
+      presence_site_sp = pres_data,
+      site_data = env_data[,-1],
+      site_suitability=~.,
+      # Priors
+      mu_beta = 0,
+      V_beta = 10,
+      # Starting values
+      beta_start = beta_start[[i]],
+      # Other
+      seed = seed_mcmc[[i]],
+      verbose = 1
+    )
+    return(mod)
+  }
+
+# Stop cluster
+stopCluster(clust)
+save(mod_probit,
+     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit.rda")
+```
+
+```{r output-probit}
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit.rda")
+# Output
+length(mod_probit)
+m1 <- mod_probit[[1]]
+str(m1, max.level = 1)
+```
+
+We evaluate the convergence of the MCMC output in which two parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
+Convergence is diagnosed when the chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values substantially above 1, its indicates lack of convergence.
+
+```{r MCMC-convergence}
+require(coda)
+arr2mcmc <- function(x) {
+  return(mcmc(as.data.frame(x)))
+}
+# MCMC lists
+mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
+# psrf gelman indice 
+psrf_beta <- gelman.diag(mcmc_list_beta)$mpsrf
+# gelman indice
+cat("psrf_beta:", psrf_beta, "\n")
+```
+
+```{r est-probit}
+beta_m1 <- lapply(m1$mcmc.sp, colMeans)
+probit_theta_m1 <- m1$probit_theta_pred
+deviance_m1 <- mean(m1$mcmc.Deviance)
+```
+
+**Comparison with BayesComm**
+
+```{r BayesComm-comparison}
+load("~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm.rda")
+beta_est_m1 <- data.frame(matrix(unlist(beta_m1), ncol=3, byrow=T))
+names(beta_est_m1) <- c("intercept","snow","snow2")
+beta_est_m1$sp <- names(pres_data)
+# Intercept
+plot(beta_est_bayescomm$intercept, beta_est_m1$intercept,
+     main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+abline(a=0, b=1, col="red")
+# Snow
+plot(beta_est_bayescomm$snow, beta_est_m1$snow,
+     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+abline(a=0, b=1, col="red")
+# Snow2
+plot(beta_est_bayescomm$snow2, beta_est_m1$snow2,
+     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+abline(a=0, b=1, col="red")
+
+```
+
+
+#### Model **with** random site effect 
+
+We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
+
+```{r chains-probit-randsite, eval=FALSE}
+## Load libraries
+require(doParallel)
+require(foreach)
+
+## Make a cluster for parallel MCMCs
+nchains <- 2
+ncores <- nchains ## One core for each MCMC chains
+clust <- makeCluster(ncores)
+registerDoParallel(clust)
+
+# Starting values for two chains
+beta_start <- list(1, -1)
+alpha_start <- list(-1, 1)
+V_alpha_start <- list(1, 2)
+#formatting of starting parameters generated by the function 
+# Seeds
+seed_mcmc <- list(1234, 4321)
+```
+
+
+```{r mod-probit-randsite, eval=FALSE}
+library(jSDM)
+# Model with foreach and doPar call
+mod_probit_randsite <-
+  foreach (i = 1:nchains) %dopar% {
+    # Infering model parameters
+    mod <- jSDM::jSDM_binomial_probit_block(
+      # Iterations
+      mcmc = 30000,
+      thin = 30,
+      burnin = 30000,
+      # Data
+      presence_site_sp = pres_data,
+      site_data = env_data[,-1],
+      site_suitability=~.,
+      site_effect="random",
+      # Priors
+      mu_beta = 0,
+      V_beta = 10,
+      shape=0.5, 
+      rate=0.0005,
+      # Starting values
+      beta_start = beta_start[[i]],
+      alpha_start = alpha_start[[i]],
+      V_alpha = V_alpha_start[[i]],
+      # Other
+      seed = seed_mcmc[[i]],
+      verbose = 1
+    )
+    return(mod)
+  }
+
+# Stop cluster
+stopCluster(clust)
+save(mod_probit_randsite,
+     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite.rda")
+```
+
+```{r output-probit-randsite}
+# Output
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite.rda")
+length(mod_probit_randsite)
+m2 <- mod_probit_randsite[[1]]
+str(m2, max.level = 1)
+```
+
+```{r MCMC-convergence-randsite, echo=FALSE}
+require(coda)
+arr2mcmc <- function(x) {
+  return(mcmc(as.data.frame(x)))
+}
+# MCMC lists
+mcmc_list_alpha <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.alpha"), arr2mcmc))
+mcmc_list_V_alpha <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.V_alpha"), arr2mcmc))
+mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_probit_theta <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","probit_theta_pred"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.Deviance"), arr2mcmc))
+# psrf gelman indice 
+psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_beta <- gelman.diag(mcmc_list_beta)$mpsrf
+# gelman indice
+cat("psrf_alpha:", psrf_alpha, "\n")
+cat("psrf_beta:", psrf_beta, "\n")
+```
+
+```{r est-probit-randiste}
+alpha_m2 <- colMeans(m2$mcmc.alpha)
+V_alpha_m2 <- colMeans(m2$mcmc.V_alpha)
+beta_m2 <- lapply(m2$mcmc.sp, colMeans)
+probit_theta_m2 <- m2$probit_theta_pred
+deviance_m2 <- mean(m2$mcmc.Deviance)
+```
+
+### Model **with** latent variables 
+
+#### Model **without** site effect 
+
+```{r chains-probit-lv, eval=FALSE}
+library(parallel)
+library(doParallel)
+## Make a cluster for parallel MCMCs
+nchains <- 2
+ncores <- nchains ## One core for each MCMC chains
+clust <- makeCluster(ncores)
+registerDoParallel(clust)
+
+# Number of latent variables
+nl <- 2
+
+# Starting parameters 
+lambda_start <- list(-1, 1)
+beta_start <- list(-1,1)
+W_start <- list(0.1, -0.1)
+#formatting of starting parameters
+#and constraints on lambda generated by the function 
+# Seeds
+seed_mcmc <- list(1234, 4321)
+```
+
+
+```{r mod-probit-lv, eval=FALSE}
+# Model
+mod_probit_lv <-
+  foreach (i = 1:nchains) %dopar% {
+    # Infering model parameters
+    mod <- jSDM::jSDM_binomial_probit_block(
+      # Iterations
+      burnin=30000, mcmc=30000, thin=30,
+      # Data
+      presence_site_sp=pres_data,
+      site_data = env_data[,-1],
+      site_suitability = ~.,
+      # Model specification 
+      n_latent=2,
+      site_effect="none",
+      # Priors
+      V_beta = 10,
+      mu_beta = 0,
+      mu_lambda = 0,
+      V_lambda= 10,
+      # Starting values
+      beta_start = beta_start[[i]],
+      lambda_start = lambda_start[[i]],
+      W_start = W_start[[i]],
+      # Other
+      seed = seed_mcmc[[i]],
+      verbose = 1
+    )
+    return(mod)
+  }
+
+
+# Stop cluster
+stopCluster(clust)
+save(mod_probit_lv, file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_lv.rda")
+```
+
+```{r output-probit-lv}
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_lv.rda")
+# Output
+m3 <- mod_probit_lv[[1]]
+str(m3, max.level = 1)
+```
+
+
+```{r MCMC-convergence-probit-lv, echo=FALSE}
+# # psrf
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.Deviance"), arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.latent"), arr2mcmc))
+psrf_beta <- gelman.diag(mcmc_list_param[,1:np])$mpsrf
+psrf_lv <- gelman.diag(mcmc_list_lv)$mpsrf
+cat("psrf_lv:", psrf_lv, "\n")
+cat("psrf_beta:", psrf_beta, "\n")
+```
+
+
+```{r est-probit-lv}
+param_m3 <- lapply(m3$mcmc.sp,colMeans)
+probit_theta_m3 <- m3$probit_theta_pred
+deviance_m3 <- colMeans(m3$mcmc.Deviance)
+```
+
+*Comparison with BayesComm*
+
+```{r BayesComm-comparison-lv}
+load("~/Documents/jSDM/vignettes/SDM_jSDM_files/BayesComm_lv.rda")
+beta_est_m3 <- data.frame(matrix(unlist(lapply(param_m3,"[",1:np)), ncol=3, byrow=T))
+names(beta_est_m3) <- c("intercept","snow","snow2")
+beta_est_m3$sp <- names(pres_data)
+# Intercept
+plot(beta_est_bayescomm_lv$intercept, beta_est_m1$intercept,
+     main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+abline(a=0, b=1, col="red")
+# Snow
+plot(beta_est_bayescomm_lv$snow, beta_est_m1$snow,
+     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+abline(a=0, b=1, col="red")
+# Snow2
+plot(beta_est_bayescomm_lv$snow2, beta_est_m1$snow2,
+     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+
+plot(apply(mod_BayesComm_lv$trace$z,c(2,3), mean), m3$Z_latent)
+abline(a=0, b=1, col="red")
+```
+
+
+#### Model **with** random site effect 
+
+```{r chains-probit-randsite-lv, eval=FALSE}
+library(parallel)
+library(doParallel)
+## Make a cluster for parallel MCMCs
+nchains <- 2
+ncores <- nchains ## One core for each MCMC chains
+clust <- makeCluster(ncores)
+registerDoParallel(clust)
+
+# Number of latent variables
+nl <- 2
+
+# Starting parameters with constraints on lambdas
+lambda_start <- list(-1, 1)
+beta_start <- list(-1,1)
+W_start <- list(0.1,-0.1)
+alpha_start <- list(-1, 1)
+V_alpha_start <- list(1, 2)
+#formatting of starting parameters
+#and constraints on lambda generated by the function 
+# Seeds
+seed_mcmc <- list(1234, 4321)
+```
+
+
+```{r mod-probit-randsite-lv, eval=FALSE}
+# Model
+mod_probit_randsite_lv <-
+  foreach (i = 1:nchains) %dopar% {
+    # Infering model parameters
+    mod <- jSDM::jSDM_binomial_probit_block(
+      # Iterations
+      burnin=30000, mcmc=30000, thin=30,
+      # Data
+      presence_site_sp=pres_data,
+      site_data = env_data[,-1],
+      site_suitability = ~.,
+      # Model specification 
+      n_latent=2,
+      site_effect="random",
+      # Priors
+      V_beta = 10,
+      mu_beta = 0,
+      mu_lambda = 0,
+      V_lambda= 10,
+      shape=0.5, 
+      rate=0.0005,
+      # Starting values
+      beta_start = beta_start[[i]],
+      lambda_start = lambda_start[[i]],
+      W_start = W_start[[i]],
+      alpha_start = alpha_start[[i]],
+      V_alpha = V_alpha_start[[i]],
+      # Other
+      seed = seed_mcmc[[i]],
+      verbose = 1
+    )
+    return(mod)
+  }
+# Stop cluster
+stopCluster(clust)
+
+save(mod_probit_randsite_lv,
+     file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite_lv.rda")
+```
+
+```{r output-probit-randiste-lv}
+load(file="~/Documents/jSDM/vignettes/SDM_jSDM_files/mod_probit_randsite_lv.rda")
+# Output
+m4 <- mod_probit_randsite_lv[[1]]
+str(m4, max.level = 1)
+```
+
+
+```{r MCMC-convergence-randiste-lv, echo=FALSE}
+# MCMC lists
+mcmc_list_alpha <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.alpha"), arr2mcmc))
+mcmc_list_V_alpha <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.V_alpha"), arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.latent"), arr2mcmc))
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.Deviance"), arr2mcmc))
+# psrf gelman indice 
+psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_beta <- gelman.diag(mcmc_list_param[,1:np])$mpsrf
+psrf_lv <- gelman.diag(mcmc_list_lv)$mpsrf
+# gelman indice
+cat("psrf_lv:", psrf_lv, "\n")
+cat("psrf_alpha:", psrf_alpha, "\n")
+cat("psrf_beta:", psrf_beta, "\n")
+```
+
+
+```{r est-probit-randsite-lv}
+alpha_m4 <- colMeans(m4$mcmc.alpha)
+V_alpha_m4 <- colMeans(m4$mcmc.V_alpha)
+param_m4 <- lapply(m4$mcmc.sp,colMeans)
+probit_theta_m4 <- m4$probit_theta_pred
+deviance_m4 <- colMeans(m4$mcmc.Deviance)
+```
+
+# Results
+
+## Comparison of models with and without random site effect 
+
+### Comparison of parameter values
+
+We compare the intercept for each species between the two models.
+
+```{r comp-intercept-randsite}
+# Intercepts
+plot(lapply(beta_m1,"[", 1) , lapply(beta_m2, "[", 1), cex=nobs_sp^(1/4),
+     main="Fixed species intercept beta",
+     xlab="m1 without site effect", ylab="m2 with site effect")
+abline(a=0, b=1, col="red")
+plot(lapply(param_m3,"[", 1), lapply(param_m4, "[", 1), cex=nobs_sp^(1/4),
+     main="Fixed species intercept beta",
+     xlab="m3 without site effect", ylab="m4 with site effect")
+abline(a=0, b=1, col="red")
+```
+
+We compare the effect of the environmental variables for each species between the two models.
+
+```{r comp-env-effect-randsite}
+# Environmental variable effects
+for(k in 2:np){
+plot(lapply(beta_m1, "[", k), lapply(beta_m2,"[", k), cex=nobs_sp^(1/3),
+     main=paste0("Fixed species effect ", names(beta_m2[[1]][k])),
+     xlab="m1 without site effect", ylab="m2 with site effect")
+abline(a=0, b=1, col="red")
+}
+
+for(k in 2:np){
+plot(lapply(param_m3, "[", k), lapply(param_m4,"[", k), cex=nobs_sp^(1/3),
+      main=paste0("Fixed species effect ", names(param_m3[[1]][k])),
+     xlab="m3 without site effect", ylab="m4 with site effect")
+abline(a=0, b=1, col="red")
+}
+
+```
+
+### Comparing predictions
+
+```{r comp-pred-randsite}
+# Predictions
+plot(probit_theta_m1, probit_theta_m2, cex=rep(nobs_sp^(1/3), 75),
+     main="Predicted probit(theta)", 
+     xlab="m1 without site effect", ylab="m2 with site effect")
+abline(a=0, b=1, col="red")
+plot(probit_theta_m3, probit_theta_m4, cex=rep(nobs_sp^(1/3), 75),
+     main="Predicted probit(theta)", 
+     xlab="m3 without site effect", ylab="m4 with site effect")
+abline(a=0, b=1, col="red")
+```
+
+## Comparison of models with and without latent variables 
+
+### Comparison of parameter values  
+
+We compare the random site effects between the two models.
+
+```{r comp-lv}
+# Random site effects
+plot(alpha_m2, alpha_m4, main="Random site effect alpha",
+     xlab="m2 without latent variables", ylab="m4 with latent variables")
+abline(a=0, b=1, col="red")
+```
+
+A part of the initial site random effects is now included in the latent variables $W_i$.
+
+```{r V_alpha}
+V_alpha_m2
+V_alpha_m4
+V_alpha_m2 >=  V_alpha_m4
+```
+
+
+We compare the intercept for each species between the two models.
+
+```{r comp-intercept-lv}
+# Intercepts
+plot(lapply(beta_m1,"[", 1) , lapply(param_m3, "[", 1), cex=nobs_sp^(1/3),
+     main="Fixed species intercept beta",
+     xlab="m1 without latent variables", ylab="m3 with latent variables")
+abline(a=0, b=1, col="red")
+plot(lapply(beta_m2,"[", 1), lapply(param_m4, "[", 1), cex=nobs_sp^(1/3),
+     main="Fixed species intercept beta",
+     xlab="m2 without latent variables", ylab="m4 with latent variables")
+abline(a=0, b=1, col="red")
+```
+
+We compare the effect of the environmental variables for each species between the two models.
+
+```{r comp-env-effect-lv}
+# Environmental variable effects
+for(k in 2:np){
+plot(lapply(beta_m1, "[", k), lapply(param_m3,"[", k), cex=nobs_sp^(1/3),
+          main=paste0("Fixed species effect ", names(beta_m1[[1]][k])),
+     xlab="m1 without latent variables", ylab="m3 with latent variables")
+abline(a=0, b=1, col="red")
+}
+
+for(k in 2:np){
+plot(lapply(beta_m2, "[", k), lapply(param_m4,"[", k), cex=nobs_sp^(1/3),
+      main=paste0("Fixed species effect ", names(beta_m2[[1]][k])),
+     xlab="m2 without latent variables", ylab="m4 with latent variables")
+abline(a=0, b=1, col="red")
+}
+
+
+```
+
+### Comparing predictions
+
+```{r comp-pred-lv}
+# Predictions
+plot(probit_theta_m1, probit_theta_m3, cex=rep(nobs_sp^(1/3), 75),
+     main="Predicted probit(theta)",
+     xlab="m1 without latent variables", ylab="m3 with latent variables")
+abline(a=0, b=1, col="red")
+plot(probit_theta_m2, probit_theta_m4, cex=rep(nobs_sp^(1/3), 75),
+     main="Predicted probit(theta)",
+     xlab="m2 without latent variables", ylab="m4 with latent variables")
+abline(a=0, b=1, col="red")
+```
+
+## Deviance
+
+(ref:cap-comp-dev) **Deviance comparison**. Bewteen a probit model with two latent variables or without and with or without random site effect.\vspace{0.5cm}
+
+```{r comp-dev}
+# Deviance
+dev_df <- data.frame(mod=c("probit", "probit_rand_site", "probit_lv", "probit_rand_site_lv"),
+                     dev=c(deviance_m1, deviance_m2, deviance_m3,  deviance_m4))
+rownames(dev_df) <- c("m1 ","m2", "m3", "m4")
+knitr::kable(dev_df, caption="(ref:cap-comp-dev)", booktabs=TRUE, digits=0, row.names=T) %>%
+  kable_styling(position="center", full_width = FALSE)
+```
+
+
+# References

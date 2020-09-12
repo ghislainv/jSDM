@@ -47,11 +47,12 @@ The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize
 
 The package includes the following functions to fit various species distribution models :
 
-| function | data-type |
-|:---------|:----------|
-| `jSDM_binomial_logit()` | presence-absence |
-| `jSDM_binomial_probit_block()` | presence-absence |
-| `jSDM_poisson_log()` | abundance |
+| function |  data type   | data format |
+|:---------|:-------------|:------------|
+| `jSDM_binomial_logit()` | presence-absence | wide | 
+| `jSDM_binomial_probit_block()` | presence-absence | wide |
+| `jSDM_binomial_probit_block_long_format()` | presence-absence | long |
+| `jSDM_poisson_log()` | abundance | wide |
 
 * `jSDM_binomial_probit_block()` : 
 
@@ -102,6 +103,21 @@ The package includes the following functions to fit various species distribution
   | if `n_latent=0` and `site_effect="random"`| log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
   | if `n_latent>0` and `site_effect="random"`| log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
+* `jSDM_binomial_probit_block_long_format()` : 
+
+  **Ecological process:**
+
+  $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),$$ 
+  where
+
+  | conditions                                   | model specification                              |
+  |:---------------------------------------------|:-------------------------------------------------|
+  | if `n_latent=0` and `site_effect="none"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j$ |
+  | if `n_latent>0` and `site_effect="none"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
+  | if `n_latent=0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and   $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
+  | if `n_latent>0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
+  | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
+  | if `n_latent>0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
 
 
