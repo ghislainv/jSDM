@@ -116,6 +116,9 @@ LazyLoad:yes
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/SDM_jSDM.html">Comparing SDMs and JSDMs</a>
+    </li>
+    <li>
       <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
     </li>
     <li>
@@ -233,6 +236,19 @@ where <table class='table'>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>log\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
 <tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>log\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 <tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>log\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+</table></p>
+<p>#'</p></li>
+<li><p><code><a href='jSDM_binomial_probit_block_long_format.html'>jSDM_binomial_probit_block_long_format</a></code> : <br />
+<br />
+<b>Ecological process:</b>
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+where <table class='table'>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table></p></li>
 </ul>
 
@@ -262,7 +278,7 @@ where <table class='table'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

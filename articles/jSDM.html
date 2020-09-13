@@ -64,6 +64,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/SDM_jSDM.html">Comparing SDMs and JSDMs</a>
+    </li>
+    <li>
       <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
     </li>
     <li>
@@ -162,20 +165,29 @@
 <table class="table">
 <thead><tr class="header">
 <th align="left">function</th>
-<th align="left">data-type</th>
+<th align="left">data type</th>
+<th align="left">data format</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left"><code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code></td>
 <td align="left">presence-absence</td>
+<td align="left">wide</td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code></td>
 <td align="left">presence-absence</td>
+<td align="left">wide</td>
 </tr>
 <tr class="odd">
+<td align="left"><code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code></td>
+<td align="left">presence-absence</td>
+<td align="left">long</td>
+</tr>
+<tr class="even">
 <td align="left"><code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code></td>
 <td align="left">abundance</td>
+<td align="left">wide</td>
 </tr>
 </tbody>
 </table>
@@ -337,6 +349,60 @@ where</p>
 <td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="random"</code>
 </td>
 <td align="left">log<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</span> and <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code> :</p>
+<p><strong>Ecological process:</strong></p>
+<p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),\]</span>
+where</p>
+<table class="table">
+<colgroup>
+<col width="47%">
+<col width="52%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">conditions</th>
+<th align="left">model specification</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="none"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</span>
+</td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="none"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</span>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="random"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + \alpha_i\)</span> and <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</span>
+</td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</span>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="fixed"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + \alpha_i\)</span>
+</td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="random"</code>
+</td>
+<td align="left">probit<span class="math inline">\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</span> and <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</span>
 </td>
 </tr>
 </tbody>
@@ -623,7 +689,7 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

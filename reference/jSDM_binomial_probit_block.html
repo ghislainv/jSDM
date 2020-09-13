@@ -107,6 +107,9 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/SDM_jSDM.html">Comparing SDMs and JSDMs</a>
+    </li>
+    <li>
       <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
     </li>
     <li>
@@ -534,12 +537,12 @@ where</p><table class='table'>
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;       1553.592         35.859          2.536         12.691 
+#&gt;       1586.565         29.978          2.120          5.291 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
-#&gt;  1483  1531  1552  1579  1613 
+#&gt;  1534  1563  1587  1608  1645 
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.Deviance</span>)
 </div><div class='img'><img src='jSDM_binomial_probit_block-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
@@ -572,7 +575,7 @@ where</p><table class='table'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

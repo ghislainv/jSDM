@@ -1,6 +1,14 @@
 pandoc: '2.2'
-pkgdown: 1.6.0
+pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: []
-last_built: 2020-09-10T08:07Z
+articles:
+  SDM_jSDM: SDM_jSDM.html
+  jSDM: jSDM.html
+  jSDM_binomial_logit: jSDM_binomial_logit.html
+  jSDM_binomial_probit_block: jSDM_binomial_probit_block.html
+  jSDM_binomial_probit_block_long_format: jSDM_binomial_probit_block_long_format.html
+  jSDM_boral: jSDM_boral.html
+  jSDM_poisson_log: jSDM_poisson_log.html
+  proof: proof.html
+last_built: 2020-09-13T19:34Z
 
