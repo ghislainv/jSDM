@@ -379,10 +379,11 @@ mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.sp"), a
 mcmc_list_probit_theta <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","probit_theta_pred"), arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_randsite,"[[","mcmc.Deviance"), arr2mcmc))
 # psrf gelman indice 
-psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_alpha <- gelman.diag(mcmc_list_alpha, multivariate = FALSE)
+psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf
 psrf_beta <- gelman.diag(mcmc_list_beta)$mpsrf
 # gelman indice
-cat("psrf_alpha:", psrf_alpha, "\n")
+cat("psrf_V_alpha:", psrf_V_alpha[1], "\n")
 cat("psrf_beta:", psrf_beta, "\n")
 ```
 
@@ -592,12 +593,13 @@ mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.latent
 mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.sp"), arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_randsite_lv,"[[","mcmc.Deviance"), arr2mcmc))
 # psrf gelman indice 
-psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_alpha <- gelman.diag(mcmc_list_alpha, multivariate = FALSE)
+psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf
 psrf_beta <- gelman.diag(mcmc_list_param[,1:np])$mpsrf
 psrf_lv <- gelman.diag(mcmc_list_lv)$mpsrf
 # gelman indice
 cat("psrf_lv:", psrf_lv, "\n")
-cat("psrf_alpha:", psrf_alpha, "\n")
+cat("psrf_V_alpha:", psrf_V_alpha[1], "\n")
 cat("psrf_beta:", psrf_beta, "\n")
 ```
 
