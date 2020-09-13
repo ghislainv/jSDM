@@ -281,7 +281,7 @@ Figure 1.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">BayesComm</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">beta_est_bayescomm</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), oma=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">mod_BayesComm</span>, chain=<span class="st">"B$Agro.rupe"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">mod_BayesComm</span>, chain=<span class="st">"B$Agro.rupe"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"species "</span>, <span class="kw">aravo</span><span class="op">$</span><span class="kw">spe.names</span>[<span class="st">"Agro.rupe"</span>]), outer=<span class="fl">TRUE</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/plot-BayesComm-1.png" style="display: block; margin: auto;"></p>
@@ -306,7 +306,7 @@ Figure 1.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">BayesComm</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">beta_est_bayescomm_lv</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), oma=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">mod_BayesComm_lv</span>, chain=<span class="st">"B$Agro.rupe"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">mod_BayesComm_lv</span>, chain=<span class="st">"B$Agro.rupe"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"species "</span>, <span class="kw">aravo</span><span class="op">$</span><span class="kw">spe.names</span>[<span class="st">"Agro.rupe"</span>]), outer=<span class="fl">TRUE</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/plot-BayesComm_lv-1.png" style="display: block; margin: auto;"></p>
@@ -441,21 +441,21 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">beta_est_m1</span>) <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"intercept"</span>,<span class="st">"snow"</span>,<span class="st">"snow2"</span>)
 <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">pres_data</span>)
 <span class="co"># Intercept</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">intercept</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">intercept</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">intercept</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">intercept</span>,
      main=<span class="st">"beta_intercept"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="co"># Snow</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">snow</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">snow</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow</span>,
      main=<span class="st">"beta_snow"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-2.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="co"># Snow2</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">snow2</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow2</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm</span><span class="op">$</span><span class="kw">snow2</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow2</span>,
      main=<span class="st">"beta_snow2"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
@@ -648,27 +648,27 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">beta_est_m3</span>) <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"intercept"</span>,<span class="st">"snow"</span>,<span class="st">"snow2"</span>)
 <span class="kw">beta_est_m3</span><span class="op">$</span><span class="kw">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">pres_data</span>)
 <span class="co"># Intercept</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">intercept</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">intercept</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">intercept</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">intercept</span>,
      main=<span class="st">"beta_intercept"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-lv-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit">
 <span class="co"># Snow</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">snow</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">snow</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow</span>,
      main=<span class="st">"beta_snow"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-lv-2.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit">
 <span class="co"># Snow2</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">snow2</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow2</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">beta_est_bayescomm_lv</span><span class="op">$</span><span class="kw">snow2</span>, <span class="kw">beta_est_m1</span><span class="op">$</span><span class="kw">snow2</span>,
      main=<span class="st">"beta_snow2"</span>, xlab=<span class="st">"fitted by BayesComm"</span>, ylab=<span class="st">"fitted by jSDM"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-lv-3.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb29"><pre class="downlit">
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">Z_BayesComm</span>, <span class="kw">m3</span><span class="op">$</span><span class="kw">Z_latent</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">Z_BayesComm</span>, <span class="kw">m3</span><span class="op">$</span><span class="kw">Z_latent</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/BayesComm-comparison-lv-4.png" width="576" style="display: block; margin: auto;"></p>
@@ -787,14 +787,14 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <p>We compare the intercept for each species between the two models.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit">
 <span class="co"># Intercepts</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>,<span class="st">"["</span>, <span class="fl">1</span>) , <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">4</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>,<span class="st">"["</span>, <span class="fl">1</span>) , <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">4</span>),
      main=<span class="st">"Fixed species intercept beta"</span>,
      xlab=<span class="st">"m1 without site effect"</span>, ylab=<span class="st">"m2 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/comp-intercept-randsite-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>,<span class="st">"["</span>, <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">4</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>,<span class="st">"["</span>, <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">4</span>),
      main=<span class="st">"Fixed species intercept beta"</span>,
      xlab=<span class="st">"m3 without site effect"</span>, ylab=<span class="st">"m4 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -804,7 +804,7 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <div class="sourceCode" id="cb37"><pre class="downlit">
 <span class="co"># Environmental variable effects</span>
 <span class="co">for</span>(<span class="kw">k</span> <span class="co">in</span> <span class="fl">2</span><span class="op">:</span><span class="kw">np</span>){
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
      main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Fixed species effect "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">beta_m2</span>[[<span class="fl">1</span>]][<span class="kw">k</span>])),
      xlab=<span class="st">"m1 without site effect"</span>, ylab=<span class="st">"m2 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -814,7 +814,7 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <div class="sourceCode" id="cb38"><pre class="downlit">
 
 <span class="co">for</span>(<span class="kw">k</span> <span class="co">in</span> <span class="fl">2</span><span class="op">:</span><span class="kw">np</span>){
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
       main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Fixed species effect "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">param_m3</span>[[<span class="fl">1</span>]][<span class="kw">k</span>])),
      xlab=<span class="st">"m3 without site effect"</span>, ylab=<span class="st">"m4 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -827,14 +827,14 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <a href="#comparing-predictions" class="anchor"></a><span class="header-section-number">3.1.2</span> Comparing predictions</h3>
 <div class="sourceCode" id="cb39"><pre class="downlit">
 <span class="co"># Predictions</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta_m1</span>, <span class="kw">probit_theta_m2</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta_m1</span>, <span class="kw">probit_theta_m2</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
      main=<span class="st">"Predicted probit(theta)"</span>, 
      xlab=<span class="st">"m1 without site effect"</span>, ylab=<span class="st">"m2 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/comp-pred-randsite-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta_m3</span>, <span class="kw">probit_theta_m4</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta_m3</span>, <span class="kw">probit_theta_m4</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
      main=<span class="st">"Predicted probit(theta)"</span>, 
      xlab=<span class="st">"m3 without site effect"</span>, ylab=<span class="st">"m4 with site effect"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -851,7 +851,7 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <p>We compare the random site effects between the two models.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit">
 <span class="co"># Random site effects</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">alpha_m2</span>, <span class="kw">alpha_m4</span>, main=<span class="st">"Random site effect alpha"</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">alpha_m2</span>, <span class="kw">alpha_m4</span>, main=<span class="st">"Random site effect alpha"</span>,
      xlab=<span class="st">"m2 without latent variables"</span>, ylab=<span class="st">"m4 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
@@ -871,14 +871,14 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <p>We compare the intercept for each species between the two models.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit">
 <span class="co"># Intercepts</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>,<span class="st">"["</span>, <span class="fl">1</span>) , <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>,<span class="st">"["</span>, <span class="fl">1</span>) , <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
      main=<span class="st">"Fixed species intercept beta"</span>,
      xlab=<span class="st">"m1 without latent variables"</span>, ylab=<span class="st">"m3 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/comp-intercept-lv-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>,<span class="st">"["</span>, <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>,<span class="st">"["</span>, <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>, <span class="st">"["</span>, <span class="fl">1</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
      main=<span class="st">"Fixed species intercept beta"</span>,
      xlab=<span class="st">"m2 without latent variables"</span>, ylab=<span class="st">"m4 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -888,7 +888,7 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <div class="sourceCode" id="cb45"><pre class="downlit">
 <span class="co"># Environmental variable effects</span>
 <span class="co">for</span>(<span class="kw">k</span> <span class="co">in</span> <span class="fl">2</span><span class="op">:</span><span class="kw">np</span>){
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m1</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m3</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
           main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Fixed species effect "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">beta_m1</span>[[<span class="fl">1</span>]][<span class="kw">k</span>])),
      xlab=<span class="st">"m1 without latent variables"</span>, ylab=<span class="st">"m3 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -898,7 +898,7 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <div class="sourceCode" id="cb46"><pre class="downlit">
 
 <span class="co">for</span>(<span class="kw">k</span> <span class="co">in</span> <span class="fl">2</span><span class="op">:</span><span class="kw">np</span>){
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">beta_m2</span>, <span class="st">"["</span>, <span class="kw">k</span>), <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">param_m4</span>,<span class="st">"["</span>, <span class="kw">k</span>), cex=<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>),
       main=<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Fixed species effect "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">beta_m2</span>[[<span class="fl">1</span>]][<span class="kw">k</span>])),
      xlab=<span class="st">"m2 without latent variables"</span>, ylab=<span class="st">"m4 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
@@ -911,14 +911,14 @@ If the convergence diagnostic gives values substantially above 1, its indicates 
 <a href="#comparing-predictions-1" class="anchor"></a><span class="header-section-number">3.2.2</span> Comparing predictions</h3>
 <div class="sourceCode" id="cb47"><pre class="downlit">
 <span class="co"># Predictions</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta_m1</span>, <span class="kw">probit_theta_m3</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta_m1</span>, <span class="kw">probit_theta_m3</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
      main=<span class="st">"Predicted probit(theta)"</span>,
      xlab=<span class="st">"m1 without latent variables"</span>, ylab=<span class="st">"m3 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
 </pre></div>
 <p><img src="SDM_jSDM_files/figure-html/comp-pred-lv-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb48"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">probit_theta_m2</span>, <span class="kw">probit_theta_m4</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">probit_theta_m2</span>, <span class="kw">probit_theta_m4</span>, cex=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">nobs_sp</span><span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">3</span>), <span class="fl">75</span>),
      main=<span class="st">"Predicted probit(theta)"</span>,
      xlab=<span class="st">"m2 without latent variables"</span>, ylab=<span class="st">"m4 with latent variables"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(a=<span class="fl">0</span>, b=<span class="fl">1</span>, col=<span class="st">"red"</span>)
