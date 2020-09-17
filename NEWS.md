@@ -8,7 +8,7 @@
 * Functions to fit models in which site effects are included as fixed effects, as random effects or not included and with or without latent variables.
 * Complete [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) documentation 
 * Add datasets ([`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html), [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html), [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html), [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html), [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html), [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html)). 
-* Five new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression", "Bernoulli probit regression with data in long format" and “Binomial logistic regression”) are available.
+* Seven new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression", "Bernoulli probit regression with data in long format", “Binomial logistic regression, "Running jSDM in parallel" and "Comparing SDMs and JSDMs") are available.
 * Complete and correct the vignette "Comparison jSDM-boral". 
 * New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM>.
 

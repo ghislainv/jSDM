@@ -176,7 +176,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
     }
   
     // center alpha 
-    alpha_run = alpha_run - arma::mean(alpha_run);
+    //alpha_run = alpha_run - arma::mean(alpha_run);
     
     ////////////////////////////////////////////////
     // V_alpha

@@ -1,0 +1,413 @@
+---
+title: "Running jSDM in parallel"
+output:
+  bookdown::html_document2:
+  #base_format: rmarkdown::html_vignette
+  #highlight: tango
+  number_sections: true
+toc: true
+toc_float: true
+fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteIndexEntry{Running jSDM in parallel}
+ %\VignetteEncoding{UTF-8}
+ %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
+---
+  
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+knitr::opts_chunk$set(
+  fig.align = "center",
+  fig.width = 6, fig.height = 6,
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  eval=TRUE,
+  highlight = TRUE
+)
+```
+
+# Generating data for a Hierarchical Gaussian Linear Regression
+
+## Binomial model for presence-absence data
+
+We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
+
+$$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
+  
+  $$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
+  
+  - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
+- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
+- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
+
+This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
+
+## Data-set simulation 
+
+We generate presence-absence data following this generalized multivariate linear model with a probit link function, which includes latent variables and random site effect. 
+
+```{r simulated-data, eval=FALSE}
+#=================
+#== Load libraries
+library(jSDM)
+
+#==================
+#== Data simulation
+
+#= Number of sites
+nsite <- 210
+
+#= Set seed for repeatability
+seed <- 1234
+set.seed(seed)
+
+#= Number of species
+nsp<- 70
+
+#= Number of latent variables
+n_latent <- 2
+
+#= Ecological process (suitability)
+x1 <- rnorm(nsite,0,1)
+x2 <- rnorm(nsite,0,1)
+X <- cbind(rep(1,nsite),x1,x2)
+np <- ncol(X)
+#= Latent variables W
+W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+data <- cbind (X,W)
+#= Fixed species effect beta 
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
+                        byrow=TRUE, nrow=nsp))
+#= Factor loading lambda  
+l.zero <- 0
+l.diag <- runif(2,0,2)
+l.other <- runif(nsp*n_latent-3,-2,2)
+lambda.target <- t(matrix(c(l.diag[1],l.zero,
+                            l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
+param.target <- rbind(beta.target,lambda.target)
+#= Variance of random site effect 
+V_alpha.target <- 0.5
+#= Random site effect 
+alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
+#= probit(theta)
+probit_theta<-X%*%beta.target + W%*%lambda.target + alpha.target
+# Latent variable Z 
+e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
+Z_true <- probit_theta + e
+# Presence-absence matrix Y
+Y <- matrix (NA, nsite,nsp)
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
+    else {Y[i,j] <- 0}
+  }
+}
+colnames(Y) <- paste0("Species", 1:nsp)
+head(Y)
+save(Y, Z_true, alpha.target, V_alpha.target, beta.target,
+     X, lambda.target, W,file="jSDM_in_parallel_files/sim_data.rda")
+```
+
+We look at the number of observations per site.
+
+```{r presence-data}
+load("jSDM_in_parallel_files/sim_data.rda")
+# Number of observations per site
+nobs_site <- apply(Y, 1, sum)
+nobs_site
+# Number of observations per species
+nobs_sp <- apply(Y, 2, sum)
+nobs_sp
+```
+
+# Fitting joint Species Distribution Models in parallel
+
+We simulate in parallel two Monte-Carlo Markov chains (MCMC) of parameters values for this binomial model, using the R packages  `doParallel` and `foreach` in a first time and `snow` and `snowfall` in a second time. 
+
+##Using `doParallel` and `foreach`
+
+We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
+
+```{r chains-probit-1, eval=FALSE}
+library(parallel)
+library(doParallel)
+## Make a cluster for parallel MCMCs
+nchains <- 2
+ncores <- nchains ## One core for each MCMC chains
+clust <- makeCluster(ncores)
+registerDoParallel(clust)
+
+# Number of latent variables
+nl <- 2
+
+# Starting parameters 
+lambda_start <- c(-1,1)
+beta_start <- c(-1,1)
+W_start <- c(0,-0.1)
+alpha_start <- c(-1, 1)
+V_alpha_start <- c(1, 2)
+#formatting of starting parameters
+#and constraints on lambda generated by the function 
+# Seeds
+seed_mcmc <- c(1234, 4321)
+```
+
+
+```{r mod-probit-1, eval=FALSE}
+# Model
+mod_probit_1 <-
+  foreach (i = 1:nchains) %dopar% {
+    # Infering model parameters
+    mod <- jSDM::jSDM_binomial_probit_block(
+      # Iterations
+      burnin=25000, mcmc=25000, thin=25,
+      # Data
+      presence_site_sp=Y,
+      site_data = X[,-1],
+      site_suitability = ~.,
+      # Model specification 
+      n_latent=nl,
+      site_effect="random",
+      # Priors
+      V_beta = 10,
+      mu_beta = 0,
+      mu_lambda = 0,
+      V_lambda= 10,
+      shape=0.5, 
+      rate=0.0005,
+      # Starting values
+      beta_start = beta_start[i],
+      lambda_start = lambda_start[i],
+      W_start=W_start[i],
+      alpha_start = alpha_start[i],
+      V_alpha = V_alpha_start[i],
+      # Other
+      seed = seed_mcmc[i],
+      verbose = 1
+    )
+    return(mod)
+  }
+# Stop cluster
+stopCluster(clust)
+
+save(mod_probit_1, file="jSDM_in_parallel_files/mod_probit_1.rda")
+```
+
+```{r output-probit-1}
+load("jSDM_in_parallel_files/mod_probit_1.rda")
+# Output
+length(mod_probit_1)
+m1 <- mod_probit_1[[1]]
+str(m1, max.level = 1)
+```
+
+## Using `snow` and `snowfall`
+
+```{r chains-probit-2, eval=FALSE}
+## Load libraries
+library(snow)
+library(snowfall)
+
+## Setting the number of CPUs to be 2
+sfInit(parallel=TRUE, cpus=2)
+
+## Assigning the jSDM library to each CPU
+sfLibrary(jSDM)
+
+# Number of latent variables
+nl <- 2
+
+# Starting parameters 
+# formatting of starting parameters
+# and constraints on lambda generated by the function 
+lambda_start <- c(-2, 2)
+beta_start <- c(-2,2)
+W_start <- c(0.2,-0.2)
+alpha_start <- c(-2, 2)
+V_alpha_start <- c(2, 3)
+
+# Seeds
+seed_mcmc <- c(123, 321)
+
+# list of data and starting parameters 
+listData <- list(Y=Y, X=X[,-1], beta_start, lambda_start, W_start, alpha_start, V_alpha_start, seed_mcmc)
+```
+
+
+```{r mod-probit-2, eval=FALSE}
+## Defining the function that will run MCMC on each CPU
+# Arguments:
+# i - will be 1 or 2
+mod.MCMChregress <- function (i,listData) {
+  # data
+  Y <- listData[[1]]
+  X <- listData[[2]]
+  beta_start <- listData[[3]]
+  lambda_start <- listData[[4]]
+  W_start <- listData[[5]]
+  alpha_start <- listData[[6]]
+  V_alpha_start <- listData[[7]]
+  seed_mcmc <- listData[[8]]
+  # Infering model parameters
+  mod <- jSDM_binomial_probit_block(
+      # Iterations
+      burnin=25000, mcmc=25000, thin=25,
+      # Data
+      presence_site_sp=Y,
+      site_data = X,
+      site_suitability = ~.,
+      # Model specification 
+      n_latent=2,
+      site_effect="random",
+      # Priors
+      V_beta = 10,
+      mu_beta = 0,
+      mu_lambda = 0,
+      V_lambda= 10,
+      shape=0.5, 
+      rate=0.0005,
+      # Starting values
+      beta_start = beta_start[i],
+      lambda_start = lambda_start[i],
+      W_start = W_start[i],
+      alpha_start = alpha_start[i],
+      V_alpha = V_alpha_start[i],
+      # Other
+      seed = seed_mcmc[i],
+      verbose = 1
+  )
+  return(mod)
+}# Starting parameters 
+
+## Calling the sfLapply function that will run on each of the CPUs
+mod_probit_2 <- sfLapply(1:2, fun=mod.MCMChregress, listData=listData)
+
+## Stop cluster
+sfStop()
+
+save(mod_probit_2, file="jSDM_in_parallel_files/mod_probit_2.rda")
+```
+
+```{r output-probit-2}
+load("jSDM_in_parallel_files/mod_probit_2.rda")
+# Output
+length(mod_probit_2)
+m2 <- mod_probit_2[[1]]
+str(m2, max.level = 1)
+```
+
+# Evaluation of MCMC convergence 
+
+We evaluate the convergence of the MCMC output in which four parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values substantially above 1, its indicates lack of convergence.
+
+```{r MCMC-convergence-randiste-lv, echo=FALSE}
+require(coda)
+arr2mcmc <- function(x) {
+  return(mcmc(as.data.frame(x)))
+}
+# MCMC lists
+mcmc_list_alpha <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.alpha"), arr2mcmc))
+mcmc_list_V_alpha <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.V_alpha"), arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.latent"), arr2mcmc))
+mcmc_list_param <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.Deviance"), arr2mcmc))
+nsamp <- nrow(mcmc_list_alpha[[1]])
+# psrf gelman indice 
+psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf
+psrf_beta <- gelman.diag(mcmc_list_param[,1:np])$mpsrf
+psrf_lv <- gelman.diag(mcmc_list_lv)$mpsrf
+# display gelman indice
+cat("psrf_lv:", psrf_lv, "\n")
+cat("alpha:", psrf_alpha, "\n")
+cat("psrf_V_alpha:", psrf_V_alpha[1], "\n")
+cat("psrf_beta:", psrf_beta, "\n")
+```
+
+
+# Representation of results
+
+```{r est-probit}
+## Plot trace and posterior distributions 
+# for two first species
+par(mfrow=c(1,2))
+plot(mcmc_list_param[, 1:((np+nl)*2)])
+# for two first sites 
+plot(mcmc_list_lv[,c(1:2,nsite+1:2)])
+plot(mcmc_list_alpha[,c(1,2)])
+par(mfrow=c(1,2))
+plot(mcmc_list_V_alpha)
+# Deviance 
+plot(mcmc_list_deviance)
+```
+
+# Accuracy of predictions 
+
+```{r obs-fitted}
+## Predictive posterior mean for each observation
+alpha_m1 <- colMeans(m1$mcmc.alpha)
+V_alpha_m1 <- colMeans(m1$mcmc.V_alpha)
+param_m1 <- matrix(unlist(lapply(m1$mcmc.sp,colMeans)), nrow=nsp, byrow=T)
+probit_theta_m1 <- m1$probit_theta_pred
+deviance_m1 <- colMeans(m1$mcmc.Deviance)
+
+# Species effects beta and factor loadings lambda
+par(mfrow=c(1,2))
+plot(t(beta.target), param_m1[,1:np],
+     main="species effect beta",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+plot(t(lambda.target), param_m1[,(np+1):(np+nl)],
+     main="factor loadings lambda",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+## W latent variables
+par(mfrow=c(1,2))
+for (l in 1:n_latent) {
+  plot(W[,l],
+       summary(m1$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
+       main = paste0("Latent variable W_", l),
+       xlab ="obs", ylab ="fitted")
+  abline(a=0,b=1,col='red')
+}
+#= Random site effect alpha 
+par(mfrow=c(1,3))
+plot(alpha.target, alpha_m1,
+     xlab ="obs", ylab ="fitted", main="site effect alpha")
+abline(a=0,b=1,col='red')
+## Valpha
+coda::traceplot(m1$mcmc.V_alpha, main="Trace V_alpha")
+coda::densplot(m1$mcmc.V_alpha,main="Density V_alpha")
+abline(v=V_alpha.target,col='red')
+
+## Deviance 
+plot(m1$mcmc.Deviance)
+
+#= Predictions 
+par(mfrow=c(1,2))
+## probit(tetha)
+plot(probit_theta, probit_theta_m1,
+     main="probit(theta)",xlab="obs",ylab="fitted")
+abline(a=0,b=1,col='red')
+## Z
+plot(Z_true, m1$Z_latent,
+     main="Z_latent", xlab="obs", ylab="fitted")
+abline(a=0,b=1,col='red')
+```
+
+# References

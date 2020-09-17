@@ -372,7 +372,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     beta_start <- form.beta.start.sp(beta_start, np, nsp)
     lambda_start <- form.lambda.start.sp(lambda_start, n_latent, nsp)
     W_start <-form.W.start.sp(W_start, nsite, n_latent)
-    param_start = rbind(beta_start,lambda_start)
+    # param_start = rbind(beta_start,lambda_start)
     
     #========
     # Form and check priors
@@ -381,18 +381,25 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     Vbeta <- check.Vbeta.mat(V_beta,np)
     mulambda <- check.mulambda(mu_lambda,n_latent)
     Vlambda <- check.Vlambda.mat(V_lambda,n_latent)
-    Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
-    muparam <- c(mubeta,mulambda)
+    # Vparam <- diag(c(diag(Vbeta),diag(Vlambda)))
+    # muparam <- c(mubeta,mulambda)
     V_W <- diag(rep(1,n_latent))
     
     #========
     # call Rcpp function
     #========
-    mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+
+    mod <- Rcpp_jSDM_binomial_probit_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                               Y=Y, X=as.matrix(X),
-                                              param_start= param_start, V_param=Vparam, mu_param = muparam,
+                                              beta_start= beta_start, V_beta=Vbeta, mu_beta = mubeta,
+                                              lambda_start= lambda_start, V_lambda=Vlambda, mu_lambda = mulambda,
                                               W_start=W_start, V_W=V_W,
                                               seed=seed, verbose=verbose)
+    # mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+    #                                           Y=Y, X=as.matrix(X),
+    #                                           param_start= param_start, V_param=Vparam, mu_param = muparam,
+    #                                           W_start=W_start, V_W=V_W,
+    #                                           seed=seed, verbose=verbose)
     
     #= Transform Sample list in an MCMC object
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
@@ -400,10 +407,15 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      # MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      # colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
+      # ## lambda_j
+      # MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      # colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
+      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)

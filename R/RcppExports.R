@@ -73,6 +73,10 @@ Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format <- function(ngibbs, nth
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, param_start, V_param, mu_param, V_W, W_start, alpha_start, V_alpha_start, shape, rate, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_lv <- function(ngibbs, nthin, nburn, Y, X, beta_start, lambda_start, V_beta, mu_beta, V_lambda, mu_lambda, V_W, W_start, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_lv`, ngibbs, nthin, nburn, Y, X, beta_start, lambda_start, V_beta, mu_beta, V_lambda, mu_lambda, V_W, W_start, seed, verbose)
+}
+
 Rcpp_jSDM_poisson_log <- function(ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_poisson_log`, ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose)
 }

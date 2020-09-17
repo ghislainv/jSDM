@@ -270,7 +270,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # nburn <- 5000
 # nthin <- 5
 # ngibbs <- nsamp+nburn
-# mod <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+# mod_block <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                           Y=Y, X=X,
 #                                           param_start=param_start, W_start=matrix(0,nsite,nl),
 #                                           V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
@@ -286,10 +286,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # par(mfrow=c(np,2))
 # mean_beta <- matrix(0,nsp,np)
 # for (j in 1:nsp) {
-#   mean_beta[j,] <-apply(mod$param[,j,1:np],2,mean)
+#   mean_beta[j,] <-apply(mod_block$param[,j,1:np],2,mean)
 #   if(j<5){
 #     for (p in 1:np) {
-#       MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+#       MCMC.betaj <- coda::mcmc(mod_block$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
 #       summary(MCMC.betaj)
 #       coda::traceplot(MCMC.betaj[,p])
 #       coda::densplot(MCMC.betaj[,p], main = paste0("beta",p,j))
@@ -301,10 +301,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # par(mfrow=c(nl*2,2))
 # mean_lambda <- matrix(0,nsp,nl)
 # for (j in 1:nsp) {
-#   mean_lambda[j,] <- apply(mod$param[,j,(np+1):(nl+np)],2,mean)
+#   mean_lambda[j,] <- apply(mod_block$param[,j,(np+1):(nl+np)],2,mean)
 #   if(j<5){
 #     for (l in 1:nl) {
-#       MCMC.lambdaj <- coda::mcmc(mod$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
+#       MCMC.lambdaj <- coda::mcmc(mod_block$param[,j,(np+1):(nl+np)], start=nburn+1, end=ngibbs, thin=nthin)
 #       summary(MCMC.lambdaj)
 #       coda::traceplot(MCMC.lambdaj[,l])
 #       coda::densplot(MCMC.lambdaj[,l],main = paste0("lambda",l,j))
@@ -321,28 +321,28 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-## W latent variables
+# # W latent variables
 # par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# mean_W <- apply(mod$W, c(2,3), mean)
+# mean_W <- apply(mod_block$W, c(2,3), mean)
 # plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
 # title("Variables latentes", outer = T)
 # plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-#
-# # lambda * W 
+# 
+# # lambda * W
 # par(mfrow=c(1,1))
-# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
+# plot(W %*% lambda.target,mean_W %*%t(mean_lambda),
 #      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
 # abline(a=0,b=1,col='red')
-#
+# 
 # ## Deviance
-# mean(mod$Deviance)
+# mean(mod_block$Deviance)
 # ## Prediction
 # # probit_theta
-# plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
+# plot(probit_theta,mod_block$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
 # abline(a=0,b=1,col='red')
 # # Z
-# plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
+# plot(Z_true,mod_block$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
 # abline(a=0,b=1,col='red')
 */
