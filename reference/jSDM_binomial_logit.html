@@ -106,7 +106,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/SDM_jSDM.html">Comparing SDMs and JSDMs</a>
+      <a href="../articles/Madagascar.html">Application of jSDM on forest data from Madagascar</a>
+    </li>
+    <li>
+      <a href="../articles/SDM_JSDM.html">Comparing SDMs and JSDMs</a>
     </li>
     <li>
       <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
@@ -119,6 +122,9 @@
     </li>
     <li>
       <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
+    </li>
+    <li>
+      <a href="../articles/jSDM_in_parallel.html">Running jSDM in parallel</a>
     </li>
     <li>
       <a href="../articles/jSDM_poisson_log.html">Poisson log-linear regression</a>
@@ -502,11 +508,11 @@ where</p><table class='table'>
 #&gt;       2 </div><div class='input'>
 <span class='co'># Species effects beta and factor loadings lambda</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>beta.target</span>, <span class='kw'>mean_beta</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>beta.target</span>, <span class='kw'>mean_beta</span>,
      main=<span class='st'>"species effect beta"</span>,
      xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>lambda.target</span>, <span class='kw'>mean_lambda</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>lambda.target</span>, <span class='kw'>mean_lambda</span>,
      main=<span class='st'>"factor loadings lambda"</span>,
      xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
@@ -514,7 +520,7 @@ where</p><table class='table'>
 <span class='co'>## W latent variables</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='co'>for</span> (<span class='kw'>l</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>n_latent</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>W</span>[,<span class='kw'>l</span>],
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>W</span>[,<span class='kw'>l</span>],
        <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.latent</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='kw'>l</span>)]])[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
        main = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='kw'>l</span>),
        xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
@@ -524,7 +530,7 @@ where</p><table class='table'>
 <span class='co'>## alpha</span>
 <span class='co'># summary(mod$mcmc.alpha)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.alpha</span>)[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.alpha</span>)[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
      xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>, main=<span class='st'>"site effect alpha"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
 <span class='co'>## Valpha</span>
@@ -535,16 +541,16 @@ where</p><table class='table'>
 </div><div class='img'><img src='jSDM_binomial_logit-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Deviance</span>
 <span class='co'># summary(mod$mcmc.Deviance)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.Deviance</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.Deviance</span>)
 </div><div class='img'><img src='jSDM_binomial_logit-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>logit.theta</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>),<span class='kw'>logit</span>),
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>logit.theta</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>),<span class='kw'>logit</span>),
      main=<span class='st'>"logit(theta)"</span>,
      xlab=<span class='st'>"obs"</span>, ylab=<span class='st'>"fitted"</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span> ,b=<span class='fl'>1</span>, col=<span class='st'>"red"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>theta</span>, <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>theta</span>, <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>theta_latent</span>,
      main=<span class='st'>"Probabilities of occurence theta"</span>,
      xlab=<span class='st'>"obs"</span>, ylab=<span class='st'>"fitted"</span>)
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span> ,b=<span class='fl'>1</span>, col=<span class='st'>"red"</span>)
