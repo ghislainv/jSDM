@@ -145,7 +145,7 @@ for (j in 1:nsp) {
 Z_BayesComm <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm_lv <- difftime(T2,T1)
-save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, mod_BayesComm_lv, file="SDM_JSDM_files/BayesComm_lv.rda")
+save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="SDM_JSDM_files/BayesComm_lv.rda")
 ```
 
 ```{r plot-BayesComm_lv, eval=FALSE}
