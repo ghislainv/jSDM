@@ -18,10 +18,8 @@ vignette: >
  %\VignetteIndexEntry{Running jSDM in parallel}
  %\VignetteEncoding{UTF-8}
  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: inline
 ---
-  
+
 ```{r setup, include=FALSE}
 library(knitr)
 library(kableExtra)
@@ -43,10 +41,10 @@ knitr::opts_chunk$set(
 We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
 
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
-  
-  $$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
-  
-  - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
+
+$$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
+
+- $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 - $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
 - $X_i$: Vector of explanatory variables for site $i$ (including intercept).
 - $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
@@ -117,15 +115,14 @@ for (i in 1:nsite){
 }
 colnames(Y) <- paste0("Species", 1:nsp)
 head(Y)
-save(Y, Z_true, alpha.target, V_alpha.target, beta.target,
-     X, lambda.target, W,file="jSDM_in_parallel_files/sim_data.rda")
+save(Y, Z_true, alpha.target, V_alpha.target, beta.target, probit_theta,
+     X, lambda.target, np , nsite, nsp, n_latent, W, file="jSDM_in_parallel_files/sim_data.rda")
 ```
 
 We look at the number of observations per site.
 
 ```{r presence-data}
 load("jSDM_in_parallel_files/sim_data.rda")
-np <- ncol(X)
 # Number of observations per site
 nobs_site <- apply(Y, 1, sum)
 nobs_site
@@ -138,7 +135,7 @@ nobs_sp
 
 We simulate in parallel two Monte-Carlo Markov chains (MCMC) of parameters values for this binomial model, using the R packages  `doParallel` and `foreach` in a first time and `snow` and `snowfall` in a second time. 
 
-##Using `doParallel` and `foreach`
+## Using `doParallel` and `foreach`
 
 We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
 
@@ -204,7 +201,7 @@ mod_probit_1 <-
 # Stop cluster
 stopCluster(clust)
 
-save(mod_probit_1, nl, file="jSDM_in_parallel_files/mod_probit_1.rda")
+save(mod_probit_1,  file="jSDM_in_parallel_files/mod_probit_1.rda")
 ```
 
 ```{r output-probit-1}
@@ -264,31 +261,31 @@ mod.MCMChregress <- function (i,listData) {
   seed_mcmc <- listData[[8]]
   # Infering model parameters
   mod <- jSDM_binomial_probit_block(
-      # Iterations
-      burnin=25000, mcmc=25000, thin=25,
-      # Data
-      presence_site_sp=Y,
-      site_data = X,
-      site_suitability = ~.,
-      # Model specification 
-      n_latent=2,
-      site_effect="random",
-      # Priors
-      V_beta = 10,
-      mu_beta = 0,
-      mu_lambda = 0,
-      V_lambda= 10,
-      shape=0.5, 
-      rate=0.0005,
-      # Starting values
-      beta_start = beta_start[i],
-      lambda_start = lambda_start[i],
-      W_start = W_start[i],
-      alpha_start = alpha_start[i],
-      V_alpha = V_alpha_start[i],
-      # Other
-      seed = seed_mcmc[i],
-      verbose = 1
+    # Iterations
+    burnin=25000, mcmc=25000, thin=25,
+    # Data
+    presence_site_sp=Y,
+    site_data = X,
+    site_suitability = ~.,
+    # Model specification 
+    n_latent=2,
+    site_effect="random",
+    # Priors
+    V_beta = 10,
+    mu_beta = 0,
+    mu_lambda = 0,
+    V_lambda= 10,
+    shape=0.5, 
+    rate=0.0005,
+    # Starting values
+    beta_start = beta_start[i],
+    lambda_start = lambda_start[i],
+    W_start = W_start[i],
+    alpha_start = alpha_start[i],
+    V_alpha = V_alpha_start[i],
+    # Other
+    seed = seed_mcmc[i],
+    verbose = 1
   )
   return(mod)
 }# Starting parameters 
@@ -299,7 +296,7 @@ mod_probit_2 <- sfLapply(1:2, fun=mod.MCMChregress, listData=listData)
 ## Stop cluster
 sfStop()
 
-save(mod_probit_2,nl, file="jSDM_in_parallel_files/mod_probit_2.rda")
+save(mod_probit_2, file="jSDM_in_parallel_files/mod_probit_2.rda")
 ```
 
 ```{r output-probit-2}
@@ -321,12 +318,13 @@ require(coda)
 arr2mcmc <- function(x) {
   return(mcmc(as.data.frame(x)))
 }
+mod_probit <- c(mod_probit_1,mod_probit_2)
 # MCMC lists
-mcmc_list_alpha <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.alpha"), arr2mcmc))
-mcmc_list_V_alpha <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.V_alpha"), arr2mcmc))
-mcmc_list_lv <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.latent"), arr2mcmc))
-mcmc_list_param <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_deviance <- mcmc.list(lapply(lapply(c(mod_probit_1, mod_probit_2),"[[","mcmc.Deviance"), arr2mcmc))
+mcmc_list_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.alpha"), arr2mcmc))
+mcmc_list_V_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.V_alpha"), arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.latent"), arr2mcmc))
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 nsamp <- nrow(mcmc_list_alpha[[1]])
 # psrf gelman indice 
 psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
@@ -346,13 +344,17 @@ cat("psrf_beta:", psrf_beta, "\n")
 ```{r est-probit}
 ## Plot trace and posterior distributions 
 # for two first species
-par(mfrow=c(1,2))
-plot(mcmc_list_param[, 1:((np+nl)*2)])
+plot(mcmc_list_param[,1:((np+n_latent)*2)])
 # for two first sites 
 plot(mcmc_list_lv[,c(1:2,nsite+1:2)])
-plot(mcmc_list_alpha[,c(1,2)])
 par(mfrow=c(1,2))
-plot(mcmc_list_V_alpha)
+coda::traceplot(mcmc_list_V_alpha)
+coda::densplot(mcmc_list_V_alpha)
+abline(v=V_alpha.target, col='red')
+legend("topright", legend="V_alpha.target",
+       lwd=1,col='red', cex=0.6, bty="n")
+
+plot(mcmc_list_alpha[,c(1,2)])
 # Deviance 
 plot(mcmc_list_deviance)
 ```
@@ -361,53 +363,76 @@ plot(mcmc_list_deviance)
 
 ```{r obs-fitted}
 ## Predictive posterior mean for each observation
-alpha_m1 <- colMeans(m1$mcmc.alpha)
-V_alpha_m1 <- colMeans(m1$mcmc.V_alpha)
-param_m1 <- matrix(unlist(lapply(m1$mcmc.sp,colMeans)), nrow=nsp, byrow=T)
-probit_theta_m1 <- m1$probit_theta_pred
-deviance_m1 <- colMeans(m1$mcmc.Deviance)
-
+nchains <- length(mod_probit)
 # Species effects beta and factor loadings lambda
 par(mfrow=c(1,2))
-plot(t(beta.target), param_m1[,1:np],
-     main="species effect beta",
-     xlab ="obs", ylab ="fitted")
-abline(a=0,b=1,col='red')
-plot(t(lambda.target), param_m1[,(np+1):(np+nl)],
-     main="factor loadings lambda",
-     xlab ="obs", ylab ="fitted")
-abline(a=0,b=1,col='red')
+for (i in 1:nchains){
+  param <- matrix(unlist(lapply(mod_probit[[i]]$mcmc.sp,colMeans)), nrow=nsp, byrow=T)
+  if(i==1){
+    plot(t(beta.target), param[,1:np],
+         main="species effect beta",
+         xlab ="obs", ylab ="fitted")
+    abline(a=0,b=1,col='red')
+  }
+  else{
+    points(t(beta.target), param[,1:np], col=2:nchains)
+  }
+}
+for (i in 1:nchains){
+    param <- matrix(unlist(lapply(mod_probit[[i]]$mcmc.sp,colMeans)), nrow=nsp, byrow=T)
+  if (i==1){
+    plot(t(lambda.target), param[,(np+1):(np+n_latent)],
+         main="factor loadings lambda",
+         xlab ="obs", ylab ="fitted")
+    abline(a=0,b=1,col='red')
+  } else {
+    points(t(lambda.target), param[,(np+1):(np+n_latent)],
+           col=2:nchains)
+  }
+}
 ## W latent variables
 par(mfrow=c(1,2))
 for (l in 1:n_latent) {
-  plot(W[,l],
-       summary(m1$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"],
-       main = paste0("Latent variable W_", l),
-       xlab ="obs", ylab ="fitted")
-  abline(a=0,b=1,col='red')
+  for (i in 1:nchains){
+    if (i==1){
+      plot(W[,l],
+           summary(mod_probit[[i]]$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
+           ,main = paste0("Latent variable W_", l),
+           xlab ="obs", ylab ="fitted")
+      abline(a=0,b=1,col='red')
+    }
+    else{
+      points(W[,l],
+           summary(mod_probit[[i]]$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
+           ,col=2:nchains)
+    }
+  }
 }
-#= Random site effect alpha 
-par(mfrow=c(1,3))
-plot(alpha.target, alpha_m1,
-     xlab ="obs", ylab ="fitted", main="site effect alpha")
-abline(a=0,b=1,col='red')
-## Valpha
-coda::traceplot(m1$mcmc.V_alpha, main="Trace V_alpha")
-coda::densplot(m1$mcmc.V_alpha,main="Density V_alpha")
-abline(v=V_alpha.target,col='red')
 
-## Deviance 
-plot(m1$mcmc.Deviance)
+#= Random site effect alpha 
+par(mfrow=c(1,1))
+plot(alpha.target, colMeans(mod_probit[[1]]$mcmc.alpha),
+     xlab ="obs", ylab ="fitted", main="site effect alpha")
+for (i in 2:nchains){
+  points(alpha.target, colMeans(mod_probit[[i]]$mcmc.alpha), col=2:nchains)
+}
+abline(a=0,b=1,col='red')
 
 #= Predictions 
 par(mfrow=c(1,2))
-## probit(tetha)
-plot(probit_theta, probit_theta_m1,
+plot(probit_theta, mod_probit[[1]]$probit_theta_pred,
      main="probit(theta)",xlab="obs",ylab="fitted")
+for (i in 2:nchains){
+  ## probit(tetha)
+  points(probit_theta, mod_probit[[i]]$probit_theta_pred,col=c(2:nchains))
+}
 abline(a=0,b=1,col='red')
 ## Z
-plot(Z_true, m1$Z_latent,
+plot(Z_true, mod_probit[[1]]$Z_latent,
      main="Z_latent", xlab="obs", ylab="fitted")
+for (i in 2:nchains){
+  points(Z_true, mod_probit[[i]]$Z_latent, col=2:nchains)
+}
 abline(a=0,b=1,col='red')
 ```
 
