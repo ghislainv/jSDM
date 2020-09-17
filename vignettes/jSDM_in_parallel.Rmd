@@ -203,7 +203,7 @@ mod_probit_1 <-
 # Stop cluster
 stopCluster(clust)
 
-save(mod_probit_1, file="jSDM_in_parallel_files/mod_probit_1.rda")
+save(mod_probit_1, nl, file="jSDM_in_parallel_files/mod_probit_1.rda")
 ```
 
 ```{r output-probit-1}
@@ -298,7 +298,7 @@ mod_probit_2 <- sfLapply(1:2, fun=mod.MCMChregress, listData=listData)
 ## Stop cluster
 sfStop()
 
-save(mod_probit_2, file="jSDM_in_parallel_files/mod_probit_2.rda")
+save(mod_probit_2,nl, file="jSDM_in_parallel_files/mod_probit_2.rda")
 ```
 
 ```{r output-probit-2}
