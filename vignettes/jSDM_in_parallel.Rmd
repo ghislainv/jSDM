@@ -125,6 +125,7 @@ We look at the number of observations per site.
 
 ```{r presence-data}
 load("jSDM_in_parallel_files/sim_data.rda")
+np <- ncol(X)
 # Number of observations per site
 nobs_site <- apply(Y, 1, sum)
 nobs_site
