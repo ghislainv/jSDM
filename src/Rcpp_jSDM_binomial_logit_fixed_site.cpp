@@ -115,26 +115,24 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
     
     for ( int i = 0; i < NSITE; i++ ) {
       // alpha
-      dens_data.site_alpha = i; // Specifying the site 
-      double x_now = dens_data.alpha_run(i);
-      double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_logit(x_now, &dens_data);
-      double p_prop = alphadens_logit(x_prop, &dens_data);
-      double ratio = std::exp(p_prop - p_now); // ratio
-      double z = gsl_rng_uniform(r);
-      // Actualization
-      if ( z < ratio ) {
-        dens_data.alpha_run(i) = x_prop;
-        nA_alpha(i)++;
-      } 
+      if(i==0){
+        // constraints of identifiability on alpha
+        dens_data.alpha_run(i) = 0.0;
+      } else {
+        dens_data.site_alpha = i; // Specifying the site 
+        double x_now = dens_data.alpha_run(i);
+        double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
+        double p_now = alphadens_logit(x_now, &dens_data);
+        double p_prop = alphadens_logit(x_prop, &dens_data);
+        double ratio = std::exp(p_prop - p_now); // ratio
+        double z = gsl_rng_uniform(r);
+        // Actualization
+        if ( z < ratio ) {
+          dens_data.alpha_run(i) = x_prop;
+          nA_alpha(i)++;
+        } 
+      }
     } // loop on sites 
-    
-    // center alpha 
-    dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
-    
-    // constraints of identifiability on alpha
-    dens_data.alpha_run(0) = 0.0;
-    
     
     for ( int j = 0; j < NSP; j++ ) {
       // beta
@@ -280,8 +278,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
 # library(coda)
 # library(jSDM)
 # 
-# nsp <- 50
-# nsite <- 200
+# nsp <- 70
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # visits<- rpois(nsite,3)
@@ -307,12 +305,12 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
 # 
 # # Call to C++ function
 # mod <- Rcpp_jSDM_binomial_logit_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                           Y=Y, T=visits, X=X,
-#                                           beta_start=matrix(0,np,nsp),
-#                                           alpha_start=rep(0,nsite),
-#                                           V_alpha=10, mu_beta=rep(0,np),
-#                                           V_beta=rep(1.0E6,np),
-#                                           seed=1234, ropt=0.44, verbose=1)
+#                                            Y=Y, T=visits, X=X,
+#                                            beta_start=matrix(0,np,nsp),
+#                                            alpha_start=rep(0,nsite),
+#                                            V_alpha=10, mu_beta=rep(0,np),
+#                                            V_beta=rep(100,np),
+#                                            seed=1234, ropt=0.44, verbose=1)
 # 
 # # Parameter estimates
 # ##alpha

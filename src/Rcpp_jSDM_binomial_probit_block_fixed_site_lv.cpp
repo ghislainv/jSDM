@@ -176,9 +176,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
-    // center alpha 
-    alpha_run = alpha_run - arma::mean(alpha_run);
-    
     // constraints of identifiability on alpha
     alpha_run(0) = 0.0;
     
@@ -260,8 +257,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
 # #Data
 # #===================================================
 # 
-# nsp<- 50
-# nsite <- 200
+# nsp<- 70
+# nsite <- 210
 # np <- 3
 # nl <- 2
 # seed <- 123
@@ -306,8 +303,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
 # nthin <- 5
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                                      Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
-#                                                      mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
+#                                                      Y=Y, X=X, param_start=param_start, 
+#                                                      V_param=diag(c(rep(100,np),rep(10,nl))), mu_param = rep(0,np+nl),
+#                                                      W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
 #                                                      alpha_start=rep(0,nsite), V_alpha=10,
 #                                                      seed=123, verbose=1)
 # 
@@ -361,17 +359,17 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
 # plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-## W latent variables
+# # W latent variables
 # par(mfrow=c(1,2))
 # mean_W <- apply(mod$W, c(2,3), mean)
 # plot(W[,1],mean_W[,1])
 # abline(a=0,b=1,col='red')
 # plot(W[,2],mean_W[,2])
 # abline(a=0,b=1,col='red')
-#
-# # lambda * W 
+# 
+# # lambda * W
 # par(mfrow=c(1,1))
-# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda))
+# plot(W %*% lambda.target,mean_W %*%t(mean_lambda))
 # abline(a=0,b=1,col='red')
 # 
 # ## Deviance
@@ -383,4 +381,4 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
 # # Z
 # plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
 # abline(a=0,b=1,col='red')
-# */
+*/

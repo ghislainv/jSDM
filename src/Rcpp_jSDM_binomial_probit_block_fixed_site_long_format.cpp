@@ -146,9 +146,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
-    // center alpha 
-    alpha_run = alpha_run - arma::mean(alpha_run);
-    
     // constraints of identifiability on alpha
     alpha_run(0) = 0.0;
     
@@ -225,8 +222,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(
 # # Data
 # # ===================================================
 # 
-# nsp <- 50
-# nsite <- 150
+# nsp <- 70
+# nsite <- 210
 # seed <- 123
 # set.seed(seed)
 # 
@@ -269,7 +266,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(
 # mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_long_format(
 #   ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #   Y=data$Y, X=X, Id_site=data$site, Id_sp=data$species,
-#   beta_start=matrix(0,np,nsp), V_beta=diag(rep(1.0E6,np)),
+#   beta_start=matrix(0,np,nsp), V_beta=diag(rep(100,np)),
 #   mu_beta = rep(0,np),
 #   alpha_start=rep(0,nsite), V_alpha=10,
 #   seed=123, verbose=1)

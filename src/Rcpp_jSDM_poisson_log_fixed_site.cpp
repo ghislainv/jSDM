@@ -116,25 +116,24 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site(
     
     for ( int i = 0; i < NSITE; i++ ) {
       // alpha
-      dens_data.site_alpha = i; // Specifying the site 
-      double x_now = dens_data.alpha_run(i);
-      double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_pois(x_now, &dens_data);
-      double p_prop = alphadens_pois(x_prop, &dens_data);
-      double ratio = std::exp(p_prop - p_now); // ratio
-      double z = gsl_rng_uniform(r);
-      // Actualization
-      if ( z < ratio ) {
-        dens_data.alpha_run(i) = x_prop;
-        nA_alpha(i)++;
-      } 
-    } // loop on sites
-    
-    // Centering alpha 
-    dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
-    
-    // constraints of identifiability on alpha
-    dens_data.alpha_run(0) = 0.0;
+      if(i==0){
+        // constraints of identifiability on alpha
+        dens_data.alpha_run(i) = 0.0;
+      } else {
+        dens_data.site_alpha = i; // Specifying the site 
+        double x_now = dens_data.alpha_run(i);
+        double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
+        double p_now = alphadens_pois(x_now, &dens_data);
+        double p_prop = alphadens_pois(x_prop, &dens_data);
+        double ratio = std::exp(p_prop - p_now); // ratio
+        double z = gsl_rng_uniform(r);
+        // Actualization
+        if ( z < ratio ) {
+          dens_data.alpha_run(i) = x_prop;
+          nA_alpha(i)++;
+        } 
+      } // loop on sites
+    }
     
     for ( int j = 0; j < NSP; j++ ) {
       // beta
@@ -279,8 +278,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site(
 /*** R
 # library(coda)
 # 
-# nsp <- 50
-# nsite <- 150
+# nsp <- 70
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -289,7 +288,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site(
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
 # np <- ncol(X)
-# beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+# beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 # alpha.target <- runif(nsite,-2,2)
 # alpha.target[1] <- 0
 # log.theta <- X %*% t(beta.target) + alpha.target
@@ -297,9 +296,9 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site(
 # Y <- apply(theta, 2, rpois, n=nsite)
 # 
 # # Iterations
-# nsamp <- 10000
-# nburn <- 10000
-# nthin <- 10
+# nsamp <- 5000
+# nburn <- 5000
+# nthin <- 5
 # ngibbs <- nsamp+nburn
 # 
 # # Call to C++ function
@@ -308,7 +307,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site(
 #                                           beta_start=matrix(0,np,nsp),
 #                                           alpha_start=rep(0,nsite),
 #                                           V_alpha=10,
-#                                           mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+#                                           mu_beta=rep(0,np), V_beta=rep(100,np),
 #                                           seed=1234, ropt=0.44, verbose=1)
 # 
 # # Parameter estimates

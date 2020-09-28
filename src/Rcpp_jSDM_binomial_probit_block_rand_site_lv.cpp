@@ -261,12 +261,12 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 
 // Test
 /*** R
-#===================================================
-#Data
-#===================================================
+# #===================================================
+# #Data
+# #===================================================
 # 
-# nsp<- 50
-# nsite <- 200
+# nsp<- 70
+# nsite <- 210
 # np <- 3
 # nl <- 2
 # seed <- 1234
@@ -311,7 +311,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # nthin <- 5
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                               Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
+#                               Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(100,np),rep(10,nl))),
 #                               mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
 #                               alpha_start=rep(0,nsite), V_alpha_start=1, shape=0.5, rate=0.0005,
 #                               seed=123, verbose=1)
@@ -373,7 +373,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-## W latent variables
+# # W latent variables
 # par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
 # mean_W <- apply(mod$W, c(2,3), mean)
 # plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
@@ -381,10 +381,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # title("Variables latentes", outer = T)
 # plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-#
-# # lambda * W 
+# 
+# # lambda * W
 # par(mfrow=c(1,1))
-# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
+# plot(W %*% lambda.target,mean_W %*%t(mean_lambda),
 #      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
 # abline(a=0,b=1,col='red')
 # 

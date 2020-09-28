@@ -130,9 +130,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
-    // center alpha 
-    alpha_run = alpha_run - arma::mean(alpha_run);
-    
     // constraints of identifiability on alpha
     alpha_run(0) = 0.0;
     
@@ -207,12 +204,12 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
 
 // Test
 /*** R
-#===================================================
-#Data
-#===================================================
+# #===================================================
+# # Data
+# #===================================================
 # 
-# nsp<- 50
-# nsite <- 200
+# nsp<- 70
+# nsite <- 210
 # np <- 3
 # nl <- 2
 # seed <- 123
@@ -246,7 +243,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
 # nthin <- 5
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                                   Y=Y, X=X, beta_start=matrix(0,np,nsp), V_beta=diag(rep(1.0E6,np)),
+#                                                   Y=Y, X=X, beta_start=matrix(0,np,nsp),
+#                                                   V_beta=diag(rep(100,np)),
 #                                                   mu_beta = rep(0,np),
 #                                                   alpha_start=rep(0,nsite), V_alpha=10,
 #                                                   seed=123, verbose=1)
@@ -277,7 +275,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
 #   }
 # }
 # 
-# ## Species effect beta 
+# ## Species effect beta
 # par(mfrow=c(1,1),oma=c(1, 0, 1, 0))
 # plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
 # title("Fixed species effects", outer = T)

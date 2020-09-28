@@ -224,7 +224,7 @@ double betadens_pois (double beta_jk, void *dens_data) {
   // logLikelihood
   double logL = 0.0;
   for ( int i = 0; i < d->NSITE; i++ ) {
-    /* theta */
+    // log_theta 
     double log_theta = 0.0;
     for ( int p = 0; p < d->NP; p++ ) {
       if ( p != k ) {
@@ -328,7 +328,7 @@ double alphadens_pois(double alpha_i, void *dens_data) {
   int i = d->site_alpha;
   // logLikelihood
   double logL = 0.0;
-  /* theta */
+  // theta 
   for ( int j = 0; j < d->NSP; j++ ) {
     double log_theta = 0.0;
     for ( int p = 0; p < d->NP; p++ ) {

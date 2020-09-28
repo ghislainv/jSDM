@@ -131,19 +131,24 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
   for ( int g = 0; g < NGIBBS; g++ ) {
     
     for ( int i = 0; i < NSITE; i++ ) {
-      // alpha
-      dens_data.site_alpha = i; // Specifying the site 
-      double x_now = dens_data.alpha_run(i);
-      double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
-      double p_now = alphadens_logit(x_now, &dens_data);
-      double p_prop = alphadens_logit(x_prop, &dens_data);
-      double ratio = std::exp(p_prop - p_now); // ratio
-      double z = gsl_rng_uniform(r);
-      // Actualization
-      if ( z < ratio ) {
-        dens_data.alpha_run(i) = x_prop;
-        nA_alpha(i)++;
-      } 
+      if(i==0){    
+        // constraints of identifiability on alpha
+        dens_data.alpha_run(i) = 0.0;
+      } else {
+        // alpha
+        dens_data.site_alpha = i; // Specifying the site 
+        double x_now = dens_data.alpha_run(i);
+        double x_prop = x_now + gsl_ran_gaussian_ziggurat(r, sigma_alpha(i));
+        double p_now = alphadens_logit(x_now, &dens_data);
+        double p_prop = alphadens_logit(x_prop, &dens_data);
+        double ratio = std::exp(p_prop - p_now); // ratio
+        double z = gsl_rng_uniform(r);
+        // Actualization
+        if ( z < ratio ) {
+          dens_data.alpha_run(i) = x_prop;
+          nA_alpha(i)++;
+        } 
+      }
       
       // W
       dens_data.site_W = i; // Specifying the site
@@ -163,16 +168,10 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
       } // loop on rank of latent variable 
     } // loop on sites 
     
-    // center alpha 
-    //dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
-    
-    // constraints of identifiability on alpha
-    dens_data.alpha_run(0) = 0.0;
-    
     // Centering and reducing W_i 
     for ( int q = 0; q < NL; q++ ) {
       dens_data.W_run.col(q) = dens_data.W_run.col(q) - arma::mean(dens_data.W_run.col(q));
-      dens_data.W_run.col(q) = dens_data.W_run.col(q)*1/arma::stddev(dens_data.W_run.col(q));
+      dens_data.W_run.col(q) = dens_data.W_run.col(q)*1.0/arma::stddev(dens_data.W_run.col(q));
     }
     
     for ( int j = 0; j < NSP; j++ ) {
@@ -390,7 +389,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
 # library(jSDM)
 # 
 # nsp <- 100
-# nsite <- 300
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # visits<- rpois(nsite,3)
@@ -428,7 +427,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
 #                                               lambda_start=matrix(0,nl,nsp),
 #                                               W_start=matrix(0,nsite,nl),
 #                                               alpha_start=rep(0,nsite), V_alpha=10,
-#                                               mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+#                                               mu_beta=rep(0,np), V_beta=rep(100,np),
 #                                               mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
 #                                               V_W=rep(1,nl),
 #                                               seed=1234, ropt=0.44, verbose=1)
@@ -474,7 +473,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
 # plot(lambda.target,mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
 # 
-## W latent variables
+# # W latent variables
 # par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
 # mean_W <- apply(mod$W, c(2,3), mean)
 # plot(W[,1],mean_W[,1], main="W1",xlab="obs", ylab= "fitted")
@@ -482,10 +481,10 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site_lv(
 # title("Variables latentes", outer = T)
 # plot(W[,2],mean_W[,2], main="W2", xlab="obs", ylab= "fitted")
 # abline(a=0,b=1,col='red')
-#
-# # lambda * W 
+# 
+# # lambda * W
 # par(mfrow=c(1,1))
-# plot(W %*% t(lambda.target),mean_W %*%t(mean_lambda),
+# plot(W %*% t(lambda.target), mean_W %*%t(mean_lambda),
 #      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
 # abline(a=0,b=1,col='red')
 # 

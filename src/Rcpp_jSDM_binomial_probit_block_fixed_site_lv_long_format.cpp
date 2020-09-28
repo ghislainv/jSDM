@@ -179,24 +179,23 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
     
     // Loop on sites 
     for (int i=0; i<NSITE; i++) {
-      int nobs_i = rowId_site[i].n_elem;
-      double small_v=0.0;
-      // small_v
-      for (int n=0; n<nobs_i; n++) {
-        small_v += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
+      if(i==0){
+        // constraints of identifiability on alpha
+        alpha_run(i) = 0.0;
+      } else {
+        int nobs_i = rowId_site[i].n_elem;
+        double small_v=0.0;
+        // small_v
+        for (int n=0; n<nobs_i; n++) {
+          small_v += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
+        }
+        // big_V
+        double big_V = 1/(1/V_alpha + nobs_i);
+        
+        // Draw in the posterior distribution
+        alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
       }
-      // big_V
-      double big_V = 1/(1/V_alpha + nobs_i);
-      
-      // Draw in the posterior distribution
-      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-      }
-    
-    // center alpha 
-    alpha_run = alpha_run - arma::mean(alpha_run);
-    
-    // constraints of identifiability on alpha
-    alpha_run(0) = 0.0;
+    }
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -275,8 +274,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 # # Data
 # # ===================================================
 # 
-# nsp <- 50
-# nsite <- 150
+# nsp <- 70
+# nsite <- 210 
 # np <- 3
 # nl <- 2
 # seed <- 123
@@ -298,6 +297,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 # alpha.target[1] <- 0
 # probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
+# # W_supObs <- cbind(rnorm(nsite),rnorm(nsite))
 # probit_theta_supObs <- X_supObs%*%beta.target + W%*%lambda.target + alpha.target
 # probit_theta <- c(probit_theta, probit_theta_supObs)
 # nobs <- length(probit_theta)
@@ -330,7 +330,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 # mod <- Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 #   ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #   Y=data$Y, X=X, Id_site=data$site, Id_sp=data$species,
-#   param_start=param_start, V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
+#   param_start=param_start, V_param=diag(c(rep(100,np),rep(10,nl))),
 #   mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
 #   alpha_start=rep(0,nsite), V_alpha=10,
 #   seed=123, verbose=1)
