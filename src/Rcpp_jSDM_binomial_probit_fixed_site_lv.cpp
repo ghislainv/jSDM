@@ -22,19 +22,21 @@ using namespace std;
 /* Gibbs sampler function */
 
 // [[Rcpp::export]]
-Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const int nburn, 
-                                        const arma::umat &Y, 
-                                        const arma::mat &X,
-                                        const arma::mat &beta_start,
-                                        const arma::mat &lambda_start,
-                                        const arma::mat &V_beta,
-                                        const arma::vec &mu_beta,
-                                        const arma::mat &V_lambda,
-                                        const arma::vec &mu_lambda,
-                                        arma::mat V_W,
-                                        arma::mat W_start,
-                                        const int seed,
-                                        const int verbose) {
+Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nthin,const int nburn, 
+                                                         const arma::umat &Y, 
+                                                         const arma::mat &X,
+                                                         const arma::mat &beta_start,
+                                                         const arma::mat &V_beta,
+                                                         const arma::vec &mu_beta,
+                                                         const arma::mat &lambda_start,
+                                                         const arma::mat &V_lambda,
+                                                         const arma::vec &mu_lambda,
+                                                         arma::mat V_W,
+                                                         arma::mat W_start,
+                                                         arma::vec alpha_start,
+                                                         double V_alpha,
+                                                         const int seed,
+                                                         const int verbose) {
   
   ////////////////////////////////////////////////////////////////////////////////
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,6 +65,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
   arma::Cube<double> beta; beta.zeros(NSAMP, NSP, NP);
   arma::Cube<double> lambda; lambda.zeros(NSAMP, NSP, NL);
   arma::Cube<double> W; W.zeros(NSAMP, NSITE, NL);
+  arma::mat alpha; alpha.zeros(NSAMP, NSITE);
   /* Latent variable */
   arma::mat probit_theta_pred; probit_theta_pred.zeros(NSITE, NSP);
   arma::mat Z_latent; Z_latent.zeros(NSITE, NSP);
@@ -72,14 +75,17 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
   /////////////////////////////////////
   // Initializing running parameters //
   
-  //  mat of species effects parameters and coefficients for latent variables (nl+np,nsp)
+  //  mat of species effects parameters (np,nsp)
   arma::mat beta_run = beta_start;
+  // coefficients for latent variables (nl+np,nsp)
   arma::mat lambda_run = lambda_start;
+  // alpha vec of sites effects (nsite)
+  arma::vec alpha_run = alpha_start;
   // w latent variables (nsite*nl)
   arma::mat W_run = W_start;
   // Z latent (nsite*nsp)
   arma::mat Z_run; Z_run.zeros(NSITE,NSP);
-  // probit_theta_ij = X_i*beta_j + W_i*lambda_j
+  // probit_theta_ij = X_i*beta_j + W_i*lambda_j + alpha_i
   arma::mat probit_theta_run; probit_theta_run.zeros(NSITE,NSP);
   
   ////////////
@@ -114,7 +120,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
     // Loop on species
     for (int j=0; j<NSP; j++) {
       // small_v
-      arma::vec small_v = inv(V_beta)*mu_beta + X.t()*(Z_run.col(j)-W_run*lambda_run.col(j));
+      arma::vec small_v = inv(V_beta)*mu_beta + X.t()*(Z_run.col(j)-W_run*lambda_run.col(j)-alpha_run);
       // big_V
       arma::mat big_V = inv(inv(V_beta)+X.t()*X);
       
@@ -124,33 +130,24 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
       //////////////////////////////////
       // mat lambda : Gibbs algorithm //
       // small_v
-      small_v = inv(V_lambda)*mu_lambda + W_run.t()*(Z_run.col(j)-X*beta_run.col(j));
+      small_v = inv(V_lambda)*mu_lambda + W_run.t()*(Z_run.col(j)-X*beta_run.col(j)-alpha_run);
       // big_V
       big_V = inv(inv(V_lambda)+W_run.t()*W_run);
       
       // Draw in the posterior distribution
       arma::vec lambda_prop = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      
       // constraints on lambda
       for (int l=0; l<NL; l++) {
         if (l > j) {
           lambda_prop(l) = 0;
         }
         if ((l==j) & (lambda_prop(l) < 0)) {
-          // arma::vec Wlambda; Wlambda.zeros(NSITE);
-          // for(int lprim=0; lprim<NL; lprim++){
-          //   if(lprim!= l)
-          //   Wlambda += W_run.col(lprim)*lambda_prop(lprim);
-          // }
-          // double mu = arma::as_scalar(1/(V_lambda(l,l))*mu_lambda(l) + W_run.col(l).t()*(Z_run.col(j)-X*beta_run.col(j)-Wlambda));
-          // double sigma = std::sqrt(arma::as_scalar(1/(1/V_lambda(l,l)+W_run.col(l).t()*W_run.col(l))));
-          // lambda_prop(l) = rtnorm(s,0,R_PosInf,mu*sigma,sigma);
-          //lambda_prop(l) = rtnorm(s,0,R_PosInf,big_V(l,l)*small_v(l),std::sqrt(big_V(l,l)));
           lambda_prop(l) = lambda_run(l,j);
         }
       }
       lambda_run.col(j) = lambda_prop;
     }
+    
     
     /////////////////////////////////////////////
     // mat latent variable W: Gibbs algorithm //
@@ -161,12 +158,36 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
       arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
       
       // small_v
-      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run).t();
+      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
       
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
     }
+    // Centering and reducing W_i 
+    // for ( int q = 0; q < NL; q++ ) {
+    //   W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+    //   W_run.col(q) = W_run.col(q)/arma::stddev(W_run.col(q));
+    // }
+    
+    ///////////////////////////////
+    // vec alpha : Gibbs algorithm //
+    
+    // Loop on sites 
+    for (int i=0; i<NSITE; i++) {
+      // small_v
+      double small_v = arma::sum(Z_run.row(i)-X.row(i)*beta_run-W_run.row(i)*lambda_run);
+      
+      // big_V
+      double big_V = 1/(1/V_alpha + NSP);
+      
+      // Draw in the posterior distribution
+      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
+    }
+    
+    // constraints of identifiability on alpha
+    alpha_run(0) = 0.0;
+    
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -175,8 +196,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
     double logL = 0.0;
     for ( int i = 0; i < NSITE; i++ ) {
       for ( int j = 0; j < NSP; j++ ) {
-        // probit(theta_ij) = X_i*beta_j + W_i*lambda_j 
-        probit_theta_run(i,j) = arma::as_scalar(X.row(i)*beta_run.col(j) + W_run.row(i)*lambda_run.col(j));
+        // probit(theta_ij) = X_i*beta_j + W_i*lambda_j + alpha_i 
+        probit_theta_run(i,j) = arma::as_scalar(X.row(i)*beta_run.col(j) + W_run.row(i)*lambda_run.col(j) + alpha_run(i));
         // link function probit is the inverse of N(0,1) repartition function 
         double theta = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
         
@@ -201,6 +222,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
           probit_theta_pred(i,j) += probit_theta_run(i,j)/NSAMP;        
         }
       }
+      alpha.row(isamp-1) = alpha_run.t();
       Deviance(isamp-1) = Deviance_run;
     }
     
@@ -230,14 +252,15 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
   
   // Return results as a Rcpp::List
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
-                                          Rcpp::Named("lambda")=lambda,
+                                          Rcpp::Named("lambda") = lambda,
                                           Rcpp::Named("W") = W,
+                                          Rcpp::Named("alpha") = alpha,
                                           Rcpp::Named("Deviance") = Deviance,
                                           Rcpp::Named("Z_latent") = Z_latent,
                                           Rcpp::Named("probit_theta_pred") = probit_theta_pred );  
   return results;
   
-} // end Rcpp_jSDM_binomial_probit_lv
+} // end Rcpp_jSDM_binomial_probit_fixed_site_lv
 
 // Test
 /*** R
@@ -249,7 +272,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 # nsite <- 210
 # np <- 3
 # nl <- 2
-# seed <- 1234
+# seed <- 123
 # set.seed(seed)
 # 
 # # Ecological process (suitability)
@@ -257,18 +280,19 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
 # colnames(X) <- c("Int","x1","x2")
-# W <- matrix(rnorm(nsite*nl,0,1),nrow=nsite,byrow=TRUE)
+# W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+# data = cbind (X,W)
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-# mat <- t(matrix(runif(nsp*nl,-2,2), byrow=TRUE, nrow=nsp))
-# diag(mat) <- runif(nl,0,2)
-# lambda.target <- matrix(0,nl,nsp)
-# lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
-# probit_theta <- X %*% beta.target + W %*% lambda.target
+# l.zero <- 0
+# l.diag <- runif(2,0,2)
+# l.other <- runif(nsp*2-3,-2,2)
+# lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp))
+# alpha.target <- runif(nsite,-2,2)
+# alpha.target[1] <- 0
+# probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
-# par(mfrow=c(1,2))
-# hist(probit_theta)
-# plot(probit_theta,Z_true)
+# 
 # Y <- matrix (NA, nsite,nsp)
 # for (i in 1:nsite){
 #   for (j in 1:nsp){
@@ -276,6 +300,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 #     else {Y[i,j] <- 0}
 #   }
 # }
+# 
 # lambda_start=matrix(0,nl,nsp)
 # for (i in 1:nl){
 #   lambda_start[i,i] = 1
@@ -287,20 +312,28 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 # nburn <- 5000
 # nthin <- 5
 # ngibbs <- nsamp+nburn
-# mod <- Rcpp_jSDM_binomial_probit_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                     Y=Y, X=X,beta_start=matrix(0,np,nsp),
-#                                     lambda_start=lambda_start, W_start=matrix(0,nsite,nl),
-#                                     V_beta=diag(rep(10,np)), V_lambda=diag(rep(10,nl)),
-#                                     mu_beta = rep(0,np),mu_lambda = rep(0,nl), V_W=diag(rep(1,nl)),
-#                                     seed=123, verbose=1)
+# mod <- Rcpp_jSDM_binomial_probit_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
+#                                                      Y=Y, X=X, lambda_start=lambda_start,
+#                                                      beta_start = matrix(0,np,nsp),
+#                                                      V_lambda=diag(rep(10,nl)), mu_lambda = rep(0,nl),
+#                                                      V_beta=diag(rep(100,np)), mu_beta = rep(0,np),
+#                                                      W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
+#                                                      alpha_start=rep(0,nsite), V_alpha=10,
+#                                                      seed=123, verbose=1)
 # 
 # # ===================================================
 # # Result analysis
 # # ===================================================
 # 
-# # Parameter estimates
+# ## alpha
+# par(mfrow=c(1,1))
+# MCMC_alpha <- coda::mcmc(mod$alpha, start=nburn+1, end=ngibbs, thin=nthin)
+# plot(alpha.target,summary(MCMC_alpha)[[1]][,"Mean"],
+#      ylab ="fitted", xlab="obs", main="Fixed site effect alpha")
+# abline(a=0,b=1,col='red')
+# 
 # ## beta_j
-# par(mfrow=c(3,2))
+# par(mfrow=c(np,2))
 # mean_beta <- matrix(0,nsp,np)
 # for (j in 1:nsp) {
 #   mean_beta[j,] <-apply(mod$beta[,j,],2,mean)
@@ -315,7 +348,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 #   }
 # }
 # ## lambda_j
-# par(mfrow=c(3,2))
+# par(mfrow=c(nl*2,2))
 # mean_lambda <- matrix(0,nsp,nl)
 # for (j in 1:nsp) {
 #   mean_lambda[j,] <- apply(mod$lambda[,j,],2,mean)
@@ -339,18 +372,20 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 # abline(a=0,b=1,col='red')
 # 
 # # W latent variables
-# par(mfrow=c(1,nl),oma=c(1, 0, 1, 0))
+# par(mfrow=c(1,2))
 # mean_W <- apply(mod$W, c(2,3), mean)
-# for(l in 1:nl){
-# plot(W[,l],mean_W[,l], main=paste0("W",l), xlab="obs", ylab= "fitted")
+# plot(W[,1],mean_W[,1])
 # abline(a=0,b=1,col='red')
-# }
+# plot(W[,2],mean_W[,2])
+# abline(a=0,b=1,col='red')
 # 
 # # lambda * W
 # par(mfrow=c(1,1))
-# plot(W %*% lambda.target,mean_W %*%t(mean_lambda),
-#      xlab="obs", ylab= "fitted", main="W_i.lambda_j")
+# plot(W %*% lambda.target, mean_W %*%t(mean_lambda))
 # abline(a=0,b=1,col='red')
+# 
+# ## Deviance
+# mean(mod$Deviance)
 # ## Prediction
 # # probit_theta
 # plot(probit_theta,mod$probit_theta_pred,xlab="obs", ylab="fitted",main="probit(theta)")
@@ -358,6 +393,4 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
 # # Z
 # plot(Z_true,mod$Z_latent, xlab="obs", ylab="fitted",main="Z_latent" )
 # abline(a=0,b=1,col='red')
-# ## Deviance
-# mean(mod$Deviance)
-*/
+# */

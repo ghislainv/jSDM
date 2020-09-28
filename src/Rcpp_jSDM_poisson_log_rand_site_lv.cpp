@@ -167,6 +167,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
       } // loop on rank of latent variable 
     } // loop on sites 
     
+    
     // Centering alpha 
     dens_data.alpha_run = dens_data.alpha_run - arma::mean(dens_data.alpha_run);
     
@@ -398,8 +399,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 /*** R
 # library(coda)
 # 
-# nsp <- 50
-# nsite <- 150
+# nsp <- 70
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -412,10 +413,10 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 # W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 # nl <- ncol(W)
 # l.zero <- 0
-# l.diag <- runif(2,0,2)
-# l.other <- runif(nsp*2-3,-2,2)
+# l.diag <- runif(2,0,1)
+# l.other <- runif(nsp*2-3,-1,1)
 # lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=T, nrow=nsp)
-# beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+# beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 # V_alpha.target <- 0.5
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # log.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
@@ -435,7 +436,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 #                                              lambda_start=matrix(0,nl,nsp),
 #                                              W_start=matrix(0,nsite,nl), alpha_start=rep(0,nsite),
 #                                              V_alpha_start=1, shape = 0.5, rate = 0.0005,
-#                                              mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+#                                              mu_beta=rep(0,np), V_beta=rep(100,np),
 #                                              mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
 #                                              V_W=rep(1,nl),
 #                                              seed=1234, ropt=0.44, verbose=1)

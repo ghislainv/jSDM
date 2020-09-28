@@ -288,8 +288,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
 /*** R
 # library(coda)
 # 
-# nsp <- 50
-# nsite <- 150
+# nsp <- 70
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -298,7 +298,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
 # np <- ncol(X)
-# beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+# beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 # V_alpha.target <- 0.5
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # log.theta <- X %*% t(beta.target) + alpha.target
@@ -317,7 +317,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
 #                                        beta_start=matrix(0,np,nsp),
 #                                        alpha_start=rep(0,nsite),
 #                                        V_alpha_start=1, shape = 0.5, rate = 0.0005,
-#                                        mu_beta=rep(0,np), V_beta=rep(1.0E6,np),
+#                                        mu_beta=rep(0,np), V_beta=rep(100,np),
 #                                        seed=1234, ropt=0.44, verbose=1)
 # 
 # # Parameter estimates
