@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 
 (ref:cap-alpine-plant) **_Alpine plants_** [@Choler2005].
 
-```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)"}
+```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)", eval=F}
 knitr::include_graphics("figures/alpine_plants.png")
 ```
 
@@ -50,30 +50,34 @@ We consider alpine plants in Aravo (Valloire), south east France [@Choler2005]. 
 
 ```{r aravo}
 library(jSDM)
-data(aravo)
-aravo$spe[1:5, 1:5]
-head(aravo$env)
+# Import center and reduce birds dataset
+data(birds, package="jSDM")
+# data.obs
+PA_Birds <- birds[,1:158]
+# Remove species with less than 5 presences
+rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
+PA_Birds <- PA_Birds[, -rare_sp]
+
 ```
 
 We transform abundance into presence-absence data and remove species with less than 5 presences. We also look at the number of observations per site.
 
 ```{r presence-data}
 # Transform abundance into presence-absence
-pres_data <- aravo$spe
-pres_data[pres_data > 0] <- 1
+PA_Birds[PA_Birds >0] <- 1
 # Remove species with less than 5 presences
-rare_sp <- which(apply(pres_data, 2, sum) < 5)
-pres_data <- pres_data[, -rare_sp]
+rare_sp <- which(apply(PA_Birds, 2, sum) < 6)
+PA_Birds <- PA_Birds[, -rare_sp]
 # Number of sites and species
-nsite <- dim(pres_data)[1]
+nsite <- dim(PA_Birds)[1]
 nsite
-nsp <- dim(pres_data)[2]
+nsp <- dim(PA_Birds)[2]
 nsp
 # Number of observations per site
-nobs_site <- apply(pres_data, 1, sum)
+nobs_site <- apply(PA_Birds, 1, sum)
 nobs_site
 # Number of observations per species
-nobs_sp <- apply(pres_data, 2, sum)
+nobs_sp <- apply(PA_Birds, 2, sum)
 nobs_sp
 ```
 
@@ -91,111 +95,86 @@ The environmental variables are:
 As a first approach, we just select the "Snow" variable considering a quadratic orthogonal polynomial.
 
 ```{r env-data}
-p <- poly(aravo$env$Snow, 2)
-env_data <- data.frame(cbind(1, p))
-names(env_data) <- c("int", "snow", "snow2")
-head(env_data)
+# Normalized continuous variables
+Env_Birds <- data.frame(scale(birds[,c("elev","forest")]))
+colnames(Env_Birds) <- c("elev","forest")
+mf.suit <- model.frame(formula=~elev+forest+I(elev^2)+I(forest^2)-1, data=as.data.frame(Env_Birds))
+X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+colnames(X) <- c("elev", "forest", "elev2","forest2")
+head(X)
 # Number of environmental variables plus intercept
-np <- ncol(env_data)
+np <- ncol(X) + 1
 ```
 
 
 # Fitting species distribution models
 
-## Binomial model for presence-absence data
-
-We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
-
-$$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
-  
-  $$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
-  
-  - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
-- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
-- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
-- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
-- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
-- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
-
-This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
-
-We consider below binomial models with a probit link.
-
-## Fitting with `BayesComm`
-
-In a first step, we use the package `BayesComm` described in the article [@Golding2015] to fit binomial models with a probit link function. 
-The package `BayesComm` fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly. 
-We want to compare the parameters of the models fitted with `BayesComm` and `jSDM`. 
+## BayesComm
 
 ### Model **without** latent variables
 
-We estimate the without latent variables model parameters with the function `BC()` and the argument `model="environment"`.  
-
-```{r BayesComm, eval=FALSE}
+```{r BayesComm, eval=T}
 # R is diagonal
 library(BayesComm)
 T1 <- Sys.time()
-mod_BayesComm <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="environment", its=50000, thin=25, burn=25000)
+mod_BayesComm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="environment", its=50000, thin=25, burn=25000)
 # Estimates
-beta_est_bayescomm <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+beta_est_bayescomm <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA, forest=NA)
 for (j in 1:nsp) {
-  beta_est_bayescomm[j, 2:4] <- as.numeric(summary(mod_BayesComm, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+  beta_est_bayescomm[j, 2:(np+1)] <- as.numeric(summary(mod_BayesComm, chain=paste0("B$", names(PA_Birds)[j]))$statistics[, "Mean"])
 }
 T2 <- Sys.time()
 T_BayesComm <- difftime(T2,T1)
-save(beta_est_bayescomm, T_BayesComm,  file="SDM_JSDM_files/BayesComm.rda")
+#save(beta_est_bayescomm, T_BayesComm,  file="SDM_JSDM_files/BayesComm.rda")
 ```
 
-```{r plot-BayesComm, eval=FALSE}
+```{r plot-BayesComm, eval=T}
 library(BayesComm)
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mod_BayesComm, chain="B$Agro.rupe")
-title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+plot(mod_BayesComm, chain=paste0("B$",names(PA_Birds)[2]))
+title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
-```{r plot2-BayesComm, echo=FALSE, eval=TRUE}
+```{r plot2-BayesComm, echo=FALSE, eval=F}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm-1.png")
 ```
 
 ### Model **with** latent variables 
 
-We estimate the latent variables model parameters with the function `BC()` and the argument `model="full"` (intercept, covariates and community matrix).  
-
-```{r BayesComm_community, eval=FALSE}
+```{r BayesComm_community, eval=T}
 T1 <- Sys.time()
-mod_BayesComm_lv <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="full", its=50000, thin=25, burn=25000)
+mod_BayesComm_lv <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="full", its=50000, thin=25, burn=25000)
 # Estimates
-beta_est_bayescomm_lv <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+beta_est_bayescomm_lv <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA, forest=NA)
 for (j in 1:nsp) {
-  beta_est_bayescomm_lv[j, 2:4] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+  beta_est_bayescomm_lv[j, 2:(np+1)] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(PA_Birds)[j]))$statistics[, "Mean"])
 }
 Z_BayesComm <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm_lv <- difftime(T2,T1)
-save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="SDM_JSDM_files/BayesComm_lv.rda")
+#save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="SDM_JSDM_files/BayesComm_lv.rda")
 ```
 
-```{r plot-BayesComm_lv, eval=FALSE}
+```{r plot-BayesComm_lv, eval=T}
 library(BayesComm)
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mod_BayesComm_lv, chain="B$Agro.rupe")
-title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+plot(mod_BayesComm_lv, chain=paste0("B$", names(PA_Birds)[2]))
+title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
-```{r plot2-BayesComm_lv, echo=FALSE, eval=TRUE}
+```{r plot2-BayesComm_lv, echo=FALSE, eval=F}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm_lv-1.png")
 ```
 
-## Fitting with `jSDM`
+## Binomial model with probit link
 
-In a second step, we use the package `jSDM` to fit binomial models with a probit link. 
-We want to compare models that include or not latent variables. 
+In a first step, we consider binomial models with a probit link. We compare models without and with latent variables and which may or may not include a random site effect.
 
 ### Model **without** latent variables 
 
-We estimate the without latent variables model parameters with the function `jSDM_binomial_probit_block()`. 
+We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
 
-```{r chains-probit, eval=FALSE}
+```{r chains-probit, eval=T}
 ## Load libraries
 require(doParallel)
 require(foreach)
@@ -214,7 +193,7 @@ seed_mcmc <- c(1234, 4321)
 ```
 
 
-```{r mod-probit, eval=FALSE}
+```{r mod-probit, eval=T}
 library(jSDM)
 # Model with foreach and doPar call
 mod_probit <-
@@ -226,8 +205,8 @@ mod_probit <-
       thin = 25,
       burnin = 25000,
       # Data
-      presence_site_sp = pres_data,
-      site_data = env_data[,-1],
+      presence_site_sp = PA_Birds,
+      site_data = X,
       site_suitability=~.,
       # Priors
       mu_beta = 0,
@@ -243,12 +222,11 @@ mod_probit <-
 
 # Stop cluster
 stopCluster(clust)
-save(mod_probit,
-     file="SDM_JSDM_files/mod_probit.rda")
+# save(mod_probit,file="SDM_JSDM_files/mod_probit.rda")
 ```
 
 ```{r output-probit}
-load(file="SDM_JSDM_files/mod_probit.rda")
+#load(file="SDM_JSDM_files/mod_probit.rda")
 # Output
 length(mod_probit)
 m1 <- mod_probit[[1]]
@@ -282,30 +260,28 @@ deviance_m1 <- mean(m1$mcmc.Deviance)
 **Comparison with BayesComm**
 
 ```{r BayesComm-comparison}
-load("SDM_JSDM_files/BayesComm.rda")
-beta_est_m1 <- data.frame(matrix(unlist(beta_m1), ncol=3, byrow=T))
-names(beta_est_m1) <- c("intercept","snow","snow2")
-beta_est_m1$sp <- names(pres_data)
+#load("SDM_JSDM_files/BayesComm.rda")
+beta_est_m1 <- data.frame(matrix(unlist(beta_m1), ncol=np, byrow=T))
+names(beta_est_m1) <- c("intercept","elev", "forest")
+beta_est_m1$sp <- names(PA_Birds)
 # Intercept
 plot(beta_est_bayescomm$intercept, beta_est_m1$intercept,
      main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
-# Snow
-plot(beta_est_bayescomm$snow, beta_est_m1$snow,
-     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+# elevation 
+plot(beta_est_bayescomm$elev, beta_est_m1$elev,
+     main="beta_elev", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
-# Snow2
-plot(beta_est_bayescomm$snow2, beta_est_m1$snow2,
-     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+# forest coverage
+plot(beta_est_bayescomm$forest, beta_est_m1$forest,
+     main="beta_forest", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
 
 ```
 
 ### Model **with** latent variables 
 
-We estimate the latent variables model parameters with the function `jSDM_binomial_probit_block()` and the argument `n_latent=2`. 
-
-```{r chains-probit-lv, eval=FALSE}
+```{r chains-probit-lv, eval=T}
 library(parallel)
 library(doParallel)
 ## Make a cluster for parallel MCMCs
@@ -320,7 +296,7 @@ nl <- 2
 # Starting parameters 
 lambda_start <- c(-1, 1)
 beta_start <- c(-1,1)
-W_start <- c(0.001,-0.001)
+W_start <- c(0.1,-0.1)
 #formatting of starting parameters
 #and constraints on lambda generated by the function 
 # Seeds
@@ -328,7 +304,7 @@ seed_mcmc <- c(1234, 4321)
 ```
 
 
-```{r mod-probit-lv, eval=FALSE}
+```{r mod-probit-lv, eval=T}
 # Model
 mod_probit_lv <-
   foreach (i = 1:nchains) %dopar% {
@@ -337,8 +313,8 @@ mod_probit_lv <-
       # Iterations
       burnin=25000, mcmc=25000, thin=25,
       # Data
-      presence_site_sp=pres_data,
-      site_data = env_data[,-1],
+      presence_site_sp=PA_Birds,
+      site_data = X,
       site_suitability = ~.,
       # Model specification 
       n_latent=2,
@@ -362,11 +338,11 @@ mod_probit_lv <-
 
 # Stop cluster
 stopCluster(clust)
-save(mod_probit_lv, file="SDM_JSDM_files/mod_probit_lv.rda")
+# save(mod_probit_lv, file="SDM_JSDM_files/mod_probit_lv.rda")
 ```
 
 ```{r output-probit-lv}
-load(file="SDM_JSDM_files/mod_probit_lv.rda")
+# load(file="SDM_JSDM_files/mod_probit_lv.rda")
 # Output
 m2 <- mod_probit_lv[[1]]
 str(m2, max.level = 1)
@@ -394,21 +370,21 @@ deviance_m2 <- colMeans(m2$mcmc.Deviance)
 *Comparison with BayesComm*
 
 ```{r BayesComm-comparison-lv}
-load("SDM_JSDM_files/BayesComm_lv.rda")
-beta_est_m2 <- data.frame(matrix(unlist(lapply(param_m2,"[",1:np)), ncol=3, byrow=T))
-names(beta_est_m2) <- c("intercept","snow","snow2")
-beta_est_m2$sp <- names(pres_data)
+#load("SDM_JSDM_files/BayesComm_lv.rda")
+beta_est_m2 <- data.frame(matrix(unlist(lapply(param_m2,"[",1:np)), ncol=np, byrow=T))
+names(beta_est_m2) <- c("intercept","elev","forest")
+beta_est_m2$sp <- names(PA_Birds)
 # Intercept
-plot(beta_est_bayescomm_lv$intercept, beta_est_m1$intercept,
+plot(beta_est_bayescomm_lv$intercept, beta_est_m2$intercept,
      main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
-# Snow
-plot(beta_est_bayescomm_lv$snow, beta_est_m1$snow,
-     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+# elevation
+plot(beta_est_bayescomm_lv$elev, beta_est_m2$elev,
+     main="beta_elev", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
-# Snow2
-plot(beta_est_bayescomm_lv$snow2, beta_est_m1$snow2,
-     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
+# forest 
+plot(beta_est_bayescomm_lv$forest, beta_est_m2$forest,
+     main="beta_forest", xlab="fitted by BayesComm", ylab="fitted by jSDM")
 abline(a=0, b=1, col="red")
 plot(Z_BayesComm, m2$Z_latent)
 abline(a=0, b=1, col="red")
@@ -444,8 +420,6 @@ abline(a=0, b=1, col="red")
 
 ## Comparison of predictions
 
-We compare the probit of occurence probabilities predicted by the two models.
-
 ```{r comp-pred-lv}
 # Predictions
 plot(probit_theta_m1, probit_theta_m2, cex=rep(nobs_sp^(1/3), 75),
@@ -456,7 +430,7 @@ abline(a=0, b=1, col="red")
 
 ## Deviance
 
-(ref:cap-comp-dev) **Deviance comparison**. Between probit models without and with latent variables. \vspace{0.5cm}
+(ref:cap-comp-dev) **Deviance comparison**. Between probit models without and with latent variables and which may or may not include a random site effect. \vspace{0.5cm}
 
 ```{r comp-dev}
 # Deviance

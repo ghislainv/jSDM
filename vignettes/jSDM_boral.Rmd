@@ -32,7 +32,40 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Models definition 
+
+## Binomial models for presence-absence data
+
+We consider a latent variable model (LVM) to account for species co-occurrence [@Warton2015] on all sites . 
+
+$$y_{ij} \sim \mathcal{B}iniomial(t_i, \theta_{ij})$$
+  
+  $$ \mathrm{g}(\theta_{ij}) = \alpha_i + X_i\beta_j + W_i\lambda_j $$
+- $\theta_{ij}: occurence probability of the species $j$ on site $i$. 
+- $t_i$: number of visits at site $i$ 
+- $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
+
+The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$.
+
+- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
+- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
+
+This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
+
+## Poisson model for abundance data
+
+Referring to the models used in the articles [@Hui2016], we define the following model to account for species abundances on all sites. 
+
+$$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$. 
+
+$$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i\beta_j+ W_i\lambda_j $$
+
 # Data-sets
+ 
+Among the following datasets, the presence-absence data are from the [@Wilkinson2019] article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of `birds` during several visits to each site is from the [@Kery2006] article and the `mites` abundance data-set is from the [Borcard1994] article.
  
 ```{r data-sets, echo=FALSE, eval=TRUE}
 library(knitr)
@@ -105,11 +138,16 @@ knitr::kable(datasets, booktabs=TRUE) %>%
   kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) 
 ```
 
-# Package boral
+In the article [@Warton2015] the fitting of joint species distributions models is performed using the package `boral` which runs with `JAGS` (Just Another Gibbs Sampler) a simulation program from hierarchical Bayesian models using MCMC methods implemented in C++. 
+This package and the package `jSDM` allow to fit the model defined previously, so we can compare the results obtained by each of them on different datasets. 
+
+# Package `boral`
+
+In a first step, we fit joint species distribution models from previous datasets using the `boral()` function from package of the same name  whose functionalities are developed in the article [@Hui2016]. 
 
 ## Simulated dataset
 
-300 sites et 100 species with as parameters :
+We generate a data-set following the previous model with 300 sites, 100 species and as parameters :
 
 ```{r simulated-data, echo=TRUE}
 
@@ -153,6 +191,8 @@ for (i in 1:nsite){
 }
 ```
 
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the simulated dataset using the `boral()` function to perform binomial probit regression.
 
 ```{r boral-simulation}
 library(boral)
@@ -238,6 +278,8 @@ knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-4.pn
 
 ## Mosquitos dataset
 
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `boral()` function to perform binomial probit regression.
+
 ```{r boral-mosquito, eval=FALSE}
 # Import center and reduce Mosquito dataset
 data(mosquitos, package="jSDM")
@@ -280,6 +322,8 @@ save(T_boral_Mosquitos, mod_boral_Mosquitos,
 
 ## Eucalypts dataset
 
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `boral()` function to perform binomial probit regression.
+
 ```{r boral-eucalypts, eval=FALSE}
 # Import center and reduce Eucalypts dataset
 data(eucalypts, package="jSDM")
@@ -319,6 +363,8 @@ save(T_boral_Eucalypts, mod_boral_Eucalypts,
 ```
 
 ## Frogs dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `boral()` function to perform binomial probit regression.
 
 ```{r boral-frogs, eval=FALSE}
 # Import center and reduce Frogs dataset
@@ -361,6 +407,8 @@ save(T_boral_Frogs, mod_boral_Frogs,
 ```
 
 ## Fungi dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `boral()` function to perform binomial probit regression.
 
 ```{r boral-fungi, eval=FALSE}
 
@@ -406,6 +454,10 @@ save(T_boral_Fungi, mod_boral_Fungi,
 ```
 
 ## Birds dataset
+
+We fit a binomial joint species distribution model with multiple visit by site, including random site effect and latent variables, from the [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset using `boral()` function to perform binomial logistic regression.
+
+We have to specify the `JAGS` model in the `jagsboralmodel.txt` file because the default `JAGS` model generated by `boral` function doesn't allow to indicate different number of trials for each site as it is the case in [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset. 
 
 ```{r boral-birds, eval=FALSE}
 # Import center and reduce birds dataset
@@ -487,6 +539,8 @@ save(T_boral_Birds, mod_boral_Birds,
 
 ## Mites dataset
 
+We fit a joint species distribution model, including random site effect and latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `boral()` function to perform a poisson log-linear regression.
+
 ```{r boral-mites, eval=FALSE}
 # Import center and reduce mites dataset
 data(mites, package="jSDM")
@@ -532,9 +586,13 @@ save(T_boral_Mites, mod_boral_Mites,
 
 
 
-# Package jSDM
+# Package `jSDM`
+
+In a second step, we fit the same joint species distribution models from each of the previous datasets using the `jSDM` package.
 
 ## Simulated dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the simulated dataset using the `jSDM_binomial_probit_block()` function to perform binomial probit regression.
 
 ```{r jSDM-simulation }
 library(jSDM)
@@ -675,6 +733,8 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-10.pn
 
 ## Mosquitos dataset
 
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+
 ```{r jSDM-mosquitos }
 # Fit the model
 T1 <- Sys.time()
@@ -705,6 +765,8 @@ save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
 ```
 
 ## Eucalypts dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
 
 ```{r jSDM-eucalypts }
 # Fit the model
@@ -737,6 +799,8 @@ save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
 
 ## Frogs dataset
 
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+
 ```{r jSDM-frogs }
 # Fit the model 
 T1 <- Sys.time()
@@ -768,6 +832,8 @@ save(T_jSDM_Frogs, mod_jSDM_Frogs,
 
 ## Fungi dataset
 
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+
 ```{r jSDM-fungi }
 # Fit the model
 T1 <- Sys.time()
@@ -798,6 +864,8 @@ save(T_jSDM_Fungi, mod_jSDM_Fungi,
 ```
 
 ## Birds dataset
+
+We fit a binomial joint species distribution model with multiple visit by site, including random site effect and latent variables, from the [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset using `jSDM_binomial_logit()` function to perform binomial logistic regression.
 
 ```{r jSDM-birds }
 # Fit the model
@@ -833,6 +901,8 @@ save(T_jSDM_Birds, mod_jSDM_Birds,
 
 ## Mites dataset
 
+We fit a joint species distribution model, including random site effect and latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `jSDM_poisson_log()` function to perform a poisson log-linear regression. 
+
 ```{r jSDM-mites }
 # Fit the model
 T1 <- Sys.time()
@@ -864,6 +934,8 @@ save(T_jSDM_Mites, mod_jSDM_Mites,
 ```
 
 # Comparison
+
+Then we compare the compilation time and the results obtained with each package.  
 
 ```{r load-fitted-models, echo=FALSE, include=FALSE}
 # Simulated dataset
@@ -973,8 +1045,6 @@ kable(result, digits=2) %>%
 ## Estimated  Parameters
 
 ### Simulated dataset
-
-300 sites 100 species.
 
 ```{r jSDM-boral-simulation, echo=FALSE}
 np <- ncol(X)

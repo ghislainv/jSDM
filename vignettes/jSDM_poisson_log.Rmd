@@ -33,7 +33,7 @@ highlight = TRUE
 ```
 
 
-# Definition of the model 
+# Model definition
 
 Referring to the models used in the articles @Hui2016, we define the following model : 
 
