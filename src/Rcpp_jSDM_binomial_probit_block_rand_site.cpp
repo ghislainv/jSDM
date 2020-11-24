@@ -104,21 +104,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
       }
     }
     
-    
-    //////////////////////////////////
-    // mat beta : Gibbs algorithm //
-    
-    // Loop on species
-    for (int j=0; j<NSP; j++) {
-      // small_v
-      arma::vec small_v = inv(V_beta)*mu_beta + X.t()*(Z_run.col(j) - alpha_run);
-      // big_V
-      arma::mat big_V = inv(inv(V_beta)+X.t()*X);
-      
-      // Draw in the posterior distribution
-      beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-    }
-    
     ///////////////////////////////
     // vec alpha : Gibbs algorithm //
     
@@ -141,6 +126,20 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site(const int ngibbs,const int 
     double rate_posterior = rate + 0.5*sum;
     
     V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
+    
+    //////////////////////////////////
+    // mat beta : Gibbs algorithm //
+    
+    // Loop on species
+    for (int j=0; j<NSP; j++) {
+      // small_v
+      arma::vec small_v = inv(V_beta)*mu_beta + X.t()*(Z_run.col(j) - alpha_run);
+      // big_V
+      arma::mat big_V = inv(inv(V_beta)+X.t()*X);
+      
+      // Draw in the posterior distribution
+      beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+    }
     
     //////////////////////////////////////////////////
     //// Deviance

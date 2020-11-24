@@ -82,6 +82,9 @@ X_Mosquitos <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 data("eucalypts")
 PA_Eucalypts <- eucalypts[,1:12]
 Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),eucalypts[,c("Sandiness","Loaminess")])
+Env_Eucalypts <- Env_Eucalypts[rowSums(PA_Eucalypts) != 0,]
+# Remove sites where none species was recorded
+PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Eucalypts))
 X_Eucalypts <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Frogs dataset
@@ -91,10 +94,17 @@ Env_Frogs <- cbind(scale(frogs[,"Covariate_1"]),frogs[,"Covariate_2"],scale(frog
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Frogs))
 X_Frogs <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Fungi dataset
-data("fungi")
+data(fungi, package="jSDM")
+Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),
+                   fungi[,c("dc1","dc2","dc3","dc4","dc5",
+                            "quality3","quality4","ground3","ground4")])
+colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5",
+                         "quality3","quality4","ground3","ground4")
 PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut",
                      "phefer","phenig","phevit","poscae","triabi")]
-Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),fungi[,c("dc1","dc2","dc3","dc4","dc5","quality3","quality4","ground3","ground4")])
+Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
+# Remove sites where none species was recorded
+PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
 mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Fungi))
 X_Fungi <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Birds dataset
@@ -119,7 +129,7 @@ X_Mites <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 
 datasets <- data.frame(matrix(NA,10,7),row.names=c("data type", "distribution", "n.site","n.species","n.latent","n.X.coefs", "n.obs",  "n.param", "n.mcmc",""))
 colnames(datasets) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
-datasets["n.site",] <- c(300,nrow(mosquitos),nrow(eucalypts), nrow(frogs), nrow(fungi), nrow(birds), nrow(mites))
+datasets["n.site",] <- c(300,nrow(mosquitos),nrow(Env_Eucalypts), nrow(frogs), nrow(Env_Fungi), nrow(birds), nrow(mites))
 datasets["n.X.coefs",] <- c(3,ncol(X_Mosquitos),ncol(X_Eucalypts),ncol(X_Frogs),ncol(X_Fungi),ncol(X_Birds), ncol(X_Mites))
 datasets["n.species",] <- c(100,ncol(PA_Mosquitos),ncol(PA_Eucalypts),ncol(PA_Frogs),ncol(PA_Fungi),ncol(PA_Birds), ncol(PA_Mites))
 datasets["n.latent",] <- 2
@@ -199,7 +209,7 @@ library(boral)
 T1<-Sys.time() 
 mod_boral_sim <- boral(y=Y, X=X[,-1], lv.control=list(num.lv=nl),
                        family="binomial", row.eff="random",
-                       hypparams=c(100,10,100,30),
+                       hypparams=c(10,10,10,30),
                        mcmc.control=list(n.burnin=10000,n.iteration=15000,
                                          n.thin=5,seed=123))
 T2<-Sys.time() 
@@ -269,7 +279,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r boral-simulation-plot2, echo=FALSE, out.width=800, eval=T}
+```{r boral-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-3.png")
@@ -280,7 +290,7 @@ knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-4.pn
 
 We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `boral()` function to perform binomial probit regression.
 
-```{r boral-mosquito, eval=FALSE}
+```{r boral-mosquito}
 # Import center and reduce Mosquito dataset
 data(mosquitos, package="jSDM")
 head(mosquitos)
@@ -292,7 +302,7 @@ PA_Mosquitos <- mosquitos[,1:16]
 T1 <- Sys.time()
 mod_boral_Mosquitos <- boral(y=PA_Mosquitos, X=Env_Mosquitos,
                              lv.control=list(num.lv=2), family="binomial",
-                             row.eff="random", hypparams=c(100,10,100,30),
+                             row.eff="random", hypparams=c(10,10,10,30),
                              mcmc.control=list(n.burnin=10000,n.iteration=15000,
                                                n.thin=5,seed=123))
 T2 <- Sys.time()
@@ -324,18 +334,21 @@ save(T_boral_Mosquitos, mod_boral_Mosquitos,
 
 We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `boral()` function to perform binomial probit regression.
 
-```{r boral-eucalypts, eval=FALSE}
+```{r boral-eucalypts}
 # Import center and reduce Eucalypts dataset
 data(eucalypts, package="jSDM")
 head(eucalypts)
 Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),eucalypts[,c("Sandiness","Loaminess")])
 PA_Eucalypts <- eucalypts[,1:12]
+Env_Eucalypts <- Env_Eucalypts[rowSums(PA_Eucalypts) != 0,]
+# Remove sites where none species was recorded
+PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 
 # Fit the model 
 T1 <- Sys.time()
 mod_boral_Eucalypts <- boral(y=PA_Eucalypts, X=Env_Eucalypts,
                              lv.control=list(num.lv=2), family="binomial",
-                             row.eff="random", hypparams=c(100,10,100,30),
+                             row.eff="random", hypparams=c(10,10,10,30),
                              mcmc.control=list(n.burnin=10000,n.iteration=15000,
                                                n.thin=5,seed=123))
 T2 <- Sys.time()
@@ -366,7 +379,7 @@ save(T_boral_Eucalypts, mod_boral_Eucalypts,
 
 We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `boral()` function to perform binomial probit regression.
 
-```{r boral-frogs, eval=FALSE}
+```{r boral-frogs}
 # Import center and reduce Frogs dataset
 data(frogs, package="jSDM")
 head(frogs)
@@ -379,7 +392,7 @@ PA_Frogs <- frogs[,4:12]
 T1 <- Sys.time()
 mod_boral_Frogs <- boral(y=PA_Frogs, X=Env_Frogs,
                          lv.control=list(num.lv=2), family="binomial",
-                         row.eff="random", hypparams=c(100,10,100,30),
+                         row.eff="random", hypparams=c(10,10,10,30),
                          mcmc.control=list(n.burnin=10000, n.iteration=15000,
                                            n.thin=5,seed=123))
 T2 <- Sys.time()
@@ -410,7 +423,7 @@ save(T_boral_Frogs, mod_boral_Frogs,
 
 We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `boral()` function to perform binomial probit regression.
 
-```{r boral-fungi, eval=FALSE}
+```{r boral-fungi}
 
 # Import center and reduce fungi dataset
 data(fungi, package="jSDM")
@@ -421,12 +434,15 @@ colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5",
                          "quality3","quality4","ground3","ground4")
 PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut",
                      "phefer","phenig","phevit","poscae","triabi")]
+Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
+# Remove sites where none species was recorded
+PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
 
 # Fit the model 
 T1 <- Sys.time()
 mod_boral_Fungi <- boral(y=PA_Fungi, X=Env_Fungi,
                          lv.control=list(num.lv=2), family="binomial",
-                         row.eff="random", hypparams=c(100,10,100,30),
+                         row.eff="random", hypparams=c(10,10,10,30),
                          mcmc.control=list(n.burnin=10000, n.iteration=15000,
                                            n.thin=5,seed=123))
 T2 <- Sys.time()
@@ -459,7 +475,7 @@ We fit a binomial joint species distribution model with multiple visit by site, 
 
 We have to specify the `JAGS` model in the `jagsboralmodel.txt` file because the default `JAGS` model generated by `boral` function doesn't allow to indicate different number of trials for each site as it is the case in [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset. 
 
-```{r boral-birds, eval=FALSE}
+```{r boral-birds}
 # Import center and reduce birds dataset
 data(birds, package="jSDM")
 # data.obs
@@ -483,7 +499,7 @@ T1 <- Sys.time()
 # mod_boral_Birds <- boral(y=PA_Birds, X=X_Birds,
 #                          lv.control=list(num.lv=2), family="binomial",
 #                          trial.size=max(Env_Birds$nsurvey),
-#                          row.eff="random", hypparams=c(100,10,100,30),
+#                          row.eff="random", hypparams=c(10,10,10,30),
 #                          mcmc.control=list(n.burnin=10000, n.iteration=15000,
 #                                            n.thin=5,seed=123))
 # JAGS model in vignettes/jagsboralmodel.txt modified to specify the number of trials by site
@@ -541,7 +557,7 @@ save(T_boral_Birds, mod_boral_Birds,
 
 We fit a joint species distribution model, including random site effect and latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `boral()` function to perform a poisson log-linear regression.
 
-```{r boral-mites, eval=FALSE}
+```{r boral-mites}
 # Import center and reduce mites dataset
 data(mites, package="jSDM")
 # data.obs
@@ -558,7 +574,7 @@ X_Mites <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 T1 <- Sys.time()
 mod_boral_Mites <- boral(y=PA_Mites, X=X_Mites[,-1],
                          lv.control=list(num.lv=2), family="poisson",
-                         row.eff="random", hypparams=c(100,10,100,30),
+                         row.eff="random", hypparams=c(10,10,10,30),
                          mcmc.control=list(n.burnin=10000, n.iteration=15000,
                                            n.thin=5,seed=123))
 T2 <- Sys.time()
@@ -581,7 +597,7 @@ Deviance_boral_Mites <- -2*logL
 
 save(T_boral_Mites, mod_boral_Mites,
      log_theta_pred_Mites, Deviance_boral_Mites,
-     file="~/Documents/jSDM/vignettes/jSDM_boral_cache/boral_Mites.RData")
+     file="jSDM_boral_cache/boral_Mites.RData")
 ```
 
 
@@ -614,10 +630,10 @@ mod_jSDM_sim <- jSDM_binomial_probit_block(
   V_alpha=1, 
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2<-Sys.time() 
 T_jSDM_sim=difftime(T2, T1)
 
@@ -717,7 +733,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-simulation-plot2, echo=FALSE, out.width=800, eval=T}
+```{r jSDM-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-3.png")
@@ -754,10 +770,10 @@ mod_jSDM_Mosquitos <- jSDM_binomial_probit_block(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Mosquitos <- difftime(T2,T1)
 save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
@@ -787,10 +803,10 @@ mod_jSDM_Eucalypts <- jSDM_binomial_probit_block(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Eucalypts <- difftime(T2,T1)
 save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
@@ -820,10 +836,10 @@ mod_jSDM_Frogs <- jSDM_binomial_probit_block(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100,
+  mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Frogs <- difftime(T2,T1)
 save(T_jSDM_Frogs, mod_jSDM_Frogs,
@@ -853,10 +869,10 @@ mod_jSDM_Fungi <- jSDM_binomial_probit_block(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Fungi <- difftime(T2,T1)
 save(T_jSDM_Fungi, mod_jSDM_Fungi,
@@ -887,11 +903,11 @@ mod_jSDM_Birds <- jSDM_binomial_logit(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
   ropt=0.44,
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Birds <- difftime(T2,T1)
 save(T_jSDM_Birds, mod_jSDM_Birds,
@@ -922,11 +938,11 @@ mod_jSDM_Mites <- jSDM_poisson_log(
   V_alpha=1,
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=100 ,
+  mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
   ropt=0.44,
-  seed=1234, verbose=1)
+  seed=123, verbose=1)
 T2 <- Sys.time()
 T_jSDM_Mites <- difftime(T2,T1)
 save(T_jSDM_Mites, mod_jSDM_Mites,
@@ -1036,7 +1052,7 @@ result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("boral","jSDM")
 result$boral <- RMSE_boral_sim
 result$jSDM <- RMSE_jSDM_sim
-kable(result, digits=2) %>%
+kable(result, digits=3) %>%
   kable_styling(bootstrap_options = "striped", 
                 latex_options= c("HOLD_position","striped"),
                 full_width = FALSE)
@@ -1093,7 +1109,7 @@ plot(probit_theta_pred_sim, mod_jSDM_sim$probit_theta_pred, xlab="fitted by bora
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-simulation-plot, echo=FALSE, eval=T, out.width=800}
+```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-3.png")
@@ -1152,7 +1168,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=T, out.width=800}
+```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-3.png")
@@ -1164,6 +1180,8 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-3.png
 # Import center and reduce Eucalypts dataset
 data(eucalypts, package="jSDM")
 PA_Eucalypts <- eucalypts[,1:12]
+# Remove sites where none species was recorded
+PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 print(paste(nrow(PA_Eucalypts),"sites and ",ncol(PA_Eucalypts)," species"),quote = FALSE)
 nsp <- ncol(mod_jSDM_Eucalypts$model_spec$presences)
 nsite <- nrow(mod_jSDM_Eucalypts$model_spec$presences)
@@ -1211,7 +1229,7 @@ plot(probit_theta_pred_Eucalypts, mod_jSDM_Eucalypts$probit_theta_pred, xlab="fi
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=T, out.width=800}
+```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-3.png")
@@ -1271,7 +1289,7 @@ plot(probit_theta_pred_Frogs, mod_jSDM_Frogs$probit_theta_pred, xlab="fitted by 
 abline(a=0,b=1,col='red')
 ```
 
-```{r jSDM-boral-frogs-plot, echo=FALSE, out.width=800, eval=T}
+```{r jSDM-boral-frogs-plot, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-3.png")
@@ -1282,7 +1300,16 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-3.png")
 ```{r jSDM-boral-fungi, echo=FALSE}
 # Import center and reduce fungi dataset
 data(fungi, package="jSDM")
-PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut","phefer","phenig","phevit","poscae","triabi")]
+Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),
+                   fungi[,c("dc1","dc2","dc3","dc4","dc5",
+                            "quality3","quality4","ground3","ground4")])
+colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5",
+                         "quality3","quality4","ground3","ground4")
+PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut",
+                     "phefer","phenig","phevit","poscae","triabi")]
+Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
+# Remove sites where none species was recorded
+PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
 
 print(paste(nrow(PA_Fungi),"sites and ",ncol(PA_Fungi)," species"),quote = FALSE)
 nsp <- ncol(mod_jSDM_Fungi$model_spec$presences)
@@ -1331,7 +1358,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-fungi-plot, echo=FALSE, out.width=800, eval=T}
+```{r jSDM-boral-fungi-plot, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-3.png")
@@ -1392,7 +1419,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-birds-plot, echo=FALSE, out.width=800, eval=T}
+```{r jSDM-boral-birds-plot, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-3.png")
@@ -1402,8 +1429,8 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-3.png")
 
 ```{r jSDM-boral-mites, echo=FALSE}
 # Remove species with less than 10 presences
-rare_sp <- which(apply(PA_Mites>0, 2, sum) < 10) 
-PA_Mites <- PA_Mites[, -rare_sp]
+rare_sp <- which(apply(PA_Mites>0, 2, sum) < 10)
+if(length(rare_sp)!=0) PA_Mites <- PA_Mites[, -rare_sp]
 print(paste(nrow(PA_Mites),"sites and ",ncol(PA_Mites)," species"),quote = FALSE)
 nsp <- ncol(mod_jSDM_Mites$model_spec$presences)
 nsite <- nrow(mod_jSDM_Mites$model_spec$presences)
@@ -1451,7 +1478,7 @@ abline(a=0,b=1,col='red')
 ```
 
 
-```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800,eval=T}
+```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-1.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-2.png")
 knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-3.png")

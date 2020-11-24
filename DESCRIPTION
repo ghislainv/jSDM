@@ -3,7 +3,7 @@ Type: Package
 Title: Joint Species Distribution Models
 Version: 0.1.0
 Date: 2019-05-30
-Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot
+Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
 SystemRequirements: GNU GSL

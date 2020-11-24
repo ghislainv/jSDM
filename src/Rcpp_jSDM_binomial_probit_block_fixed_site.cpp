@@ -100,6 +100,25 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
       }
     }
     
+    ///////////////////////////////
+    // vec alpha : Gibbs algorithm //
+    
+    // Loop on sites 
+    for (int i=0; i<NSITE; i++) {
+      if(i==0){
+        // constraints of identifiability on alpha
+        alpha_run(i) = 0.0;
+      } else{
+        // small_v
+        double small_v = arma::sum(Z_run.row(i)-X.row(i)*beta_run);
+        
+        // big_V
+        double big_V = 1/(1/V_alpha + NSP);
+        
+        // Draw in the posterior distribution
+        alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
+      }
+    }
     
     //////////////////////////////////
     // mat beta : Gibbs algorithm //
@@ -114,24 +133,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
       // Draw in the posterior distribution
       beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
     }
-    
-    ///////////////////////////////
-    // vec alpha : Gibbs algorithm //
-    
-    // Loop on sites 
-    for (int i=0; i<NSITE; i++) {
-      // small_v
-      double small_v = arma::sum(Z_run.row(i)-X.row(i)*beta_run);
-      
-      // big_V
-      double big_V = 1/(1/V_alpha + NSP);
-      
-      // Draw in the posterior distribution
-      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-    }
-    
-    // constraints of identifiability on alpha
-    alpha_run(0) = 0.0;
     
     //////////////////////////////////////////////////
     //// Deviance

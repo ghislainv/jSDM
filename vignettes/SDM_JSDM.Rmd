@@ -38,42 +38,49 @@ knitr::opts_chunk$set(
 
 # Dataset
 
-## Presence-absence of alpine plants
+## Presence-absence of Swiss breeding birds
 
-(ref:cap-alpine-plant) **_Alpine plants_** [@Choler2005].
 
-```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)"}
-knitr::include_graphics("figures/alpine_plants.png")
+(ref:cap-birds) **_Swiss Breeding Birds Atlas_** [@Kery2006].
+
+```{r birds-picture, echo=FALSE, out.width=600, out.height=300, fig.cap="(ref:cap-birds)"}
+knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 
-We consider alpine plants in Aravo (Valloire), south east France [@Choler2005]. The data are available from the R package `ade4` [@Dray2007]. The original dataset includes abundance data for 82 species in 75 sites.
+This data-set is available in the [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html). It can be loaded with the `data()` command. The [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) data-set is in "wide" format: each line is a site and the occurrence data are in columns.
 
-```{r aravo}
+The Swiss breeding bird survey ("Monitoring Häufige Brutvögel" MHB) has monitored the populations of 158 common species since 1999. The MHB sample consists of 267 1-km squares that are laid out as a grid across Switzerland. Fieldwork is conducted by about 200 skilled birdwatchers, most of them volunteers. Avian populations are monitored using a simplified territory mapping protocol, where each square is surveyed up to three times during the breeding season (only twice above the tree line). 
+Surveys are conducted along a transect that does not change over the years. 
+
+The data-set contains the 2014 data, except for one quadrat not surveyed in 2014. 
+It lists 158 bird species named in Latin and whose occurrences are expressed as the number of visits during which the species was observed on each site , with the exception of 13 species not surveyed in 2014 :
+
+```{r birds}
 library(jSDM)
-data(aravo)
-aravo$spe[1:5, 1:5]
-head(aravo$env)
+# Import center and reduce birds dataset
+data(birds, package="jSDM")
+# data.obs
+PA_Birds <- birds[,1:158]
 ```
 
-We transform abundance into presence-absence data and remove species with less than 5 presences. We also look at the number of observations per site.
+We transform abundance into presence-absence data and remove species with less than 10 presences to facilitate MCMC convergence. We also look at the number of observations per site.
 
 ```{r presence-data}
 # Transform abundance into presence-absence
-pres_data <- aravo$spe
-pres_data[pres_data > 0] <- 1
-# Remove species with less than 5 presences
-rare_sp <- which(apply(pres_data, 2, sum) < 5)
-pres_data <- pres_data[, -rare_sp]
+PA_Birds[PA_Birds>0] <- 1
+# Remove species with less than 10 presences
+rare_sp <- which(apply(PA_Birds, 2, sum) < 10)
+PA_Birds <- PA_Birds[, -rare_sp]
 # Number of sites and species
-nsite <- dim(pres_data)[1]
+nsite <- dim(PA_Birds)[1]
 nsite
-nsp <- dim(pres_data)[2]
+nsp <- dim(PA_Birds)[2]
 nsp
 # Number of observations per site
-nobs_site <- apply(pres_data, 1, sum)
+nobs_site <- apply(PA_Birds, 1, sum)
 nobs_site
 # Number of observations per species
-nobs_sp <- apply(pres_data, 2, sum)
+nobs_sp <- apply(PA_Birds, 2, sum)
 nobs_sp
 ```
 
@@ -81,37 +88,34 @@ nobs_sp
 
 The environmental variables are:
 
-- **Aspect**: Relative south aspect (opposite of the sine of aspect with flat coded 0).
-- **Slope**: Slope inclination (degrees).
-- **Form**: Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity).
-- **Snow**: Mean snowmelt date (Julian day) averaged over 1997-1999.
-- **PhysD**: Physical disturbance, i.e., percentage of unvegetated soil due to physical processes.
-- **ZoogD**: Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high.
+- **elev**: the mean elevation of the quadrat (m).
+- **forest**: the percentage of forest cover in the quadrat.
+- **rlength**: the length of the route walked in the quadrat (km).
 
-As a first approach, we just select the "Snow" variable considering a quadratic orthogonal polynomial.
+As a first approach, we just select the "elev" variable considering a quadratic orthogonal polynomial.
 
 ```{r env-data}
-p <- poly(aravo$env$Snow, 2)
-env_data <- data.frame(cbind(1, p))
-names(env_data) <- c("int", "snow", "snow2")
-head(env_data)
+# Normalized continuous variables
+Env_Birds <- data.frame(scale(birds[,"elev"]))
+colnames(Env_Birds) <- c("elev")
+mf.suit <- model.frame(formula= ~ elev + I(elev^2) -1, data=as.data.frame(Env_Birds))
+X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+colnames(X) <- c("elev", "elev2")
+head(X)
 # Number of environmental variables plus intercept
-np <- ncol(env_data)
+np <- ncol(X) + 1
+np
 ```
 
-
-# Fitting species distribution models
-
-## Binomial model for presence-absence data
+# Fitting joint species distribution model for presence-absence data
 
 We consider a latent variable model (LVM) to account for species co-occurrence on all sites [@Warton2015]. 
 
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
   
-  $$ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j $$
+  $$ \mathrm{g}(\theta_{ij}) = X_i\beta_j + W_i\lambda_j $$
   
-  - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
-- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
+- $\mathrm{g}(\cdot)$: Link function (probit or logit).
 - $X_i$: Vector of explanatory variables for site $i$ (including intercept).
 - $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
 - $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
@@ -121,7 +125,7 @@ This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha
 
 We consider below binomial models with a probit link.
 
-## Fitting with `BayesComm`
+## Using `BayesComm`
 
 In a first step, we use the package `BayesComm` described in the article [@Golding2015] to fit binomial models with a probit link function. 
 The package `BayesComm` fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly. 
@@ -135,25 +139,43 @@ We estimate the without latent variables model parameters with the function `BC(
 # R is diagonal
 library(BayesComm)
 T1 <- Sys.time()
-mod_BayesComm <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="environment", its=50000, thin=25, burn=25000)
+mod_BayesComm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="environment", its=20000, thin=10, burn=10000)
 # Estimates
-beta_est_bayescomm <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+beta_est_bayescomm <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA,  elev2=NA)
 for (j in 1:nsp) {
-  beta_est_bayescomm[j, 2:4] <- as.numeric(summary(mod_BayesComm, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+  beta_est_bayescomm[j, 2:(np+1)] <- as.numeric(summary(mod_BayesComm, chain=paste0("B$", names(PA_Birds)[j]))$statistics[, "Mean"])
 }
+Z_BayesComm <- apply(mod_BayesComm$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm <- difftime(T2,T1)
-save(beta_est_bayescomm, T_BayesComm,  file="SDM_JSDM_files/BayesComm.rda")
+
+# Deviance BayesComm
+X1 <- cbind(rep(1,nsite), as.matrix(X))
+probit_theta_pred_BayesComm <- X1 %*% t(as.matrix(beta_est_bayescomm[,2:4]))
+# Deviance
+logL=0
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    theta <- pnorm(probit_theta_pred_BayesComm[i,j])
+    logL = logL + dbinom(PA_Birds[i,j],1,theta,1)  
+  }
+}
+deviance_BC1 <- -2*logL
+
+save(mod_BayesComm, file="SDM_JSDM_cache/BayesComm.rda")
+save(beta_est_bayescomm, Z_BayesComm, T_BayesComm, deviance_BC1, probit_theta_pred_BayesComm, file="SDM_JSDM_files/BayesComm.rda")
 ```
 
 ```{r plot-BayesComm, eval=FALSE}
 library(BayesComm)
+load("SDM_JSDM_cache/BayesComm.rda")
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mod_BayesComm, chain="B$Agro.rupe")
-title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+plot(mod_BayesComm, chain=paste0("B$",names(PA_Birds)[2]))
+title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
-```{r plot2-BayesComm, echo=FALSE, eval=TRUE}
+
+```{r plot2-BayesComm, out.width=600, echo=FALSE, eval=TRUE}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm-1.png")
 ```
 
@@ -163,30 +185,60 @@ We estimate the latent variables model parameters with the function `BC()` and t
 
 ```{r BayesComm_community, eval=FALSE}
 T1 <- Sys.time()
-mod_BayesComm_lv <- BayesComm::BC(Y=as.matrix(pres_data), X=as.matrix(env_data[,-1]), model="full", its=50000, thin=25, burn=25000)
+mod_BayesComm_lv <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="full", its=20000, thin=10, burn=10000)
 # Estimates
-beta_est_bayescomm_lv <- data.frame(sp=names(pres_data), intercept=NA, snow=NA, snow2=NA)
+beta_est_bayescomm_lv <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA, elev2=NA)
 for (j in 1:nsp) {
-  beta_est_bayescomm_lv[j, 2:4] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(pres_data)[j]))$statistics[, "Mean"])
+  beta_est_bayescomm_lv[j, 2:(np+1)] <- as.numeric(summary(mod_BayesComm_lv, chain=paste0("B$", names(PA_Birds)[j]))$statistics[, "Mean"])
 }
-Z_BayesComm <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
+Z_BayesComm_lv <- apply(mod_BayesComm_lv$trace$z,c(2,3), mean)
 T2 <- Sys.time()
 T_BayesComm_lv <- difftime(T2,T1)
-save(beta_est_bayescomm_lv, Z_BayesComm, T_BayesComm_lv, file="SDM_JSDM_files/BayesComm_lv.rda")
+
+# Deviance BayesComm
+X1 <- cbind(rep(1,nsite), as.matrix(X))
+e <- residuals(mod_BayesComm_lv)
+probit_theta_pred_BayesComm_lv <- X1 %*% t(as.matrix(beta_est_bayescomm_lv[,2:4])) + e
+# Deviance
+logL=0
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    theta <- pnorm(probit_theta_pred_BayesComm_lv[i,j])
+    logL = logL + dbinom(PA_Birds[i,j],1,theta,1)  
+  }
+}
+deviance_BC2 <- -2*logL
+
+# Correlation matrix
+R <- apply(mod_BayesComm_lv$trace$R,2,mean)
+R_mat <- matrix(1,nsp,nsp)
+species <-  colnames(PA_Birds)
+colnames(R_mat) <- rownames(R_mat) <- species
+for(j in 1:nsp){
+  for(jprim in 1:nsp){
+    if(length(grep(paste0(species[j],"_",species[jprim]), names(R)))!=0){
+      R_mat[j,jprim] <- R_mat[jprim,j] <-  R[grep(paste0(species[j],"_",species[jprim]), names(R)) ]  
+    }
+  }
+}
+save(mod_BayesComm_lv, file="SDM_JSDM_cache/BayesComm_lv.rda")
+save(beta_est_bayescomm_lv, Z_BayesComm_lv, T_BayesComm_lv, R_mat,  
+     deviance_BC2, probit_theta_pred_BayesComm_lv,
+     file="SDM_JSDM_files/BayesComm_lv.rda")
 ```
 
 ```{r plot-BayesComm_lv, eval=FALSE}
-library(BayesComm)
+load("SDM_JSDM_cache/BayesComm_lv.rda")
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mod_BayesComm_lv, chain="B$Agro.rupe")
-title(main=paste0("species ", aravo$spe.names["Agro.rupe"]), outer=TRUE)
+plot(mod_BayesComm_lv, chain=paste0("B$", names(PA_Birds)[2]))
+title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
-```{r plot2-BayesComm_lv, echo=FALSE, eval=TRUE}
+```{r plot2-BayesComm_lv, out.width=600, echo=FALSE, eval=TRUE}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm_lv-1.png")
 ```
 
-## Fitting with `jSDM`
+## Using `jSDM`
 
 In a second step, we use the package `jSDM` to fit binomial models with a probit link. 
 We want to compare models that include or not latent variables. 
@@ -207,7 +259,7 @@ clust <- makeCluster(ncores)
 registerDoParallel(clust)
 
 # Starting values for two chains
-beta_start <- c(1, -1)
+beta_start <- c(-1,1)
 #formatting of starting parameters generated by the function 
 # Seeds
 seed_mcmc <- c(1234, 4321)
@@ -220,14 +272,15 @@ library(jSDM)
 mod_probit <-
   foreach (i = 1:nchains) %dopar% {
     # Infering model parameters
+    T1 <- Sys.time()
     mod <- jSDM::jSDM_binomial_probit_block(
       # Iterations
-      mcmc = 25000,
-      thin = 25,
-      burnin = 25000,
+      mcmc = 10000,
+      thin = 10,
+      burnin = 10000,
       # Data
-      presence_site_sp = pres_data,
-      site_data = env_data[,-1],
+      presence_site_sp = PA_Birds,
+      site_data = X,
       site_suitability=~.,
       # Priors
       mu_beta = 0,
@@ -238,67 +291,56 @@ mod_probit <-
       seed = seed_mcmc[i],
       verbose = 1
     )
+    T2 <- Sys.time()
+    mod$T_jSDM <- difftime(T2,T1)
     return(mod)
   }
 
 # Stop cluster
 stopCluster(clust)
-save(mod_probit,
-     file="SDM_JSDM_files/mod_probit.rda")
 ```
 
-```{r output-probit}
-load(file="SDM_JSDM_files/mod_probit.rda")
+```{r output-jSDM-probit, eval=FALSE}
 # Output
-length(mod_probit)
+n_chains <- length(mod_probit)
 m1 <- mod_probit[[1]]
-str(m1, max.level = 1)
+str_m1 <- paste(capture.output(str(m1, max.level = 1)), collapse="\n")
+# Fitted values
+beta_m1 <- lapply(m1$mcmc.sp, colMeans)
+Z_latent_m1 <- m1$Z_latent
+probit_theta_m1 <- m1$probit_theta_pred
+deviance_m1 <- mean(m1$mcmc.Deviance)
+T_jSDM <- m1$T_jSDM 
+save(T_jSDM, n_chains, str_m1, beta_m1, probit_theta_m1, deviance_m1, Z_latent_m1,
+     file="SDM_JSDM_files/jSDM.rda")
+```
+
+```{r output-probit, eval=TRUE}
+load("SDM_JSDM_files/jSDM.rda")
+cat("number of chains :", n_chains,"\n")
+cat("content of each chain :", str_m1,"\n")
 ```
 
 We evaluate the convergence of the MCMC output in which two parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
 Convergence is diagnosed when the chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
-If the convergence diagnostic gives values substantially above 1, its indicates lack of convergence.
+If the convergence diagnostic gives values of potential scale reduction factor or psrf
+substantially above 1, its indicates lack of convergence.
 
-```{r MCMC-convergence}
+```{r MCMC-convergence, eval=FALSE}
 require(coda)
 arr2mcmc <- function(x) {
   return(mcmc(as.data.frame(x)))
 }
 # MCMC lists
 mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 # psrf gelman indice 
-psrf_beta <- gelman.diag(mcmc_list_beta)$mpsrf
-# gelman indice
-cat("psrf_beta:", psrf_beta, "\n")
+psrf_beta <- mean(gelman.diag(mcmc_list_beta)$psrf[,1])
+save(psrf_beta, file="SDM_JSDM_files/psrf.rda")
 ```
 
-```{r est-probit}
-beta_m1 <- lapply(m1$mcmc.sp, colMeans)
-probit_theta_m1 <- m1$probit_theta_pred
-deviance_m1 <- mean(m1$mcmc.Deviance)
-```
-
-**Comparison with BayesComm**
-
-```{r BayesComm-comparison}
-load("SDM_JSDM_files/BayesComm.rda")
-beta_est_m1 <- data.frame(matrix(unlist(beta_m1), ncol=3, byrow=T))
-names(beta_est_m1) <- c("intercept","snow","snow2")
-beta_est_m1$sp <- names(pres_data)
-# Intercept
-plot(beta_est_bayescomm$intercept, beta_est_m1$intercept,
-     main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-# Snow
-plot(beta_est_bayescomm$snow, beta_est_m1$snow,
-     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-# Snow2
-plot(beta_est_bayescomm$snow2, beta_est_m1$snow2,
-     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-
+```{r psrf, echo=FALSE, eval=TRUE}
+load("SDM_JSDM_files/psrf.rda")
+cat("psrf beta:", psrf_beta, "\n")
 ```
 
 ### Model **with** latent variables 
@@ -320,7 +362,7 @@ nl <- 2
 # Starting parameters 
 lambda_start <- c(-1, 1)
 beta_start <- c(-1,1)
-W_start <- c(0.001,-0.001)
+W_start <- c(0.1,-0.1)
 #formatting of starting parameters
 #and constraints on lambda generated by the function 
 # Seeds
@@ -333,12 +375,13 @@ seed_mcmc <- c(1234, 4321)
 mod_probit_lv <-
   foreach (i = 1:nchains) %dopar% {
     # Infering model parameters
+    T1 <- Sys.time()
     mod <- jSDM::jSDM_binomial_probit_block(
       # Iterations
-      burnin=25000, mcmc=25000, thin=25,
+      burnin=10000, mcmc=10000, thin=10,
       # Data
-      presence_site_sp=pres_data,
-      site_data = env_data[,-1],
+      presence_site_sp=PA_Birds,
+      site_data = X,
       site_suitability = ~.,
       # Model specification 
       n_latent=2,
@@ -356,116 +399,177 @@ mod_probit_lv <-
       seed = seed_mcmc[i],
       verbose = 1
     )
+    T2 <- Sys.time()
+    mod$T_jSDM <- difftime(T2,T1)
     return(mod)
   }
 
 
 # Stop cluster
 stopCluster(clust)
-save(mod_probit_lv, file="SDM_JSDM_files/mod_probit_lv.rda")
 ```
 
-```{r output-probit-lv}
-load(file="SDM_JSDM_files/mod_probit_lv.rda")
+
+```{r output-jSDM-probit-lv, eval=FALSE}
 # Output
+n_chains <- length(mod_probit_lv)
 m2 <- mod_probit_lv[[1]]
-str(m2, max.level = 1)
-```
-
-
-```{r MCMC-convergence-probit-lv, echo=FALSE}
-# # psrf
-mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.Deviance"), arr2mcmc))
-mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.latent"), arr2mcmc))
-psrf_beta <- gelman.diag(mcmc_list_param[,1:np])$mpsrf
-psrf_lv <- gelman.diag(mcmc_list_lv)$mpsrf
-cat("psrf_lv:", psrf_lv, "\n")
-cat("psrf_beta:", psrf_beta, "\n")
-```
-
-
-```{r est-probit-lv}
-param_m2 <- lapply(m2$mcmc.sp,colMeans)
+str_m2 <- paste(capture.output(str(m2, max.level = 1)), collapse="\n")
+# Fitted values
+param_m2 <- lapply(m2$mcmc.sp, colMeans)
+Z_latent_m2 <- m2$Z_latent
 probit_theta_m2 <- m2$probit_theta_pred
-deviance_m2 <- colMeans(m2$mcmc.Deviance)
+deviance_m2 <- mean(m2$mcmc.Deviance)
+T_jSDM_lv <- m2$T_jSDM
+residual_corr_mat <- get_residual_cor(m2)$cor.mean
+
+save(T_jSDM_lv, n_chains, str_m2, param_m2, probit_theta_m2, deviance_m2, residual_corr_mat, Z_latent_m2,
+     file="SDM_JSDM_files/jSDM_lv.rda")
 ```
 
-*Comparison with BayesComm*
+```{r outputjSDM-probit-lv, eval=TRUE}
+load("SDM_JSDM_files/jSDM_lv.rda")
+cat("number of chains :", n_chains,"\n")
+cat("content of each chain :", str_m2,"\n")
+```
 
-```{r BayesComm-comparison-lv}
+```{r MCMC-convergence-probit-lv, eval=FALSE}
+# psrf
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(
+  mcmc_list_param[,grep("lambda", grep("sp_1.lambda_2", colnames(mcmc_list_param[[1]]),
+                                       invert=TRUE, value=TRUE),value=TRUE)],
+  scale, scale=FALSE),arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,
+                                        "[[","mcmc.latent"), arr2mcmc))
+mcmc_list_centered_lv <- mcmc.list(lapply(lapply(mcmc_list_lv, scale, scale=FALSE),arr2mcmc))
+psrf_beta <- mean(gelman.diag(mcmc_list_param[,1:np])$psrf[,1])
+psrf_lv <- mean(gelman.diag(mcmc_list_centered_lv)$psrf[,1])
+psrf_lambda <- mean(gelman.diag(mcmc_list_centered_lambda)$psrf[,1])
+save(psrf_beta, psrf_lv, psrf_lambda, file="SDM_JSDM_files/psrf_lv.rda")
+```
+
+```{r psrf_lv, echo=FALSE, eval=TRUE}
+load("SDM_JSDM_files/psrf_lv.rda")
+cat("psrf latent variables:", psrf_lv, "\n")
+cat("psrf lambda:", psrf_lambda, "\n")
+cat("psrf beta:", psrf_beta, "\n")
+```
+
+# Comparison of results
+
+## Deviance and compilation time
+
+(ref:cap-comp-dev) **Deviance and compilation time**. of probit models without and with latent variables fitted by `jSDM` or `BayesComm`. \vspace{0.5cm}
+
+```{r comp-dev, echo=FALSE, eval=TRUE}
+load("SDM_JSDM_files/BayesComm.rda")
 load("SDM_JSDM_files/BayesComm_lv.rda")
-beta_est_m2 <- data.frame(matrix(unlist(lapply(param_m2,"[",1:np)), ncol=3, byrow=T))
-names(beta_est_m2) <- c("intercept","snow","snow2")
-beta_est_m2$sp <- names(pres_data)
-# Intercept
-plot(beta_est_bayescomm_lv$intercept, beta_est_m1$intercept,
-     main="beta_intercept", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-# Snow
-plot(beta_est_bayescomm_lv$snow, beta_est_m1$snow,
-     main="beta_snow", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-# Snow2
-plot(beta_est_bayescomm_lv$snow2, beta_est_m1$snow2,
-     main="beta_snow2", xlab="fitted by BayesComm", ylab="fitted by jSDM")
-abline(a=0, b=1, col="red")
-plot(Z_BayesComm, m2$Z_latent)
-abline(a=0, b=1, col="red")
+load("SDM_JSDM_files/jSDM.rda")
+load("SDM_JSDM_files/jSDM_lv.rda")
+
+# Deviance
+df <- data.frame(package=c("BayesComm","jSDM","BayesComm","jSDM"),
+                 model=c("GLM", "GLM","LVM", "LVM"),
+                 Time=c(T_BayesComm, T_jSDM, T_BayesComm_lv, T_jSDM_lv),
+                 Deviance=c(deviance_BC1, deviance_m1,
+                            deviance_BC2, deviance_m2))
+knitr::kable(df, caption="(ref:cap-comp-dev)", booktabs=TRUE, digits=c(0,0,1,0)) %>%
+  kable_styling(position="center", full_width = FALSE)
 ```
 
-# Results
 
-Comparison of models with and without latent variables.
+## Parameter values  
 
-## Comparison of parameter values  
+We compare the intercept for each species between models with and without latent variables fitted using `BayesComm` or `jSDM`. 
 
-We compare the intercept for each species between the two models.
-
-```{r comp-intercept-lv}
+```{r comp-intercept, eval=FALSE}
 # Intercepts
 plot(lapply(beta_m1,"[", 1) , lapply(param_m2, "[", 1), cex=nobs_sp^(1/3),
      main="Fixed species intercept beta",
-     xlab="m1 without latent variables", ylab="m2 with latent variables")
+     xlab="model without latent variables", ylab="model with latent variables")
+points(beta_est_bayescomm$intercept, beta_est_bayescomm_lv$intercept,
+       cex=rep(nobs_sp^(1/3),75), col='blue')
+abline(a=0, b=1, col="red")
+legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 abline(a=0, b=1, col="red")
 ```
 
-We compare the effect of the environmental variables for each species between the two models.
+```{r comp-intercept-plot, echo=FALSE, out.width=600, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/comp-intercept-1.png")
+```
 
-```{r comp-env-effect-lv}
+We compare the effect of the environmental variables for each species between the four models.
+
+```{r comp-env-effect, eval=FALSE}
 # Environmental variable effects
 for(k in 2:np){
 plot(lapply(beta_m1, "[", k), lapply(param_m2,"[", k), cex=nobs_sp^(1/3),
           main=paste0("Fixed species effect ", names(beta_m1[[1]][k])),
-     xlab="m1 without latent variables", ylab="m2 with latent variables")
+     xlab="model without latent variables", ylab="model with latent variables")
+points(beta_est_bayescomm[,k+1], beta_est_bayescomm_lv[,k+1],
+       cex=rep(nobs_sp^(1/3),75), col='blue')
 abline(a=0, b=1, col="red")
+legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 }
 ```
 
-## Comparison of predictions
+```{r comp-env-effect-plot, echo=FALSE, out.width=600, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/comp-env-effect-1.png")
+knitr::include_graphics("SDM_JSDM_files/figure-html/comp-env-effect-2.png")
+```
 
-We compare the probit of occurence probabilities predicted by the two models.
+## Predictions
 
-```{r comp-pred-lv}
-# Predictions
-plot(probit_theta_m1, probit_theta_m2, cex=rep(nobs_sp^(1/3), 75),
-     main="Predicted probit(theta)",
-     xlab="m1 without latent variables", ylab="m2 with latent variables")
+We compare the probit of occurence probabilities predicted by the models with and without latent variables fitted using `BayesComm` or `jSDM`.
+
+```{r comp-pred, eval=FALSE}
+require(scales)
+# Z_true 
+plot(Z_latent_m1, Z_latent_m2, main="Latent variable Z",
+     cex=rep(nobs_sp^(1/3), 75),
+     xlab="model without latent variables (SDM)",
+     ylab="model with latent variables (JSDM)")
+points(Z_BayesComm, Z_BayesComm_lv,
+       cex=rep(nobs_sp^(1/3), 75), col=alpha('blue',0.2))
 abline(a=0, b=1, col="red")
+legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
+
+# Predictions
+plot(probit_theta_m1, probit_theta_m2,
+     cex=rep(nobs_sp^(1/3), 75),
+     main="Predicted probit(theta)",
+     xlab="model without latent variables (SDM)",
+     ylab="model with latent variables (JSDM)")
+points(probit_theta_pred_BayesComm, probit_theta_pred_BayesComm_lv,
+       cex=rep(nobs_sp^(1/3),75), col=alpha('blue',0.2))
+abline(a=0, b=1, col="red")
+legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 ```
 
-## Deviance
 
-(ref:cap-comp-dev) **Deviance comparison**. Between probit models without and with latent variables. \vspace{0.5cm}
-
-```{r comp-dev}
-# Deviance
-dev_df <- data.frame(mod=c("probit", "probit_lv"),
-                     dev=c(deviance_m1, deviance_m2))
-rownames(dev_df) <- c("m1 ","m2")
-knitr::kable(dev_df, caption="(ref:cap-comp-dev)", booktabs=TRUE, digits=0, row.names=T) %>%
-  kable_styling(position="center", full_width = FALSE)
+```{r comp-pred-plot, echo=FALSE, out.width=600, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-1.png")
+knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-2.png")
 ```
 
+## Residual correlaton matrix 
+
+```{r residual_correlation_matrix, eval=FALSE}
+# Residual correlation matrix obtained with BayesComm
+reorder.cor.mean <- corrplot::corrMatOrder(R_mat, order = "FPC", hclust.method = "average")
+par(cex=1, cex.main=1.5)
+corrplot::corrplot(R_mat[reorder.cor.mean,reorder.cor.mean], title = "Residual Correlation Matrix from BayesComm", diag = F, type = "lower", method = "color",  mar = c(1,1,3,1), tl.srt = 40, tl.cex = 0.4)
+# Residual correlation matrix obtained with jSDM
+reorder.cor.mean <- corrplot::corrMatOrder(residual_corr_mat, order = "FPC", hclust.method = "average")
+rownames(residual_corr_mat) <- colnames(residual_corr_mat) <-  colnames(PA_Birds)
+par(cex=1, cex.main=1.5)
+corrplot::corrplot(residual_corr_mat[reorder.cor.mean,reorder.cor.mean], title = "Residual Correlation Matrix from jSDM", diag = F, type = "lower", method = "color",  mar = c(1,1,3,1), tl.srt = 40, tl.cex = 0.4)
+```
+
+```{r residual_correlation_matrix-plot, echo=FALSE, out.width=600, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-1.png")
+knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-2.png")
+```
 
 # References

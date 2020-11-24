@@ -122,14 +122,15 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
       }
     }
     
-    /////////////////////////////////////////////
-    // mat latent variable W: Gibbs algorithm //
-    // Loop on sites
+    
+    
     arma::mat beta_run; beta_run = param_run.submat(0,0,NP-1,NSP-1);
     arma::mat lambda_run; lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
-    
+    // Loop on sites
     for (int i=0; i<NSITE; i++) {
       int nobs_i = rowId_site[i].n_elem;
+      /////////////////////////////////////////////
+      // mat latent variable W: Gibbs algorithm //
       arma::rowvec Zprim; Zprim.zeros(nobs_i);
       for (int n=0; n<nobs_i; n++) {
         Zprim(n)=arma::as_scalar(Z_run.row(rowId_site[i].at(n))
@@ -140,12 +141,29 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
       arma::vec small_v=lambda_run.cols(Id_sp(rowId_site[i]))*Zprim.t();
       // big_V
       arma::mat big_V = inv(inv(V_W)+lambda_run.cols(Id_sp(rowId_site[i]))*lambda_run.cols(Id_sp(rowId_site[i])).t());
-      
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
+      data = arma::join_rows(X,W_run.rows(Id_site));
+      
+      ///////////////////////////////
+      // vec alpha : Gibbs algorithm //
+      if(i==0){
+        // constraints of identifiability on alpha
+        alpha_run(i) = 0.0;
+      } else {
+        // small_v
+        double small_v2=0.0;
+        for (int n=0; n<nobs_i; n++) {
+          small_v2 += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
+        }
+        // big_V
+        double big_V2 = 1/(1/V_alpha + nobs_i);
+        
+        // Draw in the posterior distribution
+        alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+      }
     }
-    data = arma::join_rows(X,W_run.rows(Id_site));
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -173,30 +191,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
       }
       param_run.col(j) = param_prop;
     }
-    
-    ///////////////////////////////
-    // vec alpha : Gibbs algorithm //
-    
-    // Loop on sites 
-    for (int i=0; i<NSITE; i++) {
-      if(i==0){
-        // constraints of identifiability on alpha
-        alpha_run(i) = 0.0;
-      } else {
-        int nobs_i = rowId_site[i].n_elem;
-        double small_v=0.0;
-        // small_v
-        for (int n=0; n<nobs_i; n++) {
-          small_v += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
-        }
-        // big_V
-        double big_V = 1/(1/V_alpha + nobs_i);
-        
-        // Draw in the posterior distribution
-        alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-      }
-    }
-    
+
     //////////////////////////////////////////////////
     //// Deviance
     
@@ -275,8 +270,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 # # ===================================================
 # 
 # nsp <- 70
-# nsite <- 210 
-# np <- 3
+# nsite <- 210
 # nl <- 2
 # seed <- 123
 # set.seed(seed)
@@ -286,6 +280,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv_long_format(
 # x2 <- rnorm(nsite,0,1)
 # X <- cbind(rep(1,nsite),x1,x2)
 # colnames(X) <- c("Int","x1","x2")
+# np <- ncol(X)
 # W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 # l.zero <- 0

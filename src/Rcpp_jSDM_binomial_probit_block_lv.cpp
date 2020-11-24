@@ -104,6 +104,25 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
       }
     }
     
+    /////////////////////////////////////////////
+    // mat latent variable W: Gibbs algorithm //
+    
+    // Loop on sites
+    for (int i=0; i<NSITE; i++) {
+      arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
+      arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
+      // big_V
+      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
+      
+      // small_v
+      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run).t();
+      
+      // Draw in the posterior distribution
+      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      W_run.row(i) = W_i.t();
+    }
+    
+    data = arma::join_rows(X, W_run);
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -129,28 +148,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
       }
       param_run.col(j) = param_prop;
     }
-    
-    
-    /////////////////////////////////////////////
-    // mat latent variable W: Gibbs algorithm //
-    
-    // Loop on sites
-    for (int i=0; i<NSITE; i++) {
-      arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
-      arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
-      // big_V
-      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
-      
-      // small_v
-      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run).t();
-      
-      // Draw in the posterior distribution
-      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      W_run.row(i) = W_i.t();
-    }
-    
-    data = arma::join_rows(X, W_run);
-    
     
     //////////////////////////////////////////////////
     //// Deviance

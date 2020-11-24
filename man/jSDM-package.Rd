@@ -30,7 +30,7 @@ The package includes the following functions to fit various species distribution
 \item{ \code{\link{jSDM_binomial_probit_block}} : \cr
 \cr
 \bold{Ecological process:}
-\deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+\deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij),}
 where \tabular{ll}{
  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
@@ -69,14 +69,14 @@ where \tabular{ll}{
 #' \item{ \code{\link{jSDM_binomial_probit_block_long_format}} : \cr
 \cr
 \bold{Ecological process:}
-\deqn{y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)}{y_ij ~ Binomial(\theta_ij,t_i),}
+\deqn{y_n \sim \mathcal{B}ernoulli(\theta_n) \text{ such as } species_n=j \text{ and } site_n=i,}{y_n ~ Bernoulli(\theta_n) such as species_n=j and site_n=i,}
 where \tabular{ll}{
- if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
- if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
- if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
- if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} \cr
- if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
- if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}}{(\theta_n) = D_n \beta + X_n \beta_sp.j} \cr
+ if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j}{(\theta_n) = D_n \beta + X_n \beta_sp.j +  W_i \lambda_j} \cr
+ if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i}{(\theta_n) = D_n \beta + X_n \beta_sp.j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i}{(\theta_n) = D_n \beta + X_n  \beta_sp.j +  W_i \lambda_j + \alpha_i} \cr
+ if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i}{(\theta_n) = D_n \beta + X_n \beta_sp.j + \alpha_i} \cr
+ if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i}{(\theta_n) = D_n \beta + X_n  \beta_sp.j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 }}
 
 }

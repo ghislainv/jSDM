@@ -14,6 +14,7 @@ jSDM_binomial_probit_block_long_format(
   thin = 10,
   alpha_start = 0,
   beta_start = 0,
+  beta_sp_start = 0,
   lambda_start = 0,
   W_start = 0,
   V_alpha = 1,
@@ -21,6 +22,8 @@ jSDM_binomial_probit_block_long_format(
   rate = 5e-04,
   mu_beta = 0,
   V_beta = 1e+06,
+  mu_beta_sp = 0,
+  V_beta_sp = 1e+06,
   mu_lambda = 0,
   V_lambda = 10,
   seed = 1234,
@@ -33,10 +36,11 @@ jSDM_binomial_probit_block_long_format(
 \code{Y} \tab \eqn{n_{obs}}{n_obs}-length vector indicating the presence by a 1 (or absence by a 0) of the species observed during each visit of the sites. \cr
 \code{site} \tab numerc or character \eqn{n_{obs}}{n_obs}-length vector indicating the visited site (sites can be visited several times). \cr
 \code{species} \tab numerc or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed (species may not have been recorded at all sites) \cr 
-\code{X1,...,Xp} \tab columns of explicative variables for the suitability process of the model \cr
+\code{x1,...,xp} \tab columns of explicative variables for the suitability process of the model \cr
 }}
 
-\item{site_suitability}{A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.}
+\item{site_suitability}{A one-sided formula with the form '~x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{d} terms related to \eqn{\beta} parameters and \eqn{p} terms related to species effects \eqn{\beta_sp} parameters,
+specifying the explicative variables for the suitability process of the model as formula used by the \code{lm} function.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
@@ -53,7 +57,9 @@ If random effects, they are drawn from a normal distribution with mean zero and 
 \item{alpha_start}{Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.}
 
-\item{beta_start}{Starting values for beta parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. If \code{beta_start} takes a scalar value, then that value will serve for all of the \eqn{\beta} parameters.}
+\item{beta_start}{Starting values for beta parameters of the suitability process must be either a scalar or a \eqn{d}-length vector. If \code{beta_start} takes a scalar value, then that value will serve for all of the \eqn{\beta} parameters.}
+
+\item{beta_sp_start}{Starting values for beta_sp parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. If \code{beta_sp_start} takes a scalar value, then that value will serve for all of the \eqn{\beta_{sp}}{\beta_sp} parameters.}
 
 \item{lambda_start}{Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal, ignored if \code{n_latent=0}.
 If \code{lambda_start} takes a scalar value, then that value will serve for all of the \eqn{\lambda} parameters except those concerned by the constraints explained above.}
@@ -70,11 +76,18 @@ Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
 \item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.}
 
-\item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{p}-length vector.
+\item{mu_beta}{Means of the Normal priors for the \eqn{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{d}-length vector.
 If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters. The default value is set to 0 for an uninformative prior.}
 
-\item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix.
- If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\beta} parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+\item{V_beta}{Variances of the Normal priors for the \eqn{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a \eqn{d \times d}{d x d} symmetric positive semi-definite square matrix.
+If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\beta} parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+The default variance is large and set to \code{1e+06} for an uninformative flat prior.}
+
+\item{mu_beta_sp}{Means of the Normal priors for the \eqn{\beta_{sp}}{\beta_sp} parameters of the suitability process. \code{mu_beta_sp} must be either a scalar or a \eqn{p}-length vector.
+If \code{mu_beta_sp} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters. The default value is set to 0 for an uninformative prior.}
+
+\item{V_beta_sp}{Variances of the Normal priors for the \eqn{\beta_{sp}}{\beta_sp} parameters of the suitability process. \code{V_beta_sp} must be either a scalar or a \eqn{p \times p}{p x p} symmetric positive semi-definite square matrix.
+ If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\beta_{sp}}{\beta_sp} parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
 The default variance is large and set to \code{1e+06} for an uninformative flat prior.}
 
 \item{mu_lambda}{Means of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables. 
@@ -94,8 +107,8 @@ An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
 mcmc.alpha \tab An mcmc object that contains the posterior samples for for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.\cr
 mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or \code{site_effect="fixed"}.\cr
 mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.\cr
-mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.\cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
+mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_{sp}}{\beta_sp} and the loading factors \eqn{\lambda} if \code{n_latent>0}.\cr
+mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_n P(y_n|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
 Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
 probit_theta_pred \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
@@ -109,14 +122,14 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 
 \bold{Ecological process:}
-\deqn{y_{n} \sim \mathcal{B}ernoulli(\theta_{n})}{y_n ~ Bernoulli(\theta_n)}
-where \tabular{ll}{
- if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
- if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
- if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
- if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} \cr
- if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
- if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+\deqn{y_{n} \sim \mathcal{B}ernoulli(\theta_{n}) \text{ such as } species_n=j \text{ and } site_n=i}{y_n ~ Bernoulli(\theta_n) such as species_n=j and site_n=i}
+ where \tabular{ll}{
+ if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}}{(\theta_n) = D_n \beta + X_n \beta_sp.j} \cr
+ if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j}{(\theta_n) =  D_n \beta  + X_n \beta_sp.j +  W_i \lambda_j} \cr
+ if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i}{(\theta_n) = D_n \beta + X_n \beta_sp.j + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i}{(\theta_n) = D_n \beta  + X_n  \beta_sp.j +  W_i \lambda_j + \alpha_i} \cr
+ if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{n}) = D_n \beta  + X_n \beta_{sp.j}  + \alpha_i}{(\theta_n) = D_n \beta + X_n \beta_sp.j + \alpha_i} \cr
+ if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i}{(\theta_n) = D_n \beta  + X_n  \beta_sp.j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 }
 }
 \examples{
@@ -133,39 +146,55 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 100
+nsite <- 50
 
 #= Set seed for repeatability
 seed <- 1234
 set.seed(seed)
 
 #' #= Number of species
-nsp <- 30
+nsp <- 25
 
 #= Number of latent variables
 n_latent <- 2
-
-#= Ecological process (suitability)
+#'
+# Ecological process (suitability)
+## X
 x1 <- rnorm(nsite,0,1)
-x2 <- rnorm(nsite,0,1)
-X <- cbind(rep(1,nsite),x1,x2)
-colnames(X) <- c("Int","x1","x2")
+x1.2 <- scale(x1^2)
+X <- cbind(rep(1,nsite),x1,x1.2)
+colnames(X) <- c("Int","x1","x1.2")
 np <- ncol(X)
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*2-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]),
-                         byrow=TRUE, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
+## W
+W <- matrix(rnorm(nsite*n_latent,0,1),nrow=nsite,byrow=TRUE)
+## D
+SLA <- runif(nsp,-1,1)
+D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 \%*\% t(SLA))))
+nd <- ncol(D)
+## parameters
+beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(n_latent,0,2)
+lambda.target <- matrix(0,n_latent,nsp)
+beta.target <-runif(nd,-1,1)
+# constraintq of identifiability
+beta_sp.target[,1] <- 0.0
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+#= Variance of random site effect 
 V_alpha.target <- 0.5
+#= Random site effect 
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-probit_theta <- X \%*\% beta.target + W \%*\% lambda.target + alpha.target
+## probit_theta
+probit_theta <- c(X \%*\% beta_sp.target) + c(W \%*\% lambda.target)
+                + as.matrix(D) \%*\% beta.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
-X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs\%*\%beta.target + W\%*\%lambda.target + alpha.target
+x1_supObs <- rnorm(nsite,0,1)
+x1.2_supObs <- scale(x1^2)
+X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
+D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs \%*\% t(SLA))))
+probit_theta_supObs <- c(X_supObs\%*\%beta_sp.target) + c(W\%*\%lambda.target)
+                       + as.matrix(D_supObs) \%*\% beta.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -177,8 +206,8 @@ for (n in 1:nobs){
 Id_site <- rep(1:nsite,nsp)
 Id_sp <- rep(1:nsp,each=nsite)
 data <- data.frame(site=rep(Id_site,2), species=rep(Id_sp,2), Y=Y,
-                   x1=c(rep(x1,nsp),rep(X_supObs[,2],nsp)),
-                   x2=c(rep(x2,nsp),rep(X_supObs[,3],nsp)))
+                   x1=c(D$x1,D_supObs$x1), x1.2=c(D$x1.2,D_supObs$x1.2),
+                   x1.SLA=c(D$x1.SLA,D_supObs$x1.SLA))
 # missing observation
 data <- data[-1,]
 
@@ -187,36 +216,46 @@ data <- data[-1,]
 
 # Increase number of iterations (burnin and mcmc) to get convergence
 mod<-jSDM_binomial_probit_block_long_format( # Iteration
-  burnin=200,
-  mcmc=200,
+  burnin=500,
+  mcmc=500,
   thin=1,
   # Response variable
   data=data,
   # Explanatory variables
-  site_suitability=~x1+x2,
+  site_suitability=~ (1 + x1 + x1.2)*species + x1.SLA + site,
   n_latent=2,
   site_effect="random",
   # Starting values
   alpha_start=0,
   beta_start=0,
+  beta_sp_start=0,
   lambda_start=0,
   W_start=0,
   V_alpha=1,
   # Priors
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=1.0E6,
+  mu_beta_sp=0, V_beta_sp=10,
+  mu_beta=0, V_beta=1,
   mu_lambda=0, V_lambda=10,
   seed=1234, verbose=1)
 
 #= Parameter estimates
 
+# beta 
+par(mfrow=c(nd,2))
+for(d in 1:nd){
+ coda::traceplot(mod$mcmc.beta[,d])
+ coda::densplot(mod$mcmc.beta[,d],
+                main = colnames(mod$mcmc.beta)[d])
+ abline(v=beta.target[d],col='red')
+}
 ## beta_j
 # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
-mean_beta <- matrix(0,nsp,ncol(X))
+mean_beta_sp <- matrix(0,nsp,ncol(X))
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit_block.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
-  mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_beta_sp[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
                          [,1:ncol(X)], 2, mean)
   for (p in 1:ncol(X)){
     coda::traceplot(coda::as.mcmc(
@@ -226,7 +265,7 @@ for (j in 1:nsp) {
       main = paste(colnames(
         mod$mcmc.sp[[paste0("sp_",j)]])[p],
         ", species : ",j))
-    abline(v=beta.target[p,j],col='red')
+    abline(v=beta_sp.target[p,j],col='red')
   }
 }
 dev.off()
@@ -254,7 +293,7 @@ dev.off()
 
 # Species effects beta and factor loadings lambda
 par(mfrow=c(1,2))
-plot(t(beta.target), mean_beta,
+plot(t(beta_sp.target), mean_beta_sp,
      main="species effect beta",
      xlab ="obs", ylab ="fitted")
 abline(a=0,b=1,col='red')

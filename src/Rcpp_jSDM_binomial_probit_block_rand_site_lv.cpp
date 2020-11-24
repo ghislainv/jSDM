@@ -113,6 +113,48 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
       }
     }
     
+    // Loop on sites
+    for (int i=0; i<NSITE; i++) {
+      
+      /////////////////////////////////////////////
+      // mat latent variable W: Gibbs algorithm //
+      arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
+      arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
+      // big_V
+      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
+      
+      // small_v
+      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
+      
+      // Draw in the posterior distribution
+      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      W_run.row(i) = W_i.t();
+      data = arma::join_rows(X, W_run);
+      
+      ///////////////////////////////
+      // vec alpha : Gibbs algorithm //
+      
+      // small_v
+      double small_v2 = arma::sum(Z_run.row(i)-data.row(i)*param_run);
+      
+      // big_V
+      double big_V2 = 1/(1/V_alpha_run + NSP);
+      
+      // Draw in the posterior distribution
+      alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+    }
+    
+    // center alpha 
+    //alpha_run = alpha_run - arma::mean(alpha_run);
+    
+    ////////////////////////////////////////////////
+    // V_alpha
+    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
+    double shape_posterior = shape + 0.5*NSITE;
+    double rate_posterior = rate + 0.5*sum;
+    
+    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
+    
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -138,53 +180,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
       }
       param_run.col(j) = param_prop;
     }
-    
-    
-    /////////////////////////////////////////////
-    // mat latent variable W: Gibbs algorithm //
-    
-    // Loop on sites
-    for (int i=0; i<NSITE; i++) {
-      arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
-      arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
-      // big_V
-      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
-      
-      // small_v
-      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
-      
-      // Draw in the posterior distribution
-      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      W_run.row(i) = W_i.t();
-    }
-    
-    data = arma::join_rows(X, W_run);
-    
-    ///////////////////////////////
-    // vec alpha : Gibbs algorithm //
-    
-    // Loop on sites 
-    for (int i=0; i<NSITE; i++) {
-      // small_v
-      double small_v = arma::sum(Z_run.row(i)-data.row(i)*param_run);
-      
-      // big_V
-      double big_V = 1/(1/V_alpha_run + NSP);
-      
-      // Draw in the posterior distribution
-      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-    }
-  
-    // center alpha 
-    //alpha_run = alpha_run - arma::mean(alpha_run);
-    
-    ////////////////////////////////////////////////
-    // V_alpha
-    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
-    double shape_posterior = shape + 0.5*NSITE;
-    double rate_posterior = rate + 0.5*sum;
-    
-    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -269,7 +264,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # nsite <- 210
 # np <- 3
 # nl <- 2
-# seed <- 1234
+# seed <- 123
 # set.seed(seed)
 # 
 # # Ecological process (suitability)

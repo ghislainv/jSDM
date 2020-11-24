@@ -136,7 +136,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_long_format(
     // vec alpha : Gibbs algorithm //
     
     // Loop on sites 
-    double sum = 0.0;
     for (int i=0; i<NSITE; i++) {
       int nobs_i = rowId_site[i].n_elem;
       double small_v=0.0;
@@ -149,12 +148,11 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_long_format(
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-      
-      sum += alpha_run(i)*alpha_run(i);
     }
     
     ////////////////////////////////////////////////
     // V_alpha
+    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
     double shape_posterior = shape + 0.5*NSITE;
     double rate_posterior = rate + 0.5*sum;
     

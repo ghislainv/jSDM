@@ -109,6 +109,45 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
       }
     }
     
+    // Loop on sites
+    arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
+    arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
+    for (int i=0; i<NSITE; i++) {
+      /////////////////////////////////////////////
+      // mat latent variable W: Gibbs algorithm //
+      // big_V
+      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
+      
+      // small_v
+      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
+      
+      // Draw in the posterior distribution
+      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      W_run.row(i) = W_i.t();
+      // Centering and reducing W_i 
+      // for ( int q = 0; q < NL; q++ ) {
+      //   W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      //   W_run.col(q) = W_run.col(q)/arma::stddev(W_run.col(q));
+      // }
+      data = arma::join_rows(X, W_run);
+      
+      ///////////////////////////////
+      // vec alpha : Gibbs algorithm //
+      
+      // Loop on sites 
+      if(i==0){
+        // constraints of identifiability on alpha
+        alpha_run(i) = 0.0;
+      }
+      // small_v
+      double small_v2 = arma::sum(Z_run.row(i)-data.row(i)*param_run);
+      
+      // big_V
+      double big_V2 = 1/(1/V_alpha + NSP);
+      
+      // Draw in the posterior distribution
+      alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+    }
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -134,51 +173,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site_lv(const int ngibbs,const 
       }
       param_run.col(j) = param_prop;
     }
-    
-    
-    /////////////////////////////////////////////
-    // mat latent variable W: Gibbs algorithm //
-    
-    // Loop on sites
-    for (int i=0; i<NSITE; i++) {
-      arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
-      arma::mat lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
-      // big_V
-      arma::mat big_V = inv(inv(V_W)+lambda_run*lambda_run.t());
-      
-      // small_v
-      arma::vec small_v =lambda_run*(Z_run.row(i)-X.row(i)*beta_run-alpha_run(i)).t();
-      
-      // Draw in the posterior distribution
-      arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      W_run.row(i) = W_i.t();
-    }
-    // Centering and reducing W_i 
-      // for ( int q = 0; q < NL; q++ ) {
-      //   W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
-      //   W_run.col(q) = W_run.col(q)/arma::stddev(W_run.col(q));
-      // }
-    
-    data = arma::join_rows(X, W_run);
-    
-    ///////////////////////////////
-    // vec alpha : Gibbs algorithm //
-    
-    // Loop on sites 
-    for (int i=0; i<NSITE; i++) {
-      // small_v
-      double small_v = arma::sum(Z_run.row(i)-data.row(i)*param_run);
-      
-      // big_V
-      double big_V = 1/(1/V_alpha + NSP);
-      
-      // Draw in the posterior distribution
-      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-    }
-    
-    // constraints of identifiability on alpha
-    alpha_run(0) = 0.0;
-    
     
     //////////////////////////////////////////////////
     //// Deviance

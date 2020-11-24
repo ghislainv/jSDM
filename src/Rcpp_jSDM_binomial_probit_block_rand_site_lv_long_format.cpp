@@ -126,13 +126,12 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
       }
     }
     
-    /////////////////////////////////////////////
-    // mat latent variable W: Gibbs algorithm //
-    // Loop on sites
     arma::mat beta_run; beta_run = param_run.submat(0,0,NP-1,NSP-1);
     arma::mat lambda_run; lambda_run = param_run.submat(NP,0,NP+NL-1,NSP-1);
-    
+    // Loop on sites
     for (int i=0; i<NSITE; i++) {
+      /////////////////////////////////////////////
+      // mat latent variable W: Gibbs algorithm //
       int nobs_i = rowId_site[i].n_elem;
       arma::rowvec Zprim; Zprim.zeros(nobs_i);
       for (int n=0; n<nobs_i; n++) {
@@ -148,8 +147,28 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
-    }
-    data = arma::join_rows(X,W_run.rows(Id_site));
+      data = arma::join_rows(X,W_run.rows(Id_site));
+      
+      ///////////////////////////////
+      // vec alpha : Gibbs algorithm //
+      double small_v2=0.0;
+      // small_v
+      for (int n=0; n<nobs_i; n++) {
+        small_v2 += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
+      }
+      // big_V
+      double big_V2 = 1/(1/V_alpha_run + nobs_i);
+      
+      // Draw in the posterior distribution
+      alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+      }
+    ////////////////////////////////////////////////
+    // V_alpha
+    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
+    double shape_posterior = shape + 0.5*NSITE;
+    double rate_posterior = rate + 0.5*sum;
+    
+    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -177,34 +196,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
       }
       param_run.col(j) = param_prop;
     }
-    
-    ///////////////////////////////
-    // vec alpha : Gibbs algorithm //
-    
-    // Loop on sites 
-    double sum = 0.0;
-    for (int i=0; i<NSITE; i++) {
-      int nobs_i = rowId_site[i].n_elem;
-      double small_v=0.0;
-      // small_v
-      for (int n=0; n<nobs_i; n++) {
-        small_v += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-data.row(rowId_site[i].at(n))*param_run.col(Id_sp(rowId_site[i].at(n))));
-      }
-      // big_V
-      double big_V = 1/(1/V_alpha_run + nobs_i);
-      
-      // Draw in the posterior distribution
-      alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
-      
-      sum += alpha_run(i)*alpha_run(i);
-    }
-    
-    ////////////////////////////////////////////////
-    // V_alpha
-    double shape_posterior = shape + 0.5*NSITE;
-    double rate_posterior = rate + 0.5*sum;
-    
-    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////////////////////
     //// Deviance
@@ -285,8 +276,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
 # # Data
 # # ===================================================
 # 
-# nsp <- 100
-# nsite <- 300
+# nsp <- 70
+# nsite <- 210
 # np <- 3
 # nl <- 2
 # seed <- 123
@@ -408,13 +399,18 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
 # abline(a=0,b=1,col='red')
 # plot(t(lambda.target),mean_lambda, xlab="obs", ylab="fitted",main="lambda")
 # abline(a=0,b=1,col='red')
-# ## W latent variables
+# 
+# # W latent variables
 # par(mfrow=c(1,2))
-# MCMC.vl1 <- coda::mcmc(mod$W[,,1], start=nburn+1, end=ngibbs, thin=nthin)
-# MCMC.vl2 <- coda::mcmc(mod$W[,,2], start=nburn+1, end=ngibbs, thin=nthin)
-# plot(W[,1],summary(MCMC.vl1)[[1]][,"Mean"], xlab="obs", ylab="fitted",main="Latent variable W_1")
+# mean_W <- apply(mod$W, c(2,3), mean)
+# plot(W[,1],mean_W[,1])
 # abline(a=0,b=1,col='red')
-# plot(W[,2],summary(MCMC.vl2)[[1]][,"Mean"],xlab="obs", ylab="fitted",main="Latent variable W_2")
+# plot(W[,2],mean_W[,2])
+# abline(a=0,b=1,col='red')
+# 
+# # lambda * W
+# par(mfrow=c(1,1))
+# plot(W %*% lambda.target, mean_W %*%t(mean_lambda))
 # abline(a=0,b=1,col='red')
 # ## Deviance
 # mean(mod$Deviance)
