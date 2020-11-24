@@ -148,8 +148,7 @@
 #' x1.2_supObs <- scale(x1^2)
 #' X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 #' D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-#' probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + c(W%*%lambda.target)
-#'                        + as.matrix(D_supObs) %*% beta.target + alpha.target
+#' probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% beta.target + alpha.target
 #' probit_theta <- c(probit_theta, probit_theta_supObs)
 #' nobs <- length(probit_theta)
 #' e <- rnorm(nobs,0,1)
