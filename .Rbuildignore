@@ -25,7 +25,6 @@ vignettes/.*\.md
 
 # vignettes
 ^vignettes/SDM_jSDM\.Rmd$
-^vignettes/SDM_jSDM2\.Rmd$
 ^vignettes/jSDM_boral\.Rmd$
 ^vignettes/jSDM_in_parallel\.Rmd$
 ^vignettes/Madagascar\.Rmd$
