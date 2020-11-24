@@ -4,6 +4,8 @@ language: r
 cache: packages
 
 apt_packages:
+  - libharfbuzz-dev
+  - libfribidi-dev
   - libgsl-dev
   - jags
 
