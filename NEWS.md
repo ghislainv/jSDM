@@ -2,7 +2,7 @@
 
 * Use of `roxygen2` for documentation and NAMESPACE 
 * Rename  `jSDM_binomial_probit_block()` the function `jSDM_probit_block()`.
-* New function `jSDM_binomial_probit_block_long_format()` for fitting joint species distribution models from presence-absence data in long format able to handle missing observations and multiple visits at sites.  
+* New function `jSDM_binomial_probit_block_long_format()` for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.  
 * New function `jSDM_poisson_log()` for fitting joint species distribution models from abundance data inspired by Hui and Francis K. C. 2016 _Methods in Ecology and Evolution_ (doi:10.1111/2041-210X.12514).
 * New function `jSDM_binomial_logit()` for fitting joint species distribution models from presence-absence data at multiple-visited sites using a bayesian inference method inspired by Albert, James H. and Chib Siddhartha 1993 _Journal of the American Statistical Association_ (doi:10.1080/01621459.1993.10476321).
 * Functions to fit models in which site effects are included as fixed effects, as random effects or not included and with or without latent variables.
