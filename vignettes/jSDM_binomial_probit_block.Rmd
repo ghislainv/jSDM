@@ -98,7 +98,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 # Parameter inference
 
-We use the `jSDM_binomial_probit_block()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_probit_block()` function to fit the JSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-probit}
 mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(

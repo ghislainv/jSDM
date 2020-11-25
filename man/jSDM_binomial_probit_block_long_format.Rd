@@ -242,7 +242,7 @@ mod<-jSDM_binomial_probit_block_long_format( # Iteration
 #= Parameter estimates
 
 # beta 
-par(mfrow=c(nd,2))
+par(mfrow=c(2,2))
 for(d in 1:nd){
  coda::traceplot(mod$mcmc.beta[,d])
  coda::densplot(mod$mcmc.beta[,d],
@@ -258,13 +258,9 @@ for (j in 1:nsp) {
   mean_beta_sp[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
                          [,1:ncol(X)], 2, mean)
   for (p in 1:ncol(X)){
-    coda::traceplot(coda::as.mcmc(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
-    coda::densplot(coda::as.mcmc(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
-      main = paste(colnames(
-        mod$mcmc.sp[[paste0("sp_",j)]])[p],
-        ", species : ",j))
+    coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p])
     abline(v=beta_sp.target[p,j],col='red')
   }
 }
@@ -280,12 +276,9 @@ for (j in 1:nsp) {
   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
   for (l in 1:n_latent) {
-    coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
-                                  [,ncol(X)+l]))
-    coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
-                                 [,ncol(X)+l]),
-                   main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
-                              [ncol(X)+l],", species : ",j))
+    coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
+    coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]),
+                   main=colnames(mod$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l])
     abline(v=lambda.target[l,j],col='red')
   }
 }

@@ -103,7 +103,7 @@ str(Env_mites)
 
 # Parameter inference
 
-We use the `jSDM_poisson_log()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_poisson_log()` function to fit the JSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-log}
 mod_mites_jSDM_log <- jSDM_poisson_log(

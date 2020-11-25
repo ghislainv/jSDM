@@ -103,7 +103,7 @@ str(Env_birds)
 
 # Parameter inference
 
-We use the `jSDM_binomial_logit()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_logit()` function to fit the JSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-logit}
 mod_birds_jSDM_logit <- jSDM_binomial_logit(

@@ -65,7 +65,7 @@
 #' #' \item{ \code{\link{jSDM_binomial_probit_block_long_format}} : \cr
 #' \cr
 #' \bold{Ecological process:}
-#' \eqn{y_n \sim \mathcal{B}ernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},
+#' \deqn{y_n \sim \mathcal{B}ernoulli(\theta_n)}{y_n ~ Bernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},
 #' where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}}{(\theta_n) = D_n \beta + X_n \beta_sp.j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j}{(\theta_n) = D_n \beta + X_n \beta_sp.j +  W_i \lambda_j} \cr

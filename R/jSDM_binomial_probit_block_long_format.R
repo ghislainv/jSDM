@@ -71,7 +71,7 @@
 #' @details We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 #'
 #' \bold{Ecological process:}
-#' \deqn{y_{n} \sim \mathcal{B}ernoulli(\theta_{n}) \text{ such as } species_n=j \text{ and } site_n=i}{y_n ~ Bernoulli(\theta_n) such as species_n=j and site_n=i}
+#' \deqn{y_n \sim \mathcal{B}ernoulli(\theta_n)}{y_n ~ Bernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},
 #'  where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}}{(\theta_n) = D_n \beta + X_n \beta_sp.j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j}{(\theta_n) =  D_n \beta  + X_n \beta_sp.j +  W_i \lambda_j} \cr
@@ -197,7 +197,7 @@
 #' #= Parameter estimates
 #' 
 #' # beta 
-#' par(mfrow=c(nd,2))
+#' par(mfrow=c(2,2))
 #' for(d in 1:nd){
 #'  coda::traceplot(mod$mcmc.beta[,d])
 #'  coda::densplot(mod$mcmc.beta[,d],
@@ -213,13 +213,9 @@
 #'   mean_beta_sp[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
 #'                          [,1:ncol(X)], 2, mean)
 #'   for (p in 1:ncol(X)){
-#'     coda::traceplot(coda::as.mcmc(
-#'       mod$mcmc.sp[[paste0("sp_",j)]][,p]))
-#'     coda::densplot(coda::as.mcmc(
-#'       mod$mcmc.sp[[paste0("sp_",j)]][,p]),
-#'       main = paste(colnames(
-#'         mod$mcmc.sp[[paste0("sp_",j)]])[p],
-#'         ", species : ",j))
+#'     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+#'     coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+#'       main = colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p])
 #'     abline(v=beta_sp.target[p,j],col='red')
 #'   }
 #' }
@@ -235,12 +231,9 @@
 #'   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
 #'                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
 #'   for (l in 1:n_latent) {
-#'     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
-#'                                   [,ncol(X)+l]))
-#'     coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
-#'                                  [,ncol(X)+l]),
-#'                    main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
-#'                               [ncol(X)+l],", species : ",j))
+#'     coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]))
+#'     coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]),
+#'                    main=colnames(mod$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l])
 #'     abline(v=lambda.target[l,j],col='red')
 #'   }
 #' }

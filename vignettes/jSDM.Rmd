@@ -58,7 +58,7 @@ The package includes the following functions to fit various species distribution
 
   **Ecological process:**
 
-  $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),$$ 
+  $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij}),$$ 
   where
 
   | conditions                                   | model specification                              |
@@ -107,19 +107,18 @@ The package includes the following functions to fit various species distribution
 
   **Ecological process:**
 
-  $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i),$$ 
+  $$y_{n} \sim \mathcal{B}ernoulli(\theta_{n}),$$ 
+  such as $species_n=j$ and $site_n=i$,
   where
 
   | conditions                                   | model specification                              |
   |:---------------------------------------------|:-------------------------------------------------|
-  | if `n_latent=0` and `site_effect="none"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j$ |
-  | if `n_latent>0` and `site_effect="none"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
-  | if `n_latent=0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and   $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-  | if `n_latent>0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
-  | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
-  | if `n_latent>0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
-
-
+  | if `n_latent=0` and `site_effect="none"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j$ |
+  | if `n_latent>0` and `site_effect="none"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j + W_i \lambda_j$ |
+  | if `n_latent=0` and `site_effect="random"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j + \alpha_i$ and   $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
+  | if `n_latent>0` and `site_effect="fixed"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j + W_i \lambda_j + \alpha_i$ |
+  | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j + \alpha_i$ |
+  | if `n_latent>0` and `site_effect="random"` | probit$(\theta_{n}) = D_n \beta + X_n \beta_sp.j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
 Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. 
 

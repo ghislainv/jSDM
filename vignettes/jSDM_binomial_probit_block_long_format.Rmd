@@ -161,7 +161,7 @@ head(data)
 
 # Parameter inference
 
-We use the `jSDM_binomial_probit_block_long_format()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_probit_block_long_format()` function to fit the JSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-probit}
 mod <- jSDM::jSDM_binomial_probit_block_long_format(
