@@ -149,7 +149,8 @@ head(aravo$traits)
 ```
 
 ```{r data-set}
-data<- data.frame(site=rep(rownames(pres_data), nsp), species=rep(colnames(pres_data), each=nsite))
+data <- data.frame(site=rep(rownames(pres_data), nsp),
+                  species=rep(colnames(pres_data), each=nsite))
 data$Y <- c(as.matrix(pres_data))
 data$snow <- rep(env_data$snow,nsp)
 data$snow2 <- rep(env_data$snow2,nsp)
@@ -263,13 +264,13 @@ We use the `predict.jSDM()` S3 method on the `mod` object of class `jSDM` to com
 nsite_pred <- 35
 ## 25 species among the 65
 nsp_pred <- 25
-sites <- sort(sample(unique(data$site), nsite_pred))
+sites <- sample(as.character(unique(data$site)), nsite_pred)
 Id_sites <- rep(sites,nsp_pred)
 species <- sample(as.character(unique(data$species)), nsp_pred)
 Id_species <- rep(species,each=nsite_pred)
 nobs <- length(Id_species)
 # Simulate new observations of covariates on those sites 
-simdata <- data.frame(site=Id_sites, species=Id_species, row.names=1:nobs)
+simdata <- data.frame(site=Id_sites, species=Id_species)
 snow <- rnorm(nsite_pred)
 p2 <- poly(snow, 2)
 simdata$snow <- p2[,1]
