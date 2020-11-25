@@ -86,9 +86,11 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   model.spec <- object$model_spec
   if(!is.null(model.spec$presences)){
     species <- colnames(model.spec$presences)
+    sites <- rownames(model.spec$presences)
   }
   if(!is.null(model.spec$data)){
     species <- unique(model.spec$data$species)
+    sites <- unique(model.spec$data$site)
   }
   
   ##= Link function probit for family=="binomial"
@@ -147,6 +149,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   np <- ncol(X.pred)
   npred <- nrow(X.pred)
   nsp <- length(unique(Id_species))
+  nsite <- length(unique(Id_sites))
   
   if(model.spec$n_latent > 0){
     nl <- model.spec$n_latent
@@ -168,6 +171,25 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   if (is.numeric(Id_species)) {
     num_species <- Id_species
+  }
+  
+  if (is.character(Id_sites) || is.factor(Id_sites)) {
+    if(!is.null(model.spec$presences)){
+      num_sites <- rep(0,nsite)
+      for(i in 1:nsite) {
+        num_sites[i] <- which(sites == Id_sites[i])
+      }
+    }
+    if(!is.null(model.spec$data)){
+      num_sites <- rep(0,npred)
+      for(i in 1:npred) {
+        num_sites[i] <- which(sites == Id_sites[i])
+      }
+    }
+  }
+  
+  if (is.numeric(Id_sites)) {
+    num_sites <- Id_sites
   }
   
   # Chains parameters 
@@ -207,16 +229,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           link.term <- X.pred %*% as.vector(beta_j)
           
           if(model.spec$n_latent > 0){
-            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
+            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites])
             for(l in 2:nl) {
-              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
+              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,num_sites]))
             }
             lambda_j <- lambda_j.mat[t,]
             link.term <- link.term + W.mat %*% lambda_j 
           }
           
           if(!is.null(model.spec$alpha_start)){
-            link.term <- link.term + as.matrix(object$mcmc.alpha[t,Id_sites])
+            link.term <- link.term + as.matrix(object$mcmc.alpha[t,num_sites])
           }
           
           term <- term + inv.link(link.term)
@@ -254,16 +276,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           link.term <- X.pred %*% as.vector(beta_j)
           
           if(model.spec$n_latent > 0){
-            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites])
+            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites])
             for(l in 2:nl) {
-              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites]))
+              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,num_sites]))
             }
             lambda_j <- lambda_j.mat[t,]
             link.term <- link.term + W.mat %*% lambda_j
           }
           
           if(!is.null(model.spec$alpha_start)){
-            link.term <- link.term + as.matrix(object$mcmc.alpha[t,Id_sites])
+            link.term <- link.term + as.matrix(object$mcmc.alpha[t,num_sites])
           }
           
           term[t,] <-  inv.link(link.term)
@@ -321,16 +343,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           }
           
           if(model.spec$n_latent > 0){
-            W_i <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites[i]])
+            W_i <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites[i]])
             for(l in 2:nl) {
-              W_i <- cbind(W_i, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites[i]]))
+              W_i <- cbind(W_i, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,num_sites[i]]))
             }
             lambda_j <- lambda_j.mat[t,]
             link.term <- link.term + W_i %*% lambda_j 
           }
           
           if(!is.null(model.spec$alpha_start)){
-            link.term <- link.term + object$mcmc.alpha[t,Id_sites[i]]
+            link.term <- link.term + object$mcmc.alpha[t,num_sites[i]]
           }
           
           term <- term + inv.link(link.term)
@@ -376,16 +398,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
           }
           
           if(model.spec$n_latent > 0){
-            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,Id_sites[i]])
+            W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites[i]])
             for(l in 2:nl) {
-              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,Id_sites[i]]))
+              W.mat <- cbind(W.mat, as.matrix(object$mcmc.latent[[paste0("lv_",l)]][t,num_sites[i]]))
             }
             lambda_j <- lambda_j.mat[t,]
             link.term <- link.term + W.mat %*% lambda_j
           }
           
           if(!is.null(model.spec$alpha_start)){
-            link.term <- link.term + as.matrix(object$mcmc.alpha[t,Id_sites[i]])
+            link.term <- link.term + as.matrix(object$mcmc.alpha[t,num_sites[i]])
           }
           
           term[t] <-  inv.link(link.term)

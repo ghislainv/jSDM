@@ -278,9 +278,9 @@ simdata$snow2 <- p2[,2]
 SLA_sp_pred <- aravo$traits[species,]$SLA
 simdata$snow.SLA <- scale(c(p2[,1] %*% t(SLA_sp_pred)))
 # Predictions 
-#theta_pred <- predict(mod, newdata=simdata,
-#                      Id_species=Id_species, #Id_sites=Id_sites, type="mean")
-#hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
+theta_pred <- predict(mod, newdata=simdata,
+                      Id_species=Id_species,   Id_sites=Id_sites, type="mean")
+hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
 ```
 
 # References
