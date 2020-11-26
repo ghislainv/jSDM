@@ -16,27 +16,12 @@ navbar:
     intro:
       text: Get started
       href: articles/jSDM.html
+    articles:
+      text: Articles
+      href: articles/index.html
     reference:
       text: Reference
       href: reference/index.html
-    articles:
-    - title: Method
-      navbar: Method
-      contents: 
-      - articles/proof.html
-    - title: Usage
-      navbar: Usage
-      contents:
-      - articles/jSDM_binomial_probit_block.html
-      - articles/jSDM_binomial_probit_block_long_format.html
-      - articles/jSDM_binomial_logit.html
-      - articles/jSDM_poisson_log.html
-      - articles/jSDM_in_parallel.html
-    - title: Comparison
-      navbar: Comparison
-      contents:
-      - articles/SDM_JSDM.html
-      - articles/jSDM_boral.html
     news:
       text: Change log
       href: news/index.html
@@ -47,6 +32,25 @@ navbar:
       icon: fa-github fa-lg
       href: https://github.com/ghislainv/jSDM
 
+articles:
+- title: Method
+  navbar: Method
+  contents: 
+  - '`proof`'
+- title: Usage
+  navbar: Usage
+  contents:
+  - '`jSDM_binomial_probit_block`'
+  - '`jSDM_binomial_probit_block_long_format`'
+  - '`jSDM_binomial_logit`'
+  - '`jSDM_poisson_log`'
+  - '`jSDM_in_parallel`'
+- title: Comparison
+  navbar: Comparison
+  contents:
+  - '`SDM_JSDM`'
+  - '`jSDM_boral`'
+      
 reference:
 - title: Package
   desc: Package description
