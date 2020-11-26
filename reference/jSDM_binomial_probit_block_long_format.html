@@ -99,38 +99,8 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/SDM_JSDM.html">Comparing SDMs and JSDMs</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block.html">Bernoulli probit regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block_long_format.html">Bernoulli probit regression with data in long format</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_in_parallel.html">Running jSDM in parallel</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_poisson_log.html">Poisson log-linear regression</a>
-    </li>
-    <li>
-      <a href="../articles/proof.html">Bayesian inference methods</a>
-    </li>
-  </ul>
+<li>
+  <a></a>
 </li>
 <li>
   <a href="../news/index.html">Change log</a>
@@ -172,28 +142,31 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>jSDM_binomial_probit_block_long_format</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>site_suitability</span>,
-  n_latent = <span class='fl'>0</span>,
-  site_effect = <span class='st'>"none"</span>,
-  burnin = <span class='fl'>5000</span>,
-  mcmc = <span class='fl'>10000</span>,
-  thin = <span class='fl'>10</span>,
-  alpha_start = <span class='fl'>0</span>,
-  beta_start = <span class='fl'>0</span>,
-  lambda_start = <span class='fl'>0</span>,
-  W_start = <span class='fl'>0</span>,
-  V_alpha = <span class='fl'>1</span>,
-  shape = <span class='fl'>0.5</span>,
-  rate = <span class='fl'>5e-04</span>,
-  mu_beta = <span class='fl'>0</span>,
-  V_beta = <span class='fl'>1e+06</span>,
-  mu_lambda = <span class='fl'>0</span>,
-  V_lambda = <span class='fl'>10</span>,
-  seed = <span class='fl'>1234</span>,
-  verbose = <span class='fl'>1</span>
-)</pre>
+    <pre class="usage"><span class='fu'>jSDM_binomial_probit_block_long_format</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>site_suitability</span>,
+  n_latent <span class='op'>=</span> <span class='fl'>0</span>,
+  site_effect <span class='op'>=</span> <span class='st'>"none"</span>,
+  burnin <span class='op'>=</span> <span class='fl'>5000</span>,
+  mcmc <span class='op'>=</span> <span class='fl'>10000</span>,
+  thin <span class='op'>=</span> <span class='fl'>10</span>,
+  alpha_start <span class='op'>=</span> <span class='fl'>0</span>,
+  beta_start <span class='op'>=</span> <span class='fl'>0</span>,
+  beta_sp_start <span class='op'>=</span> <span class='fl'>0</span>,
+  lambda_start <span class='op'>=</span> <span class='fl'>0</span>,
+  W_start <span class='op'>=</span> <span class='fl'>0</span>,
+  V_alpha <span class='op'>=</span> <span class='fl'>1</span>,
+  shape <span class='op'>=</span> <span class='fl'>0.5</span>,
+  rate <span class='op'>=</span> <span class='fl'>5e-04</span>,
+  mu_beta <span class='op'>=</span> <span class='fl'>0</span>,
+  V_beta <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  mu_beta_sp <span class='op'>=</span> <span class='fl'>0</span>,
+  V_beta_sp <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  mu_lambda <span class='op'>=</span> <span class='fl'>0</span>,
+  V_lambda <span class='op'>=</span> <span class='fl'>10</span>,
+  seed <span class='op'>=</span> <span class='fl'>1234</span>,
+  verbose <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,13 +177,14 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 <tr><td><code>Y</code></td><td>\(n_{obs}\)-length vector indicating the presence by a 1 (or absence by a 0) of the species observed during each visit of the sites.</td></tr>
 <tr><td><code>site</code></td><td>numerc or character \(n_{obs}\)-length vector indicating the visited site (sites can be visited several times).</td></tr>
 <tr><td><code>species</code></td><td>numerc or character eqnn_obsn_obs-length vector indicating the species observed (species may not have been recorded at all sites)</td></tr>
-<tr><td><code>X1,...,Xp</code></td><td>columns of explicative variables for the suitability process of the model</td></tr>
+<tr><td><code>x1,...,xp</code></td><td>columns of explicative variables for the suitability process of the model</td></tr>
 </table>
 </td>
     </tr>
     <tr>
       <th>site_suitability</th>
-      <td><p>A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.</p></td>
+      <td><p>A one-sided formula with the form '~x1 + ... + xd + species:x1 + ... + species:xp' with \(d\) terms related to \(\beta\) parameters and \(p\) terms related to species effects \(\beta_sp\) parameters,
+specifying the explicative variables for the suitability process of the model as formula used by the <code>lm</code> function.</p></td>
     </tr>
     <tr>
       <th>n_latent</th>
@@ -241,7 +215,11 @@ If <code>alpha_start</code> takes a scalar value, then that value will serve for
     </tr>
     <tr>
       <th>beta_start</th>
-      <td><p>Starting values for beta parameters of the suitability process for each species must be either a scalar or a \(p \times n_{species}\) matrix. If <code>beta_start</code> takes a scalar value, then that value will serve for all of the \(\beta\) parameters.</p></td>
+      <td><p>Starting values for beta parameters of the suitability process must be either a scalar or a \(d\)-length vector. If <code>beta_start</code> takes a scalar value, then that value will serve for all of the \(\beta\) parameters.</p></td>
+    </tr>
+    <tr>
+      <th>beta_sp_start</th>
+      <td><p>Starting values for beta_sp parameters of the suitability process for each species must be either a scalar or a \(p \times n_{species}\) matrix. If <code>beta_sp_start</code> takes a scalar value, then that value will serve for all of the \(\beta_{sp}\) parameters.</p></td>
     </tr>
     <tr>
       <th>lambda_start</th>
@@ -270,13 +248,24 @@ Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.
     </tr>
     <tr>
       <th>mu_beta</th>
-      <td><p>Means of the Normal priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a \(p\)-length vector.
+      <td><p>Means of the Normal priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a \(d\)-length vector.
 If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\beta\) parameters. The default value is set to 0 for an uninformative prior.</p></td>
     </tr>
     <tr>
       <th>V_beta</th>
-      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process. <code>V_beta</code> must be either a scalar or a \(p \times p\) symmetric positive semi-definite square matrix.
- If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta\) parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process. <code>V_beta</code> must be either a scalar or a \(d \times d\) symmetric positive semi-definite square matrix.
+If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta\) parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+The default variance is large and set to <code>1e+06</code> for an uninformative flat prior.</p></td>
+    </tr>
+    <tr>
+      <th>mu_beta_sp</th>
+      <td><p>Means of the Normal priors for the \(\beta_{sp}\) parameters of the suitability process. <code>mu_beta_sp</code> must be either a scalar or a \(p\)-length vector.
+If <code>mu_beta_sp</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\beta\) parameters. The default value is set to 0 for an uninformative prior.</p></td>
+    </tr>
+    <tr>
+      <th>V_beta_sp</th>
+      <td><p>Variances of the Normal priors for the \(\beta_{sp}\) parameters of the suitability process. <code>V_beta_sp</code> must be either a scalar or a \(p \times p\) symmetric positive semi-definite square matrix.
+ If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta_{sp}\) parameters, so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
 The default variance is large and set to <code>1e+06</code> for an uninformative flat prior.</p></td>
     </tr>
     <tr>
@@ -307,8 +296,8 @@ The default variance is large and set to 10 for an uninformative flat prior.</p>
 <tr><td>mcmc.alpha</td><td>An mcmc object that contains the posterior samples for for site effects \(\alpha_i\), not returned if <code>site_effect="none"</code>.</td></tr>
 <tr><td>mcmc.V_alpha</td><td>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>.</td></tr>
 <tr><td>mcmc.latent</td><td>A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \(W_l\) with \(l=1,\ldots,n_{latent}\), not returned if <code>n_latent=0</code>.</td></tr>
-<tr><td>mcmc.sp</td><td>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_j\) and \(\lambda_j\) if <code>n_latent&gt;0</code>.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</td></tr>
+<tr><td>mcmc.sp</td><td>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_{sp}\) and the loading factors \(\lambda\) if <code>n_latent&gt;0</code>.</td></tr>
+<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</td></tr>
 <tr><td>Z_latent</td><td>Predictive posterior mean of the latent variable Z.</td></tr>
 <tr><td>probit_theta_pred</td><td>Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.</td></tr>
 <tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
@@ -318,14 +307,14 @@ The default variance is large and set to 10 for an uninformative flat prior.</p>
 
     <p>We model an ecological process where the presence or absence of species \(j\) on site \(i\) is explained by habitat suitability.</p>
 <p><b>Ecological process:</b>
-$$y_{n} \sim \mathcal{B}ernoulli(\theta_{n})$$
-where</p><table class='table'>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+$$y_n \sim \mathcal{B}ernoulli(\theta_n)$$ such as \(species_n=j\) and \(site_n=i\),
+ where</p><table class='table'>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j}\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{n}) = D_n \beta  + X_n \beta_{sp.j}  + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table>
 
 
@@ -360,86 +349,104 @@ where</p><table class='table'>
 
 <span class='co'>#=================</span>
 <span class='co'>#== Load libraries</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://ecology.ghislainv.fr/jSDM'>jSDM</a></span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ecology.ghislainv.fr/jSDM'>jSDM</a></span><span class='op'>)</span>
 
 <span class='co'>#==================</span>
 <span class='co'>#== Data simulation</span>
 
 <span class='co'>#= Number of sites</span>
-<span class='kw'>nsite</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>nsite</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>
 
 <span class='co'>#= Set seed for repeatability</span>
-<span class='kw'>seed</span> <span class='op'>&lt;-</span> <span class='fl'>1234</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='kw'>seed</span>)
+<span class='va'>seed</span> <span class='op'>&lt;-</span> <span class='fl'>1234</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='va'>seed</span><span class='op'>)</span>
 
 <span class='co'>#' #= Number of species</span>
-<span class='kw'>nsp</span> <span class='op'>&lt;-</span> <span class='fl'>30</span>
+<span class='va'>nsp</span> <span class='op'>&lt;-</span> <span class='fl'>25</span>
 
 <span class='co'>#= Number of latent variables</span>
-<span class='kw'>n_latent</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
-
-<span class='co'>#= Ecological process (suitability)</span>
-<span class='kw'>x1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='kw'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='kw'>nsite</span>),<span class='kw'>x1</span>,<span class='kw'>x2</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>X</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Int"</span>,<span class='st'>"x1"</span>,<span class='st'>"x2"</span>)
-<span class='kw'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)
-<span class='kw'>W</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))
-<span class='kw'>beta.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='kw'>nsp</span><span class='op'>*</span><span class='kw'>np</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span>), byrow=<span class='fl'>TRUE</span>, nrow=<span class='kw'>nsp</span>))
-<span class='kw'>l.zero</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
-<span class='kw'>l.diag</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>,<span class='fl'>2</span>)
-<span class='kw'>l.other</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='kw'>nsp</span><span class='op'>*</span><span class='fl'>2</span><span class='op'>-</span><span class='fl'>3</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span>)
-<span class='kw'>lambda.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>l.diag</span>[<span class='fl'>1</span>],<span class='kw'>l.zero</span>,<span class='kw'>l.other</span>[<span class='fl'>1</span>],<span class='kw'>l.diag</span>[<span class='fl'>2</span>],<span class='kw'>l.other</span>[<span class='op'>-</span><span class='fl'>1</span>]),
-                         byrow=<span class='fl'>TRUE</span>, nrow=<span class='kw'>nsp</span>))
-<span class='kw'>param.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='kw'>beta.target</span>,<span class='kw'>lambda.target</span>)
-<span class='kw'>V_alpha.target</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
-<span class='kw'>alpha.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='kw'>V_alpha.target</span>))
-<span class='kw'>probit_theta</span> <span class='op'>&lt;-</span> <span class='kw'>X</span> <span class='op'>%*%</span> <span class='kw'>beta.target</span> <span class='op'>+</span> <span class='kw'>W</span> <span class='op'>%*%</span> <span class='kw'>lambda.target</span> <span class='op'>+</span> <span class='kw'>alpha.target</span>
+<span class='va'>n_latent</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
+<span class='co'>#'</span>
+<span class='co'># Ecological process (suitability)</span>
+<span class='co'>## X</span>
+<span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>x1.2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>x1</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='va'>nsite</span><span class='op'>)</span>,<span class='va'>x1</span>,<span class='va'>x1.2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Int"</span>,<span class='st'>"x1"</span>,<span class='st'>"x1.2"</span><span class='op'>)</span>
+<span class='va'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span>
+<span class='co'>## W</span>
+<span class='va'>W</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span><span class='op'>*</span><span class='va'>n_latent</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>,nrow<span class='op'>=</span><span class='va'>nsite</span>,byrow<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='co'>## D</span>
+<span class='va'>SLA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nsp</span>,<span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>D</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Int<span class='op'>=</span><span class='fl'>1</span>, x1<span class='op'>=</span><span class='va'>x1</span>, x1.2<span class='op'>=</span><span class='va'>x1.2</span>, x1.SLA<span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>x1</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>SLA</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span>
+<span class='co'>## parameters</span>
+<span class='va'>beta_sp.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nsp</span><span class='op'>*</span><span class='va'>np</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span>, byrow<span class='op'>=</span><span class='cn'>TRUE</span>, nrow<span class='op'>=</span><span class='va'>nsp</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>mat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nsp</span><span class='op'>*</span><span class='va'>n_latent</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span>, byrow<span class='op'>=</span><span class='cn'>TRUE</span>, nrow<span class='op'>=</span><span class='va'>nsp</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>n_latent</span>,<span class='fl'>0</span>,<span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>lambda.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='va'>n_latent</span>,<span class='va'>nsp</span><span class='op'>)</span>
+<span class='va'>beta.target</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nd</span>,<span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># constraintq of identifiability</span>
+<span class='va'>beta_sp.target</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>0.0</span>
+<span class='va'>lambda.target</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/lower.tri.html'>upper.tri</a></span><span class='op'>(</span><span class='va'>mat</span>,diag<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>mat</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/lower.tri.html'>upper.tri</a></span><span class='op'>(</span><span class='va'>mat</span>, diag<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span>
+<span class='co'>#= Variance of random site effect </span>
+<span class='va'>V_alpha.target</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
+<span class='co'>#= Random site effect </span>
+<span class='va'>alpha.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>V_alpha.target</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'>## probit_theta</span>
+<span class='va'>probit_theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>X</span> <span class='op'>%*%</span> <span class='va'>beta_sp.target</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>W</span> <span class='op'>%*%</span> <span class='va'>lambda.target</span><span class='op'>)</span> <span class='op'>+</span>
+                <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>beta.target</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>alpha.target</span>,<span class='va'>nsp</span><span class='op'>)</span>
 <span class='co'># Supplementary observation (each site have been visited twice)</span>
 <span class='co'># Environmental variables at the time of the second visit</span>
-<span class='kw'>X_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='kw'>nsite</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>),<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nsite</span>))
-<span class='kw'>probit_theta_supObs</span> <span class='op'>&lt;-</span> <span class='kw'>X_supObs</span><span class='op'>%*%</span><span class='kw'>beta.target</span> <span class='op'>+</span> <span class='kw'>W</span><span class='op'>%*%</span><span class='kw'>lambda.target</span> <span class='op'>+</span> <span class='kw'>alpha.target</span>
-<span class='kw'>probit_theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>probit_theta</span>, <span class='kw'>probit_theta_supObs</span>)
-<span class='kw'>nobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='kw'>probit_theta</span>)
-<span class='kw'>e</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nobs</span>,<span class='fl'>0</span>,<span class='fl'>1</span>)
-<span class='kw'>Z_true</span> <span class='op'>&lt;-</span> <span class='kw'>probit_theta</span> <span class='op'>+</span> <span class='kw'>e</span>
-<span class='kw'>Y</span><span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='kw'>nobs</span>)
-<span class='co'>for</span> (<span class='kw'>n</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>nobs</span>){
-  <span class='co'>if</span> ( <span class='kw'>Z_true</span>[<span class='kw'>n</span>] <span class='op'>&gt;</span> <span class='fl'>0</span>) {<span class='kw'>Y</span>[<span class='kw'>n</span>] <span class='op'>&lt;-</span> <span class='fl'>1</span>}
-}
-<span class='kw'>Id_site</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsite</span>,<span class='kw'>nsp</span>)
-<span class='kw'>Id_sp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsp</span>,each=<span class='kw'>nsite</span>)
-<span class='kw'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(site=<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>Id_site</span>,<span class='fl'>2</span>), species=<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>Id_sp</span>,<span class='fl'>2</span>), Y=<span class='kw'>Y</span>,
-                   x1=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>x1</span>,<span class='kw'>nsp</span>),<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>X_supObs</span>[,<span class='fl'>2</span>],<span class='kw'>nsp</span>)),
-                   x2=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>x2</span>,<span class='kw'>nsp</span>),<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='kw'>X_supObs</span>[,<span class='fl'>3</span>],<span class='kw'>nsp</span>)))
+<span class='va'>x1_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>x1.2_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>x1</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>X_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='va'>nsite</span><span class='op'>)</span>,<span class='va'>x1_supObs</span>,<span class='va'>x1.2_supObs</span><span class='op'>)</span>
+<span class='va'>D_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Int<span class='op'>=</span><span class='fl'>1</span>, x1<span class='op'>=</span><span class='va'>x1_supObs</span>, x1.2<span class='op'>=</span><span class='va'>x1.2_supObs</span>, x1.SLA<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>x1_supObs</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>SLA</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>probit_theta_supObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>X_supObs</span><span class='op'>%*%</span><span class='va'>beta_sp.target</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>W</span><span class='op'>%*%</span><span class='va'>lambda.target</span><span class='op'>)</span> <span class='op'>+</span> 
+                       <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>D_supObs</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>beta.target</span> <span class='op'>+</span> <span class='va'>alpha.target</span>
+<span class='va'>probit_theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>probit_theta</span>, <span class='va'>probit_theta_supObs</span><span class='op'>)</span>
+<span class='va'>nobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>probit_theta</span><span class='op'>)</span>
+<span class='va'>e</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nobs</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>Z_true</span> <span class='op'>&lt;-</span> <span class='va'>probit_theta</span> <span class='op'>+</span> <span class='va'>e</span>
+<span class='va'>Y</span><span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='va'>nobs</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>n</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>nobs</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='kw'>if</span> <span class='op'>(</span> <span class='va'>Z_true</span><span class='op'>[</span><span class='va'>n</span><span class='op'>]</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>n</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>}</span>
+<span class='op'>}</span>
+<span class='va'>Id_site</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>nsite</span>,<span class='va'>nsp</span><span class='op'>)</span>
+<span class='va'>Id_sp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>nsp</span>,each<span class='op'>=</span><span class='va'>nsite</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>Id_site</span>,<span class='fl'>2</span><span class='op'>)</span>, species<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>Id_sp</span>,<span class='fl'>2</span><span class='op'>)</span>, Y<span class='op'>=</span><span class='va'>Y</span>,
+                   x1<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>$</span><span class='va'>x1</span>,<span class='va'>D_supObs</span><span class='op'>$</span><span class='va'>x1</span><span class='op'>)</span>, x1.2<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>$</span><span class='va'>x1.2</span>,<span class='va'>D_supObs</span><span class='op'>$</span><span class='va'>x1.2</span><span class='op'>)</span>,
+                   x1.SLA<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>$</span><span class='va'>x1.SLA</span>,<span class='va'>D_supObs</span><span class='op'>$</span><span class='va'>x1.SLA</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># missing observation</span>
-<span class='kw'>data</span> <span class='op'>&lt;-</span> <span class='kw'>data</span>[<span class='op'>-</span><span class='fl'>1</span>,]
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>]</span>
 
 <span class='co'>#==================================</span>
 <span class='co'>#== Site-occupancy model</span>
 
 <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence</span>
-<span class='kw'>mod</span><span class='op'>&lt;-</span><span class='fu'>jSDM_binomial_probit_block_long_format</span>( <span class='co'># Iteration</span>
-  burnin=<span class='fl'>200</span>,
-  mcmc=<span class='fl'>200</span>,
-  thin=<span class='fl'>1</span>,
+<span class='va'>mod</span><span class='op'>&lt;-</span><span class='fu'>jSDM_binomial_probit_block_long_format</span><span class='op'>(</span> <span class='co'># Iteration</span>
+  burnin<span class='op'>=</span><span class='fl'>500</span>,
+  mcmc<span class='op'>=</span><span class='fl'>500</span>,
+  thin<span class='op'>=</span><span class='fl'>1</span>,
   <span class='co'># Response variable</span>
-  data=<span class='kw'>data</span>,
+  data<span class='op'>=</span><span class='va'>data</span>,
   <span class='co'># Explanatory variables</span>
-  site_suitability=<span class='op'>~</span><span class='kw'>x1</span><span class='op'>+</span><span class='kw'>x2</span>,
-  n_latent=<span class='fl'>2</span>,
-  site_effect=<span class='st'>"random"</span>,
+  site_suitability<span class='op'>=</span><span class='op'>~</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>x1.2</span><span class='op'>)</span><span class='op'>*</span><span class='va'>species</span> <span class='op'>+</span> <span class='va'>x1.SLA</span> <span class='op'>+</span> <span class='va'>site</span>,
+  n_latent<span class='op'>=</span><span class='fl'>2</span>,
+  site_effect<span class='op'>=</span><span class='st'>"random"</span>,
   <span class='co'># Starting values</span>
-  alpha_start=<span class='fl'>0</span>,
-  beta_start=<span class='fl'>0</span>,
-  lambda_start=<span class='fl'>0</span>,
-  W_start=<span class='fl'>0</span>,
-  V_alpha=<span class='fl'>1</span>,
+  alpha_start<span class='op'>=</span><span class='fl'>0</span>,
+  beta_start<span class='op'>=</span><span class='fl'>0</span>,
+  beta_sp_start<span class='op'>=</span><span class='fl'>0</span>,
+  lambda_start<span class='op'>=</span><span class='fl'>0</span>,
+  W_start<span class='op'>=</span><span class='fl'>0</span>,
+  V_alpha<span class='op'>=</span><span class='fl'>1</span>,
   <span class='co'># Priors</span>
-  shape=<span class='fl'>0.5</span>, rate=<span class='fl'>0.0005</span>,
-  mu_beta=<span class='fl'>0</span>, V_beta=<span class='fl'>1.0E6</span>,
-  mu_lambda=<span class='fl'>0</span>, V_lambda=<span class='fl'>10</span>,
-  seed=<span class='fl'>1234</span>, verbose=<span class='fl'>1</span>)
+  shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
+  mu_beta_sp<span class='op'>=</span><span class='fl'>0</span>, V_beta_sp<span class='op'>=</span><span class='fl'>10</span>,
+  mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>1</span>,
+  mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
+  seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
@@ -455,101 +462,102 @@ where</p><table class='table'>
 #&gt; **********:100.0% </div><div class='input'>
 <span class='co'>#= Parameter estimates</span>
 
-<span class='co'>## beta_j</span>
+<span class='co'># beta </span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>for</span><span class='op'>(</span><span class='va'>d</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>nd</span><span class='op'>)</span><span class='op'>{</span>
+ <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.beta</span><span class='op'>[</span>,<span class='va'>d</span><span class='op'>]</span><span class='op'>)</span>
+ <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.beta</span><span class='op'>[</span>,<span class='va'>d</span><span class='op'>]</span>,
+                main <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.beta</span><span class='op'>)</span><span class='op'>[</span><span class='va'>d</span><span class='op'>]</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>v<span class='op'>=</span><span class='va'>beta.target</span><span class='op'>[</span><span class='va'>d</span><span class='op'>]</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='jSDM_binomial_probit_block_long_format-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'>## beta_j</span>
 <span class='co'># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span>
-<span class='kw'>mean_beta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nsp</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>))
-<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(file=<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>),<span class='fl'>2</span>))
-<span class='co'>for</span> (<span class='kw'>j</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsp</span>) {
-  <span class='kw'>mean_beta</span>[<span class='kw'>j</span>,] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]]
-                         [,<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)], <span class='fl'>2</span>, <span class='kw'>mean</span>)
-  <span class='co'>for</span> (<span class='kw'>p</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)){
-    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
-      <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='kw'>p</span>]))
-    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(
-      <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]][,<span class='kw'>p</span>]),
-      main = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(
-        <span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]])[<span class='kw'>p</span>],
-        <span class='st'>", species : "</span>,<span class='kw'>j</span>))
-    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>beta.target</span>[<span class='kw'>p</span>,<span class='kw'>j</span>],col=<span class='st'>'red'</span>)
-  }
-}
-<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()
+<span class='va'>mean_beta_sp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='va'>nsp</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span><span class='op'>(</span>file<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"Posteriors_beta_jSDM_probit_block.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>j</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>nsp</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>mean_beta_sp</span><span class='op'>[</span><span class='va'>j</span>,<span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span>
+                         <span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
+  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>p</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span><span class='op'>)</span>,
+      main <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[</span><span class='va'>p</span><span class='op'>]</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>v<span class='op'>=</span><span class='va'>beta_sp.target</span><span class='op'>[</span><span class='va'>p</span>,<span class='va'>j</span><span class='op'>]</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; agg_png 
 #&gt;       2 </div><div class='input'>
 <span class='co'>## lambda_j</span>
 <span class='co'># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span>
 <span class='co'># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span>
-<span class='kw'>mean_lambda</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nsp</span>,<span class='kw'>n_latent</span>)
-<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span>(file=<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"Posteriors_lambda_jSDM_probit_block.pdf"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>n_latent</span><span class='op'>*</span><span class='fl'>2</span>,<span class='fl'>2</span>))
-<span class='co'>for</span> (<span class='kw'>j</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>nsp</span>) {
-  <span class='kw'>mean_lambda</span>[<span class='kw'>j</span>,] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]]
-                           [,(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='fl'>1</span>)<span class='op'>:</span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>n_latent</span>)], <span class='fl'>2</span>, <span class='kw'>mean</span>)
-  <span class='co'>for</span> (<span class='kw'>l</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>n_latent</span>) {
-    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]]
-                                  [,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>]))
-    <span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]]
-                                 [,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>]),
-                   main=<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.sp</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"sp_"</span>,<span class='kw'>j</span>)]])
-                              [<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>X</span>)<span class='op'>+</span><span class='kw'>l</span>],<span class='st'>", species : "</span>,<span class='kw'>j</span>))
-    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>lambda.target</span>[<span class='kw'>l</span>,<span class='kw'>j</span>],col=<span class='st'>'red'</span>)
-  }
-}
-<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>()
+<span class='va'>mean_lambda</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='va'>nsp</span>,<span class='va'>n_latent</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/pdf.html'>pdf</a></span><span class='op'>(</span>file<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"Posteriors_lambda_jSDM_probit_block.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>n_latent</span><span class='op'>*</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>j</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>nsp</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>mean_lambda</span><span class='op'>[</span><span class='va'>j</span>,<span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span>
+                           <span class='op'>[</span>,<span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>:</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>n_latent</span><span class='op'>)</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
+  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>l</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>n_latent</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span>,
+                   main<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>v<span class='op'>=</span><span class='va'>lambda.target</span><span class='op'>[</span><span class='va'>l</span>,<span class='va'>j</span><span class='op'>]</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; agg_png 
 #&gt;       2 </div><div class='input'>
 <span class='co'># Species effects beta and factor loadings lambda</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>beta.target</span>), <span class='kw'>mean_beta</span>,
-     main=<span class='st'>"species effect beta"</span>,
-     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>lambda.target</span>), <span class='kw'>mean_lambda</span>,
-     main=<span class='st'>"factor loadings lambda"</span>,
-     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
-</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>beta_sp.target</span><span class='op'>)</span>, <span class='va'>mean_beta_sp</span>,
+     main<span class='op'>=</span><span class='st'>"species effect beta"</span>,
+     xlab <span class='op'>=</span><span class='st'>"obs"</span>, ylab <span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>lambda.target</span><span class='op'>)</span>, <span class='va'>mean_lambda</span>,
+     main<span class='op'>=</span><span class='st'>"factor loadings lambda"</span>,
+     xlab <span class='op'>=</span><span class='st'>"obs"</span>, ylab <span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## W latent variables</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='co'>for</span> (<span class='kw'>l</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='kw'>n_latent</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>W</span>[,<span class='kw'>l</span>],
-       <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.latent</span>[[<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"lv_"</span>,<span class='kw'>l</span>)]])[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
-       main = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Latent variable W_"</span>, <span class='kw'>l</span>),
-       xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>)
-  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
-}
-</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>l</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>n_latent</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>W</span><span class='op'>[</span>,<span class='va'>l</span><span class='op'>]</span>,
+       <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.latent</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"lv_"</span>,<span class='va'>l</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='st'>"Mean"</span><span class='op'>]</span>,
+       main <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Latent variable W_"</span>, <span class='va'>l</span><span class='op'>)</span>,
+       xlab <span class='op'>=</span><span class='st'>"obs"</span>, ylab <span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## alpha</span>
 <span class='co'># summary(mod$mcmc.alpha)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.alpha</span>)[[<span class='fl'>1</span>]][,<span class='st'>"Mean"</span>],
-     xlab =<span class='st'>"obs"</span>, ylab =<span class='st'>"fitted"</span>, main=<span class='st'>"site effect alpha"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>alpha.target</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.alpha</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='st'>"Mean"</span><span class='op'>]</span>,
+     xlab <span class='op'>=</span><span class='st'>"obs"</span>, ylab <span class='op'>=</span><span class='st'>"fitted"</span>, main<span class='op'>=</span><span class='st'>"site effect alpha"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
 <span class='co'>## Valpha</span>
-<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.V_alpha</span>, main=<span class='st'>"Trace V_alpha"</span>)
-<span class='kw'>coda</span>::<span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.V_alpha</span>,main=<span class='st'>"Density V_alpha"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(v=<span class='kw'>V_alpha.target</span>,col=<span class='st'>'red'</span>)
-</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.V_alpha</span>, main<span class='op'>=</span><span class='st'>"Trace V_alpha"</span><span class='op'>)</span>
+<span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.V_alpha</span>,main<span class='op'>=</span><span class='st'>"Density V_alpha"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>v<span class='op'>=</span><span class='va'>V_alpha.target</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Deviance</span>
 <span class='co'>#summary(mod$mcmc.Deviance)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>mcmc.Deviance</span>)
-</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.Deviance</span><span class='op'>)</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
 
 <span class='co'>## probit_theta</span>
 <span class='co'># summary(mod$probit_theta_pred)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>probit_theta</span>[<span class='op'>-</span><span class='fl'>1</span>],<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>probit_theta_pred</span>,
-     main=<span class='st'>"probit(theta)"</span>,xlab=<span class='st'>"obs"</span>,ylab=<span class='st'>"fitted"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>probit_theta</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,<span class='va'>mod</span><span class='op'>$</span><span class='va'>probit_theta_pred</span>,
+     main<span class='op'>=</span><span class='st'>"probit(theta)"</span>,xlab<span class='op'>=</span><span class='st'>"obs"</span>,ylab<span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
 
 <span class='co'>## Z</span>
 <span class='co'># summary(mod$Z_latent)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>Z_true</span>[<span class='op'>-</span><span class='fl'>1</span>],<span class='kw'>mod</span><span class='op'>$</span><span class='kw'>Z_latent</span>,
-     main=<span class='st'>"Z_latent"</span>, xlab=<span class='st'>"obs"</span>, ylab=<span class='st'>"fitted"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(a=<span class='fl'>0</span>,b=<span class='fl'>1</span>,col=<span class='st'>'red'</span>)
-</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>Z_true</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,<span class='va'>mod</span><span class='op'>$</span><span class='va'>Z_latent</span>,
+     main<span class='op'>=</span><span class='st'>"Z_latent"</span>, xlab<span class='op'>=</span><span class='st'>"obs"</span>, ylab<span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span>,b<span class='op'>=</span><span class='fl'>1</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
+</div><div class='img'><img src='jSDM_binomial_probit_block_long_format-7.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

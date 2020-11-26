@@ -99,38 +99,8 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/SDM_JSDM.html">Comparing SDMs and JSDMs</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block.html">Bernoulli probit regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block_long_format.html">Bernoulli probit regression with data in long format</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_in_parallel.html">Running jSDM in parallel</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_poisson_log.html">Poisson log-linear regression</a>
-    </li>
-    <li>
-      <a href="../articles/proof.html">Bayesian inference methods</a>
-    </li>
-  </ul>
+<li>
+  <a></a>
 </li>
 <li>
   <a href="../news/index.html">Change log</a>
@@ -172,13 +142,38 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 <p>The <code>birds</code> dataset has the data for 2014, except one quadrat not surveyed in 2014.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"birds"</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"birds"</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A data frame with 266 observations on the following 166 variables.</p>
-<p>158 bird species named in latin and whose occurrences are indicated as the number of visits to each site during which the species was observed, including 13 species not recorded in the year 2014 :</p>
+<p>158 bird species named in latin and whose occurrences are indicated as the number of visits to each site during which the species was observed, including 13 species not recorded in the year 2014 and 5 covariates collected on the 266 1x1 km quadrat as well as their identifiers and coordinates :</p>    
+<p></p><table class='table'>
+<tr><td><b><code>siteID</code></b></td><td>an alphanumeric site identifier</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>coordx</code></b></td><td>a numeric vector indicating the x coordinate of the centre of the quadrat; the coordinate reference system intentionally not specified.</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>coordy</code></b></td><td>a numeric vector indicating the y coordinate of the centre of the quadrat.</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>elev</code></b></td><td>a numeric vector indicating the mean elevation of the quadrat (m).</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>rlength</code></b></td><td>the length of the route walked in the quadrat (km).</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>nsurvey</code></b></td><td>a numeric vector indicating the number of replicate surveys planned in the quadrat; above the tree-line 2, otherwise 3.</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>forest</code></b></td><td>a numeric vector indicating the percentage of forest cover in the quadrat.</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td><b><code>obs14</code></b></td><td>a categorical vector indicating the identifying number of the observer.</td></tr>
+</table>
+
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Swiss Ornithological Institute</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
 <table class='table'>
 <tr><td>english name</td><td>latin name</td></tr>
 <tr><td>Little Grebe</td><td>Tachybaptus ruficollis</td></tr>
@@ -340,29 +335,8 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 <tr><td>Rock Bunting</td><td>Emberiza cia</td></tr>
 <tr><td>Common Reed Bunting</td><td>Emberiza schoeniclus</td></tr>
 </table>
-<p>5 covariates collected on the 266 1x1 km quadrat as well as their identifiers and coordinates :</p>    
-<p></p><table class='table'>
-<tr><td><b><code>siteID</code></b></td><td>an alphanumeric site identifier</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>coordx</code></b></td><td>a numeric vector indicating the x coordinate of the centre of the quadrat; the coordinate reference system intentionally not specified.</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>coordy</code></b></td><td>a numeric vector indicating the y coordinate of the centre of the quadrat.</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>elev</code></b></td><td>a numeric vector indicating the mean elevation of the quadrat (m).</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>rlength</code></b></td><td>the length of the route walked in the quadrat (km).</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>nsurvey</code></b></td><td>a numeric vector indicating the number of replicate surveys planned in the quadrat; above the tree-line 2, otherwise 3.</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>forest</code></b></td><td>a numeric vector indicating the percentage of forest cover in the quadrat.</td></tr>
-<tr><td></td><td></td></tr>
-<tr><td><b><code>obs14</code></b></td><td>a categorical vector indicating the identifying number of the observer.</td></tr>
-</table>
 
 
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p>Swiss Ornithological Institute</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -373,8 +347,8 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>birds</span>, package=<span class='st'>"jSDM"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>birds</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>birds</span>, package<span class='op'>=</span><span class='st'>"jSDM"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>birds</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   Tachybaptus ruficollis Podiceps cristatus Ardea cinerea Ixobrychus minutus
 #&gt; 1                      0                  0             0                  0
 #&gt; 2                      0                  0             0                  0
@@ -655,7 +629,7 @@ The birds dataset has the data for 2014, except one quadrat not surveyed in 2014
 #&gt; 4                    0   Q004 934942  95276  950     4.5       3      9   293
 #&gt; 5                    0   Q005 934942 111276 1150     5.4       3     35    77
 #&gt; 6                    0   Q006 946942  95276  550     3.6       3      2   361</div><div class='input'><span class='co'># find species not recorded in 2014</span>
-<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='kw'>birds</span>[,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>158</span>])<span class='op'>==</span><span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span><span class='op'>(</span><span class='va'>birds</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>158</span><span class='op'>]</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>0</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        Ixobrychus minutus         Charadrius dubius                 Tyto alba 
 #&gt;                         4                        31                        41 
 #&gt;                 Bubo bubo             Athene noctua               Upupa epops 

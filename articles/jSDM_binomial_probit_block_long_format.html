@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bernoulli probit regression with data in long format • jSDM</title>
+<title>Bernoulli probit regression including species traits • jSDM</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Bernoulli probit regression with data in long format">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Bernoulli probit regression including species traits">
 <meta property="og:description" content="jSDM">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -56,38 +56,8 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/SDM_JSDM.html">Comparing SDMs and JSDMs</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_logit.html">Binomial logistic regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block.html">Bernoulli probit regression</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_binomial_probit_block_long_format.html">Bernoulli probit regression with data in long format</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_boral.html">Comparison jSDM-boral</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_in_parallel.html">Running jSDM in parallel</a>
-    </li>
-    <li>
-      <a href="../articles/jSDM_poisson_log.html">Poisson log-linear regression</a>
-    </li>
-    <li>
-      <a href="../articles/proof.html">Bayesian inference methods</a>
-    </li>
-  </ul>
+  <a></a>
 </li>
 <li>
   <a href="../news/index.html">Change log</a>
@@ -118,10 +88,11 @@
 
       </header><script src="jSDM_binomial_probit_block_long_format_files/jquery-1.11.3/jquery.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/shim/respond.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/navigation-1.1/tabsets.js"></script><div class="row">
+<script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/bootstrap-3.3.5/shim/respond.min.js"></script><script src="jSDM_binomial_probit_block_long_format_files/navigation-1.1/tabsets.js"></script><link href="jSDM_binomial_probit_block_long_format_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="jSDM_binomial_probit_block_long_format_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Bernoulli probit regression with data in long format</h1>
+      <h1 data-toc-skip>Bernoulli probit regression including species traits</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/ghislainv/jSDM/blob/master/vignettes/jSDM_binomial_probit_block_long_format.Rmd"><code>vignettes/jSDM_binomial_probit_block_long_format.Rmd</code></a></small>
@@ -131,112 +102,233 @@
 
     
     
-<div id="definition-of-the-model" class="section level1">
+<div id="model-definition" class="section level1">
 <h1 class="hasAnchor">
-<a href="#definition-of-the-model" class="anchor"></a><span class="header-section-number">1</span> Definition of the model</h1>
+<a href="#model-definition" class="anchor"></a><span class="header-section-number">1</span> Model definition</h1>
 <p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993">1993</a>)</span>, we define the following model :</p>
-<p><span class="math display">\[ \mathrm{probit}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i.\beta_j+ W_i.\lambda_j \]</span></p>
+<p><span class="math display">\[ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\beta + X_n.\beta_{sp.j} +  W_i.\lambda_j,\]</span>
+such as <span class="math inline">\(species_n=j\)</span> and <span class="math inline">\(site_n=i\)</span>.</p>
 <ul>
 <li><p>Link function probit: <span class="math inline">\(\mathrm{probit}: q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
-<li><p>Response variable: <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> with:</p></li>
+<li><p>Response variable: <span class="math inline">\(Y=(y_{n})^{n=1,\ldots,nobs}\)</span> such as <span class="math inline">\(species_n=j\)</span> and <span class="math inline">\(site_n=i\)</span> with:</p></li>
 </ul>
-<p><span class="math display">\[y_{ij}=\begin{cases}
-0 &amp; \text{ if species $j$ is absent on the site $i$}\\
+<p><span class="math display">\[y_{n}=\begin{cases}
+0 &amp; \text{ if species $j$ is absent on the site $i$} \\
 1 &amp;  \text{ if species  $j$ is present on the site $i$}.
 \end{cases}\]</span></p>
 <ul>
-<li>Latent variable <span class="math inline">\(z_{ij} = \alpha_i + \beta_{0j} + X_i.\beta_j + W_i.\lambda_j + \epsilon_{i,j}\)</span>, with <span class="math inline">\(\forall (i,j) \ \epsilon_{ij} \sim \mathcal{N}(0,1)\)</span> and such that:</li>
+<li>Latent variable <span class="math inline">\(z_{n} = \alpha_i + D_n.\beta + X_n.\beta_j + W_i.\lambda_j + \epsilon_{n}\)</span>, with <span class="math inline">\(\forall (n) \ \epsilon_{n} \sim \mathcal{N}(0,1)\)</span> and such that:</li>
 </ul>
-<p><span class="math display">\[y_{ij}=\begin{cases}
-1 &amp; \text{if} \ z_{ij} &gt; 0 \\
+<p><span class="math display">\[y_{n}=\begin{cases}
+1 &amp; \text{if} \ z_{n} &gt; 0 \\
 0 &amp;  \text{otherwise.}
 \end{cases}\]</span></p>
-<p>It can be easily shown that: <span class="math inline">\(y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\)</span>.</p>
+<p>It can be easily shown that: <span class="math inline">\(y_{n} \sim \mathcal{B}ernoulli(\theta_{n})\)</span>.</p>
 <ul>
 <li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
 We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal.</p></li>
-<li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
-The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
-<li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10^6)\)</span> for all betas.</p></li>
+<li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nobs}\)</span> with <span class="math inline">\(X_i=(1,x_i^1,\ldots,x_i^p)\in \mathbb{R}^{(p+1)}\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
+The corresponding fixed species intercept (<span class="math inline">\(\beta_j^0\)</span>) and regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^0,\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
+<li><p><span class="math inline">\(\beta\)</span> correspond regression coefficients of explanatory variables found in matrix <span class="math inline">\(D=(D_n)_{i=1,\ldots,nobs}\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all betas.</p></li>
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div id="occurrence-data-set" class="section level1">
+<div id="dataset" class="section level1">
 <h1 class="hasAnchor">
-<a href="#occurrence-data-set" class="anchor"></a><span class="header-section-number">2</span> Occurrence data-set</h1>
+<a href="#dataset" class="anchor"></a><span class="header-section-number">2</span> Dataset</h1>
+<div id="presence-absence-of-alpine-plants" class="section level2">
+<h2 class="hasAnchor">
+<a href="#presence-absence-of-alpine-plants" class="anchor"></a><span class="header-section-number">2.1</span> Presence-absence of alpine plants</h2>
 
 <div class="figure" style="text-align: center">
-<span id="fig:frog-picture"></span>
-<img src="figures/Litoria_ewingii.jpg" alt="Litoria ewingii (Wilkinson et al. 2019)." width="400" height="300"><p class="caption">
-Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019">2019</a>)</span>.
+<span id="fig:alpine-plant"></span>
+<img src="figures/alpine_plants.png" alt="Alpine plants (Choler 2005)."><p class="caption">
+Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Choler <a href="#ref-Choler2005">2005</a>)</span>.
 </p>
 </div>
-<p>This data-set is available in the <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html"><code>jSDM-package</code></a> R package. It can be loaded with the <code><a href="https://rdrr.io/r/utils/data.html">data()</a></code> command. The <a href="https://ecology.ghislainv.fr/jSDM/reference/frogs.html"><code>frogs</code></a> dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span>)
+<p>We consider alpine plants in Aravo (Valloire), south east France <span class="citation">(Choler <a href="#ref-Choler2005">2005</a>)</span>. The data are available from the R package <code>ade4</code> <span class="citation">(Dray &amp; Dufour <a href="#ref-Dray2007">2007</a>)</span>. The original dataset includes abundance data for 82 species in 75 sites.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span><span class="op">)</span>
 <span class="co">#&gt; ##</span>
 <span class="co">#&gt; ## jSDM R package </span>
 <span class="co">#&gt; ## For joint species distribution models </span>
 <span class="co">#&gt; ## https://ecology.ghislainv.fr/jSDM </span>
 <span class="co">#&gt; ##</span>
-<span class="co"># frogs data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">frogs</span>, package=<span class="st">"jSDM"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">frogs</span>)
-<span class="co">#&gt;   Covariate_1 Covariate_2 Covariate_3 Species_1 Species_2 Species_3 Species_4</span>
-<span class="co">#&gt; 1    3.870111           0    0.045334         1         0         0         0</span>
-<span class="co">#&gt; 2    3.326950           1    0.115903         0         0         0         0</span>
-<span class="co">#&gt; 3    2.856729           1    0.147034         0         0         0         0</span>
-<span class="co">#&gt; 4    1.623249           1    0.124283         0         0         0         0</span>
-<span class="co">#&gt; 5    4.629685           1    0.081655         0         0         0         0</span>
-<span class="co">#&gt; 6    0.698970           1    0.107048         0         0         0         0</span>
-<span class="co">#&gt;   Species_5 Species_6 Species_7 Species_8 Species_9        y        x</span>
-<span class="co">#&gt; 1         0         0         0         0         0 66.41479 9.256424</span>
-<span class="co">#&gt; 2         0         1         0         0         0 67.03841 9.025588</span>
-<span class="co">#&gt; 3         0         1         0         0         0 67.03855 9.029416</span>
-<span class="co">#&gt; 4         0         1         0         0         0 67.04200 9.029745</span>
-<span class="co">#&gt; 5         0         1         0         0         0 67.04439 9.026514</span>
-<span class="co">#&gt; 6         0         0         0         0         0 67.03894 9.023580</span>
-</pre></div>
-<p>We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.</p>
-<p>We rearrange the data in one <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> and we normalize the continuous explicative variables to facilitate MCMC convergence.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># data</span>
-<span class="co"># Normalized continuous variables</span>
-<span class="kw">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(<span class="kw">frogs</span>[,<span class="fl">1</span>]),<span class="kw">frogs</span>[,<span class="fl">2</span>],<span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(<span class="kw">frogs</span>[,<span class="fl">3</span>]))
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="kw">Env_frogs</span>) <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="kw">frogs</span>[,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>])
-<span class="kw">nsite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">Env_frogs</span>)
-<span class="kw">PA_frogs</span> <span class="op">&lt;-</span> <span class="kw">frogs</span>[,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span>]
-<span class="kw">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="kw">PA_frogs</span>)
-<span class="kw">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="kw">PA_frogs</span>))
-<span class="kw">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(Y=<span class="kw">Y</span>, species= <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="kw">PA_frogs</span>),each=<span class="kw">nsite</span>),
-                   site=<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span><span class="op">:</span><span class="kw">nsite</span>,<span class="kw">nsp</span>))
-<span class="kw">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">data</span>, <span class="kw">Env_frogs</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">)</span>
+<span class="va">aravo</span><span class="op">$</span><span class="va">spe</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;      Agro.rupe Alop.alpi Anth.nipp Heli.sede Aven.vers</span>
+<span class="co">#&gt; AR07         0         0         0         0         0</span>
+<span class="co">#&gt; AR71         0         0         0         0         0</span>
+<span class="co">#&gt; AR26         3         0         1         0         1</span>
+<span class="co">#&gt; AR54         0         0         0         2         0</span>
+<span class="co">#&gt; AR60         0         0         0         0         0</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">env</span><span class="op">)</span>
+<span class="co">#&gt;      Aspect Slope Form PhysD ZoogD Snow</span>
+<span class="co">#&gt; AR07      7     2    1    50    no  140</span>
+<span class="co">#&gt; AR71      1    35    3    40    no  140</span>
+<span class="co">#&gt; AR26      5     0    3    20    no  140</span>
+<span class="co">#&gt; AR54      9    30    3    80    no  140</span>
+<span class="co">#&gt; AR60      9     5    1    80    no  140</span>
+<span class="co">#&gt; AR70      1    30    3    40    no  140</span></code></pre></div>
+<p>We transform abundance into presence-absence data and remove species with less than 5 presences. We also look at the number of observations per site.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Transform abundance into presence-absence</span>
+<span class="va">pres_data</span> <span class="op">&lt;-</span> <span class="va">aravo</span><span class="op">$</span><span class="va">spe</span>
+<span class="va">pres_data</span><span class="op">[</span><span class="va">pres_data</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="co"># Remove species with less than 5 presences</span>
+<span class="va">rare_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pres_data</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>
+<span class="va">pres_data</span> <span class="op">&lt;-</span> <span class="va">pres_data</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span>
+<span class="co"># Number of sites and species</span>
+<span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
+<span class="va">nsite</span>
+<span class="co">#&gt; [1] 75</span>
+<span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
+<span class="va">nsp</span>
+<span class="co">#&gt; [1] 65</span>
+<span class="co"># Number of observations per site</span>
+<span class="va">nobs_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pres_data</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span>
+<span class="va">nobs_site</span>
+<span class="co">#&gt; AR07 AR71 AR26 AR54 AR60 AR70 AR22 AR25 AR27 AR28 AR72 AR01 AR23 AR08 AR12 AR13 </span>
+<span class="co">#&gt;   12   12   25   16   11   18   28   15   22   24   12   20   21   27   24   22 </span>
+<span class="co">#&gt; AR61 AR49 AR50 AR52 AR29 AR30 AR51 AR05 AR53 AR06 AR16 AR56 AR75 AR69 AR15 AR63 </span>
+<span class="co">#&gt;   20   20   21   20   27   24   25   23   12   28   17   12   16   28   20   25 </span>
+<span class="co">#&gt; AR74 AR64 AR65 AR66 AR67 AR68 AR11 AR32 AR02 AR10 AR31 AR39 AR40 AR57 AR58 AR62 </span>
+<span class="co">#&gt;    9    7    6   10   11   14   20   25   20   15   14   16   18   13   15   17 </span>
+<span class="co">#&gt; AR24 AR37 AR38 AR03 AR14 AR19 AR20 AR36 AR42 AR44 AR34 AR35 AR46 AR47 AR48 AR41 </span>
+<span class="co">#&gt;    5    7   11   12   13    6   14    9   12   10   10   13   10   15   15   18 </span>
+<span class="co">#&gt; AR43 AR45 AR21 AR73 AR04 AR09 AR17 AR18 AR33 AR55 AR59 </span>
+<span class="co">#&gt;   13   11   23   20   25   14   17   17   11   20   17</span>
+<span class="co"># Number of observations per species</span>
+<span class="va">nobs_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pres_data</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span>
+<span class="va">nobs_sp</span>
+<span class="co">#&gt; Agro.rupe Alop.alpi Anth.nipp Aven.vers Care.rosa Care.foet Care.parv Care.rupe </span>
+<span class="co">#&gt;        29        37        17        15        28        20        12         5 </span>
+<span class="co">#&gt; Care.semp Fest.quad Fest.viol Kobr.myos Luzu.lute  Poa.alpi  Poa.supi Sesl.caer </span>
+<span class="co">#&gt;        12        11        13        23         8        59         6         7 </span>
+<span class="co">#&gt; Alch.pent Alch.glau Alch.vulg Andr.brig Ante.carp Camp.sche Card.alpi Cera.stri </span>
+<span class="co">#&gt;        26        14         5        17        17        36        16        29 </span>
+<span class="co">#&gt; Cera.cera Leuc.alpi Cirs.acau Drab.aizo Erig.unif Gent.camp Gent.acau Gent.vern </span>
+<span class="co">#&gt;        12        30         5        13        22        14         8        28 </span>
+<span class="co">#&gt; Geum.mont Omal.supi Andr.vita Hier.pili Homo.alpi Leon.pyre Ligu.muto Lloy.sero </span>
+<span class="co">#&gt;        45        37        16        11         6        39        20         5 </span>
+<span class="co">#&gt; Minu.sedo Minu.vern Plan.alpi Poly.vivi Pote.aure Pote.cran Puls.vern Ranu.kuep </span>
+<span class="co">#&gt;        39        10        36        31        36        11        18        19 </span>
+<span class="co">#&gt; Sagi.glab Sali.herb Saxi.pani Sedu.alpe Semp.mont Sene.inca Sibb.proc Sile.acau </span>
+<span class="co">#&gt;        24        24         9        19        21        10        45         8 </span>
+<span class="co">#&gt; Vero.alpi Vero.bell Myos.alpe Tara.alpi Oxyt.camp Oxyt.lapp Lotu.alpi Trif.alpi </span>
+<span class="co">#&gt;        16        35        19        11         5         6         9         6 </span>
+<span class="co">#&gt; Trif.thal </span>
+<span class="co">#&gt;         5</span></code></pre></div>
+</div>
+<div id="environmental-variables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#environmental-variables" class="anchor"></a><span class="header-section-number">2.2</span> Environmental variables</h2>
+<p>The environmental variables are:</p>
+<ul>
+<li>
+<strong>Aspect</strong>: Relative south aspect (opposite of the sine of aspect with flat coded 0).</li>
+<li>
+<strong>Slope</strong>: Slope inclination (degrees).</li>
+<li>
+<strong>Form</strong>: Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity).</li>
+<li>
+<strong>Snow</strong>: Mean snowmelt date (Julian day) averaged over 1997-1999.</li>
+<li>
+<strong>PhysD</strong>: Physical disturbance, i.e., percentage of unvegetated soil due to physical processes.</li>
+<li>
+<strong>ZoogD</strong>: Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high.</li>
+</ul>
+<p>As a first approach, we just select the “Snow” variable considering a quadratic orthogonal polynomial.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">env</span><span class="op">$</span><span class="va">Snow</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="va">env_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">p</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"int"</span>, <span class="st">"snow"</span>, <span class="st">"snow2"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">)</span>
+<span class="co">#&gt;   int       snow     snow2</span>
+<span class="co">#&gt; 1   1 -0.1571577 0.1587642</span>
+<span class="co">#&gt; 2   1 -0.1571577 0.1587642</span>
+<span class="co">#&gt; 3   1 -0.1571577 0.1587642</span>
+<span class="co">#&gt; 4   1 -0.1571577 0.1587642</span>
+<span class="co">#&gt; 5   1 -0.1571577 0.1587642</span>
+<span class="co">#&gt; 6   1 -0.1571577 0.1587642</span>
+<span class="co"># Number of environmental variables plus intercept</span>
+<span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="species-traits" class="section level2">
+<h2 class="hasAnchor">
+<a href="#species-traits" class="anchor"></a><span class="header-section-number">2.3</span> Species traits</h2>
+<p>The species traits available for the alpine plants are:</p>
+<ul>
+<li>
+<strong>Height</strong>: Vegetative height (cm)</li>
+<li>
+<strong>Spread</strong>: Maximum lateral spread of clonal plants (cm)</li>
+<li>
+<strong>Angle</strong>: Leaf elevation angle estimated at the middle of the lamina</li>
+<li>
+<strong>Area</strong>: Area of a single leaf</li>
+<li>
+<strong>Thick</strong>: Maximum thickness of a leaf cross section (avoiding the midrib)</li>
+<li>
+<strong>SLA</strong> Specific leaf area</li>
+<li>
+<strong>Nmass</strong>: Mass-based leaf nitrogen content</li>
+<li>
+<strong>Seed</strong>: Seed mass</li>
+</ul>
+<p>As a first approach, we just integer the interaction between the mean snowmelt date <strong>Snow</strong> and the specific leaf area <strong>SLA</strong> as an explanatory factor of the model.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">traits</span><span class="op">)</span>
+<span class="co">#&gt;           Height Spread Angle  Area Thick  SLA N_mass Seed</span>
+<span class="co">#&gt; Agro.rupe      6     10    80  60.0  0.12  8.1 218.70 0.08</span>
+<span class="co">#&gt; Alop.alpi      5     20    20 190.9  0.20 15.1 203.85 0.21</span>
+<span class="co">#&gt; Anth.nipp     15      5    50 280.0  0.08 18.0 219.60 0.54</span>
+<span class="co">#&gt; Heli.sede      0     30    80 600.0  0.20 10.6 233.20 1.72</span>
+<span class="co">#&gt; Aven.vers     12     30    60 420.0  0.14 12.5 156.25 1.17</span>
+<span class="co">#&gt; Care.rosa     30     20    80 180.0  0.40  6.5 208.65 1.68</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>site<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span>, <span class="va">nsp</span><span class="op">)</span>,
+                  species<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span>, each<span class="op">=</span><span class="va">nsite</span><span class="op">)</span><span class="op">)</span>
+<span class="va">data</span><span class="op">$</span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span><span class="op">)</span>
+<span class="va">data</span><span class="op">$</span><span class="va">snow</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">$</span><span class="va">snow</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">data</span><span class="op">$</span><span class="va">snow2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">$</span><span class="va">snow2</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">data</span><span class="op">$</span><span class="va">snow.SLA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">env_data</span><span class="op">$</span><span class="va">snow</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">traits</span><span class="op">$</span><span class="va">SLA</span><span class="op">[</span><span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<span class="co">#&gt;   site   species Y       snow     snow2  snow.SLA</span>
+<span class="co">#&gt; 1 AR07 Agro.rupe 0 -0.1571577 0.1587642 -0.686078</span>
+<span class="co">#&gt; 2 AR71 Agro.rupe 0 -0.1571577 0.1587642 -0.686078</span>
+<span class="co">#&gt; 3 AR26 Agro.rupe 1 -0.1571577 0.1587642 -0.686078</span>
+<span class="co">#&gt; 4 AR54 Agro.rupe 0 -0.1571577 0.1587642 -0.686078</span>
+<span class="co">#&gt; 5 AR60 Agro.rupe 0 -0.1571577 0.1587642 -0.686078</span>
+<span class="co">#&gt; 6 AR70 Agro.rupe 0 -0.1571577 0.1587642 -0.686078</span></code></pre></div>
+</div>
 </div>
 <div id="parameter-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">3</span> Parameter inference</h1>
-<p>We use the <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">mod_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format</a></span>(
+<p>We use the <code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code> function to fit the JSDM (increase the number of iterations to achieve convergence).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">jSDM</span><span class="fu">::</span><span class="fu"><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
-  burnin=<span class="fl">1000</span>, mcmc=<span class="fl">1000</span>, thin=<span class="fl">1</span>,
+  burnin<span class="op">=</span><span class="fl">1000</span>, mcmc<span class="op">=</span><span class="fl">1000</span>, thin<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Response variable </span>
-  data=<span class="kw">data</span>, 
+  data<span class="op">=</span><span class="va">data</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability = <span class="op">~</span><span class="kw">.</span>,   
+  site_suitability <span class="op">=</span> <span class="op">~</span> <span class="va">snow</span> <span class="op">+</span> <span class="va">snow2</span> <span class="op">+</span> <span class="va">snow.SLA</span> <span class="op">+</span> <span class="op">(</span><span class="va">snow</span> <span class="op">+</span> <span class="va">snow2</span><span class="op">)</span><span class="op">:</span><span class="va">species</span>,   
   <span class="co"># Model specification </span>
-  n_latent=<span class="fl">2</span>, site_effect=<span class="st">"random"</span>,
+  n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"random"</span>,
   <span class="co"># Starting values</span>
-  alpha_start=<span class="fl">0</span>, beta_start=<span class="fl">0</span>,
-  lambda_start=<span class="fl">0</span>, W_start=<span class="fl">0</span>,
-  V_alpha=<span class="fl">1</span>, 
+  alpha_start<span class="op">=</span><span class="fl">0</span>, beta_start<span class="op">=</span><span class="fl">0</span>,
+  beta_sp_start<span class="op">=</span><span class="fl">0</span>,
+  lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
+  V_alpha<span class="op">=</span><span class="fl">1</span>, 
   <span class="co"># Priors</span>
-  shape=<span class="fl">0.1</span>, rate=<span class="fl">0.1</span>,
-  mu_beta=<span class="fl">0</span>, V_beta=<span class="fl">100</span>,
-  mu_lambda=<span class="fl">0</span>, V_lambda=<span class="fl">10</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">100</span>,
+  mu_beta_sp<span class="op">=</span><span class="fl">0</span>, V_beta_sp<span class="op">=</span><span class="fl">100</span>,
+  mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
-  seed=<span class="fl">1234</span>, verbose=<span class="fl">1</span>)
+  seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="co">#&gt; </span>
@@ -249,82 +341,73 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="co">#&gt; **********:70.0% </span>
 <span class="co">#&gt; **********:80.0% </span>
 <span class="co">#&gt; **********:90.0% </span>
-<span class="co">#&gt; **********:100.0%</span>
-</pre></div>
+<span class="co">#&gt; **********:100.0%</span></code></pre></div>
 </div>
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis-of-the-results" class="anchor"></a><span class="header-section-number">4</span> Analysis of the results</h1>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">model_spec</span><span class="op">$</span><span class="kw">beta_start</span>)
-
-<span class="co">## beta_j of the first two species</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))
-<span class="co">for</span> (<span class="kw">j</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>) {
-  <span class="co">for</span> (<span class="kw">p</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="kw">np</span>) {
-    <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]][,<span class="kw">p</span>]))
-    <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]][,<span class="kw">p</span>]), 
-                   main = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]])[<span class="kw">p</span>],
-                                <span class="st">", species : "</span>,<span class="kw">j</span>))
-  }
-}
-</pre></div>
-<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">beta_sp_start</span><span class="op">)</span>
+<span class="va">nd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">beta_start</span><span class="op">)</span>
+<span class="co">## beta of the first two species</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.beta</span><span class="op">)</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co">## beta_sp.j of the first two species</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">np</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"sp_"</span>,<span class="va">j</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span>outer<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span> <span class="st">"species "</span>, <span class="va">j</span> ,<span class="st">" : "</span>,
+                                   <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">species</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## lambda_j of the first two species</span>
-<span class="kw">n_latent</span> <span class="op">&lt;-</span> <span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">model_spec</span><span class="op">$</span><span class="kw">n_latent</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))
-<span class="co">for</span> (<span class="kw">j</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>) {
-  <span class="co">for</span> (<span class="kw">l</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="kw">n_latent</span>) {
-    <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]][,<span class="kw">np</span><span class="op">+</span><span class="kw">l</span>]))
-    <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]][,<span class="kw">np</span><span class="op">+</span><span class="kw">l</span>]), 
-                   main = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.sp</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"sp_"</span>,<span class="kw">j</span>)]])
-                                [<span class="kw">np</span><span class="op">+</span><span class="kw">l</span>],<span class="st">", species : "</span>,<span class="kw">j</span>))
-  }
-}
-</pre></div>
-<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-
+<span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">n_latent</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">n_latent</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"sp_"</span>,<span class="va">j</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span>outer<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span> <span class="st">"species "</span>, <span class="va">j</span> ,<span class="st">" : "</span>,
+                                   <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">species</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Latent variables W_i for the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))
-<span class="co">for</span> (<span class="kw">l</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="kw">n_latent</span>) {
-  <span class="co">for</span> (<span class="kw">i</span> <span class="co">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>) {
-  <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.latent</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="kw">l</span>)]][,<span class="kw">i</span>],
-                  main = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="kw">l</span>, <span class="st">", site "</span>, <span class="kw">i</span>))
-  <span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.latent</span>[[<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lv_"</span>,<span class="kw">l</span>)]][,<span class="kw">i</span>],
-                 main = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Latent variable W_"</span>, <span class="kw">l</span>, <span class="st">", site "</span>, <span class="kw">i</span>))
-  }
-}
-</pre></div>
-<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>,
+                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">site</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>,
+                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">site</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## alpha_i of the first two sites</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.alpha</span>[,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span>]))
-</pre></div>
-<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## V_alpha</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))
-<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.V_alpha</span>)
-<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.V_alpha</span>)
-<span class="co">## Deviance</span>
-<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.Deviance</span>)
-<span class="kw">coda</span>::<span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">mcmc.Deviance</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></code></pre></div>
+<p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Deviance</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-10.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## probit_theta</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> (mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">probit_theta_pred</span>,
-     main = <span class="st">"Predicted probit theta"</span>, xlab =<span class="st">"predicted probit theta"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span>(<span class="kw">mod_frogs</span><span class="op">$</span><span class="kw">probit_theta_pred</span>),
-     main = <span class="st">"Predicted theta"</span>, xlab =<span class="st">"predicted theta"</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">probit_theta_pred</span>,
+     main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">probit_theta_pred</span><span class="op">)</span>,
+     main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/plot-results-probit-11.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="matrice-of-correlations" class="section level1">
@@ -337,36 +420,37 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <p>We use the <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> function to compute and display the residual correlation matrix :</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span>(<span class="kw">mod_frogs</span>)
-</pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod</span>, tl.srt <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/correlation-matrix-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="predictions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictions" class="anchor"></a><span class="header-section-number">6</span> Predictions</h1>
-<p>We use the <code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code> S3 method on the <code>mod_frogs</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="co"># Sites and species concerned by predictions :</span>
-<span class="co">## 50 sites among the 104</span>
-<span class="kw">nsite_pred</span> <span class="op">&lt;-</span> <span class="fl">50</span>
-<span class="co">## All species </span>
-<span class="kw">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">data</span><span class="op">$</span><span class="kw">species</span>))
-<span class="kw">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">data</span><span class="op">$</span><span class="kw">site</span>), <span class="kw">nsite_pred</span>))
-<span class="kw">Id_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">sites</span>,<span class="kw">nsp</span>)
-<span class="kw">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">data</span><span class="op">$</span><span class="kw">species</span>))
-<span class="kw">Id_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw">species</span>,each=<span class="kw">nsite_pred</span>)
-<span class="kw">nobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw">Id_species</span>)
+<p>We use the <code><a href="../reference/predict.jSDM.html">predict.jSDM()</a></code> S3 method on the <code>mod</code> object of class <code>jSDM</code> to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model’s parameters.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sites and species concerned by predictions :</span>
+<span class="co">## 35 sites among the 75</span>
+<span class="va">nsite_pred</span> <span class="op">&lt;-</span> <span class="fl">35</span>
+<span class="co">## 25 species among the 65</span>
+<span class="va">nsp_pred</span> <span class="op">&lt;-</span> <span class="fl">25</span>
+<span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">site</span><span class="op">)</span><span class="op">)</span>, <span class="va">nsite_pred</span><span class="op">)</span>
+<span class="va">Id_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">sites</span>,<span class="va">nsp_pred</span><span class="op">)</span>
+<span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">species</span><span class="op">)</span><span class="op">)</span>, <span class="va">nsp_pred</span><span class="op">)</span>
+<span class="va">Id_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">species</span>,each<span class="op">=</span><span class="va">nsite_pred</span><span class="op">)</span>
+<span class="va">nobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Id_species</span><span class="op">)</span>
 <span class="co"># Simulate new observations of covariates on those sites </span>
-<span class="kw">simdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(row.names=<span class="fl">1</span><span class="op">:</span><span class="kw">nobs</span>)
-<span class="kw">simdata</span><span class="op">$</span><span class="kw">Covariate_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">nsite_pred</span>)
-<span class="kw">simdata</span><span class="op">$</span><span class="kw">Covariate_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">nsite_pred</span>)
-<span class="kw">simdata</span><span class="op">$</span><span class="kw">Covariate_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(<span class="kw">nsite_pred</span>,<span class="fl">1</span>,<span class="fl">0.5</span>)
+<span class="va">simdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>site<span class="op">=</span><span class="va">Id_sites</span>, species<span class="op">=</span><span class="va">Id_species</span><span class="op">)</span>
+<span class="va">snow</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite_pred</span><span class="op">)</span>
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">snow</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="va">simdata</span><span class="op">$</span><span class="va">snow</span> <span class="op">&lt;-</span> <span class="va">p2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>
+<span class="va">simdata</span><span class="op">$</span><span class="va">snow2</span> <span class="op">&lt;-</span> <span class="va">p2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>
+<span class="va">SLA_sp_pred</span> <span class="op">&lt;-</span> <span class="va">aravo</span><span class="op">$</span><span class="va">traits</span><span class="op">[</span><span class="va">species</span>,<span class="op">]</span><span class="op">$</span><span class="va">SLA</span>
+<span class="va">simdata</span><span class="op">$</span><span class="va">snow.SLA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">p2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">SLA_sp_pred</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co"># Predictions </span>
-<span class="kw">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="kw">mod_frogs</span>, newdata=<span class="kw">simdata</span>,
-                      Id_species=<span class="kw">Id_species</span>, Id_sites=<span class="kw">Id_sites</span>, type=<span class="st">"mean"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="kw">theta_pred</span>, main=<span class="st">"Predicted theta with simulated data"</span>, xlab=<span class="st">"predicted theta"</span>)
-</pre></div>
+<span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">simdata</span>,
+                      Id_species<span class="op">=</span><span class="va">Id_species</span>,   Id_sites<span class="op">=</span><span class="va">Id_sites</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated data"</span>, xlab<span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_block_long_format_files/figure-html/predictions-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -376,11 +460,14 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div id="ref-Albert1993">
 <p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
 </div>
+<div id="ref-Choler2005">
+<p>Choler, P. (2005) Consistent shifts in alpine plant traits along a mesotopographical gradient. <em>Arctic, Antarctic, and Alpine Research</em>, <strong>37</strong>, 444–453.</p>
+</div>
+<div id="ref-Dray2007">
+<p>Dray, S. &amp; Dufour, A.-B. (2007) The ade4 package: Implementing the duality diagram for ecologists. <em>Journal of Statistical Software</em>, <strong>22</strong>.</p>
+</div>
 <div id="ref-Warton2015">
 <p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
-</div>
-<div id="ref-Wilkinson2019">
-<p>Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.</p>
 </div>
 </div>
 </div>
