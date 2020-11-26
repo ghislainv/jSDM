@@ -27,7 +27,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
     const arma::uvec& Y, 
     const arma::uvec& Id_sp,
     const arma::uvec& Id_site,
-    const arma::uvec& Id_common_var,
+    const arma::vec& Id_common_var,
     const arma::mat& X,
     const arma::mat& D,
     const arma::mat& beta_sp_start,
@@ -183,11 +183,11 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
       
       // Draw in the posterior distribution
       beta_sp_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      if(j==0 & Id_common_var.at(0)!=-1){
+      if(j==0 && !Id_common_var.has_nan()){
         // constraint of identifiability on beta_sp
         // Id of columns in common between D and X 
         arma::uvec Id_sp0; Id_sp0.zeros(1);
-        beta_sp_run.submat(Id_common_var,Id_sp0).fill(0.0);
+        beta_sp_run.submat(conv_to<uvec>::from(Id_common_var),Id_sp0).fill(0.0);
       }
     }
     

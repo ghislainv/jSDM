@@ -27,7 +27,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_fixed_site_lv_long_format(
     const arma::uvec& Y, 
     const arma::uvec& Id_sp,
     const arma::uvec& Id_site,
-    const arma::uvec& Id_common_var,
+    const arma::vec& Id_common_var,
     const arma::mat& X,
     const arma::mat& D,
     const arma::mat& param_sp_start,
@@ -208,11 +208,11 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_fixed_site_lv_long_format(
       arma::mat big_V = inv(inv(V_param_sp) + data.rows(rowId_sp[j]).t()*data.rows(rowId_sp[j]));
       
       // Draw in the posterior distribution
-      arma:vec param_sp_prop = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
-      if(j==0 & Id_common_var.at(0)!=-1){
+      arma::vec param_sp_prop = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      if(j==0 && !Id_common_var.has_nan()){
         // constraint of identifiability on beta_sp
         // Id of covariables in common between D and X 
-        param_sp_prop(Id_common_var).fill(0.0);
+        param_sp_prop(conv_to<uvec>::from(Id_common_var)).fill(0.0);
       }
       // constraints on lambda
       for (int l=0; l<NL; l++) {

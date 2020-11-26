@@ -384,7 +384,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     if(sum(Id_common_var)!=0){
     Id_common_var <- Id_common_var[Id_common_var>0] -1
     } else {
-    Id_common_var <- -1
+    Id_common_var <- NaN
     }
   }
   if(site_suitability==~. - site - Y) site_suitability <- ~.
