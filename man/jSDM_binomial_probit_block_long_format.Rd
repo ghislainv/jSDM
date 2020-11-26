@@ -122,7 +122,7 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
 
 \bold{Ecological process:}
-\deqn{y_{n} \sim \mathcal{B}ernoulli(\theta_{n}) \text{ such as } species_n=j \text{ and } site_n=i}{y_n ~ Bernoulli(\theta_n) such as species_n=j and site_n=i}
+\deqn{y_n \sim \mathcal{B}ernoulli(\theta_n)}{y_n ~ Bernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},
  where \tabular{ll}{
  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j}}{(\theta_n) = D_n \beta + X_n \beta_sp.j} \cr
  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j}{(\theta_n) =  D_n \beta  + X_n \beta_sp.j +  W_i \lambda_j} \cr

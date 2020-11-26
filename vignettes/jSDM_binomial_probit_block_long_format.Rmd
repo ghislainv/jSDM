@@ -1,5 +1,5 @@
 ---
-title: "Bernoulli probit regression with data in long format"
+title: "Bernoulli probit regression including species traits"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
  %\VignetteEngine{knitr::rmarkdown}
- %\VignetteIndexEntry{Bernoulli probit regression with data in long format}
+ %\VignetteIndexEntry{Bernoulli probit regression including species traits}
  %\VignetteEncoding{UTF-8}
 ---
  
