@@ -20,7 +20,7 @@ navbar:
       text: Reference
       href: reference/index.html
     articles:
-     - title: Method
+    - title: Method
       navbar: Method
       contents: 
       - articles/proof.html
