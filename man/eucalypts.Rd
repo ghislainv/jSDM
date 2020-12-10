@@ -7,7 +7,7 @@
 \title{eucalypts dataset}
 
 \description{
-The Eucalyptus data set includes 12 taxa recorded in 458 plots spanning elevation gradients in the Grampians National Park, Victoria, which is known for high species diversity and endemism. The park has three mountain ranges interspersed with alluvial valleys and sand sheet and has a semi‐Mediterranean climate with warm, dry summers and cool, wet winters.
+The Eucalyptus data set includes 12 taxa recorded in 458 plots spanning elevation gradients in the Grampians National Park, Victoria, which is known for high species diversity and endemism. The park has three mountain ranges interspersed with alluvial valleys and sand sheet and has a semi-Mediterranean climate with warm, dry summers and cool, wet winters.
 
 This dataset records presence or absence at 458 sites of 12 eucalypts species, 7 covariates collected at these sites as well as their longitude and latitude.}
 
@@ -36,11 +36,11 @@ This dataset records presence or absence at 458 sites of 12 eucalypts species, 7
 
     \item{\code{Rockiness}}{a numeric vector taking values from 0 to 95 corresponding to the rock cover of the site in percent estimated in 5 \% increments in field plots}
     \item{\code{Sandiness}}{a binary vector indicating if soil texture categorie is sandiness based on soil texture classes from field plots and according to relative amounts of sand, silt, and clay particles}
-    \item{\code{VallyBotFlat}}{a numeric vector taking values from 0 to 6 corresponding to the valley bottom flatness GIS‐derived variable defining flat areas relative to surroundings likely to accumulate sediment (units correspond to the percentage of slope e.g. 0.5 = 16 \%slope, 4.5 = 1 \%slope, 5.5 = 0.5 \%slope)}
+    \item{\code{VallyBotFlat}}{a numeric vector taking values from 0 to 6 corresponding to the valley bottom flatness GIS-derived variable defining flat areas relative to surroundings likely to accumulate sediment (units correspond to the percentage of slope e.g. 0.5 = 16 \%slope, 4.5 = 1 \%slope, 5.5 = 0.5 \%slope)}
     \item{\code{PPTann}}{a numeric vector taking values from 555 to 1348 corresponding to annual precipitation in millimeters measured as the sum of monthly precipitation estimated using BIOCLIM based on 20m grid cell Digital Elevation Model}
     \item{\code{Loaminess}}{a binary vector indicating if soil texture categorie is loaminess based on soil texture classes from field plots and according to relative amounts of sand, silt, and clay particles}
     \item{\code{cvTemp}}{a numeric vector taking values from 136 to 158 corresponding to coefficient of variation of temperature seasonality in percent measured as the standard deviation of weekly mean temperatures as a percentage of the annual mean temperature from BIOCLIM}
-    \item{\code{T0}}{a numeric vector corresponding to solar radiation in \eqn{WH/m²} measured as the amount of incident solar energy based on the visible sky and the sun’s position. Derived from Digital Elevation Model in ArcGIS 9.2 Spatial Analyst for the summer solstice (December 22)}
+    \item{\code{T0}}{a numeric vector corresponding to solar radiation in \eqn{WH/m^2} measured as the amount of incident solar energy based on the visible sky and the sun's position. Derived from Digital Elevation Model in ArcGIS 9.2 Spatial Analyst for the summer solstice (December 22)}
     \item{\code{latitude}}{a numeric vector indicating the latitude of the studied site}
     \item{\code{longitude}}{a numeric vector indicating the longitude of the studied site}
   }

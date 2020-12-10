@@ -187,7 +187,7 @@ mod <- jSDM_poisson_log(# Chains
                         shape=0.5,
                         rate=0.0005,
                         mu_beta=0,
-                        V_beta=1.0E6,
+                        V_beta=10,
                         mu_lambda=0,
                         V_lambda=10,
                         # Various

@@ -19,14 +19,14 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 colnames(X) <- c("Int","x1","x2")
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
-probit_theta <- X %*% beta_sp.target 
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+probit_theta <- X %*% beta.target 
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
 colnames(X_supObs) <- c("Int","x1","x2")
-probit_theta_supObs <- X_supObs%*%beta_sp.target 
+probit_theta_supObs <- X_supObs%*%beta.target 
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -52,8 +52,8 @@ nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                                     data=data,
                                                     site_suitability = ~ (x1 + x2):species,
-                                                    beta_sp_start=0,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    beta_start=0,
+                                                    mu_beta=0, V_beta=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with one species", {
@@ -86,15 +86,15 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite), x1, x2)
 colnames(X) <- c("Int","x1","x2")
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 
-probit_theta <- X %*% beta_sp.target 
+probit_theta <- X %*% beta.target 
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
 colnames(X_supObs) <- c("Int","x1","x2")
-probit_theta_supObs <- X_supObs%*%beta_sp.target 
+probit_theta_supObs <- X_supObs%*%beta.target 
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -120,8 +120,8 @@ nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                                     data = data,
                                                     site_suitability = ~ (x1 + x2):species,
-                                                    beta_sp_start=0,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    beta_start=0,
+                                                    mu_beta=0, V_beta=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works", {
@@ -149,7 +149,7 @@ W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 #= Number of latent variables
 n_latent <- ncol(W)
 data <- cbind (X,W)
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
@@ -157,12 +157,12 @@ lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 
 
-probit_theta <- X %*% beta_sp.target + W %*% lambda.target 
+probit_theta <- X %*% beta.target + W %*% lambda.target 
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs%*%beta_sp.target + W%*%lambda.target 
+probit_theta_supObs <- X_supObs%*%beta.target + W%*%lambda.target 
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -190,9 +190,9 @@ mod <- jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               site_suitability = ~ x1:species + x2:species + species,
                                               site_effect="none",
                                               n_latent=n_latent,
-                                              beta_sp_start=0,
+                                              beta_start=0,
                                               lambda_start=0, W_start=0,
-                                              mu_beta_sp=0, V_beta_sp=100,
+                                              mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
                                               seed=1234, verbose=1)
 # Tests
@@ -219,16 +219,16 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite), x1, x2)
 colnames(X) <- c("Int","x1","x2")
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 
 alpha.target <- runif(nsite,-2,2)
 alpha.target[1] <- 0 
-probit_theta <- X %*% beta_sp.target + alpha.target
+probit_theta <- X %*% beta.target + alpha.target
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs%*%beta_sp.target + alpha.target
+probit_theta_supObs <- X_supObs%*%beta.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -255,10 +255,10 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, th
                                                     data=data, n_latent=0,
                                                     site_suitability = ~(x1 + x2):species,
                                                     site_effect="fixed",
-                                                    alpha_start=0, beta_sp_start=0,
+                                                    alpha_start=0, beta_start=0,
                                                     V_alpha=10,
                                                     shape=0.5, rate=0.0005,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    mu_beta=0, V_beta=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with fixed site effect", {
@@ -283,15 +283,15 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 colnames(X) <- c("Int","x1","x2")
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-probit_theta <- X %*% beta_sp.target + alpha.target
+probit_theta <- X %*% beta.target + alpha.target
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs%*%beta_sp.target + alpha.target
+probit_theta_supObs <- X_supObs%*%beta.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -318,10 +318,10 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, th
                                                     data=data, n_latent=0,
                                                     site_suitability = ~ (x1 + x2):species,
                                                     site_effect="random",
-                                                    alpha_start=0, beta_sp_start=0,
+                                                    alpha_start=0, beta_start=0,
                                                     V_alpha=1,
                                                     shape=0.5, rate=0.0005,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    mu_beta=0, V_beta=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with random site effect", {
@@ -350,7 +350,7 @@ X <- cbind(rep(1,nsite),x1,x2)
 colnames(X) <- c("Int","x1","x2")
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 data <- cbind (X,W)
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
@@ -358,12 +358,12 @@ lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 alpha.target <- runif(nsite,-2,2)
 alpha.target[1] <- 0 
-probit_theta <- X %*% beta_sp.target + W %*% lambda.target + alpha.target
+probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs%*%beta_sp.target + W%*%lambda.target + alpha.target
+probit_theta_supObs <- X_supObs%*%beta.target + W%*%lambda.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -391,11 +391,11 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
                                                     n_latent=2, 
                                                     site_effect = "fixed", 
                                                     burnin=burnin, mcmc=mcmc, thin=thin,
-                                                    alpha_start=0, beta_sp_start=0,
+                                                    alpha_start=0, beta_start=0,
                                                     lambda_start=0, W_start=0,
                                                     V_alpha=10,
                                                     shape=0.5, rate=0.0005,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    mu_beta=0, V_beta=100,
                                                     mu_lambda=0, V_lambda=10,
                                                     seed=1234, verbose=1)
 # Tests
@@ -427,7 +427,7 @@ X <- cbind(rep(1,nsite),x1,x2)
 colnames(X) <- c("Int","x1","x2")
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 data <- cbind (X,W)
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
 l.zero <- 0
 l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
@@ -437,12 +437,12 @@ lambda.target <- t(matrix(c(l.diag[1],l.zero,
 Valpha.target <- 0.5
 
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
-probit_theta <- X %*% beta_sp.target + W %*% lambda.target + alpha.target
+probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 set.seed(2*seed)
 X_supObs <- cbind(rep(1,nsite),rnorm(nsite),rnorm(nsite))
-probit_theta_supObs <- X_supObs%*%beta_sp.target + W%*%lambda.target + alpha.target
+probit_theta_supObs <- X_supObs%*%beta.target + W%*%lambda.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -470,11 +470,11 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
                                                     n_latent=2, 
                                                     site_effect = "random", 
                                                     burnin=burnin, mcmc=mcmc, thin=thin,
-                                                    alpha_start=0, beta_sp_start=0,
+                                                    alpha_start=0, beta_start=0,
                                                     lambda_start=0, W_start=0,
                                                     V_alpha=1,
                                                     shape=0.5, rate=0.0005,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    mu_beta=0, V_beta=100,
                                                     mu_lambda=0, V_lambda=10,
                                                     seed=1234, verbose=1)
 # Tests
@@ -527,23 +527,23 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-beta.target <-runif(nd,-1,1)
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+gamma.target <-runif(nd,-1,1)
 # constraint of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 #= Variance of random site effect
 V_alpha.target <- 0.5
 #= Random site effect
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + as.matrix(D) %*% beta.target + rep(alpha.target,nsp)
+probit_theta <- c(X %*% beta.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + as.matrix(D_supObs) %*% beta.target + alpha.target
+probit_theta_supObs <- c(X_supObs%*%beta.target) + as.matrix(D_supObs) %*% gamma.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -569,17 +569,17 @@ nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                                     data=data,
                                                     site_suitability = ~ x1 + x1.2 + x1.SLA + x1:species + x1.2:species,
+                                                    gamma_start=0,
+                                                    mu_gamma=0, V_gamma=100,
                                                     beta_start=0,
                                                     mu_beta=0, V_beta=100,
-                                                    beta_sp_start=0,
-                                                    mu_beta_sp=0, V_beta_sp=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with one species", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
   expect_equal(sum(is.na(mod$Z_latent)),0)
   expect_equal(sum(is.infinite(mod$Z_latent)),0)
@@ -612,17 +612,17 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
-beta.target <-runif(nd,-1,1)
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+gamma.target <-runif(nd,-1,1)
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + as.matrix(D) %*% beta.target 
+probit_theta <- c(X %*% beta.target) + as.matrix(D) %*% gamma.target 
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + as.matrix(D_supObs) %*% beta.target 
+probit_theta_supObs <- c(X_supObs%*%beta.target) + as.matrix(D_supObs) %*% gamma.target 
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -648,14 +648,14 @@ nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                                     data = data,
                                                     site_suitability = ~ (x1 + x1.2)*species + x1.SLA,
-                                                    beta_sp_start=0,
-                                                    mu_beta_sp=0, V_beta_sp=100,
+                                                    beta_start=0,
+                                                    mu_beta=0, V_beta=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
   expect_equal(sum(is.na(mod$Z_latent)),0)
   expect_equal(sum(is.infinite(mod$Z_latent)),0)
@@ -684,23 +684,23 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
 diag(mat) <- runif(n_latent,0,2)
 lambda.target <- matrix(0,n_latent,nsp)
-beta.target <-runif(nd,-1,1)
+gamma.target <-runif(nd,-1,1)
 # constraints of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + c(W %*% lambda.target) + as.matrix(D) %*% beta.target 
+probit_theta <- c(X %*% beta.target) + c(W %*% lambda.target) + as.matrix(D) %*% gamma.target 
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% beta.target
+probit_theta_supObs <- c(X_supObs%*%beta.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% gamma.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -728,18 +728,18 @@ mod <- jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               site_suitability = ~ (x1 + x1.2)*species + x1.SLA,
                                               site_effect="none",
                                               n_latent=n_latent,
+                                              gamma_start=0,
+                                              mu_gamma=0, V_gamma=100,
                                               beta_start=0,
-                                              mu_beta=0, V_beta=100,
-                                              beta_sp_start=0,
                                               lambda_start=0, W_start=0,
-                                              mu_beta_sp=0, V_beta_sp=100,
+                                              mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
                                               seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
   expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
@@ -767,22 +767,22 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-beta.target <-runif(nd,-1,1)
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+gamma.target <-runif(nd,-1,1)
 #= Fixed site effect
 alpha.target <- runif(nsite,-2,2)
 # constraints of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 alpha.target[1] <- 0 
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + as.matrix(D) %*% beta.target + rep(alpha.target,nsp)
+probit_theta <- c(X %*% beta.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + as.matrix(D_supObs) %*% beta.target + alpha.target
+probit_theta_supObs <- c(X_supObs%*%beta.target) + as.matrix(D_supObs) %*% gamma.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -809,18 +809,18 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, th
                                                     data=data, n_latent=0,
                                                     site_suitability = ~(x1 + x1.2)*species + x1.SLA,
                                                     site_effect="fixed",
-                                                    alpha_start=0, beta_start=0,
-                                                    beta_sp_start=0,
+                                                    alpha_start=0, gamma_start=0,
+                                                    beta_start=0,
                                                     V_alpha=10,
                                                     shape=0.5, rate=0.0005,
+                                                    mu_gamma=0, V_gamma=100,
                                                     mu_beta=0, V_beta=100,
-                                                    mu_beta_sp=0, V_beta_sp=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
   expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
@@ -847,23 +847,23 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-beta.target <-runif(nd,-1,1)
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+gamma.target <-runif(nd,-1,1)
 #= Variance of random site effect
 V_alpha.target <- 0.5
 #= Random site effect
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # constraints of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + as.matrix(D) %*% beta.target + rep(alpha.target,nsp)
+probit_theta <- c(X %*% beta.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target)+ as.matrix(D_supObs) %*% beta.target + alpha.target
+probit_theta_supObs <- c(X_supObs%*%beta.target)+ as.matrix(D_supObs) %*% gamma.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -890,17 +890,17 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(burnin=burnin, mcmc=mcmc, th
                                                     data=data, n_latent=0,
                                                     site_suitability = ~ (x1 + x1.2)*species + x1.SLA,
                                                     site_effect="random",
-                                                    alpha_start=0, beta_start=0,
-                                                    V_alpha=1, beta_sp_start=0,
+                                                    alpha_start=0, gamma_start=0,
+                                                    V_alpha=1, beta_start=0,
                                                     shape=0.5, rate=0.0005,
+                                                    mu_gamma=0, V_gamma=100,
                                                     mu_beta=0, V_beta=100,
-                                                    mu_beta_sp=0, V_beta_sp=100,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
   expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
@@ -933,26 +933,26 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
 diag(mat) <- runif(n_latent,0,2)
 lambda.target <- matrix(0,n_latent,nsp)
-beta.target <-runif(nd,-1,1)
+gamma.target <-runif(nd,-1,1)
 #= Fixed site effect
 alpha.target <- runif(nsite,-2,2)
 # constraints of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 alpha.target[1] <- 0 
 lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + c(W %*% lambda.target) + as.matrix(D) %*% beta.target + rep(alpha.target,nsp)
+probit_theta <- c(X %*% beta.target) + c(W %*% lambda.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% beta.target + alpha.target
+probit_theta_supObs <- c(X_supObs%*%beta.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% gamma.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -980,20 +980,20 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
                                                     n_latent=2, 
                                                     site_effect = "fixed", 
                                                     burnin=burnin, mcmc=mcmc, thin=thin,
-                                                    alpha_start=0, beta_start=0,
-                                                    beta_sp_start=0,
+                                                    alpha_start=0, gamma_start=0,
+                                                    beta_start=0,
                                                     lambda_start=0, W_start=0,
                                                     V_alpha=10,
                                                     shape=0.5, rate=0.0005,
+                                                    mu_gamma=0, V_gamma=100,
                                                     mu_beta=0, V_beta=100,
-                                                    mu_beta_sp=0, V_beta_sp=100,
                                                     mu_lambda=0, V_lambda=10,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
   expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
@@ -1029,27 +1029,27 @@ SLA <- runif(nsp,-1,1)
 D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 nd <- ncol(D)
 ## parameters
-beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
 diag(mat) <- runif(n_latent,0,2)
 lambda.target <- matrix(0,n_latent,nsp)
-beta.target <-runif(nd,-1,1)
+gamma.target <-runif(nd,-1,1)
 # constraints of identifiability
-beta_sp.target[,1] <- 0.0
+beta.target[,1] <- 0.0
 lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 #= Variance of random site effect
 V_alpha.target <- 0.5
 #= Random site effect
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 ## probit_theta
-probit_theta <- c(X %*% beta_sp.target) + c(W %*% lambda.target) + as.matrix(D) %*% beta.target + rep(alpha.target,nsp)
+probit_theta <- c(X %*% beta.target) + c(W %*% lambda.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
 x1.2_supObs <- scale(x1^2)
 X_supObs <- cbind(rep(1,nsite),x1_supObs,x1.2_supObs)
 D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=x1.2_supObs, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
-probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% beta.target + alpha.target
+probit_theta_supObs <- c(X_supObs%*%beta.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% gamma.target + alpha.target
 probit_theta <- c(probit_theta, probit_theta_supObs)
 nobs <- length(probit_theta)
 e <- rnorm(nobs,0,1)
@@ -1077,20 +1077,20 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
                                                     n_latent=2, 
                                                     site_effect = "random", 
                                                     burnin=burnin, mcmc=mcmc, thin=thin,
-                                                    alpha_start=0, beta_start=0,
-                                                    beta_sp_start=0,
+                                                    alpha_start=0, gamma_start=0,
+                                                    beta_start=0,
                                                     lambda_start=0, W_start=0,
                                                     V_alpha=1,
                                                     shape=0.5, rate=0.0005,
+                                                    mu_gamma=0, V_gamma=100,
                                                     mu_beta=0, V_beta=100,
-                                                    mu_beta_sp=0, V_beta_sp=100,
                                                     mu_lambda=0, V_lambda=10,
                                                     seed=1234, verbose=1)
 # Tests
 test_that("jSDM_binomial_probit_block_long_format works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
-  expect_equal(dim(mod$mcmc.beta),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
   expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
   expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))

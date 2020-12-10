@@ -120,14 +120,14 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     suitability <- model.spec$site_suitability 
     if(model.spec$site_suitability==~.) suitability <- ~. - site - Y
     mf.suit <- model.frame(formula=suitability, data=as.data.frame(newdata))
-    # design matrix X for species effects beta_sp
+    # design matrix X for species effects beta
     Xterms <- stringi::stri_remove_empty(gsub(":?species:?", "", 
                                               grep("species", attr(attr(mf.suit,"terms"),"term.labels"), value=T)))  
     Xformula <- paste0("~",paste0(Xterms, collapse="+"))
     mf.suit.X <- model.frame(formula=Xformula, data=as.data.frame(newdata))
     attr(attr(mf.suit.X,"terms"),"intercept") <- ifelse(grepl("- *species", suitability[2]),0,1)
     X.pred <- model.matrix(attr(mf.suit.X,"terms"), data=mf.suit.X)
-    # design matrix D for parameters beta 
+    # design matrix D for parameters gamma
     Dterms <- grep("species", grep("site", attr(attr(mf.suit,"terms"),"term.labels"), value=T, invert=T), value=T, invert=T)
     if(length(Dterms)!=0){
       Dformula <- paste0("~", paste0(Dterms, collapse="+"))
@@ -211,22 +211,22 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         ##= Matrix of MCMC parameters
         if(model.spec$n_latent==0){
           if(length(model.spec$beta_start)==np){
-            beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+            betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
           }
         }
         if(model.spec$n_latent > 0){
-          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
           lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
         for (t in 1:nsamp) {
           
-          beta_j <- beta_j.mat[t,]
-          link.term <- X.pred %*% as.vector(beta_j)
+          betaj <- betaj.mat[t,]
+          link.term <- X.pred %*% as.vector(betaj)
           
           if(model.spec$n_latent > 0){
             W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites])
@@ -256,24 +256,24 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         
         if(model.spec$n_latent==0){
           if(length(model.spec$beta_start)==np){
-            beta_j.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+            betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
           }
         }
         
         if(model.spec$n_latent > 0){
           ##= Matrix of MCMC parameters
-          beta_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
           lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
         for (t in 1:nsamp) {
           
-          beta_j <- beta_j.mat[t,]
-          link.term <- X.pred %*% as.vector(beta_j)
+          betaj <- betaj.mat[t,]
+          link.term <- X.pred %*% as.vector(betaj)
           
           if(model.spec$n_latent > 0){
             W.mat <- as.matrix(object$mcmc.latent[[paste0("lv_",1)]][t,num_sites])
@@ -316,30 +316,30 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         term <- 0
         ##= Matrix of MCMC parameters
         if(length(Dterms)!=0){
-        beta.mat <- as.matrix(object$mcmc.beta)
+          gamma.mat <- as.matrix(object$mcmc.gamma)
         }
         if(model.spec$n_latent==0){
           if(length(model.spec$beta_start)==np){
-            beta_spj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+            betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            beta_spj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
           }
         }
         if(model.spec$n_latent > 0){
-          beta_spj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
           lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
         for (t in 1:nsamp) {
   
-          beta_spj <- beta_spj.mat[t,]
-          link.term <- X.pred[i,] %*% as.vector(beta_spj)
+          betaj <- betaj.mat[t,]
+          link.term <- X.pred[i,] %*% as.vector(betaj)
           
           if(length(Dterms)!=0){
-            beta <- beta.mat[t,]
-            link.term <- link.term + D.pred[i,] %*% as.vector(beta) 
+            gamma <- gamma.mat[t,]
+            link.term <- link.term + D.pred[i,] %*% as.vector(gamma) 
           }
           
           if(model.spec$n_latent > 0){
@@ -368,33 +368,33 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         term <- rep(0,nsamp)
         
         if(length(Dterms)!=0){
-          beta.mat <- as.matrix(object$mcmc.beta)
+          gamma.mat <- as.matrix(object$mcmc.gamma)
         }
         
         if(model.spec$n_latent==0){
           if(length(model.spec$beta_start)==np){
-            beta_spj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
+            betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            beta_spj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
           }
         }
         
         if(model.spec$n_latent > 0){
           ##= Matrix of MCMC parameters
-          beta_spj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
           lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
         for (t in 1:nsamp) {
           
-          beta_spj <- beta_spj.mat[t,]
-          link.term <- X.pred[i,] %*% as.vector(beta_spj)
+          betaj <- betaj.mat[t,]
+          link.term <- X.pred[i,] %*% as.vector(betaj)
           
           if(length(Dterms)!=0){
-            beta <- beta.mat[t,]
-            link.term <- link.term + D.pred[i,] %*% as.vector(beta) 
+            gamma <- gamma.mat[t,]
+            link.term <- link.term + D.pred[i,] %*% as.vector(gamma) 
           }
           
           if(model.spec$n_latent > 0){

@@ -37,9 +37,9 @@ The species traits for the plants are:
     \code{Seed} \tab Seed mass \cr } }
 }
 \source{
-Choler, P. (2005) Consistent shifts in Alpine plant traits along a mesotopographical gradient. Arctic, Antarctic, and Alpine Research 37,444–453.
+Choler, P. (2005) Consistent shifts in Alpine plant traits along a mesotopographical gradient. Arctic, Antarctic, and Alpine Research 37,444-453.
 
-Dray S, Dufour A (2007). The ade4 Package: Implementing the Duality Diagram for Ecologists. \emph{Journal of Statistical Software}, 22(4), 1–20. doi: \url{10.18637/jss.v022.i04}. 
+Dray S, Dufour A (2007). The ade4 Package: Implementing the Duality Diagram for Ecologists. \emph{Journal of Statistical Software}, 22(4), 1-20. doi: \url{10.18637/jss.v022.i04}. 
 }
 
 \examples{

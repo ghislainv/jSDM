@@ -89,9 +89,7 @@ get_residual_cor <- function(mod) {
   }
   n.mcmc <- nrow(mod$mcmc.latent[[1]])
   n.lv <- length(mod$mcmc.latent)
-  if(!is.null(mod$model_spec$beta_sp_start)){
-  n.X.coeff <- nrow(mod$model_spec$beta_sp_start)
-  } else {
+  if(!is.null(mod$model_spec$beta_start)){
   n.X.coeff <- nrow(mod$model_spec$beta_start)
   }
   Tau.arr <- matrix(NA,n.mcmc,n.species^2)

@@ -5,7 +5,7 @@
 \title{mites dataset}
 
 \description{
-This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of Université de Montréal, Québec, Canada in June 1989. 
+This example data set is composed of 70 cores of mostly Sphagnum mosses collected on the territory of the Station de biologie des Laurentides of University of  Montreal, Quebec, Canada in June 1989. 
 
 The whole sampling area was 2.5 m x 10 m in size and thirty-five taxa were recognized as species, though many were not given a species name, owing to the incomplete stage of systematic knowledge of the North American Oribatid fauna.
 
@@ -14,7 +14,7 @@ The data set comprises the abundances of 35 morphospecies, 5 substrate and micri
 See Borcard et al. (1992, 1994) for details.
 }
 
-\details{ Oribatid mites (Acari: Oribatida) are a very diversified group of small (0.2–1.2 mm) soil-dwelling, mostly microphytophagous and detritivorous arthropods. A well aerated soil or a complex substrate like Sphagnum mosses present in bogs and wet forests can harbour up to several hundred thousand individuals per square metre. Local assemblages are sometimes composed of over a hundred species, including many rare ones. This diversity makes oribatid mites an interesting target group to study community–environment relationships at very local scales.
+\details{ Oribatid mites (Acari: Oribatida) are a very diversified group of small (0.2-1.2 mm) soil-dwelling, mostly microphytophagous and detritivorous arthropods. A well aerated soil or a complex substrate like Sphagnum mosses present in bogs and wet forests can harbour up to several hundred thousand individuals per square metre. Local assemblages are sometimes composed of over a hundred species, including many rare ones. This diversity makes oribatid mites an interesting target group to study community-environment relationships at very local scales.
 }
 
 \usage{data("mites")}

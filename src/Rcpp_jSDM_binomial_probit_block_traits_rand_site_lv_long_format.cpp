@@ -35,9 +35,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     double V_alpha_start,
     const arma::mat& V_param_sp,
     const arma::vec& mu_param_sp,
-    const arma::vec& beta_start,
-    const arma::mat& V_beta,
-    const arma::vec& mu_beta,
+    const arma::vec& gamma_start,
+    const arma::mat& V_gamma,
+    const arma::vec& mu_gamma,
     const arma::mat& V_W,
     const arma::mat& W_start,
     double shape,
@@ -73,7 +73,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
   arma::Cube<double> W; W.zeros(NSAMP, NSITE, NL);
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
   arma::vec V_alpha; V_alpha.zeros(NSAMP);
-  arma::mat beta; beta.zeros(NSAMP, ND);
+  arma::mat gamma; gamma.zeros(NSAMP, ND);
   /* Latent variable */
   arma::vec probit_theta_pred; probit_theta_pred.zeros(NOBS);
   arma::vec Z_latent; Z_latent.zeros(NOBS);
@@ -85,7 +85,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
   
   //  mat of species effects parameters and coefficients for latent variables (nl+np,nsp)
   arma::mat param_sp_run = param_sp_start;
-  arma::mat beta_run = beta_start;
+  arma::mat gamma_run = gamma_start;
   // alpha vec of sites effects (nsite)
   arma::vec alpha_run = alpha_start;
   double V_alpha_run = V_alpha_start;
@@ -93,7 +93,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
   arma::mat W_run = W_start;
   // Z latent (nobs)
   arma::vec Z_run; Z_run.zeros(NOBS);
-  // probit_theta_ij = X_i*beta_j + alpha_i + W_i*lambda_j + D_ij*beta
+  // probit_theta_n = X_n*beta_j + alpha_i + W_i*lambda_j + D_n*gamma
+  // with Id_sp_n=j and Id_site_n=i
   arma::mat probit_theta_run; probit_theta_run.zeros(NOBS);
   // Data 
   // data-set with covariables and latent variables 
@@ -136,7 +137,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     /////////////////////////////////////////////
     // mat latent variable W: Gibbs algorithm //
     // Loop on sites
-    arma::mat beta_sp_run; beta_sp_run = param_sp_run.submat(0,0,NP-1,NSP-1);
+    arma::mat beta_run; beta_run = param_sp_run.submat(0,0,NP-1,NSP-1);
     arma::mat lambda_sp_run; lambda_sp_run = param_sp_run.submat(NP,0,NP+NL-1,NSP-1);
     
     for (int i=0; i<NSITE; i++) {
@@ -144,8 +145,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
       arma::rowvec Zprim; Zprim.zeros(nobs_i);
       for (int n=0; n<nobs_i; n++) {
         Zprim(n)=arma::as_scalar(Z_run.row(rowId_site[i].at(n))
-                                   -X.row(rowId_site[i].at(n))*beta_sp_run.col(Id_sp(rowId_site[i].at(n)))
-                                   -D.row(rowId_site[i].at(n))*beta_run
+                                   -X.row(rowId_site[i].at(n))*beta_run.col(Id_sp(rowId_site[i].at(n)))
+                                   -D.row(rowId_site[i].at(n))*gamma_run
                                    -alpha_run(Id_site(rowId_site[i].at(n))));
       }
       // small_v
@@ -165,7 +166,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     for (int n=0; n<nobs_i; n++) {
       small_v2 += arma::as_scalar(Z_run.row(rowId_site[i].at(n))
                                     -data.row(rowId_site[i].at(n))*param_sp_run.col(Id_sp(rowId_site[i].at(n)))
-                                    -D.row(rowId_site[i].at(n))*beta_run);
+                                    -D.row(rowId_site[i].at(n))*gamma_run);
     }
     // big_V
     double big_V2 = 1/(1/V_alpha_run + nobs_i);
@@ -182,7 +183,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
   V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////
-    // vec beta: Gibbs algorithm //
+    // vec gamma: Gibbs algorithm //
     
     // Loop on species
     arma::vec small_v; small_v.zeros(ND);
@@ -193,13 +194,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
                                             -alpha_run(Id_site(rowId_sp[j])));
     }
     // small_v
-    small_v += inv(V_beta)*mu_beta;
+    small_v += inv(V_gamma)*mu_gamma;
     
     // big_V
-    arma::mat big_V = inv(inv(V_beta) + D.t()*D);
+    arma::mat big_V = inv(inv(V_gamma) + D.t()*D);
     
     // Draw in the posterior distribution
-    beta_run = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+    gamma_run = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
     
     //////////////////////////////////
     // mat param_sp: Gibbs algorithm //
@@ -208,7 +209,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     for (int j=0; j<NSP; j++) {
       // small_v
       arma::vec small_v = inv(V_param_sp)*mu_param_sp + data.rows(rowId_sp[j]).t()*(Z_run(rowId_sp[j])
-                                                                                      -D.rows(rowId_sp[j])*beta_run
+                                                                                      -D.rows(rowId_sp[j])*gamma_run
                                                                                       -alpha_run(Id_site(rowId_sp[j])));
       
       // big_V
@@ -217,7 +218,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
       // Draw in the posterior distribution
       arma::vec param_sp_prop = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       if(j==0 && !Id_common_var.has_nan()){
-        // constraint of identifiability on beta_sp
+        // constraint of identifiability on beta
         // Id of covariables in common between D and X 
         param_sp_prop(conv_to<uvec>::from(Id_common_var)).fill(0.0);
       }
@@ -238,9 +239,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     // logLikelihood
     double logL = 0.0;
     for ( int n = 0; n < NOBS; n++ ) {
-      // probit(theta_ij) = X_i*beta_sp_j + W_i*lambda_sp_j + D_ij*beta
+      // probit_theta_n = X_n*beta_j + alpha_i + W_i*lambda_j + D_n*gamma
+      // with Id_sp_n=j and Id_site_n=i
       probit_theta_run(n) = arma::as_scalar(data.row(n)*param_sp_run.col(Id_sp(n))
-                                              + D.row(n)*beta_run 
+                                              + D.row(n)*gamma_run 
                                               + alpha_run(Id_site(n)));
       // link function probit is the inverse of N(0,1) repartition function 
       double theta = gsl_cdf_ugaussian_P(probit_theta_run(n));
@@ -262,7 +264,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
       for ( int i=0; i<NSITE; i++ ) {
         W.tube(isamp-1,i) = W_run.row(i);
       }
-      beta.row(isamp-1) = beta_run.t();
+      gamma.row(isamp-1) = gamma_run.t();
       for ( int n=0; n<NOBS; n++ ) {
         Z_latent(n) += Z_run(n) / NSAMP; // We compute the mean of NSAMP values
         probit_theta_pred(n) += probit_theta_run(n)/NSAMP;        
@@ -298,7 +300,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
   
   // Return results as a Rcpp::List
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("param_sp") = param_sp,
-                                          Rcpp::Named("beta") = beta,
+                                          Rcpp::Named("gamma") = gamma,
                                           Rcpp::Named("W") = W,
                                           Rcpp::Named("alpha") = alpha,
                                           Rcpp::Named("V_alpha") = V_alpha,
@@ -316,6 +318,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # # ===================================================
 # nsp <- 100
 # nsite <- 300
+# nl <- 2
+# 
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -333,22 +337,22 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 # nd <- ncol(D)
 # ## parameters
-# beta_sp.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+# beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
 # # constraint of identifiability
-# beta_sp.target[,1] <- 0.0
+# beta.target[,1] <- 0.0
 # mat <- t(matrix(runif(nsp*nl,-2,2), byrow=TRUE, nrow=nsp))
 # diag(mat) <- runif(nl,0,2)
 # lambda_sp.target <- matrix(0,nl,nsp)
 # lambda_sp.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
-# beta.target <-runif(nd,-1,1)
+# gamma.target <-runif(nd,-1,1)
 # V_alpha.target <- 0.5
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # ## probit_theta
-# probit_theta <- c(X %*% beta_sp.target) + c(W %*% lambda_sp.target) + as.matrix(D) %*% beta.target + rep(alpha.target, nsp)
+# probit_theta <- c(X %*% beta.target) + c(W %*% lambda_sp.target) + as.matrix(D) %*% gamma.target + rep(alpha.target, nsp)
 # # x1_supObs <- rnorm(nsite)
 # # X_supObs <- cbind(rep(1,nsite),x1_supObs,scale(x1_supObs^2))
 # # D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=scale(x1_supObs^2), x1.SLA= scale(c(x1_supObs %*% t(SLA))))
-# # probit_theta_supObs <- c(X_supObs%*%beta_sp.target) + as.matrix(D_supObs) %*% beta.target
+# # probit_theta_supObs <- c(X_supObs %*% beta.target) + as.matrix(D_supObs) %*% gamma.target
 # # probit_theta <- c(probit_theta, probit_theta_supObs)
 # nobs <- length(probit_theta)
 # hist(probit_theta)
@@ -403,8 +407,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 #   ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #   Y=data$Y, X=X, D=D, Id_site=data$site, Id_sp=data$species,
 #   Id_common_var=c(0,1,2),
-#   beta_start=rep(0,nd), V_beta=diag(rep(2,nd)),
-#   mu_beta = rep(0,nd),
+#   gamma_start=rep(0,nd), V_gamma=diag(rep(2,nd)),
+#   mu_gamma = rep(0,nd),
 #   param_sp_start=param_sp_start,
 #   V_param_sp=diag(rep(2,np+nl)),
 #   mu_param_sp = rep(0,np+nl),
@@ -440,27 +444,27 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # coda::traceplot(MCMC_V_alpha)
 # coda::densplot(MCMC_V_alpha, main ="V_alpha" )
 # abline(v=V_alpha.target,col='red')
-# ## beta
+# ## gamma
 # par(mfrow=c(2,2))
-# MCMC.beta <- coda::mcmc(mod$beta, start=nburn+1, end=ngibbs, thin=nthin)
+# MCMC.gamma <- coda::mcmc(mod$gamma, start=nburn+1, end=ngibbs, thin=nthin)
 # for(d in 1:nd){
-# coda::traceplot(MCMC.beta[,d])
-# coda::densplot(MCMC.beta[,d], main = paste0("beta_",colnames(D)[d]))
-# abline(v=beta.target[d],col='red')
+# coda::traceplot(MCMC.gamma[,d])
+# coda::densplot(MCMC.gamma[,d], main = paste0("gamma_",colnames(D)[d]))
+# abline(v=gamma.target[d],col='red')
 # }
 # 
-# ## beta_sp_j
+# ## beta_j
 # par(mfrow=c(np,2))
-# mean_beta_sp <- matrix(0,nsp,np)
+# mean_beta <- matrix(0,nsp,np)
 # for (j in 1:nsp) {
-#   mean_beta_sp[j,] <-apply(mod$param_sp[,j,1:np],2,mean)
+#   mean_beta[j,] <-apply(mod$param_sp[,j,1:np],2,mean)
 #   if(j<5){
-#     MCMC.beta_spj <- coda::mcmc(mod$param_sp[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+#     MCMC.beta_j <- coda::mcmc(mod$param_sp[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
 #     for (p in 1:np) {
-#       summary(MCMC.beta_spj)
-#       coda::traceplot(MCMC.beta_spj[,p])
-#       coda::densplot(MCMC.beta_spj[,p], main = paste0("beta_sp",j,p))
-#       abline(v=beta_sp.target[p,j],col='red')
+#       summary(MCMC.beta_j)
+#       coda::traceplot(MCMC.beta_j[,p])
+#       coda::densplot(MCMC.beta_j[,p], main = paste0("beta_",j,p))
+#       abline(v=beta.target[p,j],col='red')
 #     }
 #   }
 # }
@@ -481,10 +485,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 #   }
 # }
 # 
-# ## Fixed species effect beta_sp and loading factors lambda_sp
+# ## Fixed species effect beta and loading factors lambda_sp
 # par(mfrow=c(1,2))
-# ## beta_sp
-# plot(t(beta_sp.target), mean_beta_sp, xlab="obs", ylab="fitted", main="Fixed species effect beta")
+# ## beta
+# plot(t(beta.target), mean_beta, xlab="obs", ylab="fitted", main="Fixed species effect beta")
 # abline(a=0,b=1,col='red')
 # ## lambda_sp
 # plot(t(lambda_sp.target), mean_lambda_sp, xlab="obs", ylab="fitted", main="Loading factors lambda")
@@ -509,20 +513,18 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # plot(mcmc.Deviance)
 # 
 # par(mfrow=c(1,1))
-# colnames(mod$beta) <- paste0("beta_",colnames(D))
-# boxplot(mod$beta, main="beta fitted by jSDM")
+# colnames(mod$gamma) <- paste0("gamma_",colnames(D))
+# boxplot(mod$gamma, main="gamma fitted by jSDM")
 # # create data for segments
-# n <- ncol(mod$beta)
+# n <- ncol(mod$gamma)
 # # width of each boxplot is 0.8
 # x0s <- 1:n - 0.4
 # x1s <- 1:n + 0.4
 # # these are the y-coordinates for the horizontal lines
 # # that you need to set to the desired values.
-# y0s <- beta.target
+# y0s <- gamma.target
 # # add segments
 # segments(x0 = x0s, x1 = x1s, y0 = y0s, col = "red", lwd=2)
-# legend("bottomright", legend=c("beta target"), col=c('red'), lty=1, lwd=2)
+# legend("bottomright", legend=c("gamma target"), col=c('red'), lty=1, lwd=2)
 # dev.off()
-# #test en SDM logit binomial
-# #voir obs dans IC
 */
