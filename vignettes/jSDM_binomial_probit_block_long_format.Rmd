@@ -1,5 +1,5 @@
 ---
-title: "Bernoulli probit regression including species traits"
+title: "Bernoulli probit regression with species traits"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
  %\VignetteEngine{knitr::rmarkdown}
- %\VignetteIndexEntry{Bernoulli probit regression including species traits}
+ %\VignetteIndexEntry{Bernoulli probit regression with species traits}
  %\VignetteEncoding{UTF-8}
 ---
  
@@ -35,7 +35,7 @@ highlight = TRUE
 
 Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
-$$ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\beta + X_n.\beta_{sp.j} +  W_i.\lambda_j,$$
+$$ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\gamma_{sp.j} +  W_i.\lambda_j,$$
 such as $species_n=j$ and $site_n=i$.
 
 - Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
@@ -47,7 +47,7 @@ $$y_{n}=\begin{cases}
 1 &  \text{ if species  $j$ is present on the site $i$}.
 \end{cases}$$
 
-- Latent variable $z_{n} = \alpha_i + D_n.\beta + X_n.\beta_j + W_i.\lambda_j + \epsilon_{n}$, with $\forall (n) \ \epsilon_{n} \sim \mathcal{N}(0,1)$ and such that:
+- Latent variable $z_{n} = \alpha_i + D_n.\gamma + X_n.\beta_j + W_i.\lambda_j + \epsilon_{n}$, with $\forall (n) \ \epsilon_{n} \sim \mathcal{N}(0,1)$ and such that:
 
 $$y_{n}=\begin{cases}
 1 & \text{if} \ z_{n} > 0 \\
@@ -56,13 +56,13 @@ $$y_{n}=\begin{cases}
 
 It can be easily shown that: $y_{n} \sim \mathcal{B}ernoulli(\theta_{n})$. 
 
-- Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+- Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default $q=2$).
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for each lambda not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
 
 - Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nobs}$ with $X_i=(1,x_i^1,\ldots,x_i^p)\in \mathbb{R}^{(p+1)}$ where $p$ is the number of bioclimatic variables considered.
 The corresponding fixed species intercept ($\beta_j^0$) and regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^0,\beta_j^1,\ldots,\beta_j^p)'$.
 
-- $\beta$ correspond regression coefficients of explanatory variables found in matrix $D=(D_n)_{i=1,\ldots,nobs}$. We use a prior distribution $\mathcal{N}(0,10)$ for all betas. 
+- $\gamma$ correspond regression coefficients of explanatory variables found in matrix $D=(D_n)_{i=1,\ldots,nobs}$. We use a prior distribution $\mathcal{N}(0,10)$ for all parameters $\gamma$. 
 
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
@@ -174,14 +174,14 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(
   # Model specification 
   n_latent=2, site_effect="random",
   # Starting values
-  alpha_start=0, beta_start=0,
-  beta_sp_start=0,
+  alpha_start=0, gamma_start=0,
+  beta_start=0,
   lambda_start=0, W_start=0,
   V_alpha=1, 
   # Priors
   shape=0.1, rate=0.1,
-  mu_beta=0, V_beta=100,
-  mu_beta_sp=0, V_beta_sp=100,
+  mu_gamma=0, V_gamma=10,
+  mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
   seed=1234, verbose=1)
@@ -190,12 +190,12 @@ mod <- jSDM::jSDM_binomial_probit_block_long_format(
 # Analysis of the results
 
 ```{r plot-results-probit}
-np <- nrow(mod$model_spec$beta_sp_start)
-nd <- length(mod$model_spec$beta_start)
-## beta of the first two species
-plot(mod$mcmc.beta)
+np <- nrow(mod$model_spec$beta_start)
+nd <- length(mod$model_spec$gamma_start)
+## gamma of the first two species
+plot(mod$mcmc.gamma)
 
-## beta_sp.j of the first two species
+## beta_j of the first two species
 par(mfrow=c(np,2), oma=c(0,0,2,0))
 for (j in 1:2) {
     plot(mod$mcmc.sp[[paste0("sp_",j)]][,1:np])
