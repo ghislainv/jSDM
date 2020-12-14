@@ -31,6 +31,8 @@ Make sure the GNU Scientific Library ([GSL](https://www.gnu.org/software/gsl/)) 
 
 ## Installation
 
+### Stable version from CRAN 
+
 Install the latest stable version of **jSDM** from [CRAN](https://cran.r-project.org/) with:
 
 ```{r cran, eval=FALSE}
@@ -39,9 +41,15 @@ install.packages("jSDM")
 
 Or install the development version of **jSDM** from [GitHub](https://github.com/ghislainv/jSDM) with:
 
+### Development version for Linux
+
 ```{r github, eval=FALSE}
 devtools::install_github("ghislainv/jSDM")
 ```
+
+### Development version for Windows
+
+The binary release can be found here : [jSDM_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).
 
 <!-- ## Available functions  -->
 <!-- The package includes the following functions to fit various species distribution models :  -->

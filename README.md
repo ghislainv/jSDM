@@ -33,9 +33,13 @@ Or install the development version of **jSDM** from
 [GitHub](https://github.com/ghislainv/jSDM)
 with:
 
+### Installation of development version on Linux
+
 ``` r
 devtools::install_github("ghislainv/jSDM")
 ```
+
+### Installation of development version on Windows
 
 <!-- ## Available functions  -->
 
