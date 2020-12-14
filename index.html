@@ -50,7 +50,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,13 +70,13 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="http://twitter.com/ghislainv">
-    <span class="fa fa-twitter fa-lg"></span>
+    <span class="fas fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/ghislainv/jSDM">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -110,8 +110,15 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"jSDM"</span><span class="op">)</span></code></pre></div>
 <p>Or install the development version of <strong>jSDM</strong> from <a href="https://github.com/ghislainv/jSDM">GitHub</a> with:</p>
+<div id="installation-of-development-version-on-linux" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installation-of-development-version-on-linux" class="anchor"></a>Installation of development version on Linux</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ghislainv/jSDM"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="installation-of-development-version-on-windows" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installation-of-development-version-on-windows" class="anchor"></a>Installation of development version on Windows</h3>
 <!-- ## Available functions  -->
 <!-- The package includes the following functions to fit various species distribution models :  -->
 <!-- |                function                |    data type     |                      fitted model                                 | -->
@@ -126,6 +133,7 @@
 <!-- | jSDM_binomial_probit_block_rand_site   | presence-absence | $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
 <!-- | jSDM_binomial_probit_block_lv          | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j$ | -->
 <!-- | `jSDM_binomial_probit_block_rand_site_lv` | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
+</div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
