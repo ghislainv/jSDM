@@ -216,12 +216,12 @@ where <table class='table'>
 <b>Ecological process:</b>
 $$y_n \sim \mathcal{B}ernoulli(\theta_n)$$ such as \(species_n=j\) and \(site_n=i\),
 where <table class='table'>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j}\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j}  + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{n}) = D_n \beta + X_n \beta_{sp.j} + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j +  W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n  \beta_j +  W_i \lambda_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n  \beta_j +  W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
 </table></p></li>
 </ul>
 

@@ -398,7 +398,7 @@ where</p><table class='table'>
   V_alpha<span class='op'>=</span><span class='fl'>1</span>,
   <span class='co'># Priors</span>
   shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
-  mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>1.0E6</span>,
+  mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
   mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
   seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
@@ -510,12 +510,12 @@ where</p><table class='table'>
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;       1574.890         30.931          2.187          7.434 
+#&gt;       1573.938         32.966          2.331          5.887 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
-#&gt;  1515  1551  1576  1599  1626 
+#&gt;  1507  1552  1574  1596  1638 
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.Deviance</span><span class='op'>)</span>
 </div><div class='img'><img src='jSDM_binomial_probit_block-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
