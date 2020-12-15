@@ -22,6 +22,8 @@ Make sure the GNU Scientific Library
 
 ## Installation
 
+### Stable version from CRAN
+
 Install the latest stable version of **jSDM** from
 [CRAN](https://cran.r-project.org/) with:
 
@@ -29,17 +31,21 @@ Install the latest stable version of **jSDM** from
 install.packages("jSDM")
 ```
 
-Or install the development version of **jSDM** from
-[GitHub](https://github.com/ghislainv/jSDM)
-with:
+### Development version for Linux
 
-### Installation of development version on Linux
+Or install the development version of **jSDM** from
+[GitHub](https://github.com/ghislainv/jSDM) with:
 
 ``` r
 devtools::install_github("ghislainv/jSDM")
 ```
 
-### Installation of development version on Windows
+### Development version for Windows
+
+Or the binary release of **jSDM** can be found here
+:
+
+[jSDM\_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).
 
 <!-- ## Available functions  -->
 
