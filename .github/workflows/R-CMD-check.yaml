@@ -45,6 +45,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@v1
+      
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
 
       - name: Query dependencies
         run: |
