@@ -47,7 +47,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
       
       - name: Compile LaTeX document
-        run: sudo apt-get install texlive-latex-base texlive-fonts-recommended
+        run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
 
       - name: Query dependencies
         run: |
