@@ -114,8 +114,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
       
-      - name: Install debian packages
+      - name: Remove package libcurl4
         run: sudo apt-get remove libcurl4
+      
+      - name: Install debian packages
         run: sudo apt-get install libcurl3 libharfbuzz-dev libfribidi-dev libgsl-dev jags
 
       - name: Query dependencies
