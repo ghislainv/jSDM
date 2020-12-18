@@ -160,7 +160,7 @@ save(beta_est_BC, T_BC, deviance_BC, probit_theta_pred_BC, file="SDM_JSDM_files/
 
 We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
 
-```{r plot-BayesComm, eval=TRUE}
+```{r plot-BayesComm, eval=FALSE}
 library(BayesComm)
 load("SDM_JSDM_cache/BC.rda")
 
