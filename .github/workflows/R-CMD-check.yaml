@@ -45,10 +45,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@v1
-      
-      - name: Install debian packages
-          run: sudo apt-get install libharfbuzz-dev libfribidi-dev libgsl-dev jags
-
 
       - name: Query dependencies
         run: |
@@ -114,6 +110,9 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
 
       - uses: r-lib/actions/setup-pandoc@v1
+      
+      - name: Install debian packages
+        run: sudo apt-get install libharfbuzz-dev libfribidi-dev libgsl-dev jags
 
       - name: Query dependencies
         run: |
