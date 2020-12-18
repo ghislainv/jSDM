@@ -3,8 +3,7 @@
 
 # jSDM R Package <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-[![Travis
-CI](https://api.travis-ci.org/ghislainv/jSDM.svg?branch=master)](https://travis-ci.org/ghislainv/jSDM)
+[![R-CMD-check](https://github.com/ghislainv/jSDM/workflows/R-CMD-check/badge.svg)](https://github.com/ghislainv/jSDM/actions)
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/package=jSDM)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3253460.svg)](https://doi.org/10.5281/zenodo.3253460)

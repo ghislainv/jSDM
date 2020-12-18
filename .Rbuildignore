@@ -20,9 +20,6 @@ vignettes/.*\.md
 ^logos$
 ^pkgdown$
 
-# travis
-^\.travis\.yml$
-
 # vignettes
 ^vignettes/SDM_jSDM\.Rmd$
 ^vignettes/jSDM_boral\.Rmd$
@@ -33,3 +30,5 @@ vignettes/.*\.md
 ^vignettes/jagsboralmodel\.txt$
 ^vignettes/proof\.Rmd$
 ^vignettes/.*_cache$
+^\.github$
+^_pkgdown\.yml$
