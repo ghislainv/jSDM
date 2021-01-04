@@ -499,7 +499,79 @@ test_that("jSDM_binomial_probit_block_long_format works with random site effect 
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
 })
 
+#=============== JSDM with random intercept only, site effect and latent variables =============
+
+# Ecological process (suitability)
+X <- matrix(1,nsite,1)
+colnames(X) <- c("Int")
+W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+data <- cbind (X,W)
+beta.target <- t(matrix(runif(nsp*ncol(X),-2,2), byrow=TRUE, nrow=nsp))
+l.zero <- 0
+l.diag <- runif(2,0,2)
+l.other <- runif(nsp*n_latent-3,-2,2)
+lambda.target <- t(matrix(c(l.diag[1],l.zero,
+                            l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
+
+Valpha.target <- 0.5
+
+alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
+probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
+nobs <- length(probit_theta)
+e <- rnorm(nobs,0,1)
+Z_true <- probit_theta + e
+Y<-rep(0,nobs)
+for (n in 1:nobs){
+  if ( Z_true[n] > 0) {Y[n] <- 1}
+}
+Id_site <- rep(1:nsite,nsp)
+Id_sp <- rep(1:nsp,each=nsite)
+data <- data.frame(site=Id_site, species=Id_sp, Y=Y, Int=1)
+# missing observation
+data <- data[-1,]
+nobs <- nobs -1
+
+# Fit the model
+burnin <- 500
+mcmc <- 500
+thin <- 1
+nsamp <- mcmc/thin
+mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
+                                                    site_suitability= ~ Int:species - species ,
+                                                    n_latent=2, 
+                                                    site_effect = "random", 
+                                                    burnin=burnin, mcmc=mcmc, thin=thin,
+                                                    alpha_start=0, beta_start=0,
+                                                    lambda_start=0, W_start=0,
+                                                    V_alpha=1,
+                                                    shape=0.5, rate=0.0005,
+                                                    mu_beta=0, V_beta=100,
+                                                    mu_lambda=0, V_lambda=10,
+                                                    seed=1234, verbose=1)
+# Tests
+test_that("jSDM_binomial_probit_block_long_format works with random site effect and latent variables", {
+  expect_equal(length(mod$mcmc.sp),nsp)
+  expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
+  expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
+  expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(sum(is.na(mod$Z_latent)),0)
+  expect_equal(sum(is.infinite(mod$Z_latent)),0)
+  expect_equal(length(mod$Z_latent),nobs)
+  expect_equal(sum(is.na(mod$probit_theta_pred)),0)
+  expect_equal(length(mod$probit_theta_pred),nobs)
+  expect_equal(sum(is.na(mod$mcmc.V_alpha)),0)
+  expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
+  expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
+  expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
+})
+
 context("test-jSDM_binomial_probit_block_long_format")
+
 
 #=== With traits =======
 
@@ -1074,6 +1146,102 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
                                                     site_suitability= ~ (x1 + x1.2)*species + x1.SLA,
+                                                    n_latent=2, 
+                                                    site_effect = "random", 
+                                                    burnin=burnin, mcmc=mcmc, thin=thin,
+                                                    alpha_start=0, gamma_start=0,
+                                                    beta_start=0,
+                                                    lambda_start=0, W_start=0,
+                                                    V_alpha=1,
+                                                    shape=0.5, rate=0.0005,
+                                                    mu_gamma=0, V_gamma=100,
+                                                    mu_beta=0, V_beta=100,
+                                                    mu_lambda=0, V_lambda=10,
+                                                    seed=1234, verbose=1)
+# Tests
+test_that("jSDM_binomial_probit_block_long_format works with random site effect and latent variables", {
+  expect_equal(length(mod$mcmc.sp),nsp)
+  expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
+  expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))
+  expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
+  expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(sum(is.na(mod$Z_latent)),0)
+  expect_equal(sum(is.infinite(mod$Z_latent)),0)
+  expect_equal(length(mod$Z_latent),nobs)
+  expect_equal(sum(is.na(mod$probit_theta_pred)),0)
+  expect_equal(length(mod$probit_theta_pred),nobs)
+  expect_equal(sum(is.na(mod$mcmc.V_alpha)),0)
+  expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
+  expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
+  expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
+})
+
+#=============== JSDM with intercept only, random site effect and latent variables =============
+
+#= Number of latent variables
+n_latent <- 2
+#'
+# Ecological process (suitability)
+## X
+X <- matrix(1,nsite,1)
+colnames(X) <- c("Int")
+np <- ncol(X)
+## W
+W <- matrix(rnorm(nsite*n_latent,0,1),nrow=nsite,byrow=TRUE)
+## D
+SLA <- runif(nsp,-1,1)
+x1 <- rnorm(nsite,0,1)
+D <- data.frame(Int=1, x1.SLA= scale(c(x1 %*% t(SLA))))
+nd <- ncol(D)
+## parameters
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(n_latent,0,2)
+lambda.target <- matrix(0,n_latent,nsp)
+gamma.target <-runif(nd,-1,1)
+# constraints of identifiability
+beta.target[,1] <- 0.0
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+#= Variance of random site effect
+V_alpha.target <- 0.5
+#= Random site effect
+alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
+## probit_theta
+probit_theta <- c(X %*% beta.target) + c(W %*% lambda.target) + as.matrix(D) %*% gamma.target + rep(alpha.target,nsp)
+# Supplementary observation (each site have been visited twice)
+# Environmental variables at the time of the second visit
+x1_supObs <- rnorm(nsite,0,1)
+X_supObs <- X
+D_supObs <- data.frame(Int=1, x1.SLA=scale(c(x1_supObs %*% t(SLA))))
+probit_theta_supObs <- c(X_supObs%*%beta.target) + c(W%*%lambda.target) + as.matrix(D_supObs) %*% gamma.target + alpha.target
+probit_theta <- c(probit_theta, probit_theta_supObs)
+nobs <- length(probit_theta)
+e <- rnorm(nobs,0,1)
+Z_true <- probit_theta + e
+Y<-rep(0,nobs)
+for (n in 1:nobs){
+  if ( Z_true[n] > 0) {Y[n] <- 1}
+}
+Id_site <- rep(1:nsite,nsp)
+Id_sp <- rep(1:nsp,each=nsite)
+data <- data.frame(site=rep(Id_site,2), species=rep(Id_sp,2), Y=Y,
+                   Int=1, x1.SLA=c(D$x1.SLA,D_supObs$x1.SLA))
+# missing observation
+data <- data[-1,]
+nobs <- nobs-1
+
+# Fit the model
+burnin <- 500
+mcmc <- 500
+thin <- 1
+nsamp <- mcmc/thin
+mod <- jSDM::jSDM_binomial_probit_block_long_format(data=data,
+                                                    site_suitability= ~ Int*species + x1.SLA -1 - species,
                                                     n_latent=2, 
                                                     site_effect = "random", 
                                                     burnin=burnin, mcmc=mcmc, thin=thin,

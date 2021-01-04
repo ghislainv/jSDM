@@ -376,3 +376,67 @@ test_that("jSDM_poisson_log works with random site effect and latent variables",
   expect_equal(sum(is.na(mod$mcmc.V_alpha)),0)
   expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
 })
+
+#===================================================
+#= jSDM with latent variables and random site effect 
+
+# Ecological process (suitability)
+X <- matrix(1,nsite,1)
+colnames(X)<- "Int"
+np <- ncol(X)
+set.seed(2*seed)
+W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+#= Number of latent variables
+n_latent <- ncol(W)
+l.zero <- 0
+l.diag <- runif(2,0,2)
+l.other <- runif(nsp*2-3,-2,2)
+lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+Valpha.target <- 0.5
+alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
+log.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
+theta <- exp(log.theta)
+Y <- apply(theta, 2, rpois, n=nsite) 
+
+
+# Fit the model 
+mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains 
+                        # Response variable
+                        presence_site_sp=Y,  
+                        # Explanatory variables
+                        site_suitability=~Int-1, site_data=X,
+                        n_latent= n_latent,
+                        site_effect ="random",
+                        # Starting values
+                        alpha_start=0,
+                        beta_start=0,
+                        lambda_start = 0,
+                        W_start=0,
+                        V_alpha=1,
+                        # Priors
+                        shape=0.5, rate=0.0005,
+                        mu_beta=0, V_beta=1.0E6,
+                        mu_lambda=0, V_lambda=10,
+                        # Various
+                        seed=1234, ropt=0.44, verbose=1)
+# Tests 
+test_that("jSDM_poisson_log works with random site effect and latent variables", {
+  expect_equal(length(mod$mcmc.sp),nsp)
+  expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
+  expect_equal(dim(mod$mcmc.latent$lv_1),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_1)),0)
+  expect_equal(dim(mod$mcmc.latent$lv_2),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
+  expect_equal(sum(is.na(mod$theta_latent)),0)
+  expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)+n_latent))
+  expect_equal(sum(is.na(mod$mcmc.sp)),0)
+  expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
+  expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
+  expect_equal(sum(is.na(mod$mcmc.alpha)),0)
+  expect_equal(sum(is.na(mod$mcmc.V_alpha)),0)
+  expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
+})
