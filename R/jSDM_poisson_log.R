@@ -331,7 +331,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -395,7 +395,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
       MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
@@ -475,7 +475,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -540,7 +540,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -612,7 +612,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
       MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
@@ -700,7 +700,7 @@ jSDM_poisson_log  <- function(# Iteration
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
       MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
