@@ -446,7 +446,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -502,7 +502,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## betaj
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X),"_sp.",j)
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -575,10 +575,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         ## lambda_j
-        MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+        MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
@@ -652,10 +652,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta
-        MCMC.betaj <- coda::mcmc(mod$param_sp[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$param_sp[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         ## lambda_j
-        MCMC.lambda_j <- coda::mcmc(mod$param_sp[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+        MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param_sp[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
@@ -730,7 +730,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -792,7 +792,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       colnames(MCMC.gamma) <- paste0("gamma_",colnames(D))
       MCMC.sp <- list()
       for (j in 1:nsp) {
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -865,7 +865,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -931,7 +931,7 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       colnames(MCMC.gamma) <- paste0("gamma_",colnames(D))
       MCMC.sp <- list()
       for (j in 1:nsp) {
-        MCMC.betaj <- coda::mcmc(mod$beta[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$beta[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X),"_sp.",j)
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.betaj,start=nburn+1, end=ngibbs, thin=nthin)
       }
@@ -1018,10 +1018,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.betaj <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
@@ -1105,10 +1105,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$param_sp[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$param_sp[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         ## lambda_j
-        MCMC.lambda_j <- coda::mcmc(mod$param_sp[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+        MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param_sp[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
@@ -1196,10 +1196,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.betaj <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.betaj <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+      MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
@@ -1279,10 +1279,10 @@ jSDM_binomial_probit_block_long_format <- function(data, site_suitability, n_lat
       MCMC.sp <- list()
       for (j in 1:nsp) {
         ## beta_j
-        MCMC.betaj <- coda::mcmc(mod$param_sp[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.betaj <- coda::mcmc(as.matrix(mod$param_sp[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.betaj) <- paste0("beta_",colnames(X))
         ## lambda_j
-        MCMC.lambda_j <- coda::mcmc(mod$param_sp[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)	
+        MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param_sp[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
         MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(cbind(MCMC.betaj, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)

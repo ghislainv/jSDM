@@ -331,7 +331,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -407,10 +407,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       # MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
       # colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
@@ -489,7 +489,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -558,7 +558,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
@@ -642,10 +642,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
-      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       # MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)
       # colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
@@ -742,10 +742,10 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     colnames(MCMC.V_alpha) <- "V_alpha"
     MCMC.sp <- list()
     for (j in 1:nsp) {
-      MCMC.beta_j <- coda::mcmc(mod$param[,j,1:np], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.beta_j <- coda::mcmc(as.matrix(mod$param[,j,1:np]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       ## lambda_j
-      MCMC.lambda_j <- coda::mcmc(mod$param[,j,(np+1):(n_latent+np)], start=nburn+1, end=ngibbs, thin=nthin)
+      MCMC.lambda_j <- coda::mcmc(as.matrix(mod$param[,j,(np+1):(n_latent+np)]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
       # ## beta_j
       # MCMC.beta_j <- coda::mcmc(mod$beta[,j,], start=nburn+1, end=ngibbs, thin=nthin)

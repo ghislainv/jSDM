@@ -599,7 +599,7 @@ form.b.start <- function (b.start, nd) {
   else if(sum(length(b.start) != nd) > 0) {
     stop("Error: b.start not conformable.\n")
   }
-return(b.start.vec)
+  return(b.start.vec)
 }
 
 form.lambda.start.sp <- function (lambda.start, n_latent, nsp) {
@@ -707,7 +707,11 @@ check.Vbeta.mat <- function(Vbeta, np) {
   }
   if (is.null(dim(Vbeta))) {
     if(is.scalar(Vbeta)){
-      Vbeta.mat <- diag(rep(Vbeta,np))
+      if(np==1){
+        Vbeta.mat <- as.matrix(Vbeta)
+      } else {
+        Vbeta.mat <- diag(rep(Vbeta,np))
+      }
     }
     else if(is.vector(Vbeta) && length(Vbeta)==np){
       Vbeta.mat <- diag(Vbeta)
@@ -784,7 +788,11 @@ check.Vlambda.mat <- function(Vlambda, n_latent) {
   }
   if (is.null(dim(Vlambda))) {
     if(is.scalar(Vlambda)){
-      Vlambda.mat <- diag(rep(Vlambda,n_latent))
+      if(n_latent==1){
+        Vlambda.mat <- as.matrix(Vlambda)
+      }else {
+        Vlambda.mat <- diag(rep(Vlambda,n_latent))
+      }
     }
     else if(is.vector(Vlambda) && length(Vlambda)==n_latent){
       Vlambda.mat <- diag(Vlambda)
