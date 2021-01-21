@@ -384,8 +384,8 @@ where</p><table class='table'>
 <span class='co'>#= Site-occupancy model</span>
 <span class='co'># Increase number of iterations (burnin and mcmc) to get convergence</span>
 <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'>jSDM_binomial_logit</span><span class='op'>(</span><span class='co'># Chains</span>
-  burnin<span class='op'>=</span><span class='fl'>200</span>,
-  mcmc<span class='op'>=</span><span class='fl'>200</span>,
+  burnin<span class='op'>=</span><span class='fl'>150</span>,
+  mcmc<span class='op'>=</span><span class='fl'>150</span>,
   thin<span class='op'>=</span><span class='fl'>1</span>,
   <span class='co'># Response variable</span>
   presence_site_sp<span class='op'>=</span><span class='va'>Y</span>,
@@ -415,16 +415,16 @@ where</p><table class='table'>
 </div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
-#&gt; **********:10.0%, mean accept. rates= beta:0.253 lambda:0.228 W:0.433 alpha:0.338
-#&gt; **********:20.0%, mean accept. rates= beta:0.319 lambda:0.334 W:0.352 alpha:0.432
-#&gt; **********:30.0%, mean accept. rates= beta:0.412 lambda:0.378 W:0.398 alpha:0.455
-#&gt; **********:40.0%, mean accept. rates= beta:0.401 lambda:0.442 W:0.422 alpha:0.467
-#&gt; **********:50.0%, mean accept. rates= beta:0.433 lambda:0.446 W:0.445 alpha:0.447
-#&gt; **********:60.0%, mean accept. rates= beta:0.457 lambda:0.471 W:0.438 alpha:0.465
-#&gt; **********:70.0%, mean accept. rates= beta:0.448 lambda:0.449 W:0.446 alpha:0.449
-#&gt; **********:80.0%, mean accept. rates= beta:0.436 lambda:0.439 W:0.434 alpha:0.458
-#&gt; **********:90.0%, mean accept. rates= beta:0.432 lambda:0.454 W:0.439 alpha:0.449
-#&gt; **********:100.0%, mean accept. rates= beta:0.445 lambda:0.458 W:0.437 alpha:0.447</div><div class='input'><span class='co'>#==========</span>
+#&gt; **********:10.0%, mean accept. rates= beta:0.253 lambda:0.242 W:0.456 alpha:0.328
+#&gt; **********:20.0%, mean accept. rates= beta:0.333 lambda:0.323 W:0.350 alpha:0.446
+#&gt; **********:30.0%, mean accept. rates= beta:0.392 lambda:0.384 W:0.404 alpha:0.440
+#&gt; **********:40.0%, mean accept. rates= beta:0.421 lambda:0.422 W:0.416 alpha:0.452
+#&gt; **********:50.0%, mean accept. rates= beta:0.416 lambda:0.442 W:0.418 alpha:0.461
+#&gt; **********:60.0%, mean accept. rates= beta:0.448 lambda:0.472 W:0.454 alpha:0.476
+#&gt; **********:70.0%, mean accept. rates= beta:0.436 lambda:0.462 W:0.446 alpha:0.455
+#&gt; **********:80.0%, mean accept. rates= beta:0.466 lambda:0.500 W:0.455 alpha:0.474
+#&gt; **********:90.0%, mean accept. rates= beta:0.453 lambda:0.452 W:0.458 alpha:0.459
+#&gt; **********:100.0%, mean accept. rates= beta:0.438 lambda:0.446 W:0.452 alpha:0.442</div><div class='input'><span class='co'>#==========</span>
 <span class='co'>#== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>

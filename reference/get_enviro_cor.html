@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate correlations due to shared environmental response — get_enviro_cor • jSDM</title>
+<title>Extract covariances and correlations due to shared environmental responses — get_enviro_cor • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Calculate correlations due to shared environmental response — get_enviro_cor" />
+<meta property="og:title" content="Extract covariances and correlations due to shared environmental responses — get_enviro_cor" />
 <meta property="og:description" content="Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response." />
 <meta property="og:image" content="/logo.png" />
 
@@ -131,7 +131,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate correlations due to shared environmental response</h1>
+    <h1>Extract covariances and correlations due to shared environmental responses</h1>
     <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/get_enviro_cor.R'><code>R/get_enviro_cor.R</code></a></small>
     <div class="hidden name"><code>get_enviro_cor.Rd</code></div>
     </div>
@@ -218,7 +218,7 @@ Such correlation matrices are discussed and found in Ovaskainen et al., (2010), 
                                   <span class='co'># Explanatory variables</span>
                                   site_suitability <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
                                   site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
-                                  n_latent<span class='op'>=</span><span class='fl'>2</span>,
+                                  n_latent<span class='op'>=</span><span class='fl'>0</span>,
                                   site_effect<span class='op'>=</span><span class='st'>"random"</span>,
                                   <span class='co'># Chains</span>
                                   burnin<span class='op'>=</span><span class='fl'>100</span>,
@@ -227,13 +227,10 @@ Such correlation matrices are discussed and found in Ovaskainen et al., (2010), 
                                   <span class='co'># Starting values</span>
                                   alpha_start<span class='op'>=</span><span class='fl'>0</span>,
                                   beta_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  lambda_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  W_start<span class='op'>=</span><span class='fl'>0</span>,
                                   V_alpha<span class='op'>=</span><span class='fl'>1</span>,
                                   <span class='co'># Priors</span>
                                   shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
                                   mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>1.0E6</span>,
-                                  mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
                                   <span class='co'># Various</span>
                                   seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
