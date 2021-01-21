@@ -77,8 +77,11 @@
 #' 
 #' 
 predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean", probs=c(0.025,0.975), ...) {
-  
   ##= Check
+  if (!class(object)=="jSDM"){
+    stop("Please provide an object of class jSDM in", calling.function(),
+         call.=FALSE)
+  }
   if (!(type %in% c("mean","quantile","posterior"))) {stop("type must be \"mean\", \"quantile\" or \"posterior\"")}
   if (sum(probs<0)>0 | sum(probs>1)>0) {stop("probs must be a vector of probabilities between (0,1)")}
   

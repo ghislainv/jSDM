@@ -30,7 +30,7 @@ Install the latest stable version of **jSDM** from
 install.packages("jSDM")
 ```
 
-### Development version for Linux
+### Development version
 
 Or install the development version of **jSDM** from
 [GitHub](https://github.com/ghislainv/jSDM) with:
@@ -39,9 +39,8 @@ Or install the development version of **jSDM** from
 devtools::install_github("ghislainv/jSDM")
 ```
 
-### Development version for Windows
-
-Or the binary release of **jSDM** can be found here
+Or the binary release of **jSDM**’s development version compiled with R
+version 4.0.3 can be found here
 :
 
 [jSDM\_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).

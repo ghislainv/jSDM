@@ -25,6 +25,10 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
+#' @references  \tabular{l}{
+#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750. \cr
+#' Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. Methods in Ecology and Evolution, 7, 549-555.\cr
+#' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.\cr }
 #' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}} 
 #' @examples 
 #' library(jSDM)
@@ -66,13 +70,17 @@
 #'  result$cov.mean
 #'  result$cor.mean
 #' @keywords stats::cov2cor
-#' @seealso \code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}} 
+#' @seealso \code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}} 
 #' @importFrom stats cov2cor
 #' @export
 
 
 # Calculate the residual correlation matrix from a LVM
 get_residual_cor <- function(mod) {
+  #== Check
+  if (!class(mod)=="jSDM"){
+    stop("Please provide an object of class jSDM in", calling.function(), call.=FALSE)
+  }
   if (mod$model_spec$n_latent==0) {
     cat("Error: The jSDM class object provided is not a latent variable model (LVM).\n
         The lambdas parameters needed to compute the residual correlation matrix have not been estimated. \n")
@@ -81,25 +89,16 @@ get_residual_cor <- function(mod) {
   }
   if(!is.null(mod$model_spec$presences)){
     n.species <- ncol(mod$model_spec$presences)
-    n.sites <- nrow(mod$model_spec$presences)
   }
   if(!is.null(mod$model_spec$data)){
     n.species <- length(unique(mod$model_spec$data$species))
-    n.sites <- length(unique(mod$model_spec$data$site))
   }
   n.mcmc <- nrow(mod$mcmc.latent[[1]])
-  n.lv <- length(mod$mcmc.latent)
-  if(!is.null(mod$model_spec$beta_start)){
-  n.X.coeff <- nrow(mod$model_spec$beta_start)
-  }
   Tau.arr <- matrix(NA,n.mcmc,n.species^2)
   Tau.cor.arr <- matrix(NA,n.mcmc,n.species^2)
   
   for(t in 1:n.mcmc) { 
-    lv.coefs <- mod$mcmc.sp[["sp_1"]][t,(n.X.coeff+1):(n.X.coeff+n.lv)]
-    for(j in 2:n.species) { 
-      lv.coefs <- rbind(lv.coefs,mod$mcmc.sp[[paste0("sp_",j)]][t,(n.X.coeff+1):(n.X.coeff+n.lv)])
-    }
+    lv.coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("lambda",colnames(mod$mcmc.sp$sp_1))))
     Tau.mat <- lv.coefs%*%t(lv.coefs) + diag(n.species)
     Tau.arr[t,] <- as.vector(Tau.mat) 
     Tau.cor.mat <- cov2cor(Tau.mat)
