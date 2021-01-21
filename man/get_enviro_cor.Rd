@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_enviro_cor.R
 \name{get_enviro_cor}
 \alias{get_enviro_cor}
-\title{Calculate correlations due to shared environmental response}
+\title{Extract covariances and correlations due to shared environmental responses}
 \usage{
 get_enviro_cor(mod, type = "mean", prob = 0.95)
 }
@@ -47,7 +47,7 @@ mod <- jSDM_binomial_probit_block(# Response variable
                                   # Explanatory variables
                                   site_suitability = ~.,
                                   site_data = Env_frogs,
-                                  n_latent=2,
+                                  n_latent=0,
                                   site_effect="random",
                                   # Chains
                                   burnin=100,
@@ -56,13 +56,10 @@ mod <- jSDM_binomial_probit_block(# Response variable
                                   # Starting values
                                   alpha_start=0,
                                   beta_start=0,
-                                  lambda_start=0,
-                                  W_start=0,
                                   V_alpha=1,
                                   # Priors
                                   shape=0.5, rate=0.0005,
                                   mu_beta=0, V_beta=1.0E6,
-                                  mu_lambda=0, V_lambda=10,
                                   # Various
                                   seed=1234, verbose=1)
 # Calcul of residual correlation between species 
