@@ -122,8 +122,8 @@
 #' #= Site-occupancy model
 #' # Increase number of iterations (burnin and mcmc) to get convergence
 #' mod <- jSDM_binomial_logit(# Chains
-#'   burnin=200,
-#'   mcmc=200,
+#'   burnin=150,
+#'   mcmc=150,
 #'   thin=1,
 #'   # Response variable
 #'   presence_site_sp=Y,

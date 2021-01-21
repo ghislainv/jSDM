@@ -7,7 +7,7 @@
 
 #' @name get_enviro_cor
 #' @aliases get_enviro_cor
-#' @title Calculate correlations due to shared environmental response
+#' @title Extract covariances and correlations due to shared environmental responses
 #' @description Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response.
 #' @param mod An object of class \code{"jSDM"}
 #' @param type A choice of either the posterior median (\code{type = "median"}) or posterior mean (\code{type = "mean"}), which are then treated as estimates and the fitted values are calculated from.
@@ -48,7 +48,7 @@
 #'                                   # Explanatory variables
 #'                                   site_suitability = ~.,
 #'                                   site_data = Env_frogs,
-#'                                   n_latent=2,
+#'                                   n_latent=0,
 #'                                   site_effect="random",
 #'                                   # Chains
 #'                                   burnin=100,
@@ -57,13 +57,10 @@
 #'                                   # Starting values
 #'                                   alpha_start=0,
 #'                                   beta_start=0,
-#'                                   lambda_start=0,
-#'                                   W_start=0,
 #'                                   V_alpha=1,
 #'                                   # Priors
 #'                                   shape=0.5, rate=0.0005,
 #'                                   mu_beta=0, V_beta=1.0E6,
-#'                                   mu_lambda=0, V_lambda=10,
 #'                                   # Various
 #'                                   seed=1234, verbose=1)
 #' # Calcul of residual correlation between species 
@@ -131,8 +128,8 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   
   for (t in 1:n.mcmc)
   {
-    cw_X_coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("beta",colnames(mod$mcmc.sp$sp_1))))
-    enviro.linpreds <- tcrossprod(X, as.matrix(cw_X_coefs))
+    beta <- sapply(mod$mcmc.sp, "[", t, grep("beta",colnames(mod$mcmc.sp$sp_1)))
+    enviro.linpreds <- as.matrix(X) %*% as.matrix(beta)
     all_enviro_cov_mat[t, , ] <- cov(enviro.linpreds)
     all_enviro_cor_mat[t, , ] <- cor(enviro.linpreds)
   }
