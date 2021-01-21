@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate the residual correlation matrix from a latent variable model (LVM) — get_residual_cor • jSDM</title>
+<title>Calculate correlations due to shared environmental response — get_enviro_cor • jSDM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Calculate the residual correlation matrix from a latent variable model (LVM) — get_residual_cor" />
-<meta property="og:description" content="This function use coefficients \((\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using jSDM package, to calculate the variance-covariance matrix which controls correlation between species." />
+<meta property="og:title" content="Calculate correlations due to shared environmental response — get_enviro_cor" />
+<meta property="og:description" content="Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -131,16 +131,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate the residual correlation matrix from a latent variable model (LVM)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/get_residual_cor.R'><code>R/get_residual_cor.R</code></a></small>
-    <div class="hidden name"><code>get_residual_cor.Rd</code></div>
+    <h1>Calculate correlations due to shared environmental response</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ghislainv/jSDM/blob/master/R/get_enviro_cor.R'><code>R/get_enviro_cor.R</code></a></small>
+    <div class="hidden name"><code>get_enviro_cor.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function use coefficients \((\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)\), corresponding to latent variables fitted using <code>jSDM</code> package, to calculate the variance-covariance matrix which controls correlation between species.</p>
+    <p>Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_residual_cor</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_enviro_cor</span><span class='op'>(</span><span class='va'>mod</span>, type <span class='op'>=</span> <span class='st'>"mean"</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,32 +149,38 @@
       <th>mod</th>
       <td><p>An object of class <code>"jSDM"</code></p></td>
     </tr>
+    <tr>
+      <th>type</th>
+      <td><p>A choice of either the posterior median (<code>type = "median"</code>) or posterior mean (<code>type = "mean"</code>), which are then treated as estimates and the fitted values are calculated from.
+Default is posterior mean.</p></td>
+    </tr>
+    <tr>
+      <th>prob</th>
+      <td><p>A numeric scalar in the interval \((0,1)\) giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
+Defaults to 0.95.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>results A list including :</p><table class='table'>
-<tr><td>cov.mean</td><td>Average over the MCMC samples of the variance-covariance matrix</td></tr>
-<tr><td>cov.median</td><td>Median over the MCMC samples of the variance-covariance matrix</td></tr>
-<tr><td>cor.mean</td><td>Average over the MCMC samples of the residual correlation matrix</td></tr>
-<tr><td>cor.median</td><td>Median over the MCMC samples of the residual correlation matrix</td></tr>
+<tr><td><code>cor, cor.lower, cor.upper</code></td><td>A set of \(p \times p\) correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 % highest posterior interval.</td></tr>
+<tr><td><code>sig.cor</code></td><td>A \(p \times p\) correlation matrix containing only the “significant" correlations whose 95 % highest posterior interval does not contain zero. All non-significant correlations are set to zero.</td></tr>
+<tr><td><code>cov</code></td><td>Average over the MCMC samples of the \(p \times p\) covariance matrix.</td></tr>
 </table>
 
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies\) can be derived from the covariance in the latent variables such as :</p><table class='table'>
-<tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr>
-<tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr>
-</table>
-<p>then we compute correlations from covariances :
-$$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
+    <p>In both independent response and correlated response models, where the each of the columns of the response matrix y are fitted to a set of explanatory variables given by X,
+the covariance and thus between two columns \(j\) and \(j'\) due to similarities in their response to the model matrix is calculated based on the linear predictors \(X \beta_j\) and \(X \beta_j'\), where \(\beta_j\) are species effects relating to the explanatory variables.
+Such correlation matrices are discussed and found in Ovaskainen et al., (2010), Pollock et al., 2014</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
 <table class='table'>
 <tr><td>Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750.</td></tr>
-<tr><td>Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. Methods in Ecology and Evolution, 7, 549-555.</td></tr>
+<tr><td>Ovaskainen et al. (2010). Modeling species co-occurrence by multivariate logistic regression generates new hypotheses on fungal interactions. Ecology, 91, 2514-2521.</td></tr>
 <tr><td>Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.</td></tr>
 <tr><td></td></tr>
 </table>
@@ -182,8 +188,8 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p>
-<p><code><a href='get_enviro_cor.html'>get_enviro_cor</a></code> <code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code>  <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></p></div>
+    <div class='dont-index'><p><code><a href='get_residual_cor.html'>get_residual_cor</a></code> <code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p>
+<p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code>  <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     
@@ -243,48 +249,10 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 #&gt; **********:80.0% 
 #&gt; **********:90.0% 
 #&gt; **********:100.0% </div><div class='input'><span class='co'># Calcul of residual correlation between species </span>
- <span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'>get_residual_cor</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
- <span class='va'>result</span><span class='op'>$</span><span class='va'>cov.mean</span>
-</div><div class='output co'>#&gt;             [,1]       [,2]        [,3]        [,4]       [,5]       [,6]
-#&gt;  [1,]  3.3789567  0.5495776  0.74964597 -0.61355800  0.9767918  3.7085373
-#&gt;  [2,]  0.5495776  1.8579273 -0.15998403 -0.23481436  1.1630311  1.9530749
-#&gt;  [3,]  0.7496460 -0.1599840  1.76208664 -0.07132744 -0.1795687  0.6520033
-#&gt;  [4,] -0.6135580 -0.2348144 -0.07132744  1.37741345 -0.4485464 -1.3143951
-#&gt;  [5,]  0.9767918  1.1630311 -0.17956874 -0.44854635  3.1752087  3.3754817
-#&gt;  [6,]  3.7085373  1.9530749  0.65200329 -1.31439514  3.3754817  9.3203027
-#&gt;  [7,]  0.5054527  0.2494830  0.23217863 -0.12104662  0.3121235  0.8497448
-#&gt;  [8,] -0.8788383 -1.0664315  0.05371213  0.42165935 -1.8446916 -3.0261182
-#&gt;  [9,]  2.6431833  0.3853481  0.94385985 -0.84145570  0.9607951  4.1226304
-#&gt;             [,7]        [,8]       [,9]
-#&gt;  [1,]  0.5054527 -0.87883830  2.6431833
-#&gt;  [2,]  0.2494830 -1.06643152  0.3853481
-#&gt;  [3,]  0.2321786  0.05371213  0.9438598
-#&gt;  [4,] -0.1210466  0.42165935 -0.8414557
-#&gt;  [5,]  0.3121235 -1.84469156  0.9607951
-#&gt;  [6,]  0.8497448 -3.02611818  4.1226304
-#&gt;  [7,]  1.4029626 -0.41721828  0.4513634
-#&gt;  [8,] -0.4172183  2.95895876 -0.7137110
-#&gt;  [9,]  0.4513634 -0.71371105  4.6059391</div><div class='input'> <span class='va'>result</span><span class='op'>$</span><span class='va'>cor.mean</span>
-</div><div class='output co'>#&gt;             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-#&gt;  [1,]  1.0000000  0.20453355  0.20389435 -0.28796416  0.30570681  0.6481131
-#&gt;  [2,]  0.2045336  1.00000000 -0.08339542 -0.14296118  0.47276228  0.4456077
-#&gt;  [3,]  0.2038944 -0.08339542  1.00000000 -0.03470816 -0.07736071  0.1247348
-#&gt;  [4,] -0.2879642 -0.14296118 -0.03470816  1.00000000 -0.21415661 -0.3557957
-#&gt;  [5,]  0.3057068  0.47276228 -0.07736071 -0.21415661  1.00000000  0.6245053
-#&gt;  [6,]  0.6481131  0.44560775  0.12473478 -0.35579565  0.62450533  1.0000000
-#&gt;  [7,]  0.1490197  0.12163367  0.12696133 -0.07493227  0.13414142  0.1882425
-#&gt;  [8,] -0.2438092 -0.43935350  0.03697324  0.19979546 -0.60201933 -0.5622628
-#&gt;  [9,]  0.6677055  0.15229738  0.26770728 -0.30341374  0.25787458  0.6506643
-#&gt;              [,7]        [,8]       [,9]
-#&gt;  [1,]  0.14901969 -0.24380922  0.6677055
-#&gt;  [2,]  0.12163367 -0.43935350  0.1522974
-#&gt;  [3,]  0.12696133  0.03697324  0.2677073
-#&gt;  [4,] -0.07493227  0.19979546 -0.3034137
-#&gt;  [5,]  0.13414142 -0.60201933  0.2578746
-#&gt;  [6,]  0.18824247 -0.56226282  0.6506643
-#&gt;  [7,]  1.00000000 -0.17348151  0.1375714
-#&gt;  [8,] -0.17348151  1.00000000 -0.1928445
-#&gt;  [9,]  0.13757140 -0.19284453  1.0000000</div></pre>
+ <span class='va'>enviro.cors</span> <span class='op'>&lt;-</span> <span class='fu'>get_enviro_cor</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
+<span class='fu'>corrplot</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/corrplot/man/corrplot.html'>corrplot</a></span><span class='op'>(</span><span class='va'>enviro.cors</span><span class='op'>$</span><span class='va'>sig.cor</span>, title <span class='op'>=</span> <span class='st'>"Shared response correlations"</span>,
+         type <span class='op'>=</span> <span class='st'>"lower"</span>, diag <span class='op'>=</span> <span class='cn'>FALSE</span>, mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>0.5</span>,<span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, tl.srt <span class='op'>=</span> <span class='fl'>45</span><span class='op'>)</span>
+</div><div class='img'><img src='get_enviro_cor-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
