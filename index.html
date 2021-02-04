@@ -66,6 +66,9 @@
 <li>
   <a href="news/index.html">Change log</a>
 </li>
+<li>
+  <a></a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -97,7 +100,7 @@
 <a href="#jsdm-r-package-" class="anchor"></a>jSDM R Package <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
 
-<p>Package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework (Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>). The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.</p>
+<p>Package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework (Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>). The Gibbs sampler is written in C++. It uses <a href="https://cran.r-project.org/web/packages/Rcpp/index.html">Rcpp</a>, <a href="http://arma.sourceforge.net/docs.html">Armadillo</a> and <a href="https://www.gnu.org/software/gsl/">GSL</a> to maximize computation efficiency.</p>
 <div id="system-requirements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#system-requirements" class="anchor"></a>System requirements</h2>
@@ -121,21 +124,41 @@
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ghislainv/jSDM"</span><span class="op">)</span></code></pre></div>
 <p>Or the binary release of <strong>jSDM</strong>’s development version compiled with R version 4.0.3 can be found here :</p>
 <p><a href="https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F">jSDM_windows</a>.</p>
-<!-- ## Available functions  -->
-<!-- The package includes the following functions to fit various species distribution models :  -->
-<!-- |                function                |    data type     |                      fitted model                                 | -->
-<!-- |:---------------------------------------|-----------------:|-----------------------------------------------:| -->
-<!-- | jSDM_binomial_logit_one_species        | presence-absence |  $y_n \sim \mathcal{B}inomial(\theta_n, t_n)  where, / logit(\theta_n) = X_n \beta$ | -->
-<!-- `jSDM_binomial_logit`                    | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j$ | -->
-<!-- | jSDM_binomial_logit_rand_site          | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \  logit(\theta_{ij}) = X_i \beta_j \ and \ \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
-<!-- | jSDM_binomial_logit_lv                 | presence-absence |   $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j$ | -->
-<!-- | jSDM_binomial_logit_rand_site_lv       | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_ij, t_i) \ where, \ logit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
-<!-- | jSDM_binomial_probit_block_one_species | presence-absence |  $y_n \sim \mathcal{B}inomial(\theta_n, t_n) \ where, \ probit(\theta_n) = X_n \beta$ | -->
-<!-- | jSDM_binomial_probit_block             | presence-absence |   $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j$ | -->
-<!-- | jSDM_binomial_probit_block_rand_site   | presence-absence | $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
-<!-- | jSDM_binomial_probit_block_lv          | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j + W_i \lambda_j$ | -->
-<!-- | `jSDM_binomial_probit_block_rand_site_lv` | presence-absence |  $y_{ij} \sim \mathcal{B}inomial(\theta_{ij}, t_i) \ where, \ probit(\theta_{ij}) = X_i \beta_j +  W_i \lambda_j + \alpha_i \ and \  \alpha_i \sim \mathcal{N}(0,V_{\alpha})$ | -->
 </div>
+</div>
+<div id="available-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#available-functions" class="anchor"></a>Available functions</h2>
+<p>The package includes the following functions to fit various species distribution models :</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">function</th>
+<th align="center">data type</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>jSDM_binomial_logit</code></td>
+<td align="center">presence-absence</td>
+</tr>
+<tr class="even">
+<td align="left"><code>jSDM_binomial_probit_block</code></td>
+<td align="center">presence-absence</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>jSDM_binomial_probit_block_long_format</code></td>
+<td align="center">presence-absence</td>
+</tr>
+<tr class="even">
+<td align="left"><code>jSDM_poisson_log</code></td>
+<td align="center">abundance</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="contributing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contributing" class="anchor"></a>Contributing</h2>
+<p>The <code>jSDM</code> R package is Open Source and released under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL version 3</a> license. Anybody who is interested can contribute to the package development following our <a href="articles/Contributing.html">Community guidelines</a>. Every contributor must agree to follow the project’s <a href="articles/Code_of_conduct.html">Code of Conduct</a>.</p>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -172,9 +195,9 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
+<li>Jeanne Clément <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5228-5015" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-1685-4997" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Jeanne Clément <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5228-5015" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
 </ul>
@@ -194,7 +217,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, Jeanne Clément, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">

@@ -62,6 +62,9 @@
 <li>
   <a href="../news/index.html">Change log</a>
 </li>
+<li>
+  <a></a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -140,7 +143,7 @@
 <div id="data-sets" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-sets" class="anchor"></a><span class="header-section-number">2</span> Data-sets</h1>
-<p>Among the following datasets, the presence-absence data are from the <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019" role="doc-biblioref">2019</a>)</span> article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of <code>birds</code> during several visits to each site is from the <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006" role="doc-biblioref">2006</a>)</span> article and the <code>mites</code> abundance data-set is from the [Borcard1994] article.</p>
+<p>Among the following datasets, the presence-absence data are from the <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019" role="doc-biblioref">2019</a>)</span> article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of <code>birds</code> during several visits to each site is from the <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006" role="doc-biblioref">2006</a>)</span> article and the <code>mites</code> abundance data-set is from the <span class="citation">(Borcard &amp; Legendre <a href="#ref-Borcard1994" role="doc-biblioref">1994</a>)</span> article.</p>
 <pre><code>#&gt; ##
 #&gt; ## jSDM R package 
 #&gt; ## For joint species distribution models 
@@ -472,14 +475,13 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">l.diag</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.zero</span>,<span class="va">l.other</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.diag</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">l.other</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,
                           byrow<span class="op">=</span><span class="cn">T</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
 <span class="va">param.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">beta.target</span>,<span class="va">lambda.target</span><span class="op">)</span>
-<span class="va">param.target</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">beta.target</span>,<span class="va">lambda.target</span><span class="op">)</span>
-<span class="va">V_alpha.target</span><span class="op">=</span><span class="fl">0.5</span>
-<span class="va">V</span><span class="op">=</span><span class="fl">1</span>
+<span class="va">param.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">beta.target</span>,<span class="va">lambda.target</span><span class="op">)</span>
+<span class="va">V_alpha.target</span> <span class="op">&lt;-</span> <span class="fl">0.5</span>
 <span class="va">alpha.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">V_alpha.target</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Simulation of response data with probit link</span>
 <span class="va">probit_theta</span><span class="op">=</span><span class="va">X</span> <span class="op">%*%</span> <span class="va">beta.target</span> <span class="op">+</span> <span class="va">W</span> <span class="op">%*%</span> <span class="va">lambda.target</span> <span class="op">+</span> <span class="va">alpha.target</span>
-<span class="va">e</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span><span class="op">)</span>,<span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">e</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
 <span class="va">Z_true</span> <span class="op">&lt;-</span> <span class="va">probit_theta</span> <span class="op">+</span> <span class="va">e</span>
 <span class="va">Y</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span> <span class="op">(</span><span class="cn">NA</span>, <span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsite</span><span class="op">)</span><span class="op">{</span>
@@ -801,7 +803,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">T_boral_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span><span class="op">)</span>
 
-<span class="co"># Predicted probit(theta) </span>
+<span class="co"># Predicted logit(theta) </span>
 <span class="va">logit_theta_pred_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mod_boral_Birds</span><span class="op">$</span><span class="va">mean</span><span class="op">$</span><span class="va">row.coefs</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">X_Birds</span><span class="op">)</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">mod_boral_Birds</span><span class="op">$</span><span class="va">mean</span><span class="op">$</span><span class="va">X.coefs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span>,nrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span>, ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">%*%</span> <span class="va">mod_boral_Birds</span><span class="op">$</span><span class="va">mean</span><span class="op">$</span><span class="va">lv.coefs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> 
@@ -1426,6 +1428,9 @@ RMSE
 <a href="#mites-dataset-2" class="anchor"></a><span class="header-section-number">5.3.7</span> Mites dataset</h3>
 <p><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-3.png" width="800" style="display: block; margin: auto;"></p>
 <div id="refs" class="references">
+<div id="ref-Borcard1994">
+<p>Borcard, D. &amp; Legendre, P. (1994) Environmental control and spatial structure in ecological communities: An example using oribatid mites (Acari, Oribatei). <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.</p>
+</div>
 <div id="ref-Hui2016">
 <p>Hui, F.K.C. (2016) Boral – Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in r. <em>Methods in Ecology and Evolution</em>, <strong>7</strong>, 744–750.</p>
 </div>
@@ -1455,7 +1460,7 @@ RMSE
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, Jeanne Clément, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">

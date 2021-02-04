@@ -62,6 +62,9 @@
 <li>
   <a href="../news/index.html">Change log</a>
 </li>
+<li>
+  <a></a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -105,7 +108,7 @@
 <h1 class="hasAnchor">
 <a href="#model-definition" class="anchor"></a><span class="header-section-number">1</span> Model definition</h1>
 <p>Referring to the models used in the articles <span class="citation">Warton <em>et al.</em> (<a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span> and <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993" role="doc-biblioref">1993</a>)</span>, we define the following model :</p>
-<p><span class="math display">\[ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\gamma_{sp.j} +  W_i.\lambda_j,\]</span>
+<p><span class="math display">\[ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\beta_j +  W_i.\lambda_j,\]</span>
 such as <span class="math inline">\(species_n=j\)</span> and <span class="math inline">\(site_n=i\)</span>.</p>
 <ul>
 <li><p>Link function probit: <span class="math inline">\(\mathrm{probit}: q \rightarrow \Phi^{-1}(q)\)</span> where <span class="math inline">\(\Phi\)</span> correspond to the repartition function of the reduced centred normal distribution.</p></li>
@@ -483,7 +486,7 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, Jeanne Clément, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">
