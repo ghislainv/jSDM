@@ -920,7 +920,7 @@ save(T_jSDM_Mites, mod_jSDM_Mites,
 
 Then we compare the compilation time and the results obtained with each package.  
 
-```{r load-fitted-models, echo=FALSE, include=FALSE, eval=TRUE}
+```{r load-fitted-models, echo=FALSE, include=FALSE}
 # Simulated dataset
 load(file="jSDM_Hmsc_cache/Hmsc_simulation.RData")
 load(file="jSDM_Hmsc_cache/jSDM_simulation.RData")
