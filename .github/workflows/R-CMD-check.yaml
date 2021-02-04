@@ -75,8 +75,8 @@ jobs:
       - name: Install old source dependencies
         if: matrix.config.r == '3.5'
         run: |
-          remotes::install_version("BayesLogit", "0.6.1")
-          remotes::install_version("MCMCpack", "1.4-9")
+          remotes::install_version(package = "BayesLogit", version = "0.6")
+          remotes::install_version(package = "MCMCpack", version = "1.4-9")
 
       - name: Install dependencies
         run: |
