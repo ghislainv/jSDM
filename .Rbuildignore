@@ -24,7 +24,7 @@ vignettes/.*\.md
 ^vignettes/SDM_jSDM\.Rmd$
 ^vignettes/jSDM_boral\.Rmd$
 ^vignettes/jSDM_Box2_Warton2015\.Rmd$
-^vignettes/jSDM_HMSC\.Rmd$
+^vignettes/jSDM_Hmsc\.Rmd$
 ^vignettes/jSDM_in_parallel\.Rmd$
 ^vignettes/Madagascar\.Rmd$
 ^vignettes/jagsboralmodel\.txt$

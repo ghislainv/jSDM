@@ -35,7 +35,7 @@ highlight = TRUE
 
 Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
 
-$$ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\gamma_{sp.j} +  W_i.\lambda_j,$$
+$$ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\beta_j +  W_i.\lambda_j,$$
 such as $species_n=j$ and $site_n=i$.
 
 - Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.

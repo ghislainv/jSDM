@@ -65,7 +65,7 @@ $$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i\beta_j+ W_i\lambda_j $$
 
 # Data-sets
  
-Among the following datasets, the presence-absence data are from the [@Wilkinson2019] article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of `birds` during several visits to each site is from the [@Kery2006] article and the `mites` abundance data-set is from the [Borcard1994] article.
+Among the following datasets, the presence-absence data are from the [@Wilkinson2019] article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of `birds` during several visits to each site is from the [@Kery2006] article and the `mites` abundance data-set is from the [@Borcard1994] article.
  
 ```{r data-sets, echo=FALSE, eval=TRUE}
 library(knitr)
@@ -183,14 +183,13 @@ l.other <- runif(nsp*2-3,-2,2)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]),
                           byrow=T, nrow=nsp))
 param.target <- rbind(beta.target,lambda.target)
-param.target=rbind(beta.target,lambda.target)
-V_alpha.target=0.5
-V=1
+param.target <- rbind(beta.target,lambda.target)
+V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 
 # Simulation of response data with probit link
 probit_theta=X %*% beta.target + W %*% lambda.target + alpha.target
-e=matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+e=matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 Z_true <- probit_theta + e
 Y=matrix (NA, nsite,nsp)
 for (i in 1:nsite){
@@ -532,7 +531,7 @@ mod_boral_Birds <- jagsUI::jags(data = jags.data, inits <- gen.inits,
 T2 <- Sys.time()
 T_boral_Birds <- difftime(T2,T1)
 
-# Predicted probit(theta) 
+# Predicted logit(theta) 
 logit_theta_pred_Birds <- c(mod_boral_Birds$mean$row.coefs) +
   as.matrix(X_Birds) %*% t(as.matrix(mod_boral_Birds$mean$X.coefs)) + 
   matrix(1,nrow=nrow(PA_Birds), ncol=1)%*% mod_boral_Birds$mean$lv.coefs[,1] + 
