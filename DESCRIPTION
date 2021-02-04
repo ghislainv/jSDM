@@ -7,16 +7,16 @@ Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
-Suggests: knitr, kableExtra, raster, sp, rmarkdown, bookdown, testthat, boral, BayesComm, doParallel, foreach, snow, snowfall
+Suggests: knitr, kableExtra, raster, sp, rmarkdown, bookdown, testthat, boral, Hmsc, BayesComm, doParallel, foreach, snow, snowfall
 Authors@R: c(
-  person("Ghislain", "Vieilledent", role=c("aut", "cre"),
-         email="ghislain.vieilledent@cirad.fr",
-         comment=c(ORCID="0000-0002-1685-4997")),
   person("Jeanne", "Clément", role=c("aut"),
          email="jeanne.clement16@laposte.net",
          comment=c(ORCID="0000-0002-5228-5015")),
+  person("Ghislain", "Vieilledent", role=c("aut", "cre"),
+         email="ghislain.vieilledent@cirad.fr",
+         comment=c(ORCID="0000-0002-1685-4997")),
   person("CIRAD", role=c("cph", "fnd")))
-Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+Maintainer: Jeanne Clément <jeanne.clement16@laposte.net>
 Description: Fits joint species distribution models ('jSDM')
     in a hierarchical Bayesian framework (Warton et al. 2015
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
@@ -28,5 +28,5 @@ URL: https://ecology.ghislainv.fr/jSDM, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues
 LazyLoad: yes
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
