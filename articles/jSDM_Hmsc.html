@@ -770,6 +770,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">PA_Birds</span> <span class="op">&lt;-</span> <span class="va">PA_Birds</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span>
 <span class="co"># Transform presence-absence data with multiple visits per site into binary data</span>
 <span class="va">PA_Birds</span><span class="op">[</span><span class="va">PA_Birds</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="co"># Scale environmental variables </span>
 <span class="va">Env_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">birds</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"elev"</span>,<span class="st">"rlength"</span>,<span class="st">"forest"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 
 
@@ -1104,6 +1105,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">PA_Birds</span> <span class="op">&lt;-</span> <span class="va">PA_Birds</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span>
 <span class="co"># Transform presence-absence data with multiple visits per site into binary data</span>
 <span class="va">PA_Birds</span><span class="op">[</span><span class="va">PA_Birds</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="co"># Scale environmental variables </span>
 <span class="va">Env_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">birds</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"elev"</span>,<span class="st">"rlength"</span>,<span class="st">"forest"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Fit the model</span>
@@ -1295,7 +1297,7 @@ Deviance jSDM
 1414
 </td>
 <td style="text-align:left;">
-Inf
+14205
 </td>
 <td style="text-align:left;">
 6857
