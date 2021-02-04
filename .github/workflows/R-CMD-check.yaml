@@ -73,7 +73,7 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
           
       - name: Install old source dependencies
-        if: runner.r == '3.5'
+        if: matrix.config.r == '3.5'
         run: |
           install.packages("https://cran.r-project.org/src/contrib/Archive/BayesLogit/BayesLogit_0.6.tar.gz", repos=NULL)
           install.packages("https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-9.tar.gz", repos=NULL)
