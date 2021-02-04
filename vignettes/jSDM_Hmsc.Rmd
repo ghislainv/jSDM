@@ -24,7 +24,7 @@ vignette: >
 knitr::opts_chunk$set(
   fig.align="center",
   fig.width=8, fig.height=6,
-  cache=TRUE,
+  cache=FALSE,
   collapse=TRUE,
   comment="#>",
   highlight=TRUE,
@@ -112,6 +112,8 @@ PA_Birds <- birds[,1:158]
 # Remove species with less than 5 presences
 rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
 PA_Birds <- PA_Birds[, -rare_sp]
+# Transform presence-absence data with multiple visits per site into binary data
+PA_Birds[PA_Birds > 0] <- 1
 Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
 mf.suit <- model.frame(formula=~elev+rlength+forest, data=as.data.frame(Env_Birds))
 X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
@@ -501,6 +503,7 @@ rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5)
 PA_Birds <- PA_Birds[, -rare_sp]
 # Transform presence-absence data with multiple visits per site into binary data
 PA_Birds[PA_Birds > 0] <- 1
+# Scale environmental variables 
 Env_Birds <- data.frame(scale(birds[,c("elev","rlength","forest")]))
 
 
@@ -855,6 +858,7 @@ rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5)
 PA_Birds <- PA_Birds[, -rare_sp]
 # Transform presence-absence data with multiple visits per site into binary data
 PA_Birds[PA_Birds > 0] <- 1
+# Scale environmental variables 
 Env_Birds <- data.frame(scale(birds[,c("elev","rlength","forest")]))
 
 # Fit the model
