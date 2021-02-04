@@ -13,6 +13,11 @@ navbar:
     home:
       icon: fa-home fa-lg
       href: index.html
+    links:
+      - text: Contributing
+        href: articles/Contributing.html
+      - text: Code of conduct
+        href: articles/Code_of_conduct.html
     intro:
       text: Get started
       href: articles/jSDM.html
@@ -50,7 +55,8 @@ articles:
   contents:
   - '`SDM_JSDM`'
   - '`jSDM_boral`'
-      
+  - '`jSDM_Hmsc`'
+  
 reference:
 - title: Package
   desc: Package description
@@ -63,7 +69,6 @@ reference:
   - '`jSDM_binomial_probit_block_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
-
 - title: Data
   desc: Data-sets used in examples
   contents:
@@ -74,7 +79,6 @@ reference:
   - '`birds`'
   - '`mites`'
   - '`aravo`'
-
 - title: Miscellaneous
   desc: Miscellaneous functions
   contents:
@@ -83,9 +87,7 @@ reference:
   - '`get_residual_cor`'
   - '`plot_residual_cor`'
   - '`get_enviro_cor`'
-
 - title: Predict
   desc: S3 method to predict from a jSDM model
   contents:
   - '`predict.jSDM`'
-

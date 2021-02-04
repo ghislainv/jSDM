@@ -1,5 +1,5 @@
 # jSDM 0.1.1
-
+* Add Code of conduct and Contributing section 
 * Use of `roxygen2` for documentation and NAMESPACE 
 * Rename  `jSDM_binomial_probit_block()` the function `jSDM_probit_block()`.
 * New function `jSDM_binomial_probit_block_long_format()` for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.  
@@ -9,7 +9,7 @@
 * New function `get_enviro_cor()` to extract covariances and correlations due to shared environmental responses. 
 * Complete [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) documentation 
 * Add datasets ([`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html), [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html), [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html), [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html), [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html), [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html)). 
-* Seven new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression", "Bernoulli probit regression with data in long format", “Binomial logistic regression, "Running jSDM in parallel" and "Comparing SDMs and JSDMs") are available.
+* Seven new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression", "Bernoulli probit regression with data in long format", “Binomial logistic regression, "Running jSDM in parallel", "Comparing SDMs and JSDMs" and "Comparison jSDM-Hmsc") are available.
 * Complete and correct the vignette "Comparison jSDM-boral". 
 * New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM>.
 

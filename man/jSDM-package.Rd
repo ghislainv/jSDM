@@ -23,6 +23,7 @@ The package includes the following functions to fit various species distribution
    function \tab data-type \cr
    \code{\link{jSDM_binomial_logit}} \tab presence-absence \cr
    \code{\link{jSDM_binomial_probit_block}} \tab presence-absence \cr
+   \code{\link{jSDM_binomial_probit_block_long_format}} \tab presence-absence \cr
    \code{\link{jSDM_poisson_log}} \tab abundance \cr }
    
 \itemize{
