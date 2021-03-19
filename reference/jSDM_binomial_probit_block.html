@@ -112,13 +112,13 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://twitter.com/ghislainv">
-    <span class="fas fa-twitter fa-lg"></span>
+    <span class="fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/ghislainv/jSDM">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -355,7 +355,6 @@ where</p><table class='table'>
 <span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>
 <span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='va'>nsite</span><span class='op'>)</span>,<span class='va'>x1</span>,<span class='va'>x2</span><span class='op'>)</span>
 <span class='va'>W</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span> <span class='op'>(</span><span class='va'>X</span>,<span class='va'>W</span><span class='op'>)</span>
 <span class='va'>beta.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nsp</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span>,
                         byrow<span class='op'>=</span><span class='cn'>TRUE</span>, nrow<span class='op'>=</span><span class='va'>nsp</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>l.zero</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
@@ -363,7 +362,6 @@ where</p><table class='table'>
 <span class='va'>l.other</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>nsp</span><span class='op'>*</span><span class='va'>n_latent</span><span class='op'>-</span><span class='fl'>3</span>,<span class='op'>-</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>lambda.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>l.diag</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,<span class='va'>l.zero</span>,
                             <span class='va'>l.other</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,<span class='va'>l.diag</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>,<span class='va'>l.other</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>, byrow<span class='op'>=</span><span class='cn'>TRUE</span>, nrow<span class='op'>=</span><span class='va'>nsp</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>param.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>beta.target</span>,<span class='va'>lambda.target</span><span class='op'>)</span>
 <span class='va'>V_alpha.target</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
 <span class='va'>V</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
 <span class='va'>alpha.target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nsite</span>,<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>V_alpha.target</span><span class='op'>)</span><span class='op'>)</span>
@@ -513,12 +511,12 @@ where</p><table class='table'>
 #&gt;    plus standard error of the mean:
 #&gt; 
 #&gt;           Mean             SD       Naive SE Time-series SE 
-#&gt;       1573.938         32.966          2.331          5.887 
+#&gt;       1553.633         31.928          2.258          6.124 
 #&gt; 
 #&gt; 2. Quantiles for each variable:
 #&gt; 
 #&gt;  2.5%   25%   50%   75% 97.5% 
-#&gt;  1507  1552  1574  1596  1638 
+#&gt;  1494  1530  1554  1577  1610 
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.Deviance</span><span class='op'>)</span>
 </div><div class='img'><img src='jSDM_binomial_probit_block-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#= Predictions</span>
