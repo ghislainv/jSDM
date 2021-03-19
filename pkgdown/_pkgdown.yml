@@ -85,8 +85,10 @@ reference:
   - '`logit`'
   - '`inv_logit`'
   - '`get_residual_cor`'
-  - '`plot_residual_cor`'
   - '`get_enviro_cor`'
+  - '`plot_residual_cor`'
+  - '`plot_associations`'
+
 - title: Predict
   desc: S3 method to predict from a jSDM model
   contents:
