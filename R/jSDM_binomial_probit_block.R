@@ -106,7 +106,6 @@
 #' x2 <- rnorm(nsite,0,1)
 #' X <- cbind(rep(1,nsite),x1,x2)
 #' W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-#' data <- cbind (X,W)
 #' beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
 #'                         byrow=TRUE, nrow=nsp))
 #' l.zero <- 0
@@ -114,7 +113,6 @@
 #' l.other <- runif(nsp*n_latent-3,-2,2)
 #' lambda.target <- t(matrix(c(l.diag[1],l.zero,
 #'                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
-#' param.target <- rbind(beta.target,lambda.target)
 #' V_alpha.target <- 0.5
 #' V <- 1
 #' alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
@@ -285,6 +283,12 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
   nsp <- ncol(Y)
   nsite <- nrow(Y)
   nobs <- nsite*nsp
+  if(is.null(colnames(Y))){
+    colnames(Y) <- paste0("species_",1:ncol(Y))
+  }
+  if(is.null(rownames(Y))){
+    rownames(Y) <- 1:nrow(Y)
+  }
   T <- matrix(1, nsite, nsp)
   #= Suitability
   mf.suit <- model.frame(formula=site_suitability, data=as.data.frame(site_data))
@@ -334,10 +338,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
     }
     
     #= Model specification, site_suitability,
@@ -427,10 +427,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    
     #= Model specification, site_suitability,
     model_spec <- list(presences=Y,
                        site_suitability=site_suitability,
@@ -485,17 +481,13 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
       MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
     }
     
     #= Model specification, site_suitability,
@@ -552,7 +544,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.V_alpha <- coda::mcmc(mod$V_alpha,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.V_alpha) <- "V_alpha"
     MCMC.sp <- list()
@@ -561,10 +553,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
     }
     
     #= Model specification, site_suitability,
@@ -638,7 +626,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
@@ -662,9 +650,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
     #= Model specification, site_suitability,
     model_spec <- list(presences=Y,
                        site_suitability=site_suitability,
@@ -737,7 +722,7 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.V_alpha <- coda::mcmc(mod$V_alpha,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.V_alpha) <- "V_alpha"
     MCMC.sp <- list()
@@ -763,9 +748,6 @@ jSDM_binomial_probit_block <- function(burnin=5000, mcmc=15000, thin=10,
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
     #= Model specification, site_suitability,
     model_spec <- list(presences=Y,
                        site_suitability=site_suitability,

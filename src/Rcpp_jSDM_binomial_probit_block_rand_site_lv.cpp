@@ -73,7 +73,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
   
   /////////////////////////////////////
   // Initializing running parameters //
-  
   //  mat of species effects parameters and coefficients for latent variables (nl+np,nsp)
   arma::mat param_run = param_start;
   // alpha vec of sites effects (nsite)
@@ -115,7 +114,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
     
     // Loop on sites
     for (int i=0; i<NSITE; i++) {
-      
       /////////////////////////////////////////////
       // mat latent variable W: Gibbs algorithm //
       arma::mat beta_run = param_run.submat(0,0,NP-1,NSP-1);
@@ -145,7 +143,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
     }
     
     // center alpha 
-    //alpha_run = alpha_run - arma::mean(alpha_run);
+    alpha_run = alpha_run - arma::mean(alpha_run);
     
     ////////////////////////////////////////////////
     // V_alpha
@@ -154,7 +152,6 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
     double rate_posterior = rate + 0.5*sum;
     
     V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
-    
     
     //////////////////////////////////
     // mat param: Gibbs algorithm //
@@ -256,7 +253,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 
 // Test
 /*** R
-# #===================================================
+#===================================================
 # #Data
 # #===================================================
 # 
@@ -282,7 +279,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # param.target <- rbind(beta.target,lambda.target)
 # V_alpha.target <- 0.5
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-# probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
+# probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target 
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
 # 
@@ -301,12 +298,12 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv(const int ngibbs,const i
 # 
 # # Call to C++ function
 # # Iterations
-# nsamp <- 5000
-# nburn <- 5000
-# nthin <- 5
+# nsamp <- 15000
+# nburn <- 15000
+# nthin <- 15
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                               Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(100,np),rep(10,nl))),
+#                               Y=Y, X=X, param_start=param_start, V_param=diag(c(rep(10,np),rep(10,nl))),
 #                               mu_param = rep(0,np+nl), W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
 #                               alpha_start=rep(0,nsite), V_alpha_start=1, shape=0.5, rate=0.0005,
 #                               seed=123, verbose=1)

@@ -469,6 +469,4 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_lv_long_format(
 # segments(x0 = x0s, x1 = x1s, y0 = y0s, col = "red", lwd=2)
 # legend("bottomright", legend=c("gamma target"), col=c('red'), lty=1, lwd=2)
 # dev.off()
-# #test en SDM logit binomial
-# #voir obs dans IC
 */

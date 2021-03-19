@@ -195,7 +195,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # np <- ncol(X)
 # colnames(X) <- c("Int","x1","x2")
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-# probit_theta <- X %*% beta.target
+# probit_theta <- X %*% beta.target 
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e
 # 
@@ -215,7 +215,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block(const int ngibbs,const int nthin,cons
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                        Y=Y, X=X, beta_start=matrix(0,np,nsp),
-#                                        V_beta=diag(rep(1.0E6,np)), mu_beta = rep(0,np),
+#                                        V_beta=diag(rep(10,np)), mu_beta = rep(0,np),
 #                                        seed=123, verbose=1)
 # 
 # # ===================================================

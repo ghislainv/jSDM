@@ -270,7 +270,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_lv(const int ngibbs,const int nthin,c
 # mod_block <- Rcpp_jSDM_binomial_probit_block_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                           Y=Y, X=X,
 #                                           param_start=param_start, W_start=matrix(0,nsite,nl),
-#                                           V_param=diag(c(rep(1.0E6,np),rep(10,nl))),
+#                                           V_param=diag(c(rep(10,np),rep(1,nl))),
 #                                           mu_param = rep(0,np+nl), V_W=diag(rep(1,nl)),
 #                                           seed=123, verbose=1)
 # 

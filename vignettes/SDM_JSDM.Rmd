@@ -601,7 +601,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-1.png")
 
 ## Residual correlaton matrix 
 
- After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
+ After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
  $$\Sigma_{ij} = \begin{cases}
  \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
   \lambda_i .\lambda_j^T + 1 & \text{ if } i=j

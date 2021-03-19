@@ -292,6 +292,12 @@ jSDM_binomial_logit <- function(# Iteration
   nsp <- ncol(Y)
   nsite <- nrow(Y)
   nobs <- nsite*nsp
+  if(is.null(colnames(Y))){
+    colnames(Y) <- paste0("species_",1:ncol(Y))
+  }
+  if(is.null(rownames(Y))){
+    rownames(Y) <- 1:nrow(Y)
+  }
   if(!is.null(trials)){
     T <- as.vector(trials)
   } else {
@@ -349,9 +355,6 @@ jSDM_binomial_logit <- function(# Iteration
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
                        presences=Y, trials=T, 
@@ -424,10 +427,6 @@ jSDM_binomial_logit <- function(# Iteration
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
-    
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
                        presences=Y, trials=T, 
@@ -482,7 +481,7 @@ jSDM_binomial_logit <- function(# Iteration
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.V_alpha <- coda::mcmc(mod$V_alpha,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.V_alpha) <- "V_alpha"
     MCMC.sp <- list()
@@ -492,10 +491,7 @@ jSDM_binomial_logit <- function(# Iteration
       colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
+  
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
                        presences=Y, trials=T, 
@@ -549,7 +545,7 @@ jSDM_binomial_logit <- function(# Iteration
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
@@ -558,9 +554,6 @@ jSDM_binomial_logit <- function(# Iteration
       MCMC.sp[[paste0("sp_",j)]] <- coda::as.mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
     }
     
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
-    }
     #= Model specification, site_suitability,
     model_spec <- list(burnin=burnin, mcmc=mcmc, thin=thin,
                        presences=Y, trials=T, 
@@ -621,7 +614,7 @@ jSDM_binomial_logit <- function(# Iteration
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.sp <- list()
     for (j in 1:nsp) {
       ## beta_j
@@ -638,10 +631,6 @@ jSDM_binomial_logit <- function(# Iteration
     for (l in 1:n_latent) {
       MCMC.lv_l <- coda::mcmc(mod$W[,,l], start=nburn+1, end=ngibbs, thin=nthin)
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
     }
     
     #= Model specification, site_suitability,
@@ -707,7 +696,7 @@ jSDM_binomial_logit <- function(# Iteration
     MCMC.Deviance <- coda::mcmc(mod$Deviance,start=nburn+1,end=ngibbs,thin=nthin)     
     colnames(MCMC.Deviance) <- "Deviance"
     MCMC.alpha <- coda::mcmc(mod$alpha,start=nburn+1,end=ngibbs,thin=nthin)
-    colnames(MCMC.alpha) <- paste0("alpha_",1:nsite)
+    colnames(MCMC.alpha) <- paste0("alpha_",rownames(Y))
     MCMC.V_alpha <- coda::mcmc(mod$V_alpha,start=nburn+1,end=ngibbs,thin=nthin)
     colnames(MCMC.V_alpha) <- "V_alpha"    
     MCMC.sp <- list()
@@ -726,10 +715,6 @@ jSDM_binomial_logit <- function(# Iteration
     for (l in 1:n_latent) {
       MCMC.lv_l <- coda::mcmc(mod$W[,,l], start=nburn+1, end=ngibbs, thin=nthin)
       MCMC.latent[[paste0("lv_",l)]] <- MCMC.lv_l
-    }
-    
-    if(is.null(colnames(Y))){
-      colnames(Y) <- paste0("species_",1:ncol(Y))
     }
     
     #= Model specification, site_suitability,

@@ -174,13 +174,14 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     // Draw in the posterior distribution
     alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
   }
-  ////////////////////////////////////////////////
-  // V_alpha
-  double sum = arma::as_scalar(alpha_run.t()*alpha_run);
-  double shape_posterior = shape + 0.5*NSITE;
-  double rate_posterior = rate + 0.5*sum;
-  
-  V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
+    
+    ////////////////////////////////////////////////
+    // V_alpha
+    double sum = arma::as_scalar(alpha_run.t()*alpha_run);
+    double shape_posterior = shape + 0.5*NSITE;
+    double rate_posterior = rate + 0.5*sum;
+    
+    V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
     //////////////////////////////////
     // vec gamma: Gibbs algorithm //
@@ -241,9 +242,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
     for ( int n = 0; n < NOBS; n++ ) {
       // probit_theta_n = X_n*beta_j + alpha_i + W_i*lambda_j + D_n*gamma
       // with Id_sp_n=j and Id_site_n=i
-      probit_theta_run(n) = arma::as_scalar(data.row(n)*param_sp_run.col(Id_sp(n))
-                                              + D.row(n)*gamma_run 
-                                              + alpha_run(Id_site(n)));
+      probit_theta_run(n) = arma::as_scalar(data.row(n)*param_sp_run.col(Id_sp(n)) +
+        D.row(n)*gamma_run + alpha_run(Id_site(n)));
       // link function probit is the inverse of N(0,1) repartition function 
       double theta = gsl_cdf_ugaussian_P(probit_theta_run(n));
       
@@ -333,7 +333,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # ## W
 # W <- matrix(rnorm(nsite*nl,0,1),nrow=nsite,byrow=TRUE)
 # ## D
-# SLA <- runif(nsp,-1,1)
+# SLA <- runif(nsp,-3,3)
 # D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 # nd <- ncol(D)
 # ## parameters
@@ -344,8 +344,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 # diag(mat) <- runif(nl,0,2)
 # lambda_sp.target <- matrix(0,nl,nsp)
 # lambda_sp.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
-# gamma.target <-runif(nd,-1,1)
-# V_alpha.target <- 0.5
+# gamma.target <-runif(nd,-2,2)
+# V_alpha.target <- 0.7
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # ## probit_theta
 # probit_theta <- c(X %*% beta.target) + c(W %*% lambda_sp.target) + as.matrix(D) %*% gamma.target + rep(alpha.target, nsp)
@@ -407,10 +407,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_lv_long_format(
 #   ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #   Y=data$Y, X=X, D=D, Id_site=data$site, Id_sp=data$species,
 #   Id_common_var=c(0,1,2),
-#   gamma_start=rep(0,nd), V_gamma=diag(rep(2,nd)),
+#   gamma_start=rep(0,nd), V_gamma=diag(rep(10,nd)),
 #   mu_gamma = rep(0,nd),
 #   param_sp_start=param_sp_start,
-#   V_param_sp=diag(rep(2,np+nl)),
+#   V_param_sp=diag(rep(10,np+nl)),
 #   mu_param_sp = rep(0,np+nl),
 #   W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
 #   alpha_start=rep(0,nsite), V_alpha_start=1, shape=0.5, rate=0.0005,

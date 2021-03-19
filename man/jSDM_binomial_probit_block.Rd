@@ -147,7 +147,6 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-data <- cbind (X,W)
 beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
                         byrow=TRUE, nrow=nsp))
 l.zero <- 0
@@ -155,7 +154,6 @@ l.diag <- runif(2,0,2)
 l.other <- runif(nsp*n_latent-3,-2,2)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
 V_alpha.target <- 0.5
 V <- 1
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))

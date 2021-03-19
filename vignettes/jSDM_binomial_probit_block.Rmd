@@ -61,9 +61,9 @@ We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coeffi
 - Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
 
-- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10)$ for all betas. 
+- $\beta_{0j}$ correspond to the intercept for species $j$ which is assumed to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10)$ for all betas. 
 
-- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assume that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
 
 # Occurrence data-set

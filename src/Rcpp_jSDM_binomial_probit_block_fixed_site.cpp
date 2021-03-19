@@ -245,9 +245,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_fixed_site(const int ngibbs,const int
 # ngibbs <- nsamp+nburn
 # mod <- Rcpp_jSDM_binomial_probit_block_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #                                                   Y=Y, X=X, beta_start=matrix(0,np,nsp),
-#                                                   V_beta=diag(rep(100,np)),
+#                                                   V_beta=diag(rep(10,np)),
 #                                                   mu_beta = rep(0,np),
-#                                                   alpha_start=rep(0,nsite), V_alpha=10,
+#                                                   alpha_start=rep(0,nsite), V_alpha=1,
 #                                                   seed=123, verbose=1)
 # 
 # # ===================================================

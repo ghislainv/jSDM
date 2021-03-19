@@ -150,6 +150,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_long_format(
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
     }
     
+    // center alpha 
+    alpha_run = alpha_run - arma::mean(alpha_run);
+    
     ////////////////////////////////////////////////
     // V_alpha
     double sum = arma::as_scalar(alpha_run.t()*alpha_run);

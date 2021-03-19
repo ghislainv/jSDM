@@ -162,6 +162,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_rand_site_lv_long_format(
       // Draw in the posterior distribution
       alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
       }
+    
+    // center alpha 
+    alpha_run = alpha_run - arma::mean(alpha_run);
+    
     ////////////////////////////////////////////////
     // V_alpha
     double sum = arma::as_scalar(alpha_run.t()*alpha_run);

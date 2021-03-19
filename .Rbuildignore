@@ -27,8 +27,10 @@ vignettes/.*\.md
 ^vignettes/jSDM_Hmsc\.Rmd$
 ^vignettes/jSDM_in_parallel\.Rmd$
 ^vignettes/Madagascar\.Rmd$
+^vignettes/Convergence_LVM\.Rmd$
 ^vignettes/jagsboralmodel\.txt$
 ^vignettes/proof\.Rmd$
 ^vignettes/.*_cache$
+^vignettes/grassdata
 ^\.github$
 ^_pkgdown\.yml$

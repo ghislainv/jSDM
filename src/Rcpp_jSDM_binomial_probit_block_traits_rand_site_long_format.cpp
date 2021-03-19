@@ -142,6 +142,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
       // Draw in the posterior distribution
       alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
     }
+    
     ////////////////////////////////////////////////
     // V_alpha
     double sum = arma::as_scalar(alpha_run.t()*alpha_run);
@@ -169,10 +170,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
     // Draw in the posterior distribution
     gamma_run = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
     
+    
     //////////////////////////////////
     // mat beta: Gibbs algorithm //
-    
-    
+  
     // Loop on species
     for (int j=0; j<NSP; j++) {
       // small_v
@@ -198,14 +199,12 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
     double logL = 0.0;
     for ( int n = 0; n < NOBS; n++ ) {
       // probit(theta_ij) = X_i*beta_j + D_ij*gamma
-      probit_theta_run(n) = arma::as_scalar(X.row(n)*beta_run.col(Id_sp(n))
-                                              + D.row(n)*gamma_run
-                                              + alpha_run(Id_site(n)));
-                                              // link function probit is the inverse of N(0,1) repartition function 
-                                              double theta = gsl_cdf_ugaussian_P(probit_theta_run(n));
-                                              
-                                              /* log Likelihood */
-                                              logL += R::dbinom(Y(n), 1, theta, 1);
+      probit_theta_run(n) = arma::as_scalar(X.row(n)*beta_run.col(Id_sp(n))+ D.row(n)*gamma_run + alpha_run(Id_site(n)));
+      // link function probit is the inverse of N(0,1) repartition function 
+      double theta = gsl_cdf_ugaussian_P(probit_theta_run(n));
+      
+      /* log Likelihood */
+      logL += R::dbinom(Y(n), 1, theta, 1);
     } // loop on observations
     
     // Deviance
@@ -269,8 +268,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
 # # ===================================================
 # # Data
 # # ===================================================
-# nsp <- 100
-# nsite <- 300
+# nsp <- 70
+# nsite <- 210
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -286,7 +285,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
 # SLA <- runif(nsp,-3,3)
 # D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 # nd <- ncol(D)
-# gamma.target <-runif(nd,-2,2)
+# gamma.target <- runif(nd,-2,2)
 # V_alpha.target <- 0.7
 # alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 # probit_theta <- c(X %*% beta.target) + as.matrix(D) %*% gamma.target + alpha.target
@@ -405,10 +404,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
 #   }
 # }
 # 
-# ## Fixed pecies effect beta
+# ## Fixed species effect beta
 # par(mfrow=c(1,1))
 # ## beta
-# plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted", main="Fixed species effect gamma")
+# plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted", main="Fixed species effect beta")
 # abline(a=0,b=1,col='red')
 # 
 # # Deviance
@@ -419,7 +418,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_block_traits_rand_site_long_format(
 # # ## Fitting Generalized Linear Model
 # # data$species <- as.factor(data$species)
 # # data$site <- as.factor(data$site)
-# # Model failed to converge in 10000 evaluations with 50 species and 150 sites 
+# # Model failed to converge in 10000 evaluations with 50 species and 150 sites
 # # glm <- lme4::glmer( Y ~  1 + x1 + x1.2 + x1.SLA + species + (1|site) + x1:species + x1.2:species,
 # #                     family=binomial(link="probit"), data=data)
 # # par(mfrow=c(1,2))
