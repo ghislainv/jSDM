@@ -26,7 +26,7 @@ editor_options:
 
 The `jSDM` R package is Open Source and released under
 the [GNU GPL version 3 license ](https://www.gnu.org/licenses/gpl-3.0.en.html). Anybody who is interested can contribute to the package development. 
-There are many ways to contribute, such as writing tutorials, examples or tests, improving documentation, submitting bug reports and feature requests, or writing code to provide new functionalities which can be incorporated into future versions of the package. Every contributor must agree to follow the project's [Code Of Conduct](https://ecology.ghislainv.fr/jSDM/Code_of_conduct.html).
+There are many ways to contribute, such as writing tutorials, examples or tests, improving documentation, submitting bug reports and feature requests, or writing code to provide new functionalities which can be incorporated into future versions of the package. Every contributor must agree to follow the project's [Code Of Conduct](https://ecology.ghislainv.fr/jSDM/articles/Code_of_conduct.html).
 
 ## Report an issue
 
