@@ -565,12 +565,47 @@ form.priorVrho <- function (priorVrho) {
 
 # =======================================================================
 #
-# Check and form starting parameters for jSDM_binomial_probit_block
+# Check and form starting parameters for jSDM_binomial_probit
 #
 # =======================================================================
 
 is.scalar <- function(x) {
   is.atomic(x) && length(x) == 1L
+}
+
+form.gamma.start.mat <- function(gamma.start,nt,np){
+  if(!all(!is.na(gamma.start))){
+    cat("Error: gamma_start must no contain missing values.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  else if(is.null(dim(gamma.start))){
+    if(is.vector(gamma.start)){
+      if(length(gamma.start)==(np*nt) || length(gamma.start)==nt || length(gamma.start)==1){
+        gamma.start.mat <- matrix(gamma.start,nt,np) 
+      }
+      else if(length(gamma.start)==np){
+        gamma.start.mat <- matrix(gamma.start,nt,np, byrow=TRUE) 
+      }
+      else if(sum(c(np,nt,np*nt,1)==length(gamma.start))==0){
+        cat("Error: gamma_start not conformable, you can specify a vector of length np=", np,
+            "(number of covariates plus intercept), nt=", nt,
+            "(number of traits plus intercept) or np.nt=", np*nt, "to fill matrix gamma_start.\n")
+        stop("Please respecify and call ", calling.function(), " again.",
+             call.=FALSE)
+      }
+    }
+  }
+  else if(sum(dim(gamma.start)==c(nt,np))==2){
+    gamma.start.mat <- gamma.start
+  }
+  else if(sum(dim(gamma.start)==c(nt,np))!=2){
+    cat("Error: gamma_start not conformable, should form a matrix of size (number of traits plus intercept) nt x np (number of covariates plus intercept) :"
+        , nt," x", np,". \n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(gamma.start.mat)
 }
 
 form.beta.start.sp <- function (beta.start, np, nsp) {
@@ -672,10 +707,85 @@ form.W.start.sp <- function (W.start, nsite, n_latent) {
   return(W.start.mat)
 }
 #==================================================================
-# Check and form priors for jSDM_binomial_probit_block
+# Check and form priors for jSDM_binomial_probit
 #==================================================================
-check.mubeta <- function(mubeta, np) {
-  if (is.null(dim(mubeta))) {
+check.mugamma.mat <- function(mugamma,nt,np){
+  if(!all(!is.na(mugamma))){
+    cat("Error: mu_gamma must no contain missing values.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  else if(is.null(dim(mugamma))){
+    if(is.vector(mugamma)){
+      if(length(mugamma)==(np*nt) || length(mugamma)==nt || length(mugamma)==1){
+        mugamma.mat <- matrix(mugamma,nt,np) 
+      }
+      else if(length(mugamma)==np){
+        mugamma.mat <- matrix(mugamma,nt,np, byrow=TRUE) 
+      }
+      else if(sum(c(np,nt,np*nt,1)==length(mugamma))==0){
+        cat("Error: mu_gamma not conformable, you can specify a vector of length np=", np,
+            "(number of covariates plus intercept), nt=", nt,
+            "(number of traits plus intercept) or np.nt=", np*nt, "to fill matrix mu_gamma.\n")
+        stop("Please respecify and call ", calling.function(), " again.",
+             call.=FALSE)
+      }
+    }
+  }
+  else if(sum(dim(mugamma)==c(nt,np))==2){
+    mugamma.mat <- mugamma
+  }
+  else if(sum(dim(mugamma)==c(nt,np))!=2){
+    cat("Error: mu_gamma not conformable, should form a matrix of size (number of traits plus intercept) nt x np (number of covariates plus intercept) :"
+        , nt," x", np,". \n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(mugamma.mat)
+}
+
+check.Vgamma.mat <- function(Vgamma,nt,np){
+  if(!all(!is.na(Vgamma))){
+    cat("Error: V_gamma must no contain missing values.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  if (!all(Vgamma>=0)) {
+    cat("Error: V_gamma should be positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  else if (is.null(dim(Vgamma))) {
+    if(is.vector(Vgamma)){
+      if(length(Vgamma)==(np*nt) || length(Vgamma)==nt || length(Vgamma)==1){
+        Vgamma.mat <- matrix(Vgamma,nt,np)
+      }
+      else if(length(Vgamma)==np){
+        Vgamma.mat <- matrix(Vgamma,nt,np, byrow=TRUE)
+      }
+      else if(sum(c(np,nt,np*nt,1)==length(Vgamma))==0){
+        cat("Error: V_gamma not conformable, you can specify a vector of length np=", np,
+            "(number of covariates plus intercept), nt=", nt,
+            "(number of traits plus intercept) or nt.np=", nt*np, "to fill matrix V_gamma.\n")
+        stop("Please respecify and call ", calling.function(), " again.",
+             call.=FALSE)
+      }
+    }
+  }
+  else if(sum(dim(Vgamma)==c(nt,np))==2){
+    Vgamma.mat <- Vgamma
+  }
+  else if(sum(dim(Vgamma)==c(nt,np))!=2){
+    cat("Error: V_gamma not conformable, should form a matrix of size (number of traits plus intercept) nt x np (number of covariates plus intercept) :",
+        nt,"x", np,". \n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(Vgamma.mat)
+}
+
+check.mubeta <- function(mubeta, np){
+  if (is.null(dim(mubeta))){
     if(is.scalar(mubeta)){
       mubeta <- rep(mubeta,np) 
     }
@@ -692,7 +802,7 @@ check.mubeta <- function(mubeta, np) {
 }
 
 check.Vbeta.mat <- function(Vbeta, np) {
-  if (sum(dim(Vbeta)==c(np,np))==2) {
+  if (sum(dim(Vbeta)==c(np,np))==2){
     if (!all(diag(Vbeta)>0) && sum(is.na(Vbeta))!=0) {
       cat("Error: V_beta should be strictly positive on diagonal.\n")
       stop("Please respecify and call ", calling.function(), " again.",
@@ -701,24 +811,28 @@ check.Vbeta.mat <- function(Vbeta, np) {
     Vbeta.mat <- Vbeta
   }
   else if (!all(Vbeta>0) && sum(is.na(Vbeta))!=0) {
-    cat("Error: V_beta should be strictly positive.\n")
+    cat("Error: V_beta should be strictly positive on diagonal.\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  if (is.null(dim(Vbeta))) {
+  if (is.null(dim(Vbeta))){
     if(is.scalar(Vbeta)){
-      if(np==1){
-        Vbeta.mat <- as.matrix(Vbeta)
-      } else {
-        Vbeta.mat <- diag(rep(Vbeta,np))
-      }
+      Vbeta.mat <- matrix(0,np,np)
+      diag(Vbeta.mat) <- Vbeta 
     }
-    else if(is.vector(Vbeta) && length(Vbeta)==np){
-      Vbeta.mat <- diag(Vbeta)
+    else if(is.vector(Vbeta)){
+      if(length(Vbeta)==np){
+        Vbeta.mat <- matrix(0,np,np)
+        diag(Vbeta.mat) <- Vbeta 
+      } else{
+        cat("Error: V_beta not conformable, you must specify a ", np,"-length vector to fill the diagonal of the square matrix", np,"x",np,".\n")
+        stop("Please respecify and call ", calling.function(), " again.",
+             call.=FALSE) 
+      }
     }
   }
   else if (sum(dim(Vbeta) != c(np, np)) > 0) {
-    cat("Error: V_beta not conformable.\n")
+    cat("Error: V_beta not conformable, should form a square matrix", np,"x",np,".\n")
     stop("Please respecify and call ", calling.function(), " again.",
          call.=FALSE)
   }

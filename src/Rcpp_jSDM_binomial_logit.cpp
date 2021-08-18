@@ -15,12 +15,12 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
     const arma::umat &Y, // Number of successes (presences)
     const arma::uvec &T, // Number of trials
     const arma::mat &X, // Suitability covariates
-    arma::mat beta_start,//beta
-    arma::vec mu_beta,
-    arma::vec V_beta,
-    const int seed,
-    const double ropt,
-    const int verbose) {
+    const arma::mat &beta_start,//beta
+    const arma::vec &mu_beta,
+    const arma::vec &V_beta,
+    const int &seed,
+    const double &ropt,
+    const int &verbose) {
   
   ////////////////////////////////////////
   // Defining and initializing objects //
@@ -46,6 +46,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   /* Parameters */
   arma::Cube<double> beta; beta.zeros(NSAMP, NSP, NP);
   /* Latent variable */
+  arma::mat logit_theta_run; logit_theta_run.zeros(NSITE, NSP);
+  arma::mat logit_theta_latent; logit_theta_latent.zeros(NSITE, NSP);
   arma::mat theta_run; theta_run.zeros(NSITE, NSP);
   arma::mat theta_latent; theta_latent.zeros(NSITE, NSP);
   /* Deviance */
@@ -139,6 +141,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
         for ( int p = 0; p < NP; p++ ) {
           Xpart_theta += dens_data.X(i,p) * dens_data.beta_run(p,j);
         }
+        logit_theta_run(i,j) = Xpart_theta;
         theta_run(i,j) = invlogit(Xpart_theta);
         /* log Likelihood */
         logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
@@ -151,15 +154,15 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
     
     /////////////
     // Output //
-    if (((g+1)>NBURN) && (((g+1)%(NTHIN))==0)) {
+    if (((g+1)>NBURN) && (((g+1-NBURN)%(NTHIN))==0)) {
       int isamp=((g+1)-NBURN)/(NTHIN);
       for ( int j=0; j<NSP; j++ ) {
         beta.tube(isamp-1,j) = dens_data.beta_run.col(j);
-        for ( int i=0; i<NSITE; i++ ) {
-          theta_latent(i,j) += theta_run(i,j) / NSAMP; // We compute the mean of NSAMP values
-        }//loop on sites
       }// loop on species
       Deviance(isamp-1) = Deviance_run;
+      // We compute the mean of NSAMP values
+      logit_theta_latent += logit_theta_run/NSAMP;
+      theta_latent += theta_run/NSAMP;
     }
     
     ///////////////////////////////////////////////
@@ -223,6 +226,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   // Return results as a Rcpp::List
   Rcpp::List results = Rcpp::List::create(Rcpp::Named("beta") = beta,
                                           Rcpp::Named("Deviance") = Deviance,
+                                          Rcpp::Named("logit_theta_latent") = logit_theta_latent,
                                           Rcpp::Named("theta_latent") = theta_latent);
   
   return results;
@@ -294,9 +298,15 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 # mean(mod$Deviance)
 # 
 # # Predictions
-# plot(theta,mod$theta_latent, main="theta",
-#      xlab="obs", ylab="fitted")
-# abline(a=0,b=1,col="red")
+# ##logit_theta
+# par(mfrow=c(1,2))
+# plot(logit.theta,mod$logit_theta_latent, ylab ="fitted",
+#      xlab="obs", main="logit(theta)")
+# abline(a=0,b=1,col='red')
+# ##theta
+# plot(theta,mod$theta_latent,ylab ="fitted",
+#      xlab="obs", main="Probabilities of occurrence theta")
+# abline(a=0,b=1,col='red')
 */
 
 ////////////////////////////////////////////////////////////////////

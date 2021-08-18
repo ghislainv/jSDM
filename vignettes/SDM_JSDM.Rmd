@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
   comment = "#>",
-  eval=TRUE,
+  eval=FALSE,
   highlight = TRUE
 )
 ```
@@ -43,7 +43,7 @@ knitr::opts_chunk$set(
 
 (ref:cap-birds) **_Swiss Breeding Birds Atlas_** [@Kery2006].
 
-```{r birds-picture, echo=FALSE, out.width=600, out.height=300, fig.cap="(ref:cap-birds)"}
+```{r birds-picture, echo=FALSE, eval=TRUE, out.width=600, out.height=300, fig.cap="(ref:cap-birds)"}
 knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 
@@ -55,7 +55,7 @@ Surveys are conducted along a transect that does not change over the years.
 The data-set contains the 2014 data, except for one quadrat not surveyed in 2014. 
 It lists 158 bird species named in Latin and whose occurrences are expressed as the number of visits during which the species was observed on each site , with the exception of 13 species not surveyed in 2014 :
 
-```{r birds}
+```{r birds, eval=TRUE}
 library("jSDM")
 # Import center and reduce birds dataset
 data(birds, package="jSDM")
@@ -65,7 +65,7 @@ PA_Birds <- birds[,1:158]
 
 We transform abundance into presence-absence data and remove species with less than 10 presences to facilitate MCMC convergence. We also look at the number of observations per site.
 
-```{r presence-data}
+```{r presence-data, eval=TRUE,}
 # Transform abundance into presence-absence
 PA_Birds[PA_Birds>0] <- 1
 # Remove species with less than 10 presences
@@ -94,15 +94,11 @@ The environmental variables are:
 
 As a first approach, we just select the "elev" variable considering a quadratic orthogonal polynomial.
 
-```{r env-data}
+```{r env-data, eval=TRUE}
 # Normalized continuous variables
-Env_Birds <- scale(data.frame(elev=birds[,"elev"]))
-mf.suit <- model.frame(formula= ~ elev + I(elev^2) -1, data=as.data.frame(Env_Birds))
-X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
-colnames(X) <- c("elev","elev2")
-head(X)
+Env_Birds <- data.frame(elev=scale(birds[,"elev"]),elev2=scale(birds[,"elev"]^2))
 # Number of environmental variables plus intercept
-np <- ncol(X) + 1
+np <- ncol(Env_Birds) + 1
 np
 ```
 
@@ -126,12 +122,12 @@ In a first step, we use the package `BayesComm` described in the article [@Goldi
 The package `BayesComm` fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly. 
 We want to compare the parameters of the models fitted with `BayesComm` and `jSDM`. 
 
-We estimate the parameters of the SDM with the function `BC()` and the argument `model="environment"`.  
+We estimate the parameters of the species distribution model (SDM) with the function `BC()` and the argument `model="environment"`.  
 
 ```{r BayesComm, eval=FALSE}
 library(BayesComm)
 T1 <- Sys.time()
-mod_BC <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="environment", its=20000, thin=10, burn=10000)
+mod_BC <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(Env_Birds), model="environment", its=20000, thin=10, burn=10000)
 # Estimates
 beta_est_BC <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA,  elev2=NA)
 for (j in 1:nsp) {
@@ -142,35 +138,34 @@ T2 <- Sys.time()
 T_BC <- difftime(T2,T1)
 
 # Deviance BayesComm
-X1 <- cbind(rep(1,nsite), as.matrix(X))
-probit_theta_pred_BC <- X1 %*% t(as.matrix(beta_est_BC[,2:4]))
+X1 <- cbind(rep(1,nsite), as.matrix(Env_Birds))
+probit_theta_latent_BC <- X1 %*% t(as.matrix(beta_est_BC[,2:4]))
 # Deviance
 logL=0
 for (i in 1:nsite){
   for (j in 1:nsp){
-    theta <- pnorm(probit_theta_pred_BC[i,j])
+    theta <- pnorm(probit_theta_latent_BC[i,j])
     logL = logL + dbinom(PA_Birds[i,j],1,theta,1)  
   }
 }
 deviance_BC <- -2*logL
 
 save(mod_BC, file="SDM_JSDM_cache/BC.rda")
-save(beta_est_BC, T_BC, deviance_BC, probit_theta_pred_BC, file="SDM_JSDM_files/BC.rda")
+save(beta_est_BC, T_BC, deviance_BC, probit_theta_latent_BC, file="SDM_JSDM_files/BC.rda")
 ```
 
 We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
 
-```{r plot-BayesComm, eval=FALSE}
+```{r plot-BayesComm}
 library(BayesComm)
 load("SDM_JSDM_cache/BC.rda")
-
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 plot(mod_BC, chain=paste0("B$",names(PA_Birds)[2]))
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
 
-```{r plot2-BayesComm, out.width=600, echo=FALSE, eval=TRUE}
+```{r plot2-BayesComm, out.width=600, echo=FALSE}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm-1.png")
 ```
 
@@ -178,9 +173,9 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm-1.png")
 
 In a second step, we use the package `jSDM` to fit binomial models with a probit link. 
 
-We estimate the parameters of the SDM with the function `jSDM_binomial_probit_block()` and the argument `n_latent=0` set by default. 
+We estimate the parameters of the SDM with the function `jSDM_binomial_probit()` and the argument `n_latent=0` set by default. 
 
-```{r chains-probit, eval=FALSE}
+```{r chains-probit}
 ## Load libraries
 require(doParallel)
 require(foreach)
@@ -199,25 +194,25 @@ seed_mcmc <- c(1234, 4321)
 ```
 
 
-```{r mod-probit, eval=FALSE}
+```{r mod-probit}
 library(jSDM)
 # Model with foreach and doPar call
 mod_probit <-
   foreach (i = 1:nchains) %dopar% {
     # Infering model parameters
     T1 <- Sys.time()
-    mod <- jSDM::jSDM_binomial_probit_block(
+    mod <- jSDM::jSDM_binomial_probit(
       # Iterations
       mcmc = 10000,
       thin = 10,
       burnin = 10000,
       # Data
-      presence_site_sp = PA_Birds,
-      site_data = X,
-      site_suitability=~.,
+      presence_data = PA_Birds,
+      site_data = Env_Birds,
+      site_formula=~.,
       # Priors
+      V_beta =10,
       mu_beta = 0,
-      V_beta = 10,
       # Starting values
       beta_start = beta_start[i],
       # Other
@@ -230,21 +225,20 @@ mod_probit <-
   }
 
 # Stop cluster
-stopCluster(clust)
+#stopCluster(clust)
 ```
 
 Overview of the results :
 
-```{r output-jSDM-probit, eval=FALSE}
+```{r output-jSDM-probit}
 # Output
 n_chains <- length(mod_probit)
 mod_jSDM <- mod_probit[[1]]
 str_jSDM <- paste(capture.output(str(mod_jSDM, max.level = 1)), collapse="\n")
-
 # Fitted values
 beta_jSDM <- lapply(mod_jSDM$mcmc.sp, colMeans)
 #Z_latent_jSDM <- mod_jSDM$Z_latent
-probit_theta_jSDM <- mod_jSDM$probit_theta_pred
+probit_theta_jSDM <- mod_jSDM$probit_theta_latent
 deviance_jSDM <- mean(mod_jSDM$mcmc.Deviance)
 T_jSDM <- mod_jSDM$T_jSDM 
 save(T_jSDM, n_chains, str_jSDM, beta_jSDM, probit_theta_jSDM, deviance_jSDM, 
@@ -262,12 +256,11 @@ Convergence is diagnosed when the chains have ‘forgotten’ their initial valu
 If the convergence diagnostic gives values of potential scale reduction factor or psrf
 substantially above 1, its indicates lack of convergence.
 
-```{r MCMC-convergence, eval=FALSE}
+```{r MCMC-convergence}
 require(coda)
 arr2mcmc <- function(x) {
   return(mcmc(as.data.frame(x)))
 }
-
 # MCMC lists
 mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
 # psrf gelman indice 
@@ -282,9 +275,8 @@ cat("psrf beta:", psrf_beta, "\n")
 
 We can also visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
 
-```{r plot-jSDM, eval=FALSE}
+```{r plot-jSDM}
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-
 plot(mcmc_list_beta[,grep("sp_2.beta",colnames(mcmc_list_beta[[1]]))])
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
@@ -318,7 +310,7 @@ We estimate the parameters of the JSDM with the function `BC()` and the argument
 
 ```{r BayesComm_community, eval=FALSE}
 T1 <- Sys.time()
-mod_BC_comm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(X), model="full", its=20000, thin=10, burn=10000)
+mod_BC_comm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(Env_Birds), model="full", its=20000, thin=10, burn=10000)
 # Estimates
 beta_est_BC_comm <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA, elev2=NA)
 for (j in 1:nsp) {
@@ -329,14 +321,14 @@ T2 <- Sys.time()
 T_BC_comm <- difftime(T2,T1)
 
 # Deviance BayesComm
-X1 <- cbind(rep(1,nsite), as.matrix(X))
+X1 <- cbind(rep(1,nsite), as.matrix(Env_Birds))
 e <- residuals(mod_BC_comm)
-probit_theta_pred_BC_comm <- X1 %*% t(as.matrix(beta_est_BC_comm[,2:4])) + e
+probit_theta_latent_BC_comm <- X1 %*% t(as.matrix(beta_est_BC_comm[,2:4])) + e
 # Deviance
 logL=0
 for (i in 1:nsite){
   for (j in 1:nsp){
-    theta <- pnorm(probit_theta_pred_BC_comm[i,j])
+    theta <- pnorm(probit_theta_latent_BC_comm[i,j])
     logL = logL + dbinom(PA_Birds[i,j],1,theta,1)  
   }
 }
@@ -356,13 +348,13 @@ for(j in 1:nsp){
 }
 save(mod_BC_comm, file="SDM_JSDM_cache/BC_comm.rda")
 save(beta_est_BC_comm, T_BC_comm, R_mat,
-     deviance_BC_comm, probit_theta_pred_BC_comm,
+     deviance_BC_comm, probit_theta_latent_BC_comm,
      file="SDM_JSDM_files/BC_comm.rda")
 ```
 
 We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
 
-```{r plot-BC_comm, eval=FALSE}
+```{r plot-BC_comm}
 load("SDM_JSDM_cache/BC_comm.rda")
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 
@@ -376,9 +368,9 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BC_comm-1.png")
 
 ## Using `jSDM`
 
-We estimate the latent variables model parameters with the function `jSDM_binomial_probit_block()` and the argument `n_latent=2`. 
+We estimate the latent variables model parameters with the function `jSDM_binomial_probit()` and the argument `n_latent=2`. 
 
-```{r chains-probit-lv, eval=FALSE}
+```{r chains-probit-lv}
 library(parallel)
 library(doParallel)
 ## Make a cluster for parallel MCMCs
@@ -386,9 +378,6 @@ nchains <- 2
 ncores <- nchains ## One core for each MCMC chains
 clust <- makeCluster(ncores)
 registerDoParallel(clust)
-
-# Number of latent variables
-nl <- 2
 
 # Starting parameters 
 lambda_start <- c(-1, 1)
@@ -401,24 +390,24 @@ seed_mcmc <- c(1234, 4321)
 ```
 
 
-```{r mod-probit-lv, eval=FALSE}
+```{r mod-probit-lv}
 # Model
 mod_probit_lv <-
   foreach (i = 1:nchains) %dopar% {
     # Infering model parameters
     T1 <- Sys.time()
-    mod <- jSDM::jSDM_binomial_probit_block(
+    mod <- jSDM::jSDM_binomial_probit(
       # Iterations
       burnin=10000, mcmc=10000, thin=10,
       # Data
-      presence_site_sp=PA_Birds,
-      site_data = X,
-      site_suitability = ~.,
+      presence_data=PA_Birds,
+      site_data = Env_Birds,
+      site_formula = ~.,
       # Model specification 
       n_latent=2,
       site_effect="none",
       # Priors
-      V_beta = 10,
+      V_beta =10,
       mu_beta = 0,
       mu_lambda = 0,
       V_lambda= 10,
@@ -435,12 +424,12 @@ mod_probit_lv <-
     return(mod)
   }
 # Stop cluster
-stopCluster(clust)
+#stopCluster(clust)
 ```
 
 Overview of the results :
 
-```{r output-jSDM-probit-lv, eval=FALSE}
+```{r output-jSDM-probit-lv}
 # Output
 n_chains <- length(mod_probit_lv)
 mod_jSDM_lv <- mod_probit_lv[[1]]
@@ -448,11 +437,10 @@ str_jSDM_lv <- paste(capture.output(str(mod_jSDM_lv, max.level = 1)), collapse="
 # Fitted values
 param_jSDM_lv <- lapply(mod_jSDM_lv$mcmc.sp, colMeans)
 #Z_latent_jSDM_lv <- mod_jSDM_lv$Z_latent
-probit_theta_jSDM_lv <- mod_jSDM_lv$probit_theta_pred
+probit_theta_jSDM_lv <- mod_jSDM_lv$probit_theta_latent
 deviance_jSDM_lv <- mean(mod_jSDM_lv$mcmc.Deviance)
 T_jSDM_lv <- mod_jSDM_lv$T_jSDM
 residual_corr_mat <- get_residual_cor(mod_jSDM_lv)$cor.mean
-
 save(T_jSDM_lv, n_chains, str_jSDM_lv, param_jSDM_lv, probit_theta_jSDM_lv, deviance_jSDM_lv, residual_corr_mat, 
      file="SDM_JSDM_files/jSDM_lv.rda")
 ```
@@ -465,7 +453,7 @@ cat("content of each chain :", str_jSDM_lv,"\n")
 
 We then evaluate if the chains have ‘forgotten’ their initial values, and if the output from all chains is indistinguishable.
 
-```{r MCMC-convergence-probit-lv, eval=FALSE}
+```{r MCMC-convergence-probit-lv}
 # psrf
 mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
 mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(
@@ -494,7 +482,7 @@ not substantially above 1, its indicates some convergence.
 
 We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
 
-```{r plot-jSDM-lv, eval=FALSE}
+```{r plot-jSDM-lv}
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 
 plot(mcmc_list_param[,grep("sp_2.beta",colnames(mcmc_list_param[[1]]))])
@@ -512,7 +500,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/plot-jSDM-lv-1.png")
 
 (ref:cap-comp-dev) **Deviance and compilation time**. of SDM and JSDM fitted by `jSDM` or `BayesComm`. \vspace{0.5cm}
 
-```{r comp-dev, echo=FALSE, eval=FALSE}
+```{r comp-dev, echo=FALSE}
 load("SDM_JSDM_files/BC.rda")
 load("SDM_JSDM_files/BC_comm.rda")
 load("SDM_JSDM_files/jSDM.rda")
@@ -535,15 +523,15 @@ The sizes of the dots on the following graphs are proportional to the number of 
 
 First, we compare the intercept for each species between classical or joint species distribution model that takes into account co-occurrences between species, fitted using `BayesComm` or `jSDM`. 
 
-```{r comp-intercept, eval=FALSE}
+```{r comp-intercept}
 # Intercepts
 ## jSDM
-plot(lapply(beta_jSDM,"[", 1) , lapply(param_jSDM_lv, "[", 1), cex=nobs_sp^(1/4),
+plot(lapply(beta_jSDM,"[", 1) , lapply(param_jSDM_lv, "[", 1), cex=nobs_sp^(1/5),
      main="Fixed species intercept beta",
      xlab="SDM", ylab="JSDM")
 # BayesComm
 points(beta_est_BC$intercept, beta_est_BC_comm$intercept,
-       cex=rep(nobs_sp^(1/4),75), col='blue')
+       cex=rep(nobs_sp^(1/5),75), col='blue')
 abline(a=0, b=1, col="red")
 legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 abline(a=0, b=1, col="red")
@@ -555,16 +543,16 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-intercept-1.png")
 
 We compare the effect of the environmental variables for each species between the four models.
 
-```{r comp-env-effect, eval=FALSE}
+```{r comp-env-effect}
 # Environmental variable effects
 for(k in 2:np){
 ## jSDM
-plot(lapply(beta_jSDM, "[", k), lapply(param_jSDM_lv,"[", k), cex=nobs_sp^(1/4),
+plot(lapply(beta_jSDM, "[", k), lapply(param_jSDM_lv,"[", k), cex=nobs_sp^(1/5),
           main=paste0("Fixed species effect ", names(beta_jSDM[[1]][k])),
      xlab="SDM", ylab="JSDM")
 ## BayesComm
 points(beta_est_BC[,k+1], beta_est_BC_comm[,k+1],
-       cex=rep(nobs_sp^(1/4),75), col='blue')
+       cex=rep(nobs_sp^(1/5),75), col='blue')
 abline(a=0, b=1, col="red")
 legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 }
@@ -579,17 +567,17 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-env-effect-2.png")
 
 We compare the probit of occurence probabilities predicted by the classical or joint species distribution, fitted using `BayesComm` or `jSDM`.
 
-```{r comp-pred, eval=FALSE}
+```{r comp-pred}
 # Predictions
 ## jSDM
 plot(probit_theta_jSDM, probit_theta_jSDM_lv,
-     cex=rep(nobs_sp^(1/4), 75),
+     cex=rep(nobs_sp^(1/5), 75),
      main="Predicted probit(theta)",
      xlab="SDM",
      ylab="JSDM")
 ## BayesComm
-points(probit_theta_pred_BC, probit_theta_pred_BC_comm,
-       cex=rep(nobs_sp^(1/4),75), col='blue')
+points(probit_theta_latent_BC, probit_theta_latent_BC_comm,
+       cex=rep(nobs_sp^(1/5),75), col='blue')
 abline(a=0, b=1, col="red")
 legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
 ```
@@ -610,7 +598,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-1.png")
 
 
 
-```{r residual_correlation_matrix, eval=FALSE}
+```{r residual_correlation_matrix}
 # Residual correlation matrix obtained with BayesComm
 reorder.cor.mean <- corrplot::corrMatOrder(R_mat, order = "FPC", hclust.method = "average")
 par(cex=1, cex.main=1.5)
@@ -627,5 +615,9 @@ corrplot::corrplot(residual_corr_mat[reorder.cor.mean,reorder.cor.mean], title =
 knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-1.png")
 knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-2.png")
 ```
+
+In one hand, the results obtained with `jSDM` and `BayesComm` are quite similar and therefore the use of a latent variable model (LVM) rather than a classical GLMM has only a minimal influence on the estimated values of the species effects ($\beta$). 
+
+On the other hand, the estimated values of the species intercept are quite similar using a classical species distribution model (SDM) or a joint species distribution model (JSDM), but the estimated values of the other species effects differ slightly. 
 
 # References

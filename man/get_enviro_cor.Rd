@@ -42,26 +42,26 @@ library(jSDM)
  Env_frogs <- as.data.frame(Env_frogs)
  # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
-mod <- jSDM_binomial_probit_block(# Response variable
-                                  presence_site_sp=PA_frogs,
-                                  # Explanatory variables
-                                  site_suitability = ~.,
-                                  site_data = Env_frogs,
-                                  n_latent=0,
-                                  site_effect="random",
-                                  # Chains
-                                  burnin=100,
-                                  mcmc=100,
-                                  thin=1,
-                                  # Starting values
-                                  alpha_start=0,
-                                  beta_start=0,
-                                  V_alpha=1,
-                                  # Priors
-                                  shape=0.5, rate=0.0005,
-                                  mu_beta=0, V_beta=10,
-                                  # Various
-                                  seed=1234, verbose=1)
+mod <- jSDM_binomial_probit(# Response variable
+                             presence_data=PA_frogs,
+                             # Explanatory variables
+                             site_formula = ~.,
+                             site_data = Env_frogs,
+                             n_latent=0,
+                             site_effect="random",
+                             # Chains
+                             burnin=100,
+                             mcmc=100,
+                             thin=1,
+                             # Starting values
+                             alpha_start=0,
+                             beta_start=0,
+                             V_alpha=1,
+                             # Priors
+                             shape=0.5, rate=0.0005,
+                             mu_beta=0, V_beta=10,
+                             # Various
+                             seed=1234, verbose=1)
 # Calcul of residual correlation between species 
  enviro.cors <- get_enviro_cor(mod)
 corrplot::corrplot(enviro.cors$sig.cor, title = "Shared response correlations",
@@ -74,9 +74,7 @@ Ovaskainen et al. (2010). Modeling species co-occurrence by multivariate logisti
 Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406. \cr }
 }
 \seealso{
-\code{\link{get_residual_cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}}
-
-\code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}}
+\code{\link[stats]{cov2cor}} \code{\link{get_residual_cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}}
 }
 \author{
 \tabular{l}{

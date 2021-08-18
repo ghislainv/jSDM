@@ -16,16 +16,16 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
     const arma::umat &Y, // Number of successes (presences)
     const arma::uvec &T, // Number of trials
     const arma::mat &X, // Suitability covariates
-    arma::mat beta_start,
-    arma::vec alpha_start,//alpha
-    double V_alpha_start,
-    arma::vec mu_beta, // Priors 
-    arma::vec V_beta,
-    double shape,
-    double rate,
-    const int seed, // Various 
-    const double ropt,
-    const int verbose) {
+    const arma::mat &beta_start,
+    const arma::vec &alpha_start,//alpha
+    const double &V_alpha_start,
+    const arma::vec &mu_beta, // Priors 
+    const arma::vec &V_beta,
+    const double &shape,
+    const double &rate,
+    const int &seed, // Various 
+    const double &ropt,
+    const int &verbose) {
   
   ////////////////////////////////////////
   // Defining and initializing objects //
@@ -53,6 +53,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
   arma::vec V_alpha; V_alpha.zeros(NSAMP);
   /* Latent variable */
+  arma::mat logit_theta_run; logit_theta_run.zeros(NSITE, NSP);
+  arma::mat logit_theta_latent; logit_theta_latent.zeros(NSITE, NSP);
   arma::mat theta_run; theta_run.zeros(NSITE, NSP);
   arma::mat theta_latent; theta_latent.zeros(NSITE, NSP);
   /* Deviance */
@@ -178,6 +180,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
           Xpart_theta += dens_data.X(i,p) * dens_data.beta_run(p,j);
         }
         Xpart_theta += dens_data.alpha_run(i);
+        logit_theta_run(i,j) = Xpart_theta;
         theta_run(i,j) = invlogit(Xpart_theta);
         /* log Likelihood */
         logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
@@ -190,17 +193,17 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
     
     /////////////
     // Output //
-    if (((g+1)>NBURN) && (((g+1)%(NTHIN))==0)) {
+    if (((g+1)>NBURN) && (((g+1-NBURN)%(NTHIN))==0)) {
       int isamp=((g+1)-NBURN)/(NTHIN);
       for ( int j=0; j<NSP; j++ ) {
         beta.tube(isamp-1,j) = dens_data.beta_run.col(j);
-        for ( int i=0; i<NSITE; i++ ) {
-          theta_latent(i,j) += theta_run(i,j) / NSAMP; // We compute the mean of NSAMP values
-        }//loop on sites
       }// loop on species
       alpha.row(isamp-1) = dens_data.alpha_run;
       V_alpha(isamp-1) = dens_data.V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
+      // We compute the mean of NSAMP values
+      logit_theta_latent += logit_theta_run/NSAMP;
+      theta_latent += theta_run/NSAMP;
     }
     
     ///////////////////////////////////////////////
@@ -229,7 +232,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
     }
     
     /* After the burnin period */
-    if ( (g+1) % DIV == 0 && (g+1) > NBURN ) {
+    if ( ((g+1) % DIV == 0) && ((g+1) > NBURN)) {
       for (int j=0; j<NSP; j++) {
         for (int p=0; p<NP; p++) {
           Ar_beta(j,p) = ((double) nA_beta(j,p)) / DIV;
@@ -280,6 +283,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
                                           Rcpp::Named("alpha") = alpha,
                                           Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
+                                          Rcpp::Named("logit_theta_latent") = logit_theta_latent,
                                           Rcpp::Named("theta_latent") = theta_latent);
   
   return results;
@@ -364,17 +368,14 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
 # 
 # # Predictions
 # ##logit_theta
-# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# logit_theta_pred <- apply(mod$theta_latent,c(1,2),logit)
-# plot(logit.theta,logit_theta_pred, ylab ="fitted",
+# par(mfrow=c(1,2))
+# plot(logit.theta,mod$logit_theta_latent, ylab ="fitted",
 #      xlab="obs", main="logit(theta)")
-# title(main="Probabilities of occurrence",outer=T)
 # abline(a=0,b=1,col='red')
 # ##theta
 # plot(theta,mod$theta_latent,ylab ="fitted",
-#      xlab="obs", main="theta")
+#      xlab="obs", main="Probabilities of occurrence theta")
 # abline(a=0,b=1,col='red')
-
 */
 
 ////////////////////////////////////////////////////////////////////

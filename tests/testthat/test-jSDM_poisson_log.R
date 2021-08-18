@@ -1,7 +1,6 @@
 context("test-jSDM_poisson_log")
 
-#=========================================
-#= Single species distribution model (SDM) 
+#================= Single species distribution model (SDM) ======================
 
 # Data simulation
 #= Number of sites
@@ -32,9 +31,9 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         # Response variable
-                        presence_site_sp=Y,
+                        count_data=Y,
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         # Starting values
                         beta_start=0,
                         # Priors
@@ -45,6 +44,8 @@ mod <- jSDM_poisson_log(burnin, mcmc, thin,# Chains
 test_that("jSDM_poisson_log works with one species", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,np))
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
@@ -52,8 +53,7 @@ test_that("jSDM_poisson_log works with one species", {
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
 })
 
-#=========================================
-#= joint species distribution model (jSDM)
+#================ Joint species distribution model (JSDM) ========================
 
 # Data simulation
 #= Number of sites
@@ -82,9 +82,9 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         # Starting values
                         beta_start=0,
                         # Priors
@@ -95,6 +95,8 @@ mod <- jSDM_poisson_log(burnin, mcmc, thin,# Chains
 test_that("jSDM_poisson_log works ", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,np))
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
@@ -102,8 +104,7 @@ test_that("jSDM_poisson_log works ", {
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
 })
 
-#==============================
-#= jSDM with fixed site effect
+#========== JSDM with fixed site effect ====================
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
@@ -120,9 +121,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model 
 mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         site_effect="fixed", 
                         # Starting values
                         alpha_start=0,
@@ -139,6 +140,8 @@ test_that("jSDM_poisson_log works with fixed site effect", {
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
@@ -147,8 +150,7 @@ test_that("jSDM_poisson_log works with fixed site effect", {
   expect_equal(dim(mod$mcmc.alpha),c(nsamp,nsite))
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
 })
-#==============================
-#= jSDM with random site effect
+#========== JSDM with random site effect ====================
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
@@ -166,9 +168,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model 
 mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         site_effect="random", 
                         # Starting values
                         alpha_start=0,
@@ -186,6 +188,8 @@ test_that("jSDM_poisson_log works with random site effect", {
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)))
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
@@ -197,8 +201,7 @@ test_that("jSDM_poisson_log works with random site effect", {
   expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
 })
 
-#==============================
-#= jSDM with latent variables
+#=========== JSDM with latent variables ===================
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
@@ -222,9 +225,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model
 mod <- jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         n_latent=n_latent,
                         # Starting values
                         beta_start=0, lambda_start = 0,
@@ -244,14 +247,15 @@ test_that("jSDM_poisson_log works with latent variables", {
   expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)+n_latent))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
 })
 
-#===================================================
-#= jSDM with latent variables and fixed site effect 
+#============ JSDM with latent variables and fixed site effect =======================================
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
@@ -277,9 +281,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model 
 mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains 
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         n_latent= n_latent,
                         site_effect ="fixed",
                         # Starting values
@@ -303,6 +307,8 @@ test_that("jSDM_poisson_log works with fixed site effect and latent variables", 
   expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)+n_latent))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
@@ -312,8 +318,7 @@ test_that("jSDM_poisson_log works with fixed site effect and latent variables", 
   expect_equal(sum(is.na(mod$mcmc.alpha)),0)
 })
 
-#===================================================
-#= jSDM with latent variables and random site effect 
+#============= JSDM with latent variables and random site effect ======================================
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
@@ -339,9 +344,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model 
 mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains 
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~x1+x2, site_data=X,
+                        site_formula=~x1+x2, site_data=X,
                         n_latent= n_latent,
                         site_effect ="random",
                         # Starting values
@@ -366,6 +371,8 @@ test_that("jSDM_poisson_log works with random site effect and latent variables",
   expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)+n_latent))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
@@ -377,8 +384,7 @@ test_that("jSDM_poisson_log works with random site effect and latent variables",
   expect_equal(dim(mod$mcmc.V_alpha),c(nsamp,1))
 })
 
-#===================================================
-#= jSDM with latent variables and random site effect 
+#== JSDM with intercept only, latent variables and random site effect ===================================
 
 # Ecological process (suitability)
 X <- matrix(1,nsite,1)
@@ -403,9 +409,9 @@ Y <- apply(theta, 2, rpois, n=nsite)
 # Fit the model 
 mod <- jSDM_poisson_log(burnin, mcmc, thin, # Chains 
                         # Response variable
-                        presence_site_sp=Y,  
+                        count_data=Y,  
                         # Explanatory variables
-                        site_suitability=~Int-1, site_data=X,
+                        site_formula=~Int-1, site_data=X,
                         n_latent= n_latent,
                         site_effect ="random",
                         # Starting values
@@ -430,6 +436,8 @@ test_that("jSDM_poisson_log works with random site effect and latent variables",
   expect_equal(sum(is.na(mod$mcmc.latent$lv_2)),0)
   expect_equal(sum(is.na(mod$theta_latent)),0)
   expect_equal(dim(mod$theta_latent),c(nsite,nsp))
+  expect_equal(sum(is.na(mod$log_theta_latent)),0)
+  expect_equal(dim(mod$log_theta_latent),c(nsite,nsp))
   expect_equal(unique(lapply(mod$mcmc.sp,dim))[[1]],c(nsamp,ncol(X)+n_latent))
   expect_equal(sum(is.na(mod$mcmc.sp)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))

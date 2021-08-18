@@ -14,21 +14,21 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
     const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
     const arma::mat &X, // Suitability covariates
-    arma::mat W_start, // Starting values
-    arma::mat lambda_start,
-    arma::mat beta_start,
-    arma::vec alpha_start,//alpha
-    double V_alpha_start,
-    arma::vec mu_beta, // Priors 
-    arma::vec V_beta,
-    arma::vec mu_lambda,
-    arma::vec V_lambda,
-    arma::vec V_W,
-    double shape,
-    double rate,
-    const int seed, // Various 
-    const double ropt,
-    const int verbose) {
+    const arma::mat &W_start, // Starting values
+    const arma::mat &lambda_start,
+    const arma::mat &beta_start,
+    const arma::vec &alpha_start,//alpha
+    const double &V_alpha_start,
+    const arma::vec &mu_beta, // Priors 
+    const arma::vec &V_beta,
+    const arma::vec &mu_lambda,
+    const arma::vec &V_lambda,
+    const arma::vec &V_W,
+    const double &shape,
+    const double &rate,
+    const int &seed, // Various 
+    const double &ropt,
+    const int &verbose) {
   
   ////////////////////////////////////////
   // Defining and initializing objects //
@@ -58,6 +58,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
   arma::mat alpha; alpha.zeros(NSAMP, NSITE);
   arma::vec V_alpha; V_alpha.zeros(NSAMP);
   /* Latent variable */
+  arma::mat log_theta_run; log_theta_run.zeros(NSITE, NSP);
+  arma::mat log_theta_latent; log_theta_latent.zeros(NSITE, NSP);
   arma::mat theta_run; theta_run.zeros(NSITE, NSP);
   arma::mat theta_latent; theta_latent.zeros(NSITE, NSP);
   /* Deviance */
@@ -178,12 +180,12 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
     
     dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
     
-    // Centering and reducing W_i 
+    // Centering and reducing W_i
     for ( int q = 0; q < NL; q++ ) {
       dens_data.W_run.col(q) = dens_data.W_run.col(q) - arma::mean(dens_data.W_run.col(q));
       dens_data.W_run.col(q) = dens_data.W_run.col(q)*1/arma::stddev(dens_data.W_run.col(q));
     }
-    
+
     for ( int j = 0; j < NSP; j++ ) {
       // beta
       dens_data.sp_beta = j; // Specifying the species
@@ -254,7 +256,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
           log_theta += dens_data.W_run(i,q) * dens_data.lambda_run(q,j);
         }
         log_theta += dens_data.alpha_run(i);
-        theta_run(i,j) = std::exp(log_theta);
+        log_theta_run(i,j) = log_theta;
+        theta_run(i,j) = std::exp(log_theta_run(i,j));
         /* log Likelihood */
         logL += R::dpois(dens_data.Y(i,j), theta_run(i,j), 1);
       } // loop on species
@@ -266,19 +269,21 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
     
     /////////////
     // Output //
-    if (((g+1)>NBURN) && (((g+1)%(NTHIN))==0)) {
+    if (((g+1)>NBURN) && (((g+1-NBURN)%(NTHIN))==0)) {
       int isamp=((g+1)-NBURN)/(NTHIN);
       for ( int j=0; j<NSP; j++ ) {
         beta.tube(isamp-1,j) = dens_data.beta_run.col(j);
         lambda.tube(isamp-1,j) = dens_data.lambda_run.col(j);
-        for ( int i=0; i<NSITE; i++ ) {
-          W.tube(isamp-1,i) = dens_data.W_run.row(i);
-          theta_latent(i,j) += theta_run(i,j) / NSAMP; // We compute the mean of NSAMP values
-        }//loop on sites
       }// loop on species
+      for ( int i=0; i<NSITE; i++ ) {
+        W.tube(isamp-1,i) = dens_data.W_run.row(i);
+      }//loop on sites
       alpha.row(isamp-1) = dens_data.alpha_run;
       V_alpha(isamp-1) = dens_data.V_alpha_run;
       Deviance(isamp-1) = Deviance_run;
+      // We compute the mean of NSAMP values
+      log_theta_latent += log_theta_run/NSAMP;
+      theta_latent += theta_run/NSAMP;
     }
     
     ///////////////////////////////////////////////
@@ -389,6 +394,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
                                           Rcpp::Named("alpha") = alpha,
                                           Rcpp::Named("V_alpha") = V_alpha,
                                           Rcpp::Named("Deviance") = Deviance,
+                                          Rcpp::Named("log_theta_latent") = log_theta_latent,
                                           Rcpp::Named("theta_latent") = theta_latent);
   
   return results;
@@ -399,8 +405,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 /*** R
 # library(coda)
 # 
-# nsp <- 70
-# nsite <- 210
+# nsp <- 50
+# nsite <- 150
 # seed <- 1234
 # set.seed(seed)
 # 
@@ -424,9 +430,9 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 # Y <- apply(theta, 2, rpois, n=nsite)
 # 
 # # Iterations
-# nsamp <- 5000
-# nburn <- 5000
-# nthin <- 5
+# nsamp <- 1000
+# nburn <- 1000
+# nthin <- 1
 # ngibbs <- nsamp+nburn
 # 
 # # Call to C++ function
@@ -436,7 +442,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 #                                              lambda_start=matrix(0,nl,nsp),
 #                                              W_start=matrix(0,nsite,nl), alpha_start=rep(0,nsite),
 #                                              V_alpha_start=1, shape = 0.5, rate = 0.0005,
-#                                              mu_beta=rep(0,np), V_beta=rep(100,np),
+#                                              mu_beta=rep(0,np), V_beta=c(10,rep(1,np-1)),
 #                                              mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
 #                                              V_W=rep(1,nl),
 #                                              seed=1234, ropt=0.44, verbose=1)
@@ -468,7 +474,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 #   }
 # }
 # ## lambda_j
-# par(mfrow=c(nl*2,2))
+# par(mfrow=c(2,2))
 # for (j in 1:4) {
 #   for (l in 1:nl) {
 #     MCMC.lambdaj <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)
@@ -510,17 +516,14 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
 # 
 # # Predictions
 # ##log_theta
-# par(mfrow=c(1,2),oma=c(1, 0, 1, 0))
-# log_theta_pred <- apply(mod$theta_latent,c(1,2),log)
-# plot(log.theta,log_theta_pred, ylab ="fitted",
+# par(mfrow=c(1,2))
+# plot(log.theta, mod$log_theta_latent, ylab ="fitted",
 #      xlab="obs", main="log(theta)")
-# title(main="Probabilities of occurrence",outer=T)
 # abline(a=0,b=1,col='red')
 # ##theta
 # plot(theta,mod$theta_latent,ylab ="fitted",
-#      xlab="obs", main="theta")
+#      xlab="obs", main="Probabilities of occurrence theta")
 # abline(a=0,b=1,col='red')
-
 */
 
 ////////////////////////////////////////////////////////////////////

@@ -1,0 +1,286 @@
+---
+title: "Bernoulli probit regression with missing data and species traits"
+output:
+  bookdown::html_document2:
+    #base_format: rmarkdown::html_vignette
+    #highlight: tango
+    number_sections: true
+    toc: true
+    #toc_float: true
+    fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteIndexEntry{Bernoulli probit regression with missing data and species traits}
+ %\VignetteEncoding{UTF-8}
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+fig.align = "center",
+fig.width = 6, fig.height = 6,
+cache = FALSE,
+collapse = TRUE,
+comment = "#>",
+highlight = TRUE
+)
+```
+
+# Model definition 
+
+Referring to the models used in the articles @Warton2015 and @Albert1993, we define the following model :
+
+$$ \mathrm{probit}(\theta_{n}) =\alpha_i + D_n.\gamma + X_n.\beta_j +  W_i.\lambda_j,$$
+such as $species_n=j$ and $site_n=i$.
+
+- Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
+
+- Response variable: $Y=(y_{n})^{n=1,\ldots,nobs}$ such as $species_n=j$ and $site_n=i$ with:
+
+$$y_{n}=\begin{cases}
+0 & \text{ if species $j$ is absent on the site $i$} \\
+1 &  \text{ if species  $j$ is present on the site $i$}.
+\end{cases}$$
+
+- Latent variable $z_{n} = \alpha_i + D_n.\gamma + X_n.\beta_j + W_i.\lambda_j + \epsilon_{n}$, with $\forall (n) \ \epsilon_{n} \sim \mathcal{N}(0,1)$ and such that:
+
+$$y_{n}=\begin{cases}
+1 & \text{if} \ z_{n} > 0 \\
+0 &  \text{otherwise.}
+\end{cases}$$
+
+It can be easily shown that: $y_{n} \sim \mathcal{B}ernoulli(\theta_{n})$. 
+
+- Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default $q=2$).
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for each lambda not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+
+- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nobs}$ with $X_i=(1,x_i^1,\ldots,x_i^p)\in \mathbb{R}^{(p+1)}$ where $p$ is the number of bioclimatic variables considered.
+The corresponding fixed species intercept ($\beta_j^0$) and regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^0,\beta_j^1,\ldots,\beta_j^p)'$.
+
+- $\gamma$ correspond to the regression coefficients of explanatory variables found in matrix $D=(D_n)_{i=1,\ldots,nobs}$. We use a prior distribution $\mathcal{N}(0,10)$ for all parameters $\gamma$. 
+
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+
+# Dataset
+
+## Presence-absence of alpine plants
+
+(ref:cap-alpine-plant) **_Alpine plants_** [@Choler2005].
+
+```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)"}
+knitr::include_graphics("figures/alpine_plants.png")
+```
+
+We consider alpine plants in Aravo (Valloire), south east France [@Choler2005]. The data are available from the R package `ade4` [@Dray2007]. The original dataset includes abundance data for 82 species in 75 sites.
+
+```{r aravo}
+library(jSDM)
+data(aravo)
+aravo$spe[1:5, 1:5]
+head(aravo$env)
+```
+
+We transform abundance into presence-absence data and remove species with less than 5 presences. We also look at the number of observations per site.
+
+```{r presence-data}
+# Transform abundance into presence-absence
+pres_data <- aravo$spe
+pres_data[pres_data > 0] <- 1
+# Remove species with less than 5 presences
+rare_sp <- which(apply(pres_data, 2, sum) < 5)
+pres_data <- pres_data[, -rare_sp]
+# Number of sites and species
+nsite <- dim(pres_data)[1]
+nsite
+nsp <- dim(pres_data)[2]
+nsp
+# Number of observations per site
+nobs_site <- apply(pres_data, 1, sum)
+nobs_site
+# Number of observations per species
+nobs_sp <- apply(pres_data, 2, sum)
+nobs_sp
+```
+
+## Environmental variables
+
+The environmental variables are:
+
+- **Aspect**: Relative south aspect (opposite of the sine of aspect with flat coded 0).
+- **Slope**: Slope inclination (degrees).
+- **Form**: Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity).
+- **Snow**: Mean snowmelt date (Julian day) averaged over 1997-1999.
+- **PhysD**: Physical disturbance, i.e., percentage of unvegetated soil due to physical processes.
+- **ZoogD**: Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high.
+
+As a first approach, we just select the "Snow" variable considering a quadratic orthogonal polynomial.
+
+```{r env-data}
+p <- poly(aravo$env$Snow, 2)
+env_data <- data.frame(cbind(1, p))
+names(env_data) <- c("int", "snow", "snow2")
+head(env_data)
+# Number of environmental variables plus intercept
+np <- ncol(env_data)
+```
+
+## Species traits
+
+The species traits available for the alpine plants are:
+
+- **Height**:	Vegetative height (cm)
+- **Spread**:	Maximum lateral spread of clonal plants (cm)
+- **Angle**:	Leaf elevation angle estimated at the middle of the lamina
+- **Area**:	Area of a single leaf
+- **Thick**:	Maximum thickness of a leaf cross section (avoiding the midrib)
+- **SLA** Specific leaf area
+- **Nmass**:	Mass-based leaf nitrogen content
+- **Seed**:	Seed mass
+
+As a first approach, we just integer the interaction between the mean snowmelt date **Snow** and the specific leaf area **SLA** as an explanatory factor of the model.
+
+```{r traits-data}
+head(aravo$traits)
+```
+
+```{r data-set}
+data <- data.frame(site=rep(rownames(pres_data), nsp),
+                  species=rep(colnames(pres_data), each=nsite))
+data$Y <- c(as.matrix(pres_data))
+data$snow <- rep(env_data$snow,nsp)
+data$snow2 <- rep(env_data$snow2,nsp)
+data$snow.SLA <- scale(c(env_data$snow %*% t(aravo$traits$SLA[-rare_sp])))
+head(data)
+```
+
+
+# Parameter inference
+
+We use the `jSDM_binomial_probit_long_format()` function to fit the JSDM (increase the number of iterations to achieve convergence). 
+
+```{r jSDM-probit}
+mod <- jSDM_binomial_probit_long_format(
+  # Chains
+  burnin=1000, mcmc=1000, thin=1,
+  # Response variable 
+  data=data, 
+  # Explanatory variables 
+  site_formula = ~ snow.SLA + (snow + snow2):species,
+  # Model specification 
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, gamma_start=0,
+  beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1, 
+  # Priors
+  shape=0.1, rate=0.1,
+  mu_gamma=0, V_gamma=10,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=1234, verbose=1)
+```
+
+# Analysis of the results
+
+```{r plot-results-probit}
+np <- nrow(mod$model_spec$beta_start)
+nd <- length(mod$model_spec$gamma_start)
+## gamma 
+plot(mod$mcmc.gamma)
+
+## beta_j of the first two species
+par(mfrow=c(np,2), oma=c(0,0,2,0))
+for (j in 1:2) {
+    plot(mod$mcmc.sp[[paste0("sp_",j)]][,1:np])
+    title(outer=TRUE, main=paste0( "species ", j ," : ",
+                                   unique(data$species)[j]), cex.main=1.5)
+}
+
+## lambda_j of the first two species
+n_latent <- mod$model_spec$n_latent
+par(mfrow=c(n_latent,2), oma=c(0,0,2,0))
+for (j in 1:2) {
+    plot(mod$mcmc.sp[[paste0("sp_",j)]][,(np+1):(np+n_latent)])
+    title(outer=TRUE, main=paste0( "species ", j ," : ",
+                                   unique(data$species)[j]), cex.main=1.5)
+}
+
+## Latent variables W_i for the first two sites
+par(mfrow=c(2,2))
+for (l in 1:n_latent) {
+  for (i in 1:2) {
+  coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],
+                  main = paste0("Latent variable W_", l, ", site ", unique(data$site)[i]))
+  coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],
+                 main = paste0("Latent variable W_", l, ", site ", unique(data$site)[i]))
+  }
+}
+
+## alpha_i of the first two sites
+plot(mod$mcmc.alpha[,1:2])
+
+## V_alpha
+plot(mod$mcmc.V_alpha)
+## Deviance
+plot(mod$mcmc.Deviance)
+
+## probit_theta
+par (mfrow=c(2,1))
+hist(mod$probit_theta_latent,
+     main = "Predicted probit theta", xlab ="predicted probit theta")
+hist(mod$theta_latent,
+     main = "Predicted theta", xlab ="predicted theta")
+```
+
+# Matrice of correlations 
+
+After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
+$$\Sigma_{ij} = \begin{cases}
+\lambda_i .\lambda_j^T & \text{ if } i \neq j \\
+\lambda_i .\lambda_j^T + 1 & \text{ if } i=j
+\end{cases}$$, then we compute correlations from covariances :
+$$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
+We use the `plot_residual_cor()` function to compute and display  the residual correlation matrix :
+
+```{r correlation-matrix-probit}
+plot_residual_cor(mod, tl.srt = 10)
+```
+
+# Predictions 
+
+We use the `predict.jSDM()` S3 method on the `mod` object of class `jSDM` to compute the mean (or expectation) of the posterior distributions obtained and get the expected values of model's parameters.
+
+```{r predictions-probit}
+# Sites and species concerned by predictions :
+## 35 sites among the 75
+nsite_pred <- 35
+## 25 species among the 65
+nsp_pred <- 25
+sites <- sample(as.character(unique(data$site)), nsite_pred)
+Id_sites <- rep(sites,nsp_pred)
+species <- sample(as.character(unique(data$species)), nsp_pred)
+Id_species <- rep(species,each=nsite_pred)
+nobs <- length(Id_species)
+# Simulate new observations of covariates on those sites 
+simdata <- data.frame(site=Id_sites, species=Id_species)
+snow <- rnorm(nsite_pred)
+p2 <- poly(snow, 2)
+simdata$snow <- p2[,1]
+simdata$snow2 <- p2[,2]
+SLA_sp_pred <- aravo$traits[species,]$SLA
+simdata$snow.SLA <- scale(c(p2[,1] %*% t(SLA_sp_pred)))
+# Predictions 
+theta_pred <- predict(mod, newdata=simdata,
+                      Id_species=Id_species,   Id_sites=Id_sites, type="mean")
+hist(theta_pred, main="Predicted theta with simulated data", xlab="predicted theta")
+```
+
+# References

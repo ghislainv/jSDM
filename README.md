@@ -56,8 +56,8 @@ distribution models :
 | function                                 |    data type     |
 | :--------------------------------------- | :--------------: |
 | `jSDM_binomial_logit`                    | presence-absence |
-| `jSDM_binomial_probit_block`             | presence-absence |
-| `jSDM_binomial_probit_block_long_format` | presence-absence |
+| `jSDM_binomial_probit`             | presence-absence |
+| `jSDM_binomial_probit_long_format` | presence-absence |
 | `jSDM_poisson_log`                       |    abundance     |
 
 ## Contributing

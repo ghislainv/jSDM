@@ -25,7 +25,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_poisson_log}}
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_poisson_log}}
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -37,28 +37,29 @@
 #' colnames(Env_frogs) <- colnames(frogs[,1:3])
 #'# Parameter inference
 #' # Increase the number of iterations to reach MCMC convergence
-#' mod<-jSDM_binomial_probit_block(presence_site_sp=PA_frogs,
-#'                                 # Explanatory variables
-#'                                 site_suitability = ~.,
-#'                                 site_data = Env_frogs,
-#'                                 n_latent=2,
-#'                                 site_effect="random",
-#'                                 # Chains
-#'                                 burnin=100,
-#'                                 mcmc=100,
-#'                                 thin=1,
-#'                                 # Starting values
-#'                                 alpha_start=0,
-#'                                 beta_start=0,
-#'                                 lambda_start=0,
-#'                                 W_start=0,
-#'                                 V_alpha=1,
-#'                                 # Priors
-#'                                 shape=0.5, rate=0.0005,
-#'                                 mu_beta=0, V_beta=10,
-#'                                 mu_lambda=0, V_lambda=10,
-#'                                 # Various
-#'                                 seed=1234, verbose=1)
+#' mod<-jSDM_binomial_probit(# Response variable
+#'                           presence_data=PA_frogs,
+#'                           # Explanatory variables
+#'                           site_formula = ~.,
+#'                           site_data = Env_frogs,
+#'                           n_latent=2,
+#'                           site_effect="random",
+#'                           # Chains
+#'                           burnin=100,
+#'                           mcmc=100,
+#'                           thin=1,
+#'                           # Starting values
+#'                           alpha_start=0,
+#'                           beta_start=0,
+#'                           lambda_start=0,
+#'                           W_start=0,
+#'                           V_alpha=1,
+#'                           # Priors
+#'                           shape=0.5, rate=0.0005,
+#'                           mu_beta=0, V_beta=10,
+#'                           mu_lambda=0, V_lambda=10,
+#'                           # Various
+#'                           seed=1234, verbose=1)
 #' 
 #'# Select site and species for predictions
 #'## 30 sites
@@ -87,9 +88,13 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   ##= Model specifications
   model.spec <- object$model_spec
-  if(!is.null(model.spec$presences)){
-    species <- colnames(model.spec$presences)
-    sites <- rownames(model.spec$presences)
+  if(!is.null(model.spec$presence_data)){
+    species <- colnames(model.spec$presence_data)
+    sites <- rownames(model.spec$presence_data)
+  }
+  if(!is.null(model.spec$count_data)){
+    species <- colnames(model.spec$count_data)
+    sites <- rownames(model.spec$count_data)
   }
   if(!is.null(model.spec$data)){
     species <- unique(model.spec$data$species)
@@ -120,8 +125,8 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   
   if(!is.null(model.spec$data)){
     #= Suitability
-    suitability <- model.spec$site_suitability 
-    if(model.spec$site_suitability==~.) suitability <- ~. - site - Y
+    suitability <- model.spec$site_formula 
+    if(model.spec$site_formula==~.) suitability <- ~. - site - Y
     mf.suit <- model.frame(formula=suitability, data=as.data.frame(newdata))
     # design matrix X for species effects beta
     Xterms <- stringi::stri_remove_empty(gsub(":?species:?", "", 
@@ -133,17 +138,16 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     # design matrix D for parameters gamma
     Dterms <- grep("species", grep("site", attr(attr(mf.suit,"terms"),"term.labels"), value=T, invert=T), value=T, invert=T)
     if(length(Dterms)!=0){
-      Dformula <- paste0("~", paste0(Dterms, collapse="+"))
+      Dformula <- paste0("~", paste0(Dterms, collapse="+"),"-1")
       mf.suit.D <- model.frame(formula=Dformula, data=as.data.frame(newdata))
-      attr(attr(mf.suit.D,"terms"),"intercept") <- attr(attr(mf.suit,"terms"),"intercept")
       D.pred <- model.matrix(attr(mf.suit.D,"terms"), data=mf.suit.D)
       nd <- ncol(D.pred)
     }
   }
   
-  if(!is.null(model.spec$presences)){
+  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
     # Suitability process
-    suitability <- model.spec$site_suitability
+    suitability <- model.spec$site_formula
     mf.pred <- model.frame(formula=suitability,data=as.data.frame(newdata))
     X.pred <- model.matrix(attr(mf.pred,"terms"),data=mf.pred)
   }
@@ -158,7 +162,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     nl <- model.spec$n_latent
   }
   if (is.character(Id_species) || is.factor(Id_species)) {
-    if(!is.null(model.spec$presences)){
+    if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
       num_species <- rep(0,nsp)
       for(j in 1:nsp) {
         num_species[j] <- which(species == Id_species[j])
@@ -177,7 +181,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   }
   
   if (is.character(Id_sites) || is.factor(Id_sites)) {
-    if(!is.null(model.spec$presences)){
+    if(!is.null(model.spec$presence_data)| !is.null(model.spec$count_data)){
       num_sites <- rep(0,nsite)
       for(i in 1:nsite) {
         num_sites[i] <- which(sites == Id_sites[i])
@@ -201,7 +205,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   nburn <- model.spec$burnin
   nsamp <- model.spec$mcmc/nthin
   
-  if(!is.null(model.spec$presences)){
+  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
     ##= Posterior mean
     if (type=="mean") {
       term.pred <- matrix(0, npred, nsp)

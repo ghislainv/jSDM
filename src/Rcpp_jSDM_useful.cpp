@@ -17,7 +17,6 @@
 #include <gsl/gsl_sf_erf.h>
 #include "Rcpp_jSDM_useful.h"
 
-
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppGSL)]]
 
@@ -30,6 +29,25 @@ double logit (double x) {
   return std::log(x) - std::log(1-x);
 }
 
+double pdf_tnorm(double x, double mu, double sigma,
+                 double a, double b) {
+  static const double SQRT_2_PI    = 2.506628274631000241612;  // sqrt(2*pi)
+  if (ISNAN(x) || ISNAN(mu) || ISNAN(sigma) || ISNAN(a) || ISNAN(b))
+    return x+mu+sigma+a+b;
+  
+  if (a == R_NegInf && b == R_PosInf)
+    return R::dnorm(x, mu, sigma, false);
+  
+  double Phi_a, Phi_b;
+  if (x > a && x < b) {
+    Phi_a = R::pnorm((a-mu)/sigma,0.0, 1.0, true, false);
+    Phi_b = R::pnorm((b-mu)/sigma,0.0, 1.0, true, false);
+    return exp(-((x-mu)*(x-mu)) / (2.0*(sigma*sigma))) /
+      (SQRT_2_PI*sigma * (Phi_b - Phi_a));
+  } else {
+    return 0.0;
+  }
+}
 /*********************/
 /* Function invlogit */
 double invlogit (double x) {
@@ -143,7 +161,7 @@ double lambdaUdens_logit (double lambda_jq, void *dens_data) {
   } // loop on sites 
   
   // logPosterior = logL + logPrior
-  double logP = logL + R::dunif(lambda_jq, d->mu_lambda(q), d->V_lambda(q), 1);
+  double logP = logL + std::log(pdf_tnorm(lambda_jq, d->mu_lambda(q), std::sqrt(d->V_lambda(q)), 0, R_PosInf));
   return logP;
 }
 
@@ -315,7 +333,7 @@ double lambdaUdens_pois (double lambda_jq, void *dens_data) {
   } // loop on sites 
   
   // logPosterior = logL + logPrior
-  double logP = logL + R::dunif(lambda_jq, d->mu_lambda(q), d->V_lambda(q), 1);
+  double logP = logL + std::log(pdf_tnorm(lambda_jq, d->mu_lambda(q), std::sqrt(d->V_lambda(q)), 0, R_PosInf));
   return logP;
 }
 
@@ -3134,5 +3152,4 @@ double rtnorm(
   
   return r;  
 }
-
 // End

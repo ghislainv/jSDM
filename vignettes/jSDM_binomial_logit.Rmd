@@ -110,10 +110,10 @@ mod_birds_jSDM_logit <- jSDM_binomial_logit(
   # Chains
   burnin=500, mcmc=500, thin=1,
   # Response variable 
-  presence_site_sp=PA_birds, 
+  presence_data=PA_birds, 
   trials=Env_birds$nsurvey,
   # Explanatory variables 
-  site_suitability = ~ elev+rlength+forest,   
+  site_formula = ~ elev+rlength+forest,   
   site_data = Env_birds,
   # Model specification 
   n_latent=2, site_effect="random",
@@ -182,7 +182,7 @@ coda::densplot(mod_birds_jSDM_logit$mcmc.Deviance)
 
 # theta
 par (mfrow=c(2,1))
-hist(logit(mod_birds_jSDM_logit$theta_latent), main = "Predicted logit theta", xlab ="predicted logit theta")
+hist(mod_birds_jSDM_logit$logit_theta_latent, main = "Predicted logit theta", xlab ="predicted logit theta")
 hist(mod_birds_jSDM_logit$theta_latent, main = "Predicted theta", xlab ="predicted theta")
 ```
 

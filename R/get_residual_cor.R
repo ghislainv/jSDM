@@ -29,7 +29,7 @@
 #' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750. \cr
 #' Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. Methods in Ecology and Evolution, 7, 549-555.\cr
 #' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}} 
+#' @seealso \code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}} 
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -41,36 +41,35 @@
 #'  colnames(Env_frogs) <- colnames(frogs[,1:3])
 #'  Env_frogs <- as.data.frame(Env_frogs)
 #'  # Parameter inference
-#'# Increase the number of iterations to reach MCMC convergence
-#' mod <- jSDM_binomial_probit_block(# Response variable
-#'                                   presence_site_sp=PA_frogs,
-#'                                   # Explanatory variables
-#'                                   site_suitability = ~.,
-#'                                   site_data = Env_frogs,
-#'                                   n_latent=2,
-#'                                   site_effect="random",
-#'                                   # Chains
-#'                                   burnin=100,
-#'                                   mcmc=100,
-#'                                   thin=1,
-#'                                   # Starting values
-#'                                   alpha_start=0,
-#'                                   beta_start=0,
-#'                                   lambda_start=0,
-#'                                   W_start=0,
-#'                                   V_alpha=1,
-#'                                   # Priors
-#'                                   shape=0.5, rate=0.0005,
-#'                                   mu_beta=0, V_beta=10,
-#'                                   mu_lambda=0, V_lambda=10,
-#'                                   # Various
-#'                                   seed=1234, verbose=1)
+#' # Increase the number of iterations to reach MCMC convergence
+#'  mod <- jSDM_binomial_probit(# Response variable
+#'                              presence_data=PA_frogs,
+#'                              # Explanatory variables
+#'                              site_formula = ~.,
+#'                              site_data = Env_frogs,
+#'                              n_latent=2,
+#'                              site_effect="random",
+#'                              # Chains
+#'                              burnin=100,
+#'                              mcmc=100,
+#'                              thin=1,
+#'                              # Starting values
+#'                              alpha_start=0,
+#'                              beta_start=0,
+#'                              lambda_start=0,
+#'                              W_start=0,
+#'                              V_alpha=1,
+#'                              # Priors
+#'                              shape=0.5, rate=0.0005,
+#'                              mu_beta=0, V_beta=10,
+#'                              mu_lambda=0, V_lambda=10,
+#'                              # Various
+#'                              seed=1234, verbose=1)
 #' # Calcul of residual correlation between species 
 #'  result <- get_residual_cor(mod)
 #'  result$cov.mean
 #'  result$cor.mean
 #' @keywords stats::cov2cor
-#' @seealso \code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}} 
 #' @importFrom stats cov2cor
 #' @export
 
@@ -87,8 +86,11 @@ get_residual_cor <- function(mod) {
     stop("Please fit a LVM on your data and call ", calling.function(), " again.",
          call.=FALSE)
   }
-  if(!is.null(mod$model_spec$presences)){
-    n.species <- ncol(mod$model_spec$presences)
+  if(!is.null(mod$model_spec$presence_data)){
+    n.species <- ncol(mod$model_spec$presence_data)
+  }
+  if(!is.null(mod$model_spec$count_data)){
+    n.species <- ncol(mod$model_spec$count_data)
   }
   if(!is.null(mod$model_spec$data)){
     n.species <- length(unique(mod$model_spec$data$species))

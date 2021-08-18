@@ -74,5 +74,5 @@ double invlogit (double x);
 //  The code is based on the implementation by Guillaume Dollé, Vincent Mazet
 //  available from http://miv.u-strasbg.fr/mazet/rtnorm/.
 double rtnorm (gsl_rng *gen, double a,double b,const double mu,const double sigma);
-
+double pdf_tnorm(double x, double mu, double sigma, double a, double b);
 // End

@@ -63,19 +63,18 @@ We generate presence-absence data following this generalized multivariate linear
 library(jSDM)
 ```
 
-```{r simulated-data, eval=FALSE}
+```{r simulated-data}
 #==================
 #== Data simulation
-
 #= Number of sites
-nsite <- 300
+nsite <- 210
 
 #= Set seed for repeatability
 seed <- 123
 set.seed(seed)
 
 #= Number of species
-nsp<- 100
+nsp <- 70
 
 #= Number of latent variables
 n_latent <- 2
@@ -103,7 +102,7 @@ V_alpha.target <- 0.5
 #= Random site effect 
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 #= probit(theta)
-probit_theta<-X%*%beta.target + W%*%lambda.target + alpha.target
+probit_theta <- X%*%beta.target + W%*%lambda.target + alpha.target
 # Latent variable Z 
 e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 Z_true <- probit_theta + e
@@ -117,13 +116,15 @@ for (i in 1:nsite){
 }
 
 colnames(Y) <- paste0("Species", 1:nsp)
-save(Y, Z_true, alpha.target, V_alpha.target, beta.target, probit_theta,
-     X, lambda.target, np , nsite, nsp, n_latent, W, file="jSDM_in_parallel_files/sim_data.rda")
+save(Y, Z_true, alpha.target, V_alpha.target, beta.target, probit_theta
+     ,X, lambda.target, np , nsite, nsp, n_latent, W
+     ,file="jSDM_in_parallel_files/sim_data.rda")
 ```
 
 We look at the number of observations per site.
 
 ```{r presence-data, eval=TRUE}
+
 load("jSDM_in_parallel_files/sim_data.rda")
 head(Y)
 # Number of observations per site
@@ -152,9 +153,11 @@ We simulate in parallel two Monte-Carlo Markov chains (MCMC) of parameters value
 
 ## Using `doParallel` and `foreach`
 
-We estimate the model parameters with the function `jSDM_binomial_probit_block()`. 
+We estimate the model parameters with the function `jSDM_binomial_probit()`. 
 
 ```{r chains-probit-1}
+
+library(jSDM)
 library(parallel)
 library(doParallel)
 ## Make a cluster for parallel MCMCs
@@ -184,13 +187,13 @@ seed_mcmc <- c(1234, 4321)
 mod_probit_1 <-
   foreach (i = 1:nchains) %dopar% {
     # Infering model parameters
-    mod <- jSDM_binomial_probit_block(
+    mod <- jSDM::jSDM_binomial_probit(
       # Iterations
       burnin=10000, mcmc=10000, thin=10,
       # Data
-      presence_site_sp=Y,
+      presence_data=Y,
       site_data = X[,-1],
-      site_suitability = ~.,
+      site_formula = ~.,
       # Model specification 
       n_latent=n_latent,
       site_effect="random",
@@ -214,13 +217,14 @@ mod_probit_1 <-
     return(mod)
   }
 # Stop cluster
-stopCluster(clust)
+# stopCluster(clust)
 ```
 
 ## Using `snow` and `snowfall`
 
 ```{r chains-probit-2}
 ## load libraries
+
 library(snow)
 library(snowfall)
 
@@ -239,8 +243,8 @@ n_latent <- 2
 lambda_start <- c(-0.5, 0.5)
 beta_start <- c(-0.5,0.5)
 W_start <- c(0.2,-0.2)
-alpha_start <- c(-1, 1)
-V_alpha_start <- c(2, 1.5)
+alpha_start <- c(-0.2, 0.2)
+V_alpha_start <- c(0.2, 0.7)
 
 # Seeds
 seed_mcmc <- c(123, 321)
@@ -251,6 +255,7 @@ listData <- list(Y=Y, X=X[,-1], beta_start, lambda_start, W_start, alpha_start, 
 
 
 ```{r mod-probit-2}
+
 ## Defining the function that will run MCMC on each CPU
 # Arguments:
 # i - will be 1 or 2
@@ -265,13 +270,13 @@ mod.MCMChregress <- function (i,listData) {
   V_alpha_start <- listData[[7]]
   seed_mcmc <- listData[[8]]
   # Infering model parameters
-  mod <- jSDM_binomial_probit_block(
+  mod <- jSDM_binomial_probit(
     # Iterations
     burnin=10000, mcmc=10000, thin=10,
     # Data
-    presence_site_sp=Y,
+    presence_data=Y,
     site_data = X,
-    site_suitability = ~.,
+    site_formula = ~.,
     # Model specification 
     n_latent=2,
     site_effect="random",
@@ -299,8 +304,7 @@ mod.MCMChregress <- function (i,listData) {
 mod_probit_2 <- sfLapply(1:2, fun=mod.MCMChregress, listData=listData)
 
 ## Stop cluster
-sfStop()
-
+#sfStop()
 # Output
 n_chains <- length(c(mod_probit_1, mod_probit_2))
 mod <- mod_probit_1[[1]]
@@ -321,7 +325,7 @@ Convergence is diagnosed when the four chains have ‘forgotten’ their initial
 If the convergence diagnostic gives values of potential scale reduction factor or psrf
 substantially above 1, its indicates lack of convergence.
 
-```{r MCMC-convergence-randiste-lv, echo=TRUE}
+```{r MCMC-convergence-randsite-lv, echo=TRUE}
 require(coda)
 arr2mcmc <- function(x) {
   return(mcmc(as.data.frame(x)))
@@ -338,7 +342,8 @@ mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(mcmc_list_param[,grep("lamb
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 nsamp <- nrow(mcmc_list_alpha[[1]])
 # psrf gelman indice 
-psrf_alpha <- gelman.diag(mcmc_list_alpha)$mpsrf
+psrf_alpha <- gelman.diag(mcmc_list_alpha, transform=TRUE)$mpsrf
+#max(gelman.diag(mcmc_list_alpha, multivariate = FALSE)$psrf)
 psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf
 psrf_beta <- gelman.diag(mcmc_list_param[,grep("beta",colnames(mcmc_list_param[[1]]))])$mpsrf
 psrf_lambda <- gelman.diag(mcmc_list_centered_lambda)$mpsrf
@@ -348,6 +353,7 @@ save(psrf_lambda, psrf_lv, psrf_alpha, psrf_V_alpha, psrf_beta,
 ```
 
 ```{r psrf, echo=FALSE, eval=TRUE}
+
 load("jSDM_in_parallel_files/psrf.rda")
 # display gelman indice :  potential scale reduction factor or psrf
 cat("psrf centered latent variables:", psrf_lv, "\n")
@@ -463,11 +469,11 @@ abline(a=0,b=1,col='red')
 
 #= Predictions 
 par(mfrow=c(1,2))
-plot(probit_theta, mod_probit[[1]]$probit_theta_pred,
+plot(probit_theta, mod_probit[[1]]$probit_theta_latent,
      main="probit(theta)",xlab="obs",ylab="fitted")
 for (i in 2:nchains){
   ## probit(tetha)
-  points(probit_theta, mod_probit[[i]]$probit_theta_pred,col=c(2:nchains))
+  points(probit_theta, mod_probit[[i]]$probit_theta_latent,col=c(2:nchains))
 }
 abline(a=0,b=1,col='red')
 ## Z

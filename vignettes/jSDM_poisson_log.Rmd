@@ -110,9 +110,9 @@ mod_mites_jSDM_log <- jSDM_poisson_log(
   # Chains
   burnin=1000, mcmc=1000, thin=1,
   # Response variable 
-  presence_site_sp=PA_mites, 
+  count_data=PA_mites, 
   # Explanatory variables 
-  site_suitability = ~.,   
+  site_formula = ~.,   
   site_data = Env_mites,
   # Model specification 
   n_latent=2, site_effect="random",
@@ -178,7 +178,7 @@ coda::densplot(mod_mites_jSDM_log$mcmc.Deviance)
 
 ## probit_theta
 par (mfrow=c(2,1))
-hist(log(mod_mites_jSDM_log$theta_latent), main = "Predicted log theta", xlab ="predicted log theta")
+hist(mod_mites_jSDM_log$log_theta_latent, main = "Predicted log theta", xlab ="predicted log theta")
 hist(mod_mites_jSDM_log$theta_latent, main = "Predicted theta", xlab ="predicted theta")
 ```
 

@@ -77,9 +77,9 @@ Env_mites <- as.data.frame(Env_mites)
 # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
 mod <- jSDM_poisson_log(# Response variable
-                        presence_site_sp=PA_mites,
+                        count_data=PA_mites,
                         # Explanatory variables
-                        site_suitability = ~  water + topo + density,
+                        site_formula = ~  water + topo + density,
                         site_data = Env_mites,
                         n_latent=2,
                         site_effect="random",
@@ -112,7 +112,7 @@ plot_associations(R, env_effect = env_effect, species_order="main env_effect")
 Pichler M. and Hartig F. (2020). “A new method for faster and more accurate inference of species associations from big community data”. \cr}
 }
 \seealso{
-\code{\link{jSDM-package}} \code{\link{get_residual_cor}} \code{\link{jSDM_binomial_probit_block_long_format}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}
+\code{\link{jSDM-package}} \code{\link{get_residual_cor}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_probit_long_format}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}
 }
 \author{
 \tabular{l}{

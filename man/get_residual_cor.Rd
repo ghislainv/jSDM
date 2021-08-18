@@ -40,29 +40,29 @@ library(jSDM)
  Env_frogs <- as.data.frame(Env_frogs)
  # Parameter inference
 # Increase the number of iterations to reach MCMC convergence
-mod <- jSDM_binomial_probit_block(# Response variable
-                                  presence_site_sp=PA_frogs,
-                                  # Explanatory variables
-                                  site_suitability = ~.,
-                                  site_data = Env_frogs,
-                                  n_latent=2,
-                                  site_effect="random",
-                                  # Chains
-                                  burnin=100,
-                                  mcmc=100,
-                                  thin=1,
-                                  # Starting values
-                                  alpha_start=0,
-                                  beta_start=0,
-                                  lambda_start=0,
-                                  W_start=0,
-                                  V_alpha=1,
-                                  # Priors
-                                  shape=0.5, rate=0.0005,
-                                  mu_beta=0, V_beta=10,
-                                  mu_lambda=0, V_lambda=10,
-                                  # Various
-                                  seed=1234, verbose=1)
+ mod <- jSDM_binomial_probit(# Response variable
+                             presence_data=PA_frogs,
+                             # Explanatory variables
+                             site_formula = ~.,
+                             site_data = Env_frogs,
+                             n_latent=2,
+                             site_effect="random",
+                             # Chains
+                             burnin=100,
+                             mcmc=100,
+                             thin=1,
+                             # Starting values
+                             alpha_start=0,
+                             beta_start=0,
+                             lambda_start=0,
+                             W_start=0,
+                             V_alpha=1,
+                             # Priors
+                             shape=0.5, rate=0.0005,
+                             mu_beta=0, V_beta=10,
+                             mu_lambda=0, V_lambda=10,
+                             # Various
+                             seed=1234, verbose=1)
 # Calcul of residual correlation between species 
  result <- get_residual_cor(mod)
  result$cov.mean
@@ -75,9 +75,7 @@ Ovaskainen et al. (2016). Using latent variable models to identify large network
 Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.\cr }
 }
 \seealso{
-\code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}}
-
-\code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}}  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}  \code{\link{jSDM_binomial_probit_block}}
+\code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}
 }
 \author{
 \tabular{l}{

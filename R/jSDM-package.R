@@ -18,13 +18,13 @@
 #' \tabular{ll}{
 #'    function \tab data-type \cr
 #'    \code{\link{jSDM_binomial_logit}} \tab presence-absence \cr
-#'    \code{\link{jSDM_binomial_probit_block}} \tab presence-absence \cr
-#'    \code{\link{jSDM_binomial_probit_block_long_format}} \tab presence-absence \cr
+#'    \code{\link{jSDM_binomial_probit}} \tab presence-absence \cr
+#'    \code{\link{jSDM_binomial_probit_long_format}} \tab presence-absence \cr
 #'    \code{\link{jSDM_poisson_log}} \tab abundance \cr }
 #'    
 #' \itemize{
 #'   
-#' \item{ \code{\link{jSDM_binomial_probit_block}} : \cr
+#' \item{ \code{\link{jSDM_binomial_probit}} : \cr
 #' \cr
 #' \bold{Ecological process:}
 #' \deqn{y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})}{y_ij ~ Bernoulli(\theta_ij),}
@@ -63,7 +63,7 @@
 #'  if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }}
 #' 
-#' #' \item{ \code{\link{jSDM_binomial_probit_block_long_format}} : \cr
+#' #' \item{ \code{\link{jSDM_binomial_probit_long_format}} : \cr
 #' \cr
 #' \bold{Ecological process:}
 #' \deqn{y_n \sim \mathcal{B}ernoulli(\theta_n)}{y_n ~ Bernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},

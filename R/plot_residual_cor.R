@@ -22,7 +22,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit_block}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
+#' @seealso \code{\link[corrplot]{corrplot}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -34,33 +34,31 @@
 #'  colnames(Env_frogs) <- colnames(frogs[,1:3])
 #'# Parameter inference
 #'# Increase the number of iterations to reach MCMC convergence
-#'mod<-jSDM_binomial_probit_block(# Response variable 
-#'                                presence_site_sp = 
-#'                                PA_frogs, 
-#'                                # Explanatory variables 
-#'                                site_suitability = ~.,   
-#'                                site_data = Env_frogs,
-#'                                n_latent=2,
-#'                                site_effect="random",
-#'                                # Chains
-#'                                burnin=100,
-#'                                mcmc=100,
-#'                                thin=1,
-#'                                # Starting values
-#'                                alpha_start=0,
-#'                                beta_start=0,
-#'                                lambda_start=0,
-#'                                W_start=0,
-#'                                V_alpha=1, 
-#'                                # Priors
-#'                                shape=0.5, rate=0.0005,
-#'                                mu_beta=0, V_beta=1.0E6,
-#'                                mu_lambda=0, V_lambda=10,
-#'                                # Various 
-#'                                seed=1234, verbose=1)
+#' mod<-jSDM_binomial_probit(# Response variable
+#'                            presence_data = PA_frogs,
+#'                            # Explanatory variables
+#'                            site_formula = ~.,
+#'                            site_data = Env_frogs,
+#'                            n_latent=2,
+#'                            site_effect="random",
+#'                            # Chains
+#'                            burnin=100,
+#'                            mcmc=100,
+#'                            thin=1,
+#'                            # Starting values
+#'                            alpha_start=0,
+#'                            beta_start=0,
+#'                            lambda_start=0,
+#'                            W_start=0,
+#'                            V_alpha=1,
+#'                            # Priors
+#'                            shape=0.5, rate=0.0005,
+#'                            mu_beta=0, V_beta=1.0E6,
+#'                            mu_lambda=0, V_lambda=10,
+#'                            # Various
+#'                            seed=1234, verbose=1)
 #' # Representation of residual correlation between species 
 #' plot_residual_cor(mod)
-#' @seealso \code{\link[corrplot]{corrplot}}
 #' @references \tabular{l}{
 #' Taiyun Wei and Viliam Simko (2017). R package "corrplot": Visualization of a Correlation Matrix (Version 0.84) \cr
 #' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr
@@ -74,8 +72,11 @@ plot_residual_cor <- function(mod, title = "Residual Correlation Matrix from LVM
                               method = "color",  mar = c(1,1,3,1), tl.srt = 45, tl.cex = 0.5, ...) {
   lv2.cor <- get_residual_cor(mod)
   lv2.cor$reorder.cor.mean <- corrplot::corrMatOrder(lv2.cor$cor.mean, order = "FPC", hclust.method = "average")
-  if(!is.null(mod$model_spec$presences)){
-  rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- colnames(mod$model_spec$presences)
+  if(!is.null(mod$model_spec$presence_data)){
+  rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- colnames(mod$model_spec$presence_data)
+  }
+  if(!is.null(mod$model_spec$count_data)){
+    rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- colnames(mod$model_spec$count_data)
   }
   if(!is.null(mod$model_spec$data)){
     rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- unique(mod$model_spec$data$species)

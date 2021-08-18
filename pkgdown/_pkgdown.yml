@@ -45,8 +45,8 @@ articles:
 - title: Usage
   navbar: Usage
   contents:
-  - '`jSDM_binomial_probit_block`'
-  - '`jSDM_binomial_probit_block_long_format`'
+  - '`jSDM_binomial_probit`'
+  - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
   - '`jSDM_in_parallel`'
@@ -65,8 +65,8 @@ reference:
 - title: jSDM
   desc: Functions for joint species distribution models
   contents:  
-  - '`jSDM_binomial_probit_block`'
-  - '`jSDM_binomial_probit_block_long_format`'
+  - '`jSDM_binomial_probit`'
+  - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
 - title: Data

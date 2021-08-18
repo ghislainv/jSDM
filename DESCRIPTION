@@ -3,11 +3,12 @@ Type: Package
 Title: Joint Species Distribution Models
 Version: 0.1.1
 Date: 2019-05-30
-Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi
+Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
-Suggests: knitr, kableExtra, raster, sp, rmarkdown, bookdown, testthat, boral, Hmsc, BayesComm, doParallel, foreach, snow, snowfall
+Suggests: knitr, kableExtra, raster, sp, rmarkdown, bookdown,
+          testthat, boral, Hmsc, BayesComm, doParallel, foreach, snow, snowfall
 Authors@R: c(
   person("Jeanne", "Clément", role=c("aut"),
          email="jeanne.clement16@laposte.net",

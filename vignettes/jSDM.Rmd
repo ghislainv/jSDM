@@ -50,11 +50,11 @@ The package includes the following functions to fit various species distribution
 | function |  data type   | data format |
 |:---------|:-------------|:------------|
 | `jSDM_binomial_logit()` | presence-absence | wide | 
-| `jSDM_binomial_probit_block()` | presence-absence | wide |
-| `jSDM_binomial_probit_block_long_format()` | presence-absence | long |
+| `jSDM_binomial_probit()` | presence-absence | wide |
+| `jSDM_binomial_probit_long_format()` | presence-absence | long |
 | `jSDM_poisson_log()` | abundance | wide |
 
-* `jSDM_binomial_probit_block()` : 
+* `jSDM_binomial_probit()` : 
 
   **Ecological process:**
 
@@ -103,7 +103,7 @@ The package includes the following functions to fit various species distribution
   | if `n_latent=0` and `site_effect="random"`| log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
   | if `n_latent>0` and `site_effect="random"`| log$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
-* `jSDM_binomial_probit_block_long_format()` : 
+* `jSDM_binomial_probit_long_format()` : 
 
   **Ecological process:**
 
@@ -205,17 +205,17 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 ## Parameter inference
 
-We use the `jSDM_binomial_probit_block()`
+We use the `jSDM_binomial_probit()`
 function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-probit}
-mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
+mod_frogs_jSDM_probit <- jSDM_binomial_probit(
   # Chains
   burnin=1000, mcmc=1000, thin=1,
   # Response variable 
-  presence_site_sp = PA_frogs, 
+  presence_data = PA_frogs, 
   # Explanatory variables 
-  site_suitability = ~.,   
+  site_formula = ~.,   
   site_data = Env_frogs,
   # Model specification 
   n_latent=2, site_effect="random",
@@ -225,8 +225,8 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit_block(
   V_alpha=1, 
   # Priors
   shape=0.1, rate=0.1,
-  mu_beta=0, V_beta=10,
-  mu_lambda=0, V_lambda=10,
+  mu_beta=0, V_beta=1,
+  mu_lambda=0, V_lambda=1,
   # Various 
   seed=1234, verbose=1)
 ```
@@ -282,10 +282,10 @@ coda::traceplot(mod_frogs_jSDM_probit$mcmc.Deviance)
 coda::densplot(mod_frogs_jSDM_probit$mcmc.Deviance)
 
 ## probit_theta
-par (mfrow=c(2,1))
-hist(mod_frogs_jSDM_probit$probit_theta_pred,
+par (mfrow=c(1,2))
+hist(mod_frogs_jSDM_probit$probit_theta_latent,
      main = "Predicted probit theta", xlab ="predicted probit theta")
-hist(pnorm(mod_frogs_jSDM_probit$probit_theta_pred),
+hist(mod_frogs_jSDM_probit$theta_latent,
      main = "Predicted theta", xlab ="predicted theta")
 ```
 

@@ -3,10 +3,11 @@ title: "Comparison jSDM-boral"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
-    #highlight: tango
+    highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_depth: 4
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
@@ -24,7 +25,7 @@ vignette: >
 knitr::opts_chunk$set(
   fig.align="center",
   fig.width=8, fig.height=6,
-  cache=FALSE,
+  cache=TRUE,
   collapse=TRUE,
   comment="#>",
   highlight=TRUE,
@@ -41,7 +42,7 @@ We consider a latent variable model (LVM) to account for species co-occurrence [
 $$y_{ij} \sim \mathcal{B}iniomial(t_i, \theta_{ij})$$
   
   $$ \mathrm{g}(\theta_{ij}) = \alpha_i + X_i\beta_j + W_i\lambda_j $$
-- $\theta_{ij}: occurence probability of the species $j$ on site $i$. 
+- $\theta_{ij}$: occurence probability of the species $j$ on site $i$. 
 - $t_i$: number of visits at site $i$ 
 - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 
@@ -61,7 +62,7 @@ Referring to the models used in the articles [@Hui2016], we define the following
 
 $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$. 
 
-$$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i\beta_j+ W_i\lambda_j $$
+$$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j} + X_i\beta_j + W_i\lambda_j $$
 
 # Data-sets
  
@@ -114,7 +115,8 @@ PA_Birds <- birds[,1:158]
 rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
 PA_Birds <- PA_Birds[, -rare_sp]
 Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
-mf.suit <- model.frame(formula=~elev+rlength+forest, data=as.data.frame(Env_Birds))
+colnames(Env_Birds) <- c("elev","rlength","forest","nsurvey")
+mf.suit <- model.frame(formula=~elev+rlength+forest, data=Env_Birds)
 X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
 # Mites dataset
 data("mites")
@@ -160,33 +162,32 @@ In a first step, we fit joint species distribution models from previous datasets
 We generate a data-set following the previous model with 300 sites, 100 species and as parameters :
 
 ```{r simulated-data, echo=TRUE}
-
 # Toy example : 
 nsp <- 100
 nsite <- 300
-np <- 3
-nl <- 2
-seed <- 123
+seed <- 1234
 set.seed(seed)
 
 # Ecological process (suitability)
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
+np <- ncol(X)
 # Simulation of parameters
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+nl <- ncol(W)
+beta.target <- t(matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp))
 l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*2-3,-2,2)
+l.diag <- runif(2,0,1)
+l.other <- runif(nsp*2-3,-1,1)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]),
                           byrow=T, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
 V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 
 # Simulation of response data with probit link
 probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
+theta <- pnorm(probit_theta)
 e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 Z_true <- probit_theta + e
 Y <- matrix (NA, nsite,nsp)
@@ -206,40 +207,41 @@ library(boral)
 T1<-Sys.time() 
 mod_boral_sim <- boral(y=Y, X=X[,-1], lv.control=list(num.lv=nl),
                        family="binomial", row.eff="random",
-                       hypparams=c(10,10,10,30),
+                       hypparams=c(10,10,10,30), 
                        mcmc.control=list(n.burnin=10000,n.iteration=15000,
                                          n.thin=5,seed=123))
 T2<-Sys.time() 
 T_boral_sim=difftime(T2, T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_sim <- mod_boral_sim$row.coefs$ID1$mean + 
+probit_theta_latent_sim <- mod_boral_sim$row.coefs$ID1$mean + 
   X[,-1] %*% t(mod_boral_sim$X.coefs.mean) + 
-  X[,1] %*% mod_boral_sim$lv.coefs.mean[,"beta0"] + 
+  matrix(mod_boral_sim$lv.coefs.mean[,"beta0"],nrow=nsite,ncol=nsp,byrow=TRUE) +
   mod_boral_sim$lv.mean%*%t(mod_boral_sim$lv.coefs.mean[,-1])
+
+theta_latent_sim <- pnorm(probit_theta_latent_sim)
+
 # RMSE
-SE=(probit_theta-probit_theta_pred_sim)^2
+SE=(probit_theta-probit_theta_latent_sim)^2
 RMSE_boral_sim=sqrt(sum(SE/(nsite*nsp)))
 # Deviance 
 logL=0
 for (i in 1:nsite){
   for (j in 1:nsp){
-    theta <- pnorm(probit_theta_pred_sim[i,j])
-    logL=logL + dbinom(Y[i,j],1,theta,1)  
+    logL=logL + dbinom(Y[i,j],1,theta_latent_sim[i,j],1)  
   }
 }
 Deviance_boral_sim <- -2*logL
 
 save(np, nl, nsp, nsite, beta.target, lambda.target, alpha.target, 
      V_alpha.target, X, W, probit_theta, Z_true, Y, T_boral_sim,
-     mod_boral_sim, probit_theta_pred_sim,
+     mod_boral_sim, probit_theta_latent_sim,
      RMSE_boral_sim, Deviance_boral_sim,
      file="jSDM_boral_cache/boral_simulation.RData")
 ```
 
 ```{r boral-simulation-plot}
 load(file="jSDM_boral_cache/boral_simulation.RData")
-
 ## Fixed species effect beta
 par(mfrow=c(1,2))
 plot(t(beta.target),
@@ -265,13 +267,18 @@ plot(alpha.target, mod_boral_sim$row.coefs$ID1$mean,
 abline(a=0,b=1,col='red')
 points(V_alpha.target, mod_boral_sim$row.sigma$ID1["mean"],
        pch=17, col='red', cex=1.5)
-legend("topleft", legend="V_alpha", pch=17, col='blue')
+legend("topleft", legend="V_alpha", pch=17, col='red')
 title("Random site effect alpha and its variance")
 
 ## Prediction
-# probit_theta_pred 
-plot(probit_theta,probit_theta_pred_sim,
+par(mfrow=c(1,2))
+# probit_theta_latent 
+plot(probit_theta,probit_theta_latent_sim,
      main="probit(theta)", xlab ="obs", ylab="fitted")
+abline(a=0,b=1,col='red')
+# theta_latent
+plot(pnorm(probit_theta), pnorm(probit_theta_latent_sim),
+     main="theta", xlab ="obs", ylab="fitted")
 abline(a=0,b=1,col='red')
 ```
 
@@ -306,23 +313,23 @@ T2 <- Sys.time()
 T_boral_Mosquitos <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Mosquitos <- mod_boral_Mosquitos$row.coefs[[1]]$mean +
+probit_theta_latent_Mosquitos <- mod_boral_Mosquitos$row.coefs[[1]]$mean +
   as.matrix(Env_Mosquitos) %*% t(mod_boral_Mosquitos$X.coefs.mean) +
   matrix(1,nrow=nrow(PA_Mosquitos), ncol=1)%*%mod_boral_Mosquitos$lv.coefs.mean[,"beta0"] + 
   mod_boral_Mosquitos$lv.mean%*% t(mod_boral_Mosquitos$lv.coefs.mean[,-1])
-
+# theta_latent
+theta_latent_Mosquitos <- pnorm(probit_theta_latent_Mosquitos)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Mosquitos)){
   for (j in 1:ncol(PA_Mosquitos)){
-    theta <- pnorm(probit_theta_pred_Mosquitos[i,j])
-    logL=logL + dbinom(PA_Mosquitos[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Mosquitos[i,j],1,theta_latent_Mosquitos[i,j],1)  
   }
 }
 Deviance_boral_Mosquitos <- -2*logL
 
 save(T_boral_Mosquitos, mod_boral_Mosquitos,
-     probit_theta_pred_Mosquitos, Deviance_boral_Mosquitos,
+     probit_theta_latent_Mosquitos, Deviance_boral_Mosquitos,
      file="jSDM_boral_cache/boral_Mosquitos.RData")
 ```
 
@@ -339,7 +346,7 @@ Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "
 PA_Eucalypts <- eucalypts[,1:12]
 Env_Eucalypts <- Env_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 # Remove sites where none species was recorded
-PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
+PA_Eucalypts <- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 
 # Fit the model 
 T1 <- Sys.time()
@@ -352,23 +359,23 @@ T2 <- Sys.time()
 T_boral_Eucalypts <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Eucalypts <- mod_boral_Eucalypts$row.coefs[[1]]$mean + 
+probit_theta_latent_Eucalypts <- mod_boral_Eucalypts$row.coefs[[1]]$mean + 
   as.matrix(Env_Eucalypts) %*% t(mod_boral_Eucalypts$X.coefs.mean) + 
   matrix(1,nrow=nrow(PA_Eucalypts),ncol=1)%*%mod_boral_Eucalypts$lv.coefs.mean[,"beta0"] + 
   mod_boral_Eucalypts$lv.mean%*%t(mod_boral_Eucalypts$lv.coefs.mean[,-1])
-
+# theta_latent
+theta_latent_Eucalypts <- pnorm(probit_theta_latent_Eucalypts)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Eucalypts)){
   for (j in 1:ncol(PA_Eucalypts)){
-    theta <- pnorm(probit_theta_pred_Eucalypts[i,j])
-    logL=logL + dbinom(PA_Eucalypts[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Eucalypts[i,j],1,theta_latent_Eucalypts[i,j],1)  
   }
 }
 Deviance_boral_Eucalypts <- -2*logL
 
 save(T_boral_Eucalypts, mod_boral_Eucalypts,
-     probit_theta_pred_Eucalypts, Deviance_boral_Eucalypts,
+     probit_theta_latent_Eucalypts, Deviance_boral_Eucalypts,
      file="jSDM_boral_cache/boral_Eucalypts.RData")
 ```
 
@@ -396,23 +403,23 @@ T2 <- Sys.time()
 T_boral_Frogs <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Frogs <- mod_boral_Frogs$row.coefs[[1]]$mean + 
+probit_theta_latent_Frogs <- mod_boral_Frogs$row.coefs[[1]]$mean + 
   as.matrix(Env_Frogs) %*% t(mod_boral_Frogs$X.coefs.mean) +
   matrix(1,nrow=nrow(PA_Frogs), ncol=1)%*%mod_boral_Frogs$lv.coefs.mean[,"beta0"] + 
   mod_boral_Frogs$lv.mean%*%t(mod_boral_Frogs$lv.coefs.mean[,-1])
-
+# theta_latent
+theta_latent_Frogs <- pnorm(probit_theta_latent_Frogs)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Frogs)){
   for (j in 1:ncol(PA_Frogs)){
-    theta <- pnorm(probit_theta_pred_Frogs[i,j])
-    logL=logL + dbinom(PA_Frogs[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Frogs[i,j],1,theta_latent_Frogs[i,j],1)  
   }
 }
 Deviance_boral_Frogs <- -2*logL
 
 save(T_boral_Frogs, mod_boral_Frogs,
-     probit_theta_pred_Frogs, Deviance_boral_Frogs,
+     probit_theta_latent_Frogs, Deviance_boral_Frogs,
      file="jSDM_boral_cache/boral_Frogs.RData")
 ```
 
@@ -446,23 +453,23 @@ T2 <- Sys.time()
 T_boral_Fungi <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-probit_theta_pred_Fungi <- mod_boral_Fungi$row.coefs[[1]]$mean +
+probit_theta_latent_Fungi <- mod_boral_Fungi$row.coefs[[1]]$mean +
   as.matrix(Env_Fungi) %*% t(mod_boral_Fungi$X.coefs.mean) + 
   matrix(1,nrow=nrow(PA_Fungi), ncol=1)%*%mod_boral_Fungi$lv.coefs.mean[,"beta0"] + 
   mod_boral_Fungi$lv.mean%*%t(mod_boral_Fungi$lv.coefs.mean[,-1])
-
+# theta_latent
+theta_latent_Fungi <- pnorm(probit_theta_latent_Fungi)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Fungi)){
   for (j in 1:ncol(PA_Fungi)){
-    theta <- pnorm(probit_theta_pred_Fungi[i,j])
-    logL=logL + dbinom(PA_Fungi[i,j],1,theta,1)  
+    logL=logL + dbinom(PA_Fungi[i,j],1,theta_latent_Fungi[i,j],1)  
   }
 }
 Deviance_boral_Fungi <- -2*logL
 
 save(T_boral_Fungi, mod_boral_Fungi,
-     probit_theta_pred_Fungi, Deviance_boral_Fungi,
+     probit_theta_latent_Fungi, Deviance_boral_Fungi,
      file="jSDM_boral_cache/boral_Fungi.RData")
 ```
 
@@ -492,7 +499,7 @@ num.lv <- 2
 # Fit the model 
 library(jagsUI)
 T1 <- Sys.time()
-# Number of trials by site impossible to specify, trial.size either equal to a single element, or a vector of length equal to the number of columns in y
+# Number of trials by site impossible to specify with boral, trial.size either equal to a single element, or a vector of length equal to the number of columns in y
 # mod_boral_Birds <- boral(y=PA_Birds, X=X_Birds,
 #                          lv.control=list(num.lv=2), family="binomial",
 #                          trial.size=max(Env_Birds$nsurvey),
@@ -530,23 +537,23 @@ T2 <- Sys.time()
 T_boral_Birds <- difftime(T2,T1)
 
 # Predicted logit(theta) 
-logit_theta_pred_Birds <- c(mod_boral_Birds$mean$row.coefs) +
+logit_theta_latent_Birds <- c(mod_boral_Birds$mean$row.coefs) +
   as.matrix(X_Birds) %*% t(as.matrix(mod_boral_Birds$mean$X.coefs)) + 
   matrix(1,nrow=nrow(PA_Birds), ncol=1)%*% mod_boral_Birds$mean$lv.coefs[,1] + 
   mod_boral_Birds$mean$lvs%*%t(mod_boral_Birds$mean$lv.coefs[,-1])
-
+# theta_latent
+theta_latent_Birds <- inv_logit(logit_theta_latent_Birds)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Birds)){
   for (j in 1:ncol(PA_Birds)){
-    theta <- inv_logit(logit_theta_pred_Birds[i,j])
-    logL= logL + dbinom(PA_Birds[i,j],Env_Birds$nsurvey[i],theta,1)  
+    logL= logL + dbinom(PA_Birds[i,j],Env_Birds$nsurvey[i],theta_latent_Birds[i,j],1)  
   }
 }
 Deviance_boral_Birds <- -2*logL
 # mod_boral_Birds$mean$deviance
 save(T_boral_Birds, mod_boral_Birds,
-     logit_theta_pred_Birds, Deviance_boral_Birds,
+     logit_theta_latent_Birds, Deviance_boral_Birds,
      file="jSDM_boral_cache/boral_Birds.RData")
 ```
 
@@ -578,22 +585,23 @@ T2 <- Sys.time()
 T_boral_Mites <- difftime(T2,T1)
 
 # Predicted probit(theta) 
-log_theta_pred_Mites <- as.matrix(X_Mites[,-1]) %*% t(mod_boral_Mites$X.coefs.mean) +
+log_theta_latent_Mites <- as.matrix(X_Mites[,-1]) %*% t(mod_boral_Mites$X.coefs.mean) +
   matrix(1,nrow=nrow(PA_Mites), ncol=1)%*%mod_boral_Mites$lv.coefs.mean[,"beta0"] + 
   mod_boral_Mites$lv.mean%*%t(mod_boral_Mites$lv.coefs.mean[,-1]) +
   c(mod_boral_Mites$row.coefs[[1]]$mean)
+# theta_latent
+theta_latent_Mites <- exp(log_theta_latent_Mites)
 # Deviance
 logL=0
 for (i in 1:nrow(PA_Mites)){
   for (j in 1:ncol(PA_Mites)){
-    theta <- exp(log_theta_pred_Mites[i,j])
-    logL=logL + dpois(PA_Mites[i,j], theta,1)  
+    logL=logL + dpois(PA_Mites[i,j],theta_latent_Mites[i,j],1)  
   }
 }
 Deviance_boral_Mites <- -2*logL
 
 save(T_boral_Mites, mod_boral_Mites,
-     log_theta_pred_Mites, Deviance_boral_Mites,
+     log_theta_latent_Mites, Deviance_boral_Mites,
      file="jSDM_boral_cache/boral_Mites.RData")
 ```
 
@@ -605,19 +613,20 @@ In a second step, we fit the same joint species distribution models from each of
 
 ## Simulated dataset
 
-We fit a binomial joint species distribution model, including random site effect and latent variables, from the simulated dataset using the `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the simulated dataset using the `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-simulation }
+```{r jSDM-simulation}
+load(file="jSDM_boral_cache/boral_simulation.RData")
 library(jSDM)
 # Fit the model
 T1<-Sys.time() 
-mod_jSDM_sim <- jSDM_binomial_probit_block(
+mod_jSDM_sim <- jSDM_binomial_probit(
   # Chains
   burnin=10000, mcmc=5000, thin=5,
   # Response variable
-  presence_site_sp=Y, 
+  presence_data=Y, 
   # Explanatory variables 
-  site_suitability=~x1+x2,   
+  site_formula=~x1+x2,   
   site_data=X,
   # Model specification
   n_latent=2, site_effect="random",
@@ -627,7 +636,7 @@ mod_jSDM_sim <- jSDM_binomial_probit_block(
   V_alpha=1, 
   # Priors 
   shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=10 ,
+  mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
   seed=123, verbose=1)
@@ -635,7 +644,7 @@ T2<-Sys.time()
 T_jSDM_sim=difftime(T2, T1)
 
 # RMSE
-SE=(probit_theta-mod_jSDM_sim$probit_theta_pred)^2
+SE=(probit_theta-mod_jSDM_sim$probit_theta_latent)^2
 RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
 
 save(T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
@@ -644,7 +653,6 @@ save(T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
 
 ```{r jSDM-simulation-plot}
 load(file="jSDM_boral_cache/jSDM_simulation.RData")
-load(file="jSDM_boral_cache/boral_simulation.RData")
 # ===================================================
 # Result analysis
 # ===================================================
@@ -710,22 +718,18 @@ plot(alpha.target,apply(mod_jSDM_sim$mcmc.alpha,2,mean),
      xlab= "obs", ylab="fitted", main="Random site effect alpha")
 abline(a=0,b=1,col='red')
 
-SE=(probit_theta-mod_jSDM_sim$probit_theta_pred)^2
-RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
-
-
 ## Deviance
 plot(mod_jSDM_sim$mcmc.Deviance, main="Deviance")
 
 #= Predictions
 ## probit_theta
 par(mfrow=c(1,2))
-plot(probit_theta,mod_jSDM_sim$probit_theta_pred,
+plot(probit_theta,mod_jSDM_sim$probit_theta_latent,
      xlab="obs",ylab="fitted", main="probit(theta)")
 abline(a=0,b=1,col='red')
-## Z
-plot(Z_true,mod_jSDM_sim$Z_latent,
-     xlab="obs", ylab="fitted", main="latent variable Z")
+## theta
+plot(pnorm(probit_theta),mod_jSDM_sim$theta_latent,
+     xlab="obs",ylab="fitted", main="theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -746,18 +750,18 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-10.pn
 
 ## Mosquitos dataset
 
-We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
 ```{r jSDM-mosquitos }
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_Mosquitos <- jSDM_binomial_probit_block(
+mod_jSDM_Mosquitos <- jSDM_binomial_probit(
   # Chains 
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=PA_Mosquitos, 
+  presence_data=PA_Mosquitos, 
   # Explanatory variables 
-  site_suitability=~.,   
+  site_formula=~.,   
   site_data=Env_Mosquitos,
   # Model specification
   site_effect="random", n_latent=2,
@@ -779,18 +783,18 @@ save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
 
 ## Eucalypts dataset
 
-We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
 ```{r jSDM-eucalypts }
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_Eucalypts <- jSDM_binomial_probit_block(
+mod_jSDM_Eucalypts <- jSDM_binomial_probit(
   # Chains
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=PA_Eucalypts,
+  presence_data=PA_Eucalypts,
   # Explanatory variables 
-  site_suitability=~.,   
+  site_formula=~.,   
   site_data=Env_Eucalypts,
   # Model specification
   n_latent=2, site_effect="random",
@@ -812,18 +816,18 @@ save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
 
 ## Frogs dataset
 
-We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
 ```{r jSDM-frogs }
 # Fit the model 
 T1 <- Sys.time()
-mod_jSDM_Frogs <- jSDM_binomial_probit_block(
+mod_jSDM_Frogs <- jSDM_binomial_probit(
   # Chains
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=as.matrix(PA_Frogs), 
+  presence_data=as.matrix(PA_Frogs), 
   # Explanatory variables 
-  site_suitability=~.,   
+  site_formula=~.,   
   site_data=as.data.frame(Env_Frogs),
   # Model specification 
   n_latent=2, site_effect="random",
@@ -845,18 +849,18 @@ save(T_jSDM_Frogs, mod_jSDM_Frogs,
 
 ## Fungi dataset
 
-We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit_block()` function to perform binomial probit regression.
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-fungi }
+```{r jSDM-fungi}
 # Fit the model
 T1 <- Sys.time()
-mod_jSDM_Fungi <- jSDM_binomial_probit_block(
+mod_jSDM_Fungi <- jSDM_binomial_probit(
   # Chains 
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=PA_Fungi, 
+  presence_data=PA_Fungi, 
   # Explanatory variables 
-  site_suitability=~.,   
+  site_formula=~.,   
   site_data=Env_Fungi,
   # Model specification
   n_latent=2, site_effect="random",
@@ -887,9 +891,9 @@ mod_jSDM_Birds <- jSDM_binomial_logit(
   # Chains 
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=PA_Birds, 
+  presence_data=PA_Birds, 
   # Explanatory variables 
-  site_suitability=~elev+rlength+forest,   
+  site_formula=~elev+rlength+forest,   
   site_data=Env_Birds,
   trials= Env_Birds$nsurvey, 
   # Model specification
@@ -923,9 +927,9 @@ mod_jSDM_Mites <- jSDM_poisson_log(
   # Chains 
   burnin=10000, mcmc=5000, thin=5,
   # Response variable 
-  presence_site_sp=PA_Mites, 
+  count_data=PA_Mites, 
   # Explanatory variables 
-  site_suitability=~.,   
+  site_formula=~.,   
   site_data=Env_Mites,
   # Model specification
   n_latent=2, site_effect="random",
@@ -952,7 +956,7 @@ Then we compare the compilation time and the results obtained with each package.
 
 ```{r load-fitted-models, echo=FALSE, include=FALSE}
 # Simulated dataset
-load(file="jSDM_boral_cache/boral_simulation.RData")
+load(file="jSDM_boral_cache/boral_simulation.RData")  
 load(file="jSDM_boral_cache/jSDM_simulation.RData")
 # Mosquitos dataset
 load(file="jSDM_boral_cache/boral_Mosquitos.RData")
@@ -975,16 +979,15 @@ load(file="jSDM_boral_cache/jSDM_Mites.RData")
 logL=0
 for (i in 1:nsite){
   for (j in 1:nsp){
-    theta <- pnorm(mod_jSDM_sim$probit_theta_pred[i,j])
-    logL=logL + dbinom(Y[i,j],1,theta,1)  
+    logL=logL + dbinom(Y[i,j],1,pnorm(mod_jSDM_sim$probit_theta_latent[i,j]),log=TRUE) 
   }
 }
-Deviance_jSDM_sim<- -2*logL
-for( suffix in c("Mosquitos","Eucalypts","Frogs","Fungi")){
+Deviance_jSDM_sim <- -2*logL
+for(suffix in c("Mosquitos","Eucalypts","Frogs","Fungi")){
 logL=0
 for (i in 1:nrow(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv))){
   for (j in 1:ncol(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv))){
-    theta <- pnorm(eval(parse(text=paste0("mod_jSDM_", suffix, "$probit_theta_pred[i,j]")), env=.GlobalEnv))
+    theta <- pnorm(eval(parse(text=paste0("mod_jSDM_", suffix, "$probit_theta_latent[i,j]")), env=.GlobalEnv))
     logL=logL + dbinom(eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv)[i,j],1,theta,1)  
   }
 }
@@ -1012,6 +1015,7 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, 
 ## Compilation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
+
 load("jSDM_boral_files/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
@@ -1059,7 +1063,7 @@ kable(result, digits=3) %>%
 
 ### Simulated dataset
 
-```{r jSDM-boral-simulation, echo=FALSE}
+```{r jSDM-boral-simulation, echo=FALSE,}
 np <- ncol(X)
 # Alpha et V_alpha
 par(mfrow=c(1,2))
@@ -1101,8 +1105,10 @@ plot(mod_boral_sim$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jS
 abline(a=0,b=1,col='red')
 
 # Predictions 
-par(mfrow=c(1,1))
-plot(probit_theta_pred_sim, mod_jSDM_sim$probit_theta_pred, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+par(mfrow=c(1,2))
+plot(probit_theta_latent_sim, mod_jSDM_sim$probit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+abline(a=0,b=1,col='red')
+plot(pnorm(probit_theta_latent_sim), mod_jSDM_sim$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1120,8 +1126,8 @@ data(mosquitos, package="jSDM")
 PA_Mosquitos <- mosquitos[,1:16]
 
 print(paste(nrow(PA_Mosquitos),"sites and ",ncol(PA_Mosquitos)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Mosquitos$model_spec$presences)
-nsite <- nrow(mod_jSDM_Mosquitos$model_spec$presences)
+nsp <- ncol(mod_jSDM_Mosquitos$model_spec$presence_data)
+nsite <- nrow(mod_jSDM_Mosquitos$model_spec$presence_data)
 nl <- mod_jSDM_Mosquitos$model_spec$n_latent
 np <- nrow(mod_jSDM_Mosquitos$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1159,8 +1165,10 @@ for (l in 1:nl){
 plot(mod_boral_Mosquitos$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
 abline(a=0,b=1,col='red')
 # Predictions 
-par(mfrow=c(1,1))
-plot(probit_theta_pred_Mosquitos, mod_jSDM_Mosquitos$probit_theta_pred, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+par(mfrow=c(1,2))
+plot(probit_theta_latent_Mosquitos, mod_jSDM_Mosquitos$probit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+abline(a=0,b=1,col='red')
+plot(pnorm(probit_theta_latent_Mosquitos), mod_jSDM_Mosquitos$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1180,8 +1188,8 @@ PA_Eucalypts <- eucalypts[,1:12]
 # Remove sites where none species was recorded
 PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
 print(paste(nrow(PA_Eucalypts),"sites and ",ncol(PA_Eucalypts)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Eucalypts$model_spec$presences)
-nsite <- nrow(mod_jSDM_Eucalypts$model_spec$presences)
+nsp <- ncol(mod_jSDM_Eucalypts$model_spec$presence_data)
+nsite <- nrow(mod_jSDM_Eucalypts$model_spec$presence_data)
 nl <- mod_jSDM_Eucalypts$model_spec$n_latent
 np <- nrow(mod_jSDM_Eucalypts$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1221,8 +1229,10 @@ plot(mod_boral_Eucalypts$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted
 abline(a=0,b=1,col='red')
 
 # Predictions 
-par(mfrow=c(1,1))
-plot(probit_theta_pred_Eucalypts, mod_jSDM_Eucalypts$probit_theta_pred, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+par(mfrow=c(1,2))
+plot(probit_theta_latent_Eucalypts, mod_jSDM_Eucalypts$probit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+abline(a=0,b=1,col='red')
+plot(pnorm(probit_theta_latent_Eucalypts), mod_jSDM_Eucalypts$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1240,8 +1250,8 @@ data(frogs, package="jSDM")
 PA_Frogs <- frogs[,4:12]
 
 print(paste(nrow(PA_Frogs),"sites and ",ncol(PA_Frogs)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Frogs$model_spec$presences)
-nsite <- nrow(mod_jSDM_Frogs$model_spec$presences)
+nsp <- ncol(mod_jSDM_Frogs$model_spec$presence_data)
+nsite <- nrow(mod_jSDM_Frogs$model_spec$presence_data)
 nl <- mod_jSDM_Frogs$model_spec$n_latent
 np <- nrow(mod_jSDM_Frogs$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1281,8 +1291,10 @@ plot(mod_boral_Frogs$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by 
 abline(a=0,b=1,col='red')
 
 # Predictions 
-par(mfrow=c(1,1))
-plot(probit_theta_pred_Frogs, mod_jSDM_Frogs$probit_theta_pred, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+par(mfrow=c(1,2))
+plot(probit_theta_latent_Frogs, mod_jSDM_Frogs$probit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+abline(a=0,b=1,col='red')
+plot(pnorm(probit_theta_latent_Frogs), mod_jSDM_Frogs$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1309,8 +1321,8 @@ Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
 PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
 
 print(paste(nrow(PA_Fungi),"sites and ",ncol(PA_Fungi)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Fungi$model_spec$presences)
-nsite <- nrow(mod_jSDM_Fungi$model_spec$presences)
+nsp <- ncol(mod_jSDM_Fungi$model_spec$presence_data)
+nsite <- nrow(mod_jSDM_Fungi$model_spec$presence_data)
 nl <- mod_jSDM_Fungi$model_spec$n_latent
 np <- nrow(mod_jSDM_Fungi$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1349,8 +1361,10 @@ for (l in 1:nl){
 plot(mod_boral_Fungi$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
 abline(a=0,b=1,col='red')
 # Predictions 
-par(mfrow=c(1,1))
-plot(probit_theta_pred_Fungi, mod_jSDM_Fungi$probit_theta_pred, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+par(mfrow=c(1,2))
+plot(probit_theta_latent_Fungi, mod_jSDM_Fungi$probit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted probit(theta)")
+abline(a=0,b=1,col='red')
+plot(pnorm(probit_theta_latent_Fungi), mod_jSDM_Fungi$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="Predicted theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1370,8 +1384,8 @@ PA_Birds <- birds[,1:158]
 rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
 PA_Birds <- PA_Birds[, -rare_sp]
 print(paste(nrow(PA_Birds),"sites and ",ncol(PA_Birds)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Birds$model_spec$presences)
-nsite <- nrow(mod_jSDM_Birds$model_spec$presences)
+nsp <- ncol(mod_jSDM_Birds$model_spec$presence_data)
+nsite <- nrow(mod_jSDM_Birds$model_spec$presence_data)
 nl <- mod_jSDM_Birds$model_spec$n_latent
 np <- nrow(mod_jSDM_Birds$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1410,8 +1424,10 @@ for (l in 1:nl){
 plot(mod_boral_Birds$mean$lvs, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
 abline(a=0,b=1,col='red')
 # Predictions 
-par(mfrow=c(1,1))
-plot(logit_theta_pred_Birds, logit(mod_jSDM_Birds$theta_latent), xlab="fitted by boral", ylab="fitted by jSDM", main="logit(theta)")
+par(mfrow=c(1,2))
+plot(logit_theta_latent_Birds, mod_jSDM_Birds$logit_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="logit(theta)")
+abline(a=0,b=1,col='red')
+plot(inv_logit(logit_theta_latent_Birds), mod_jSDM_Birds$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="theta")
 abline(a=0,b=1,col='red')
 ```
 
@@ -1429,8 +1445,8 @@ knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-3.png")
 rare_sp <- which(apply(PA_Mites>0, 2, sum) < 10)
 if(length(rare_sp)!=0) PA_Mites <- PA_Mites[, -rare_sp]
 print(paste(nrow(PA_Mites),"sites and ",ncol(PA_Mites)," species"),quote = FALSE)
-nsp <- ncol(mod_jSDM_Mites$model_spec$presences)
-nsite <- nrow(mod_jSDM_Mites$model_spec$presences)
+nsp <- ncol(mod_jSDM_Mites$model_spec$count_data)
+nsite <- nrow(mod_jSDM_Mites$model_spec$count_data)
 nl <- mod_jSDM_Mites$model_spec$n_latent
 np <- nrow(mod_jSDM_Mites$model_spec$beta_start)
 # Alpha et V_alpha
@@ -1469,8 +1485,10 @@ for (l in 1:nl){
 plot(mod_boral_Mites$lv.mean, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
 abline(a=0,b=1,col='red')
 # Predictions 
-par(mfrow=c(1,1))
-plot(log_theta_pred_Mites, apply(mod_jSDM_Mites$theta_latent,c(1,2),log), xlab="fitted by boral", ylab="fitted by jSDM", main="log(theta)")
+par(mfrow=c(1,2))
+plot(log_theta_latent_Mites, mod_jSDM_Mites$log_theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="log(theta)")
+abline(a=0,b=1,col='red')
+plot(exp(log_theta_latent_Mites), mod_jSDM_Mites$theta_latent, xlab="fitted by boral", ylab="fitted by jSDM", main="theta")
 abline(a=0,b=1,col='red')
 ```
 

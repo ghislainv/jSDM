@@ -8,12 +8,15 @@ jSDM_poisson_log(
   burnin = 5000,
   mcmc = 10000,
   thin = 10,
-  presence_site_sp,
-  site_suitability,
+  count_data,
   site_data,
+  site_formula,
+  trait_data = NULL,
+  trait_formula = NULL,
   n_latent = 0,
   site_effect = "none",
   beta_start = 0,
+  gamma_start = 0,
   lambda_start = 0,
   W_start = 0,
   alpha_start = 0,
@@ -21,7 +24,9 @@ jSDM_poisson_log(
   shape = 0.5,
   rate = 5e-04,
   mu_beta = 0,
-  V_beta = 1e+06,
+  V_beta = 10,
+  mu_gamma = 0,
+  V_gamma = 10,
   mu_lambda = 0,
   V_lambda = 10,
   ropt = 0.44,
@@ -36,11 +41,18 @@ jSDM_poisson_log(
 
 \item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
 
-\item{presence_site_sp}{A vector indicating the number of successes (or presences) and the absence by a zero for each species at studied sites.}
+\item{count_data}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the abundance of each species on each site.}
 
-\item{site_suitability}{A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.}
+\item{site_data}{A data frame containing the model's explicative variables by site.}
 
-\item{site_data}{data frame containing the model's explicative variables.}
+\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,
+used to form the design matrix \eqn{X} of size \eqn{n_{site} \times np}{n_site x np}.}
+
+\item{trait_data}{A data frame containing the species traits which can be included as part of the model. Default to \code{NULL} to fit a model without species traits.}
+
+\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,
+used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
+Default to \code{NULL} to fit a model with all possible interactions between environnemental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
@@ -48,16 +60,24 @@ jSDM_poisson_log(
 If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to \code{"none"}.}
 
-\item{beta_start}{Starting values for beta parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. 
+\item{beta_start}{Starting values for \eqn{\beta} parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. 
 If \code{beta_start} takes a scalar value, then that value will serve for all of the \eqn{\beta} parameters.}
 
-\item{lambda_start}{Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal, ignored if \code{n_latent=0}. 
+\item{gamma_start}{Starting values for \eqn{\gamma} parameters that represent the influence of species-specific traits on species' responses \eqn{\beta},
+\code{gamma_start} must be either a scalar, a vector of length \eqn{nt}, \eqn{np} or \eqn{nt.np} or a \eqn{nt \times np}{nt x np} matrix.
+ If \code{gamma_start} takes a scalar value, then that value will serve for all of the \eqn{\gamma} parameters.
+ If \code{gamma_start} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \eqn{nt \times np}{nt x np} matrix is filled by column with specified values,
+  if a \eqn{np}-length vector is given, the matrix is filled by row.}
+
+\item{lambda_start}{Starting values for \eqn{\lambda} parameters corresponding to the latent variables for each species must be either a scalar
+or a \eqn{n_{latent} \times n_{species}}{n_latent x n_species} upper triangular matrix with strictly positive values on the diagonal,
+ignored if \code{n_latent=0}.
 If \code{lambda_start} takes a scalar value, then that value will serve for all of the \eqn{\lambda} parameters except those concerned by the constraints explained above.}
 
-\item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix, ignored if \code{n_latent=0}. 
-If \code{W_start} takes a scalar value, then that value will serve for all of the \eqn{W_{il}}{W_il} with \eqn{i=1,\ldots,n_{site}}{l=1,...,n_site} and \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}.}
+\item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix, ignored if \code{n_latent=0}.
+If \code{W_start} takes a scalar value, then that value will serve for all of the \eqn{W_{il}}{W_il} with \eqn{i=1,\ldots,n_{site}}{i=1,...,n_site} and \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}.}
 
-\item{alpha_start}{Starting values for random site effect parameters must be either a scalar or a nsite-length vector, ignored if \code{site_effect="none"}. 
+\item{alpha_start}{Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.}
 
 \item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
@@ -66,25 +86,43 @@ Must be a stricly positive scalar, ignored if \code{site_effect="none"}.}
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
 
-\item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}.
+\item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.}
 
-\item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. 
-\code{mu_beta} must be either a scalar or a \eqn{p}-length vector. 
-If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters. 
-The default value is set to 0 for an uninformative prior.}
+\item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{np}-length vector.
+If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters.
+ The default value is set to 0 for an uninformative prior, ignored if \code{trait_data} is specified.}
 
-\item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{V_beta} must be either a scalar or a \eqn{p}-length \eqn{n_{latent}}{n_latent} vector. 
-If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\beta} parameters.
-The default variance is large and set to 1.0E6 for an uninformative flat prior.}
+\item{V_beta}{Variances of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process.
+ \code{V_beta} must be either a scalar or a \eqn{np \times np}{np x np} symmetric positive semi-definite square matrix.
+ If \code{V_beta} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\beta} parameters,
+  so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+The default variance is large and set to 10 for an uninformative flat prior.}
 
-\item{mu_lambda}{Means of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables, ignored if \code{n_latent=0}. 
-\code{mu_lambda} must be either a scalar or a \eqn{n_{latent}}{n_latent}-length vector. If \code{mu_lambda} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\lambda} parameters.
-The default value is set to 0 for an uninformative prior.}
+\item{mu_gamma}{Means of the Normal priors for the \eqn{\gamma}{\gamma} parameters.
+\code{mu_gamma} must be either a scalar, a vector of length \eqn{nt}, \eqn{np} or \eqn{nt.np} or a \eqn{nt \times np}{nt x np} matrix.
+If \code{mu_gamma} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\gamma} parameters.
+If \code{mu_gamma} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \eqn{nt \times np}{nt x np} matrix is filled by column with specified values,
+ if a \eqn{np}-length vector is given, the matrix is filled by row. 
+The default value is set to 0 for an uninformative prior, ignored if \code{trait_data=NULL}.}
 
-\item{V_lambda}{Variances of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables, ignored if \code{n_latent=0}. 
-\code{V_lambda} must be either a scalar or a \eqn{n_{latent}}{n_latent}-length positive vector. 
-If \code{V_lambda} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\lambda} parameters. The default variance is large and set to 10 for an uninformative flat prior.}
+\item{V_gamma}{Variances of the Normal priors for the \eqn{\gamma}{\gamma} parameters.
+\code{V_gamma} must be either a scalar, a vector of length \eqn{nt}, \eqn{np} or \eqn{nt.np} or a \eqn{nt \times np}{nt x np} positive matrix.
+If \code{V_gamma} takes a scalar value, then that value will serve as the prior variance for all of the \eqn{\gamma} parameters.
+If \code{V_gamma} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \eqn{nt \times np}{nt x np} matrix is filled by column with specified values,
+ if a \eqn{np}-length vector is given, the matrix is filled by row. 
+The default variance is large and set to 10 for an uninformative flat prior, ignored if \code{trait_data=NULL}.}
+
+\item{mu_lambda}{Means of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables. 
+\code{mu_lambda} must be either a scalar or a \eqn{n_{latent}}{n_latent}-length vector. 
+If \code{mu_lambda} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\lambda}{\lambda} parameters.
+ The default value is set to 0 for an uninformative prior.}
+
+\item{V_lambda}{Variances of the Normal priors for the \eqn{\lambda}{\lambda} parameters corresponding to the latent variables.
+ \code{V_lambda} must be either a scalar or a \eqn{n_{latent} \times n_{latent}}{n_latent x n_latent} symmetric positive semi-definite square matrix.
+If \code{V_lambda} takes a scalar value, then that value will serve as the prior variance for all of \eqn{\lambda}{\lambda} parameters,
+ so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal.
+The default variance is large and set to 10 for an uninformative flat prior.}
 
 \item{ropt}{Target acceptance rate for the adaptive Metropolis algorithm. Default to 0.44.}
 
@@ -98,8 +136,10 @@ mcmc.alpha \tab An mcmc object that contains the posterior samples for site effe
 mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or  \code{site_effect="fixed"}. \cr
 mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.\cr
 mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.\cr
+mcmc.gamma \tab A list by covariates of mcmc objects that contains the posterior samples for \eqn{\gamma_p} parameters with \eqn{p=1,\ldots,np}{p=1,...,np} if \code{trait_data} is specified.\cr
 mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
-theta_latent \tab Predictive posterior mean of the probability associated to the suitability process for each observation. \cr
+log_theta_latent \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function. \cr
+theta_latent \tab PPredictive posterior mean of the probability to each species to be present on each site. \cr
 model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
@@ -120,6 +160,31 @@ where \tabular{ll}{
  if \code{n_latent=0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
  if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 }
+
+In the absence of data on species traits (\code{trait_data=NULL}), the effect of species \eqn{j}: \eqn{\beta_j};
+follows the same a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_p},V_{\beta_p})}{\beta_jp ~ N(\mu_\beta.p,V_\beta.p)},
+for each species. 
+
+If species traits data are provided, the effect of species \eqn{j}: \eqn{\beta_j};
+follows an a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})}{\beta_jp ~ N_np(\mu_\beta.jp,V_\beta.p)},
+where \eqn{\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}}{mu_\beta.jp=\Sigma_(k=1,...,nt) t_jk.\gamma_kp}, takes different values for each species.
+
+We assume that \eqn{\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})}{\gamma.kp ~ N(\mu_\gamma.kp,V_\gamma.kp)} as prior distribution. 
+
+We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma=(\gamma_kp) for k=1,...,nt and p=1,...,np} such as : 
+\tabular{ccc}{\eqn{\gamma} \tab = \tab \tabular{rccccccl}{
+\tab \strong{\eqn{x_0}} \tab \strong{\eqn{x_1}} \tab... \tab \strong{\eqn{x_p}} \tab ... \tab \strong{\eqn{x_np}} \tab  \cr 
+\tab__________\tab________\tab________\tab________\tab________\tab________\tab \cr 
+\strong{\eqn{t_0}} | \tab  \strong{\eqn{\gamma_{0,0}}{\gamma_(0,0)}} \tab \emph{\eqn{\gamma_{0,1}}{\gamma_(0,1)}} \tab ... \tab \emph{\eqn{\gamma_{0,p}}{\gamma_(0,p)}} \tab... \tab \emph{\eqn{\gamma_{0,np}}{\gamma_(0,np)}} \tab \{ \emph{effect of environmental variables} \cr
+  | \tab \strong{intercept} \tab \tab \tab \tab \tab \tab \cr 
+  \strong{\eqn{t_1}} | \tab  \eqn{\gamma_{1,0}}{\gamma_(1,0)} \tab \emph{\eqn{\gamma_{1,1}}{\gamma_(1,1)}} \tab ... \tab \emph{\eqn{\gamma_{1,p}}{\gamma_(1,p)}} \tab... \tab \emph{\eqn{\gamma_{1,np}}{\gamma_(1,np)}} \tab \cr
+  ... | \tab ... \tab ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
+  \strong{\eqn{t_k}} | \tab \emph{\eqn{\gamma_{k,0}}{\gamma_(k,0)}} \tab \emph{\eqn{\gamma_{k,1}}{\gamma_(k,1)}} \tab... \tab \eqn{\gamma_{k,p}}{\gamma_(k,p)} \tab... \tab \eqn{\gamma_{k,np}}{\gamma_(k,np)} \tab \cr
+  ... | \tab ... \tab  ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
+  \strong{\eqn{t_nt}} | \tab \emph{\eqn{\gamma_{nt,0}}{\gamma_(nt,0)}} \tab \eqn{\gamma_{nt,1}}{\gamma_(nt,1)}\tab ... \tab \eqn{\gamma_{nt,p}}{\gamma_(nt,p)} \tab... \tab \eqn{\gamma_{nt,np}}{\gamma_(nt,np)} \tab \cr
+  \tab \emph{average} \tab \tab \tab \tab \tab \tab \cr 
+  \tab \emph{trait effect} \tab \tab interaction \tab traits \tab environment \tab \tab \cr 
+}}
 }
 \examples{
 #==============================================
@@ -171,9 +236,9 @@ mod <- jSDM_poisson_log(# Chains
                         mcmc=200,
                         thin=1,
                         # Response variable
-                        presence_site_sp=Y,
+                        count_data=Y,
                         # Explanatory variables
-                        site_suitability=~x1+x2,
+                        site_formula=~x1+x2,
                         site_data=X,
                         n_latent=n_latent,
                         site_effect="random",
@@ -208,10 +273,8 @@ for (j in 1:nsp) {
   mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
                          2, mean)
   for (p in 1:ncol(X)) {
-    coda::traceplot(coda::as.mcmc(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
-    coda::densplot(coda::as.mcmc(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,p])
+    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,p],
       main = paste(colnames(
         mod$mcmc.sp[[paste0("sp_",j)]])[p],
         ", species : ",j))
@@ -230,10 +293,8 @@ for (j in 1:nsp) {
   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
   for (l in 1:n_latent) {
-    coda::traceplot(coda::as.mcmc(mod$mcmc.sp
-                                  [[paste0("sp_",j)]][,ncol(X)+l]))
-    coda::densplot(coda::as.mcmc(mod$mcmc.sp
-                                 [[paste0("sp_",j)]][,ncol(X)+l]),
+    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
+    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l],
                    main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
                               [ncol(X)+l],", species : ",j))
     abline(v=lambda.target[j,l],col='red')
@@ -281,7 +342,7 @@ plot(mod$mcmc.Deviance)
 #= Predictions
 # summary(mod$theta_latent)
 par(mfrow=c(1,2))
-plot(log.theta, apply(mod$theta_latent,c(1,2),log),
+plot(log.theta, mod$log_theta_latent,
      main="log(theta)",
      xlab="obs", ylab="fitted")
 abline(a=0 ,b=1, col="red")
@@ -294,10 +355,11 @@ abline(a=0 ,b=1, col="red")
 \tabular{l}{
 Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.\cr
 Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. \emph{Ecological Applications}, 16, 33-50.\cr
+Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. \emph{Ecology Letters}, 20, 561-576.\cr
 }
 }
 \seealso{
-\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit_block}}  \code{\link{jSDM_binomial_logit}}
+\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}}  \code{\link{jSDM_binomial_logit}}
 }
 \author{
 \tabular{l}{
