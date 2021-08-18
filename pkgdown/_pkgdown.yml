@@ -30,9 +30,6 @@ navbar:
     news:
       text: Change log
       href: news/index.html
-    twitter:
-      icon: fab fa-twitter fa-lg
-      href: http://twitter.com/ghislainv
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/ghislainv/jSDM
