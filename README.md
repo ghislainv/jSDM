@@ -12,7 +12,7 @@ Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/p
 Package for fitting joint species distribution models (JSDM) in a
 hierarchical Bayesian framework (Warton *et al.*
 [2015](#ref-Warton2015)). The Gibbs sampler is written in C++. It uses
-[Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html),
+[Rcpp](https://cran.r-project.org/web/packages/Rcpp),
 [Armadillo](http://arma.sourceforge.net/docs.html) and
 [GSL](https://www.gnu.org/software/gsl/) to maximize computation
 efficiency.
@@ -53,12 +53,12 @@ version 4.0.3 can be found here
 The package includes the following functions to fit various species
 distribution models :
 
-| function                                 |    data type     |
-| :--------------------------------------- | :--------------: |
-| `jSDM_binomial_logit`                    | presence-absence |
+| function                           |    data type     |
+| :--------------------------------- | :--------------: |
+| `jSDM_binomial_logit`              | presence-absence |
 | `jSDM_binomial_probit`             | presence-absence |
 | `jSDM_binomial_probit_long_format` | presence-absence |
-| `jSDM_poisson_log`                       |    abundance     |
+| `jSDM_poisson_log`                 |    abundance     |
 
 ## Contributing
 

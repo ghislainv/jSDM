@@ -165,9 +165,10 @@ add_species_arrows = function(radius = 5.0, label = "Species", reverse = TRUE, s
 #' @param cols_occurrence color gradient for species 
 #' @param cols_env_effect color gradient for environmental effect 
 #' @param lwd_occurrence lwd for occurrence lines
-#' @param species_order order species according to their mean abundance at sites (species_order="abundance" by default),
-#'  to the number of sites where they occur ("frequency") 
-#'  or after their most important environmental coefficients ("main environmental effect")
+#' @param species_order order species according to : \tabular{ll}{
+#'  \code{"abundance"} \tab their mean abundance at sites by default) \cr
+#'  \code{"frequency"} \tab the number of sites where they occur \cr
+#'  \code{"main environmental effect"} \tab their most important environmental coefficients \cr}
 #' @param species_indices indices for sorting species
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies}{R=(R_ij) avec i=1,..., nspecies et j=1,..., nspecies}
 #'  can be derived from the covariance in the latent variables such as : 
@@ -230,7 +231,8 @@ plot_associations = function(R, radius = 5.0, main = NULL,
                              circleBreak = FALSE, top = 10L, occ = NULL, env_effect=NULL, 
                              cols_association = c("#FF0000", "#BF003F", "#7F007F", "#3F00BF", "#0000FF"),
                              cols_occurrence = c( "#BEBEBE", "#8E8E8E", "#5F5F5F", "#2F2F2F", "#000000"),
-                             cols_env_effect =c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "#666666"),
+                             cols_env_effect =c("#1B9E77", "#D95F02", "#7570B3", "#E7298A",
+                                                "#66A61E", "#E6AB02", "#A6761D", "#666666"),
                              lwd_occurrence = 1.0,
                              species_order="abundance",
                              species_indices = NULL

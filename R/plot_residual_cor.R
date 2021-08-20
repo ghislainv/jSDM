@@ -8,7 +8,7 @@
 #' @name plot_residual_cor
 #' @aliases plot_residual_cor
 #' @title Plot the residual correlation matrix from a latent variable model (LVM).
-#' @description Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{corrplot} function from the package of the same name.
+#' @description Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{\link[corrplot]{corrplot}} function from the package of the same name.
 #' @param mod An object of class \code{"jSDM"}.
 #' @param title Character, title of the graph.
 #' @param diag Logical, whether display the correlation coefficients on the principal diagonal.

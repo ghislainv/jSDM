@@ -45,9 +45,10 @@ plot_associations(
 
 \item{lwd_occurrence}{lwd for occurrence lines}
 
-\item{species_order}{order species according to their mean abundance at sites (species_order="abundance" by default),
-to the number of sites where they occur ("frequency") 
-or after their most important environmental coefficients ("main environmental effect")}
+\item{species_order}{order species according to : \tabular{ll}{
+\code{"abundance"} \tab their mean abundance at sites by default) \cr
+\code{"frequency"} \tab the number of sites where they occur \cr
+\code{"main environmental effect"} \tab their most important environmental coefficients \cr}}
 
 \item{species_indices}{indices for sorting species}
 }

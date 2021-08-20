@@ -14,11 +14,11 @@
 #' Default is posterior mean.
 #' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
 #' Defaults to 0.95.
-#' @return results A list including : \tabular{ll}{
-#' \code{cor, cor.lower, cor.upper} \tab A set of \eqn{p \times p}{p x p} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval. \cr 
-#' \code{sig.cor} \tab  A \eqn{p \times p}{p x p} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior interval does not contain zero. All non-significant correlations are set to zero. \cr
-#' \code{cov} \tab Average over the MCMC samples of the \eqn{p \times p}{p x p} covariance matrix. \cr
-#' }
+#' @return results A list including : 
+#' \item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
+#' \item{sig.cor}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior interval does not contain zero. All non-significant correlations are set to zero.}
+#' \item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}
+#' 
 #' @details In both independent response and correlated response models, where the each of the columns of the response matrix y are fitted to a set of explanatory variables given by X,
 #' the covariance and thus between two columns \eqn{j} and \eqn{j'} due to similarities in their response to the model matrix is calculated based on the linear predictors \eqn{X \beta_j} and \eqn{X \beta_j'}, where \eqn{\beta_j} are species effects relating to the explanatory variables.
 #  For multivariate abundance data, the correlation calculated by this function can be interpreted as the correlation attributable to similarities in the environmental response between species. 
@@ -65,8 +65,8 @@
 #'                              seed=1234, verbose=1)
 #' # Calcul of residual correlation between species 
 #'  enviro.cors <- get_enviro_cor(mod)
-#' corrplot::corrplot(enviro.cors$sig.cor, title = "Shared response correlations",
-#'          type = "lower", diag = FALSE, mar = c(3,0.5,2,1), tl.srt = 45)
+# corrplot::corrplot(enviro.cors$sig.cor, title = "Shared response correlations",
+#                    type = "lower", diag = FALSE, mar = c(3,0.5,2,1), tl.srt = 45)
 #' @keywords stats::cov2cor
 #' @importFrom stats cov cor
 #' @importFrom coda as.mcmc HPDinterval

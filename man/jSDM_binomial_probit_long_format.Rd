@@ -31,16 +31,17 @@ jSDM_binomial_probit_long_format(
 )
 }
 \arguments{
-\item{data}{A \code{data.frame} with at least the following columns :
-\tabular{ll}{
-\code{Y} \tab \eqn{n_{obs}}{n_obs}-length vector indicating the presence by a 1 (or absence by a 0) of the species observed during each visit of the sites. \cr
-\code{site} \tab numerc or character \eqn{n_{obs}}{n_obs}-length vector indicating the visited site (sites can be visited several times). \cr
-\code{species} \tab numerc or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed (species may not have been recorded at all sites) \cr 
-\code{x1,...,xp} \tab columns of explicative variables for the suitability process of the model \cr
-}}
+\item{data}{A \code{data.frame} with at least the following columns : \tabular{ll}{
+\code{Y} \tab \eqn{n_{obs}}{n_obs}-length vector indicating the presence by a 1 (or absence by a 0), \cr
+\tab of the species observed during each visit of the sites.\cr 
+\code{site} \tab numeric or character \eqn{n_{obs}}{n_obs}-length vector indicating the visited site, \cr
+\tab  (sites can be visited several times).\cr
+\code{species} \tab numeric or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed, \cr 
+\tab (species may not have been recorded at all sites).\cr 
+\code{x1,...,xp} \tab columns of explicative variables for the suitability process of the model.\cr}}
 
 \item{site_formula}{A one-sided formula with the form '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{d} terms related to \eqn{\gamma} parameters and \eqn{p} terms related to species effects \eqn{\beta},
-specifying the explicative variables for the suitability process of the model as formula used by the \code{\link{lm}} function.}
+specifying the explicative variables for the suitability process of the model as formula used by the \code{\link[stats]{lm}} function.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
@@ -103,17 +104,17 @@ The default variance is large and set to 10 for an uninformative flat prior.}
 \item{verbose}{A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.}
 }
 \value{
-An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
-mcmc.alpha \tab An mcmc object that contains the posterior samples for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.\cr
-mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or \code{site_effect="fixed"}.\cr
-mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.\cr
-mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta} and the loading factors \eqn{\lambda} if \code{n_latent>0}.\cr
-mcmc.gamma \tab An mcmc objects that contains the posterior samples for parameters \eqn{\gamma} not returned if \code{d=0}.\cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_n P(y_n|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
-Z_latent \tab Predictive posterior mean of the latent variable Z. \cr
-probit_theta_latent \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.\cr
-theta_latent \tab Predictive posterior mean of the probability to each species to be present on each site.\cr
-model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
+An object of class \code{"jSDM"} acting like a list including :
+ \item{mcmc.alpha}{An mcmc object that contains the posterior samples for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.}
+ \item{mcmc.V_alpha}{An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or \code{site_effect="fixed"}.}
+ \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.}
+ \item{mcmc.sp}{A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta} and the loading factors \eqn{\lambda} if \code{n_latent>0}.}
+ \item{mcmc.gamma}{An mcmc objects that contains the posterior samples for parameters \eqn{\gamma} not returned if \code{d=0}.}
+ \item{mcmc.Deviance}{The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_n P(y_n|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.} 
+ \item{Z_latent}{Predictive posterior mean of the latent variable Z. }
+ \item{probit_theta_latent}{Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.}
+ \item{theta_latent}{Predictive posterior mean of the probability to each species to be present on each site.}
+ \item{model_spec}{Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.}
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
 \description{
@@ -131,7 +132,7 @@ We model an ecological process where the presence or absence of species \eqn{j} 
  if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j  + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
  if \code{n_latent>0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j + W_i \lambda_j + \alpha_i} \cr
  if \code{n_latent=0} and \code{site_effect="random"} \tab probit\eqn{(\theta_n) = D_n \gamma  + X_n \beta_j  + \alpha_i} \cr
- if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j + W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j + W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} 
 }
 }
 \examples{

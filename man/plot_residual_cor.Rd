@@ -39,7 +39,7 @@ plot_residual_cor(
 Displays a reordered correlation matrix
 }
 \description{
-Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{corrplot} function from the package of the same name.
+Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{\link[corrplot]{corrplot}} function from the package of the same name.
 }
 \examples{
 library(jSDM)

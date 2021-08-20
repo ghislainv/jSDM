@@ -37,8 +37,8 @@ Presence or absence at 167 sites of 16 species that constitute the aquatic fauna
     
     \item{\code{depth__cm}}{a numeric vector corresponding to the water depth in cm recorded as the mean of the depth at the edge and the centre of each dip site}
     \item{\code{temperature__C}}{a numeric vector corresponding to the temperature in °C}
-    \item{\code{oxidation_reduction_potential__Mv}}{a numeric vector corresponding to the oxidation-reduction potential of the water in millivolts (mV)}
-    \item{\code{salinity__ppt}}{a numeric vector corresponding to the salinity of the wtaer in parts per thousand (ppt)}
+    \item{\code{oxidation_reduction_potential__Mv}}{a numeric vector corresponding to the redox potential of the water in millivolts (mV)}
+    \item{\code{salinity__ppt}}{a numeric vector corresponding to the salinity of the water in parts per thousand (ppt)}
         
     High-resolution digital photographs were taken of vegetation at the edge and centre dip points and the presence or absence of different vegetation types at each dipsite was determined from these photographs using field guides :
     \item{\code{water_crowfoot__Ranunculus}}{a binary vector indicating presence on sites by a 1 and absence by a 0 of the plant species Ranunculus aquatilis which common name is water-crowfoot}

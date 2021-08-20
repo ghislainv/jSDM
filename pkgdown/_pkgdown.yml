@@ -47,6 +47,7 @@ articles:
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
   - '`jSDM_in_parallel`'
+  - '`jSDM_with_traits`'
 - title: Comparison
   navbar: Comparison
   contents:

@@ -16,11 +16,10 @@ Default is posterior mean.}
 Defaults to 0.95.}
 }
 \value{
-results A list including : \tabular{ll}{
-\code{cor, cor.lower, cor.upper} \tab A set of \eqn{p \times p}{p x p} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval. \cr 
-\code{sig.cor} \tab  A \eqn{p \times p}{p x p} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior interval does not contain zero. All non-significant correlations are set to zero. \cr
-\code{cov} \tab Average over the MCMC samples of the \eqn{p \times p}{p x p} covariance matrix. \cr
-}
+results A list including : 
+\item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
+\item{sig.cor}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior interval does not contain zero. All non-significant correlations are set to zero.}
+\item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}
 }
 \description{
 Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response.
@@ -64,8 +63,6 @@ mod <- jSDM_binomial_probit(# Response variable
                              seed=1234, verbose=1)
 # Calcul of residual correlation between species 
  enviro.cors <- get_enviro_cor(mod)
-corrplot::corrplot(enviro.cors$sig.cor, title = "Shared response correlations",
-         type = "lower", diag = FALSE, mar = c(3,0.5,2,1), tl.srt = 45)
 }
 \references{
 \tabular{l}{

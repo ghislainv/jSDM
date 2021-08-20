@@ -10,12 +10,11 @@ get_residual_cor(mod)
 \item{mod}{An object of class \code{"jSDM"}}
 }
 \value{
-results A list including : \tabular{ll}{
-cov.mean \tab Average over the MCMC samples of the variance-covariance matrix \cr 
-cov.median \tab Median over the MCMC samples of the variance-covariance matrix \cr
-cor.mean \tab Average over the MCMC samples of the residual correlation matrix \cr
-cor.median \tab Median over the MCMC samples of the residual correlation matrix \cr
-}
+results A list including : 
+\item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.} 
+\item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
+\item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
+\item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
 }
 \description{
 This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.

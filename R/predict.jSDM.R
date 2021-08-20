@@ -18,7 +18,7 @@
 #' \code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument), \cr
 #' \code{"posterior"} for the full predictive posterior for each prediction. \cr }
 #' Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.
-#'@param probs Numeric vector of probabilities with values in [0,1],
+#'@param probs Numeric vector of probabilities with values in [0,1], \cr
 #' used when \code{type="quantile"}.
 #'@param ... Further arguments passed to or from other methods.
 #' @return Return a vector for the predictive posterior mean when \code{type="mean"}, a data-frame with the mean and quantiles when \code{type="quantile"} or an \code{mcmc} object (see \code{coda} package) with posterior distribution for each prediction when \code{type="posterior"}.

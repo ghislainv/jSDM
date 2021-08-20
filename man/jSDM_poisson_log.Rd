@@ -37,7 +37,8 @@ jSDM_poisson_log(
 \arguments{
 \item{burnin}{The number of burnin iterations for the sampler.}
 
-\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
+\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\cr
+\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
 
 \item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
 
@@ -45,22 +46,25 @@ jSDM_poisson_log(
 
 \item{site_data}{A data frame containing the model's explicative variables by site.}
 
-\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,
+\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,\cr
 used to form the design matrix \eqn{X} of size \eqn{n_{site} \times np}{n_site x np}.}
 
-\item{trait_data}{A data frame containing the species traits which can be included as part of the model. Default to \code{NULL} to fit a model without species traits.}
+\item{trait_data}{A data frame containing the species traits which can be included as part of the model.\cr
+Default to \code{NULL} to fit a model without species traits.}
 
-\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,
-used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
+\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,\cr
+used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} \cr 
+and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
 Default to \code{NULL} to fit a model with all possible interactions between environnemental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
-\item{site_effect}{A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
+\item{site_effect}{A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}),\cr
+or not included (\code{"none"}) in the model. 
 If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to \code{"none"}.}
 
-\item{beta_start}{Starting values for \eqn{\beta} parameters of the suitability process for each species must be either a scalar or a \eqn{p \times n_{species}}{p x n_species} matrix. 
+\item{beta_start}{Starting values for \eqn{\beta} parameters of the suitability process for each species must be either a scalar or a \eqn{np \times n_{species}}{np x n_species} matrix. 
 If \code{beta_start} takes a scalar value, then that value will serve for all of the \eqn{\beta} parameters.}
 
 \item{gamma_start}{Starting values for \eqn{\gamma} parameters that represent the influence of species-specific traits on species' responses \eqn{\beta},
@@ -131,16 +135,16 @@ The default variance is large and set to 10 for an uninformative flat prior.}
 \item{verbose}{A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in \%) reached by the Gibbs sampler.}
 }
 \value{
-An object of class \code{"jSDM"} acting like a list including : \tabular{ll}{
-mcmc.alpha \tab An mcmc object that contains the posterior samples for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.\cr
-mcmc.V_alpha \tab An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or  \code{site_effect="fixed"}. \cr
-mcmc.latent \tab A list by latent variable of mcmc objects that contains the posterior samples for latent variables \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.\cr
-mcmc.sp \tab A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.\cr
-mcmc.gamma \tab A list by covariates of mcmc objects that contains the posterior samples for \eqn{\gamma_p} parameters with \eqn{p=1,\ldots,np}{p=1,...,np} if \code{trait_data} is specified.\cr
-mcmc.Deviance \tab The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.\cr 
-log_theta_latent \tab Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function. \cr
-theta_latent \tab PPredictive posterior mean of the probability to each species to be present on each site. \cr
-model_spec \tab Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.\cr}
+An object of class \code{"jSDM"} acting like a list including : 
+ \item{mcmc.alpha}{An mcmc object that contains the posterior samples for site effects \eqn{\alpha_i}, not returned if \code{site_effect="none"}.}
+ \item{mcmc.V_alpha}{An mcmc object that contains the posterior samples for variance of random site effect, not returned if \code{site_effect="none"} or  \code{site_effect="fixed"}.}
+ \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.}
+ \item{mcmc.sp}{A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.}
+ \item{mcmc.gamma}{A list by covariates of mcmc objects that contains the posterior samples for \eqn{\gamma_p} parameters with \eqn{p=1,\ldots,np}{p=1,...,np} if \code{trait_data} is specified.}
+ \item{mcmc.Deviance}{The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.}
+ \item{log_theta_latent}{Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function.}
+ \item{theta_latent}{Predictive posterior mean of the probability to each species to be present on each site.}
+ \item{model_spec}{Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.}
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
 \description{
@@ -153,12 +157,12 @@ We model an ecological process where the presence or absence of species \eqn{j} 
 \bold{Ecological process : }
 \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij ~ Poisson(\theta_ij),}
 where \tabular{ll}{
- if \code{n_latent=0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j}{(\theta_ij) = \beta_0j + X_i \beta_j} \cr
- if \code{n_latent>0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j}{(\theta_ij) = \beta_0j + X_i \beta_j +  W_i \lambda_j} \cr
- if \code{n_latent=0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} \cr
- if \code{n_latent>0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
- if \code{n_latent=0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i}{(\theta_ij) = \beta_0j + X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
- if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = \beta_0j + X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent=0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) =  X_i \beta_j}{(\theta_ij) = X_i \beta_j} \cr
+ if \code{n_latent>0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) =  X_i \beta_j + W_i \lambda_j}{(\theta_ij) =  X_i \beta_j +  W_i \lambda_j} \cr
+ if \code{n_latent=0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = X_i \beta_j  + \alpha_i}{(\theta_ij) = X_i \beta_j + \alpha_i} \cr
+ if \code{n_latent>0} and \code{site_effect="fixed"} \tab log\eqn{(\theta_{ij}) = X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = X_i  \beta_j +  W_i \lambda_j + \alpha_i}  \cr
+ if \code{n_latent=0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = X_i \beta_j  + \alpha_i}{(\theta_ij) = X_i \beta_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
+ if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 }
 
 In the absence of data on species traits (\code{trait_data=NULL}), the effect of species \eqn{j}: \eqn{\beta_j};
@@ -166,14 +170,12 @@ follows the same a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \
 for each species. 
 
 If species traits data are provided, the effect of species \eqn{j}: \eqn{\beta_j};
-follows an a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})}{\beta_jp ~ N_np(\mu_\beta.jp,V_\beta.p)},
-where \eqn{\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}}{mu_\beta.jp=\Sigma_(k=1,...,nt) t_jk.\gamma_kp}, takes different values for each species.
-
+follows an a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})}{\beta_jp ~ N(\mu_\beta.jp,V_\beta.p)},
+where \eqn{\mu_{\beta_jp} = \sum\limits_{k=1}^{nt} t_{jk}.\gamma_{kp}}{mu_\beta.jp=\Sigma_(k=1,...,nt) t_jk.\gamma_kp}, takes different values for each species.
 We assume that \eqn{\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})}{\gamma.kp ~ N(\mu_\gamma.kp,V_\gamma.kp)} as prior distribution. 
-
 We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma=(\gamma_kp) for k=1,...,nt and p=1,...,np} such as : 
-\tabular{ccc}{\eqn{\gamma} \tab = \tab \tabular{rccccccl}{
-\tab \strong{\eqn{x_0}} \tab \strong{\eqn{x_1}} \tab... \tab \strong{\eqn{x_p}} \tab ... \tab \strong{\eqn{x_np}} \tab  \cr 
+\tabular{rccccccl}{
+\tab \strong{\eqn{x_0}} \tab \strong{\eqn{x_1}} \tab... \tab \strong{\eqn{x_p}} \tab ... \tab \strong{\eqn{x_{np}}{x_np}} \tab  \cr 
 \tab__________\tab________\tab________\tab________\tab________\tab________\tab \cr 
 \strong{\eqn{t_0}} | \tab  \strong{\eqn{\gamma_{0,0}}{\gamma_(0,0)}} \tab \emph{\eqn{\gamma_{0,1}}{\gamma_(0,1)}} \tab ... \tab \emph{\eqn{\gamma_{0,p}}{\gamma_(0,p)}} \tab... \tab \emph{\eqn{\gamma_{0,np}}{\gamma_(0,np)}} \tab \{ \emph{effect of environmental variables} \cr
   | \tab \strong{intercept} \tab \tab \tab \tab \tab \tab \cr 
@@ -181,10 +183,10 @@ We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma
   ... | \tab ... \tab ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
   \strong{\eqn{t_k}} | \tab \emph{\eqn{\gamma_{k,0}}{\gamma_(k,0)}} \tab \emph{\eqn{\gamma_{k,1}}{\gamma_(k,1)}} \tab... \tab \eqn{\gamma_{k,p}}{\gamma_(k,p)} \tab... \tab \eqn{\gamma_{k,np}}{\gamma_(k,np)} \tab \cr
   ... | \tab ... \tab  ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
-  \strong{\eqn{t_nt}} | \tab \emph{\eqn{\gamma_{nt,0}}{\gamma_(nt,0)}} \tab \eqn{\gamma_{nt,1}}{\gamma_(nt,1)}\tab ... \tab \eqn{\gamma_{nt,p}}{\gamma_(nt,p)} \tab... \tab \eqn{\gamma_{nt,np}}{\gamma_(nt,np)} \tab \cr
+  \strong{\eqn{t_{nt}}{t_nt}} | \tab \emph{\eqn{\gamma_{nt,0}}{\gamma_(nt,0)}} \tab \eqn{\gamma_{nt,1}}{\gamma_(nt,1)}\tab ... \tab \eqn{\gamma_{nt,p}}{\gamma_(nt,p)} \tab... \tab \eqn{\gamma_{nt,np}}{\gamma_(nt,np)} \tab \cr
   \tab \emph{average} \tab \tab \tab \tab \tab \tab \cr 
   \tab \emph{trait effect} \tab \tab interaction \tab traits \tab environment \tab \tab \cr 
-}}
+}
 }
 \examples{
 #==============================================

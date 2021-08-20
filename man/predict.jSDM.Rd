@@ -29,7 +29,7 @@
 \code{"posterior"} for the full predictive posterior for each prediction. \cr }
 Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.}
 
-\item{probs}{Numeric vector of probabilities with values in [0,1],
+\item{probs}{Numeric vector of probabilities with values in [0,1], \cr
 used when \code{type="quantile"}.}
 
 \item{...}{Further arguments passed to or from other methods.}
