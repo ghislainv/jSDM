@@ -1,5 +1,5 @@
 ---
-title: "Analyzing Response of Alpine Plants to Snowmelt Date"
+title: "Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
  %\VignetteEngine{knitr::rmarkdown}
- %\VignetteIndexEntry{Analyzing Response of Alpine Plants to Snowmelt Date}
+ %\VignetteIndexEntry{Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA}
  %\VignetteEncoding{UTF-8}
 ---
  
