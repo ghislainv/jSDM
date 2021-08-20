@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -119,18 +119,18 @@
 </ul>
 <p><span class="math display">\[ 
 \begin{aligned}
-&amp;z_{i,j} = \alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j},\\
-&amp;\text{ with } \epsilon_{i,j} \sim \mathcal{N}(0,1) \ \forall i,j  \text{ and such as : } \\
-&amp;y_{i,j}=
+&amp;z_{ij} = \alpha_i X_i'\beta_j+ W_i'\lambda_j + \epsilon_{ij},\\
+&amp;\text{ with } \epsilon_{ij} \sim \mathcal{N}(0,1) \ \forall ij  \text{ and such as : } \\
+&amp;y_{ij}=
 \begin{cases}
-1 &amp; \text{ if } z_{i,j} &gt; 0 \\
+1 &amp; \text{ if } z_{ij} &gt; 0 \\
 0 &amp;  \text{ otherwise.}
 \end{cases} 
 \end{aligned}
 \Rightarrow  
 \begin{cases}
-y_{i,j}| z_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j}) \text{ with } \\
-\theta_{i,j} = \Phi(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j) \\
+y_{ij}| z_{ij} \sim \mathcal{B}ernoulli(\theta_{ij}) \text{ with } \\
+\theta_{ij} = \Phi(\alpha_i + X_i'\beta_j+ W_i'\lambda_j) \\
 \text{where } \Phi \text{ correspond to the repartition function} \\
 \text{of the reduced centred normal distribution.}
 \end{cases}
@@ -139,26 +139,37 @@ y_{i,j}| z_{i,j} \sim \mathcal{B}ernoulli(\theta_{i,j}) \text{ with } \\
 <li>Proof</li>
 </ul>
 <p><span class="math display">\[\begin{aligned}
-\mathbb{P}(y_{i,j}=1) &amp; = \mathbb{P}(z_{i,j} &gt; 0)\\
-&amp; = \mathbb{P}(\alpha_i + \beta_{0j}+X_i'\beta_j+ W_i'\lambda_j + \epsilon_{i,j} &gt; 0)\\
-&amp; = \mathbb{P}(\epsilon_{i,j} &gt; - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
-&amp; = \mathbb{P}(\epsilon_{i,j} \leq \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
-&amp; = \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+\mathbb{P}(y_{ij}=1) &amp; = \mathbb{P}(z_{ij} &gt; 0)\\
+&amp; = \mathbb{P}(\alpha_i + X_i'\beta_j + W_i'\lambda_j + \epsilon_{ij} &gt; 0)\\
+&amp; = \mathbb{P}(\epsilon_{ij} &gt; - (\alpha_i +  X_i'\beta_j + W_i'\lambda_j) \ ) \\
+&amp; = \mathbb{P}(\epsilon_{ij} \leq \alpha_i +  X_i'\beta_j + W_i'\lambda_j) \\
+&amp; = \Phi( \alpha_i + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}\]</span></p>
 <p>In the same way:</p>
 <p><span class="math display">\[\begin{aligned}
-\mathbb{P}(y_{i,j}=0) &amp; = \mathbb{P}(z_{i,j} \leq 0)\\
-&amp; = \mathbb{P}(\epsilon_{i,j} \leq - (\alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \ ) \\
-&amp; = \mathbb{P}(\epsilon_{i,j} &gt; \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
-&amp; = 1 - \Phi( \alpha_i + \beta_{0j} + X_i'\beta_j + W_i'\lambda_j) \\
+\mathbb{P}(y_{ij}=0) &amp; = \mathbb{P}(z_{ij} \leq 0)\\
+&amp; = \mathbb{P}(\epsilon_{ij} \leq - (\alpha_i  + X_i'\beta_j + W_i'\lambda_j) \ ) \\
+&amp; = \mathbb{P}(\epsilon_{ij} &gt; \alpha_i + X_i'\beta_j + W_i'\lambda_j) \\
+&amp; = 1 - \Phi( \alpha_i + X_i'\beta_j + W_i'\lambda_j) \\
 \end{aligned}\]</span></p>
 <p>with the following parameters and priors :</p>
 <ul>
-<li><p>Latent variables: <span class="math inline">\(W_i=(W_i^1,\ldots,W_i^q)\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10)\)</span> for all lambdas not concerned by constraints to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal.</p></li>
-<li><p>Explanatory variables: bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered.
-The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_j^1,\ldots,\beta_j^p)'\)</span>.</p></li>
-<li><p><span class="math inline">\(\beta_{0j}\)</span> correspond to the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect. We use a prior distribution <span class="math inline">\(\mathcal{N}(0,10^6)\)</span> for all betas.</p></li>
+<li><p>Latent variables: <span class="math inline">\(W_i=(W_{i1},\ldots,W_{iq})\)</span> where <span class="math inline">\(q\)</span> is the number of latent variables considered, which has to be fixed by the user (by default q=2).
+We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> and we define the associated coefficients: <span class="math inline">\(\lambda_j=(\lambda_{j1},\ldots, \lambda_{jq})'\)</span>. We use a prior distribution <span class="math inline">\(\mathcal{N}(\mu_{\lambda},V_{\lambda})\)</span> for each lambda not concerned by constraints to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal.</p></li>
+<li>
+<p>Explanatory variables:</p>
+<ul>
+<li>bioclimatic data about each site. <span class="math inline">\(X=(X_i)_{i=1,\ldots,nsite}\)</span> with <span class="math inline">\(X_i=(x_{i0},x_{i1},\ldots,x_{ip})\in \mathbb{R}^{p+1}\)</span> where <span class="math inline">\(p\)</span> is the number of bioclimatic variables considered and <span class="math inline">\(\forall i, x_{i0}=1\)</span>.</li>
+<li>traits data about each species. <span class="math inline">\(T=(T_j)_{j=1,\ldots,nspecies}\)</span> with <span class="math inline">\(T_j=(t_{j0},t_{j1},\ldots,t_{jq},\ldots,t_{jnt})\in \mathbb{R}^{nt+1}\)</span> where <span class="math inline">\(nt\)</span> is the number of species specific traits considered and <span class="math inline">\(t_{j0}=1,\forall j\)</span>.</li>
+</ul>
+</li>
+<li>
+<p>The corresponding regression coefficients for each species <span class="math inline">\(j\)</span> are noted : <span class="math inline">\(\beta_j=(\beta_{j0},\beta_{j1},\ldots,\beta_{jp})'\)</span> where <span class="math inline">\(\beta_{j0}\)</span> represents the intercept for species <span class="math inline">\(j\)</span> which is assume to be a fixed effect.</p>
+<ul>
+<li>In the absence of data on species traits, the effect of species <span class="math inline">\(j\)</span>: <span class="math inline">\(\beta_j\)</span>; follows the same a priori Gaussian distribution such that <span class="math inline">\(\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta},V_{\beta})\)</span>, for each species.</li>
+<li>If species traits data are provided, the effect of species <span class="math inline">\(j\)</span>: <span class="math inline">\(\beta_j\)</span>; follows an a priori Gaussian distribution such that <span class="math inline">\(\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta_j},V_{\beta})\)</span>, where <span class="math inline">\(\mu_{\beta_{jk}} = \sum_{r=0}^{nt} t_{jr}.\gamma_{rk}\)</span> for <span class="math inline">\(k=0,\ldots,p\)</span>, takes different values for each species. We assume that <span class="math inline">\(\gamma_{rk} \sim \mathcal{N}(\mu_{\gamma_{rk}},V_{\gamma_{rk}})\)</span> as prior distribution.</li>
+</ul>
+</li>
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
@@ -171,7 +182,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <ul>
 <li>Proposition</li>
 </ul>
-<p>We go back to a model of the form: <span class="math inline">\(Z' = X\beta + \epsilon\)</span> to estimate the posterior distributions of betas, lambdas and latent variables <span class="math inline">\(W_i\)</span> of the model. For example concerning <span class="math inline">\(\lambda_j\)</span>, we define <span class="math inline">\(Z'_{i,j} = Z_{i,j} - \alpha_i - \beta_{0j} - X_i'\beta_j\)</span> such as <span class="math inline">\(Z'_{i,j} = W_i'\lambda_j + \epsilon_{i,j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)\)</span>.</p>
+<p>We go back to a model of the form: <span class="math inline">\(Z' = X\beta + \epsilon\)</span> to estimate the posterior distributions of betas, lambdas and latent variables <span class="math inline">\(W_i\)</span> of the model. For example concerning <span class="math inline">\(\lambda_j\)</span>, we define <span class="math inline">\(Z'_{ij} = Z_{ij} - \alpha_i - X_i'\beta_j\)</span> such as <span class="math inline">\(Z'_{ij} = W_i'\lambda_j + \epsilon_{ij}\)</span> so <span class="math inline">\(Z'_{ij} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)\)</span>.</p>
 <p>In this case we can use the following proposition:</p>
 <p><span class="math display">\[\begin{cases} 
 Y \ | \ \beta &amp;\sim \mathcal{N}_n ( X\beta, I_n) \\
@@ -196,7 +207,8 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 &amp; \quad -(V^{-1}m + X'Y)'(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y) +m'V^{-1}m + Y'Y)\\
 &amp; \propto \exp\left(-\frac{1}{2}\left(\beta - \underbrace{(V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)}_{m^*}\right)'\underbrace{(V^{-1}+X'X)}_{{V^*}^{-1}}\left(\beta - (V^{-1}+X'X)^{-1}(V^{-1}m + X'Y)\right)\right)
 \end{aligned}\]</span></p>
-<p>Actually, we use that proposition to estimate lambdas and betas in a single block. So, we consider <span class="math inline">\(Z'_{i,j} = \beta_{0j} + X_i'\beta_j+ W_i'\lambda_j +\epsilon_{i,j}\)</span>.</p>
+<!-- Actually, we use that proposition to estimate lambdas and betas in a single block. So, we consider $Z'_{ij} = X_i'\beta_j+ W_i'\lambda_j +\epsilon_{ij}$.  -->
+<p>Actually, we use that proposition to estimate betas, lambdas and gammas if species traits data are provided.</p>
 </div>
 <div id="random-site-effects" class="section level3">
 <h3 class="hasAnchor">
@@ -204,7 +216,7 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 <ul>
 <li>Proposition</li>
 </ul>
-<p>About the posterior distribution of the random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we can use a transformation of the form <span class="math inline">\(Z'_{i,j} = \alpha_i + \epsilon_{i,j}\)</span>, with <span class="math inline">\(Z'_{i,j} = Z_{i,j} - W_i'\lambda_j - X_i'\beta_j- \beta_{0j}\)</span> so <span class="math inline">\(Z'_{i,j} \ | \ W_i \ , \ \lambda_j, \ \beta_j, \ \beta_{0j}, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)\)</span>. We then use the following proposition:</p>
+<p>About the posterior distribution of the random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we can use a transformation of the form <span class="math inline">\(Z'_{ij} = \alpha_i + \epsilon_{ij}\)</span>, with <span class="math inline">\(Z'_{ij} = Z_{ij} - W_i'\lambda_j - X_i'\beta_j\)</span> so <span class="math inline">\(Z'_{ij} \ | \ W_i, \ \lambda_j, \ \beta_j, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)\)</span>. We then use the following proposition:</p>
 <p><span class="math display">\[\begin{cases} 
 x \ | \ \theta &amp; \sim \mathcal{N}(\theta, \ \sigma^2) \\
 \theta  &amp; \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
@@ -278,7 +290,7 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 <div id="gibbs-sampler-using-conjuate-priors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gibbs-sampler-using-conjuate-priors" class="anchor"></a><span class="header-section-number">1.4</span> Gibbs sampler using conjuate priors</h2>
-<p>The algorithm used in  function to estimate the parameters of the probit model is therefore as follows:</p>
+<p>The algorithm used in <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to estimate the parameters of the probit model is therefore as follows:</p>
 <ul>
 <li>Define the constants <span class="math inline">\(N_{Gibbs}\)</span>, <span class="math inline">\(N_{burn}\)</span>, <span class="math inline">\(N_{thin}\)</span> such that <span class="math inline">\(N_{Gibbs}\)</span> corresponds to the number of iterations performed by the Gibbs sampler, <span class="math inline">\(N_{burn}\)</span> to the number of iterations required for burn-in or warm-up time and <span class="math inline">\(N_{samp} = \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}\)</span> to the number of estimated values retained for each parameter. Indeed, the estimated parameters are recorded at certain iterations, in order to obtain a sample of <span class="math inline">\(N_{samp}\)</span> values distributed according to the <span class="math inline">\(a \ posteriori\)</span> distribution for each of the parameters.</li>
 </ul>
@@ -289,25 +301,31 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 <ul>
 <li><p>Generate the <strong>latent variable</strong> <span class="math inline">\(Z^{(t)}=\left(Z_{ij}^{(t)}\right)_{i=1,\ldots,I}^{j=1,\ldots,J}\)</span> such that
 <span class="math display">\[Z_{ij}^{(t)} \sim  \begin{cases} 
-\mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 &amp; \text{ if } y_{ij } =0 \\ 
-\mathcal{N}\left(\alpha_i^{(t−1)} + \beta_{j0}^{(t−1)} + X_i\beta_j{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ left truncated by } 0 &amp;        \text{ if } y_{ij} =1
+\mathcal{N}\left(\alpha_i^{(t−1)} + X_i\beta_j^{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 &amp; \text{ if } y_{ij } =0 \\ 
+\mathcal{N}\left(\alpha_i^{(t−1)} + X_i\beta_j^{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ left truncated by } 0 &amp; \text{ if } y_{ij} =1
 \end{cases}\]</span>
 , the latent variable is thus initialized at the first iteration by generating it according to these centered normal laws.</p></li>
-<li><p>Generate the <strong>fixed species effects</strong> <span class="math inline">\(P_j^{(t)}=(\beta_{j0}^{(t)},\beta_{j1}^{(t)} \ldots, \beta_{jp}^{(t)},\lambda_{j1}^{(t)},\ldots, \lambda_{jq}^{(t)})'\)</span> for <span class="math inline">\(j=1,\ldots,J\)</span> such as :
-<span class="math display">\[P_j^{(t)} \ | \ Z^{(t)}, W_1^{(t-1)}, \alpha_1^{(t-1)}, \ldots, W_I^{(t−1)}, \alpha_I^{(t-1)} \sim \mathcal{N}_{p+q+1}(m^\star,V^\star) \text{, with }\]</span>
-<span class="math display">\[m^\star = (V^{-1} + {D^{(t)}}'D^{(t)})^{-1}(V^{-1}m + {D^{(t)}}'Z^\star_j) \text{ and } V^\star = \left(V^{-1}+{D^{(t)}}'D^{(t)}\right)^{-1},\]</span>
-<span class="math display">\[\text{ where } Z_j^\star =(Z_{1j}^\star,\ldots,Z_{Ij}^\star)' \text{ such as } Z^\star_{ij} = Z_{ij}^{(t)}-\alpha_i^{(t-1)}.\]</span>
-In order to constrain the diagonal values of <span class="math inline">\(\Lambda =\left(\lambda_{jl}\right)_{j=1,\ldots,J}^{l=1,\ldots,q}\)</span> to positive values and make the matrix lower triangular,
-the values of the randomly simulated <span class="math inline">\(P^{(t)}\)</span> are modified according to the following conditions:
-<span class="math display">\[P_{jp+1+l}^{(t)} = \lambda_{jl}^{(t)} \leftarrow \begin{cases}
-0 &amp; \text{ if } l&gt;j \\
-\lambda_{jl}^{(t-1)} &amp; \text{ if } l=j \text{ and } \lambda_{jl}^{(t)} &lt; 0.
-\end{cases}\]</span>
-We define <span class="math inline">\(P^{(t)}=\left( P_1^{(t)} | \ldots | P_J^{(t)} \right)\)</span>.</p></li>
-<li><p>Generate the <strong>latent variables</strong> (or unmeasured predictors) <span class="math inline">\(W_i^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> according to : <span class="math display">\[W_i^{(t)} \ | \ Z^{(t)}, P^{(t)},  \alpha_i^{(t-1)} \sim \mathcal{N}_{q} \left((I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}({\Lambda^{(t)}}'Z_i^{\star \star}),(I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}\right),\]</span>
-<span class="math display">\[\text{ where } Z_i^{\star \star} =(Z_{i1}^{\star \star},\ldots,Z_{iJ}^{\star \star}) \text{ such as } Z_{ij}^{\star \star } = Z_{ij}^{(t)}-\alpha_i^{(t-1)} − \beta_{j0}^{(t)} - X_i\beta_j^{(t)}.\]</span> We define <span class="math inline">\(D_i^{(t)} = \left(1,X_{i1},\ldots,X_{ip},W_{i1}^{(t)}, \ldots, W_{iq}^{(t)} \right)\)</span>.</p></li>
+<li><p>If species traits data are provided, generate the <strong>effects of species-specific traits on species’ responses</strong> <span class="math inline">\(\gamma^{(t)}=\left(\gamma_{rk}^{(t)}\right)^{r=0,\ldots,nt}_{k=0,\ldots,p}\)</span> such as :
+<span class="math display">\[\gamma_{rk}^{(t)} \ | \beta_{1k}^{(t-1)}, \ldots, \beta_{Jk}^{(t-1)} \sim \mathcal{N}(m^\star,V^\star) \text{, with }\]</span>
+<span class="math display">\[m^\star = (V_{\gamma_{rk}}^{-1} + T_r'T_r)^{-1}(V_{\gamma_{rk}}^{-1}\mu_{\gamma_{rk}} + T_r\left(\beta_k^{(t-1)} - \sum\limits_{r' \neq r} T_{r'} \gamma_{r'k}^{(t-1)} \right) \text{ and } V^\star = \left(V_{\gamma_{rk}}^{-1}+ T_r'T_r\right)^{-1}.\]</span></p></li>
+<li><p>Generate the <strong>fixed species effects</strong> <span class="math inline">\(\beta_j^{(t)}=(\beta_{j0}^{(t)},\beta_{j1}^{(t)}, \ldots, \beta_{jp}^{(t)})'\)</span> for <span class="math inline">\(j=1,\ldots,J\)</span> such as :
+<span class="math display">\[\beta_j^{(t)} \ | \ Z^{(t)}, W_1^{(t-1)}, \alpha_1^{(t-1)}, \ldots, W_I^{(t−1)}, \alpha_I^{(t-1), ,\lambda_{j1}^{(t-1)},\ldots, \lambda_{jq}^{(t-1)}} \sim \mathcal{N}_{p+1}(m^\star,V^\star) \text{, with }\]</span>
+<span class="math display">\[m^\star = (V_{\beta}^{-1} + X'X)^{-1}(V_{\beta}^{-1}\mu_{\beta_j} + X'Z^\star_j) \text{ and } V^\star = \left(V_{\beta}^{-1}+ X'X\right)^{-1},\]</span>
+<span class="math display">\[\text{ where } Z_j^\star =(Z_{1j}^\star,\ldots,Z_{Ij}^\star)' \text{ such as } Z^\star_{ij} = Z_{ij}^{(t)} - W_i^{(t−1)}\lambda_j^{(t−1)} - \alpha_i^{(t-1)}.\]</span></p></li>
+<li><p>Generate the the <strong>loading factors related to latent variables</strong> <span class="math inline">\(\lambda_j^{(t)}=(\lambda_{j1}^{(t)},\ldots, \lambda_{jq}^{(t)})'\)</span> for <span class="math inline">\(j=1,\ldots,J\)</span> such as :
+<span class="math display">\[\lambda_{jl}^{(t)} \ | \ Z^{(t)}, \beta_j^{(t)}, \alpha^{(t-1)}, W^{(t-1)}, \lambda_1^{(t-1)}, \ldots, \lambda_{l-1}^{(t−1)},\lambda_{l+1}^{(t−1)},\ldots, \lambda_q^{(t-1)} \sim \mathcal{N}(m^\star,V^\star) \text{, with }\]</span>
+<span class="math display">\[m^\star = (V_{\lambda}^{-1} + {W_l^{(t-1)}}'W_l^{(t-1)})^{-1}(V_{\lambda}^{-1}\mu_{\lambda} + {W_l^{(t-1)}}'Z^\star_j) \text{ and } V^\star = \left(V_{\lambda}^{-1}+{W_l^{(t-1)}}'W_l^{(t-1)}\right)^{-1},\]</span>
+<span class="math display">\[\text{ where } Z_j^\star =(Z_{1j}^\star,\ldots,Z_{Ij}^\star)' \text{ such as } Z^\star_{ij} = Z_{ij}^{(t)}-X_i\beta_j^{(t)}-\alpha_i^{(t-1)}-\sum\limits_{l'\neq l}W_{il'}\lambda_{jl'}.\]</span>
+In order to constrain the diagonal values of <span class="math inline">\(\Lambda =\left(\lambda_{jl}\right)_{j=1,\ldots,J}^{l=1,\ldots,q}\)</span> to positive values and make the matrix lower triangular, the values of <span class="math inline">\(\lambda_j^{(t)}\)</span> are simulated according to the following conditions:
+<span class="math display">\[ \lambda_{jl}^{(t)} \sim \begin{cases}
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1 &amp; \text{ if } l&gt;j, \\
+\mathcal{N}(m^\star,V^\star) \text{ left truncated by } 0  &amp; \text{ if } l=j, \\
+\mathcal{N}(m^\star,V^\star) &amp; \text{ if } l&lt;j.
+\end{cases}\]</span></p></li>
+<li><p>Generate the <strong>latent variables</strong> (or unmeasured predictors) <span class="math inline">\(W_i^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> according to : <span class="math display">\[W_i^{(t)} \ | \ Z^{(t)}, \lambda^{(t)}, \beta^{(t)},  \alpha_i^{(t-1)} \sim \mathcal{N}_{q} \left((I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}({\Lambda^{(t)}}'Z_i^{\star}),(I_q + {\Lambda^{(t)}}'\Lambda^{(t)})^{-1}\right),\]</span>
+<span class="math display">\[\text{ where } Z_i^{\star} =(Z_{i1}^{\star},\ldots,Z_{iJ}^{\star}) \text{ such as } Z_{ij}^{\star} = Z_{ij}^{(t)}-\alpha_i^{(t-1)} - X_i\beta_j^{(t)}.\]</span></p></li>
 <li><p>Generate the <strong>random site effects</strong> <span class="math inline">\(\alpha_i^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> selon :
-<span class="math display">\[ \alpha_i | \ Z^{(t)}, P^{(t)},W_i^{(t)} \sim \mathcal{N}\left(\dfrac{ \sum_{j=1}^J Z_{ij}^{(t)} - D_i^{(t)}P_j^{(t)}}{{V_{\alpha}^{(t-1)}}^{-1} + J} , \left( \frac{1}{V_{\alpha}^{(t-1)}}+ J \right)^{-1}  \right)\]</span></p></li>
+<span class="math display">\[ \alpha_i | \ Z^{(t)}, \lambda^{(t)}, \beta^{(t)}, W_i^{(t)} \sim \mathcal{N}\left(\dfrac{ \sum_{j=1}^J Z_{ij}^{(t)} - X_i\beta_j^{(t)} - W_i^{(t)}\lambda_j^{(t)}}{{V_{\alpha}^{(t-1)}}^{-1} + J} , \left( \frac{1}{V_{\alpha}^{(t-1)}}+ J \right)^{-1}  \right)\]</span></p></li>
 <li><p>Generate the <strong>variance of random site effects</strong> <span class="math inline">\(V_\alpha^{(t)}\)</span> according to: <span class="math display">\[V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)\]</span></p></li>
 </ul>
 </li>
@@ -320,7 +338,7 @@ We define <span class="math inline">\(P^{(t)}=\left( P_1^{(t)} | \ldots | P_J^{(
 <div id="model-definition-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#model-definition-1" class="anchor"></a><span class="header-section-number">2.1</span> Model definition</h2>
-<p>In the same way as for the probit model, the logit model can be defined by means of a latent variable: <span class="math inline">\(Z_{ij}= \alpha_i + \beta_{j0} + X_i\beta_j + W_i\lambda_j + \epsilon_{ij}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> et <span class="math inline">\(j=1,\ldots,J\)</span>, with <span class="math inline">\(\epsilon_{ij} \sim \mathrm{logistique}(0,1)\)</span> <em>iid</em> and such as:
+<p>In the same way as for the probit model, the logit model can be defined by means of a latent variable: <span class="math inline">\(Z_{ij}= \alpha_i + X_i\beta_j + W_i\lambda_j + \epsilon_{ij}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> et <span class="math inline">\(j=1,\ldots,J\)</span>, with <span class="math inline">\(\epsilon_{ij} \sim \mathrm{logistique}(0,1)\)</span> <em>iid</em> and such as:
 <span class="math display">\[y_{ij}=
 \begin{cases}
 1 &amp; \text{ if } Z_{ij} &gt; 0 \\
@@ -328,18 +346,23 @@ We define <span class="math inline">\(P^{(t)}=\left( P_1^{(t)} | \ldots | P_J^{(
 \end{cases}\]</span>
 However in this case the <em>a priori</em> distributions of the latent variable and the parameters are not conjugated, we are not able to use the properties of the conjugated priors, so modelling using a latent variable is irrelevant.<br>
 In this case it is assumed that <span class="math display">\[y_{ij} \ | \theta_{ij} \sim \mathcal{B}inomial(n_i,\theta_{ij})\]</span>, with
-<span class="math inline">\(\mathrm{probit(\theta_{ij})} = \alpha_i + \beta_{j0}+X_i\beta_j+ W_i\lambda_j\)</span> and <span class="math inline">\(n_i\)</span> the number of visits to the site <span class="math inline">\(i\)</span>.<br>
+<span class="math inline">\(\mathrm{probit(\theta_{ij})} = \alpha_i + X_i\beta_j+ W_i\lambda_j\)</span> and <span class="math inline">\(n_i\)</span> the number of visits to the site <span class="math inline">\(i\)</span>.<br>
 Therefore, the parameters of this model will be sampled by estimating their conditional <em>a posteriori</em> distributions using an adaptive Metropolis algorithm.</p>
 </div>
 <div id="priors-used" class="section level2">
 <h2 class="hasAnchor">
 <a href="#priors-used" class="anchor"></a><span class="header-section-number">2.2</span> Priors used</h2>
-<p>An <em>a priori</em> distribution is determined for each of the parameters of the model :<br><span class="math display">\[\begin{array}{lll}
+<p>An <em>a priori</em> distribution is determined for each parameter of the model :<br><span class="math display">\[\begin{array}{lll}
 V_{\alpha} &amp; \sim &amp; \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005) \text{ with } \mathrm{rate}=\frac{1}{\mathrm{scale}}, \\
-\beta_{jk} &amp; \sim &amp; \mathcal{N}(0,10^6)  \text{ for } j=1,\ldots,J \text{ and } k=1,\ldots,p, \\
+\beta_{jk} &amp; \sim &amp; \begin{cases}
+\mathcal{N}(\mu_{\beta_{jk}},V_{\beta_{k}}) \text{ for } j=1,\ldots,J \text{ and } k=0,\ldots,p, &amp; \text{if species traits data are provided} \\
+\text{ where } \mu_{\beta_{jk}} = \sum_{r=0}^{nt} t_{jr}.\gamma_{rk} \text{ and } \gamma_{rk} \sim \mathcal{N}(\mu_{\gamma_{rk}},V_{\gamma_{rk}}) &amp; \\
+ \text{ for } r=0,\ldots,nt \text{ and } k=0,\ldots,p. &amp; \\
+\mathcal{N}(\mu_{\beta_{k}},V_{\beta_{k}})  \text{ for } j=1,\ldots,J \text{ and } k=0,\ldots,p,  &amp; \text{if species traits data are not provided} \\ 
+\end{cases} \\
 \lambda_{jl} &amp; \sim &amp; \begin{cases}
-\mathcal{N}(0,10) &amp; \text{if } l &lt; j \\
-\mathcal{U}(0,10) &amp;  \text{if } l=j \\
+\mathcal{N}(\mu_{\lambda_{l}},V_{\lambda_{l}}) &amp; \text{if } l &lt; j \\
+\mathcal{N}(\mu_{\lambda_{l}},V_{\lambda_{l}}) \text{ left truncated by } 0  &amp;  \text{if } l=j \\
 P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
 \end{cases} \\
 \quad &amp;  \quad &amp; \text{ for } j=1,\ldots,J \text{ and } l=1,\ldots,q.
@@ -392,8 +415,8 @@ The variances are modified as a function of the acceptance numbers as follows fo
 <h2 class="hasAnchor">
 <a href="#gibbs-sampler-using-adaptative-metropolis-algorithm" class="anchor"></a><span class="header-section-number">2.4</span> Gibbs sampler using adaptative Metropolis algorithm</h2>
 <p>An adaptive Metropolis algorithm is used to sample the model parameters according to their conditional <em>a posteriori</em> distributions estimated to within one multiplicative constant.</p>
-<p>First we define the <span class="math inline">\(f\)</span> function that calculates the likelihood of the model as a function of the estimated parameters:<br><span class="math display">\[ f : \lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i \rightarrow  f(\lambda_j,\beta_{j0},\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i)=\mathrm{L}(\theta_{ij})\]</span>
-- Compute <span class="math inline">\(\mathrm{logit}(\theta_{ij})= \alpha_i + \beta_{j0} + X_i\beta_j + W_i\lambda_j\)</span>.</p>
+<p>First we define the <span class="math inline">\(f\)</span> function that calculates the likelihood of the model as a function of the estimated parameters:<br><span class="math display">\[ f : \lambda_j,\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i \rightarrow  f(\lambda_j,\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i)=\mathrm{L}(\theta_{ij})\]</span>
+- Compute <span class="math inline">\(\mathrm{logit}(\theta_{ij})= \alpha_i + X_i\beta_j + W_i\lambda_j\)</span>.</p>
 <ul>
 <li><p>Compute <span class="math inline">\(\theta_{ij}= \dfrac{1}{1+\exp\left(-\mathrm{logit}(\theta_{ij})\right)}\)</span>.</p></li>
 <li><p>Return <span class="math inline">\(\mathrm{L}(\theta_{ij})= p(y_{ij} \ | \ \theta_{ij},n_i)= \dbinom{n_i}{y_{ij}}(\theta_{ij})^{y_{ij}}(1-\theta_{ij})^{n_i-y_{ij}}\)</span>.</p></li>
@@ -404,13 +427,13 @@ This allows us to calculate the likelihood of the model: <span class="math inlin
 We thus use the following relations to approach the conditional <em>a posteriori</em> densities of each of the parameters with <span class="math inline">\(\Pi(.)\)</span> the densities corresponding to their <em>a priori</em> laws.
 <span class="math display">\[\begin{aligned}
 &amp; p(\beta_{jk} \ |  \ \beta_{j0},\beta_{j1},\ldots,\beta_{jk-1},\beta_{jk+1},\ldots,\beta_{jp}, \lambda_j,\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto \Pi(\beta_{jk})\prod\limits_{1\leq i\leq I}  \mathrm{L}(\theta_{ij})\\
-&amp;p(\lambda_{jl} \ |  \ \lambda_{j1},\ldots,\lambda_{jl-1},\lambda_{jl+1},\ldots,\lambda_{jq}, \beta_j,\beta_{j0},\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto  \Pi(\lambda_{jl}) \prod\limits_{1\leq i \leq I}\mathrm{L}(\theta_{ij})\\
-&amp;p(W_{il} \ |  \ W_{i1},\ldots,W_{il-1},W_{il+1},\ldots,W_{iq},\alpha_i,\beta_{10},\ldots,\beta_{J0},\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_J,Y) \propto \Pi(W_{il}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
-&amp;p(\alpha_i \ |  \ W_i,\beta_{10},\ldots,\beta_{J0},\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_j,V_{\alpha},Y) \propto \Pi(\alpha_i \ | \ V_{\alpha}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
+&amp;p(\lambda_{jl} \ |  \ \lambda_{j1},\ldots,\lambda_{jl-1},\lambda_{jl+1},\ldots,\lambda_{jq}, \beta_j,\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto  \Pi(\lambda_{jl}) \prod\limits_{1\leq i \leq I}\mathrm{L}(\theta_{ij})\\
+&amp;p(W_{il} \ |  \ W_{i1},\ldots,W_{il-1},W_{il+1},\ldots,W_{iq},\alpha_i,\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_J,Y) \propto \Pi(W_{il}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
+&amp;p(\alpha_i \ |  \ W_i,\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_j,V_{\alpha},Y) \propto \Pi(\alpha_i \ | \ V_{\alpha}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
 &amp; \text{, for $i=1,\ldots,I$, $j=1,\ldots,J$, $k=1,\ldots,p$ and $l=1,\ldots,q$. 
 }
 \end{aligned}\]</span></p>
-<p>The algorithm implemented in  on the basis of <span class="citation">Rosenthal (<a href="#ref-Rosenthal2009" role="doc-biblioref">2009</a>)</span> and <span class="citation">Roberts &amp; Rosenthal (<a href="#ref-Roberts2001" role="doc-biblioref">2001</a>)</span> articles, to estimate the parameters of the logit model is the following :</p>
+<p>The algorithm implemented in <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> on the basis of <span class="citation">Rosenthal (<a href="#ref-Rosenthal2009" role="doc-biblioref">2009</a>)</span> and <span class="citation">Roberts &amp; Rosenthal (<a href="#ref-Roberts2001" role="doc-biblioref">2001</a>)</span> articles, to estimate the parameters of the logit model is the following :</p>
 <ul>
 <li><p>Definition of constants <span class="math inline">\(N_{Gibbs}\)</span>, <span class="math inline">\(N_{burn}\)</span>, <span class="math inline">\(N_{thin}\)</span> and <span class="math inline">\(R_{opt}\)</span> such that <span class="math inline">\(N_{Gibbs}\)</span> corresponds to the number of iterations performed by the algorithm, <span class="math inline">\(N_{burn}\)</span> to the number of iterations required for the burn-in or warm-up time,<br><span class="math inline">\(N_{samp}= \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}\)</span> corresponding to the number of estimated values retained for each parameter. Indeed we record the estimated parameters at certain iterations in order to obtain <span class="math inline">\(N_{samp}\)</span> values, allowing us to represent a <span class="math inline">\(a \ posteriori\)</span> distribution for each parameter.<br>
 We set <span class="math inline">\(R_{opt}\)</span> the optimal acceptance ratio used in the adaptive Metropolis algorithms implemented for each parameter of the model.</p></li>
@@ -418,20 +441,23 @@ We set <span class="math inline">\(R_{opt}\)</span> the optimal acceptance ratio
 <li>
 <p><strong>Gibbs sampler</strong> at each iteration <span class="math inline">\(t\)</span> for <span class="math inline">\(t=1,\ldots,N_{Gibbs}\)</span> we repeat each of these steps:</p>
 <ul>
-<li><p>Generate the <strong>random site effects</strong> <span class="math inline">\(\alpha_i^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> according to an adaptive Metropolis algorithm that simulates <span class="math inline">\(\alpha_i^\star \sim \mathcal{N}(\alpha_i^{(t-1)},\sigma_{\alpha_i}^2)\)</span> and then calculates the acceptance rate as follows:<br><span class="math display">\[\gamma =min\left(1, \ \dfrac{\Pi\left(\alpha_i^\star \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(\alpha_i^\star, W_i^{(t-1)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}{\Pi\left(\alpha_i^{(t-1)} \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(\alpha_i^{(t-1)}, W_i^{(t-1)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).\]</span></p></li>
+<li><p>Generate the <strong>random site effects</strong> <span class="math inline">\(\alpha_i^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> according to an adaptive Metropolis algorithm that simulates <span class="math inline">\(\alpha_i^\star \sim \mathcal{N}(\alpha_i^{(t-1)},\sigma_{\alpha_i}^2)\)</span> and then calculates the acceptance rate as follows:<br><span class="math display">\[\gamma =min\left(1, \ \dfrac{\Pi\left(\alpha_i^\star \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}\left(\alpha_i^\star, W_i^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}{\Pi\left(\alpha_i^{(t-1)} \ | \ V_{\alpha}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(\alpha_i^{(t-1)}, W_i^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).\]</span></p></li>
 <li><p>Generate the <strong>variance of random site effects</strong> <span class="math inline">\(V_\alpha^{(t)}\)</span> according to: <span class="math display">\[V_\alpha^{(t)} \ | \ \alpha_1^{(t)},\ldots,\alpha_I^{(t)} \sim \mathcal{IG}\left( \text{shape}=0.5 + \frac{I}{2}, \text{rate}=0.005 + \frac{1}{2}\sum\limits_{i=1}^I \left(\alpha_i^{(t)}\right)^2\right)\]</span></p></li>
 <li><p>Generate the <strong>latent variables</strong> (or unmeasured predictors) <span class="math inline">\(W_{il}^{(t)}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> according to an adaptive Metropolis algorithm that simulates <span class="math inline">\(W_{il}^\star \sim \mathcal{N}(W_{il}^{(t-1)}, \sigma_{W_{il}}^2)\)</span>and then calculates the acceptance rate as follows:</p></li>
 </ul>
 </li>
 </ul>
-<p><span class="math display">\[\gamma = min\left(1,\ \dfrac{\Pi\left(W_{il}^\star\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^\star, \alpha_i^{(t)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)},X_i,y_{ij},n_i\right)} {\Pi\left(W_{il}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^{(t-1)}, \alpha_i^{(t)},\beta_{j0}^{(t-1)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).\]</span></p>
+<p><span class="math display">\[\gamma = min\left(1,\ \dfrac{\Pi\left(W_{il}^\star\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^\star, \alpha_i^{(t)},\beta_j^{(t-1)}, \lambda_j^{(t-1)},X_i,y_{ij},n_i\right)} {\Pi\left(W_{il}^{(t-1)}\right)\prod\limits_{1\leq j\leq J}f\left(W_{il}^{(t-1)}, \alpha_i^{(t)},\beta_j^{(t-1)}, \lambda_j^{(t-1)}, X_i,y_{ij},n_i\right)}\right).\]</span>
+* If species traits data are provided, generate the <strong>effects of species-specific traits on species’ responses</strong> <span class="math inline">\(\gamma^{(t)}=\left(\gamma_{rk}^{(t)}\right)^{r=0,\ldots,nt}_{k=0,\ldots,p}\)</span> such as :
+<span class="math display">\[\gamma_{rk}^{(t)} \ | \beta_{1k}^{(t-1)}, \ldots, \beta_{Jk}^{(t-1)} \sim \mathcal{N}(m^\star,V^\star) \text{, with }\]</span>
+<span class="math display">\[m^\star = (V_{\gamma_{rk}}^{-1} + T_r'T_r)^{-1}(V_{\gamma_{rk}}^{-1}\mu_{\gamma_{rk}} + T_r\left(\beta_k^{(t-1)} - \sum\limits_{r' \neq r} T_{r'} \gamma_{r'k}^{(t-1)} \right) \text{ and } V^\star = \left(V_{\gamma_{rk}}^{-1}+ T_r'T_r\right)^{-1}.\]</span></p>
 <ul>
 <li>Generate the <strong>fixed species effects</strong> <span class="math inline">\(\beta_{jk}^{(t)}\)</span> for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(k=0,\ldots,p\)</span> using an adaptive Metropolis algorithm that simulates <span class="math inline">\(\beta_{jk}^\star \sim \mathcal{N}(\beta_{jk}^{(t-1)}, \sigma_{\beta_{jk}}^2)\)</span> and then calculates the acceptance rate as follows:</li>
 </ul>
 <p><span class="math display">\[\gamma = min\left(1,\dfrac{\Pi\left(\beta_{jk}^\star\right)\prod\limits_{1\leq i\leq I}f\left(\beta_{j0}^{(t)},\small{\ldots},\beta_{jk-1}^{(t)},\beta_{jk}^\star,\beta_{jk+1}^{(t-1)},\small{\ldots}, \beta_{jp}^{(t-1)},\lambda_j^{(t-1)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)} {\Pi\left(\beta_{jk}^{(t-1)}\right)\prod\limits_{1\leq i\leq I}f\left(\beta_{j0}^{(t)},\small{\ldots},\beta_{jk-1}^{(t)},\beta_{jk}^{(t-1)},\beta_{jk+1}^{(t-1)},\small{\ldots}, \beta_{jp}^{(t-1)},\lambda_j^{(t-1)}, \alpha_1^{(t)},W_1^{(t)}, \small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)}\right).\]</span></p>
 <ul>
 <li>Generate the <strong>loading factors related to latent variables</strong> <span class="math inline">\(\lambda_{jl}^{(t)}\)</span> for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> according to an adaptive Metropolis algorithm for <span class="math inline">\(l \leq j\)</span>, simulating <span class="math inline">\(\lambda_{jl}^\star \sim \mathcal{N}(\lambda_{jl}^{(t-1)},\sigma_{\lambda_{jl}}^2)\)</span> and then calculating the acceptance rate as follows: :
-<span class="math display">\[\gamma = min\left(1,\dfrac{\Pi\left(\lambda_{jl}^\star\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^\star,\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_{j0}^{(t)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)} {\Pi\left(\lambda_{jl}^{(t-1)}\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^{(t-1)},\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_{j0}^{(t)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)}\right).\]</span>
+<span class="math display">\[\gamma = min\left(1,\dfrac{\Pi\left(\lambda_{jl}^\star\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^\star,\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)} {\Pi\left(\lambda_{jl}^{(t-1)}\right)\prod\limits_{1\leq i\leq I}f\left(\lambda_{j1}^{(t)},\small{\ldots},\lambda_{jl-1}^{(t)},\lambda_{jl}^{(t-1)},\lambda_{jl+1}^{(t-1)},\small{\ldots}, \lambda_{jq}^{(t-1)},\beta_j^{(t)}, \alpha_1^{(t)},W_1^{(t)},\small{\ldots},\alpha_I^{(t)},  W_I^{(t)},X_i,y_{ij},n_i\right)}\right).\]</span>
 In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="math inline">\(\lambda_{jl}^{(t)} = 0\)</span>.</li>
 </ul>
 </div>
@@ -444,7 +470,7 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
 <a href="#model-definition-2" class="anchor"></a><span class="header-section-number">3.1</span> Model definition</h2>
 <p>According to the article <span class="citation">Hui (<a href="#ref-Hui2016" role="doc-biblioref">2016</a>)</span>, we can use the Poisson distribution for the analysis of multivariate abundance data, with estimation performed using Bayesian Markov chain Monte Carlo methods.</p>
 <p>In this case, it is assumed that <span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij})\]</span>, with
-<span class="math inline">\(\mathrm{log}(\theta_{ij}) = \alpha_i + \beta_{j0}+X_i\beta_j+ W_i\lambda_j\)</span>.</p>
+<span class="math inline">\(\mathrm{log}(\theta_{ij}) = \alpha_i + X_i\beta_j+ W_i\lambda_j\)</span>.</p>
 <p>We therefore consider abundance data with a response variable noted : <span class="math inline">\(Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}\)</span> such as :</p>
 <p><span class="math display">\[y_{ij}=\begin{cases}
     0 &amp; \text{if species $j$ has been observed as absent at site $i$}\\
@@ -455,7 +481,7 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
 <h2 class="hasAnchor">
 <a href="#gibbs-sampler-using-adaptative-metropolis-algorithm-1" class="anchor"></a><span class="header-section-number">3.2</span> Gibbs sampler using adaptative Metropolis algorithm</h2>
 <p>In this case, we cannot use the properties of the conjugate priors, therefore, the parameters of this model will be sampled by estimating their conditional <em>a posteriori</em> distributions using an adaptive Metropolis algorithm in the Gibbs sampler, in the same way as for the logit model.</p>
-<p>We use the same algorithm as before by replacing the logit link function by a log link function and the binomial distribution by a poisson’s law to calculate the likelihood of the model in the function .</p>
+<p>We use the same algorithm as before by replacing the logit link function by a log link function and the binomial distribution by a poisson’s law to calculate the likelihood of the model in the function <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code>.</p>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

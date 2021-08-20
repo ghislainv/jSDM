@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -150,13 +150,11 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>results A list including :</p><table class='table'>
-<tr><td>cov.mean</td><td>Average over the MCMC samples of the variance-covariance matrix</td></tr>
-<tr><td>cov.median</td><td>Median over the MCMC samples of the variance-covariance matrix</td></tr>
-<tr><td>cor.mean</td><td>Average over the MCMC samples of the residual correlation matrix</td></tr>
-<tr><td>cor.median</td><td>Median over the MCMC samples of the residual correlation matrix</td></tr>
-</table>
-
+    <p>results A list including :</p>
+<dt>cov.mean</dt><dd><p>Average over the MCMC samples of the variance-covariance matrix.</p></dd> 
+<dt>cov.median</dt><dd><p>Median over the MCMC samples of the variance-covariance matrix.</p></dd>
+<dt>cor.mean</dt><dd><p>Average over the MCMC samples of the residual correlation matrix.</p></dd>
+<dt>cor.median</dt><dd><p>Median over the MCMC samples of the residual correlation matrix.</p></dd>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -179,8 +177,7 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p>
-<p><code><a href='get_enviro_cor.html'>get_enviro_cor</a></code> <code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code>  <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></p></div>
+    <div class='dont-index'><p><code><a href='get_enviro_cor.html'>get_enviro_cor</a></code> <code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code> <code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     
@@ -204,29 +201,29 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
  <span class='va'>Env_frogs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Env_frogs</span><span class='op'>)</span>
  <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></span><span class='op'>(</span><span class='co'># Response variable</span>
-                                  presence_site_sp<span class='op'>=</span><span class='va'>PA_frogs</span>,
-                                  <span class='co'># Explanatory variables</span>
-                                  site_suitability <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
-                                  site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
-                                  n_latent<span class='op'>=</span><span class='fl'>2</span>,
-                                  site_effect<span class='op'>=</span><span class='st'>"random"</span>,
-                                  <span class='co'># Chains</span>
-                                  burnin<span class='op'>=</span><span class='fl'>100</span>,
-                                  mcmc<span class='op'>=</span><span class='fl'>100</span>,
-                                  thin<span class='op'>=</span><span class='fl'>1</span>,
-                                  <span class='co'># Starting values</span>
-                                  alpha_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  beta_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  lambda_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  W_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  V_alpha<span class='op'>=</span><span class='fl'>1</span>,
-                                  <span class='co'># Priors</span>
-                                  shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
-                                  mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
-                                  mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
-                                  <span class='co'># Various</span>
-                                  seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+ <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></span><span class='op'>(</span><span class='co'># Response variable</span>
+                             presence_data<span class='op'>=</span><span class='va'>PA_frogs</span>,
+                             <span class='co'># Explanatory variables</span>
+                             site_formula <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
+                             site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
+                             n_latent<span class='op'>=</span><span class='fl'>2</span>,
+                             site_effect<span class='op'>=</span><span class='st'>"random"</span>,
+                             <span class='co'># Chains</span>
+                             burnin<span class='op'>=</span><span class='fl'>100</span>,
+                             mcmc<span class='op'>=</span><span class='fl'>100</span>,
+                             thin<span class='op'>=</span><span class='fl'>1</span>,
+                             <span class='co'># Starting values</span>
+                             alpha_start<span class='op'>=</span><span class='fl'>0</span>,
+                             beta_start<span class='op'>=</span><span class='fl'>0</span>,
+                             lambda_start<span class='op'>=</span><span class='fl'>0</span>,
+                             W_start<span class='op'>=</span><span class='fl'>0</span>,
+                             V_alpha<span class='op'>=</span><span class='fl'>1</span>,
+                             <span class='co'># Priors</span>
+                             shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
+                             mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
+                             mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
+                             <span class='co'># Various</span>
+                             seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
@@ -242,46 +239,46 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 #&gt; **********:100.0% </div><div class='input'><span class='co'># Calcul of residual correlation between species </span>
  <span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'>get_residual_cor</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
  <span class='va'>result</span><span class='op'>$</span><span class='va'>cov.mean</span>
-</div><div class='output co'>#&gt;               [,1]        [,2]        [,3]          [,4]          [,5]
-#&gt;  [1,]  1.019888296 -0.29914744 -0.14250268 -0.0467891875 -0.0722501164
-#&gt;  [2,] -0.299147436  9.94593642  3.67550266  1.5853072451  1.8645487640
-#&gt;  [3,] -0.142502678  3.67550266  3.03099958  0.3639098905  0.9785972970
-#&gt;  [4,] -0.046789188  1.58530725  0.36390989  2.4564191217 -0.0007477446
-#&gt;  [5,] -0.072250116  1.86454876  0.97859730 -0.0007477446  1.6954953999
-#&gt;  [6,] -0.099163164  2.23936811  1.79442109 -1.9021699888  1.2438343310
-#&gt;  [7,] -0.252253284  6.68282929  3.26624885  0.1909489511  1.8513410376
-#&gt;  [8,] -0.001508894 -0.08889944 -0.01204976  0.4191186723 -0.1353533695
-#&gt;  [9,] -0.139224863  3.57545919  1.87602985 -0.4241692078  1.1878414601
-#&gt;              [,6]       [,7]         [,8]       [,9]
-#&gt;  [1,] -0.09916316 -0.2522533 -0.001508894 -0.1392249
-#&gt;  [2,]  2.23936811  6.6828293 -0.088899438  3.5754592
-#&gt;  [3,]  1.79442109  3.2662489 -0.012049755  1.8760299
-#&gt;  [4,] -1.90216999  0.1909490  0.419118672 -0.4241692
-#&gt;  [5,]  1.24383433  1.8513410 -0.135353369  1.1878415
-#&gt;  [6,]  7.25492962  4.2387848 -1.196767692  3.7395279
-#&gt;  [7,]  4.23878483  7.4630584 -0.585799830  4.0741364
-#&gt;  [8,] -1.19676769 -0.5857998  1.528537842 -0.7233906
-#&gt;  [9,]  3.73952788  4.0741364 -0.723390640  4.0717626</div><div class='input'> <span class='va'>result</span><span class='op'>$</span><span class='va'>cor.mean</span>
-</div><div class='output co'>#&gt;                [,1]        [,2]        [,3]         [,4]         [,5]
-#&gt;  [1,]  1.000000e+00 -0.09515311 -0.08130562 -0.029044143 -0.052268453
-#&gt;  [2,] -9.515311e-02  1.00000000  0.70216127  0.290215587  0.434609665
-#&gt;  [3,] -8.130562e-02  0.70216127  1.00000000  0.145096747  0.415935662
-#&gt;  [4,] -2.904414e-02  0.29021559  0.14509675  1.000000000  0.002748996
-#&gt;  [5,] -5.226845e-02  0.43460966  0.41593566  0.002748996  1.000000000
-#&gt;  [6,] -3.826329e-02  0.28373533  0.38628389 -0.372246962  0.357658253
-#&gt;  [7,] -8.867579e-02  0.73671579  0.69756825  0.041150118  0.502434871
-#&gt;  [8,] -8.894845e-05  0.01776982 -0.02123308  0.225378603 -0.088950061
-#&gt;  [9,] -6.711617e-02  0.53462299  0.54104067 -0.132217229  0.437856413
-#&gt;              [,6]        [,7]          [,8]        [,9]
-#&gt;  [1,] -0.03826329 -0.08867579 -8.894845e-05 -0.06711617
-#&gt;  [2,]  0.28373533  0.73671579  1.776982e-02  0.53462299
-#&gt;  [3,]  0.38628389  0.69756825 -2.123308e-02  0.54104067
-#&gt;  [4,] -0.37224696  0.04115012  2.253786e-01 -0.13221723
-#&gt;  [5,]  0.35765825  0.50243487 -8.895006e-02  0.43785641
-#&gt;  [6,]  1.00000000  0.59166304 -3.559776e-01  0.69731433
-#&gt;  [7,]  0.59166304  1.00000000 -1.672187e-01  0.73421703
-#&gt;  [8,] -0.35597755 -0.16721873  1.000000e+00 -0.27799971
-#&gt;  [9,]  0.69731433  0.73421703 -2.779997e-01  1.00000000</div></pre>
+</div><div class='output co'>#&gt;             [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+#&gt;  [1,] 1.88651417 0.42707430  3.0891104  0.7910278  0.4422630  0.5098426
+#&gt;  [2,] 0.42707430 1.35579884  1.8758170  0.5291296  0.2111268  0.1872100
+#&gt;  [3,] 3.08911038 1.87581698 14.0941006  2.3991099  2.0502945  2.7399401
+#&gt;  [4,] 0.79102778 0.52912959  2.3991099  3.3079084 -0.3411853 -1.2460042
+#&gt;  [5,] 0.44226300 0.21112680  2.0502945 -0.3411853  1.8717346  1.2523301
+#&gt;  [6,] 0.50984264 0.18720997  2.7399401 -1.2460042  1.2523301  3.6224175
+#&gt;  [7,] 0.09649469 0.05421798  0.7904238 -0.4955056  0.4641193  0.8933733
+#&gt;  [8,] 0.30831288 0.21138642  1.2583301  0.6515816 -0.2543942 -0.1956588
+#&gt;  [9,] 1.31041778 0.70726630  6.4727710 -0.7900288  1.8072864  3.5789830
+#&gt;              [,7]       [,8]       [,9]
+#&gt;  [1,]  0.09649469  0.3083129  1.3104178
+#&gt;  [2,]  0.05421798  0.2113864  0.7072663
+#&gt;  [3,]  0.79042379  1.2583301  6.4727710
+#&gt;  [4,] -0.49550561  0.6515816 -0.7900288
+#&gt;  [5,]  0.46411927 -0.2543942  1.8072864
+#&gt;  [6,]  0.89337333 -0.1956588  3.5789830
+#&gt;  [7,]  1.50972108 -0.1838248  1.2493127
+#&gt;  [8,] -0.18382477  1.9813527  0.4221238
+#&gt;  [9,]  1.24931267  0.4221238  7.0243817</div><div class='input'> <span class='va'>result</span><span class='op'>$</span><span class='va'>cor.mean</span>
+</div><div class='output co'>#&gt;             [,1]       [,2]      [,3]       [,4]        [,5]        [,6]
+#&gt;  [1,] 1.00000000 0.26348417 0.5845973  0.2870249  0.20842615  0.19393369
+#&gt;  [2,] 0.26348417 1.00000000 0.4152815  0.2495831  0.11715353  0.07986601
+#&gt;  [3,] 0.58459727 0.41528149 1.0000000  0.3492276  0.37299634  0.39261149
+#&gt;  [4,] 0.28702486 0.24958312 0.3492276  1.0000000 -0.14151734 -0.35530450
+#&gt;  [5,] 0.20842615 0.11715353 0.3729963 -0.1415173  1.00000000  0.46150151
+#&gt;  [6,] 0.19393369 0.07986601 0.3926115 -0.3553045  0.46150151  1.00000000
+#&gt;  [7,] 0.05800416 0.02743642 0.1522625 -0.2218658  0.24660404  0.36176260
+#&gt;  [8,] 0.16185432 0.12725605 0.2468859  0.2115327 -0.07976029 -0.04791613
+#&gt;  [9,] 0.37058190 0.21853109 0.6585472 -0.1665244  0.50363601  0.71686564
+#&gt;              [,7]        [,8]        [,9]
+#&gt;  [1,]  0.05800416  0.16185432  0.37058190
+#&gt;  [2,]  0.02743642  0.12725605  0.21853109
+#&gt;  [3,]  0.15226249  0.24688586  0.65854720
+#&gt;  [4,] -0.22186577  0.21153268 -0.16652443
+#&gt;  [5,]  0.24660404 -0.07976029  0.50363601
+#&gt;  [6,]  0.36176260 -0.04791613  0.71686564
+#&gt;  [7,]  1.00000000 -0.09164662  0.35491504
+#&gt;  [8,] -0.09164662  1.00000000  0.07761542
+#&gt;  [9,]  0.35491504  0.07761542  1.00000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

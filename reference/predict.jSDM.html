@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -179,7 +179,7 @@
     </tr>
     <tr>
       <th>probs</th>
-      <td><p>Numeric vector of probabilities with values in [0,1],
+      <td><p>Numeric vector of probabilities with values in [0,1], <br />
 used when <code>type="quantile"</code>.</p></td>
     </tr>
     <tr>
@@ -193,7 +193,7 @@ used when <code>type="quantile"</code>.</p></td>
     <p>Return a vector for the predictive posterior mean when <code>type="mean"</code>, a data-frame with the mean and quantiles when <code>type="quantile"</code> or an <code>mcmc</code> object (see <code>coda</code> package) with posterior distribution for each prediction when <code>type="posterior"</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
+    <div class='dont-index'><p><code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></code> <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     
@@ -216,28 +216,29 @@ used when <code>type="quantile"</code>.</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>Env_frogs</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>frogs</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
 <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='va'>mod</span><span class='op'>&lt;-</span><span class='fu'><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></span><span class='op'>(</span>presence_site_sp<span class='op'>=</span><span class='va'>PA_frogs</span>,
-                                <span class='co'># Explanatory variables</span>
-                                site_suitability <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
-                                site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
-                                n_latent<span class='op'>=</span><span class='fl'>2</span>,
-                                site_effect<span class='op'>=</span><span class='st'>"random"</span>,
-                                <span class='co'># Chains</span>
-                                burnin<span class='op'>=</span><span class='fl'>100</span>,
-                                mcmc<span class='op'>=</span><span class='fl'>100</span>,
-                                thin<span class='op'>=</span><span class='fl'>1</span>,
-                                <span class='co'># Starting values</span>
-                                alpha_start<span class='op'>=</span><span class='fl'>0</span>,
-                                beta_start<span class='op'>=</span><span class='fl'>0</span>,
-                                lambda_start<span class='op'>=</span><span class='fl'>0</span>,
-                                W_start<span class='op'>=</span><span class='fl'>0</span>,
-                                V_alpha<span class='op'>=</span><span class='fl'>1</span>,
-                                <span class='co'># Priors</span>
-                                shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
-                                mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
-                                mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
-                                <span class='co'># Various</span>
-                                seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>mod</span><span class='op'>&lt;-</span><span class='fu'><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></span><span class='op'>(</span><span class='co'># Response variable</span>
+                          presence_data<span class='op'>=</span><span class='va'>PA_frogs</span>,
+                          <span class='co'># Explanatory variables</span>
+                          site_formula <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
+                          site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
+                          n_latent<span class='op'>=</span><span class='fl'>2</span>,
+                          site_effect<span class='op'>=</span><span class='st'>"random"</span>,
+                          <span class='co'># Chains</span>
+                          burnin<span class='op'>=</span><span class='fl'>100</span>,
+                          mcmc<span class='op'>=</span><span class='fl'>100</span>,
+                          thin<span class='op'>=</span><span class='fl'>1</span>,
+                          <span class='co'># Starting values</span>
+                          alpha_start<span class='op'>=</span><span class='fl'>0</span>,
+                          beta_start<span class='op'>=</span><span class='fl'>0</span>,
+                          lambda_start<span class='op'>=</span><span class='fl'>0</span>,
+                          W_start<span class='op'>=</span><span class='fl'>0</span>,
+                          V_alpha<span class='op'>=</span><span class='fl'>1</span>,
+                          <span class='co'># Priors</span>
+                          shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
+                          mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
+                          mu_lambda<span class='op'>=</span><span class='fl'>0</span>, V_lambda<span class='op'>=</span><span class='fl'>10</span>,
+                          <span class='co'># Various</span>
+                          seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 

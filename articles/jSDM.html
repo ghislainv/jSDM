@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -154,12 +154,12 @@
 <td align="left">wide</td>
 </tr>
 <tr class="even">
-<td align="left"><code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code></td>
+<td align="left"><code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code></td>
 <td align="left">presence-absence</td>
 <td align="left">wide</td>
 </tr>
 <tr class="odd">
-<td align="left"><code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code></td>
+<td align="left"><code><a href="../reference/jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format()</a></code></td>
 <td align="left">presence-absence</td>
 <td align="left">long</td>
 </tr>
@@ -172,7 +172,7 @@
 </table>
 <ul>
 <li>
-<p><code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> :</p>
+<p><code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> :</p>
 <p><strong>Ecological process:</strong></p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij}),\]</span>
 where</p>
@@ -334,7 +334,7 @@ where</p>
 </table>
 </li>
 <li>
-<p><code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code> :</p>
+<p><code><a href="../reference/jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format()</a></code> :</p>
 <p><strong>Ecological process:</strong></p>
 <p><span class="math display">\[y_{n} \sim \mathcal{B}ernoulli(\theta_n),\]</span>
 such as <span class="math inline">\(species_n=j\)</span> and <span class="math inline">\(site_n=i\)</span>,
@@ -442,7 +442,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <a href="#occurrence-data-set" class="anchor"></a><span class="header-section-number">2.2</span> Occurrence data-set</h2>
 
 <div class="figure" style="text-align: center">
-<span id="fig:frog-picture"></span>
+<span style="display:block;" id="fig:frog-picture"></span>
 <img src="figures/Litoria_ewingii.jpg" alt="Litoria ewingii (Wilkinson et al. 2019)." width="400" height="300"><p class="caption">
 Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019" role="doc-biblioref">2019</a>)</span>.
 </p>
@@ -479,16 +479,16 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div id="parameter-inference" class="section level2">
 <h2 class="hasAnchor">
 <a href="#parameter-inference" class="anchor"></a><span class="header-section-number">2.3</span> Parameter inference</h2>
-<p>We use the <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code>
+<p>We use the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code>
 function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_frogs_jSDM_probit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">mod_frogs_jSDM_probit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
   burnin<span class="op">=</span><span class="fl">1000</span>, mcmc<span class="op">=</span><span class="fl">1000</span>, thin<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp <span class="op">=</span> <span class="va">PA_frogs</span>, 
+  presence_data <span class="op">=</span> <span class="va">PA_frogs</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,   
+  site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,   
   site_data <span class="op">=</span> <span class="va">Env_frogs</span>,
   <span class="co"># Model specification </span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"random"</span>,
@@ -498,8 +498,8 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
   V_alpha<span class="op">=</span><span class="fl">1</span>, 
   <span class="co"># Priors</span>
   shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,
-  mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -578,10 +578,10 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## probit_theta</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">probit_theta_pred</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">probit_theta_pred</span><span class="op">)</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
 </div>

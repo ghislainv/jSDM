@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,8 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="jSDM_Hmsc_files/navigation-1.1/tabsets.js"></script><script src="jSDM_Hmsc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="jSDM_Hmsc_files/kePrint-0.0.1/kePrint.js"></script><link href="jSDM_Hmsc_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="jSDM_Hmsc_files/jqueryui-1.11.4/jquery-ui.min.js"></script><link href="jSDM_Hmsc_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet">
+<script src="jSDM_Hmsc_files/tocify-1.9.1/jquery.tocify.js"></script><script src="jSDM_Hmsc_files/navigation-1.1/tabsets.js"></script><script src="jSDM_Hmsc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="jSDM_Hmsc_files/kePrint-0.0.1/kePrint.js"></script><link href="jSDM_Hmsc_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -456,27 +457,28 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="co"># Toy example : </span>
 <span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">100</span>
 <span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">300</span>
-<span class="va">np</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 <span class="va">nl</span> <span class="op">&lt;-</span> <span class="fl">2</span>
-<span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span>
+<span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span>
 
 <span class="co"># Ecological process (suitability)</span>
 <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
 <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsite</span><span class="op">)</span>,<span class="va">x1</span>,<span class="va">x2</span><span class="op">)</span>
+<span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
 <span class="co"># Simulation of parameters</span>
 <span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">np</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
+<span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">np</span>,<span class="op">-</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
 <span class="va">l.zero</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-<span class="va">l.diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">l.other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fl">2</span><span class="op">-</span><span class="fl">3</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">l.diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>
+<span class="va">l.other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fl">2</span><span class="op">-</span><span class="fl">3</span>,<span class="op">-</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>
 <span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">l.diag</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.zero</span>,<span class="va">l.other</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.diag</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">l.other</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,
                           byrow<span class="op">=</span><span class="cn">T</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
 <span class="va">param.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">beta.target</span>,<span class="va">lambda.target</span><span class="op">)</span>
 
 <span class="co"># Simulation of response data with probit link</span>
 <span class="va">probit_theta</span> <span class="op">&lt;-</span> <span class="va">X</span> <span class="op">%*%</span> <span class="va">beta.target</span> <span class="op">+</span> <span class="va">W</span> <span class="op">%*%</span> <span class="va">lambda.target</span>
+<span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span>
 <span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
 <span class="va">Z_true</span> <span class="op">&lt;-</span> <span class="va">probit_theta</span> <span class="op">+</span> <span class="va">e</span>
 <span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
@@ -501,23 +503,23 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_sim</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_sim</span><span class="op">)</span>
+<span class="va">theta_latent_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_sim</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_sim</span><span class="op">)</span>
 <span class="co"># RMSE</span>
 <span class="co">#res &lt;- evaluateModelFit(hM=mod_Hmsc_sim, predY=preds)</span>
-<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">probit_theta</span><span class="op">-</span><span class="va">probit_theta_pred_sim</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">theta</span><span class="op">-</span><span class="va">theta_latent_sim</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="va">RMSE_Hmsc_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">SE</span><span class="op">/</span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsite</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">Y</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_sim</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">Y</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_sim</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_sim</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">np</span>, <span class="va">nl</span>, <span class="va">nsp</span>, <span class="va">nsite</span>, <span class="va">beta.target</span>, <span class="va">lambda.target</span>, <span class="va">X</span>, <span class="va">W</span>, <span class="va">probit_theta</span>, <span class="va">Z_true</span>, <span class="va">Y</span>, <span class="va">T_Hmsc_sim</span>,
-     <span class="va">mod_Hmsc_sim</span>, <span class="va">probit_theta_pred_sim</span>,
+<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">np</span>, <span class="va">nl</span>, <span class="va">nsp</span>, <span class="va">nsite</span>, <span class="va">beta.target</span>, <span class="va">lambda.target</span>, <span class="va">X</span>, <span class="va">W</span>, <span class="va">theta</span>, <span class="va">probit_theta</span>, <span class="va">Z_true</span>, <span class="va">Y</span>, <span class="va">T_Hmsc_sim</span>,
+     <span class="va">mod_Hmsc_sim</span>, <span class="va">rL</span>, <span class="va">probit_theta_latent_sim</span>,
      <span class="va">RMSE_Hmsc_sim</span>, <span class="va">Deviance_Hmsc_sim</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_simulation.RData"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -551,7 +553,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
       <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">lambda.target</span><span class="op">[</span><span class="va">l</span>,<span class="va">j</span><span class="op">]</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span>
-<span class="va">Hmsc_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/getPostEstimate.html">getPostEstimate</a></span><span class="op">(</span>hM<span class="op">=</span><span class="va">mod_Hmsc_sim</span>, parName<span class="op">=</span><span class="st">'Lambda'</span><span class="op">)</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span>
+<span class="va">Hmsc_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/getPostEstimate.html">getPostEstimate</a></span><span class="op">(</span>hM<span class="op">=</span><span class="va">mod_Hmsc_sim</span>, parName<span class="op">=</span><span class="st">'Lambda'</span>, r<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">mean</span><span class="op">)</span>
 
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
@@ -563,7 +565,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
 
 <span class="co">## Latent variable W </span>
-<span class="va">Hmsc_lvs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/getPostEstimate.html">getPostEstimate</a></span><span class="op">(</span>hM<span class="op">=</span><span class="va">mod_Hmsc_sim</span>, parName<span class="op">=</span><span class="st">'Eta'</span><span class="op">)</span><span class="op">$</span><span class="va">mean</span>
+<span class="va">Hmsc_lvs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/getPostEstimate.html">getPostEstimate</a></span><span class="op">(</span>hM<span class="op">=</span><span class="va">mod_Hmsc_sim</span>, parName<span class="op">=</span><span class="st">'Eta'</span>, r<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">mean</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nl</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,<span class="va">Hmsc_lvs</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,
@@ -573,9 +575,9 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="op">}</span>
 
 <span class="co">## Prediction</span>
-<span class="co"># probit_theta_pred </span>
+<span class="co"># probit_theta_latent </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>,<span class="va">probit_theta_pred_sim</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>,<span class="va">probit_theta_latent_sim</span>,
      main<span class="op">=</span><span class="st">"probit(theta)"</span>, xlab <span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-7.png" width="800" style="display: block; margin: auto;"></p>
@@ -606,20 +608,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Mosquitos</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Mosquitos</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Mosquitos</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_Mosquitos</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_Mosquitos</span><span class="op">)</span>
+<span class="va">theta_latent_Mosquitos</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Mosquitos</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_Mosquitos</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_Mosquitos</span><span class="op">)</span>
 
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Mosquitos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Mosquitos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Mosquitos</span> <span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_Mosquitos</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Mosquitos</span> <span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_Mosquitos</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Mosquitos</span>  <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Mosquitos</span>, <span class="va">mod_Hmsc_Mosquitos</span>,
-     <span class="va">probit_theta_pred_Mosquitos</span>, <span class="va">Deviance_Hmsc_Mosquitos</span>,
+     <span class="va">probit_theta_latent_Mosquitos</span>, <span class="va">Deviance_Hmsc_Mosquitos</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Mosquitos.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="eucalypts-dataset" class="section level2">
@@ -650,20 +652,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Eucalypts</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Eucalypts</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Eucalypts</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_Eucalypts</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_Eucalypts</span><span class="op">)</span>
+<span class="va">theta_latent_Eucalypts</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Eucalypts</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_Eucalypts</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_Eucalypts</span><span class="op">)</span>
 
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Eucalypts</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Eucalypts</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Eucalypts</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_Eucalypts</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Eucalypts</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_Eucalypts</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Eucalypts</span>  <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Eucalypts</span>, <span class="va">mod_Hmsc_Eucalypts</span>,
-     <span class="va">probit_theta_pred_Eucalypts</span>, <span class="va">Deviance_Hmsc_Eucalypts</span>,
+     <span class="va">probit_theta_latent_Eucalypts</span>, <span class="va">Deviance_Hmsc_Eucalypts</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Eucalypts.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="frogs-dataset" class="section level2">
@@ -693,20 +695,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Frogs</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Frogs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Frogs</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_Frogs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_Frogs</span><span class="op">)</span>
+<span class="va">theta_latent_Frogs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Frogs</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_Frogs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_Frogs</span><span class="op">)</span>
 
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Frogs</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Frogs</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Frogs</span> <span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_Frogs</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Frogs</span> <span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_Frogs</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Frogs</span>  <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Frogs</span>, <span class="va">mod_Hmsc_Frogs</span>,
-     <span class="va">probit_theta_pred_Frogs</span>, <span class="va">Deviance_Hmsc_Frogs</span>,
+     <span class="va">probit_theta_latent_Frogs</span>, <span class="va">Deviance_Hmsc_Frogs</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Frogs.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="fungi-dataset" class="section level2">
@@ -742,20 +744,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Fungi</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Fungi</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Fungi</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_Fungi</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_Fungi</span><span class="op">)</span>
+<span class="va">theta_latent_Fungi</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Fungi</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_Fungi</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_Fungi</span><span class="op">)</span>
 
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Fungi</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Fungi</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Fungi</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_Fungi</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Fungi</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_Fungi</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Fungi</span>  <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Fungi</span>, <span class="va">mod_Hmsc_Fungi</span>,
-     <span class="va">probit_theta_pred_Fungi</span>, <span class="va">Deviance_Hmsc_Fungi</span>,
+     <span class="va">probit_theta_latent_Fungi</span>, <span class="va">Deviance_Hmsc_Fungi</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Fungi.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="birds-dataset" class="section level2">
@@ -789,19 +791,19 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Birds</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Birds</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Birds</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">probit_theta_pred_Birds</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_pred_Birds</span><span class="op">)</span>
+<span class="va">theta_latent_Birds</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Birds</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">probit_theta_latent_Birds</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">theta_latent_Birds</span><span class="op">)</span>
 
 <span class="co"># Deviance</span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span> <span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_pred_Birds</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span> <span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span>,<span class="va">theta_latent_Birds</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Birds</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Birds</span>, <span class="va">mod_Hmsc_Birds</span>,
-     <span class="va">probit_theta_pred_Birds</span>, <span class="va">Deviance_Hmsc_Birds</span>,
+     <span class="va">probit_theta_latent_Birds</span>, <span class="va">Deviance_Hmsc_Birds</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Birds.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="mites-dataset" class="section level2">
@@ -836,20 +838,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_Hmsc_Mites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># Predicted probit(theta) </span>
-<span class="va">theta_pred_Mites</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Mites</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
-<span class="va">log_theta_pred_Mites</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">theta_pred_Mites</span><span class="op">)</span>
+<span class="va">theta_latent_Mites</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/computePredictedValues.html">computePredictedValues</a></span><span class="op">(</span><span class="va">mod_Hmsc_Mites</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="va">mean</span><span class="op">)</span>
+<span class="va">log_theta_latent_Mites</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">theta_latent_Mites</span><span class="op">)</span>
 
 <span class="co"># Deviance</span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">PA_Mites</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">PA_Mites</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">dpois</a></span><span class="op">(</span><span class="va">PA_Mites</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="va">theta_pred_Mites</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
+    <span class="va">logL</span><span class="op">=</span><span class="va">logL</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">dpois</a></span><span class="op">(</span><span class="va">PA_Mites</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="va">theta_latent_Mites</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span>  
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">Deviance_Hmsc_Mites</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_Hmsc_Mites</span>, <span class="va">mod_Hmsc_Mites</span>,
-     <span class="va">log_theta_pred_Mites</span>, <span class="va">Deviance_Hmsc_Mites</span>,
+     <span class="va">log_theta_latent_Mites</span>, <span class="va">Deviance_Hmsc_Mites</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Mites.RData"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
@@ -861,18 +863,20 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <div id="simulated-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulated-dataset-1" class="anchor"></a><span class="header-section-number">4.1</span> Simulated dataset</h2>
-<p>We fit a binomial joint species distribution model, including latent variables, from the simulated dataset using the <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model, including latent variables, from the simulated dataset using the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"jSDM_Hmsc_cache/Hmsc_simulation.RData"</span><span class="op">)</span>
+<span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span><span class="op">)</span>
 <span class="co"># Fit the model</span>
 <span class="va">T1</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> 
-<span class="va">mod_jSDM_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<span class="va">mod_jSDM_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
-  burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
+  burnin<span class="op">=</span><span class="fl">5000</span>, mcmc<span class="op">=</span><span class="fl">10000</span>, thin<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Response variable</span>
-  presence_site_sp<span class="op">=</span><span class="va">Y</span>, 
+  presence_data<span class="op">=</span><span class="va">Y</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span>,   
   site_data<span class="op">=</span><span class="va">X</span>,
   <span class="co"># Model specification</span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
@@ -880,7 +884,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">np</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -888,7 +892,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_jSDM_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>,<span class="va">T1</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>
 
 <span class="co"># RMSE</span>
-<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">probit_theta</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">probit_theta_pred</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">theta</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">theta_latent</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="va">RMSE_jSDM_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">SE</span><span class="op">/</span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_jSDM_sim</span>, <span class="va">mod_jSDM_sim</span>, <span class="va">RMSE_jSDM_sim</span>,
@@ -954,47 +958,47 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">probit_theta</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">probit_theta_pred</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">theta</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">theta_latent</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="va">RMSE_jSDM_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">SE</span><span class="op">/</span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-
 
 <span class="co">## Deviance</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">mcmc.Deviance</span>, main<span class="op">=</span><span class="st">"Deviance"</span><span class="op">)</span>
 
 <span class="co">#= Predictions</span>
 <span class="co">## probit_theta</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>,<span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">probit_theta_pred</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>,<span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      xlab<span class="op">=</span><span class="st">"obs"</span>,ylab<span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"probit(theta)"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
-<span class="co">## Z</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">Z_true</span>,<span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">Z_latent</span>,
-     xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"latent variable Z"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
+
+<span class="co"># ## theta</span>
+<span class="co"># plot(pnorm(probit_theta),mod_jSDM_sim$theta_latent,</span>
+<span class="co">#      xlab="obs",ylab="fitted", main="theta")</span>
+<span class="co"># abline(a=0,b=1,col='red')</span></code></pre></div>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-7.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-8.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="mosquitos-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mosquitos-dataset-1" class="anchor"></a><span class="header-section-number">4.2</span> Mosquitos dataset</h2>
-<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html"><code>mosquitos</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html"><code>mosquitos</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit the model</span>
 <span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_jSDM_Mosquitos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<span class="va">mod_jSDM_Mosquitos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains </span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_Mosquitos</span>, 
+  presence_data<span class="op">=</span><span class="va">PA_Mosquitos</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="va">Env_Mosquitos</span>,
   <span class="co"># Model specification</span>
   site_effect<span class="op">=</span><span class="st">"none"</span>, n_latent<span class="op">=</span><span class="fl">2</span>,
   <span class="co"># Starting values </span>
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
-  <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  <span class="co"># Priors</span>
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Mosquitos</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -1006,25 +1010,25 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <div id="eucalypts-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#eucalypts-dataset-1" class="anchor"></a><span class="header-section-number">4.3</span> Eucalypts dataset</h2>
-<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html"><code>eucalypts</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html"><code>eucalypts</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit the model</span>
 <span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_jSDM_Eucalypts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<span class="va">mod_jSDM_Eucalypts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_Eucalypts</span>,
+  presence_data<span class="op">=</span><span class="va">PA_Eucalypts</span>,
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="va">Env_Eucalypts</span>,
   <span class="co"># Model specification</span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
   <span class="co"># Starting values </span>
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
-  <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  <span class="co"># Priors</span>
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Eucalypts</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -1036,17 +1040,17 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <div id="frogs-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#frogs-dataset-1" class="anchor"></a><span class="header-section-number">4.4</span> Frogs dataset</h2>
-<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/frogs.html"><code>frogs</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/frogs.html"><code>frogs</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit the model </span>
 <span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_jSDM_Frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<span class="va">mod_jSDM_Frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">PA_Frogs</span><span class="op">)</span>, 
+  presence_data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">PA_Frogs</span><span class="op">)</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">Env_Frogs</span><span class="op">)</span>,
   <span class="co"># Model specification </span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
@@ -1054,7 +1058,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Frogs</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -1066,25 +1070,24 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <div id="fungi-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fungi-dataset-1" class="anchor"></a><span class="header-section-number">4.5</span> Fungi dataset</h2>
-<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/fungi.html"><code>fungi</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model, including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/fungi.html"><code>fungi</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit the model</span>
 <span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_jSDM_Fungi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
+<span class="va">mod_jSDM_Fungi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains </span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_Fungi</span>, 
+  presence_data<span class="op">=</span><span class="va">PA_Fungi</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="va">Env_Fungi</span>,
   <span class="co"># Model specification</span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
   <span class="co"># Starting values </span>
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
-  <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Fungi</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -1096,7 +1099,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <div id="birds-dataset-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#birds-dataset-1" class="anchor"></a><span class="header-section-number">4.6</span> Birds dataset</h2>
-<p>We fit a binomial joint species distribution model including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/birds.html"><code>birds</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> function to perform binomial probit regression.</p>
+<p>We fit a binomial joint species distribution model including latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/birds.html"><code>birds</code></a> dataset using <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Birds dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"birds"</span><span class="op">)</span>
@@ -1111,13 +1114,13 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 
 <span class="co"># Fit the model</span>
 <span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_jSDM_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block</a></span><span class="op">(</span>
-    <span class="co"># Chains </span>
+<span class="va">mod_jSDM_Birds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
+  <span class="co"># Chains </span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_Birds</span>, 
+  presence_data<span class="op">=</span><span class="va">PA_Birds</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="va">Env_Birds</span>,
   <span class="co"># Model specification</span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
@@ -1125,7 +1128,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Birds</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   seed<span class="op">=</span><span class="fl">123</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -1145,9 +1148,9 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   <span class="co"># Chains </span>
   burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_Mites</span>, 
+  count_data<span class="op">=</span><span class="va">PA_Mites</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
+  site_formula<span class="op">=</span><span class="op">~</span><span class="va">.</span>,   
   site_data<span class="op">=</span><span class="va">Env_Mites</span>,
   <span class="co"># Model specification</span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"none"</span>,
@@ -1155,7 +1158,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   beta_start<span class="op">=</span><span class="fl">0</span>,
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   <span class="co"># Priors </span>
-  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,
+  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X_Mites</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Various </span>
   ropt<span class="op">=</span><span class="fl">0.44</span>,
@@ -1205,7 +1208,7 @@ Mites
 Compilation time Hmsc (secondes)
 </td>
 <td style="text-align:left;">
-658
+641
 </td>
 <td style="text-align:left;">
 283
@@ -1231,25 +1234,25 @@ Compilation time Hmsc (secondes)
 Compilation time jSDM (secondes)
 </td>
 <td style="text-align:left;">
-100
+177
 </td>
 <td style="text-align:left;">
 20
 </td>
 <td style="text-align:left;">
-29
+39
 </td>
 <td style="text-align:left;">
-5
+7
 </td>
 <td style="text-align:left;">
-34
+38
 </td>
 <td style="text-align:left;">
-119
+178
 </td>
 <td style="text-align:left;">
-115
+123
 </td>
 </tr>
 <tr>
@@ -1257,7 +1260,7 @@ Compilation time jSDM (secondes)
 Deviance Hmsc
 </td>
 <td style="text-align:left;">
-25868
+15421
 </td>
 <td style="text-align:left;">
 1768
@@ -1283,25 +1286,25 @@ Deviance Hmsc
 Deviance jSDM
 </td>
 <td style="text-align:left;">
-25627
+15191
 </td>
 <td style="text-align:left;">
-1284
+1266
 </td>
 <td style="text-align:left;">
-1909
+1830
 </td>
 <td style="text-align:left;">
-217
+203
 </td>
 <td style="text-align:left;">
-1414
+1357
 </td>
 <td style="text-align:left;">
-14205
+14121
 </td>
 <td style="text-align:left;">
-6857
+6812
 </td>
 </tr>
 <tr>
@@ -1331,12 +1334,12 @@ Deviance jSDM
 </tr>
 </tbody>
 </table>
-<p><code>jSDM</code> is <strong>5 to 24</strong> times faster than <code>Hmsc</code>.</p>
+<p><code>jSDM</code> is <strong>4 to 17</strong> times faster than <code>Hmsc</code>.</p>
 </div>
 <div id="root-mean-square-error-rmse-for-simulated-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#root-mean-square-error-rmse-for-simulated-data" class="anchor"></a><span class="header-section-number">5.2</span> Root-Mean-Square Error (RMSE) for simulated data</h2>
-Computed for <span class="math inline">\(\text{probit}(\theta_{ij})\)</span> with the simulated data-set.
+<p>Computed for the probabilities of presences <span class="math inline">\(\theta_{ij}\)</span> on the simulated data-set.</p>
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:left;">
@@ -1353,10 +1356,10 @@ jSDM
 RMSE
 </td>
 <td style="text-align:right;">
-0.318
+0.073
 </td>
 <td style="text-align:right;">
-0.322
+0.072
 </td>
 </tr></tbody>
 </table>

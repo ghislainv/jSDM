@@ -87,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -136,10 +136,12 @@
 <a href="#jsdm-011" class="anchor"></a>jSDM 0.1.1<small> Unreleased </small>
 </h1>
 <ul>
+<li>Add the possibility of considering an additional hierarchical level in the Bayesian models of the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code>, <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> and <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> functions to take into account interactions between species-specific traits and the environment in estimating species effects.</li>
+<li>Separate the drawing of species effects beta and factor loadings lambda in the functions <code>jSDM_binomial_probit_block()</code> and <code>jSDM_binomial_probit_block_long_format()</code> renamed <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> and <code><a href="../reference/jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format()</a></code>.</li>
 <li>Add Code of conduct and Contributing section</li>
 <li>Use of <code>roxygen2</code> for documentation and NAMESPACE</li>
-<li>Rename <code><a href="../reference/jSDM_binomial_probit_block.html">jSDM_binomial_probit_block()</a></code> the function <code>jSDM_probit_block()</code>.</li>
-<li>New function <code><a href="../reference/jSDM_binomial_probit_block_long_format.html">jSDM_binomial_probit_block_long_format()</a></code> for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.<br>
+<li>Rename <code>jSDM_binomial_probit_block()</code> the function <code>jSDM_probit_block()</code>.</li>
+<li>New function <code>jSDM_binomial_probit_block_long_format()</code> for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.<br>
 </li>
 <li>New function <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> for fitting joint species distribution models from abundance data inspired by Hui and Francis K. C. 2016 <em>Methods in Ecology and Evolution</em> (<a href="doi:10.1111/2041-210X.12514" class="uri">doi:10.1111/2041-210X.12514</a>).</li>
 <li>New function <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> for fitting joint species distribution models from presence-absence data at multiple-visited sites using a bayesian inference method inspired by Albert, James H. and Chib Siddhartha 1993 <em>Journal of the American Statistical Association</em> (<a href="doi:10.1080/01621459.1993.10476321" class="uri">doi:10.1080/01621459.1993.10476321</a>).</li>

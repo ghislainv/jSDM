@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -160,12 +160,10 @@ Defaults to 0.95.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>results A list including :</p><table class='table'>
-<tr><td><code>cor, cor.lower, cor.upper</code></td><td>A set of \(p \times p\) correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 % highest posterior interval.</td></tr>
-<tr><td><code>sig.cor</code></td><td>A \(p \times p\) correlation matrix containing only the “significant" correlations whose 95 % highest posterior interval does not contain zero. All non-significant correlations are set to zero.</td></tr>
-<tr><td><code>cov</code></td><td>Average over the MCMC samples of the \(p \times p\) covariance matrix.</td></tr>
-</table>
-
+    <p>results A list including :</p>
+<dt>cor, cor.lower, cor.upper</dt><dd><p>A set of \(np \times np\) correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 % highest posterior interval.</p></dd> 
+<dt>sig.cor</dt><dd><p>A \(np \times np\) correlation matrix containing only the “significant" correlations whose 95 % highest posterior interval does not contain zero. All non-significant correlations are set to zero.</p></dd>
+<dt>cov</dt><dd><p>Average over the MCMC samples of the \(np \times np\) covariance matrix.</p></dd>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -185,8 +183,7 @@ Such correlation matrices are discussed and found in Ovaskainen et al., (2010), 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='get_residual_cor.html'>get_residual_cor</a></code> <code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p>
-<p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code>  <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code>  <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code></p></div>
+    <div class='dont-index'><p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code> <code><a href='get_residual_cor.html'>get_residual_cor</a></code> <code><a href='jSDM-package.html'>jSDM-package</a></code> <code><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></code> <code><a href='jSDM_binomial_logit.html'>jSDM_binomial_logit</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     
@@ -210,26 +207,26 @@ Such correlation matrices are discussed and found in Ovaskainen et al., (2010), 
  <span class='va'>Env_frogs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Env_frogs</span><span class='op'>)</span>
  <span class='co'># Parameter inference</span>
 <span class='co'># Increase the number of iterations to reach MCMC convergence</span>
-<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></span><span class='op'>(</span><span class='co'># Response variable</span>
-                                  presence_site_sp<span class='op'>=</span><span class='va'>PA_frogs</span>,
-                                  <span class='co'># Explanatory variables</span>
-                                  site_suitability <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
-                                  site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
-                                  n_latent<span class='op'>=</span><span class='fl'>0</span>,
-                                  site_effect<span class='op'>=</span><span class='st'>"random"</span>,
-                                  <span class='co'># Chains</span>
-                                  burnin<span class='op'>=</span><span class='fl'>100</span>,
-                                  mcmc<span class='op'>=</span><span class='fl'>100</span>,
-                                  thin<span class='op'>=</span><span class='fl'>1</span>,
-                                  <span class='co'># Starting values</span>
-                                  alpha_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  beta_start<span class='op'>=</span><span class='fl'>0</span>,
-                                  V_alpha<span class='op'>=</span><span class='fl'>1</span>,
-                                  <span class='co'># Priors</span>
-                                  shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
-                                  mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
-                                  <span class='co'># Various</span>
-                                  seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></span><span class='op'>(</span><span class='co'># Response variable</span>
+                             presence_data<span class='op'>=</span><span class='va'>PA_frogs</span>,
+                             <span class='co'># Explanatory variables</span>
+                             site_formula <span class='op'>=</span> <span class='op'>~</span><span class='va'>.</span>,
+                             site_data <span class='op'>=</span> <span class='va'>Env_frogs</span>,
+                             n_latent<span class='op'>=</span><span class='fl'>0</span>,
+                             site_effect<span class='op'>=</span><span class='st'>"random"</span>,
+                             <span class='co'># Chains</span>
+                             burnin<span class='op'>=</span><span class='fl'>100</span>,
+                             mcmc<span class='op'>=</span><span class='fl'>100</span>,
+                             thin<span class='op'>=</span><span class='fl'>1</span>,
+                             <span class='co'># Starting values</span>
+                             alpha_start<span class='op'>=</span><span class='fl'>0</span>,
+                             beta_start<span class='op'>=</span><span class='fl'>0</span>,
+                             V_alpha<span class='op'>=</span><span class='fl'>1</span>,
+                             <span class='co'># Priors</span>
+                             shape<span class='op'>=</span><span class='fl'>0.5</span>, rate<span class='op'>=</span><span class='fl'>0.0005</span>,
+                             mu_beta<span class='op'>=</span><span class='fl'>0</span>, V_beta<span class='op'>=</span><span class='fl'>10</span>,
+                             <span class='co'># Various</span>
+                             seed<span class='op'>=</span><span class='fl'>1234</span>, verbose<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Running the Gibbs sampler. It may be long, please keep cool :)
 #&gt; 
@@ -244,9 +241,7 @@ Such correlation matrices are discussed and found in Ovaskainen et al., (2010), 
 #&gt; **********:90.0% 
 #&gt; **********:100.0% </div><div class='input'><span class='co'># Calcul of residual correlation between species </span>
  <span class='va'>enviro.cors</span> <span class='op'>&lt;-</span> <span class='fu'>get_enviro_cor</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
-<span class='fu'>corrplot</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/corrplot/man/corrplot.html'>corrplot</a></span><span class='op'>(</span><span class='va'>enviro.cors</span><span class='op'>$</span><span class='va'>sig.cor</span>, title <span class='op'>=</span> <span class='st'>"Shared response correlations"</span>,
-         type <span class='op'>=</span> <span class='st'>"lower"</span>, diag <span class='op'>=</span> <span class='cn'>FALSE</span>, mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>0.5</span>,<span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, tl.srt <span class='op'>=</span> <span class='fl'>45</span><span class='op'>)</span>
-</div><div class='img'><img src='get_enviro_cor-1.png' alt='' width='700' height='433' /></div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

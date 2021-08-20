@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -141,13 +141,16 @@
   burnin <span class='op'>=</span> <span class='fl'>5000</span>,
   mcmc <span class='op'>=</span> <span class='fl'>10000</span>,
   thin <span class='op'>=</span> <span class='fl'>10</span>,
-  <span class='va'>presence_site_sp</span>,
-  <span class='va'>site_suitability</span>,
+  <span class='va'>presence_data</span>,
+  <span class='va'>site_formula</span>,
+  trait_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  trait_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>site_data</span>,
   trials <span class='op'>=</span> <span class='cn'>NULL</span>,
   n_latent <span class='op'>=</span> <span class='fl'>0</span>,
   site_effect <span class='op'>=</span> <span class='st'>"none"</span>,
   beta_start <span class='op'>=</span> <span class='fl'>0</span>,
+  gamma_start <span class='op'>=</span> <span class='fl'>0</span>,
   lambda_start <span class='op'>=</span> <span class='fl'>0</span>,
   W_start <span class='op'>=</span> <span class='fl'>0</span>,
   alpha_start <span class='op'>=</span> <span class='fl'>0</span>,
@@ -155,7 +158,9 @@
   shape <span class='op'>=</span> <span class='fl'>0.5</span>,
   rate <span class='op'>=</span> <span class='fl'>5e-04</span>,
   mu_beta <span class='op'>=</span> <span class='fl'>0</span>,
-  V_beta <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  V_beta <span class='op'>=</span> <span class='fl'>10</span>,
+  mu_gamma <span class='op'>=</span> <span class='fl'>0</span>,
+  V_gamma <span class='op'>=</span> <span class='fl'>10</span>,
   mu_lambda <span class='op'>=</span> <span class='fl'>0</span>,
   V_lambda <span class='op'>=</span> <span class='fl'>10</span>,
   ropt <span class='op'>=</span> <span class='fl'>0.44</span>,
@@ -179,21 +184,32 @@
       <td><p>The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.</p></td>
     </tr>
     <tr>
-      <th>presence_site_sp</th>
-      <td><p>A vector indicating the number of successes (or presences) and the absence by a zero for each species at studied sites.</p></td>
+      <th>presence_data</th>
+      <td><p>A matrix \(n_{site} \times n_{species}\) indicating the number of successes (or presences) and the absence by a zero for each species at the studied sites.</p></td>
     </tr>
     <tr>
-      <th>site_suitability</th>
-      <td><p>A one-sided formula of the form '~x1+...+xp' with p terms specifying the explicative variables for the suitability process of the model.</p></td>
+      <th>site_formula</th>
+      <td><p>A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,
+used to form the design matrix \(X\) of size \(n_{site} \times np\).</p></td>
+    </tr>
+    <tr>
+      <th>trait_data</th>
+      <td><p>A data frame containing the species traits which can be included as part of the model. Default to <code>NULL</code> to fit a model without species traits.</p></td>
+    </tr>
+    <tr>
+      <th>trait_formula</th>
+      <td><p>A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,
+used to form the trait design matrix \(Tr\) of size \(n_{species} \times nt\) and to set to <code>0</code> the \(\gamma\) parameters corresponding to interactions not taken into account according to the formula. 
+Default to <code>NULL</code> to fit a model with all possible interactions between environnemental variables defined by <code>site_formula</code> and species traits found in <code>trait_data</code>.</p></td>
     </tr>
     <tr>
       <th>site_data</th>
-      <td><p>data frame containing the model's explicative variables.</p></td>
+      <td><p>A data frame containing the model's explicative variables by site.</p></td>
     </tr>
     <tr>
       <th>trials</th>
-      <td><p>A vector indicating the number of trials for each site. \(t_i\) should be superior or equal to \(y_{ij}\), the number of successes for observation \(n\).
-If \(t_i=0\), then \(y_{ij}=0\). The default is one visit by site.</p></td>
+      <td><p>A vector indicating the number of trials for each site. \(n_i\) should be superior or equal to \(y_{ij}\), the number of successes for observation \(n\).
+If \(n_i=0\), then \(y_{ij}=0\). The default is one visit by site.</p></td>
     </tr>
     <tr>
       <th>n_latent</th>
@@ -207,22 +223,32 @@ If random effects, they are drawn from a normal distribution with mean zero and 
     </tr>
     <tr>
       <th>beta_start</th>
-      <td><p>Starting values for beta parameters of the suitability process for each species must be either a scalar or a \(p \times n_{species}\) matrix. 
+      <td><p>Starting values for \(\beta\) parameters of the suitability process for each species must be either a scalar or a \(np \times n_{species}\) matrix. 
 If <code>beta_start</code> takes a scalar value, then that value will serve for all of the \(\beta\) parameters.</p></td>
     </tr>
     <tr>
+      <th>gamma_start</th>
+      <td><p>Starting values for \(\gamma\) parameters that represent the influence of species-specific traits on species' responses \(\beta\),
+<code>gamma_start</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) matrix.
+ If <code>gamma_start</code> takes a scalar value, then that value will serve for all of the \(\gamma\) parameters.
+ If <code>gamma_start</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
+  if a \(np\)-length vector is given, the matrix is filled by row.</p></td>
+    </tr>
+    <tr>
       <th>lambda_start</th>
-      <td><p>Starting values for lambda parameters corresponding to the latent variables for each species must be either a scalar or a \(n_{latent} \times n_{species}\) upper triangular matrix with strictly positive values on the diagonal, ignored if <code>n_latent=0</code>. 
+      <td><p>Starting values for \(\lambda\) parameters corresponding to the latent variables for each species must be either a scalar
+or a \(n_{latent} \times n_{species}\) upper triangular matrix with strictly positive values on the diagonal,
+ignored if <code>n_latent=0</code>.
 If <code>lambda_start</code> takes a scalar value, then that value will serve for all of the \(\lambda\) parameters except those concerned by the constraints explained above.</p></td>
     </tr>
     <tr>
       <th>W_start</th>
-      <td><p>Starting values for latent variables must be either a scalar or a \(nsite \times n_latent\) matrix, ignored if <code>n_latent=0</code>. 
+      <td><p>Starting values for latent variables must be either a scalar or a \(nsite \times n_latent\) matrix, ignored if <code>n_latent=0</code>.
 If <code>W_start</code> takes a scalar value, then that value will serve for all of the \(W_{il}\) with \(i=1,\ldots,n_{site}\) and \(l=1,\ldots,n_{latent}\).</p></td>
     </tr>
     <tr>
       <th>alpha_start</th>
-      <td><p>Starting values for random site effect parameters must be either a scalar or a nsite-length vector, ignored if <code>site_effect="none"</code>. 
+      <td><p>Starting values for random site effect parameters must be either a scalar or a \(n_{site}\)-length vector, ignored if <code>site_effect="none"</code>.
 If <code>alpha_start</code> takes a scalar value, then that value will serve for all of the \(\alpha\) parameters.</p></td>
     </tr>
     <tr>
@@ -237,33 +263,55 @@ Must be a stricly positive scalar. Default to 0.5 for weak informative prior.</p
     </tr>
     <tr>
       <th>rate</th>
-      <td><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>.
+      <td><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>
 Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.</p></td>
     </tr>
     <tr>
       <th>mu_beta</th>
-      <td><p>Means of the Normal priors for the \(\beta\) parameters of the suitability process. 
-<code>mu_beta</code> must be either a scalar or a \(p\)-length vector. 
-If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\beta\) parameters. 
-The default value is set to 0 for an uninformative prior.</p></td>
+      <td><p>Means of the Normal priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a \(np\)-length vector.
+If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\beta\) parameters.
+ The default value is set to 0 for an uninformative prior, ignored if <code>trait_data</code> is specified.</p></td>
     </tr>
     <tr>
       <th>V_beta</th>
-      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process. <code>V_beta</code> must be either a scalar or a \(p\)-length \(n_{latent}\) vector. 
-If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta\) parameters.
-The default variance is large and set to 1.0E6 for an uninformative flat prior.</p></td>
+      <td><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process.
+ <code>V_beta</code> must be either a scalar or a \(np \times np\) symmetric positive semi-definite square matrix.
+ If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta\) parameters,
+  so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
+The default variance is large and set to 10 for an uninformative flat prior.</p></td>
+    </tr>
+    <tr>
+      <th>mu_gamma</th>
+      <td><p>Means of the Normal priors for the \(\gamma\) parameters.
+<code>mu_gamma</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) matrix.
+If <code>mu_gamma</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\gamma\) parameters.
+If <code>mu_gamma</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
+ if a \(np\)-length vector is given, the matrix is filled by row. 
+The default value is set to 0 for an uninformative prior, ignored if <code>trait_data=NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>V_gamma</th>
+      <td><p>Variances of the Normal priors for the \(\gamma\) parameters.
+<code>V_gamma</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) positive matrix.
+If <code>V_gamma</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\gamma\) parameters.
+If <code>V_gamma</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
+ if a \(np\)-length vector is given, the matrix is filled by row. 
+The default variance is large and set to 10 for an uninformative flat prior, ignored if <code>trait_data=NULL</code>.</p></td>
     </tr>
     <tr>
       <th>mu_lambda</th>
-      <td><p>Means of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, ignored if <code>n_latent=0</code>. 
-<code>mu_lambda</code> must be either a scalar or a \(n_{latent}\)-length vector. If <code>mu_lambda</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\lambda\) parameters.
-The default value is set to 0 for an uninformative prior.</p></td>
+      <td><p>Means of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables. 
+<code>mu_lambda</code> must be either a scalar or a \(n_{latent}\)-length vector. 
+If <code>mu_lambda</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\lambda\) parameters.
+ The default value is set to 0 for an uninformative prior.</p></td>
     </tr>
     <tr>
       <th>V_lambda</th>
-      <td><p>Variances of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables, ignored if <code>n_latent=0</code>. 
-<code>V_lambda</code> must be either a scalar or a \(n_{latent}\)-length positive vector. 
-If <code>V_lambda</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\lambda\) parameters. The default variance is large and set to 10 for an uninformative flat prior.</p></td>
+      <td><p>Variances of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables.
+ <code>V_lambda</code> must be either a scalar or a \(n_{latent} \times n_{latent}\) symmetric positive semi-definite square matrix.
+If <code>V_lambda</code> takes a scalar value, then that value will serve as the prior variance for all of \(\lambda\) parameters,
+ so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal.
+The default variance is large and set to 10 for an uninformative flat prior.</p></td>
     </tr>
     <tr>
       <th>ropt</th>
@@ -281,28 +329,52 @@ If <code>V_lambda</code> takes a scalar value, then that value will serve as the
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>"jSDM"</code> acting like a list including :</p><table class='table'>
-<tr><td>mcmc.alpha</td><td>An mcmc object that contains the posterior samples for site effects \(\alpha_i\), not returned if <code>site_effect="none"</code>.</td></tr>
-<tr><td>mcmc.V_alpha</td><td>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code> or  <code>site_effect="fixed"</code>.</td></tr>
-<tr><td>mcmc.latent</td><td>A list by latent variable of mcmc objects that contains the posterior samples for latent variables \(W_l\) with \(l=1,\ldots,n_{latent}\), not returned if <code>n_latent=0</code>.</td></tr>
-<tr><td>mcmc.sp</td><td>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_j\) and \(\lambda_j\) if <code>n_latent&gt;0</code>.</td></tr>
-<tr><td>mcmc.Deviance</td><td>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</td></tr>
-<tr><td>theta_latent</td><td>Predictive posterior mean of the probability associated to the suitability process for each observation.</td></tr>
-<tr><td>model_spec</td><td>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</td></tr>
-</table>
-<p>The <code>mcmc.</code> objects can be summarized by functions provided by the <code>coda</code> package.</p>
+    <p>An object of class <code>"jSDM"</code> acting like a list including :</p>
+<dt>mcmc.alpha</dt><dd><p>An mcmc object that contains the posterior samples for site effects \(\alpha_i\), not returned if <code>site_effect="none"</code>.</p></dd>
+ <dt>mcmc.V_alpha</dt><dd><p>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code> or  <code>site_effect="fixed"</code>.</p></dd>
+ <dt>mcmc.latent</dt><dd><p>A list by latent variable of mcmc objects that contains the posterior samples for latent variables \(W_l\) with \(l=1,\ldots,n_{latent}\), not returned if <code>n_latent=0</code>.</p></dd>
+ <dt>mcmc.sp</dt><dd><p>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_j\) and \(\lambda_j\) if <code>n_latent&gt;0</code>.</p></dd>
+ <dt>mcmc.gamma</dt><dd><p>A list by covariates of mcmc objects that contains the posterior samples for \(\gamma_p\) parameters with \(p=1,\ldots,np\) if <code>trait_data</code> is specified.</p></dd>
+ <dt>mcmc.Deviance</dt><dd><p>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</p></dd> 
+ <dt>logit_theta_latent</dt><dd><p>Predictive posterior mean of the probability to each species to be present on each site, transformed by logit link function.</p></dd>
+ <dt>theta_latent</dt><dd><p>Predictive posterior mean of the probability associated to the suitability process for each observation.</p></dd>
+ <dt>model_spec</dt><dd><p>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</p></dd>
+The mcmc. objects can be summarized by functions provided by the coda package.
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>We model an ecological process where the presence or absence of species \(j\) on site \(i\) is explained by habitat suitability.</p>
 <p><b>Ecological process : </b>
-$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
+$$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},n_i)$$
 where</p><table class='table'>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
-<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
-<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr>
+<tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+<tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr>
+</table>
+
+
+<p>In the absence of data on species traits (<code>trait_data=NULL</code>), the effect of species \(j\): \(\beta_j\);
+follows the same a priori Gaussian distribution such that \(\beta_{jp} \sim \mathcal{N}(\mu_{\beta_p},V_{\beta_p})\),
+for each species.</p>
+<p>If species traits data are provided, the effect of species \(j\): \(\beta_j\);
+follows an a priori Gaussian distribution such that \(\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})\),
+where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different values for each species.
+We assume that \(\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})\) as prior distribution. 
+We define the matrix \(\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}\) such as :</p><table class='table'>
+<tr><td></td><td><strong>\(x_0\)</strong></td><td><strong>\(x_1\)</strong></td><td>...</td><td><strong>\(x_p\)</strong></td><td>...</td><td><strong>\(x_{np}\)</strong></td><td></td></tr>
+<tr><td></td><td>__________</td><td>________</td><td>________</td><td>________</td><td>________</td><td>________</td><td></td></tr>
+<tr><td><strong>\(t_0\)</strong> |</td><td><strong>\(\gamma_{0,0}\)</strong></td><td><em>\(\gamma_{0,1}\)</em></td><td>...</td><td><em>\(\gamma_{0,p}\)</em></td><td>...</td><td><em>\(\gamma_{0,np}\)</em></td><td>{ <em>effect of environmental variables</em></td></tr>
+<tr><td>|</td><td><strong>intercept</strong></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>\(t_1\)</strong> |</td><td>\(\gamma_{1,0}\)</td><td><em>\(\gamma_{1,1}\)</em></td><td>...</td><td><em>\(\gamma_{1,p}\)</em></td><td>...</td><td><em>\(\gamma_{1,np}\)</em></td><td></td></tr>
+<tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr>
+<tr><td><strong>\(t_k\)</strong> |</td><td><em>\(\gamma_{k,0}\)</em></td><td><em>\(\gamma_{k,1}\)</em></td><td>...</td><td>\(\gamma_{k,p}\)</td><td>...</td><td>\(\gamma_{k,np}\)</td><td></td></tr>
+<tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr>
+<tr><td><strong>\(t_{nt}\)</strong> |</td><td><em>\(\gamma_{nt,0}\)</em></td><td>\(\gamma_{nt,1}\)</td><td>...</td><td>\(\gamma_{nt,p}\)</td><td>...</td><td>\(\gamma_{nt,np}\)</td><td></td></tr>
+<tr><td></td><td><em>average</em></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td><em>trait effect</em></td><td></td><td>interaction</td><td>traits</td><td>environment</td><td></td><td></td></tr>
 </table>
 
 
@@ -312,13 +384,14 @@ where</p><table class='table'>
 <table class='table'>
 <tr><td>Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. <em>Applied Statistics</em>, 54, 1-20.</td></tr>
 <tr><td>Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. <em>Ecological Applications</em>, 16, 33-50.</td></tr>
+<tr><td>Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. <em>Ecology Letters</em>, 20, 561-576.</td></tr>
 <tr><td></td></tr>
 </table>
 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/coda/man/plot.mcmc.html'>plot.mcmc</a></code>, <code><a href='https://rdrr.io/pkg/coda/man/summary.mcmc.html'>summary.mcmc</a></code> <code><a href='jSDM_binomial_probit_block.html'>jSDM_binomial_probit_block</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/coda/man/plot.mcmc.html'>plot.mcmc</a></code>, <code><a href='https://rdrr.io/pkg/coda/man/summary.mcmc.html'>summary.mcmc</a></code> <code><a href='jSDM_binomial_probit.html'>jSDM_binomial_probit</a></code>  <code><a href='jSDM_poisson_log.html'>jSDM_poisson_log</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     
@@ -385,10 +458,10 @@ where</p><table class='table'>
   mcmc<span class='op'>=</span><span class='fl'>150</span>,
   thin<span class='op'>=</span><span class='fl'>1</span>,
   <span class='co'># Response variable</span>
-  presence_site_sp<span class='op'>=</span><span class='va'>Y</span>,
+  presence_data<span class='op'>=</span><span class='va'>Y</span>,
   trials<span class='op'>=</span><span class='va'>visits</span>,
   <span class='co'># Explanatory variables</span>
-  site_suitability<span class='op'>=</span><span class='op'>~</span><span class='va'>x1</span><span class='op'>+</span><span class='va'>x2</span>,
+  site_formula<span class='op'>=</span><span class='op'>~</span><span class='va'>x1</span><span class='op'>+</span><span class='va'>x2</span>,
   site_data<span class='op'>=</span><span class='va'>X</span>,
   n_latent<span class='op'>=</span><span class='va'>n_latent</span>,
   site_effect<span class='op'>=</span><span class='st'>"random"</span>,
@@ -414,14 +487,14 @@ where</p><table class='table'>
 #&gt; 
 #&gt; **********:10.0%, mean accept. rates= beta:0.253 lambda:0.242 W:0.456 alpha:0.328
 #&gt; **********:20.0%, mean accept. rates= beta:0.333 lambda:0.323 W:0.350 alpha:0.446
-#&gt; **********:30.0%, mean accept. rates= beta:0.392 lambda:0.384 W:0.404 alpha:0.440
-#&gt; **********:40.0%, mean accept. rates= beta:0.421 lambda:0.422 W:0.416 alpha:0.452
-#&gt; **********:50.0%, mean accept. rates= beta:0.416 lambda:0.442 W:0.418 alpha:0.461
-#&gt; **********:60.0%, mean accept. rates= beta:0.448 lambda:0.472 W:0.454 alpha:0.476
-#&gt; **********:70.0%, mean accept. rates= beta:0.436 lambda:0.462 W:0.446 alpha:0.455
-#&gt; **********:80.0%, mean accept. rates= beta:0.466 lambda:0.500 W:0.455 alpha:0.474
-#&gt; **********:90.0%, mean accept. rates= beta:0.453 lambda:0.452 W:0.458 alpha:0.459
-#&gt; **********:100.0%, mean accept. rates= beta:0.438 lambda:0.446 W:0.452 alpha:0.442</div><div class='input'><span class='co'>#==========</span>
+#&gt; **********:30.0%, mean accept. rates= beta:0.391 lambda:0.382 W:0.400 alpha:0.445
+#&gt; **********:40.0%, mean accept. rates= beta:0.416 lambda:0.414 W:0.419 alpha:0.466
+#&gt; **********:50.0%, mean accept. rates= beta:0.423 lambda:0.461 W:0.426 alpha:0.445
+#&gt; **********:60.0%, mean accept. rates= beta:0.447 lambda:0.452 W:0.445 alpha:0.466
+#&gt; **********:70.0%, mean accept. rates= beta:0.440 lambda:0.444 W:0.440 alpha:0.468
+#&gt; **********:80.0%, mean accept. rates= beta:0.469 lambda:0.479 W:0.443 alpha:0.470
+#&gt; **********:90.0%, mean accept. rates= beta:0.464 lambda:0.459 W:0.451 alpha:0.453
+#&gt; **********:100.0%, mean accept. rates= beta:0.423 lambda:0.450 W:0.432 alpha:0.450</div><div class='input'><span class='co'>#==========</span>
 <span class='co'>#== Outputs</span>
 
 <span class='co'>#= Parameter estimates</span>
@@ -435,10 +508,8 @@ where</p><table class='table'>
   <span class='va'>mean_beta</span><span class='op'>[</span><span class='va'>j</span>,<span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>]</span>,
                          <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
   <span class='kw'>for</span> <span class='op'>(</span><span class='va'>p</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span>
-      <span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span>
-      <span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span><span class='op'>)</span>,
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span><span class='op'>)</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='va'>p</span><span class='op'>]</span>,
       main <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span>
         <span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[</span><span class='va'>p</span><span class='op'>]</span>,
         <span class='st'>", species : "</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>)</span>
@@ -458,10 +529,8 @@ where</p><table class='table'>
   <span class='va'>mean_lambda</span><span class='op'>[</span><span class='va'>j</span>,<span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span>
                            <span class='op'>[</span>,<span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>:</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>n_latent</span><span class='op'>)</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
   <span class='kw'>for</span> <span class='op'>(</span><span class='va'>l</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>n_latent</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span>
-                                  <span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/mcmc.html'>as.mcmc</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span>
-                                 <span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span>,
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/traceplot.html'>traceplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span><span class='op'>)</span>
+    <span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/densplot.html'>densplot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span>,
                    main<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>mcmc.sp</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"sp_"</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
                               <span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>+</span><span class='va'>l</span><span class='op'>]</span>,<span class='st'>", species : "</span>,<span class='va'>j</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>v<span class='op'>=</span><span class='va'>lambda.target</span><span class='op'>[</span><span class='va'>j</span>,<span class='va'>l</span><span class='op'>]</span>,col<span class='op'>=</span><span class='st'>'red'</span><span class='op'>)</span>
@@ -510,7 +579,7 @@ where</p><table class='table'>
 <span class='co'>#= Predictions</span>
 <span class='co'># summary(mod$theta_latent)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>logit.theta</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>$</span><span class='va'>theta_latent</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>,<span class='va'>logit</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>logit.theta</span>, <span class='va'>mod</span><span class='op'>$</span><span class='va'>logit_theta_latent</span>,
      main<span class='op'>=</span><span class='st'>"logit(theta)"</span>,
      xlab<span class='op'>=</span><span class='st'>"obs"</span>, ylab<span class='op'>=</span><span class='st'>"fitted"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>0</span> ,b<span class='op'>=</span><span class='fl'>1</span>, col<span class='op'>=</span><span class='st'>"red"</span><span class='op'>)</span>

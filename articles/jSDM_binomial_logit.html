@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -135,7 +135,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <a href="#occurence-data-set" class="anchor"></a><span class="header-section-number">2</span> Occurence data-set</h1>
 
 <div class="figure" style="text-align: center">
-<span id="fig:birds-picture"></span>
+<span style="display:block;" id="fig:birds-picture"></span>
 <img src="figures/swiss_breeding_birds_atlas.jpg" alt="Swiss Breeding Bird Atlas (Kéry &amp; Schmid 2006)." width="600" height="300"><p class="caption">
 Figure 2.1: <strong><em>Swiss Breeding Bird Atlas</em></strong> <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006" role="doc-biblioref">2006</a>)</span>.
 </p>
@@ -183,10 +183,10 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
   <span class="co"># Chains</span>
   burnin<span class="op">=</span><span class="fl">500</span>, mcmc<span class="op">=</span><span class="fl">500</span>, thin<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_birds</span>, 
+  presence_data<span class="op">=</span><span class="va">PA_birds</span>, 
   trials<span class="op">=</span><span class="va">Env_birds</span><span class="op">$</span><span class="va">nsurvey</span>,
   <span class="co"># Explanatory variables </span>
-  site_suitability <span class="op">=</span> <span class="op">~</span> <span class="va">elev</span><span class="op">+</span><span class="va">rlength</span><span class="op">+</span><span class="va">forest</span>,   
+  site_formula <span class="op">=</span> <span class="op">~</span> <span class="va">elev</span><span class="op">+</span><span class="va">rlength</span><span class="op">+</span><span class="va">forest</span>,   
   site_data <span class="op">=</span> <span class="va">Env_birds</span>,
   <span class="co"># Model specification </span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"random"</span>,
@@ -205,15 +205,15 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <span class="co">#&gt; Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; **********:10.0%, mean accept. rates= beta:0.221 lambda:0.211 W:0.355 alpha:0.267</span>
-<span class="co">#&gt; **********:20.0%, mean accept. rates= beta:0.294 lambda:0.300 W:0.345 alpha:0.341</span>
-<span class="co">#&gt; **********:30.0%, mean accept. rates= beta:0.365 lambda:0.358 W:0.385 alpha:0.394</span>
-<span class="co">#&gt; **********:40.0%, mean accept. rates= beta:0.412 lambda:0.407 W:0.419 alpha:0.421</span>
-<span class="co">#&gt; **********:50.0%, mean accept. rates= beta:0.431 lambda:0.428 W:0.437 alpha:0.438</span>
-<span class="co">#&gt; **********:60.0%, mean accept. rates= beta:0.442 lambda:0.439 W:0.435 alpha:0.447</span>
-<span class="co">#&gt; **********:70.0%, mean accept. rates= beta:0.441 lambda:0.435 W:0.440 alpha:0.444</span>
-<span class="co">#&gt; **********:80.0%, mean accept. rates= beta:0.440 lambda:0.430 W:0.436 alpha:0.448</span>
-<span class="co">#&gt; **********:90.0%, mean accept. rates= beta:0.437 lambda:0.433 W:0.438 alpha:0.445</span>
-<span class="co">#&gt; **********:100.0%, mean accept. rates= beta:0.442 lambda:0.429 W:0.436 alpha:0.451</span></code></pre></div>
+<span class="co">#&gt; **********:20.0%, mean accept. rates= beta:0.293 lambda:0.299 W:0.346 alpha:0.342</span>
+<span class="co">#&gt; **********:30.0%, mean accept. rates= beta:0.366 lambda:0.358 W:0.389 alpha:0.394</span>
+<span class="co">#&gt; **********:40.0%, mean accept. rates= beta:0.411 lambda:0.399 W:0.422 alpha:0.417</span>
+<span class="co">#&gt; **********:50.0%, mean accept. rates= beta:0.435 lambda:0.431 W:0.433 alpha:0.443</span>
+<span class="co">#&gt; **********:60.0%, mean accept. rates= beta:0.438 lambda:0.438 W:0.440 alpha:0.448</span>
+<span class="co">#&gt; **********:70.0%, mean accept. rates= beta:0.439 lambda:0.432 W:0.447 alpha:0.441</span>
+<span class="co">#&gt; **********:80.0%, mean accept. rates= beta:0.438 lambda:0.432 W:0.446 alpha:0.446</span>
+<span class="co">#&gt; **********:90.0%, mean accept. rates= beta:0.434 lambda:0.433 W:0.438 alpha:0.443</span>
+<span class="co">#&gt; **********:100.0%, mean accept. rates= beta:0.442 lambda:0.430 W:0.439 alpha:0.446</span></code></pre></div>
 </div>
 <div id="analysis-of-the-results" class="section level1">
 <h1 class="hasAnchor">
@@ -278,7 +278,7 @@ main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/
 <code class="sourceCode R">
 <span class="co"># theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="../reference/logit.html">logit</a></span><span class="op">(</span><span class="va">mod_birds_jSDM_logit</span><span class="op">$</span><span class="va">theta_latent</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Predicted logit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted logit theta"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_birds_jSDM_logit</span><span class="op">$</span><span class="va">logit_theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted logit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted logit theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_birds_jSDM_logit</span><span class="op">$</span><span class="va">theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_logit_files/figure-html/plot-results-logit-11.png" width="576" style="display: block; margin: auto;"></p>
 </div>

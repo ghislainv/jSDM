@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -135,7 +135,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <a href="#abundance-data-set" class="anchor"></a><span class="header-section-number">2</span> Abundance data-set</h1>
 
 <div class="figure" style="text-align: center">
-<span id="fig:mites-picture"></span>
+<span style="display:block;" id="fig:mites-picture"></span>
 <img src="figures/Oribatid_mites.jpg" alt="Oribatid mites (Borcard &amp; Legendre 1994)." width="500" height="400"><p class="caption">
 Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Borcard &amp; Legendre <a href="#ref-Borcard1994" role="doc-biblioref">1994</a>)</span>.
 </p>
@@ -210,9 +210,9 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
   <span class="co"># Chains</span>
   burnin<span class="op">=</span><span class="fl">1000</span>, mcmc<span class="op">=</span><span class="fl">1000</span>, thin<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Response variable </span>
-  presence_site_sp<span class="op">=</span><span class="va">PA_mites</span>, 
+  count_data<span class="op">=</span><span class="va">PA_mites</span>, 
   <span class="co"># Explanatory variables </span>
-  site_suitability <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,   
+  site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,   
   site_data <span class="op">=</span> <span class="va">Env_mites</span>,
   <span class="co"># Model specification </span>
   n_latent<span class="op">=</span><span class="fl">2</span>, site_effect<span class="op">=</span><span class="st">"random"</span>,
@@ -301,7 +301,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <code class="sourceCode R">
 <span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">theta_latent</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Predicted log theta"</span>, xlab <span class="op">=</span><span class="st">"predicted log theta"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">log_theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted log theta"</span>, xlab <span class="op">=</span><span class="st">"predicted log theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-11.png" width="576" style="display: block; margin: auto;"></p>
 </div>
