@@ -114,7 +114,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
       
       - name: Install debian packages
-        run: sudo apt-get install libcurl4-openssl-dev libcurl3 libharfbuzz-dev libfribidi-dev libgsl-dev jags
+        run: sudo apt-get install libcurl4-openssl-dev libcurl4 libharfbuzz-dev libfribidi-dev libgsl-dev jags
 
       - name: Query dependencies
         run: |
