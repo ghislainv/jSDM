@@ -1,6 +1,9 @@
-# jSDM 0.1.1
-* Add the possibility of considering an additional hierarchical level in the Bayesian models of the `jSDM_binomial_probit()`, `jSDM_binomial_logit()` and `jSDM_poisson_log()` functions to take into account interactions between species-specific traits and the environment in estimating species effects. 
+# jSDM 0.1.2
+* New vignettes “Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA” available
+* Add the possibility of considering an additional hierarchical level in the Bayesian models of the `jSDM_binomial_probit()`, `jSDM_binomial_logit()` and `jSDM_poisson_log()` functions to take into account interactions between species-specific traits and the environment in estimating species effects.
 * Separate the drawing of species effects beta and factor loadings lambda in the functions `jSDM_binomial_probit_block()` and `jSDM_binomial_probit_block_long_format()` renamed `jSDM_binomial_probit()` and `jSDM_binomial_probit_long_format()`.
+
+# jSDM 0.1.1
 * Add Code of conduct and Contributing section 
 * Use of `roxygen2` for documentation and NAMESPACE 
 * Rename  `jSDM_binomial_probit_block()` the function `jSDM_probit_block()`.
