@@ -91,6 +91,7 @@
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr> \cr
 #' Jeanne Clément <jeanne.clement16@laposte.net> \cr }
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
+#' @importFrom stringi stri_remove_empty
 #' @examples
 #' #==============================================
 #' # jSDM_binomial_probit_long_format()

@@ -74,6 +74,7 @@
 #'                      type="mean")
 #'hist(theta_pred, main="Predicted theta with simulated covariates")
 #' @keywords prediction predictive posterior credible interval
+#' @importFrom stringi stri_remove_empty
 #' @export 
 #' 
 #' 

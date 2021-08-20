@@ -70,6 +70,7 @@
 #' @keywords stats::cov2cor
 #' @importFrom stats cov cor
 #' @importFrom coda as.mcmc HPDinterval
+#' @importFrom stringi stri_remove_empty
 #' @export
 get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   ##= Check
