@@ -114,8 +114,11 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
       
       - name: Install debian packages
-        run: sudo apt-get install libcurl4-openssl-dev libcurl4 libharfbuzz-dev libfribidi-dev libgsl-dev jags
-
+        run: |
+          sudo apt-get update
+          sudo apt-get -y upgrade
+          sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
+          sudo Rscript -e "install.packages('stringi')"
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -133,7 +136,6 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages('stringi', type="source", repos="https://cran.rstudio.com", configure.args="--disable-icu-bundle")
           install.packages("pkgdown", dependencies = TRUE)
         shell: Rscript {0}
 
