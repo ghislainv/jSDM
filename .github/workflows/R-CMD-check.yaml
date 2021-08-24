@@ -120,7 +120,7 @@ jobs:
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
       - name: Query dependencies
         run: |
-          sudo Rscript -e "install.packages('stringi',repos="http://cran.us.r-project.org")"
+          sudo Rscript -e "install.packages('stringi', repos='http://cran.us.r-project.org')"
           install.packages('remotes', repos="http://cran.us.r-project.org")
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
