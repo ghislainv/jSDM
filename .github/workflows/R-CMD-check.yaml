@@ -45,8 +45,12 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
       
-      - name: Compile LaTeX document
-        run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+      - name: Install debian and latex packages
+        run: |
+          sudo apt-get update
+          sudo apt-get -y upgrade
+          sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
 
       - name: Query dependencies
         run: |
