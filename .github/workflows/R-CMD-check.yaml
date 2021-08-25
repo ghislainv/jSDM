@@ -89,11 +89,10 @@ jobs:
         if: runner.os == 'windows'
         run: |
           git clone https://github.com/microsoft/vcpkg.git
-           cd vcpkg
           .\bootstrap-vcpkg.bat
-          .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
-
+          .\vcpkg integrate install
+          set 
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -124,18 +123,10 @@ jobs:
 
       - name: Check
         env:
-        if: runner.os == 'MacOS'
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-        
-      - name: Check
-        env:
-        if: runner.os != 'MacOs'
           _R_CHECK_CRAN_INCOMING_: false
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
-        
+
       - name: Show testthat output
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
