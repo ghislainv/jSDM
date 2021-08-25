@@ -123,19 +123,15 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        env: 'MacOS'
+        env:
+        if: runner.os == 'MacOS'
           _R_CHECK_CRAN_INCOMING_: false
         run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
         
       - name: Check
-        env: 'Linux'
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-        
-      - name: Check
-        env: 'Windows'
+        env:
+        if: runner.os != 'MacOs'
           _R_CHECK_CRAN_INCOMING_: false
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
