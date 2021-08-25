@@ -92,6 +92,7 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg install gsl gsl:x64-windows
           .\vcpkg integrate install
+          set 
 
       - name: Query dependencies
         run: |
