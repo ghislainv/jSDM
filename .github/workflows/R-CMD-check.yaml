@@ -51,7 +51,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
       
-      - name: Install latex packages on Linux
+      - name: Install jags, stringi and latex packages on Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
@@ -59,14 +59,14 @@ jobs:
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
-      - name: Install latex packages on MacOS
+      - name: Install jags, stringi and latex packages on MacOS
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install jags
           brew install --cask basictex 
           brew install --cask tex-live-utility
-          reset
+          bash --login
           which pdflatex
           
       - name: Install latex packages on Windows
@@ -86,7 +86,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gsl cmake
-          reset
+          bash --login
           
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
