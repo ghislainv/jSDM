@@ -63,6 +63,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
+          brew install jags
           brew install --cask basictex jags
           brew install --cask tex-live-utility
           reset
