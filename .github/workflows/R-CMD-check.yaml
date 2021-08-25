@@ -62,7 +62,7 @@ jobs:
       - name: Install debian and latex packages
         if: runner.os == 'macOS'
         run: |
-          sudo Rscript -e "install.packages('stringi', type="source", repos='http://cran.us.r-project.org')"
+          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install texlive
           
       - name: Install system dependencies
