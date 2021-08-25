@@ -64,7 +64,7 @@ jobs:
         run: |
           brew install jags
           brew install --cask basictex 
-          brew install --cask tex-live-utility
+          brew install --cask texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install latex packages on Windows
@@ -93,6 +93,7 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
+          setx LIB_GSL "D:\a\jSDM\jSDM\vcpkg\packages\gsl_x86-windows"
            
       - name: Query dependencies
         run: |
