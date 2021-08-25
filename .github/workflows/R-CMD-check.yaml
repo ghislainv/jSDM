@@ -63,8 +63,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          brew install --cask basictex
-          source ~/.bash_profile
+          brew install --cask basictex jags
+          rest
           
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
@@ -83,7 +83,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gsl cmake
-          source ~/.bash_profile
+          rest
           
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
