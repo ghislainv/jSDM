@@ -63,7 +63,9 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
-          sudo port install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+          sudo tlmgr update --self
+          sudo tlmgr update --all
+          sudo tlmgr install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
       - name: Install system dependencies
         if: runner.os == 'Linux'
