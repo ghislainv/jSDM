@@ -82,7 +82,7 @@ jobs:
       - name: Install GSL dependencies on MacOS
         if: runner.os == 'macOS'
         run: |
-          brew install --cask gsl 
+          brew install gsl 
           
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
