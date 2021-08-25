@@ -58,6 +58,16 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+          
+      - name: Install GSL dependencies on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install gsl cmake
+          
+      - name: Install GSL dependencies on Windows
+        if: runner.os == 'windows'
+        run: |
+          .\vcpkg install gsl gsl:x64-windows
 
       - name: Query dependencies
         run: |
