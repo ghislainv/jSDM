@@ -51,7 +51,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
       
-      - name: Install debian and latex packages
+      - name: Install latex packages on Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
@@ -59,12 +59,17 @@ jobs:
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
-      - name: Install debian and latex packages
+      - name: Install latex packages on MacOS
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install texlive
           
+      - name: Install latex packages on Windows
+        if: runner.os == 'Windows'
+        run: |
+          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -81,7 +86,7 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
-          cd C:\
+          cd D:\
           mkdir DEV
           cd DEV
           git clone https://github.com/microsoft/vcpkg.git
