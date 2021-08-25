@@ -92,7 +92,7 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg install gsl gsl:x64-windows
           .\vcpkg integrate install
-          set 
+           set 
 
       - name: Query dependencies
         run: |
@@ -123,11 +123,16 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        env:
+        if: runner.os == 'MacOs'
+          _R_CHECK_CRAN_INCOMING_: false
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no_manual"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+      - name: Check
+        if: runner.os =! 'MacOs'
           _R_CHECK_CRAN_INCOMING_: false
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
-
+        
       - name: Show testthat output
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
