@@ -63,7 +63,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          brew install --cask mactex
+          brew install --cask basictex
           
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
@@ -86,14 +86,11 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
-          cd D:\
-          mkdir DEV
-          cd DEV
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-          .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
+          .\vcpkg integrate install
 
       - name: Query dependencies
         run: |
