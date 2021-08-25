@@ -89,10 +89,11 @@ jobs:
         if: runner.os == 'windows'
         run: |
           git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
           .\bootstrap-vcpkg.bat
-          .\vcpkg install gsl gsl:x64-windows
           .\vcpkg integrate install
-          set 
+          .\vcpkg install gsl gsl:x64-windows
+           
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -124,7 +125,7 @@ jobs:
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
