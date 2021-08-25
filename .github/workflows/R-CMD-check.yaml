@@ -89,7 +89,6 @@ jobs:
         if: runner.os == 'windows'
         run: |
           git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
           .\bootstrap-vcpkg.bat
           .\vcpkg install gsl gsl:x64-windows
           .\vcpkg integrate install
