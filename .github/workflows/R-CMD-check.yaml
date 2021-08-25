@@ -68,7 +68,7 @@ jobs:
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
         run: |
-          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
+          Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
