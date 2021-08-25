@@ -64,7 +64,7 @@ jobs:
         run: |
           brew install jags
           brew install --cask basictex 
-          brew install --cask texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+          brew install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install latex packages on Windows
