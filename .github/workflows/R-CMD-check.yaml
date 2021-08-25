@@ -56,22 +56,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y upgrade
-          sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
       - name: Install jags, stringi and latex packages on MacOS
         if: runner.os == 'macOS'
         run: |
-          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          sudo install jags
-          sudo install --cask basictex 
-          sudo install --cask tex-live-utility
+          brew install jags
+          brew install --cask basictex 
+          brew install --cask tex-live-utility
 
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
         run: |
-          Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-
+        
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -111,6 +108,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
