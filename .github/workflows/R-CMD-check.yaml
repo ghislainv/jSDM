@@ -58,6 +58,11 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+        if: runner.os == 'macOS'
+        run: |
+          sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          sudo ./tlmgr update --self
+          sudo ./tlmgr install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -147,6 +152,7 @@ jobs:
           sudo apt-get -y upgrade
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          
       - name: Query dependencies
         run: |
           install.packages('remotes', repos="http://cran.us.r-project.org")
