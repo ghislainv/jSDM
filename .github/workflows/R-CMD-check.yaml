@@ -58,6 +58,8 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+          
+      - name: Install debian and latex packages
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
