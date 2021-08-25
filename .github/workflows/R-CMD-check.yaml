@@ -63,7 +63,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          brew cask install mactex
+          brew install --cask mactex
           
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
