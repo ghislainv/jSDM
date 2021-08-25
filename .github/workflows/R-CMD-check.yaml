@@ -63,8 +63,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install jags
-          brew install --cask basictex 
-          brew install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
+          brew install texlive texlive-latex-extra
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install latex packages on Windows
@@ -88,12 +87,13 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
+          cd C:\
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
-          setx LIB_GSL "D:\a\jSDM\jSDM\vcpkg\packages\gsl_x86-windows"
+          setx LIB_GSL "C:\a\jSDM\jSDM\vcpkg\packages\gsl_x64-windows" /m
            
       - name: Query dependencies
         run: |
