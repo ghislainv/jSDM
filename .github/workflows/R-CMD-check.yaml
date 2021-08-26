@@ -64,7 +64,7 @@ jobs:
         run: |
           brew install jags
           brew install basictex
-          source ~/.zshrc
+          exec "$SHELL"
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install latex packages on Windows
