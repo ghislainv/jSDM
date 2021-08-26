@@ -63,7 +63,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install jags
-          brew install texlive texlive-latex-extra
+          brew install basictex
+          source ~/.zshrc
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install latex packages on Windows
