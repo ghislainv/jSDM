@@ -65,6 +65,7 @@ jobs:
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install jags
           brew install mactex
+          eval "$(/usr/libexec/path_helper)"
           sudo tlmgr update --self
           sudo tlmgr install collection-fontsrecommended collection-fontsextra
           eval "$(/usr/libexec/path_helper)"
@@ -76,8 +77,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          Rscript -e "install.packages('Rtools', type='source', repos='http://cran.us.r-project.org')"
-          
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -100,7 +100,8 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
-          ls 
+          ls .\packages
+          ls .\installed 
           echo $LIB_GSL
           setx -m PATH "$env:path;C:\R\lib64\gsl\bin"
           setx -m LIB_GSL "C:/R/lib64/gsl"
