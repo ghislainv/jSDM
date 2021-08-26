@@ -69,7 +69,6 @@ jobs:
           sudo tlmgr update --self
           sudo tlmgr install collection-fontsrecommended collection-fontsextra
           eval "$(/usr/libexec/path_helper)"
-          sudo Rscript -e "Sys.which("pdflatex")"
           which pdflatex
           $PATH
           
