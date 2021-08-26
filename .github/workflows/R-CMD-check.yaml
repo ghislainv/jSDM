@@ -69,9 +69,9 @@ jobs:
           sudo tlmgr update --self
           sudo tlmgr install collection-fontsrecommended collection-fontsextra
           eval "$(/usr/libexec/path_helper)"
+          sudo Rscript -e "Sys.which('pdflatex')"
           which pdflatex
-          $PATH
-          
+
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
         run: |
@@ -99,8 +99,8 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
-          ls .\packages
-          ls .\installed 
+          ls -R .\packages\gsl_x64-windows
+          ls -R .\installed\x64-windows
           echo $LIB_GSL
           setx -m PATH "$env:path;C:\R\lib64\gsl\bin"
           setx -m LIB_GSL "C:/R/lib64/gsl"
