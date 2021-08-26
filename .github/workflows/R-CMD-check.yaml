@@ -72,7 +72,7 @@ jobs:
           which pdflatex
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           
-      - name: Install latex packages on Windows
+      - name: Install stringi,(jags and latex) packages on Windows
         if: runner.os == 'Windows'
         run: |
           Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
@@ -101,9 +101,9 @@ jobs:
           .\vcpkg install gsl gsl:x64-windows
           ls -R .\packages\gsl_x64-windows
           ls -R .\installed\x64-windows
-          echo $LIB_GSL
-          setx -m PATH "$env:path;C:\R\vcpkg\installed\x64-windows\bin"
-          setx -m LIB_GSL "C:/R/vcpkg/installed/x64-windows"
+          setx -m PATH "$env:path;C:\R\vcpkg\packages\gsl_x64-windows\bin"
+          setx -m LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
+          echo %LIB_GSL%
            
       - name: Query dependencies
         run: |
@@ -131,6 +131,9 @@ jobs:
           options(width = 100)
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
+          Sys.which('pdflatex')
+          RcppGSL::CFlags()
+          RcppGSL::LdFlags()
         shell: Rscript {0}
 
       - name: Check
