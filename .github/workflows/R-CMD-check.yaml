@@ -66,7 +66,7 @@ jobs:
           brew install jags
           brew install basictex
           eval "$(/usr/libexec/path_helper)"
-          tlmgr install collection-fontsrecommended
+          sudo tlmgr install collection-fontsrecommended
 
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
