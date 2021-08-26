@@ -90,7 +90,7 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
-          cd C:\
+          cd C:\R
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
@@ -99,7 +99,7 @@ jobs:
           grep -l gsl 
           setx -m PATH "$env:path;C:\lib64\gsl\bin"
           setx -m LIB_GSL "C:/lib64/gsl"
-          echo %LIB_GSL%"
+          echo %LIB_GSL%
            
       - name: Query dependencies
         run: |
