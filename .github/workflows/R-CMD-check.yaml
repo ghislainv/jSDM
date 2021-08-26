@@ -88,7 +88,7 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
-          choco install gsl 
+          choco install --config gsl -y  
           setx -m PATH "$env:path;C:\lib64\gsl\bin"
           setx -m LIB_GSL "C:/lib64/gsl"
           shell("echo %LIB_GSL%")
