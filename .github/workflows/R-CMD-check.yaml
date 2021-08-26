@@ -76,6 +76,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
+          Rscript -e "install.packages('Rtools', type='source', repos='http://cran.us.r-project.org')"
           
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -99,7 +100,7 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg install gsl gsl:x64-windows
-          ls .\vcpkg
+          ls 
           echo $LIB_GSL
           setx -m PATH "$env:path;C:\R\lib64\gsl\bin"
           setx -m LIB_GSL "C:/R/lib64/gsl"
