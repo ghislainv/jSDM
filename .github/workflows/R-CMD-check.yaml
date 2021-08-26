@@ -62,7 +62,6 @@ jobs:
       - name: Install jags, stringi and latex packages on MacOS
         if: runner.os == 'macOS'
         run: |
-          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install jags
           brew install mactex
           eval "$(/usr/libexec/path_helper)"
@@ -71,7 +70,8 @@ jobs:
           eval "$(/usr/libexec/path_helper)"
           sudo Rscript -e "Sys.which('pdflatex')"
           which pdflatex
-
+          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
+          
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
         run: |
@@ -102,8 +102,8 @@ jobs:
           ls -R .\packages\gsl_x64-windows
           ls -R .\installed\x64-windows
           echo $LIB_GSL
-          setx -m PATH "$env:path;C:\R\lib64\gsl\bin"
-          setx -m LIB_GSL "C:/R/lib64/gsl"
+          setx -m PATH "$env:path;C:\R\vcpkg\installed\x64-windows\bin"
+          setx -m LIB_GSL "C:/R/vcpkg/installed/x64-windows"
            
       - name: Query dependencies
         run: |
