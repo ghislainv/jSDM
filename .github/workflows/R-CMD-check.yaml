@@ -64,11 +64,14 @@ jobs:
         run: |
           sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
           brew install jags
-          brew install basictex
-          eval "$(/usr/libexec/path_helper)"
+          brew install mactex
           sudo tlmgr update --self
-          sudo tlmgr install collection-fontsrecommended
-
+          sudo tlmgr install collection-fontsrecommended collection-fontsextra
+          eval "$(/usr/libexec/path_helper)"
+          sudo Rscript -e "Sys.which("pdflatex")"
+          which pdflatex
+          $PATH
+          
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
         run: |
@@ -94,12 +97,12 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           .\bootstrap-vcpkg.bat
-          .\vcpkg --triplet x64-windows integrate install
-          .\vcpkg install gsl 
-          grep -l gsl 
-          setx -m PATH "$env:path;C:\lib64\gsl\bin"
-          setx -m LIB_GSL "C:/lib64/gsl"
-          echo %LIB_GSL%
+          .\vcpkg integrate install
+          .\vcpkg install gsl gsl:x64-windows
+          ls .\vcpkg
+          echo $LIB_GSL
+          setx -m PATH "$env:path;C:\R\lib64\gsl\bin"
+          setx -m LIB_GSL "C:/R/lib64/gsl"
            
       - name: Query dependencies
         run: |
