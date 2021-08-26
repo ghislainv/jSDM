@@ -66,6 +66,7 @@ jobs:
           brew install jags
           brew install basictex
           eval "$(/usr/libexec/path_helper)"
+          tlmgr install collection-fontsrecommended
 
       - name: Install latex packages on Windows
         if: runner.os == 'Windows'
@@ -88,7 +89,13 @@ jobs:
       - name: Install GSL dependencies on Windows
         if: runner.os == 'windows'
         run: |
-          choco install --config gsl -y  
+          cd C:\
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg --triplet x64-windows integrate install
+          .\vcpkg install gsl gsl:x64-windows
+          shell("echo %LIB_GSL%"
           setx -m PATH "$env:path;C:\lib64\gsl\bin"
           setx -m LIB_GSL "C:/lib64/gsl"
           shell("echo %LIB_GSL%")
