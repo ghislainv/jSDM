@@ -26,12 +26,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest,   r: 'devel'}
-          - {os: windows-latest,   r: 'release'}
-          - {os: windows-latest,   r: 'oldrel'}
-          - {os: macos-latest,   r: 'devel'}
-          - {os: macos-latest,   r: 'release'}
-          - {os: macos-latest,   r: 'oldrel'}
           - {os: ubuntu-latest,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest", http-user-agent: "R/4.0.0 (ubuntu-20.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
           - {os: ubuntu-latest,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-latest,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
@@ -58,28 +52,6 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
-          
-      - name: Install jags, stringi and latex packages on MacOS
-        if: runner.os == 'macOS'
-        run: |
-          brew install jags
-          brew install mactex ghostscript
-          eval "$(/usr/libexec/path_helper)"
-          sudo Rscript -e "install.packages('tinytex', type='source', repos='http://cran.us.r-project.org')"
-          sudo Rscript -e "tinytex::tlmgr_install('pdfcrop')"
-          sudo tlmgr update --self
-          sudo tlmgr install collection-fontsrecommended collection-fontsextra 
-          eval "$(/usr/libexec/path_helper)"
-          sudo Rscript -e "Sys.which('pdflatex')"
-          Rscript -e "Sys.which('pdflatex')"
-          Rscript -e "Sys.which('texi2dvi')"
-          which pdflatex
-          sudo Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
-          
-      - name: Install stringi,(jags and latex) packages on Windows
-        if: runner.os == 'Windows'
-        run: |
-          Rscript -e "install.packages('stringi', type='source', repos='http://cran.us.r-project.org')"
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -109,29 +81,6 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-        
-      - name: Install GSL dependencies on MacOS
-        if: runner.os == 'macOS'
-        run: |
-          brew install gsl 
-          
-      - name: Install GSL dependencies on Windows
-        if: runner.os == 'windows'
-        run: |
-          cd C:\R
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
-          .\vcpkg integrate install
-          .\vcpkg install gsl gsl:x64-windows
-          ls -R .\packages\gsl_x64-windows
-          ls -R .\installed\x64-windows
-          setx /M PATH "C:\R\vcpkg\packages\gsl_x64-windows\bin"
-          setx /M LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
-          refreshEnv
-          echo %LIB_GSL%
-          Rscript -e "Sys.setenv(LIB_GSL= 'C:/R/vcpkg/packages/gsl_x64-windows')"
-          Rscript -e "library('RcppGSL'); CFlags(); LdFlags()"
 
       - name: Session info
         run: |
