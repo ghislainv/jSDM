@@ -103,6 +103,7 @@ jobs:
           ls -R .\installed\x64-windows
           setx -m PATH "$env:path;C:\R\vcpkg\packages\gsl_x64-windows\bin"
           setx -m LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
+          refreshEnv
           echo %LIB_GSL%
            
       - name: Query dependencies
@@ -131,15 +132,19 @@ jobs:
           options(width = 100)
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
-          Sys.which('pdflatex')
-          RcppGSL::CFlags()
-          RcppGSL::LdFlags()
+          Rscript -e "Sys.which('pdflatex')"
+          Rscript -e "Sys.which('texi2dvi')"
+          library(RcppGSL)
+          CFlags()
+          LdFlags()
+
         shell: Rscript {0}
 
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
+        run: |
+          rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
