@@ -65,6 +65,7 @@ jobs:
           brew install jags
           brew install mactex ghostscript
           eval "$(/usr/libexec/path_helper)"
+          sudo Rscript -e "install.packages('tinytex', type='source', repos='http://cran.us.r-project.org')"
           sudo Rscript -e "tinytex::tlmgr_install('pdfcrop')"
           sudo tlmgr update --self
           sudo tlmgr install collection-fontsrecommended collection-fontsextra 
@@ -87,28 +88,6 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-          
-      - name: Install GSL dependencies on MacOS
-        if: runner.os == 'macOS'
-        run: |
-          brew install gsl 
-          
-      - name: Install GSL dependencies on Windows
-        if: runner.os == 'windows'
-        run: |
-          cd C:\R
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
-          .\vcpkg integrate install
-          .\vcpkg install gsl gsl:x64-windows
-          ls -R .\packages\gsl_x64-windows
-          ls -R .\installed\x64-windows
-          setx -m PATH "$env:path;C:\R\vcpkg\packages\gsl_x64-windows\bin"
-          setx -m LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
-          refreshEnv
-          echo %LIB_GSL%
-          Rscript -e "library('RcppGSL'); CFlags(); LdFlags()"
        
       - name: Query dependencies
         run: |
@@ -130,6 +109,28 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
+        
+      - name: Install GSL dependencies on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install gsl 
+          
+      - name: Install GSL dependencies on Windows
+        if: runner.os == 'windows'
+        run: |
+          cd C:\R
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg integrate install
+          .\vcpkg install gsl gsl:x64-windows
+          ls -R .\packages\gsl_x64-windows
+          ls -R .\installed\x64-windows
+          setx -m PATH "$env:path;C:\R\vcpkg\packages\gsl_x64-windows\bin"
+          setx -m LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
+          refreshEnv
+          echo %LIB_GSL%
+          Rscript -e "library('RcppGSL'); CFlags(); LdFlags()"
 
       - name: Session info
         run: |
