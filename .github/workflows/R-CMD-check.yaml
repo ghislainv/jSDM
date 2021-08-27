@@ -126,10 +126,11 @@ jobs:
           .\vcpkg install gsl gsl:x64-windows
           ls -R .\packages\gsl_x64-windows
           ls -R .\installed\x64-windows
-          setx -m PATH "$env:path;C:\R\vcpkg\packages\gsl_x64-windows\bin"
-          setx -m LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
+          setx /M PATH "C:\R\vcpkg\packages\gsl_x64-windows\bin"
+          setx /M LIB_GSL "C:/R/vcpkg/packages/gsl_x64-windows"
           refreshEnv
           echo %LIB_GSL%
+          Rscript -e "Sys.setenv(LIB_GSL='C:/R/vcpkg/packages/gsl_x64-windows')"
           Rscript -e "library('RcppGSL'); CFlags(); LdFlags()"
 
       - name: Session info
