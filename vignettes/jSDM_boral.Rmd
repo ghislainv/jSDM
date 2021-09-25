@@ -222,7 +222,7 @@ probit_theta_latent_sim <- mod_boral_sim$row.coefs$ID1$mean +
 theta_latent_sim <- pnorm(probit_theta_latent_sim)
 
 # RMSE
-SE=(probit_theta-probit_theta_latent_sim)^2
+SE=(pnorm(probit_theta)-theta_latent_sim)^2
 RMSE_boral_sim=sqrt(sum(SE/(nsite*nsp)))
 # Deviance 
 logL=0
@@ -644,7 +644,7 @@ T2<-Sys.time()
 T_jSDM_sim=difftime(T2, T1)
 
 # RMSE
-SE=(probit_theta-mod_jSDM_sim$probit_theta_latent)^2
+SE=(pnorm(probit_theta)-mod_jSDM_sim$theta_latent)^2
 RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
 
 save(T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
@@ -1015,7 +1015,6 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, 
 ## Compilation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
-
 load("jSDM_boral_files/jSDM-boral-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
@@ -1047,8 +1046,9 @@ jSDM is **`r min_ratio` to `r max_ratio`** times faster than boral/jags.
 
 ## Root-Mean-Square Error (RMSE) for simulated data
 
-Computed for $\text{probit}(\theta_{ij})$ with the simulated data-set.
+Computed for or the probabilities of presences $\theta_{ij}$ with the simulated data-set.
 ```{r RMSE, eval=TRUE, echo=FALSE}
+
 result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("boral","jSDM")
 result$boral <- RMSE_boral_sim
