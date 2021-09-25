@@ -53,6 +53,10 @@ Rcpp_jSDM_binomial_probit <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, seed, verbose)
 }
 
+Rcpp_jSDM_binomial_probit_lv_corr <- function(ngibbs, nthin, nburn, Y, X, beta_start, lambda_start, W_start, V_beta, mu_beta, V_lambda, mu_lambda, V_W, jhat, target_sign, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_binomial_probit_lv_corr`, ngibbs, nthin, nburn, Y, X, beta_start, lambda_start, W_start, V_beta, mu_beta, V_lambda, mu_lambda, V_W, jhat, target_sign, seed, verbose)
+}
+
 Rcpp_jSDM_binomial_probit_fixed_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_beta, mu_beta, V_alpha, seed, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_fixed_site`, ngibbs, nthin, nburn, Y, X, beta_start, alpha_start, V_beta, mu_beta, V_alpha, seed, verbose)
 }
