@@ -83,7 +83,7 @@
 
       
 
-      </header><script src="jSDM_boral_files/jquery-1.11.3/jquery.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
+      </header><script src="jSDM_boral_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="jSDM_boral_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <script src="jSDM_boral_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_boral_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_boral_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
@@ -512,7 +512,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">theta_latent_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">probit_theta_latent_sim</span><span class="op">)</span>
 
 <span class="co"># RMSE</span>
-<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">probit_theta</span><span class="op">-</span><span class="va">probit_theta_latent_sim</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span><span class="op">-</span><span class="va">theta_latent_sim</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="va">RMSE_boral_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">SE</span><span class="op">/</span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co"># Deviance </span>
 <span class="va">logL</span><span class="op">=</span><span class="fl">0</span>
@@ -704,8 +704,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <a href="#fungi-dataset" class="anchor"></a><span class="header-section-number">3.5</span> Fungi dataset</h2>
 <p>We fit a binomial joint species distribution model, including random site effect and latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/fungi.html"><code>fungi</code></a> dataset using <code><a href="https://rdrr.io/pkg/boral/man/boral.html">boral()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># Import center and reduce fungi dataset</span>
+<code class="sourceCode R"><span class="co"># Import center and reduce fungi dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">fungi</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span>
 <span class="va">Env_Fungi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">fungi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"diam"</span>,<span class="st">"epi"</span>,<span class="st">"bark"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
                    <span class="va">fungi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dc1"</span>,<span class="st">"dc2"</span>,<span class="st">"dc3"</span>,<span class="st">"dc4"</span>,<span class="st">"dc5"</span>,
@@ -916,7 +915,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T_jSDM_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">T2</span>, <span class="va">T1</span><span class="op">)</span>
 
 <span class="co"># RMSE</span>
-<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="va">probit_theta</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">probit_theta_latent</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="va">SE</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span><span class="op">-</span><span class="va">mod_jSDM_sim</span><span class="op">$</span><span class="va">theta_latent</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="va">RMSE_jSDM_sim</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">SE</span><span class="op">/</span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">T_jSDM_sim</span>, <span class="va">mod_jSDM_sim</span>, <span class="va">RMSE_jSDM_sim</span>,
@@ -1369,7 +1368,7 @@ Deviance jSDM
 <div id="root-mean-square-error-rmse-for-simulated-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#root-mean-square-error-rmse-for-simulated-data" class="anchor"></a><span class="header-section-number">5.2</span> Root-Mean-Square Error (RMSE) for simulated data</h2>
-Computed for <span class="math inline">\(\text{probit}(\theta_{ij})\)</span> with the simulated data-set.
+Computed for or the probabilities of presences <span class="math inline">\(\theta_{ij}\)</span> with the simulated data-set.
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:left;">
@@ -1386,10 +1385,10 @@ jSDM
 RMSE
 </td>
 <td style="text-align:right;">
-0.366
+0.088
 </td>
 <td style="text-align:right;">
-0.369
+0.086
 </td>
 </tr></tbody>
 </table>

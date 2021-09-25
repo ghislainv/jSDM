@@ -83,7 +83,7 @@
 
       
 
-      </header><script src="jSDM_binomial_probit_long_format_files/jquery-1.11.3/jquery.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
+      </header><script src="jSDM_binomial_probit_long_format_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="jSDM_binomial_probit_long_format_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <script src="jSDM_binomial_probit_long_format_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_binomial_probit_long_format_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_binomial_probit_long_format_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
@@ -358,8 +358,7 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.gamma</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## beta_j of the first two species</span>
+<code class="sourceCode R"><span class="co">## beta_j of the first two species</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">np</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"sp_"</span>,<span class="va">j</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span><span class="op">)</span>
@@ -368,8 +367,7 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## lambda_j of the first two species</span>
+<code class="sourceCode R"><span class="co">## lambda_j of the first two species</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">n_latent</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">n_latent</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
@@ -379,8 +377,7 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## Latent variables W_i for the first two sites</span>
+<code class="sourceCode R"><span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
@@ -392,13 +389,11 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## alpha_i of the first two sites</span>
+<code class="sourceCode R"><span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## V_alpha</span>
+<code class="sourceCode R"><span class="co">## V_alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -406,8 +401,7 @@ Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Chol
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_long_format_files/figure-html/plot-results-probit-10.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## probit_theta</span>
+<code class="sourceCode R"><span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>

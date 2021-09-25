@@ -83,7 +83,7 @@
 
       
 
-      </header><script src="jSDM_with_traits_files/jquery-1.11.3/jquery.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
+      </header><script src="jSDM_with_traits_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="jSDM_with_traits_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <script src="jSDM_with_traits_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_with_traits_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_with_traits_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
@@ -360,8 +360,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## lambda_j of the first two species</span>
+<code class="sourceCode R"><span class="co">## lambda_j of the first two species</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">n_latent</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">n_latent</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
@@ -371,8 +370,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## species effects for all species</span>
+<code class="sourceCode R"><span class="co">## species effects for all species</span>
 <span class="co"># par(mfrow=c(2,2), oma=c(0,0,2,0))</span>
 <span class="co"># plot(mcmc.list(mod$mcmc.sp))</span>
 <span class="co"># title(outer=TRUE, main="All species effects")</span>
@@ -389,13 +387,11 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## alpha_i of the first two sites</span>
+<code class="sourceCode R"><span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-10.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## V_alpha</span>
+<code class="sourceCode R"><span class="co">## V_alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-11.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -403,8 +399,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-12.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## probit_theta</span>
+<code class="sourceCode R"><span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
