@@ -126,7 +126,8 @@ jobs:
           sudo apt-get -y upgrade
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
-          
+          sudo Rscript -e "install.packages('curl',repos='http://cran.us.r-project.org',type='source')"
+          sudo Rscript -e "install.packages('covr',repos='http://cran.us.r-project.org',type='source')"
 
       - name: Query dependencies
         run: |
@@ -145,7 +146,7 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_version("pkgdown", vesion="1.6.0", dependencies = TRUE)
+          install.packages("pkgdown"", dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Install package
