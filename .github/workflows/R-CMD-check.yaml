@@ -126,8 +126,7 @@ jobs:
           sudo apt-get -y upgrade
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
-          sudo Rscript -e "remove.packages('curl')"
-          sudo Rscript -e "install.packages('curl')"
+          sudo Rscript -e "install.packages('curl',repos='http://cran.us.r-project.org',type='source')"
 
       - name: Query dependencies
         run: |
