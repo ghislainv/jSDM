@@ -124,14 +124,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y upgrade
-          sudo add-apt-repository ppa:xapienz/curl34
-          sudo apt policy curl
-          sudo apt remove curl libcurl4
-          sudo apt install curl=7.58.0-2ubuntu3ppa2 libcurl4=7.58.0-2ubuntu3ppa2
-          sudo apt install libcurl4 
-          sudo apt install libcurl3
-          sudo apt-get install  r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
+          sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          remove.packages("curl")
+          install.packages("curl")
 
       - name: Query dependencies
         run: |
