@@ -52,7 +52,6 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
-
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -110,16 +109,7 @@ jobs:
           path: check
           
   pkgdown:
-    runs-on : ${{ matrix.config.os }}
-    
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {os: ubuntu-latest,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-
+    runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -133,10 +123,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y upgrade
-          sudo add-apt-repository ppa:xapienz/curl34
-          sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
-          sudo Rscript -e "install.packages('curl', repos='https://cloud.r-project.org')"
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           
       - name: Query dependencies
