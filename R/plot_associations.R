@@ -151,8 +151,9 @@ add_species_arrows = function(radius = 5.0, label = "Species", reverse = TRUE, s
 }
 
 
-#' @name plot_associations
-#' @title plot species-species associations
+#' plotAssociations
+#' plot species-species associations
+#'
 #' @param R  matrix of correlation \eqn{R}
 #' @param radius circle's radius
 #' @param main title
