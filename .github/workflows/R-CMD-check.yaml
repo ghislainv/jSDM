@@ -115,7 +115,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: {os: ubuntu-latest,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+        config: 
+          - {os: ubuntu-latest,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -131,6 +132,9 @@ jobs:
           sudo apt-get install libcurl4 libcurl4-openssl-dev curl
           
       - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@v1
       
