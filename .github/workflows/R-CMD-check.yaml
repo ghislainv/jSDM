@@ -52,8 +52,8 @@ jobs:
           sudo apt-get -y upgrade
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
-            - name: Query dependencies
-            
+          
+      - name: Query dependencies
         run: |
           install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
@@ -69,6 +69,7 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
        
+
       - name: Cache R packages
         if: runner.os != 'Windows'
         uses: actions/cache@v2
