@@ -1,0 +1,1673 @@
+---
+title: "Convergence of latent variables"
+output:
+  bookdown::html_document2:
+    #base_format: rmarkdown::html_vignette
+    #highlight: tango
+    number_sections: true
+    toc: true
+    toc_float: true
+fig_caption: yes
+link-citations: yes
+bibliography: bib/biblio-jSDM.bib
+biblio-style: bib/jae.bst
+csl: bib/journal-of-applied-ecology.csl
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteIndexEntry{Convergence of latent variables}
+ %\VignetteEncoding{UTF-8}
+ %\VignetteEngine{knitr::rmarkdown}
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+fig.align="center",
+fig.width=8, fig.height=6,
+cache=TRUE,
+collapse=TRUE,
+comment="#>",
+highlight=TRUE,
+eval=TRUE
+)
+```
+
+# Models definition
+
+## Binomial models for presence-absence data
+
+We consider a latent variable model (LVM) to account for species co-occurrence [@Warton2015] on all sites . 
+
+$$ y_{ij} \sim \mathcal{B}iniomial(t_i, \theta_{ij})$$
+
+$$ \mathrm{g}(\theta_{ij}) = \alpha_i + X_i\beta_j + W_i\lambda_j $$
+- $\theta_{ij}$: occurence probability of the species $j$ on site $i$. 
+
+- $t_i$: number of visits at site $i$ 
+
+- $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
+
+The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$.
+
+- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
+- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
+
+This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
+
+## Poisson model for abundance data
+
+Referring to the models used in the articles [@Hui2016], we define the following model to account for species abundances on all sites. 
+
+$$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$. 
+
+$$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j}+X_i\beta_j+ W_i\lambda_j $$
+# Methods 
+## Reordering species
+- Fit JSDM to get a first estimation of loading factor lambda 
+- Select the species with the highest coefficient of variation on factor loadings lambda for each latent axis 
+- Rearrange the P/A matrix with this species on the first columns under the constraint of positivity on the diagonal of the lambda matrix
+
+## Breaking reflection invariance
+
+
+Method inspired by from https://austinrochford.com/posts/2021-07-05-factor-analysis-pymc3.html
+
+# Datasets
+
+Among the following datasets, the presence-absence data are from the [@Wilkinson2019] article in which they are used to compare joint species distribution models (JSDM) for presence-absence data, the dataset that records the presence or absence of `birds` during several visits to each site is from the [@Kery2006] article and the `mites` abundance data-set is from the [@Borcard1994] article.
+
+## Simulated dataset 
+
+```{r data-simulation }
+#== Data simulation
+
+#= Number of sites
+nsite <- 150
+
+#= Set seed for repeatability
+seed <- 1234
+set.seed(seed)
+
+#= Number of species
+nsp <- 50
+
+#= Number of latent variables
+n_latent <- 3
+
+#= Ecological process (suitability)
+x1 <- rnorm(nsite,0,1)
+x2 <- rnorm(nsite,0,1)
+X <- cbind(rep(1,nsite),x1,x2)
+np <- ncol(X)
+W <- matrix(rnorm(nsite*n_latent,0,1), nrow=nsite)
+beta.target <- t(matrix(runif(nsp*np,-2,2),
+                        byrow=TRUE, nrow=nsp))
+colnames(beta.target) <- paste0("sp_",1:nsp)
+lambda.target <- matrix(0,n_latent,nsp)
+# constraintq of identifiability
+mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(n_latent,0,2)
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+colnames(lambda.target) <- paste0("sp_",1:nsp)
+V_alpha.target <- 0.5
+V <- 1
+alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
+probit_theta<- X %*% beta.target + W %*% lambda.target + alpha.target
+e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+Z_true <- probit_theta + e
+Y <- matrix (NA, nsite,nsp)
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
+    else {Y[i,j] <- 0}
+  }
+}
+colnames(Y) <- paste0("sp_",1:nsp)
+rownames(Y) <- paste0("site_",1:nsite)
+```
+
+##  Datasets overview
+
+```{r data-sets, echo=FALSE, eval=TRUE}
+library(knitr)
+library(kableExtra)
+library(jSDM)
+library(boral)
+# Mosquitos dataset
+data("mosquitos")
+PA_Mosquitos <- mosquitos[,1:16]
+Env_Mosquitos <- mosquitos[,17:29]
+mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Mosquitos))
+X_Mosquitos <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+# Eucalypts dataset
+data("eucalypts")
+PA_Eucalypts <- eucalypts[,1:12]
+Env_Eucalypts <- cbind(scale(eucalypts[,c("Rockiness","VallyBotFlat","PPTann", "cvTemp","T0")]),eucalypts[,c("Sandiness","Loaminess")])
+Env_Eucalypts <- Env_Eucalypts[rowSums(PA_Eucalypts) != 0,]
+# Remove sites where none species was recorded
+PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
+mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Eucalypts))
+X_Eucalypts <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+# Frogs dataset
+data("frogs")
+PA_Frogs <- frogs[,4:12]
+Env_Frogs <- cbind(scale(frogs[,"Covariate_1"]),frogs[,"Covariate_2"],scale(frogs[,"Covariate_3"]))
+mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Frogs))
+X_Frogs <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+# Fungi dataset
+data(fungi, package="jSDM")
+Env_Fungi <- cbind(scale(fungi[,c("diam","epi","bark")]),
+                   fungi[,c("dc1","dc2","dc3","dc4","dc5",
+                            "quality3","quality4","ground3","ground4")])
+colnames(Env_Fungi) <- c("diam","epi","bark","dc1","dc2","dc3","dc4","dc5",
+                         "quality3","quality4","ground3","ground4")
+PA_Fungi <- fungi[,c("antser","antsin","astfer","fompin","hetpar","junlut",
+                     "phefer","phenig","phevit","poscae","triabi")]
+Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
+# Remove sites where none species was recorded
+PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
+mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Fungi))
+X_Fungi <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+# Birds dataset
+data("birds")
+PA_Birds <- birds[,1:158]
+# Remove species with less than 5 presences
+rare_sp <- which(apply(PA_Birds>0, 2, sum) < 5) 
+PA_Birds <- PA_Birds[, -rare_sp]
+Env_Birds <- data.frame(cbind(scale(birds[,c("elev","rlength","forest")]), birds[,"nsurvey"]))
+colnames(Env_Birds) <- c("elev","rlength","forest","nsurvey")
+mf.suit <- model.frame(formula=~elev+rlength+forest, data=as.data.frame(Env_Birds))
+X_Birds <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+# Mites dataset
+data("mites")
+PA_Mites <- mites[,1:35]
+# Remove species with less than 10 presences
+rare_sp <- which(apply(PA_Mites >0, 2, sum) < 10) 
+PA_Mites <- PA_Mites[, -rare_sp]
+# Normalized continuous variables
+Env_Mites  <- cbind(scale(mites[,c("density","water")]), mites[,c("substrate", "shrubs", "topo")])
+mf.suit <- model.frame(formula=~., data=as.data.frame(Env_Mites))
+X_Mites <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
+
+datasets <- data.frame(matrix(NA,10,7),row.names=c("data type", "distribution", "n.site","n.species","n.latent","n.X.coefs", "n.obs",  "n.param", "n.mcmc",""))
+colnames(datasets) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
+datasets["n.site",] <- c(300,nrow(mosquitos),nrow(Env_Eucalypts), nrow(Env_Frogs), nrow(Env_Fungi), nrow(birds), nrow(mites))
+datasets["n.X.coefs",] <- c(3,ncol(X_Mosquitos),ncol(X_Eucalypts),ncol(X_Frogs), ncol(X_Fungi),ncol(X_Birds), ncol(X_Mites))
+datasets["n.species",] <- c(100,ncol(PA_Mosquitos),ncol(PA_Eucalypts),ncol(PA_Frogs),ncol(PA_Fungi),ncol(PA_Birds), ncol(PA_Mites))
+datasets["n.latent",] <- c(3,rep(2,6))
+datasets["n.obs",] <- datasets["n.site",]*datasets["n.species",] 
+datasets["n.mcmc",] <- 25000
+datasets["n.param",] <- datasets["n.site",]*(1+datasets["n.latent",])+1+datasets["n.species",]*(datasets["n.X.coefs",]+datasets["n.latent",])-1
+datasets["data type",] <-c("presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","presence-absence","abundance")
+datasets["distribution",] <- c("bernoulli", "bernoulli","bernoulli","bernoulli","bernoulli","binomial","poisson")
+sp_pictures <- c("figures/des.jpg",
+                 "figures/Mosquitos_.jpg","figures/Eucalyptus_.jpg",
+                 "figures/Frogs_.jpg",
+                 "figures/Fungi_.jpg",
+                 "figures/birds.jpg",
+                 "figures/oribatid-mites.png")
+datasets["",] <- sprintf('![](%s){height="100px" width="100px"}',sp_pictures)
+knitr::kable(datasets, booktabs=TRUE) %>%
+  kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) 
+```
+
+# Fitting joint species distibution models (JSDM)
+
+## Simulated dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the simulated dataset using the `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-simulation }
+library(jSDM)
+# Fit the model
+T1<-Sys.time() 
+mod_jSDM_sim <- jSDM_binomial_probit(
+  # Chains
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable
+  presence_data=Y, 
+  # Explanatory variables 
+  site_formula=~x1+x2,   
+  site_data=X,
+  # Model specification
+  n_latent=3, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1, 
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2<-Sys.time() 
+T_jSDM_sim=difftime(T2, T1)
+
+# RMSE
+SE=(probit_theta-mod_jSDM_sim$probit_theta_latent)^2
+RMSE_jSDM_sim=sqrt(sum(SE/(nsite*nsp)))
+save(np, n_latent, nsp, nsite, beta.target, lambda.target, alpha.target, 
+     V_alpha.target, X, W, probit_theta, Z_true, e, Y, 
+     T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
+     file="Convergence_LVM_cache/jSDM_simulation.RData")
+```
+
+## Mosquitos dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-mosquitos }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Mosquitos <- jSDM_binomial_probit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Mosquitos, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Mosquitos,
+  # Model specification
+  site_effect="random", n_latent=2,
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Mosquitos <- difftime(T2,T1)
+save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
+     file="Convergence_LVM_cache/jSDM_Mosquitos.RData")
+```
+
+## Eucalypts dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-eucalypts }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Eucalypts <- jSDM_binomial_probit(
+  # Chains
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Eucalypts,
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Eucalypts,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Eucalypts <- difftime(T2,T1)
+save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
+     file="Convergence_LVM_cache/jSDM_Eucalypts.RData")
+```
+
+## Frogs dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-frogs }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Frogs <- jSDM_binomial_probit(
+  # Chains
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable
+  presence_data=as.matrix(PA_Frogs),
+  # Explanatory variables
+  site_formula=~.,
+  site_data=as.data.frame(Env_Frogs),
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Frogs <- difftime(T2,T1)
+save(T_jSDM_Frogs, mod_jSDM_Frogs,
+     file="Convergence_LVM_cache/jSDM_Frogs.RData")
+```
+
+## Fungi dataset
+
+We fit a binomial joint species distribution model, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-fungi }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Fungi <- jSDM_binomial_probit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Fungi, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Fungi,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Fungi <- difftime(T2,T1)
+save(T_jSDM_Fungi, mod_jSDM_Fungi,
+     file="Convergence_LVM_cache/jSDM_Fungi.RData")
+```
+
+## Birds dataset
+
+We fit a binomial joint species distribution model with multiple visit by site, including random site effect and latent variables, from the [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset using `jSDM_binomial_logit()` function to perform binomial logistic regression.
+
+```{r jSDM-birds }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Birds <- jSDM_binomial_logit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Birds, 
+  # Explanatory variables 
+  site_formula=~elev+rlength+forest,   
+  site_data=Env_Birds,
+  trials=Env_Birds$nsurvey, 
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=c(10,rep(1,ncol(X_Birds)-1)),
+  mu_lambda=0, V_lambda=1,
+  # Various 
+  ropt=0.44,
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Birds <- difftime(T2,T1)
+save(T_jSDM_Birds, mod_jSDM_Birds,
+     file="Convergence_LVM_cache/jSDM_Birds.RData")
+```
+
+
+## Mites dataset
+
+We fit a joint species distribution model, including random site effect and latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `jSDM_poisson_log()` function to perform a poisson log-linear regression. 
+
+```{r jSDM-mites }
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Mites <- jSDM_poisson_log(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  count_data=PA_Mites, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Mites,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=c(10,rep(1,ncol(X_Mites)-1)),
+  mu_lambda=0, V_lambda=1,
+  # Various 
+  ropt=0.44,
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Mites <- difftime(T2,T1)
+save(T_jSDM_Mites, mod_jSDM_Mites,
+     file="Convergence_LVM_cache/jSDM_Mites.RData")
+```
+
+# Reordering species 
+
+## Simulated dataset
+```{r reorder-species-sim }
+load("Convergence_LVM_cache/jSDM_simulation.RData")
+# identify species with higher factor loadings lambda_j
+sp_constraint <- apply(lambda.target,1,which.max)
+# reorder lambda.target
+lambda.target.ordered <- cbind(lambda.target[,sp_constraint],lambda.target[,-sp_constraint])
+lambda.target.ordered[lambda.target.ordered==0.0] <- runif(sum(lambda.target.ordered==0.0),-2,2)
+lambda.target.ordered[lower.tri(lambda.target.ordered,diag=FALSE)] <- 0.0
+beta.target.ordered <- beta.target[,colnames(lambda.target.ordered)]
+probit_theta2 <- X %*% beta.target.ordered + W %*% lambda.target.ordered + alpha.target
+Z_true.ordered <- probit_theta2 + e
+# reorder Y 
+Y.ordered <- matrix (NA, nsite,nsp)
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    if ( Z_true.ordered[i,j] > 0) {Y.ordered[i,j] <- 1}
+    else {Y.ordered[i,j] <- 0}
+  }
+}
+colnames(Y.ordered) <- colnames(lambda.target.ordered)
+#sum(Y.ordered!=Y[,colnames(lambda.target.ordered)])
+```
+
+## Real datasets
+
+```{r variation-coefficient }
+load("Convergence_LVM_cache/jSDM_simulation.RData")
+load("Convergence_LVM_cache/jSDM_Mosquitos.RData")
+load("Convergence_LVM_cache/jSDM_Eucalypts.RData")
+load("Convergence_LVM_cache/jSDM_Frogs.RData")
+load("Convergence_LVM_cache/jSDM_Fungi.RData")
+load("Convergence_LVM_cache/jSDM_Birds.RData")
+load("Convergence_LVM_cache/jSDM_Mites.RData")
+#Packages
+require(coda)
+for( suffix in c("Mosquitos","Eucalypts","Fungi" ,"Birds", "Mites","Frogs")){
+  PA <- eval(parse(text=paste0("PA_", suffix)), env=.GlobalEnv)
+  nspecies <- ncol(PA)
+  mod <- eval(parse(text=paste0("mod_jSDM_", suffix)), env=.GlobalEnv)
+  n_latent <- mod$model_spec$n_latent
+  coef_var <- matrix(0,nspecies,n_latent)
+  for (j in 1:nspecies){
+    mcmc.sp <- mod$mcmc.sp[[paste0("sp_",j)]]
+    lambda_j <- mcmc.sp[,grepl("lambda",colnames(mcmc.sp))]
+    for(l in 1:n_latent){
+      coef_var[j,l] <- mean(abs(lambda_j[,l]))/sqrt(var(abs(lambda_j[,l])))
+    }                                              
+  }
+  # Select the species with the highest coefficient of variation on each latent axis 
+  sp_constraint <- apply(coef_var,2,which.max)
+  if(length(unique(sp_constraint)) != n_latent){
+    for(l in 2:n_latent){
+      sp_constraint[l] <- apply(coef_var[-c(1:(l-1)),],2,which.max)
+    }
+  }
+  # Rearrange the P/A matrix with this species on the first three columns
+  # under the constraint of positivity on the diagonal of the lambda matrix 
+  PA <- cbind(PA[,sp_constraint],PA[,-sp_constraint])
+  assign(paste0("coef_var_", suffix),coef_var)
+  assign(paste0("PA_", suffix,"_ord"),PA)
+  save(PA, coef_var, file=paste0("~/Documents//jSDM/vignettes/Convergence_LVM_cache/",suffix, "_ord.RData"))
+}
+```
+
+```{r ACP}
+# Fit JSDM without latent variables with glm function (handle by dharma) or jSDM (use STAN/JAGS method)
+data <- data.frame(species=factor(rep(1:nsp, each=nsite)), site=factor(rep(1:nsite,nsp)), y=c(Y), X)
+glm_mod_sim <- glm(y ~ species:(x1+x2) + species, family=binomial(link="probit"), data=data)
+# Residuals (ê = Y -Ŷ) calculated with dharma 
+library(DHARMa)
+residuals <- simulateResiduals(fittedModel=glm_mod_sim, plot=F)
+residuals_mat <- t(matrix(residuals$scaledResiduals,nrow=nsite,ncol=nsp))
+# ACP (ade4) on residuals with 1,2,3,4 or 5 axes on sites 
+library(ade4)
+sp_constraint_glm <- NULL
+for (n_axes in 1:4){
+pca_res <- dudi.pca(residuals_mat, center=TRUE, scale=TRUE, nf=n_axes, scannf = FALSE) 
+sp_constraint_glm <- c(sp_constraint_glm,apply(pca_res$li,2,which.max))
+}
+sp_constraint_glm <- unique(sp_constraint_glm[duplicated(sp_constraint_glm)])
+# Identify species with higher coordinates on axes compare to jSDM results 
+print(sp_constraint_glm)
+print(sp_constraint)
+# Reorder the species to place the species with higher coordinates on the ACP axes as reference species on the latent axes (species under the positivity constraint on the diagonal of the matrix of loading factors lambda_j)
+```
+
+# Fitting JSDM with reordered species
+
+## Simulated dataset 
+
+We fit a binomial joint species distribution model with reordered species, including random site effect and latent variables, from the simulated dataset using the `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-simulation-ord }
+load("Convergence_LVM_cache/jSDM_simulation.RData")
+# Fit the model
+T1<-Sys.time() 
+mod_jSDM_sim_ord <-jSDM_binomial_probit(# Iteration
+  burnin=10000,
+  mcmc=15000,
+  thin=15,
+  # Response variable
+  presence_data=Y.ordered,
+  # Explanatory variables
+  site_formula=~x1+x2,
+  site_data = X,
+  n_latent=3,
+  site_effect="random",
+  # Starting values
+  alpha_start=0,
+  beta_start=0,
+  lambda_start=0,
+  W_start=0,
+  V_alpha=1,
+  # Priors
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  seed=1234, verbose=1)
+T2 <- Sys.time() 
+T_jSDM_sim_ord <- difftime(T2, T1)
+
+# RMSE
+SE=(probit_theta2-mod_jSDM_sim_ord$probit_theta_latent)^2
+RMSE_jSDM_sim_ord=sqrt(sum(SE/(nsp*nsite)))
+
+save(lambda.target.ordered, beta.target.ordered, probit_theta2, Z_true.ordered, Y.ordered, T_jSDM_sim_ord, mod_jSDM_sim_ord, RMSE_jSDM_sim_ord,
+     file="Convergence_LVM_cache/jSDM_simulation_ord.RData")
+```
+
+## Mosquitos dataset
+
+We fit a binomial joint species distribution model with reordered species, including random site effect and latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-mosquitos-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Mosquitos_ord <- jSDM_binomial_probit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Mosquitos_ord, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Mosquitos,
+  # Model specification
+  site_effect="random", n_latent=2,
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Mosquitos_ord <- difftime(T2,T1)
+save(T_jSDM_Mosquitos_ord, mod_jSDM_Mosquitos_ord,
+     file="Convergence_LVM_cache/jSDM_Mosquitos_ord.RData")
+```
+
+## Eucalypts dataset
+
+We fit a binomial joint species distribution model with reordered species, including random site effect and latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-eucalypts-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Eucalypts_ord <- jSDM_binomial_probit(
+  # Chains
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Eucalypts_ord,
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Eucalypts,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Eucalypts_ord <- difftime(T2,T1)
+save(T_jSDM_Eucalypts_ord, mod_jSDM_Eucalypts_ord,
+     file="Convergence_LVM_cache/jSDM_Eucalypts_ord.RData")
+```
+
+## Frogs dataset
+
+We fit a binomial joint species distribution model with reordered species, including random site effect and latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-frogs-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Frogs_ord <- jSDM_binomial_probit(
+  # Chains
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable
+  presence_data=as.matrix(PA_Frogs_ord),
+  # Explanatory variables
+  site_formula=~.,
+  site_data=as.data.frame(Env_Frogs),
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors
+  shape=0.5, rate=0.0005,
+  
+  mu_beta=0, V_beta=1,
+  mu_lambda=0, V_lambda=1,
+  # Various
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Frogs_ord <- difftime(T2,T1)
+save(T_jSDM_Frogs_ord, mod_jSDM_Frogs_ord,
+     file="Convergence_LVM_cache/jSDM_Frogs_ord.RData")
+```
+
+## Fungi dataset
+
+We fit a binomial joint species distribution model with reordered species, including random site effect and latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
+
+```{r jSDM-fungi-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Fungi_ord <- jSDM_binomial_probit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Fungi_ord, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Fungi,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=10,
+  mu_lambda=0, V_lambda=10,
+  # Various 
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Fungi_ord <- difftime(T2,T1)
+save(T_jSDM_Fungi_ord, mod_jSDM_Fungi_ord,
+     file="Convergence_LVM_cache/jSDM_Fungi_ord.RData")
+```
+
+## Birds dataset
+
+We fit a binomial joint species distribution model with multiple visit by site and reordered species, including random site effect and latent variables, from the [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset using `jSDM_binomial_logit()` function to perform binomial logistic regression.
+
+```{r jSDM-birds-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Birds_ord <- jSDM_binomial_logit(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  presence_data=PA_Birds_ord, 
+  # Explanatory variables 
+  site_formula=~elev+rlength+forest,   
+  site_data=Env_Birds,
+  trials= Env_Birds$nsurvey, 
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=c(10,rep(1,ncol(X_Birds)-1)),
+  mu_lambda=0, V_lambda=1,
+  # Various 
+  ropt=0.44,
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Birds_ord <- difftime(T2,T1)
+save(T_jSDM_Birds_ord, mod_jSDM_Birds_ord,
+     file="Convergence_LVM_cache/jSDM_Birds_ord.RData")
+```
+
+
+## Mites dataset
+
+We fit a joint species distribution model, including random site effect and latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `jSDM_poisson_log()` function to perform a poisson log-linear regression. 
+
+```{r jSDM-mites-ord}
+# Fit the model
+T1 <- Sys.time()
+mod_jSDM_Mites_ord <- jSDM_poisson_log(
+  # Chains 
+  burnin=10000, mcmc=15000, thin=15,
+  # Response variable 
+  count_data=PA_Mites_ord, 
+  # Explanatory variables 
+  site_formula=~.,   
+  site_data=Env_Mites,
+  # Model specification
+  n_latent=2, site_effect="random",
+  # Starting values 
+  alpha_start=0, beta_start=0,
+  lambda_start=0, W_start=0,
+  V_alpha=1,
+  # Priors 
+  shape=0.5, rate=0.0005,
+  mu_beta=0, V_beta=c(10,rep(1,ncol(X_Mites)-1)),
+  mu_lambda=0, V_lambda=1,
+  # Various 
+  ropt=0.44,
+  seed=123, verbose=1)
+T2 <- Sys.time()
+T_jSDM_Mites_ord <- difftime(T2,T1)
+save(T_jSDM_Mites_ord, mod_jSDM_Mites_ord,
+     file="Convergence_LVM_cache/jSDM_Mites_ord.RData")
+```
+
+# Comparison 
+
+## Deviance  
+
+```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
+load("Convergence_LVM_cache/jSDM_simulation.RData")
+load("Convergence_LVM_cache/jSDM_Mosquitos.RData")
+load("Convergence_LVM_cache/jSDM_Eucalypts.RData")
+load("Convergence_LVM_cache/jSDM_Frogs.RData")
+load("Convergence_LVM_cache/jSDM_Fungi.RData")
+load("Convergence_LVM_cache/jSDM_Birds.RData")
+load("Convergence_LVM_cache/jSDM_Mites.RData")
+load("Convergence_LVM_cache/jSDM_simulation_ord.RData")
+load("Convergence_LVM_cache/jSDM_Mosquitos_ord.RData")
+load("Convergence_LVM_cache/jSDM_Eucalypts_ord.RData")
+load("Convergence_LVM_cache/jSDM_Frogs_ord.RData")
+load("Convergence_LVM_cache/jSDM_Fungi_ord.RData")
+load("Convergence_LVM_cache/jSDM_Birds_ord.RData")
+load("Convergence_LVM_cache/jSDM_Mites_ord.RData")
+result <- data.frame(matrix(NA,14,4), row.names=c("Simulated","Simulated ordered","Mosquitos", "Mosquitos ordered", "Eucalypts","Eucalypts ordered" ,"Frogs","Frogs ordered","Fungi","Fungi ordered","Birds","Birds ordered","Mites","Mites ordered") )
+colnames(result) <- c("n_latent","Deviance", "Compilation time (s)","")
+result[,1]=c("3","3","2","2","2","2","2","2","2","2","2","2","2","2")
+result[,2] <- round(c(mean(mod_jSDM_sim$mcmc.Deviance), mean(mod_jSDM_sim_ord$mcmc.Deviance), mean(mod_jSDM_Mosquitos$mcmc.Deviance), mean(mod_jSDM_Mosquitos_ord$mcmc.Deviance), mean(mod_jSDM_Eucalypts$mcmc.Deviance), mean(mod_jSDM_Eucalypts_ord$mcmc.Deviance),  
+mean(mod_jSDM_Frogs$mcmc.Deviance), mean(mod_jSDM_Frogs_ord$mcmc.Deviance),                       mean(mod_jSDM_Fungi$mcmc.Deviance), mean(mod_jSDM_Fungi_ord$mcmc.Deviance), 
+                      mean(mod_jSDM_Birds$mcmc.Deviance), mean(mod_jSDM_Birds_ord$mcmc.Deviance),
+                      mean(mod_jSDM_Mites$mcmc.Deviance), mean(mod_jSDM_Mites_ord$mcmc.Deviance)),0)
+result[,3] <- round(as.numeric(c(T_jSDM_sim,T_jSDM_sim_ord,
+                                 T_jSDM_Mosquitos, T_jSDM_Mosquitos_ord,
+                                 T_jSDM_Eucalypts,T_jSDM_Eucalypts_ord,
+                                  T_jSDM_Frogs,T_jSDM_Frogs_ord,
+                                T_jSDM_Fungi,T_jSDM_Fungi_ord,
+                                 T_jSDM_Birds,T_jSDM_Birds_ord,
+                                 T_jSDM_Mites, T_jSDM_Mites_ord),
+                               units="secs"),1)
+sp_pictures <- c("figures/des.jpg", "figures/des.jpg",
+                 "figures/Mosquitos_.jpg", "figures/Mosquitos_.jpg", "figures/Eucalyptus_.jpg", "figures/Eucalyptus_.jpg",
+                  "figures/Frogs_.jpg","figures/Frogs_.jpg" ,
+
+ "figures/Fungi_.jpg","figures/Fungi_.jpg" ,
+                 "figures/birds.jpg", "figures/birds.jpg",
+                 "figures/oribatid-mites.png","figures/oribatid-mites.png")
+result[,4] <- sprintf('![](%s){height="80px" width="80px"}',sp_pictures)
+kable(result)%>%
+  kable_styling(bootstrap_options="striped",latex_options=c("HOLD_position","striped"), full_width=FALSE)
+```
+
+## Root-Mean-Square Error (RMSE) for simulated data
+
+Computed for $\text{probit}(\theta_{ij})$ with the simulated data-set.
+
+```{r RMSE, eval=TRUE, echo=FALSE}
+
+result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
+colnames(result) <- c("Simulated dataset","Simulated reordered dataset")
+result[1,] <- c(RMSE_jSDM_sim,RMSE_jSDM_sim_ord)
+kable(result, digits=3) %>%
+  kable_styling(bootstrap_options = "striped", 
+                latex_options= c("HOLD_position","striped"),
+                full_width = FALSE)
+```
+
+# Representation of results 
+
+## Simulated dataset
+
+```{r jSDM-simulation-plot}
+load("Convergence_LVM_cache/jSDM_simulation.RData")
+load("Convergence_LVM_cache/jSDM_simulation_ord.RData")
+nsp <- ncol(mod_jSDM_sim$theta_latent)
+nsite <- nrow(mod_jSDM_sim$theta_latent)
+np <- nrow(mod_jSDM_sim$model_spec$beta_start)
+n_latent <- mod_jSDM_sim$model_spec$n_latent
+# with original order
+## lambda_j
+mean_lambda <- matrix(0,nsp,n_latent)
+par(mfrow=c(n_latent,2), oma=c(0,0,2,0))
+for (j in 1:nsp) {
+  mean_lambda[j,] <- apply(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]]
+                           [,(np+1):(np+n_latent)], 2, mean)  
+  if(j<4){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]),
+                     main=paste(colnames(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]])
+                                [np+l],colnames(lambda.target)[j]))
+      abline(v=lambda.target[l,j],col='red')
+    }
+  }
+}
+par(mfrow=c(1,1))
+plot(t(lambda.target), mean_lambda,
+     main="factor loadings lambda",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+title(main="Results with orginal species order", outer = TRUE, cex=1.2)
+# with reordered species
+## lambda_j
+par(mfrow=c(n_latent,2), oma=c(0,0,2,0))
+mean_lambda <- matrix(0,nsp,n_latent)
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  mean_lambda[j,] <- apply(mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]]
+                           [,(np+1):(np+n_latent)], 2, mean)  
+  if(j<4){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]),
+                     main=paste(colnames(mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]])
+                                [np+l],colnames(lambda.target.ordered)[j]))
+      abline(v=lambda.target.ordered[l,j],col='red')
+    }
+  }
+}
+par(mfrow=c(1,1))
+plot(t(lambda.target.ordered), mean_lambda,
+     main="factor loadings lambda",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+title(main="Results with reordered species", outer = TRUE, cex=1.2)
+
+# with original order
+## beta_j
+mean_beta <- matrix(0,nsp,np)
+par(mfrow=c(ncol(X),2), oma=c(0,0,2,0))
+for (j in 1:nsp) {
+  mean_beta[j,] <- apply(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]]
+                         [,1:np], 2, mean)  
+  if(j<3){
+    for (p in 1:np){
+      coda::traceplot(coda::as.mcmc(
+        mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]))
+      coda::densplot(coda::as.mcmc(
+        mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]),
+        main = paste(colnames(
+          mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]])[p],
+          colnames(lambda.target)[j]))
+      abline(v=beta.target[p,j],col='red')
+    }
+  }
+}
+par(mfrow=c(1,1))
+plot(t(beta.target), mean_beta,
+     main="species effect beta",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+title(main="Results with orginal species order", outer = TRUE, cex=1.2)
+
+## W latent variables
+par(mfrow=c(1,2))
+mean_W <- matrix(0,nsite,n_latent)
+for (l in 1:n_latent) {
+  mean_W[,l] <- summary(mod_jSDM_sim$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
+  plot(W[,l],mean_W[,l],
+       main = paste0("Latent variable W_", l),
+       xlab ="obs", ylab ="fitted")
+  abline(a=0,b=1,col='red')
+}
+# Wlambda
+plot(W %*% lambda.target, mean_W %*% t(mean_lambda) ,xlab ="obs", ylab ="fitted", main="W.lambda")
+abline(a=0,b=1,col='red')
+## alpha
+par(mfrow=c(1,3))
+plot(alpha.target, summary(mod_jSDM_sim$mcmc.alpha)[[1]][,"Mean"],
+     xlab ="obs", ylab ="fitted", main="site effect alpha")
+abline(a=0,b=1,col='red')
+## Valpha
+coda::traceplot(mod_jSDM_sim$mcmc.V_alpha)
+coda::densplot(mod_jSDM_sim$mcmc.V_alpha)
+abline(v=V_alpha.target,col='red')
+
+## Deviance
+plot(mod_jSDM_sim$mcmc.Deviance)
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+plot(probit_theta,mod_jSDM_sim$probit_theta_latent,
+     main="probit(theta)",xlab="obs",ylab="fitted")
+abline(a=0,b=1,col='red')
+## theta
+plot(pnorm(probit_theta),mod_jSDM_sim$theta_latent,
+     main="theta",xlab="obs",ylab="fitted")
+abline(a=0,b=1,col='red')
+
+# with reordered species
+par(mfrow=c(ncol(X),2), oma=c(0,0,2,0))
+## beta_j
+mean_beta <- matrix(0,nsp,np)
+for (j in 1:nsp) {
+  mean_beta[j,] <- apply(mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]]
+                         [,1:np], 2, mean)  
+  if(j<3){
+    for (p in 1:np){
+      coda::traceplot(coda::as.mcmc(
+        mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+      coda::densplot(coda::as.mcmc(
+        mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+        main = paste(colnames(
+          mod_jSDM_sim_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+          colnames(lambda.target.ordered)[j]))
+      abline(v=beta.target.ordered[p,j],col='red')
+    }
+  }
+}
+title(main="Results with reordered species", outer = TRUE, cex=1.2)
+# Species effects beta 
+par(mfrow=c(1,1))
+plot(t(beta.target.ordered), mean_beta,
+     main="species effect beta",
+     xlab ="obs", ylab ="fitted")
+abline(a=0,b=1,col='red')
+
+## W latent variables
+par(mfrow=c(1,2))
+mean_W_ord <- matrix(0,nsite,n_latent)
+for (l in 1:n_latent) {
+  mean_W_ord[,l] <- summary(mod_jSDM_sim_ord$mcmc.latent[[paste0("lv_",l)]])[[1]][,"Mean"]
+  plot(W[,l],mean_W_ord[,l],
+       main = paste0("Latent variable W_", l),
+       xlab ="obs", ylab ="fitted")
+  abline(a=0,b=1,col='red')
+}
+# Wlambda
+plot(W %*% lambda.target.ordered, mean_W_ord %*% t(mean_lambda), xlab ="obs", ylab ="fitted", main="W.lambda")
+abline(a=0,b=1,col='red')
+
+## alpha
+par(mfrow=c(1,3))
+plot(alpha.target, summary(mod_jSDM_sim_ord$mcmc.alpha)[[1]][,"Mean"],
+     xlab ="obs", ylab ="fitted", main="site effect alpha")
+abline(a=0,b=1,col='red')
+## Valpha
+coda::traceplot(mod_jSDM_sim_ord$mcmc.V_alpha)
+coda::densplot(mod_jSDM_sim_ord$mcmc.V_alpha)
+abline(v=V_alpha.target,col='red')
+
+# ## Deviance
+plot(mod_jSDM_sim_ord$mcmc.Deviance)
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+plot(probit_theta2,mod_jSDM_sim_ord$probit_theta_latent,
+     main="probit(theta)",xlab="obs",ylab="fitted")
+abline(a=0,b=1,col='red')
+## theta
+plot(pnorm(probit_theta2),mod_jSDM_sim_ord$theta_latent,
+     main="theta",xlab="obs",ylab="fitted")
+abline(a=0,b=1,col='red')
+```
+
+## Mosquitos dataset
+
+```{r mosquitos-plot, echo=FALSE}
+setwd("~/Documents/jSDM/vignettes/")
+load("Convergence_LVM_cache/jSDM_Mosquitos.RData")
+mod <- mod_jSDM_Mosquitos
+load("Convergence_LVM_cache/jSDM_Mosquitos_ord.RData")
+mod_ord <- mod_jSDM_Mosquitos_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$presence_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$presence_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
+
+## Eucalypts dataset
+
+```{r Eucalypts-plot, echo=FALSE}
+load("Convergence_LVM_cache/jSDM_Eucalypts.RData")
+mod <- mod_jSDM_Eucalypts
+load("Convergence_LVM_cache/jSDM_Eucalypts_ord.RData")
+mod_ord <- mod_jSDM_Eucalypts_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$presence_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$presence_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
+
+## Frogs dataset
+
+```{r Frogs-plot }
+load("Convergence_LVM_cache/jSDM_Frogs.RData")
+mod <- mod_jSDM_Frogs
+load("Convergence_LVM_cache/jSDM_Frogs_ord.RData")
+mod_ord <- mod_jSDM_Frogs_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$presence_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$presence_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
+
+## Fungi dataset
+
+```{r Fungi-plot, echo=FALSE}
+load("Convergence_LVM_cache/jSDM_Fungi.RData")
+mod <- mod_jSDM_Fungi
+load("Convergence_LVM_cache/jSDM_Fungi_ord.RData")
+mod_ord <- mod_jSDM_Fungi_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$presence_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$presence_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$probit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
+
+## Birds dataset
+
+```{r Birds-plot, echo=FALSE}
+load("Convergence_LVM_cache/jSDM_Birds.RData")
+mod <- mod_jSDM_Birds
+load("Convergence_LVM_cache/jSDM_Birds_ord.RData")
+mod_ord <- mod_jSDM_Birds_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$presence_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$logit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$presence_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$logit_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
+
+## Mites dataset
+
+```{r Mites-plot, echo=FALSE}
+load("Convergence_LVM_cache/jSDM_Mites.RData")
+mod <- mod_jSDM_Mites
+load("Convergence_LVM_cache/jSDM_Mites_ord.RData")
+mod_ord <- mod_jSDM_Mites_ord
+
+nsp <- ncol(mod$theta_latent)
+nsite <- nrow(mod$theta_latent)
+np <- nrow(mod$model_spec$beta_start)
+n_latent <- mod$model_spec$n_latent
+species <- colnames(mod$model_spec$count_data)
+Id_sp <- 1:nsp
+# with original order
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",j))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l, " sp_",j))
+    }
+  }
+}
+
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+    coda::densplot(mod$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$log_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+
+# with reordered species
+species_reordered <- colnames(mod_ord$model_spec$count_data)
+Id_sp_ord <- Id_sp
+for(j in 1:nsp){
+  Id_sp_ord[j] <- which(species==species_reordered[j])
+}
+## beta_j
+par(mfrow=c(3,2))
+for (j in 1:1) {
+  for (p in 1:np){
+    coda::traceplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]))
+    coda::densplot(coda::as.mcmc(
+      mod_ord$mcmc.sp[[paste0("sp_",j)]][,p]),
+      main = paste0(colnames(
+        mod_ord$mcmc.sp[[paste0("sp_",j)]])[p],
+        " sp_",Id_sp_ord[j]))
+  }
+}
+## lambda_j
+par(mfrow=c(n_latent,2))
+for (j in 1:nsp) {
+  if(j<3){
+    for (l in 1:n_latent) {
+      coda::traceplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                    [,np+l]))
+      coda::densplot(coda::as.mcmc(mod_ord$mcmc.sp[[paste0("sp_",j)]]
+                                   [,np+l]), main=paste0("lambda_",l," sp_",Id_sp_ord[j]))
+    }
+  }
+}
+
+## W latent variables
+par(mfrow=c(2,2))
+for (i in 1:2) {
+  for (l in 1:n_latent) {
+    coda::traceplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l,",",i))
+    coda::densplot(mod_ord$mcmc.latent[[paste0("lv_",l)]][,i],main=paste0("W_",l," site_",i))
+  }
+}
+
+#= Predictions
+par(mfrow=c(1,2))
+## probit_theta
+hist(mod_ord$log_theta_latent,col="light blue")
+## theta
+hist(mod_ord$theta_latent,col="light blue")
+```
