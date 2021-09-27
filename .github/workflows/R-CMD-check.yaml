@@ -111,9 +111,7 @@ jobs:
           
   pkgdown:
     runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    
     strategy:
       fail-fast: false
       matrix:
@@ -124,8 +122,14 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
-      - uses: actions/checkout@v2
+     - uses: actions/checkout@v2
+
+      - name: Install libcurl4 and curl packages
+        run: |
+          sudo apt-get purge libcurl4 curl
+          sudo apt-get install libcurl4 libcurl4-openssl-dev curl
           
       - uses: r-lib/actions/setup-r@v1
 
