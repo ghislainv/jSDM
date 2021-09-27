@@ -119,7 +119,7 @@ jobs:
       - name: Install libcurl4 and curl packages
         run: |
           sudo apt-get purge libcurl4
-          sudo apt-get install libcurl4 ibcurl4-openssl-dev curl
+          sudo apt-get install libcurl4 libcurl4-openssl-dev curl
           
       - uses: r-lib/actions/setup-r@v1
 
