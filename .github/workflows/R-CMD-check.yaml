@@ -120,7 +120,6 @@ jobs:
         run: |
           sudo apt-get purge libcurl4 curl
           sudo apt-get install libcurl4 libcurl4-openssl-dev curl
-          rm /usr/lib/x86_64-linux-gnu/libcurl.so.4
           
       - uses: r-lib/actions/setup-r@v1
 
@@ -130,6 +129,7 @@ jobs:
         run: |
           sudo apt-get install r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          sudo rm /usr/lib/x86_64-linux-gnu/libcurl.so.4
 
       - name: Query dependencies
         run: |
