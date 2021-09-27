@@ -130,6 +130,7 @@ jobs:
         run: |
           sudo apt-get purge libcurl4 curl
           sudo apt-get install libcurl4 libcurl4-openssl-dev curl
+          sudo rm /usr/lib/x86_64-linux-gnu/libcurl.so.4
           
       - uses: r-lib/actions/setup-r@v1
         with:
