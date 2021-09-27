@@ -126,7 +126,9 @@ jobs:
           sudo apt-get -y upgrade
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
-          
+          sudo Rscript -e "install.packages('curl',repos='http://cran.us.r-project.org',type='source')"
+          sudo Rscript -e "install.packages('covr',repos='http://cran.us.r-project.org',type='source')"
+
       - name: Query dependencies
         run: |
           install.packages('remotes', repos="http://cran.us.r-project.org")
@@ -154,5 +156,5 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          Rscript -e 'pkgdown::deploy_to_branch()'
           
