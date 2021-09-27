@@ -122,16 +122,16 @@ jobs:
       
       - name: Install debian packages
         run: |
-          sudo apt-get remove -y libcurl4
-          sudo apt-get install -y libcurl4 curl
+          sudo apt-get purge libcurl4
+          sudo apt-get install libcurl4 curl
           sudo apt-get install libcurl4-openssl-dev r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
 
       - name: Query dependencies
         run: |
-          install.packages('remotes', repos="http://cran.us.r-project.org")
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+          sudo Rscript -e "install.packages('remotes', repos='http://cran.us.r-project.org')"
+          sudo Rscript -e "saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)"
+          sudo Rscript -e "writeLines(sprintf('R-%i.%i', getRversion()$major, getRversion()$minor), '.github/R-version')"
         shell: Rscript {0}
 
       - name: Cache R packages
@@ -143,8 +143,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown", dependencies = TRUE)
+          sudo Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          sudo Rscript -e "install.packages('pkgdown', dependencies = TRUE)"
         shell: Rscript {0}
 
       - name: Install package
@@ -154,5 +154,5 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          sudo Rscript -e "pkgdown::deploy_to_branch(new_process = FALSE)"
           
