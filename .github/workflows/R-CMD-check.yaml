@@ -126,8 +126,8 @@ jobs:
     steps:
      - uses: actions/checkout@v2
 
-      - name: Install libcurl4 and curl packages
-        run: |
+     - name: Install libcurl4 and curl packages
+       run: |
           sudo apt-get purge libcurl4 curl
           sudo apt-get install libcurl4 libcurl4-openssl-dev curl
           
