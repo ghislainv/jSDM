@@ -159,13 +159,6 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-          
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
- 
 
       - name: Install dependencies
         run: |
@@ -175,7 +168,12 @@ jobs:
 
       - name: Install package
         run: R CMD INSTALL .
-
+        
+      - name: Session info
+        run: |
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+          
       - name: Deploy package
         run: |
           git config --local user.email "actions@github.com"
