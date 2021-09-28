@@ -163,7 +163,8 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown", dependencies = TRUE)
+          remotes::install_version("rcmdcheck", version="1.3.3")
+          remotes::install_version("pkgdown",version="1.6.0", dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Install package
