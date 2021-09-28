@@ -239,7 +239,8 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## lambda_j of the first two species</span>
+<code class="sourceCode R">
+<span class="co">## lambda_j of the first two species</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">n_latent</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
@@ -252,7 +253,8 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Latent variables W_i for the first two sites</span>
+<code class="sourceCode R">
+<span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
@@ -264,11 +266,13 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="op">}</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## alpha_i of the first two sites</span>
+<code class="sourceCode R">
+<span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## V_alpha</span>
+<code class="sourceCode R">
+<span class="co">## V_alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span>
@@ -277,7 +281,8 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-10.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## probit_theta</span>
+<code class="sourceCode R">
+<span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
@@ -356,7 +361,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

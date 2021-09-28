@@ -704,7 +704,8 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <a href="#fungi-dataset" class="anchor"></a><span class="header-section-number">3.5</span> Fungi dataset</h2>
 <p>We fit a binomial joint species distribution model, including random site effect and latent variables, from the <a href="https://ecology.ghislainv.fr/jSDM/reference/fungi.html"><code>fungi</code></a> dataset using <code><a href="https://rdrr.io/pkg/boral/man/boral.html">boral()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Import center and reduce fungi dataset</span>
+<code class="sourceCode R">
+<span class="co"># Import center and reduce fungi dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">fungi</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span>
 <span class="va">Env_Fungi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">fungi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"diam"</span>,<span class="st">"epi"</span>,<span class="st">"bark"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
                    <span class="va">fungi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dc1"</span>,<span class="st">"dc2"</span>,<span class="st">"dc3"</span>,<span class="st">"dc4"</span>,<span class="st">"dc5"</span>,
@@ -1467,7 +1468,7 @@ RMSE
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

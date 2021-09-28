@@ -1,19 +1,6 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 1.6.0
 pkgdown_sha: ~
-articles:
-  Code_of_conduct: Code_of_conduct.html
-  Contributing: Contributing.html
-  SDM_JSDM: SDM_JSDM.html
-  jSDM: jSDM.html
-  jSDM_Hmsc: jSDM_Hmsc.html
-  jSDM_binomial_logit: jSDM_binomial_logit.html
-  jSDM_binomial_probit: jSDM_binomial_probit.html
-  jSDM_binomial_probit_long_format: jSDM_binomial_probit_long_format.html
-  jSDM_boral: jSDM_boral.html
-  jSDM_in_parallel: jSDM_in_parallel.html
-  jSDM_poisson_log: jSDM_poisson_log.html
-  jSDM_with_traits: jSDM_with_traits.html
-  proof: proof.html
-last_built: 2021-09-25T16:21Z
+articles: []
+last_built: 2021-09-28T18:00Z
 
