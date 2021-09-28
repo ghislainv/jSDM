@@ -156,11 +156,7 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_version("rcmdcheck", version="1.3.3")
-          remotes::install_version("lifecycle", version="1.0.0")
-          remotes::install_version("openssl", version="1.4.4")
-          install.packages(c("lazyeval","packrat","leaflet.providers","png","markdown","htmlwidgets","crosstalk","rex","textshaping","cachem","rsconnect","rticles","leaflet","covr","whisker","ragg","purrr","memoise","fs","downlit"))
-          remotes::install_version("pkgdown",version="1.6.0")
+          install.packages("pkgdown", dependencies=TRUE)
         shell: Rscript {0}
 
       - name: Install package
