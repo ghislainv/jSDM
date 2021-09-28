@@ -163,17 +163,19 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_version("rcmdcheck", version="1.3.3")
+          remotes::install_version("lifecycle", version="1.0.0")
+          remotes::install_version("openssl", version="1.4.4")
           remotes::install_version("pkgdown",version="1.6.0", dependencies = TRUE)
         shell: Rscript {0}
-              
+
+      - name: Install package
+        run: R CMD INSTALL .
+        
       - name: Session info
         run: |
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
-
-      - name: Install package
-        run: R CMD INSTALL .
           
       - name: Deploy package
         run: |
