@@ -676,7 +676,7 @@ plot_associations(R, env_effect=effects, top=20,
                   species_order="main env_effect")
 ```
 
-```{r plot-associations2, echo=FALSE, out.width=800, out.height=800, eval=TRUE}
+```{r plot-associations2, echo=FALSE, out.width=600, out.height=600, eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/plot-associations-1.png")
 knitr::include_graphics("Madagascar_files/figure-html/plot-associations-2.png")
 ```
@@ -941,7 +941,7 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-theta-future-1.png")
 
 ## Predictive maps of species richness (diversity $\alpha$)
 
-### Relative
+### Relative current species richness
 
 ```{r species-richness, eval=FALSE}
 theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
@@ -954,6 +954,8 @@ species_richness <- species_richness + sum(theta)
 writeRaster(species_richness,file=paste0("~/Documents/projet_BioSceneMada/Report/data/species_richness.tif"),
               format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
+
+### Relative future species richness
 
 ```{r species-richness-pred, echo=FALSE, eval=FALSE}
 theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_future_1.tif")
@@ -979,6 +981,8 @@ plot(species_richness, main=c("Estimated current species richness","Estimated fu
 ```{r plot-species-richness2, echo=FALSE, out.width = 700, eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-1.png")
 ```
+
+### Relative current and future species richness restricted to forest cover
 
 ```{r species-richness-deforest, eval=FALSE}
 library(glue)
@@ -1022,7 +1026,7 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-defo
 knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-deforest-2.png")
 ```
 
-### Absolute 
+### Absolute current species richness 
 
 ```{r abs-species-richness, eval=FALSE}
 # Absolute species richness 
@@ -1114,6 +1118,8 @@ Diversity $\beta$ is a measure of biodiversity that compares the diversity of sp
 
 In order to estimate this indicator, we proceed in the same way as in the @Allnutt2008 article by performing a standard PCA on the interpolated probabilities of occurrence of species for each pixel of the displayed image. We use the coordinates obtained for the first three axes of the PCA that reflect the composition of the species community likely to occupy the corresponding pixel. These coordinates are scaled $[0.255]$ so that they can be represented by red colour levels for the first axis, green for the second and blue for the third. The combination of these three colour levels determines the colouring of each pixel in the displayed $\beta$ diversity map. Therefore, a colour difference between two pixels indicates that the species present are not the same, while pixels of identical colour host communities of similar species. 
 
+### Current species turn-over
+
 ```{r diversity-beta, eval=FALSE}
 # Sample 10000 cells of presence probabilities raster
 npart <- 10
@@ -1181,29 +1187,18 @@ writeRaster(coords_RGB,file=paste0("~/Documents/projet_BioSceneMada/Report/data/
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
-```{r diversity-beta-pred, eval=FALSE}
-# Take same sample of 10000 cells than present presence probabilities raster
-npart <- 10
-samp_theta <- NULL
-for(n in 1:npart){
-  theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_future_", n, ".tif"))
-  samp_theta <- cbind(samp_theta, theta[samp_cells])
-}
-params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
-colnames(samp_theta) <- params_species$species
+### Future species turn-over
 
-# Dataframe to compute PCA on pixels dissimilarity 
-theta_df <- data.frame(samp_theta)
-# # Enlever NA 
-# data_theta <- theta_df[complete.cases(theta_df),]
-# Compute PCA on sampled theta
-library(ade4)
-pca_theta <- dudi.pca(theta_df, center=TRUE, scale=TRUE, nf=3, scannf = FALSE)
-save(pca_theta, file="~/Documents/projet_BioSceneMada/Report/data/PCA_theta_future.RData")
-str(pca_theta)
+```{r diversity-beta-pred, eval=FALSE}
+npart <- 10
+# load results of PCA on present probabilities of presences 
+load(file="~/Documents/projet_BioSceneMada/Report/data/PCA_theta.RData")
+params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_future_", 1, ".tif"))
 
 # Perform projections of PCA results on all raster's rows
 # Coordinates on the 3 axes retained in the PCA
+library(ade4)
 coords <- theta[[c(1,2,3)]]
 names(coords) <- make.names(colnames(pca_theta$li))
 values(coords) <- 0 
@@ -1245,6 +1240,7 @@ writeRaster(coords_RGB,file=paste0("~/Documents/projet_BioSceneMada/Report/data/
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
+### Current and future species turn over restricted to forest cover
 ```{r species-turnover-deforest, eval=FALSE}
 library(glue)
 # raster of Madagascar's forest cover in 2000
@@ -1299,3 +1295,4 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-diversity-beta-2.png"
 
 # Evolution of biodiversity in Madagascar under climate change 
 
+# References
