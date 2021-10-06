@@ -55,6 +55,13 @@ The inference method is able to handle only one visit by site with a **probit** 
 
 This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
 
+Using this model we can compute the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ from the covariance in the latent variables such as : 
+ $$\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
+ \end{cases}$$, then we compute correlations from covariances :
+  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
 ## Poisson model for abundance data
 
 Referring to the models used in the articles [@Hui2016], we define the following model to account for species abundances on all sites. 
@@ -603,7 +610,7 @@ library(jSDM)
 T1<-Sys.time() 
 mod_jSDM_sim <- jSDM_binomial_probit(
   # Chains
-  burnin=5000, mcmc=10000, thin=10,
+  burnin=10000, mcmc=5000, thin=5,
   # Response variable
   presence_data=Y, 
   # Explanatory variables 
@@ -984,6 +991,7 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_Hmsc_sim, T_Hmsc_sim, De
 ## Compilation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
+
 load("jSDM_Hmsc_files/jSDM-Hmsc-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time Hmsc (secondes)","Compilation time jSDM (secondes)", "Deviance Hmsc", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
@@ -1018,6 +1026,7 @@ kable(result)%>%
 Computed for the probabilities of presences $\theta_{ij}$ on the simulated data-set.
 
 ```{r RMSE, eval=TRUE, echo=FALSE}
+
 result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("Hmsc","jSDM")
 result$Hmsc <- RMSE_Hmsc_sim
@@ -1034,7 +1043,7 @@ kable(result, digits=3) %>%
 
 ```{r jSDM-Hmsc-simulation, echo=FALSE}
 np <- ncol(X)
-
+print(paste(nrow(Y),"sites and ",ncol(Y)," species"),quote = FALSE)
 # species fixed effect beta
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_sim, parName='Beta')$mean)
 jSDM_beta <- matrix(0,nsp,np)
@@ -1072,6 +1081,31 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual Covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_sim, start=1)
+n.mcmc <- mod_Hmsc_sim$samples
+nsp <- mod_Hmsc_sim$ns
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_sim)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_sim)$cov.mean
+Sigma.target <- t(lambda.target) %*% lambda.target + diag(nsp)
+RMSE_Sigma_jSDM <- sqrt(sum((Sigma.target-jSDM_Sigma)^2)/(nsp*nsp))
+RMSE_Sigma_Hmsc <- sqrt(sum((Sigma.target-Hmsc_Sigma)^2)/(nsp*nsp))
+par(mfrow=c(1,1))
+plot(Sigma.target,Hmsc_Sigma, col='blue',main=expression(paste("Residual covariance matrix ",Sigma)), xlab="obs", ylab="fitted")
+points(Sigma.target,jSDM_Sigma, col=scales::alpha('black',alpha = 0.6))
+legend("topleft",pch="o",bty="n",
+       c(paste("fitted by jSDM, RMSE: ",round(RMSE_Sigma_jSDM,2)),
+         paste("fitted by Hmsc, RMSE: ", round(RMSE_Sigma_Hmsc,2))),
+       col=c("black","blue"))
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(probit_theta_latent_sim, mod_jSDM_sim$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
@@ -1082,6 +1116,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-4.png")
 ```
 
 ### Mosquitos dataset
@@ -1131,6 +1166,22 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Mosquitos, start=1)
+n.mcmc <- mod_Hmsc_Mosquitos$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Mosquitos)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Mosquitos)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(probit_theta_latent_Mosquitos, mod_jSDM_Mosquitos$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
@@ -1142,6 +1193,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-4.png")
 ```
 
 ### Eucalypts dataset
@@ -1192,6 +1244,22 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Eucalypts, start=1)
+n.mcmc <- mod_Hmsc_Eucalypts$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Eucalypts)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Eucalypts)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(probit_theta_latent_Eucalypts, mod_jSDM_Eucalypts$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
@@ -1202,6 +1270,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-4.png")
 ```
 
 ### Frogs dataset
@@ -1250,6 +1319,22 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Frogs, start=1)
+n.mcmc <- mod_Hmsc_Frogs$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Frogs)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Frogs)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(probit_theta_latent_Frogs, mod_jSDM_Frogs$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
@@ -1260,6 +1345,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-4.png")
 ```
 
 ### Fungi dataset
@@ -1318,6 +1404,22 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Fungi, start=1)
+n.mcmc <- mod_Hmsc_Fungi$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Fungi)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Fungi)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(probit_theta_latent_Fungi, mod_jSDM_Fungi$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
@@ -1329,6 +1431,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-4.png")
 ```
 
 ### Birds dataset
@@ -1373,6 +1476,22 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Birds, start=1)
+n.mcmc <- mod_Hmsc_Birds$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Birds)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Birds)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(c(probit_theta_latent_Birds), mod_jSDM_Birds$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="probit(theta)")
@@ -1384,6 +1503,7 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-4.png")
 ```
 
 ### Mites dataset
@@ -1431,6 +1551,23 @@ abline(a=0,b=1,col='red')
 plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
+# Residual covariance Matrix
+codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_Mites, start=1)
+n.mcmc <- mod_Hmsc_Mites$samples
+Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
+for(t in 1:n.mcmc) { 
+  lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.cov.arr[t,] <- as.vector(Tau.mat) 
+}
+Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
+#Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Mites)[[1]]$mean
+jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Mites)$cov.mean
+par(mfrow=c(1,1))
+plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+abline(a=0,b=1, col='red')
+
+
 # Predictions 
 par(mfrow=c(1,1))
 plot(log_theta_latent_Mites, mod_jSDM_Mites$log_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="log(theta)")
@@ -1442,5 +1579,6 @@ abline(a=0,b=1,col='red')
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png")
 knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png")
+knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-4.png")
 ```
 
