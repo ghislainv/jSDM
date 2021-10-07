@@ -133,6 +133,12 @@
 <span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span>. Also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>.</li>
 </ul>
 <p>This model is equivalent to a multivariate GLMM <span class="math inline">\(\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}\)</span>, where <span class="math inline">\(u_{ij} \sim \mathcal{N}(0, \Sigma)\)</span> with the constraint that the variance-covariance matrix <span class="math inline">\(\Sigma = \Lambda \Lambda^{\prime}\)</span>, where <span class="math inline">\(\Lambda\)</span> is the full matrix of factor loadings, with the <span class="math inline">\(\lambda_j\)</span> as its columns.</p>
+<p>Using this model we can compute the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> from the covariance in the latent variables such as :
+<span class="math display">\[\Sigma_{ij} = \begin{cases}
+ \lambda_i .\lambda_j^T &amp; \text{ if } i \neq j \\
+  \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
+ \end{cases}\]</span>, then we compute correlations from covariances :
+<span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 </div>
 <div id="poisson-model-for-abundance-data" class="section level2">
 <h2 class="hasAnchor">
@@ -872,7 +878,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="va">T1</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> 
 <span class="va">mod_jSDM_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
-  burnin<span class="op">=</span><span class="fl">5000</span>, mcmc<span class="op">=</span><span class="fl">10000</span>, thin<span class="op">=</span><span class="fl">10</span>,
+  burnin<span class="op">=</span><span class="fl">10000</span>, mcmc<span class="op">=</span><span class="fl">5000</span>, thin<span class="op">=</span><span class="fl">5</span>,
   <span class="co"># Response variable</span>
   presence_data<span class="op">=</span><span class="va">Y</span>, 
   <span class="co"># Explanatory variables </span>
@@ -1234,7 +1240,7 @@ Compilation time Hmsc (secondes)
 Compilation time jSDM (secondes)
 </td>
 <td style="text-align:left;">
-177
+87
 </td>
 <td style="text-align:left;">
 20
@@ -1286,7 +1292,7 @@ Deviance Hmsc
 Deviance jSDM
 </td>
 <td style="text-align:left;">
-15191
+15193
 </td>
 <td style="text-align:left;">
 1266
@@ -1370,37 +1376,37 @@ RMSE
 <div id="simulated-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulated-dataset-2" class="anchor"></a><span class="header-section-number">5.3.1</span> Simulated dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="mosquitos-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mosquitos-dataset-2" class="anchor"></a><span class="header-section-number">5.3.2</span> Mosquitos dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="eucalypts-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#eucalypts-dataset-2" class="anchor"></a><span class="header-section-number">5.3.3</span> Eucalypts dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="frogs-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#frogs-dataset-2" class="anchor"></a><span class="header-section-number">5.3.4</span> Frogs dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="fungi-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fungi-dataset-2" class="anchor"></a><span class="header-section-number">5.3.5</span> Fungi dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="birds-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#birds-dataset-2" class="anchor"></a><span class="header-section-number">5.3.6</span> Birds dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
 <div id="mites-dataset-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mites-dataset-2" class="anchor"></a><span class="header-section-number">5.3.7</span> Mites dataset</h3>
-<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-4.png" width="800" style="display: block; margin: auto;"></p>
 <div id="refs" class="references">
 <div id="ref-Borcard1994">
 <p>Borcard, D. &amp; Legendre, P. (1994) Environmental control and spatial structure in ecological communities: An example using oribatid mites (Acari, Oribatei). <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.</p>
