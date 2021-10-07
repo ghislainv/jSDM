@@ -38,7 +38,7 @@ We want to identify biodiversity refuge zones in Madagascar
 
 ```{r load-librairies, echo=FALSE}
 #library(readr)
-library(dplyr)
+#library(dplyr)
 library(raster)
 library(rgdal)
 library(jSDM)

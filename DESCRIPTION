@@ -7,7 +7,7 @@ Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
-Suggests: knitr, kableExtra, raster, sp, rmarkdown, bookdown,
+Suggests: knitr, kableExtra, raster, sp, rgdal, dplyr, rmarkdown, bookdown,
           testthat, boral, Hmsc, BayesComm, doParallel, foreach, snow, snowfall
 Authors@R: c(
   person("Jeanne", "Clément", role=c("aut"),
