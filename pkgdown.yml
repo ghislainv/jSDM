@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   Code_of_conduct: Code_of_conduct.html
   Contributing: Contributing.html
+  Madagascar: Madagascar.html
   SDM_JSDM: SDM_JSDM.html
   jSDM: jSDM.html
   jSDM_Hmsc: jSDM_Hmsc.html
@@ -15,5 +16,5 @@ articles:
   jSDM_poisson_log: jSDM_poisson_log.html
   jSDM_with_traits: jSDM_with_traits.html
   proof: proof.html
-last_built: 2021-10-07T08:44Z
+last_built: 2021-10-07T14:35Z
 
