@@ -867,7 +867,7 @@ for (n in 1:npart){
 }
 ```
 
-```{r plot-theta, eval=TRUE}
+```{r plot-theta, eval=FALSE}
 params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
 npart <- 10
 first.species <- seq(1,nsp,by=floor(nsp/npart)+1)
