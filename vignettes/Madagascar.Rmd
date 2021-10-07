@@ -37,7 +37,7 @@ We want to identify biodiversity refuge zones in Madagascar
 # Load librairies
 
 ```{r load-librairies, echo=FALSE}
-library(readr)
+#library(readr)
 library(dplyr)
 library(raster)
 library(rgdal)
@@ -54,7 +54,7 @@ We use these forest inventories to calculate a matrix indicating the presence by
 
 ```{r forest-inventory, eval=FALSE}
 # forest inventory
-trees <- read_csv("~/Documents/projet_BioSceneMada/forest_inventory_Madagascar.csv")
+trees <- read.csv("~/Documents/projet_BioSceneMada/forest_inventory_Madagascar.csv")
 trees <- trees[-which(is.na(trees$sp)),]
 trees$plot <- as.character(trees$plot)
 plots <- unique(trees$plot)
@@ -1269,7 +1269,7 @@ writeRaster(species_turnover_future_deforest,"~/Documents/projet_BioSceneMada/Re
 ```
 
 
-```{r plot-diversity-beta, eval=TRUE}
+```{r plot-diversity-beta, eval=FALSE}
 # Representation of species turn over 
 species_turnover_current <- stack("~/Documents/projet_BioSceneMada/Report/data/species_turnover.tif")
 species_turnover_future <- stack("~/Documents/projet_BioSceneMada/Report/data/species_turnover_future.tif")
