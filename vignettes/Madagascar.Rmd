@@ -40,7 +40,7 @@ We want to identify biodiversity refuge zones in Madagascar
 #library(readr)
 #library(dplyr)
 library(raster)
-library(rgdal)
+#library(rgdal)
 library(jSDM)
 library(kableExtra)
 ```
