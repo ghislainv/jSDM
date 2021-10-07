@@ -158,7 +158,7 @@ knitr::include_graphics("Madagascar_files/figure-html/current-environmental-vari
 
 The values of these climate variables corresponding to the coordinates of the inventory plots are extracted and scaled to obtain the following dataset where coordinates of the sites will then be used for spatial interpolation and to spatially represent the results.
 
-```{r current-environmental-data, echo=FALSE, out.width=800, eval=TRUE}
+```{r current-environmental-data, echo=FALSE, out.width=800, eval=FALSE}
 load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
 kable(head(scaled_data_clim2), digits=3) %>%
   kable_styling(bootstrap_options = "striped", 
@@ -322,7 +322,7 @@ T_all <- difftime(T2,T1)
 save(mod_all,T_all,file="~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
 ```
 
-```{r fit-JSDM-Mada-table, echo=FALSE, include=TRUE}
+```{r fit-JSDM-Mada-table, echo=FALSE, include=TRUE, eval=FALSE}
 load("~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
 nsp<-ncol(mod_all$model_spec$presence_data)
 nplot<-nrow(mod_all$model_spec$presence_data)
@@ -333,6 +333,7 @@ colnames(results)<- c("Number of species", "Number of sites", "Number of observa
 knitr::kable(results, row.names=F, digits=1, booktabs=TRUE, align = 'c') %>%
 		kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE)
 ```
+
 
 The MCMC algorithm is used to obtain draws from the posterior distribution of the parameters. We use as estimator for each parameter the mean of the $N_{samp}$ values estimated in corresponding MCMC chain and we save the estimated parameters in .csv format.
 
@@ -648,8 +649,7 @@ R <- matrix(apply(Tau.cor.arr,2,mean),n.species,byrow=F)
 write.csv(R, file ="~/Documents/projet_BioSceneMada/Report/data/R.csv", row.names = F)
 ```
 
-```{r plot-associations, echo=TRUE, eval=TRUE, fig.dim=c(6,6)}
-
+```{r plot-associations, echo=TRUE, eval=FALSE, fig.dim=c(6,6)}
 # Forest inventory 
 load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
 # Species parameters 
