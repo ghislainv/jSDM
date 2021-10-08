@@ -39,11 +39,11 @@ knitr::opts_chunk$set(
 
 We consider a latent variable model (LVM) to account for species co-occurrence [@Warton2015] on all sites . 
 
-$$y_{ij} \sim \mathcal{B}iniomial(t_i, \theta_{ij})$$
+$$y_{ij} \sim \mathcal{B}inomial(t_i, \theta_{ij})$$
   
 $$ \mathrm{g}(\theta_{ij}) = X_i\beta_j + W_i\lambda_j $$
   
-- $\theta_{ij}: occurence probability of the species $j$ on site $i$. 
+- $\theta_{ij}$: occurence probability of the species $j$ on site $i$. 
 - $t_i$: number of visits at site $i$ 
 - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 
