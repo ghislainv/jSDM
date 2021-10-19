@@ -138,6 +138,7 @@ jobs:
         run: |
           sudo apt-get install r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
+          sudo Rscript -e "install.packages('raster',repos='http://cran.us.r-project.org')"
 
       - name: Query dependencies
         run: |
@@ -150,8 +151,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-3-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-3-
 
       - name: Install dependencies
         run: |
