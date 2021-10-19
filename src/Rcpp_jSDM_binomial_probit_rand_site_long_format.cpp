@@ -150,7 +150,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_rand_site_long_format(
         small_v += arma::as_scalar(Z_run.row(rowId_site[i].at(n))-X.row(rowId_site[i].at(n))*beta_run.col(Id_sp(rowId_site[i].at(n))));
       }
       // big_V
-      double big_V = 1/(1/V_alpha_run + nobs_i);
+      double big_V = 1.0/(1.0/V_alpha_run + nobs_i);
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
