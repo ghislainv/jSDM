@@ -136,7 +136,7 @@ jobs:
       
       - name: Install debian packages
         run: |
-          sudo apt-get install r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags
+          sudo apt-get install r-base-dev devscripts libicu-dev language-pack-pl libharfbuzz-dev libfribidi-dev libgsl-dev jags libgdal-dev
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo Rscript -e "install.packages('terra',repos='http://cran.us.r-project.org')"
           sudo Rscript -e "install.packages('raster',repos='http://cran.us.r-project.org')"
