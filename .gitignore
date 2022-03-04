@@ -9,3 +9,4 @@ src/*.dll
 jSDM.Rproj
 docs/*
 vignettes/grassdata 
+cran-comments.md

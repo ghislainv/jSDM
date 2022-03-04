@@ -9,7 +9,7 @@
 ^NEWS\.Rmd$
 ^.git$
 ^.gitignore$
-
+^cran-comments\.md
 # pkgdown
 ^docs$
 ^logos$
