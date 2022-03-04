@@ -49,6 +49,8 @@ articles:
   - '`jSDM_poisson_log`'
   - '`jSDM_in_parallel`'
   - '`jSDM_with_traits`'
+  - '`Madagascar`'
+  
 - title: Comparison
   navbar: Comparison
   contents:
