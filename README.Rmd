@@ -58,6 +58,7 @@ The package includes the following functions to fit various species distribution
 |:---------------------------------------|:-----------------:|
 `jSDM_binomial_logit`                    | presence-absence |  
 | `jSDM_binomial_probit` | presence-absence |  
+| `jSDM_binomial_probit_sp_constrained` | presence-absence |  
 | `jSDM_binomial_probit_long_format`        | presence-absence |   
 | `jSDM_poisson_log` | abundance | 
 

@@ -10,8 +10,8 @@ Status](https://www.r-pkg.org/badges/version/jSDM)](https://cran.r-project.org/p
 [![Downloads](https://cranlogs.r-pkg.org/badges/jSDM)](https://cran.r-project.org/package=jSDM)
 
 Package for fitting joint species distribution models (JSDM) in a
-hierarchical Bayesian framework (Warton *et al.*
-[2015](#ref-Warton2015)). The Gibbs sampler is written in C++. It uses
+hierarchical Bayesian framework ([Warton *et al.*
+2015](#ref-Warton2015)). The Gibbs sampler is written in C++. It uses
 [Rcpp](https://cran.r-project.org/package=Rcpp),
 [Armadillo](http://arma.sourceforge.net/docs.html) and
 [GSL](https://www.gnu.org/software/gsl/) to maximize computation
@@ -43,22 +43,22 @@ devtools::install_github("ghislainv/jSDM")
 ```
 
 Or the binary release of **jSDM**’s development version compiled with R
-version 4.0.3 can be found here
-:
+version 4.0.5 can be found here :
 
-[jSDM\_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).
+[jSDM_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).
 
 ## Available functions
 
 The package includes the following functions to fit various species
 distribution models :
 
-| function                           |    data type     |
-| :--------------------------------- | :--------------: |
-| `jSDM_binomial_logit`              | presence-absence |
-| `jSDM_binomial_probit`             | presence-absence |
-| `jSDM_binomial_probit_long_format` | presence-absence |
-| `jSDM_poisson_log`                 |    abundance     |
+| function                              |    data type     |
+|:--------------------------------------|:----------------:|
+| `jSDM_binomial_logit`                 | presence-absence |
+| `jSDM_binomial_probit`                | presence-absence |
+| `jSDM_binomial_probit_sp_constrained` | presence-absence |
+| `jSDM_binomial_probit_long_format`    | presence-absence |
+| `jSDM_poisson_log`                    |    abundance     |
 
 ## Contributing
 
@@ -71,13 +71,13 @@ Conduct](articles/Code_of_conduct.html).
 
 ## References
 
-<div id="refs" class="references">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-Warton2015">
+<div id="ref-Warton2015" class="csl-entry">
 
 Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen,
-S., Walker, S.C. & Hui, F.K. (2015) So many variables: Joint modeling in
-community ecology. *Trends in Ecology & Evolution*, **30**, 766–779.
+S., Walker, S.C. & Hui, F.K.C. (2015) So many variables: Joint modeling
+in community ecology. *Trends in Ecology & Evolution*, **30**, 766–779.
 
 </div>
 

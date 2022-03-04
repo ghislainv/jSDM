@@ -73,9 +73,9 @@ The package includes the following functions to fit various species distribution
 
 * `jSDM_binomial_probit_sp_constrained()` : 
 
-This function allows to fit the same models than the function `jSDM_binomial_probit` except for models not including latent variables, indeed `n_latent` must be greater than zero in this function. 
-It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the $\Lambda$ matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
-This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the $\hat{R}$s (@Gelman1992) computed from the factor loadings $\lambda$ of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+  This function allows to fit the same models than the function `jSDM_binomial_probit` except for models not including latent variables, indeed `n_latent` must be greater than zero in this function. 
+  It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the $\Lambda$ matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
+  This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the $\hat{R}$s (@Gelman1992) computed from the factor loadings $\lambda$ of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
 
 * `jSDM_binomial_logit()` : 
 
