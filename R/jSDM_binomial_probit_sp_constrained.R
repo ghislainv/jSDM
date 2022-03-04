@@ -165,14 +165,14 @@
 #' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 75
+#' nsite <- 50
 #' 
 #' #= Set seed for repeatability
 #' seed <- 1234
 #' set.seed(seed)
 #' 
 #' #= Number of species
-#' nsp<- 15
+#' nsp <- 10
 #' 
 #' #= Number of latent variables
 #' n_latent <- 2
