@@ -5,9 +5,9 @@ output:
   #base_format: rmarkdown::html_vignette
   #highlight: tango
   number_sections: true
-toc: true
-toc_float: true
-fig_caption: yes
+  toc: true
+  toc_float: true
+  fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
 biblio-style: bib/jae.bst
@@ -63,7 +63,7 @@ We generate presence-absence data following this generalized multivariate linear
 library(jSDM)
 ```
 
-```{r simulated-data}
+```{r simulated-data, eval=TRUE}
 #==================
 #== Data simulation
 #= Number of sites
@@ -85,21 +85,18 @@ x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 np <- ncol(X)
 #= Latent variables W
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-data <- cbind (X,W)
+W <- matrix(rnorm(nsite*n_latent,0,1), nrow=nsite, ncol=n_latent)
 #= Fixed species effect beta 
 beta.target <- t(matrix(runif(nsp*ncol(X),-1,1),
                         byrow=TRUE, nrow=nsp))
 #= Factor loading lambda  
-l.zero <- 0
-l.diag <- runif(2,0,1)
-l.other <- runif(nsp*n_latent-3,-1,1)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,
-                            l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
+mat <- t(matrix(runif(nsp*n_latent,-1,1), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(n_latent,0,1)
+lambda.target <- matrix(0,n_latent,nsp)
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 #= Variance of random site effect 
 V_alpha.target <- 0.5
-#= Random site effect 
+#= Random site effect alpha
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 #= probit(theta)
 probit_theta <- X%*%beta.target + W%*%lambda.target + alpha.target
@@ -116,16 +113,11 @@ for (i in 1:nsite){
 }
 
 colnames(Y) <- paste0("Species", 1:nsp)
-save(Y, Z_true, alpha.target, V_alpha.target, beta.target, probit_theta
-     ,X, lambda.target, np , nsite, nsp, n_latent, W
-     ,file="jSDM_in_parallel_files/sim_data.rda")
 ```
 
 We look at the number of observations per site.
 
 ```{r presence-data, eval=TRUE}
-
-load("jSDM_in_parallel_files/sim_data.rda")
 head(Y)
 # Number of observations per site
 nobs_site <- apply(Y, 1, sum)
@@ -320,17 +312,46 @@ cat("content of each chain :", str_mod,"\n")
 
 # Evaluation of MCMC convergence 
 
-We evaluate the convergence of the MCMC output in which four parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
+## The Gelman–Rubin convergence diagnostic
+
+### Definition 
+
+The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
+
+Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$. Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
+
+The between-chains and within-chain variances are given by
+$$B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2$$
+$$W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m$$
+
+ Under certain stationarity conditions, the pooled variance : 
+ 
+ $$\hat{V}=\frac{N-1}{N}W + \frac{M+1}{MN}B$$
+ 
+is an unbiased estimator of the marginal posterior variance of $\theta$ (@Gelman1992). The potential scale reduction factor (PSRF) is defined to be the ratio of $\hat{𝑉}$ and $𝑊$. If the $𝑀$ chains have converged to the target posterior distribution, then PSRF should be close to 1. The article @Brooks1998 corrected the original PSRF by accounting for sampling variability as follows:
+$$ \hat{R}= \sqrt{\frac{\hat{d}+3}{\hat{d}+1}\frac{\hat{V}}{W}}$$
+
+where $\hat{d}$  is the degrees of freedom estimate of a $𝑡$ distribution.
+
+PSRF estimates the potential decrease in the between-chains variability $𝐵$ with respect to the within-chain variability $𝑊$. If $\hat{R}$ is large, then longer simulation sequences are expected to either decrease $𝐵$ or increase $𝑊$ because the simulations have not yet explored the full posterior distribution. As the article @Brooks1998 have suggested, if $\hat{R} < 1.2$ for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition $\hat{R} < 1.1$.
+
+### Compute $\hat{R}$  
+
+We evaluate the convergence of the MCMC output in which four parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
 Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
-If the convergence diagnostic gives values of potential scale reduction factor or psrf
-substantially above 1, its indicates lack of convergence.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or $\hat{R}$ substantially above 1, its indicates lack of convergence.
+
 
 ```{r MCMC-convergence-randsite-lv, echo=TRUE}
+mod_probit <- c(mod_probit_1,mod_probit_2)
+burnin <- mod_probit[[1]]$model_spec$burnin
+ngibbs <- burnin + mod_probit[[1]]$model_spec$mcmc
+thin <-  mod_probit[[1]]$model_spec$thin
 require(coda)
 arr2mcmc <- function(x) {
-  return(mcmc(as.data.frame(x)))
+  return(mcmc(as.data.frame(x),
+              start=burnin+1 , end=ngibbs, thin=thin))
 }
-mod_probit <- c(mod_probit_1,mod_probit_2)
 # MCMC lists
 mcmc_list_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.alpha"), arr2mcmc))
 mcmc_list_V_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.V_alpha"), arr2mcmc))
@@ -338,31 +359,49 @@ mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.latent"), arr2mcmc
 mcmc_list_centered_lv <- mcmc.list(lapply(lapply(mcmc_list_lv, scale, scale=FALSE),arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(mcmc_list_param[,grep("lambda", grep("sp_1.lambda_2", colnames(mcmc_list_param[[1]]), invert=TRUE, value=TRUE),value=TRUE)], scale, scale=FALSE),arr2mcmc))
+mcmc_list_lambda <- mcmc.list(lapply(mcmc_list_param[,grep("lambda", colnames(mcmc_list_param[[1]]), value=TRUE)], arr2mcmc))
+mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(mcmc_list_lambda, scale, scale=FALSE),arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 nsamp <- nrow(mcmc_list_alpha[[1]])
 # psrf gelman indice 
-psrf_alpha <- gelman.diag(mcmc_list_alpha, transform=TRUE)$mpsrf
-#max(gelman.diag(mcmc_list_alpha, multivariate = FALSE)$psrf)
-psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf
-psrf_beta <- gelman.diag(mcmc_list_param[,grep("beta",colnames(mcmc_list_param[[1]]))])$mpsrf
-psrf_lambda <- gelman.diag(mcmc_list_centered_lambda)$mpsrf
-psrf_lv <- gelman.diag(mcmc_list_centered_lv)$mpsrf
+psrf_alpha <- mean(gelman.diag(mcmc_list_alpha,
+                               multivariate=FALSE)$psrf[,2])
+psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf[,2]
+psrf_beta <- mean(gelman.diag(mcmc_list_param[, grep("beta", colnames(mcmc_list_param[[1]]))],
+                              multivariate=FALSE)$psrf[,2])
+psrf_lambda <- mean(gelman.diag(mcmc_list_lambda,
+                                multivariate=FALSE)$psrf[,2], na.rm=TRUE)
+psrf_lv <- mean(gelman.diag(mcmc_list_lv,
+                            multivariate=FALSE)$psrf[,2 ])
+psrf_lambda_centered <- mean(gelman.diag(mcmc_list_centered_lambda,
+                                multivariate=FALSE)$psrf[,2], na.rm=TRUE)
+psrf_lv_centered <- mean(gelman.diag(mcmc_list_centered_lv,
+                            multivariate=FALSE)$psrf[,2 ])
 save(psrf_lambda, psrf_lv, psrf_alpha, psrf_V_alpha, psrf_beta,
-     file="jSDM_in_parallel_files/psrf.rda")
+     file="jSDM_in_parallel_cache/psrf.rda")
+
+Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta, psrf_lambda, psrf_lambda_centered, psrf_lv, psrf_lv_centered),
+                   Variable=c("alpha", "Valpha", "beta", "lambda", "centered lambda", "W", "centered W"))
+# Barplot
+library(ggplot2)
+ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
+  ggtitle("Averages of Rhat obtained for each type of parameter") +
+  theme(plot.title = element_text(hjust = 0.5, size=14)) +
+  geom_bar(fill="skyblue", stat = "identity") +
+  geom_text(aes(label=round(Rhat,3)), vjust=0, hjust=-0.1) +
+  geom_hline(yintercept=1, color='red') +
+  ylim(0, max(Rhat$Rhat)+0.2) +
+  coord_flip() 
 ```
 
-```{r psrf, echo=FALSE, eval=TRUE}
-
-load("jSDM_in_parallel_files/psrf.rda")
-# display gelman indice :  potential scale reduction factor or psrf
-cat("psrf centered latent variables:", psrf_lv, "\n")
-cat("psrf centered lambda:", psrf_lambda, "\n")
-cat("psrf alpha:", psrf_alpha, "\n")
-cat("psrf V_alpha:", psrf_V_alpha[1], "\n")
-cat("psrf beta:", psrf_beta, "\n")
+```{r Rhat-plot, echo=FALSE, out.width=700, eval=TRUE}
+knitr::include_graphics("jSDM_in_parallel_files/figure-html/MCMC-convergence-randsite-lv-1.png")
 ```
 
+We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$, the site effects $\alpha$ and their variance $V_{alpha}$; we can therefore be fairly confident that convergence has been achieved for these parameters.  
+
+However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are far from 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to the identifiability issue between $W$ and $lambda$. 
+Consequently, if we center the latent variables $W$ and  factor loadings $\lambda$  estimated before computing the $\hat{R}$, we get values well closer to 1, we can therefore consider that convergence has been reached for these parameters. 
 
 # Representation of results
 
