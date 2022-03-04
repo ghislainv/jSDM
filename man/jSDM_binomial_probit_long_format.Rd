@@ -5,13 +5,13 @@
 \title{Binomial probit regression on long format data}
 \usage{
 jSDM_binomial_probit_long_format(
+  burnin = 5000,
+  mcmc = 10000,
+  thin = 10,
   data,
   site_formula,
   n_latent = 0,
   site_effect = "none",
-  burnin = 5000,
-  mcmc = 10000,
-  thin = 10,
   alpha_start = 0,
   gamma_start = 0,
   beta_start = 0,
@@ -31,6 +31,12 @@ jSDM_binomial_probit_long_format(
 )
 }
 \arguments{
+\item{burnin}{The number of burnin iterations for the sampler.}
+
+\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
+
+\item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
+
 \item{data}{A \code{data.frame} with at least the following columns : \tabular{ll}{
 \code{Y} \tab \eqn{n_{obs}}{n_obs}-length vector indicating the presence by a 1 (or absence by a 0), \cr
 \tab of the species observed during each visit of the sites.\cr 
@@ -38,22 +44,16 @@ jSDM_binomial_probit_long_format(
 \tab  (sites can be visited several times).\cr
 \code{species} \tab numeric or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed, \cr 
 \tab (species may not have been recorded at all sites).\cr 
-\code{x1,...,xp} \tab columns of explicative variables for the suitability process of the model.\cr}}
+\code{x1,...,xp} \tab columns of explanatory variables for the suitability process of the model.\cr}}
 
 \item{site_formula}{A one-sided formula with the form '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{d} terms related to \eqn{\gamma} parameters and \eqn{p} terms related to species effects \eqn{\beta},
-specifying the explicative variables for the suitability process of the model as formula used by the \code{\link[stats]{lm}} function.}
+specifying the explanatory variables for the suitability process of the model as formula used by the \code{\link[stats]{lm}} function.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
 \item{site_effect}{A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to \code{"none"}.}
-
-\item{burnin}{The number of burnin iterations for the sampler.}
-
-\item{mcmc}{The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.}
-
-\item{thin}{The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.}
 
 \item{alpha_start}{Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.}
@@ -69,13 +69,13 @@ If \code{lambda_start} takes a scalar value, then that value will serve for all 
 If \code{W_start} takes a scalar value, then that value will serve for all of the \eqn{W_{il}}{W_il} with \eqn{i=1,\ldots,n_{site}}{l=1,...,n_site} and \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}.}
 
 \item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-Must be a stricly positive scalar, ignored if \code{site_effect="none"}.}
+Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
-Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
+Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
 
 \item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
-Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.}
+Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.}
 
 \item{mu_gamma}{Means of the Normal priors for the \eqn{\gamma} parameters of the suitability process. \code{mu_gamma} must be either a scalar or a \eqn{d}-length vector.
 If \code{mu_gamma} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\gamma} parameters. The default value is set to 0 for an uninformative prior.}
@@ -187,7 +187,7 @@ V_alpha.target <- 0.5
 alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
 ## probit_theta
 probit_theta <- c(X \%*\% beta.target) + c(W \%*\% lambda.target) +
-                as.matrix(D) \%*\% gamma.target + rep(alpha.target,nsp)
+                as.matrix(D) \%*\% gamma.target + rep(alpha.target, nsp)
 # Supplementary observation (each site have been visited twice)
 # Environmental variables at the time of the second visit
 x1_supObs <- rnorm(nsite,0,1)
@@ -256,12 +256,12 @@ mean_beta <- matrix(0,nsp,ncol(X))
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
-  mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_beta[j,] <- apply(mod$mcmc.sp[[j]]
                          [,1:ncol(X)], 2, mean)
   for (p in 1:ncol(X)){
-    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,p])
-    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,p],
-      main = paste0(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[p],"_sp",j))
+    coda::traceplot(mod$mcmc.sp[[j]][,p])
+    coda::densplot(mod$mcmc.sp[[j]][,p],
+      main = paste0(colnames(mod$mcmc.sp[[j]])[p],"_sp",j))
     abline(v=beta.target[p,j],col='red')
   }
 }
@@ -274,12 +274,12 @@ mean_lambda <- matrix(0,nsp,n_latent)
 pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
-  mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_lambda[j,] <- apply(mod$mcmc.sp[[j]]
                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
   for (l in 1:n_latent) {
-    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
-    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l],
-                   main=paste0(colnames(mod$mcmc.sp[[paste0("sp_",j)]])[ncol(X)+l], "_sp",j))
+    coda::traceplot(mod$mcmc.sp[[j]][,ncol(X)+l])
+    coda::densplot(mod$mcmc.sp[[j]][,ncol(X)+l],
+                   main=paste0(colnames(mod$mcmc.sp[[j]])[ncol(X)+l], "_sp",j))
     abline(v=lambda.target[l,j],col='red')
   }
 }

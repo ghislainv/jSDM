@@ -126,7 +126,7 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   }
   n.mcmc <- nrow(mod$mcmc.sp[[1]])
   
-  if (length(grep("beta",colnames(mod$mcmc.sp$sp_1))) == 0) {
+  if (length(grep("beta",colnames(mod$mcmc.sp[[1]]))) == 0) {
     stop("Cannot find MCMC sample corresponding to coefficients for X")
   }
   enviro_cor_mat <- enviro_cor_mat_cilower <- enviro_cor_mat_ciupper <- enviro_cov_mat <- matrix(0, n.species, n.species)
@@ -138,7 +138,7 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   
   for (t in 1:n.mcmc)
   {
-    beta <- sapply(mod$mcmc.sp, "[", t, grep("beta",colnames(mod$mcmc.sp$sp_1)))
+    beta <- sapply(mod$mcmc.sp, "[", t, grep("beta",colnames(mod$mcmc.sp[[1]])))
     enviro.linpreds <- as.matrix(X) %*% as.matrix(beta)
     all_enviro_cov_mat[t, , ] <- cov(enviro.linpreds)
     all_enviro_cor_mat[t, , ] <- cor(enviro.linpreds)

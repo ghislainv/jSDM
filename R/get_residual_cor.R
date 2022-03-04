@@ -100,7 +100,7 @@ get_residual_cor <- function(mod) {
   Tau.cor.arr <- matrix(NA,n.mcmc,n.species^2)
   
   for(t in 1:n.mcmc) { 
-    lv.coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("lambda",colnames(mod$mcmc.sp$sp_1))))
+    lv.coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("lambda",colnames(mod$mcmc.sp[[1]]))))
     Tau.mat <- lv.coefs%*%t(lv.coefs) + diag(n.species)
     Tau.arr[t,] <- as.vector(Tau.mat) 
     Tau.cor.mat <- cov2cor(Tau.mat)
