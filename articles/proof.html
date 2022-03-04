@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -62,13 +64,10 @@
 <li>
   <a href="../news/index.html">Change log</a>
 </li>
-<li>
-  <a></a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ghislainv/jSDM">
+  <a href="https://github.com/ghislainv/jSDM" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,36 +82,27 @@
 
       
 
-      </header><script src="proof_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="proof_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<script src="proof_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="proof_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="proof_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="proof_files/navigation-1.1/tabsets.js"></script><script src="proof_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Bayesian inference methods</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ghislainv/jSDM/blob/master/vignettes/proof.Rmd"><code>vignettes/proof.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ghislainv/jSDM/blob/HEAD/vignettes/proof.Rmd" class="external-link"><code>vignettes/proof.Rmd</code></a></small>
       <div class="hidden name"><code>proof.Rmd</code></div>
 
     </div>
 
     
     
-<div id="bernoulli-distribution-with-probit-link-function" class="section level1">
-<h1 class="hasAnchor">
-<a href="#bernoulli-distribution-with-probit-link-function" class="anchor"></a><span class="header-section-number">1</span> Bernoulli distribution with probit link function</h1>
-<div id="model-definition" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-definition" class="anchor"></a><span class="header-section-number">1.1</span> Model definition</h2>
+<div class="section level2">
+<h2 id="bernoulli-distribution-with-probit-link-function">
+<span class="header-section-number">1</span> Bernoulli distribution with probit link function<a class="anchor" aria-label="anchor" href="#bernoulli-distribution-with-probit-link-function"></a>
+</h2>
+<div class="section level3">
+<h3 id="model-definition">
+<span class="header-section-number">1.1</span> Model definition<a class="anchor" aria-label="anchor" href="#model-definition"></a>
+</h3>
 <p>According to the article <span class="citation">Albert &amp; Siddhartha (<a href="#ref-Albert1993" role="doc-biblioref">1993</a>)</span>, a possible model is to assume the existence of an underlying latent variable related to our observed binary variable using the following proposition :</p>
 <ul>
 <li>Proposition</li>
@@ -173,12 +163,14 @@ We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> 
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div id="conjugate-priors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#conjugate-priors" class="anchor"></a><span class="header-section-number">1.2</span> Conjugate priors</h2>
-<div id="fixed-species-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fixed-species-effects" class="anchor"></a><span class="header-section-number">1.2.1</span> Fixed species effects</h3>
+<div class="section level3">
+<h3 id="conjugate-priors">
+<span class="header-section-number">1.2</span> Conjugate priors<a class="anchor" aria-label="anchor" href="#conjugate-priors"></a>
+</h3>
+<div class="section level4">
+<h4 id="fixed-species-effects">
+<span class="header-section-number">1.2.1</span> Fixed species effects<a class="anchor" aria-label="anchor" href="#fixed-species-effects"></a>
+</h4>
 <ul>
 <li>Proposition</li>
 </ul>
@@ -210,9 +202,10 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 <!-- Actually, we use that proposition to estimate lambdas and betas in a single block. So, we consider $Z'_{ij} = X_i'\beta_j+ W_i'\lambda_j +\epsilon_{ij}$.  -->
 <p>Actually, we use that proposition to estimate betas, lambdas and gammas if species traits data are provided.</p>
 </div>
-<div id="random-site-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#random-site-effects" class="anchor"></a><span class="header-section-number">1.2.2</span> Random site effects</h3>
+<div class="section level4">
+<h4 id="random-site-effects">
+<span class="header-section-number">1.2.2</span> Random site effects<a class="anchor" aria-label="anchor" href="#random-site-effects"></a>
+</h4>
 <ul>
 <li>Proposition</li>
 </ul>
@@ -240,9 +233,10 @@ p(\theta \ | \ x) &amp; \propto  p(x \ | \ \theta) \ p(\theta) \\
 &amp; \propto \exp\left(-\frac{1}{2({\tau_0}^{-2}+\sigma^{-2})^{-1}}\left(\theta^2 -2\theta \frac{\mu_0{\tau_0}^{-2}+ x\sigma^{-2}}{{\tau_0}^{-2}+\sigma^{-2}}\right)\right)\\
 \end{aligned}\]</span></p>
 </div>
-<div id="random-site-effect-variance" class="section level3">
-<h3 class="hasAnchor">
-<a href="#random-site-effect-variance" class="anchor"></a><span class="header-section-number">1.2.3</span> Random site effect variance</h3>
+<div class="section level4">
+<h4 id="random-site-effect-variance">
+<span class="header-section-number">1.2.3</span> Random site effect variance<a class="anchor" aria-label="anchor" href="#random-site-effect-variance"></a>
+</h4>
 <ul>
 <li>Proposition</li>
 </ul>
@@ -267,9 +261,10 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 \end{aligned}\]</span></p>
 </div>
 </div>
-<div id="gibbs-sampler-principle" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gibbs-sampler-principle" class="anchor"></a><span class="header-section-number">1.3</span> Gibbs sampler principle</h2>
+<div class="section level3">
+<h3 id="gibbs-sampler-principle">
+<span class="header-section-number">1.3</span> Gibbs sampler principle<a class="anchor" aria-label="anchor" href="#gibbs-sampler-principle"></a>
+</h3>
 <p>In the Bayesian framework, Gibbs’ algorithm produces a realization of the parameter <span class="math inline">\(\theta=(\theta_),\ldots,\theta_m)\)</span> according to the <em>a posteriori</em> law <span class="math inline">\(\Pi(\theta \ | \ x)\)</span> as soon as we are able to express the conditional laws: <span class="math inline">\(\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)\)</span> for <span class="math inline">\(i =1,\ldots,m\)</span>.</p>
 <p><strong>Gibbs sampling</strong> consists of:</p>
 <ul>
@@ -287,9 +282,10 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 <p>For a sufficiently large number of iterations, the vector <span class="math inline">\(\theta\)</span> obtained can thus be considered as a realization of the joint <em>a posteriori</em> law <span class="math inline">\(\Pi(\theta \ | \ x)\)</span>.</p>
 <p>Consequently, the implementation of a Gibbs sampler requires the knowledge of the <em>a posteriori</em> distributions of each of the parameters conditionally to the other parameters of the model, which can be deduced from the conjugated priors formulas in the case of the probit model but are not explicitly expressible in the case where a logit or log link function is used.</p>
 </div>
-<div id="gibbs-sampler-using-conjuate-priors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gibbs-sampler-using-conjuate-priors" class="anchor"></a><span class="header-section-number">1.4</span> Gibbs sampler using conjuate priors</h2>
+<div class="section level3">
+<h3 id="gibbs-sampler-using-conjuate-priors">
+<span class="header-section-number">1.4</span> Gibbs sampler using conjuate priors<a class="anchor" aria-label="anchor" href="#gibbs-sampler-using-conjuate-priors"></a>
+</h3>
 <p>The algorithm used in <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to estimate the parameters of the probit model is therefore as follows:</p>
 <ul>
 <li>Define the constants <span class="math inline">\(N_{Gibbs}\)</span>, <span class="math inline">\(N_{burn}\)</span>, <span class="math inline">\(N_{thin}\)</span> such that <span class="math inline">\(N_{Gibbs}\)</span> corresponds to the number of iterations performed by the Gibbs sampler, <span class="math inline">\(N_{burn}\)</span> to the number of iterations required for burn-in or warm-up time and <span class="math inline">\(N_{samp} = \dfrac{N_{Gibbs}-N_{burn}}{N_{thin}}\)</span> to the number of estimated values retained for each parameter. Indeed, the estimated parameters are recorded at certain iterations, in order to obtain a sample of <span class="math inline">\(N_{samp}\)</span> values distributed according to the <span class="math inline">\(a \ posteriori\)</span> distribution for each of the parameters.</li>
@@ -332,12 +328,14 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1 &amp; \text{ if } l&gt;j, \\
 </ul>
 </div>
 </div>
-<div id="binomial-distribution-with-logit-link-function" class="section level1">
-<h1 class="hasAnchor">
-<a href="#binomial-distribution-with-logit-link-function" class="anchor"></a><span class="header-section-number">2</span> Binomial distribution with logit link function</h1>
-<div id="model-definition-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-definition-1" class="anchor"></a><span class="header-section-number">2.1</span> Model definition</h2>
+<div class="section level2">
+<h2 id="binomial-distribution-with-logit-link-function">
+<span class="header-section-number">2</span> Binomial distribution with logit link function<a class="anchor" aria-label="anchor" href="#binomial-distribution-with-logit-link-function"></a>
+</h2>
+<div class="section level3">
+<h3 id="model-definition-1">
+<span class="header-section-number">2.1</span> Model definition<a class="anchor" aria-label="anchor" href="#model-definition-1"></a>
+</h3>
 <p>In the same way as for the probit model, the logit model can be defined by means of a latent variable: <span class="math inline">\(Z_{ij}= \alpha_i + X_i\beta_j + W_i\lambda_j + \epsilon_{ij}\)</span> for <span class="math inline">\(i=1,\ldots,I\)</span> et <span class="math inline">\(j=1,\ldots,J\)</span>, with <span class="math inline">\(\epsilon_{ij} \sim \mathrm{logistique}(0,1)\)</span> <em>iid</em> and such as:
 <span class="math display">\[y_{ij}=
 \begin{cases}
@@ -349,9 +347,10 @@ In this case it is assumed that <span class="math display">\[y_{ij} \ | \theta_{
 <span class="math inline">\(\mathrm{probit(\theta_{ij})} = \alpha_i + X_i\beta_j+ W_i\lambda_j\)</span> and <span class="math inline">\(n_i\)</span> the number of visits to the site <span class="math inline">\(i\)</span>.<br>
 Therefore, the parameters of this model will be sampled by estimating their conditional <em>a posteriori</em> distributions using an adaptive Metropolis algorithm.</p>
 </div>
-<div id="priors-used" class="section level2">
-<h2 class="hasAnchor">
-<a href="#priors-used" class="anchor"></a><span class="header-section-number">2.2</span> Priors used</h2>
+<div class="section level3">
+<h3 id="priors-used">
+<span class="header-section-number">2.2</span> Priors used<a class="anchor" aria-label="anchor" href="#priors-used"></a>
+</h3>
 <p>An <em>a priori</em> distribution is determined for each parameter of the model :<br><span class="math display">\[\begin{array}{lll}
 V_{\alpha} &amp; \sim &amp; \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005) \text{ with } \mathrm{rate}=\frac{1}{\mathrm{scale}}, \\
 \beta_{jk} &amp; \sim &amp; \begin{cases}
@@ -368,9 +367,10 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
 \quad &amp;  \quad &amp; \text{ for } j=1,\ldots,J \text{ and } l=1,\ldots,q.
 \end{array}\]</span></p>
 </div>
-<div id="adaptive-metropolis-algorithm-principle" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adaptive-metropolis-algorithm-principle" class="anchor"></a><span class="header-section-number">2.3</span> Adaptive Metropolis algorithm principle</h2>
+<div class="section level3">
+<h3 id="adaptive-metropolis-algorithm-principle">
+<span class="header-section-number">2.3</span> Adaptive Metropolis algorithm principle<a class="anchor" aria-label="anchor" href="#adaptive-metropolis-algorithm-principle"></a>
+</h3>
 <p>This algorithm belongs to the MCMC methods and allows to obtain a realization of the parameter <span class="math inline">\(\theta=(\theta_1,\ldots,,\theta_m)\)</span> according to their conditional <em>a posteriori</em> distributions <span class="math inline">\(\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)\)</span>, for <span class="math inline">\(i =1,\ldots,m\)</span> known to within a multiplicative constant.<br>
 It is called adaptive because the variance of the conditional instrumental density used is adapted according to the number of acceptances in the last iterations.</p>
 <ul>
@@ -411,9 +411,10 @@ The variances are modified as a function of the acceptance numbers as follows fo
 <li><p>Every <span class="math inline">\(\dfrac{N_{Gibbs}}{10}\)</span> iteration, average acceptance rates are calculated and displayed <span class="math inline">\(m^A = \dfrac{1}{m}\sum\limits_{i=1,\ldots,m}r^A_i\)</span>.</p></li>
 </ul>
 </div>
-<div id="gibbs-sampler-using-adaptative-metropolis-algorithm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gibbs-sampler-using-adaptative-metropolis-algorithm" class="anchor"></a><span class="header-section-number">2.4</span> Gibbs sampler using adaptative Metropolis algorithm</h2>
+<div class="section level3">
+<h3 id="gibbs-sampler-using-adaptative-metropolis-algorithm">
+<span class="header-section-number">2.4</span> Gibbs sampler using adaptative Metropolis algorithm<a class="anchor" aria-label="anchor" href="#gibbs-sampler-using-adaptative-metropolis-algorithm"></a>
+</h3>
 <p>An adaptive Metropolis algorithm is used to sample the model parameters according to their conditional <em>a posteriori</em> distributions estimated to within one multiplicative constant.</p>
 <p>First we define the <span class="math inline">\(f\)</span> function that calculates the likelihood of the model as a function of the estimated parameters:<br><span class="math display">\[ f : \lambda_j,\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i \rightarrow  f(\lambda_j,\beta_j,\alpha_i, W_i, X_i, y_{ij},n_i)=\mathrm{L}(\theta_{ij})\]</span>
 - Compute <span class="math inline">\(\mathrm{logit}(\theta_{ij})= \alpha_i + X_i\beta_j + W_i\lambda_j\)</span>.</p>
@@ -462,12 +463,14 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
 </ul>
 </div>
 </div>
-<div id="poisson-distribution-with-log-link-function" class="section level1">
-<h1 class="hasAnchor">
-<a href="#poisson-distribution-with-log-link-function" class="anchor"></a><span class="header-section-number">3</span> Poisson distribution with log link function</h1>
-<div id="model-definition-2" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-definition-2" class="anchor"></a><span class="header-section-number">3.1</span> Model definition</h2>
+<div class="section level2">
+<h2 id="poisson-distribution-with-log-link-function">
+<span class="header-section-number">3</span> Poisson distribution with log link function<a class="anchor" aria-label="anchor" href="#poisson-distribution-with-log-link-function"></a>
+</h2>
+<div class="section level3">
+<h3 id="model-definition-2">
+<span class="header-section-number">3.1</span> Model definition<a class="anchor" aria-label="anchor" href="#model-definition-2"></a>
+</h3>
 <p>According to the article <span class="citation">Hui (<a href="#ref-Hui2016" role="doc-biblioref">2016</a>)</span>, we can use the Poisson distribution for the analysis of multivariate abundance data, with estimation performed using Bayesian Markov chain Monte Carlo methods.</p>
 <p>In this case, it is assumed that <span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij})\]</span>, with
 <span class="math inline">\(\mathrm{log}(\theta_{ij}) = \alpha_i + X_i\beta_j+ W_i\lambda_j\)</span>.</p>
@@ -477,16 +480,17 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
     n &amp;  \text{if $n$ individuals of the species $j$ have been observed at the site $i$}.
     \end{cases}\]</span></p>
 </div>
-<div id="gibbs-sampler-using-adaptative-metropolis-algorithm-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gibbs-sampler-using-adaptative-metropolis-algorithm-1" class="anchor"></a><span class="header-section-number">3.2</span> Gibbs sampler using adaptative Metropolis algorithm</h2>
+<div class="section level3">
+<h3 id="gibbs-sampler-using-adaptative-metropolis-algorithm-1">
+<span class="header-section-number">3.2</span> Gibbs sampler using adaptative Metropolis algorithm<a class="anchor" aria-label="anchor" href="#gibbs-sampler-using-adaptative-metropolis-algorithm-1"></a>
+</h3>
 <p>In this case, we cannot use the properties of the conjugate priors, therefore, the parameters of this model will be sampled by estimating their conditional <em>a posteriori</em> distributions using an adaptive Metropolis algorithm in the Gibbs sampler, in the same way as for the logit model.</p>
 <p>We use the same algorithm as before by replacing the logit link function by a log link function and the binomial distribution by a poisson’s law to calculate the likelihood of the model in the function <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code>.</p>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-Albert1993">
 <p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
@@ -515,11 +519,13 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p></p>
+<p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>, Jeanne Clément.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -527,6 +533,8 @@ In the case of <span class="math inline">\(l&gt;j\)</span>, we put <span class="
 
   
 
+
+  
 
   </body>
 </html>

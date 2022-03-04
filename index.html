@@ -30,6 +30,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -66,13 +68,10 @@
 <li>
   <a href="news/index.html">Change log</a>
 </li>
-<li>
-  <a></a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ghislainv/jSDM">
+  <a href="https://github.com/ghislainv/jSDM" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -89,40 +88,39 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="jsdm-r-package-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#jsdm-r-package-" class="anchor"></a>jSDM R Package <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<div class="section level1">
+<div class="page-header"><h1 id="jsdm-r-package-">jSDM R Package <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#jsdm-r-package-"></a>
 </h1></div>
 
-<p>Package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework (Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>). The Gibbs sampler is written in C++. It uses <a href="https://cran.r-project.org/package=Rcpp">Rcpp</a>, <a href="http://arma.sourceforge.net/docs.html">Armadillo</a> and <a href="https://www.gnu.org/software/gsl/">GSL</a> to maximize computation efficiency.</p>
-<div id="system-requirements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#system-requirements" class="anchor"></a>System requirements</h2>
-<p>Make sure the GNU Scientific Library (<a href="https://www.gnu.org/software/gsl/">GSL</a>) is installed on your system.</p>
+<p>Package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework (Warton <em>et al.</em> <a href="#ref-Warton2015">2015</a>). The Gibbs sampler is written in C++. It uses <a href="https://cran.r-project.org/package=Rcpp" class="external-link">Rcpp</a>, <a href="http://arma.sourceforge.net/docs.html" class="external-link">Armadillo</a> and <a href="https://www.gnu.org/software/gsl/" class="external-link">GSL</a> to maximize computation efficiency.</p>
+<div class="section level2">
+<h2 id="system-requirements">System requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
+</h2>
+<p>Make sure the GNU Scientific Library (<a href="https://www.gnu.org/software/gsl/" class="external-link">GSL</a>) is installed on your system.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<div id="stable-version-from-cran" class="section level3">
-<h3 class="hasAnchor">
-<a href="#stable-version-from-cran" class="anchor"></a>Stable version from CRAN</h3>
-<p>Install the latest stable version of <strong>jSDM</strong> from <a href="https://cran.r-project.org/">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="section level3">
+<h3 id="stable-version-from-cran">Stable version from CRAN<a class="anchor" aria-label="anchor" href="#stable-version-from-cran"></a>
+</h3>
+<p>Install the latest stable version of <strong>jSDM</strong> from <a href="https://cran.r-project.org/" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"jSDM"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"jSDM"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="development-version" class="section level3">
-<h3 class="hasAnchor">
-<a href="#development-version" class="anchor"></a>Development version</h3>
-<p>Or install the development version of <strong>jSDM</strong> from <a href="https://github.com/ghislainv/jSDM">GitHub</a> with:</p>
+<div class="section level3">
+<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h3>
+<p>Or install the development version of <strong>jSDM</strong> from <a href="https://github.com/ghislainv/jSDM" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ghislainv/jSDM"</span><span class="op">)</span></code></pre></div>
 <p>Or the binary release of <strong>jSDM</strong>’s development version compiled with R version 4.0.3 can be found here :</p>
-<p><a href="https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F">jSDM_windows</a>.</p>
+<p><a href="https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F" class="external-link">jSDM_windows</a>.</p>
 </div>
 </div>
-<div id="available-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#available-functions" class="anchor"></a>Available functions</h2>
+<div class="section level2">
+<h2 id="available-functions">Available functions<a class="anchor" aria-label="anchor" href="#available-functions"></a>
+</h2>
 <p>The package includes the following functions to fit various species distribution models :</p>
 <table class="table">
 <thead><tr class="header">
@@ -149,14 +147,14 @@
 </tbody>
 </table>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>The <code>jSDM</code> R package is Open Source and released under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL version 3</a> license. Anybody who is interested can contribute to the package development following our <a href="articles/Contributing.html">Community guidelines</a>. Every contributor must agree to follow the project’s <a href="articles/Code_of_conduct.html">Code of Conduct</a>.</p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>The <code>jSDM</code> R package is Open Source and released under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" class="external-link">GNU GPL version 3</a> license. Anybody who is interested can contribute to the package development following our <a href="articles/Contributing.html">Community guidelines</a>. Every contributor must agree to follow the project’s <a href="articles/Code_of_conduct.html">Code of Conduct</a>.</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-Warton2015">
 <p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
@@ -168,54 +166,64 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=jSDM">https://​cloud.r-project.org/​package=jSDM</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/ghislainv/jSDM/">https://​github.com/​ghislainv/​jSDM/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ghislainv/jSDM/issues">https://​github.com/​ghislainv/​jSDM/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> | file <a href="LICENSE-text.html">LICENSE</a>
-</li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Jeanne Clément <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5228-5015" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-1685-4997" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="https://cloud.r-project.org/package=jSDM" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/ghislainv/jSDM/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ghislainv/jSDM/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/ghislainv/jSDM/actions"><img src="https://github.com/ghislainv/jSDM/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/package=jSDM"><img src="https://www.r-pkg.org/badges/version/jSDM" alt="CRAN Status"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.3253460"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3253460.svg" alt="DOI"></a></li>
-<li><a href="https://cran.r-project.org/package=jSDM"><img src="https://cranlogs.r-pkg.org/badges/jSDM" alt="Downloads"></a></li>
+<li>
+<a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a> | file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing jSDM</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>
+<a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-1685-4997" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li>Jeanne Clément <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5228-5015" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/ghislainv/jSDM/actions" class="external-link"><img src="https://github.com/ghislainv/jSDM/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://cran.r-project.org/package=jSDM" class="external-link"><img src="https://www.r-pkg.org/badges/version/jSDM" alt="CRAN Status"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.3253460" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3253460.svg" alt="DOI"></a></li>
+<li><a href="https://cran.r-project.org/package=jSDM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/jSDM" alt="Downloads"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p></p>
+<p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>, Jeanne Clément.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -223,6 +231,8 @@
 
   
 
+
+  
 
   </body>
 </html>

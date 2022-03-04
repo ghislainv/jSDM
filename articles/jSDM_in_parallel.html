@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -62,13 +64,10 @@
 <li>
   <a href="../news/index.html">Change log</a>
 </li>
-<li>
-  <a></a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ghislainv/jSDM">
+  <a href="https://github.com/ghislainv/jSDM" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,36 +82,27 @@
 
       
 
-      </header><script src="jSDM_in_parallel_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="jSDM_in_parallel_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<script src="jSDM_in_parallel_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="jSDM_in_parallel_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="jSDM_in_parallel_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="jSDM_in_parallel_files/navigation-1.1/tabsets.js"></script><script src="jSDM_in_parallel_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Running jSDM in parallel</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ghislainv/jSDM/blob/master/vignettes/jSDM_in_parallel.Rmd"><code>vignettes/jSDM_in_parallel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ghislainv/jSDM/blob/HEAD/vignettes/jSDM_in_parallel.Rmd" class="external-link"><code>vignettes/jSDM_in_parallel.Rmd</code></a></small>
       <div class="hidden name"><code>jSDM_in_parallel.Rmd</code></div>
 
     </div>
 
     
     
-<div id="generating-data-for-a-hierarchical-gaussian-linear-regression" class="section level1">
-<h1 class="hasAnchor">
-<a href="#generating-data-for-a-hierarchical-gaussian-linear-regression" class="anchor"></a><span class="header-section-number">1</span> Generating data for a Hierarchical Gaussian Linear Regression</h1>
-<div id="binomial-model-for-presence-absence-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#binomial-model-for-presence-absence-data" class="anchor"></a><span class="header-section-number">1.1</span> Binomial model for presence-absence data</h2>
+<div class="section level2">
+<h2 id="generating-data-for-a-hierarchical-gaussian-linear-regression">
+<span class="header-section-number">1</span> Generating data for a Hierarchical Gaussian Linear Regression<a class="anchor" aria-label="anchor" href="#generating-data-for-a-hierarchical-gaussian-linear-regression"></a>
+</h2>
+<div class="section level3">
+<h3 id="binomial-model-for-presence-absence-data">
+<span class="header-section-number">1.1</span> Binomial model for presence-absence data<a class="anchor" aria-label="anchor" href="#binomial-model-for-presence-absence-data"></a>
+</h3>
 <p>We consider a latent variable model (LVM) to account for species co-occurrence on all sites <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>.</p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\]</span></p>
 <p><span class="math display">\[ \mathrm{g}(\theta_{ij}) =\alpha_i + X_i\beta_j + W_i\lambda_j \]</span></p>
@@ -132,14 +122,15 @@
 </ul>
 <p>This model is equivalent to a multivariate GLMM <span class="math inline">\(\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}\)</span>, where <span class="math inline">\(u_{ij} \sim \mathcal{N}(0, \Sigma)\)</span> with the constraint that the variance-covariance matrix <span class="math inline">\(\Sigma = \Lambda \Lambda^{\prime}\)</span>, where <span class="math inline">\(\Lambda\)</span> is the full matrix of factor loadings, with the <span class="math inline">\(\lambda_j\)</span> as its columns.</p>
 </div>
-<div id="data-set-simulation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-set-simulation" class="anchor"></a><span class="header-section-number">1.2</span> Data-set simulation</h2>
+<div class="section level3">
+<h3 id="data-set-simulation">
+<span class="header-section-number">1.2</span> Data-set simulation<a class="anchor" aria-label="anchor" href="#data-set-simulation"></a>
+</h3>
 <p>We generate presence-absence data following this generalized multivariate linear model with a probit link function, which includes latent variables and random site effect.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#=================</span>
 <span class="co">#== load libraries</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#==================</span>
 <span class="co">#== Data simulation</span>
@@ -148,7 +139,7 @@
 
 <span class="co">#= Set seed for repeatability</span>
 <span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span>
 
 <span class="co">#= Number of species</span>
 <span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">70</span>
@@ -157,34 +148,31 @@
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 
 <span class="co">#= Ecological process (suitability)</span>
-<span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsite</span><span class="op">)</span>,<span class="va">x1</span>,<span class="va">x2</span><span class="op">)</span>
-<span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
+<span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsite</span><span class="op">)</span>,<span class="va">x1</span>,<span class="va">x2</span><span class="op">)</span>
+<span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
 <span class="co">#= Latent variables W</span>
-<span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span> <span class="op">(</span><span class="va">X</span>,<span class="va">W</span><span class="op">)</span>
+<span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span><span class="op">*</span><span class="va">n_latent</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">nsite</span>, ncol<span class="op">=</span><span class="va">n_latent</span><span class="op">)</span>
 <span class="co">#= Fixed species effect beta </span>
-<span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,
+<span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,
                         byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#= Factor loading lambda  </span>
-<span class="va">l.zero</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-<span class="va">l.diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">l.other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">n_latent</span><span class="op">-</span><span class="fl">3</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">l.diag</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.zero</span>,
-                            <span class="va">l.other</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.diag</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">l.other</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
-<span class="va">param.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">beta.target</span>,<span class="va">lambda.target</span><span class="op">)</span>
+<span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">n_latent</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_latent</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">n_latent</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">lambda.target</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html" class="external-link">upper.tri</a></span><span class="op">(</span><span class="va">mat</span>,diag<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html" class="external-link">upper.tri</a></span><span class="op">(</span><span class="va">mat</span>, diag<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#= Variance of random site effect </span>
 <span class="va">V_alpha.target</span> <span class="op">&lt;-</span> <span class="fl">0.5</span>
-<span class="co">#= Random site effect </span>
-<span class="va">alpha.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">V_alpha.target</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#= Random site effect alpha</span>
+<span class="va">alpha.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">V_alpha.target</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#= probit(theta)</span>
-<span class="va">probit_theta</span> <span class="op">&lt;-</span> <span class="va">X</span><span class="op">%*%</span><span class="va">beta.target</span> <span class="op">+</span> <span class="va">W</span><span class="op">%*%</span><span class="va">lambda.target</span> <span class="op">+</span> <span class="va">alpha.target</span>
+<span class="va">probit_theta</span> <span class="op">&lt;-</span> <span class="va">X</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">beta.target</span> <span class="op">+</span> <span class="va">W</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">lambda.target</span> <span class="op">+</span> <span class="va">alpha.target</span>
 <span class="co"># Latent variable Z </span>
-<span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
 <span class="va">Z_true</span> <span class="op">&lt;-</span> <span class="va">probit_theta</span> <span class="op">+</span> <span class="va">e</span>
 <span class="co"># Presence-absence matrix Y</span>
-<span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span> <span class="op">(</span><span class="cn">NA</span>, <span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
+<span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span> <span class="op">(</span><span class="cn">NA</span>, <span class="va">nsite</span>,<span class="va">nsp</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsite</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span><span class="op">{</span>
     <span class="kw">if</span> <span class="op">(</span> <span class="va">Z_true</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span><span class="va">Y</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">}</span>
@@ -192,169 +180,165 @@
   <span class="op">}</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">Z_true</span>, <span class="va">alpha.target</span>, <span class="va">V_alpha.target</span>, <span class="va">beta.target</span>, <span class="va">probit_theta</span>
-     ,<span class="va">X</span>, <span class="va">lambda.target</span>, <span class="va">np</span> , <span class="va">nsite</span>, <span class="va">nsp</span>, <span class="va">n_latent</span>, <span class="va">W</span>
-     ,file<span class="op">=</span><span class="st">"jSDM_in_parallel_files/sim_data.rda"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span></code></pre></div>
 <p>We look at the number of observations per site.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"jSDM_in_parallel_files/sim_data.rda"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
 <span class="co">#&gt;      Species1 Species2 Species3 Species4 Species5 Species6 Species7 Species8</span>
-<span class="co">#&gt; [1,]        1        0        0        1        0        1        0        1</span>
-<span class="co">#&gt; [2,]        0        0        0        1        1        1        1        0</span>
-<span class="co">#&gt; [3,]        1        0        0        0        1        1        0        0</span>
-<span class="co">#&gt; [4,]        1        1        1        1        0        1        1        1</span>
-<span class="co">#&gt; [5,]        0        1        0        1        1        1        1        0</span>
-<span class="co">#&gt; [6,]        1        0        1        1        1        1        1        0</span>
+<span class="co">#&gt; [1,]        0        0        0        1        0        0        1        0</span>
+<span class="co">#&gt; [2,]        1        0        0        0        0        1        0        0</span>
+<span class="co">#&gt; [3,]        1        0        1        1        0        1        0        0</span>
+<span class="co">#&gt; [4,]        1        1        1        1        0        1        0        0</span>
+<span class="co">#&gt; [5,]        0        0        0        1        0        1        1        0</span>
+<span class="co">#&gt; [6,]        1        0        1        0        1        1        0        0</span>
 <span class="co">#&gt;      Species9 Species10 Species11 Species12 Species13 Species14 Species15</span>
-<span class="co">#&gt; [1,]        1         0         1         1         1         0         1</span>
-<span class="co">#&gt; [2,]        0         1         1         1         1         1         0</span>
-<span class="co">#&gt; [3,]        0         1         0         1         1         0         0</span>
-<span class="co">#&gt; [4,]        1         1         1         1         1         0         1</span>
-<span class="co">#&gt; [5,]        1         0         1         1         0         1         1</span>
-<span class="co">#&gt; [6,]        0         1         0         1         1         1         0</span>
+<span class="co">#&gt; [1,]        1         0         0         1         1         0         1</span>
+<span class="co">#&gt; [2,]        0         0         0         1         1         0         0</span>
+<span class="co">#&gt; [3,]        0         1         0         1         1         1         0</span>
+<span class="co">#&gt; [4,]        1         1         0         1         1         1         1</span>
+<span class="co">#&gt; [5,]        1         0         1         0         0         1         1</span>
+<span class="co">#&gt; [6,]        0         1         0         1         1         0         0</span>
 <span class="co">#&gt;      Species16 Species17 Species18 Species19 Species20 Species21 Species22</span>
-<span class="co">#&gt; [1,]         1         0         1         0         0         1         1</span>
-<span class="co">#&gt; [2,]         1         0         1         1         1         0         1</span>
-<span class="co">#&gt; [3,]         0         1         0         0         1         1         0</span>
-<span class="co">#&gt; [4,]         0         0         0         1         0         0         1</span>
-<span class="co">#&gt; [5,]         1         0         1         1         0         0         1</span>
-<span class="co">#&gt; [6,]         1         0         0         1         1         1         0</span>
+<span class="co">#&gt; [1,]         1         1         1         1         0         0         0</span>
+<span class="co">#&gt; [2,]         1         1         0         1         0         0         0</span>
+<span class="co">#&gt; [3,]         1         1         1         0         1         1         0</span>
+<span class="co">#&gt; [4,]         1         1         0         1         1         1         0</span>
+<span class="co">#&gt; [5,]         0         0         0         1         0         1         1</span>
+<span class="co">#&gt; [6,]         0         0         1         1         1         1         0</span>
 <span class="co">#&gt;      Species23 Species24 Species25 Species26 Species27 Species28 Species29</span>
-<span class="co">#&gt; [1,]         1         0         1         1         0         1         1</span>
-<span class="co">#&gt; [2,]         1         1         1         1         1         0         1</span>
-<span class="co">#&gt; [3,]         0         1         1         0         1         0         1</span>
-<span class="co">#&gt; [4,]         0         0         1         1         1         0         1</span>
-<span class="co">#&gt; [5,]         1         1         1         0         1         1         1</span>
+<span class="co">#&gt; [1,]         1         0         0         0         0         0         0</span>
+<span class="co">#&gt; [2,]         1         0         0         1         0         0         0</span>
+<span class="co">#&gt; [3,]         1         1         1         1         1         0         1</span>
+<span class="co">#&gt; [4,]         1         1         0         1         1         0         0</span>
+<span class="co">#&gt; [5,]         1         0         0         1         0         0         0</span>
 <span class="co">#&gt; [6,]         1         1         1         1         1         0         1</span>
 <span class="co">#&gt;      Species30 Species31 Species32 Species33 Species34 Species35 Species36</span>
-<span class="co">#&gt; [1,]         1         0         1         0         1         1         0</span>
-<span class="co">#&gt; [2,]         0         1         1         0         1         0         0</span>
-<span class="co">#&gt; [3,]         0         0         0         0         0         0         1</span>
-<span class="co">#&gt; [4,]         0         1         1         0         0         1         0</span>
-<span class="co">#&gt; [5,]         1         1         1         0         1         1         0</span>
-<span class="co">#&gt; [6,]         0         1         1         1         0         0         0</span>
+<span class="co">#&gt; [1,]         1         0         0         1         0         1         1</span>
+<span class="co">#&gt; [2,]         1         0         0         0         0         1         1</span>
+<span class="co">#&gt; [3,]         1         1         0         0         0         1         1</span>
+<span class="co">#&gt; [4,]         1         1         0         1         1         1         1</span>
+<span class="co">#&gt; [5,]         0         1         1         0         1         1         0</span>
+<span class="co">#&gt; [6,]         1         0         1         0         0         1         1</span>
 <span class="co">#&gt;      Species37 Species38 Species39 Species40 Species41 Species42 Species43</span>
-<span class="co">#&gt; [1,]         1         0         1         0         1         1         1</span>
-<span class="co">#&gt; [2,]         1         0         1         1         0         0         1</span>
-<span class="co">#&gt; [3,]         0         0         0         1         0         0         1</span>
-<span class="co">#&gt; [4,]         1         0         0         1         1         1         0</span>
-<span class="co">#&gt; [5,]         1         1         1         1         1         1         1</span>
-<span class="co">#&gt; [6,]         1         1         1         1         1         0         1</span>
-<span class="co">#&gt;      Species44 Species45 Species46 Species47 Species48 Species49 Species50</span>
-<span class="co">#&gt; [1,]         1         0         0         1         1         0         1</span>
-<span class="co">#&gt; [2,]         1         0         0         1         1         0         1</span>
-<span class="co">#&gt; [3,]         0         1         1         0         1         1         1</span>
-<span class="co">#&gt; [4,]         0         1         0         1         0         1         1</span>
-<span class="co">#&gt; [5,]         0         1         1         1         1         1         1</span>
-<span class="co">#&gt; [6,]         0         0         1         1         0         1         1</span>
-<span class="co">#&gt;      Species51 Species52 Species53 Species54 Species55 Species56 Species57</span>
-<span class="co">#&gt; [1,]         1         0         1         1         1         0         1</span>
-<span class="co">#&gt; [2,]         1         1         1         1         1         1         1</span>
-<span class="co">#&gt; [3,]         0         0         1         0         1         0         1</span>
+<span class="co">#&gt; [1,]         0         0         0         1         0         1         1</span>
+<span class="co">#&gt; [2,]         1         0         1         0         0         0         1</span>
+<span class="co">#&gt; [3,]         1         1         0         1         1         0         1</span>
 <span class="co">#&gt; [4,]         1         0         0         1         0         1         1</span>
-<span class="co">#&gt; [5,]         1         1         1         1         1         1         1</span>
-<span class="co">#&gt; [6,]         1         0         1         1         1         1         1</span>
+<span class="co">#&gt; [5,]         1         1         1         1         0         1         1</span>
+<span class="co">#&gt; [6,]         1         1         1         1         0         0         0</span>
+<span class="co">#&gt;      Species44 Species45 Species46 Species47 Species48 Species49 Species50</span>
+<span class="co">#&gt; [1,]         0         1         1         1         1         0         1</span>
+<span class="co">#&gt; [2,]         0         1         0         0         1         0         0</span>
+<span class="co">#&gt; [3,]         0         1         0         1         0         0         1</span>
+<span class="co">#&gt; [4,]         1         1         1         1         1         1         1</span>
+<span class="co">#&gt; [5,]         1         0         0         1         0         1         1</span>
+<span class="co">#&gt; [6,]         1         1         1         1         1         1         1</span>
+<span class="co">#&gt;      Species51 Species52 Species53 Species54 Species55 Species56 Species57</span>
+<span class="co">#&gt; [1,]         1         1         0         0         0         0         1</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         1</span>
+<span class="co">#&gt; [3,]         1         0         1         0         1         0         1</span>
+<span class="co">#&gt; [4,]         1         1         0         1         0         0         1</span>
+<span class="co">#&gt; [5,]         1         1         0         0         0         1         0</span>
+<span class="co">#&gt; [6,]         1         0         0         0         1         1         1</span>
 <span class="co">#&gt;      Species58 Species59 Species60 Species61 Species62 Species63 Species64</span>
-<span class="co">#&gt; [1,]         1         1         0         0         0         0         0</span>
-<span class="co">#&gt; [2,]         1         1         1         0         1         0         1</span>
-<span class="co">#&gt; [3,]         0         1         1         0         0         0         1</span>
-<span class="co">#&gt; [4,]         1         0         0         1         0         1         0</span>
-<span class="co">#&gt; [5,]         1         1         1         1         1         0         0</span>
-<span class="co">#&gt; [6,]         0         1         1         0         0         0         1</span>
+<span class="co">#&gt; [1,]         1         1         0         1         1         1         1</span>
+<span class="co">#&gt; [2,]         0         1         0         0         0         1         0</span>
+<span class="co">#&gt; [3,]         1         1         1         0         0         1         1</span>
+<span class="co">#&gt; [4,]         1         0         0         1         1         1         0</span>
+<span class="co">#&gt; [5,]         0         1         1         1         0         1         1</span>
+<span class="co">#&gt; [6,]         0         1         1         1         0         1         1</span>
 <span class="co">#&gt;      Species65 Species66 Species67 Species68 Species69 Species70</span>
-<span class="co">#&gt; [1,]         0         0         0         1         0         1</span>
-<span class="co">#&gt; [2,]         0         0         0         0         0         1</span>
-<span class="co">#&gt; [3,]         0         1         1         0         0         0</span>
-<span class="co">#&gt; [4,]         0         1         1         0         1         1</span>
-<span class="co">#&gt; [5,]         1         1         1         1         0         1</span>
-<span class="co">#&gt; [6,]         0         0         1         1         0         0</span>
+<span class="co">#&gt; [1,]         0         1         1         0         1         0</span>
+<span class="co">#&gt; [2,]         0         1         1         1         0         0</span>
+<span class="co">#&gt; [3,]         0         0         1         0         0         1</span>
+<span class="co">#&gt; [4,]         0         1         1         1         1         0</span>
+<span class="co">#&gt; [5,]         0         1         0         1         1         0</span>
+<span class="co">#&gt; [6,]         1         0         1         0         0         0</span>
 <span class="co"># Number of observations per site</span>
-<span class="va">nobs_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span>
+<span class="va">nobs_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span>
 <span class="va">nobs_site</span>
-<span class="co">#&gt;   [1] 40 44 29 41 55 44 16 40 47 26 35 18 22 22 49 43 50 42 21 25 50 53 29 48 24</span>
-<span class="co">#&gt;  [26] 15 42 14 43 59 25 20 16 42 36 30 26 54 46 24 47 25 31 29 21 46 42 19 16 33</span>
-<span class="co">#&gt;  [51] 45 29 22 44 43 37 19 20 17 37 47 55 22 23 42 35 11 45 63 58 29 31 29 16 49</span>
-<span class="co">#&gt;  [76] 46 44 35  8 47 47 28 52 45 40 19 42 15 41 44 25 46 18 16 43 31 35 14 11 34</span>
-<span class="co">#&gt; [101] 21 53 40 35 15 61 32 54 54 51 20 62 39 24 23 54 42 22 18 51 25 24  8 58 36</span>
-<span class="co">#&gt; [126] 14 50 38 25 13 35 55 31 27 42 43 47 46 26 42 34 13 41 42 35 35 35 37 31 23</span>
-<span class="co">#&gt; [151] 38 30 48 16 61 51 22 52 24 24 37 39 43 23 31 34 39 56 27 38 42 26 31 31 29</span>
-<span class="co">#&gt; [176] 53  5 37 16 42 40 17 37 60 30 58 42 53 31 41 38 36  7 14 35 40 49 35 42 45</span>
-<span class="co">#&gt; [201] 50 25 37 34 44 35 25 17 50 16</span>
+<span class="co">#&gt;   [1] 35 23 42 49 37 43 44 45 15 38 60 51 52 43 25 43 24 28 45 14 42 39 37 59 20</span>
+<span class="co">#&gt;  [26] 38 37 31 41 24 24 22 56 35 44 40 37 21 46 44 19 37 39 47 59 34 52 48 32 26</span>
+<span class="co">#&gt;  [51] 19 42 41 59 42 41 27 30 37 34 45 27 32 26 55 31 38  8 42 37 26 38 36 15 57</span>
+<span class="co">#&gt;  [76] 16 38 43 22 48 47 57 39 31 51 42 32 26 30 34 28 39 17 37 30 51 53 30 58 42</span>
+<span class="co">#&gt; [101] 30 29 50 11 24 21 48 31 34 64 34 32 28 14 38 39 35 22 26 25 27 47 43 38 38</span>
+<span class="co">#&gt; [126] 20 30 33 36 30 29 56 31 45 31 26 44 38 51 33 39 39 22 25 43 26 32 31 29 20</span>
+<span class="co">#&gt; [151] 37 41 21 50 39 56 22 39 43 39 36 35 13 34 39 23 31 34 47 48 26 31 55 17 32</span>
+<span class="co">#&gt; [176] 58 63 35 21 41 30 48 24 41 41 30 50 25 40 54 25 48 31 40 34 35 36 27 34 47</span>
+<span class="co">#&gt; [201] 15 18 17 16 38 25 11 30 35 37</span>
 <span class="co"># Number of observations per species</span>
-<span class="va">nobs_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span>
+<span class="va">nobs_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span>
 <span class="va">nobs_sp</span>
 <span class="co">#&gt;  Species1  Species2  Species3  Species4  Species5  Species6  Species7  Species8 </span>
-<span class="co">#&gt;        81        85       117       153        77       139        99        69 </span>
+<span class="co">#&gt;        89        94       114       155        68       141       104        62 </span>
 <span class="co">#&gt;  Species9 Species10 Species11 Species12 Species13 Species14 Species15 Species16 </span>
-<span class="co">#&gt;       146       113        91       149       103        70       110       127 </span>
+<span class="co">#&gt;       144       115        78       143       116        69       111       145 </span>
 <span class="co">#&gt; Species17 Species18 Species19 Species20 Species21 Species22 Species23 Species24 </span>
-<span class="co">#&gt;       100        94       147       127        68        62       126        95 </span>
+<span class="co">#&gt;       100        92       147       128        60        70       137        87 </span>
 <span class="co">#&gt; Species25 Species26 Species27 Species28 Species29 Species30 Species31 Species32 </span>
-<span class="co">#&gt;       132       104       100        63        92        80       120       113 </span>
+<span class="co">#&gt;       131       103        98        61       101        89       128       121 </span>
 <span class="co">#&gt; Species33 Species34 Species35 Species36 Species37 Species38 Species39 Species40 </span>
-<span class="co">#&gt;        63        96       124        71       119        56        78       141 </span>
+<span class="co">#&gt;        67       108       126        77       116        47        84       150 </span>
 <span class="co">#&gt; Species41 Species42 Species43 Species44 Species45 Species46 Species47 Species48 </span>
-<span class="co">#&gt;        62       114       143       103       133        97       117        95 </span>
+<span class="co">#&gt;        65       124       148       109       137       100       115       102 </span>
 <span class="co">#&gt; Species49 Species50 Species51 Species52 Species53 Species54 Species55 Species56 </span>
-<span class="co">#&gt;       116       145       148        81       113       132        89        58 </span>
+<span class="co">#&gt;       108       146       142        75       108       128        95        50 </span>
 <span class="co">#&gt; Species57 Species58 Species59 Species60 Species61 Species62 Species63 Species64 </span>
-<span class="co">#&gt;       129       144       106        87       107       148        86       110 </span>
+<span class="co">#&gt;       137       143       108        85       111       146       104       123 </span>
 <span class="co">#&gt; Species65 Species66 Species67 Species68 Species69 Species70 </span>
-<span class="co">#&gt;        68       134       138        74        50        91</span>
+<span class="co">#&gt;        72       149       156        74        50        81</span>
 
 <span class="co"># Remove species with less than 5 presences</span>
-<span class="va">rare_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> 
-<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">rare_sp</span><span class="op">)</span><span class="op">!=</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
+<span class="va">rare_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> 
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">rare_sp</span><span class="op">)</span><span class="op">!=</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
   <span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span>
   <span class="va">probit_theta</span> <span class="op">&lt;-</span> <span class="va">probit_theta</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span>
   <span class="va">Z_true</span> <span class="op">&lt;-</span> <span class="va">Z_true</span><span class="op">[</span>, <span class="op">-</span><span class="va">rare_sp</span><span class="op">]</span> 
-  <span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
+  <span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
   <span class="va">nsp</span>
-  <span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
+  <span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
   <span class="va">nsite</span>
 <span class="op">}</span></code></pre></div>
 </div>
 </div>
-<div id="fitting-joint-species-distribution-models-in-parallel" class="section level1">
-<h1 class="hasAnchor">
-<a href="#fitting-joint-species-distribution-models-in-parallel" class="anchor"></a><span class="header-section-number">2</span> Fitting joint Species Distribution Models in parallel</h1>
-<p>We simulate in parallel two Monte-Carlo Markov chains (MCMC) of parameters values for this binomial model, using the R packages <code>doParallel</code> and <code>foreach</code> in a first time and <code>snow</code> and <code>snowfall</code> in a second time.</p>
-<div id="using-doparallel-and-foreach" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-doparallel-and-foreach" class="anchor"></a><span class="header-section-number">2.1</span> Using <code>doParallel</code> and <code>foreach</code>
+<div class="section level2">
+<h2 id="fitting-joint-species-distribution-models-in-parallel">
+<span class="header-section-number">2</span> Fitting joint Species Distribution Models in parallel<a class="anchor" aria-label="anchor" href="#fitting-joint-species-distribution-models-in-parallel"></a>
 </h2>
+<p>We simulate in parallel two Monte-Carlo Markov chains (MCMC) of parameters values for this binomial model, using the R packages <code>doParallel</code> and <code>foreach</code> in a first time and <code>snow</code> and <code>snowfall</code> in a second time.</p>
+<div class="section level3">
+<h3 id="using-doparallel-and-foreach">
+<span class="header-section-number">2.1</span> Using <code>doParallel</code> and <code>foreach</code><a class="anchor" aria-label="anchor" href="#using-doparallel-and-foreach"></a>
+</h3>
 <p>We estimate the model parameters with the function <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM">jSDM</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
 <span class="co">## Make a cluster for parallel MCMCs</span>
 <span class="va">nchains</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">ncores</span> <span class="op">&lt;-</span> <span class="va">nchains</span> <span class="co">## One core for each MCMC chains</span>
-<span class="va">clust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="va">ncores</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">clust</span><span class="op">)</span>
+<span class="va">clust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">ncores</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">clust</span><span class="op">)</span>
 
 <span class="co"># Number of latent variables</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 
 <span class="co"># Starting parameters </span>
-<span class="va">lambda_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>
-<span class="va">alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">V_alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">lambda_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>
+<span class="va">alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">V_alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>
 <span class="co">#formatting of starting parameters</span>
 <span class="co">#and constraints on lambda generated by the function </span>
 <span class="co"># Seeds</span>
-<span class="va">seed_mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1234</span>, <span class="fl">4321</span><span class="op">)</span></code></pre></div>
+<span class="va">seed_mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1234</span>, <span class="fl">4321</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Model</span>
 <span class="va">mod_probit_1</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html">foreach</a></span> <span class="op">(</span>i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span> <span class="op">%dopar%</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span> <span class="op">(</span>i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">%dopar%</a></span> <span class="op">{</span>
     <span class="co"># Infering model parameters</span>
     <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">jSDM</span><span class="fu">::</span><span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
       <span class="co"># Iterations</span>
@@ -383,26 +367,26 @@
       seed <span class="op">=</span> <span class="va">seed_mcmc</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
       verbose <span class="op">=</span> <span class="fl">1</span>
     <span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="co"># Stop cluster</span>
 <span class="co"># stopCluster(clust)</span></code></pre></div>
 </div>
-<div id="using-snow-and-snowfall" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-snow-and-snowfall" class="anchor"></a><span class="header-section-number">2.2</span> Using <code>snow</code> and <code>snowfall</code>
-</h2>
+<div class="section level3">
+<h3 id="using-snow-and-snowfall">
+<span class="header-section-number">2.2</span> Using <code>snow</code> and <code>snowfall</code><a class="anchor" aria-label="anchor" href="#using-snow-and-snowfall"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## load libraries</span>
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">snow</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">snowfall</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">snow</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">snowfall</span><span class="op">)</span>
 
 <span class="co">## Setting the number of CPUs to be 2</span>
-<span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-b-init.html">sfInit</a></span><span class="op">(</span>parallel<span class="op">=</span><span class="cn">TRUE</span>, cpus<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-b-init.html" class="external-link">sfInit</a></span><span class="op">(</span>parallel<span class="op">=</span><span class="cn">TRUE</span>, cpus<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
 
 <span class="co">## Assigning the jSDM library to each CPU</span>
-<span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-d-tools.html">sfLibrary</a></span><span class="op">(</span><span class="va">jSDM</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-d-tools.html" class="external-link">sfLibrary</a></span><span class="op">(</span><span class="va">jSDM</span><span class="op">)</span>
 
 <span class="co"># Number of latent variables</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fl">2</span>
@@ -410,17 +394,17 @@
 <span class="co"># Starting parameters </span>
 <span class="co"># formatting of starting parameters</span>
 <span class="co"># and constraints on lambda generated by the function </span>
-<span class="va">lambda_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span><span class="op">)</span>
-<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="op">-</span><span class="fl">0.2</span><span class="op">)</span>
-<span class="va">alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span><span class="op">)</span>
-<span class="va">V_alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>
+<span class="va">lambda_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span><span class="op">)</span>
+<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="op">-</span><span class="fl">0.2</span><span class="op">)</span>
+<span class="va">alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span><span class="op">)</span>
+<span class="va">V_alpha_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>
 
 <span class="co"># Seeds</span>
-<span class="va">seed_mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">321</span><span class="op">)</span>
+<span class="va">seed_mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">321</span><span class="op">)</span>
 
 <span class="co"># list of data and starting parameters </span>
-<span class="va">listData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Y<span class="op">=</span><span class="va">Y</span>, X<span class="op">=</span><span class="va">X</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">beta_start</span>, <span class="va">lambda_start</span>, <span class="va">W_start</span>, <span class="va">alpha_start</span>, <span class="va">V_alpha_start</span>, <span class="va">seed_mcmc</span><span class="op">)</span></code></pre></div>
+<span class="va">listData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Y<span class="op">=</span><span class="va">Y</span>, X<span class="op">=</span><span class="va">X</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">beta_start</span>, <span class="va">lambda_start</span>, <span class="va">W_start</span>, <span class="va">alpha_start</span>, <span class="va">V_alpha_start</span>, <span class="va">seed_mcmc</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## Defining the function that will run MCMC on each CPU</span>
@@ -464,198 +448,259 @@
     seed <span class="op">=</span> <span class="va">seed_mcmc</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
     verbose <span class="op">=</span> <span class="fl">1</span>
   <span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="op">}</span><span class="co"># Starting parameters </span>
 
 <span class="co">## Calling the sfLapply function that will run on each of the CPUs</span>
-<span class="va">mod_probit_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-c-calculation.html">sfLapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, fun<span class="op">=</span><span class="va">mod.MCMChregress</span>, listData<span class="op">=</span><span class="va">listData</span><span class="op">)</span>
+<span class="va">mod_probit_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/snowfall/man/snowfall-c-calculation.html" class="external-link">sfLapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, fun<span class="op">=</span><span class="va">mod.MCMChregress</span>, listData<span class="op">=</span><span class="va">listData</span><span class="op">)</span>
 
 <span class="co">## Stop cluster</span>
 <span class="co">#sfStop()</span>
 <span class="co"># Output</span>
-<span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mod_probit_1</span>, <span class="va">mod_probit_2</span><span class="op">)</span><span class="op">)</span>
+<span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mod_probit_1</span>, <span class="va">mod_probit_2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">mod_probit_1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">str_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">mod</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">n_chains</span>, <span class="va">str_mod</span>, file<span class="op">=</span><span class="st">"jSDM_in_parallel_files/output.rda"</span><span class="op">)</span></code></pre></div>
+<span class="va">str_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">n_chains</span>, <span class="va">str_mod</span>, file<span class="op">=</span><span class="st">"jSDM_in_parallel_files/output.rda"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"jSDM_in_parallel_files/output.rda"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"number of chains :"</span>, <span class="va">n_chains</span>,<span class="st">"\n"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"jSDM_in_parallel_files/output.rda"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"number of chains :"</span>, <span class="va">n_chains</span>,<span class="st">"\n"</span><span class="op">)</span>
 <span class="co">#&gt; number of chains : 4</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"content of each chain :"</span>, <span class="va">str_mod</span>,<span class="st">"\n"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"content of each chain :"</span>, <span class="va">str_mod</span>,<span class="st">"\n"</span><span class="op">)</span>
 <span class="co">#&gt; content of each chain : List of 9</span>
-<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 11801 11764 11724 11742 11740 ...</span>
+<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 11786 11812 11903 11925 11938 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ mcmc.alpha         : 'mcmc' num [1:1000, 1:210] 0.531 0.81 0.945 0.719 0.289 ...</span>
+<span class="co">#&gt;  $ mcmc.alpha         : 'mcmc' num [1:1000, 1:210] -0.08918 -0.11077 0.00951 -0.29685 -0.20246 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ mcmc.V_alpha       : 'mcmc' num [1:1000, 1] 0.483 0.473 0.647 0.692 0.677 ...</span>
+<span class="co">#&gt;  $ mcmc.V_alpha       : 'mcmc' num [1:1000, 1] 0.494 0.522 0.441 0.415 0.482 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ mcmc.sp            :List of 70</span>
 <span class="co">#&gt;  $ mcmc.latent        :List of 2</span>
-<span class="co">#&gt;  $ Z_latent           : num [1:210, 1:70] 1.443 -0.765 0.825 0.759 -0.997 ...</span>
-<span class="co">#&gt;  $ probit_theta_latent: num [1:210, 1:70] 1.15774 0.13797 0.00417 -0.05903 -0.50093 ...</span>
-<span class="co">#&gt;  $ theta_latent       : num [1:210, 1:70] 0.855 0.552 0.502 0.477 0.322 ...</span>
+<span class="co">#&gt;  $ Z_latent           : num [1:210, 1:70] -0.593 0.733 1.584 1.059 -1.888 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;  $ probit_theta_latent: num [1:210, 1:70] 0.634 -0.277 1.437 0.542 -1.807 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;  $ theta_latent       : num [1:210, 1:70] 0.7245 0.3959 0.909 0.6923 0.0457 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ model_spec         :List of 24</span>
 <span class="co">#&gt;  - attr(*, "class")= chr "jSDM"</span></code></pre></div>
 </div>
 </div>
-<div id="evaluation-of-mcmc-convergence" class="section level1">
-<h1 class="hasAnchor">
-<a href="#evaluation-of-mcmc-convergence" class="anchor"></a><span class="header-section-number">3</span> Evaluation of MCMC convergence</h1>
-<p>We evaluate the convergence of the MCMC output in which four parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
-Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
-If the convergence diagnostic gives values of potential scale reduction factor or psrf
-substantially above 1, its indicates lack of convergence.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
-<span class="va">arr2mcmc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html">mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="va">mod_probit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mod_probit_1</span>,<span class="va">mod_probit_2</span><span class="op">)</span>
-<span class="co"># MCMC lists</span>
-<span class="va">mcmc_list_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.alpha"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_V_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.V_alpha"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.latent"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_centered_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span>, <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_deviance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.Deviance"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_centered_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"sp_1.lambda_2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, invert<span class="op">=</span><span class="cn">TRUE</span>, value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>, <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_deviance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.Deviance"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">nsamp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co"># psrf gelman indice </span>
-<span class="va">psrf_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span>, transform<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">mpsrf</span>
-<span class="co">#max(gelman.diag(mcmc_list_alpha, multivariate = FALSE)$psrf)</span>
-<span class="va">psrf_V_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span>
-<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"beta"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">mpsrf</span>
-<span class="va">psrf_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lambda</span><span class="op">)</span><span class="op">$</span><span class="va">mpsrf</span>
-<span class="va">psrf_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lv</span><span class="op">)</span><span class="op">$</span><span class="va">mpsrf</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">psrf_lambda</span>, <span class="va">psrf_lv</span>, <span class="va">psrf_alpha</span>, <span class="va">psrf_V_alpha</span>, <span class="va">psrf_beta</span>,
-     file<span class="op">=</span><span class="st">"jSDM_in_parallel_files/psrf.rda"</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; psrf centered latent variables: 1.195713
-#&gt; psrf centered lambda: 1.130479
-#&gt; psrf alpha: 1.345508
-#&gt; psrf V_alpha: 1.001403
-#&gt; psrf beta: 1.122949</code></pre>
+<div class="section level2">
+<h2 id="evaluation-of-mcmc-convergence">
+<span class="header-section-number">3</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence"></a>
+</h2>
+<div class="section level3">
+<h3 id="the-gelmanrubin-convergence-diagnostic">
+<span class="header-section-number">3.1</span> The Gelman–Rubin convergence diagnostic<a class="anchor" aria-label="anchor" href="#the-gelmanrubin-convergence-diagnostic"></a>
+</h3>
+<div class="section level4">
+<h4 id="definition">
+<span class="header-section-number">3.1.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
+</h4>
+<p>The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See <span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span> and <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> for the detailed description of the method.</p>
+<p>Suppose we have <span class="math inline">\(M\)</span> chains, each of length <span class="math inline">\(N\)</span>, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter <span class="math inline">\(\theta\)</span>, let <span class="math inline">\(\left(\theta_{𝑚t}\right)_{t=1}^N\)</span> be the <span class="math inline">\(𝑚\)</span>th simulated chain, <span class="math inline">\(𝑚=1,\dots,𝑀\)</span>. Let <span class="math inline">\(\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}\)</span> and <span class="math inline">\(\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2\)</span> be the sample posterior mean and variance of the <span class="math inline">\(𝑚\)</span>th chain, and let the overall sample posterior mean be <span class="math inline">\(\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m\)</span>.</p>
+<p>The between-chains and within-chain variances are given by
+<span class="math display">\[B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2\]</span>
+<span class="math display">\[W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m\]</span></p>
+<p>Under certain stationarity conditions, the pooled variance :</p>
+<p><span class="math display">\[\hat{V}=\frac{N-1}{N}W + \frac{M+1}{MN}B\]</span></p>
+<p>is an unbiased estimator of the marginal posterior variance of <span class="math inline">\(\theta\)</span> (<span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span>). The potential scale reduction factor (PSRF) is defined to be the ratio of <span class="math inline">\(\hat{𝑉}\)</span> and <span class="math inline">\(𝑊\)</span>. If the <span class="math inline">\(𝑀\)</span> chains have converged to the target posterior distribution, then PSRF should be close to 1. The article <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> corrected the original PSRF by accounting for sampling variability as follows:
+<span class="math display">\[ \hat{R}= \sqrt{\frac{\hat{d}+3}{\hat{d}+1}\frac{\hat{V}}{W}}\]</span></p>
+<p>where <span class="math inline">\(\hat{d}\)</span> is the degrees of freedom estimate of a <span class="math inline">\(𝑡\)</span> distribution.</p>
+<p>PSRF estimates the potential decrease in the between-chains variability <span class="math inline">\(𝐵\)</span> with respect to the within-chain variability <span class="math inline">\(𝑊\)</span>. If <span class="math inline">\(\hat{R}\)</span> is large, then longer simulation sequences are expected to either decrease <span class="math inline">\(𝐵\)</span> or increase <span class="math inline">\(𝑊\)</span> because the simulations have not yet explored the full posterior distribution. As the article <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> have suggested, if <span class="math inline">\(\hat{R} &lt; 1.2\)</span> for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition <span class="math inline">\(\hat{R} &lt; 1.1\)</span>.</p>
 </div>
-<div id="representation-of-results" class="section level1">
-<h1 class="hasAnchor">
-<a href="#representation-of-results" class="anchor"></a><span class="header-section-number">4</span> Representation of results</h1>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="section level4">
+<h4 id="compute-hatr">
+<span class="header-section-number">3.1.2</span> Compute <span class="math inline">\(\hat{R}\)</span><a class="anchor" aria-label="anchor" href="#compute-hatr"></a>
+</h4>
+<p>We evaluate the convergence of the MCMC output in which four parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or <span class="math inline">\(\hat{R}\)</span> substantially above 1, its indicates lack of convergence.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mod_probit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mod_probit_1</span>,<span class="va">mod_probit_2</span><span class="op">)</span>
+<span class="va">burnin</span> <span class="op">&lt;-</span> <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">burnin</span>
+<span class="va">ngibbs</span> <span class="op">&lt;-</span> <span class="va">burnin</span> <span class="op">+</span> <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">mcmc</span>
+<span class="va">thin</span> <span class="op">&lt;-</span>  <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">thin</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
+<span class="va">arr2mcmc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+              start<span class="op">=</span><span class="va">burnin</span><span class="op">+</span><span class="fl">1</span> , end<span class="op">=</span><span class="va">ngibbs</span>, thin<span class="op">=</span><span class="va">thin</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co"># MCMC lists</span>
+<span class="va">mcmc_list_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.alpha"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_V_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.V_alpha"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.latent"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_centered_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span>, <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_deviance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.Deviance"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_centered_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_lambda</span>, <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_deviance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.Deviance"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nsamp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="co"># psrf gelman indice </span>
+<span class="va">psrf_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span>,
+                               multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">psrf_V_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>
+<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,
+                              multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">psrf_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_lambda</span>,
+                                multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">psrf_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span>,
+                            multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span> <span class="op">]</span><span class="op">)</span>
+<span class="va">psrf_lambda_centered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lambda</span>,
+                                multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">psrf_lv_centered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lv</span>,
+                            multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span> <span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">psrf_lambda</span>, <span class="va">psrf_lv</span>, <span class="va">psrf_alpha</span>, <span class="va">psrf_V_alpha</span>, <span class="va">psrf_beta</span>,
+     file<span class="op">=</span><span class="st">"jSDM_in_parallel_cache/psrf.rda"</span><span class="op">)</span>
+
+<span class="va">Rhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Rhat<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">psrf_alpha</span>, <span class="va">psrf_V_alpha</span>, <span class="va">psrf_beta</span>, <span class="va">psrf_lambda</span>, <span class="va">psrf_lambda_centered</span>, <span class="va">psrf_lv</span>, <span class="va">psrf_lv_centered</span><span class="op">)</span>,
+                   Variable<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alpha"</span>, <span class="st">"Valpha"</span>, <span class="st">"beta"</span>, <span class="st">"lambda"</span>, <span class="st">"centered lambda"</span>, <span class="st">"W"</span>, <span class="st">"centered W"</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Barplot</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Rhat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Variable</span>, y<span class="op">=</span><span class="va">Rhat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Averages of Rhat obtained for each type of parameter"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size<span class="op">=</span><span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"skyblue"</span>, stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Rhat</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, vjust<span class="op">=</span><span class="fl">0</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">1</span>, color<span class="op">=</span><span class="st">'red'</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Rhat</span><span class="op">$</span><span class="va">Rhat</span><span class="op">)</span><span class="op">+</span><span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<p><img src="jSDM_in_parallel_files/figure-html/MCMC-convergence-randsite-lv-1.png" width="700" style="display: block; margin: auto;"></p>
+<p>We can see that the <span class="math inline">\(\hat{R}\)</span> are very close to 1 for the species effects <span class="math inline">\(\beta\)</span>, the site effects <span class="math inline">\(\alpha\)</span> and their variance <span class="math inline">\(V_{alpha}\)</span>; we can therefore be fairly confident that convergence has been achieved for these parameters.</p>
+<p>However the <span class="math inline">\(\hat{R}\)</span> obtained for latent variables <span class="math inline">\(W\)</span> and factor loadings <span class="math inline">\(\lambda\)</span> are far from 1. It can be explained by the fact that <span class="math inline">\(W\)</span> and <span class="math inline">\(\lambda\)</span> can takes alternately positive and negative values between and even within MCMC chains, due to the identifiability issue between <span class="math inline">\(W\)</span> and <span class="math inline">\(lambda\)</span>.
+Consequently, if we center the latent variables <span class="math inline">\(W\)</span> and factor loadings <span class="math inline">\(\lambda\)</span> estimated before computing the <span class="math inline">\(\hat{R}\)</span>, we get values well closer to 1, we can therefore consider that convergence has been reached for these parameters.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="representation-of-results">
+<span class="header-section-number">4</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Plot trace and posterior distributions </span>
 <span class="co"># for two first species</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="co"># for two first sites </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="va">nsite</span><span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
-<span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html">densplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>, col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend<span class="op">=</span><span class="st">"V_alpha.target"</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="va">nsite</span><span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
+<span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>, col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend<span class="op">=</span><span class="st">"V_alpha.target"</span>,
        lwd<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span>, cex<span class="op">=</span><span class="fl">0.6</span>, bty<span class="op">=</span><span class="st">"n"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="co"># Deviance </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mcmc_list_deviance</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_deviance</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_in_parallel_files/figure-html/est-probit-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-7.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div id="accuracy-of-predictions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#accuracy-of-predictions" class="anchor"></a><span class="header-section-number">5</span> Accuracy of predictions</h1>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="accuracy-of-predictions">
+<span class="header-section-number">5</span> Accuracy of predictions<a class="anchor" aria-label="anchor" href="#accuracy-of-predictions"></a>
+</h2>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Predictive posterior mean for each observation</span>
-<span class="va">nchains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">)</span>
+<span class="va">nchains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">)</span>
 <span class="co"># Species effects beta and factor loadings lambda</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.sp</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">nsp</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
+  <span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.sp</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">nsp</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
   <span class="kw">if</span><span class="op">(</span><span class="va">i</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span>,
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span>,
          main<span class="op">=</span><span class="st">"species effect beta"</span>,
          xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
   <span class="op">}</span>
   <span class="kw">else</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.sp</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">nsp</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
+  <span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.sp</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">nsp</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">i</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>,
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>,
          main<span class="op">=</span><span class="st">"factor loadings lambda"</span>,
          xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>,
+    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span>, <span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>,
            col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span>
 <span class="co">## W latent variables</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mean_W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsite</span>,<span class="va">n_latent</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mean_W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsite</span>,<span class="va">n_latent</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>
+    <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>
     
     <span class="kw">if</span> <span class="op">(</span><span class="va">i</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>, <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,
-           main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>, <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,
+           main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span><span class="op">)</span>,
            xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
-      <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
     <span class="op">}</span>
     <span class="kw">else</span><span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>, <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>, <span class="va">mean_W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
     <span class="op">}</span>
   <span class="op">}</span>
 <span class="op">}</span>
 
 <span class="co">#= W.lambda</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">i</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">%*%</span><span class="va">lambda.target</span>,<span class="va">mean_W</span><span class="op">%*%</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">lambda.target</span>,<span class="va">mean_W</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,
          main <span class="op">=</span> <span class="st">"W.lambda"</span>,
          xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
   <span class="op">}</span>
   <span class="kw">else</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">W</span><span class="op">%*%</span><span class="va">lambda.target</span>,<span class="va">mean_W</span><span class="op">%*%</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">W</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">lambda.target</span>,<span class="va">mean_W</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">param</span><span class="op">[</span>,<span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
            ,col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span>
 
 <span class="co">#= Random site effect alpha </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span>,
      xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"site effect alpha"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
 
 <span class="co">#= Predictions </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probit_theta</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
      main<span class="op">=</span><span class="st">"probit(theta)"</span>,xlab<span class="op">=</span><span class="st">"obs"</span>,ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
   <span class="co">## probit(tetha)</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">probit_theta</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">probit_theta_latent</span>,col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">probit_theta</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">probit_theta_latent</span>,col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
 <span class="co">## Z</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">Z_true</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z_latent</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Z_true</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z_latent</span>,
      main<span class="op">=</span><span class="st">"Z_latent"</span>, xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">Z_true</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z_latent</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">Z_true</span>, <span class="va">mod_probit</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z_latent</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_in_parallel_files/figure-html/obs-fitted-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
+<div id="ref-Brooks1998">
+<p>Brooks, S. &amp; Gelman, A. (1998) General Methods for Monitoring Convergence of Iterative Simulations. <em>J. Comput. Graphi. Stat.</em>, <strong>7</strong>, 434–455.</p>
+</div>
+<div id="ref-Gelman1992">
+<p>Gelman, A. &amp; Rubin, D.B. (1992) Inference from Iterative Simulation Using Multiple Sequences. <em>Statistical Science</em>, <strong>7</strong>, 457–472.</p>
+</div>
 <div id="ref-Warton2015">
 <p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
 </div>
@@ -665,20 +710,20 @@ substantially above 1, its indicates lack of convergence.</p>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeanne Clément, <a href="https://ecology.ghislainv.fr">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>.</p>
+  <p></p>
+<p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>, Jeanne Clément.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -686,6 +731,8 @@ substantially above 1, its indicates lack of convergence.</p>
 
   
 
+
+  
 
   </body>
 </html>
