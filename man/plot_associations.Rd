@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_associations.R
 \name{plot_associations}
 \alias{plot_associations}
-\title{plotAssociations
+\title{plot_associations
 plot species-species associations}
 \usage{
 plot_associations(
@@ -53,7 +53,7 @@ plot_associations(
 \item{species_indices}{indices for sorting species}
 }
 \description{
-plotAssociations
+plot_associations
 plot species-species associations
 }
 \details{
@@ -104,7 +104,7 @@ mod <- jSDM_poisson_log(# Response variable
 R <- get_residual_cor(mod)$cor.mean
 plot_associations(R, circleBreak = TRUE, occ = PA_mites, species_order="abundance")
 # Average of MCMC samples of species enrironmental effect beta except the intercept
-env_effect <- t(sapply(mod$mcmc.sp,colMeans)[grep("beta_",colnames(mod$mcmc.sp$sp_1))[-1],])
+env_effect <- t(sapply(mod$mcmc.sp,colMeans)[grep("beta_",colnames(mod$mcmc.sp[[1]]))[-1],])
 colnames(env_effect) <-  gsub("beta_", "", colnames(env_effect))
 plot_associations(R, env_effect = env_effect, species_order="main env_effect")
 }
