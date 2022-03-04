@@ -13,15 +13,15 @@
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}. \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
 #' @param presence_data A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the number of successes (or presences) and the absence by a zero for each species at the studied sites.
-#' @param site_formula A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,
+#' @param site_formula A one-sided formula of the form '~x1+...+xp' specifying the explanatory variables for the suitability process of the model,
 #' used to form the design matrix \eqn{X} of size \eqn{n_{site} \times np}{n_site x np}.
-#' @param site_data A data frame containing the model's explicative variables by site.
+#' @param site_data A data frame containing the model's explanatory variables by site.
 #' @param trials A vector indicating the number of trials for each site. \eqn{n_i} should be superior or equal to \eqn{y_{ij}}{y_ij}, the number of successes for observation \eqn{n}.
 #'  If \eqn{n_i=0}, then \eqn{y_{ij}=0}{y_ij=0}. The default is one visit by site.
 #' @param trait_data A data frame containing the species traits which can be included as part of the model. Default to \code{NULL} to fit a model without species traits.
-#' @param trait_formula A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,
+#' @param trait_formula A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,
 #' used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
-#' Default to \code{NULL} to fit a model with all possible interactions between environnemental variables defined by \code{site_formula} and species traits found in \code{trait_data}.
+#' Default to \code{NULL} to fit a model with all possible interactions between environmental variables defined by \code{site_formula} and species traits found in \code{trait_data}.
 #' @param n_latent An integer which specifies the number of latent variables to generate. Defaults to \code{0}.
 #' @param site_effect A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 #'  If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
@@ -42,11 +42,11 @@
 #' @param alpha_start Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 #'  If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.
 #' @param V_alpha Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-#' Must be a stricly positive scalar, ignored if \code{site_effect="none"}.
+#' Must be a strictly positive scalar, ignored if \code{site_effect="none"}.
 #' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
-#' Must be a stricly positive scalar. Default to 0.5 for weak informative prior.
+#' Must be a strictly positive scalar. Default to 0.5 for weak informative prior.
 #' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
-#' Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.
+#' Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.
 #' @param mu_beta Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{np}-length vector.
 #'  If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters.
 #'   The default value is set to 0 for an uninformative prior, ignored if \code{trait_data} is specified.
@@ -216,13 +216,13 @@
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_logit.pdf"))
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
-#'   mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
+#'   mean_beta[j,] <- apply(mod$mcmc.sp[[j]][,1:ncol(X)],
 #'                          2, mean)
 #'   for (p in 1:ncol(X)) {
-#'     coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,p])
-#'     coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,p],
+#'     coda::traceplot(mod$mcmc.sp[[j]][,p])
+#'     coda::densplot(mod$mcmc.sp[[j]][,p],
 #'       main = paste(colnames(
-#'         mod$mcmc.sp[[paste0("sp_",j)]])[p],
+#'         mod$mcmc.sp[[j]])[p],
 #'         ", species : ",j))
 #'     abline(v=beta.target[j,p],col='red')
 #'   }
@@ -236,12 +236,12 @@
 #' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_logit.pdf"))
 #' par(mfrow=c(n_latent*2,2))
 #' for (j in 1:nsp) {
-#'   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+#'   mean_lambda[j,] <- apply(mod$mcmc.sp[[j]]
 #'                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
 #'   for (l in 1:n_latent) {
-#'     coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
-#'     coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l],
-#'                    main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+#'     coda::traceplot(mod$mcmc.sp[[j]][,ncol(X)+l])
+#'     coda::densplot(mod$mcmc.sp[[j]][,ncol(X)+l],
+#'                    main=paste(colnames(mod$mcmc.sp[[j]])
 #'                               [ncol(X)+l],", species : ",j))
 #'     abline(v=lambda.target[j,l],col='red')
 #'   }
@@ -305,31 +305,31 @@
 #'  Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}}  \code{\link{jSDM_poisson_log}} 
-#' @keywords multivariate logistic regression model binomial biodiversity MCMC, Metropolis algorithm 
+#' @keywords multivariate logistic regression model binomial biodiversity MCMC Metropolis algorithm 
 #' @export
 #' 
 
 jSDM_binomial_logit <- function(# Iteration
-  burnin=5000, mcmc=10000, thin=10,
-  # Data and suitability process
-  presence_data, site_formula,
-  trait_data=NULL, trait_formula=NULL, 
-  site_data, trials=NULL,
-  n_latent=0, site_effect="none",
-  # Starting values
-  beta_start=0, 
-  gamma_start=0,
-  lambda_start=0,
-  W_start=0,
-  alpha_start=0, 
-  V_alpha=1,
-  # Priors 
-  shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=10,
-  mu_gamma=0, V_gamma=10, 
-  mu_lambda=0, V_lambda=10,
-  # Various 
-  ropt=0.44, seed=1234, verbose=1)
+                                burnin=5000, mcmc=10000, thin=10,
+                                # Data and suitability process
+                                presence_data, site_formula,
+                                trait_data=NULL, trait_formula=NULL, 
+                                site_data, trials=NULL,
+                                n_latent=0, site_effect="none",
+                                # Starting values
+                                beta_start=0, 
+                                gamma_start=0,
+                                lambda_start=0,
+                                W_start=0,
+                                alpha_start=0, 
+                                V_alpha=1,
+                                # Priors 
+                                shape=0.5, rate=0.0005,
+                                mu_beta=0, V_beta=10,
+                                mu_gamma=0, V_gamma=10, 
+                                mu_lambda=0, V_lambda=10,
+                                # Various 
+                                ropt=0.44, seed=1234, verbose=1)
 
 {   
   #======== Basic checks ========
@@ -343,7 +343,7 @@ jSDM_binomial_logit <- function(# Iteration
   nsite <- nrow(Y)
   nobs <- nsite*nsp
   if(is.null(colnames(Y))){
-    colnames(Y) <- paste0("species_",1:ncol(Y))
+    colnames(Y) <- paste0("sp_",1:ncol(Y))
   }
   if(is.null(rownames(Y))){
     rownames(Y) <- 1:nrow(Y)
@@ -405,7 +405,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -416,7 +416,8 @@ jSDM_binomial_logit <- function(# Iteration
                          beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, mcmc.Deviance=MCMC.Deviance,
                      logit_theta_latent=mod$logit_theta_latent,
@@ -466,7 +467,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       ## W latent variables 
@@ -486,7 +487,8 @@ jSDM_binomial_logit <- function(# Iteration
                          W_start=W_start, V_W=V_W,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -535,7 +537,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -547,7 +549,8 @@ jSDM_binomial_logit <- function(# Iteration
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -593,7 +596,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -605,7 +608,8 @@ jSDM_binomial_logit <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, 
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -663,7 +667,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## W latent variables 
       MCMC.latent <- list()
@@ -683,7 +687,8 @@ jSDM_binomial_logit <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, site_effect=site_effect,
                          family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y) 
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -744,7 +749,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## W latent variables 
       MCMC.latent <- list()
@@ -764,7 +769,8 @@ jSDM_binomial_logit <- function(# Iteration
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -867,7 +873,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -891,7 +897,8 @@ jSDM_binomial_logit <- function(# Iteration
                          gamma_zeros=gamma_zeros,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp,
                      mcmc.gamma=MCMC.gamma,
@@ -950,7 +957,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -984,7 +991,8 @@ jSDM_binomial_logit <- function(# Iteration
                          W_start=W_start, V_W=V_W,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,
@@ -1041,7 +1049,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1067,7 +1075,8 @@ jSDM_binomial_logit <- function(# Iteration
                          V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,
@@ -1120,7 +1129,7 @@ jSDM_binomial_logit <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1145,7 +1154,8 @@ jSDM_binomial_logit <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, 
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,
@@ -1211,7 +1221,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1247,7 +1257,8 @@ jSDM_binomial_logit <- function(# Iteration
                          V_alpha=V_alpha, site_effect=site_effect,
                          family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp,
                      mcmc.gamma=MCMC.gamma,
@@ -1317,7 +1328,7 @@ jSDM_binomial_logit <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1353,7 +1364,8 @@ jSDM_binomial_logit <- function(# Iteration
                          V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="binomial", link="logit",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$logit_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$logit_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp,
                      mcmc.gamma=MCMC.gamma,

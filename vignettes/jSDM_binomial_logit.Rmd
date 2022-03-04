@@ -6,7 +6,7 @@ output:
     #highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
@@ -87,7 +87,7 @@ data(birds, package="jSDM")
 
 We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.
 
-We also normalize the continuous explicative variables and remove species species present on less than 5 sites to facilitate MCMC convergence. 
+We also normalize the continuous explanatory variables and remove species species present on less than 5 sites to facilitate MCMC convergence. 
 
 ```{r arranging-birds-data}
 # data.obs
@@ -139,9 +139,9 @@ np <- nrow(mod_birds_jSDM_logit$model_spec$beta_start)
 par(mfrow=c(2,2))
 for (j in 1:2) {
   for (p in 1:np) {
-      coda::traceplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,p]))
-      coda::densplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,p]), 
-main = paste(colnames(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]])[p],
+      coda::traceplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[j]][,p]))
+      coda::densplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[j]][,p]), 
+main = paste(colnames(mod_birds_jSDM_logit$mcmc.sp[[j]])[p],
 ", species : ",j))
   }
 }
@@ -151,9 +151,9 @@ n_latent <- mod_birds_jSDM_logit$model_spec$n_latent
 par(mfrow=c(2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
-    coda::traceplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,np+l]))
-    coda::densplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
-                   main = paste(colnames(mod_birds_jSDM_logit$mcmc.sp[[paste0("sp_",j)]])[np+l],
+    coda::traceplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[j]][,np+l]))
+    coda::densplot(coda::as.mcmc(mod_birds_jSDM_logit$mcmc.sp[[j]][,np+l]), 
+                   main = paste(colnames(mod_birds_jSDM_logit$mcmc.sp[[j]])[np+l],
                                 ", species : ",j))
   }
 }

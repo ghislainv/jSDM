@@ -44,18 +44,18 @@ jSDM_poisson_log(
 
 \item{count_data}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the abundance of each species on each site.}
 
-\item{site_data}{A data frame containing the model's explicative variables by site.}
+\item{site_data}{A data frame containing the model's explanatory variables by site.}
 
-\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,\cr
+\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explanatory variables for the suitability process of the model,\cr
 used to form the design matrix \eqn{X} of size \eqn{n_{site} \times np}{n_site x np}.}
 
 \item{trait_data}{A data frame containing the species traits which can be included as part of the model.\cr
 Default to \code{NULL} to fit a model without species traits.}
 
-\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,\cr
+\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,\cr
 used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} \cr 
 and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
-Default to \code{NULL} to fit a model with all possible interactions between environnemental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
+Default to \code{NULL} to fit a model with all possible interactions between environmental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
@@ -85,13 +85,13 @@ If \code{W_start} takes a scalar value, then that value will serve for all of th
 If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.}
 
 \item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-Must be a stricly positive scalar, ignored if \code{site_effect="none"}.}
+Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
-Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
+Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
 
 \item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
-Must be a stricly positive scalar. Default to 0.0005 for weak informative prior.}
+Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.}
 
 \item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{np}-length vector.
 If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters.
@@ -272,13 +272,13 @@ mean_beta <- matrix(0,nsp,np)
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_log.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
-  mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
+  mean_beta[j,] <- apply(mod$mcmc.sp[[j]][,1:ncol(X)],
                          2, mean)
   for (p in 1:ncol(X)) {
-    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,p])
-    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,p],
+    coda::traceplot(mod$mcmc.sp[[j]][,p])
+    coda::densplot(mod$mcmc.sp[[j]][,p],
       main = paste(colnames(
-        mod$mcmc.sp[[paste0("sp_",j)]])[p],
+        mod$mcmc.sp[[j]])[p],
         ", species : ",j))
     abline(v=beta.target[j,p],col='red')
   }
@@ -292,12 +292,12 @@ mean_lambda <- matrix(0,nsp,n_latent)
 pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_log.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
-  mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_lambda[j,] <- apply(mod$mcmc.sp[[j]]
                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
   for (l in 1:n_latent) {
-    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
-    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l],
-                   main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+    coda::traceplot(mod$mcmc.sp[[j]][,ncol(X)+l])
+    coda::densplot(mod$mcmc.sp[[j]][,ncol(X)+l],
+                   main=paste(colnames(mod$mcmc.sp[[j]])
                               [ncol(X)+l],", species : ",j))
     abline(v=lambda.target[j,l],col='red')
   }
@@ -368,7 +368,7 @@ Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D.
  Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 Jeanne Clément <jeanne.clement16@laposte.net>\cr }
 }
-\keyword{MCMC,}
+\keyword{MCMC}
 \keyword{Metropolis}
 \keyword{algorithm}
 \keyword{biodiversity}

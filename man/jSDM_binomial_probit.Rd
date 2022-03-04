@@ -6,7 +6,7 @@
 \usage{
 jSDM_binomial_probit(
   burnin = 5000,
-  mcmc = 15000,
+  mcmc = 10000,
   thin = 10,
   presence_data,
   site_formula,
@@ -20,13 +20,13 @@ jSDM_binomial_probit(
   beta_start = 0,
   alpha_start = 0,
   gamma_start = 0,
+  V_alpha = 1,
   mu_beta = 0,
   V_beta = 10,
   mu_lambda = 0,
   V_lambda = 10,
   mu_gamma = 0,
   V_gamma = 10,
-  V_alpha = 1,
   shape = 0.5,
   rate = 5e-04,
   seed = 1234,
@@ -43,16 +43,16 @@ jSDM_binomial_probit(
 
 \item{presence_data}{A matrix \eqn{n_{site} \times n_{species}}{n_site x n_species} indicating the presence by a 1 (or the absence by a 0) of each species on each site.}
 
-\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explicative variables for the suitability process of the model,
+\item{site_formula}{A one-sided formula of the form '~x1+...+xp' specifying the explanatory variables for the suitability process of the model,
 used to form the design matrix \eqn{X} of size \eqn{n_{site} \times np}{n_site x np}.}
 
 \item{trait_data}{A data frame containing the species traits which can be included as part of the model. Default to \code{NULL} to fit a model without species traits.}
 
-\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environnemental variables and the species traits to be considered in the model,
+\item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,
 used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
-Default to \code{NULL} to fit a model with all possible interactions between environnemental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
+Default to \code{NULL} to fit a model with all possible interactions between environmental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
 
-\item{site_data}{A data frame containing the model's explicative variables by site.}
+\item{site_data}{A data frame containing the model's explanatory variables by site.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
@@ -79,6 +79,9 @@ If \code{alpha_start} takes a scalar value, then that value will serve for all o
  If \code{gamma_start} takes a scalar value, then that value will serve for all of the \eqn{\gamma} parameters.
  If \code{gamma_start} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \eqn{nt \times np}{nt x np} matrix is filled by column with specified values,
   if a \eqn{np}-length vector is given, the matrix is filled by row.}
+
+\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
+Must be a stricly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{mu_beta}{Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{np}-length vector.
 If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters.
@@ -114,9 +117,6 @@ If \code{V_gamma} takes a scalar value, then that value will serve as the prior 
 If \code{V_gamma} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \eqn{nt \times np}{nt x np} matrix is filled by column with specified values,
  if a \eqn{np}-length vector is given, the matrix is filled by row. 
 The default variance is large and set to 10 for an uninformative flat prior, ignored if \code{trait_data=NULL}.}
-
-\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-Must be a stricly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a stricly positive scalar. Default to 0.5 for weak informative prior.}
@@ -194,7 +194,7 @@ We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma
 library(jSDM)
 
 #==================
-#== Data simulation
+#' #== Data simulation
 
 #= Number of sites
 nsite <- 150
@@ -213,21 +213,28 @@ n_latent <- 2
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
-beta.target <- t(matrix(runif(nsp*ncol(X),-2,2),
+np <- ncol(X)
+#= Latent variables W
+W <- matrix(rnorm(nsite*n_latent,0,1), nsite, n_latent)
+#= Fixed species effect beta 
+beta.target <- t(matrix(runif(nsp*np,-2,2),
                         byrow=TRUE, nrow=nsp))
-l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*n_latent-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,
-                            l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
+#= Factor loading lambda  
+lambda.target <- matrix(0, n_latent, nsp)
+mat <- t(matrix(runif(nsp*n_latent, -2, 2), byrow=TRUE, nrow=nsp))
+lambda.target[upper.tri(mat, diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+diag(lambda.target) <- runif(n_latent, 0, 2)
+#= Variance of random site effect 
 V_alpha.target <- 0.5
-V <- 1
-alpha.target <- rnorm(nsite,0,sqrt(V_alpha.target))
-probit_theta<-X\%*\%beta.target + W\%*\%lambda.target + alpha.target
+#= Random site effect alpha
+alpha.target <- rnorm(nsite,0 , sqrt(V_alpha.target))
+# Simulation of response data with probit link
+probit_theta <- X\%*\%beta.target + W\%*\%lambda.target + alpha.target
 theta <- pnorm(probit_theta)
-e <- matrix(rnorm(nsp*nsite,0,sqrt(V)),nsite,nsp)
+e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
+# Latent variable Z 
 Z_true <- probit_theta + e
+# Presence-absence matrix Y
 Y <- matrix (NA, nsite,nsp)
 for (i in 1:nsite){
   for (j in 1:nsp){
@@ -277,16 +284,12 @@ mean_beta <- matrix(0,nsp,ncol(X))
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit.pdf"))
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
-  mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_beta[j,] <- apply(mod$mcmc.sp[[j]]
                          [,1:ncol(X)], 2, mean)  
   for (p in 1:ncol(X)){
-    coda::traceplot(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p])
-    coda::densplot(
-      mod$mcmc.sp[[paste0("sp_",j)]][,p],
-      main = paste(colnames(
-        mod$mcmc.sp[[paste0("sp_",j)]])[p],
-        ", species : ",j))
+    coda::traceplot(mod$mcmc.sp[[j]][,p])
+    coda::densplot(mod$mcmc.sp[[j]][,p],
+      main = paste(colnames(mod$mcmc.sp[[j]])[p],", species : ",j))
     abline(v=beta.target[p,j],col='red')
   }
 }
@@ -299,14 +302,12 @@ mean_lambda <- matrix(0,nsp,n_latent)
 pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit.pdf"))
 par(mfrow=c(n_latent*2,2))
 for (j in 1:nsp) {
-  mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+  mean_lambda[j,] <- apply(mod$mcmc.sp[[j]]
                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)  
   for (l in 1:n_latent) {
-    coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]]
-                                  [,ncol(X)+l])
-    coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]]
-                                 [,ncol(X)+l],
-                   main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+    coda::traceplot(mod$mcmc.sp[[j]][,ncol(X)+l])
+    coda::densplot(mod$mcmc.sp[[j]][,ncol(X)+l],
+                   main=paste(colnames(mod$mcmc.sp[[j]])
                               [ncol(X)+l],", species : ",j))
     abline(v=lambda.target[l,j],col='red')
   }

@@ -1,12 +1,12 @@
 ---
-title: "Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA"
+title: "Bernoulli probit regression including species traits"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
     #highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
  %\VignetteEngine{knitr::rmarkdown}
- %\VignetteIndexEntry{Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA}
+ %\VignetteIndexEntry{Bernoulli probit regression including species traits}
  %\VignetteEncoding{UTF-8}
 ---
  
@@ -37,7 +37,7 @@ Referring to the models used in the articles @Warton2015 and @Albert1993, we def
 
 $$ \mathrm{probit}(\theta_{ij}) =\alpha_i + X_i.\beta_j + W_i.\lambda_j $$
 
-- Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the repartition function of the reduced centred normal distribution.
+- Link function probit: $\mathrm{probit}: q \rightarrow \Phi^{-1}(q)$ where $\Phi$ correspond to the distribution function of the reduced centered normal distribution.
 
 - Response variable: $Y=(y_{ij})^{i=1,\ldots,nsite}_{j=1,\ldots,nsp}$ with:
 
@@ -145,6 +145,8 @@ The species traits available for the alpine plants are:
 - **Nmass**:	Mass-based leaf nitrogen content
 - **Seed**:	Seed mass
 
+We want to analyze the response of alpine plants to snowmelt date according to their SLA.  
+
 As a first approach, we just integer the interaction between the mean snowmelt date **Snow** and the specific leaf area **SLA** as an explanatory factor of the model. We also normalize the continuous species traits to facilitate MCMC convergence. 
 
 
@@ -196,7 +198,7 @@ plot(mod$mcmc.gamma[[p]])
 ## beta_j of the first two species
 par(mfrow=c(np,2), oma=c(0,0,2,0))
 for (j in 1:2) {
-    plot(mod$mcmc.sp[[paste0("sp_",j)]][,1:np])
+    plot(mod$mcmc.sp[[j]][,1:np])
     title(outer=TRUE, main=paste0( "species ", j ," : ",
                                    colnames(PA_aravo)[j]), cex.main=1.5)
 }
@@ -205,7 +207,7 @@ for (j in 1:2) {
 n_latent <- mod$model_spec$n_latent
 par(mfrow=c(n_latent,2), oma=c(0,0,2,0))
 for (j in 1:2) {
-    plot(mod$mcmc.sp[[paste0("sp_",j)]][,(np+1):(np+n_latent)])
+    plot(mod$mcmc.sp[[j]][,(np+1):(np+n_latent)])
     title(outer=TRUE, main=paste0( "species ", j ," : ",
                                    colnames(PA_aravo)[j]), cex.main=1.5)
 }

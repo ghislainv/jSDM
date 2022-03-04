@@ -6,7 +6,7 @@ output:
     #highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
@@ -88,7 +88,7 @@ head(mites)
 
 We rearrange the data in two data-sets: a first one for the abundance observations for each species (columns) at each site (rows), and a second one for the site characteristics.
 
-We also normalize the continuous explicative variables to facilitate MCMC convergence. 
+We also normalize the continuous explanatory variables to facilitate MCMC convergence. 
 
 ```{r arranging-mites-data}
 # data.obs
@@ -137,9 +137,9 @@ np <- nrow(mod_mites_jSDM_log$model_spec$beta_start)
 ## beta_j of the first species
 par(mfrow=c(3,2))
 for (p in 1:np) {
-  coda::traceplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]][,p]))
-  coda::densplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]][,p]), 
-                 main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",1)]])[p],
+  coda::traceplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[1]][,p]))
+  coda::densplot(coda::as.mcmc(mod_mites_jSDM_log$mcmc.sp[[1]][,p]), 
+                 main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[1]])[p],
                               ", species : ",1))
 }
 
@@ -148,9 +148,9 @@ n_latent <- mod_mites_jSDM_log$model_spec$n_latent
 par(mfrow=c(2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
-    coda::traceplot(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]][,np+l])
-    coda::densplot(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]][,np+l], 
-                   main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[paste0("sp_",j)]])
+    coda::traceplot(mod_mites_jSDM_log$mcmc.sp[[j]][,np+l])
+    coda::densplot(mod_mites_jSDM_log$mcmc.sp[[j]][,np+l], 
+                   main = paste(colnames(mod_mites_jSDM_log$mcmc.sp[[j]])
                                 [np+l], ", species : ",j))
   }
 }
