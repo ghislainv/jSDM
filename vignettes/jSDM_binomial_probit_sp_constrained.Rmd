@@ -455,7 +455,7 @@ Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta0, psrf_beta,
                               "lambda \n on the diagonal", "others lambda", "W"))
 # Barplot
 library(ggplot2)
-ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
+ggplot2::ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
   ggtitle("Averages of Rhat obtained for each type of parameter") +
   theme(plot.title = element_text(hjust = 0.5, size=15)) + 
   theme(plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.1,"cm")) +
