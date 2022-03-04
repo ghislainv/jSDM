@@ -213,13 +213,13 @@
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_log.pdf"))
 #' par(mfrow=c(ncol(X),2))
 #' for (j in 1:nsp) {
-#'   mean_beta[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]][,1:ncol(X)],
+#'   mean_beta[j,] <- apply(mod$mcmc.sp[[j]][,1:ncol(X)],
 #'                          2, mean)
 #'   for (p in 1:ncol(X)) {
-#'     coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,p])
-#'     coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,p],
+#'     coda::traceplot(mod$mcmc.sp[[j]][,p])
+#'     coda::densplot(mod$mcmc.sp[[j]][,p],
 #'       main = paste(colnames(
-#'         mod$mcmc.sp[[paste0("sp_",j)]])[p],
+#'         mod$mcmc.sp[[j]])[p],
 #'         ", species : ",j))
 #'     abline(v=beta.target[j,p],col='red')
 #'   }
@@ -233,12 +233,12 @@
 #' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_log.pdf"))
 #' par(mfrow=c(n_latent*2,2))
 #' for (j in 1:nsp) {
-#'   mean_lambda[j,] <- apply(mod$mcmc.sp[[paste0("sp_",j)]]
+#'   mean_lambda[j,] <- apply(mod$mcmc.sp[[j]]
 #'                            [,(ncol(X)+1):(ncol(X)+n_latent)], 2, mean)
 #'   for (l in 1:n_latent) {
-#'     coda::traceplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
-#'     coda::densplot(mod$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l],
-#'                    main=paste(colnames(mod$mcmc.sp[[paste0("sp_",j)]])
+#'     coda::traceplot(mod$mcmc.sp[[j]][,ncol(X)+l])
+#'     coda::densplot(mod$mcmc.sp[[j]][,ncol(X)+l],
+#'                    main=paste(colnames(mod$mcmc.sp[[j]])
 #'                               [ncol(X)+l],", species : ",j))
 #'     abline(v=lambda.target[j,l],col='red')
 #'   }
@@ -302,7 +302,7 @@
 #'  Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}}  \code{\link{jSDM_binomial_logit}} 
-#' @keywords multivariate logistic regression model poisson biodiversity MCMC, Metropolis algorithm 
+#' @keywords multivariate logistic regression model poisson biodiversity MCMC Metropolis algorithm 
 #' @export
 #' 
 
@@ -339,7 +339,7 @@ jSDM_poisson_log  <- function(# Iteration
   nsite <- nrow(Y)
   nobs <- nsite*nsp
   if(is.null(colnames(Y))){
-    colnames(Y) <- paste0("species_",1:ncol(Y))
+    colnames(Y) <- paste0("sp_",1:ncol(Y))
   }
   if(is.null(rownames(Y))){
     rownames(Y) <- 1:nrow(Y)
@@ -395,7 +395,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -406,7 +406,8 @@ jSDM_poisson_log  <- function(# Iteration
                          beta_start=beta_start, mu_beta=mu_beta, V_beta=V_beta,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, mcmc.Deviance=MCMC.Deviance,
                      log_theta_latent=mod$log_theta_latent,
@@ -456,7 +457,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       ## W latent variables 
@@ -476,7 +477,8 @@ jSDM_poisson_log  <- function(# Iteration
                          W_start=W_start, V_W=V_W,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -525,7 +527,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -537,7 +539,8 @@ jSDM_poisson_log  <- function(# Iteration
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -584,7 +587,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       
       #= Model specification, site_formula,
@@ -596,7 +599,8 @@ jSDM_poisson_log  <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, 
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -654,7 +658,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## W latent variables 
       MCMC.latent <- list()
@@ -674,7 +678,8 @@ jSDM_poisson_log  <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, site_effect=site_effect,
                          family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -734,7 +739,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## W latent variables 
       MCMC.latent <- list()
@@ -754,7 +759,8 @@ jSDM_poisson_log  <- function(# Iteration
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.Deviance=MCMC.Deviance,
@@ -858,7 +864,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j, start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -882,7 +888,8 @@ jSDM_poisson_log  <- function(# Iteration
                          gamma_zeros=gamma_zeros,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp,
                      mcmc.gamma=MCMC.gamma,
@@ -941,7 +948,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -975,7 +982,8 @@ jSDM_poisson_log  <- function(# Iteration
                          W_start=W_start, V_W=V_W,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,
@@ -1032,7 +1040,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1058,7 +1066,8 @@ jSDM_poisson_log  <- function(# Iteration
                          V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp=MCMC.sp,
                      mcmc.gamma=MCMC.gamma,
@@ -1112,7 +1121,7 @@ jSDM_poisson_log  <- function(# Iteration
         ## beta_j
         MCMC.beta_j <- coda::mcmc(as.matrix(mod$beta[,j,]), start=nburn+1, end=ngibbs, thin=nthin)
         colnames(MCMC.beta_j) <- paste0("beta_",colnames(X))
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(MCMC.beta_j,start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1137,7 +1146,8 @@ jSDM_poisson_log  <- function(# Iteration
                          alpha_start=alpha_start, V_alpha=V_alpha, 
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp,
                      mcmc.gamma=MCMC.gamma,
@@ -1203,7 +1213,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1239,7 +1249,8 @@ jSDM_poisson_log  <- function(# Iteration
                          V_alpha=V_alpha, site_effect=site_effect,
                          family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,
@@ -1309,7 +1320,7 @@ jSDM_poisson_log  <- function(# Iteration
         MCMC.lambda_j <- coda::mcmc(mod$lambda[,j,], start=nburn+1, end=ngibbs, thin=nthin)	
         colnames(MCMC.lambda_j) <- paste0("lambda_",1:n_latent)
         
-        MCMC.sp[[paste0("sp_",j)]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
+        MCMC.sp[[colnames(Y)[j]]] <- coda::mcmc(cbind(MCMC.beta_j, MCMC.lambda_j),start=nburn+1, end=ngibbs, thin=nthin)
       }
       ## gamma 
       MCMC.gamma <- list()
@@ -1345,7 +1356,8 @@ jSDM_poisson_log  <- function(# Iteration
                          V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
-      
+      colnames(mod$log_theta_latent) <- colnames(mod$theta_latent) <- colnames(Y)
+      rownames(mod$log_theta_latent) <- rownames(mod$theta_latent) <- rownames(Y)
       #= Output
       output <- list(mcmc.sp= MCMC.sp, 
                      mcmc.gamma=MCMC.gamma,

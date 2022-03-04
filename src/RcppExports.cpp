@@ -7,6 +7,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // Rcpp_jSDM_binomial_logit
 Rcpp::List Rcpp_jSDM_binomial_logit(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {

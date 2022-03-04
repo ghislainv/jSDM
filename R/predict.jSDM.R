@@ -120,7 +120,9 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
         newdata <- rbind(newdata, model.spec$data[rowId_site,!c(grepl("Y",colnames(model.spec$data)) | grepl("species",colnames(model.spec$data)) | grepl("site",colnames(model.spec$data)))])
       }
     }
-    if (!all(colnames(newdata) %in% colnames(model.spec$data)) && !(ncol(newdata)==(nrow(model.spec$beta_start)+ifelse(sum(grepl("(Intercept)",colnames(object$mcmc.sp[[1]])))==1,-1,0)))) {stop("newdata must have columns names corresponding to names of all covariables in object$model_spec$data \n")}
+    if (!all(colnames(newdata) %in% colnames(model.spec$data)) &&
+        !(ncol(newdata)==(nrow(model.spec$beta_start) + ifelse(sum(grepl("(Intercept)", colnames(object$mcmc.sp[[1]])))==1,-1,0)))) 
+      {stop("newdata must have columns names corresponding to names of all covariables in object$model_spec$data \n")}
   }
   newdata <- data.frame(newdata)
   
@@ -222,12 +224,12 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
             betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[num_species[j]]])
           }
         }
         if(model.spec$n_latent > 0){
-          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
-          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[num_species[j]]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[num_species[j]]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
@@ -267,14 +269,14 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
             betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[num_species[j]]])
           }
         }
         
         if(model.spec$n_latent > 0){
           ##= Matrix of MCMC parameters
-          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,c(1:np)])
-          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[j])]][,(np+1):(np+nl)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[num_species[j]]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[num_species[j]]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
@@ -331,12 +333,12 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
             betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[num_species[i]]])
           }
         }
         if(model.spec$n_latent > 0){
-          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
-          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,(np+1):(np+nl)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[num_species[i]]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[num_species[i]]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
@@ -384,14 +386,14 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
             betaj.mat <- as.matrix(object$mcmc[,grepl("beta", colnames(object$mcmc))])
           }
           else{
-            betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]])
+            betaj.mat <- as.matrix(object$mcmc.sp[[num_species[i]]])
           }
         }
         
         if(model.spec$n_latent > 0){
           ##= Matrix of MCMC parameters
-          betaj.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,c(1:np)])
-          lambda_j.mat <- as.matrix(object$mcmc.sp[[paste0("sp_",num_species[i])]][,(np+1):(np+nl)])
+          betaj.mat <- as.matrix(object$mcmc.sp[[num_species[i]]][,c(1:np)])
+          lambda_j.mat <- as.matrix(object$mcmc.sp[[num_species[i]]][,(np+1):(np+nl)])
         }
         
         ##= Loop on samples
