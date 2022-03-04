@@ -19,6 +19,7 @@
 #'    function \tab data-type \cr
 #'    \code{\link{jSDM_binomial_logit}} \tab presence-absence \cr
 #'    \code{\link{jSDM_binomial_probit}} \tab presence-absence \cr
+#'    \code{\link{jSDM_binomial_probit_sp_constrained}}  \tab presence-absence \cr
 #'    \code{\link{jSDM_binomial_probit_long_format}} \tab presence-absence \cr
 #'    \code{\link{jSDM_poisson_log}} \tab abundance \cr }
 #'    
