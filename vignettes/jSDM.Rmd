@@ -6,7 +6,7 @@ output:
     #highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
@@ -33,7 +33,7 @@ highlight = TRUE
 
 # jSDM package 
 
-`jSDM` is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+`jSDM` is an R package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework.
 
 The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
 
@@ -51,6 +51,7 @@ The package includes the following functions to fit various species distribution
 |:---------|:-------------|:------------|
 | `jSDM_binomial_logit()` | presence-absence | wide | 
 | `jSDM_binomial_probit()` | presence-absence | wide |
+| `jSDM_binomial_probit_sp_constrained()` | presence-absence | wide |
 | `jSDM_binomial_probit_long_format()` | presence-absence | long |
 | `jSDM_poisson_log()` | abundance | wide |
 
@@ -69,6 +70,12 @@ The package includes the following functions to fit various species distribution
   | if `n_latent>0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
   | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
   | if `n_latent>0` and `site_effect="random"` | probit$(\theta_{ij}) = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
+
+* `jSDM_binomial_probit_sp_constrained()` : 
+
+This function allows to fit the same models than the function `jSDM_binomial_probit` except for models not including latent variables, indeed `n_latent` must be greater than zero in this function. 
+It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the $\Lambda$ matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
+This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the $\hat{R}$s (@Gelman1992) computed from the factor loadings $\lambda$ of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
 
 * `jSDM_binomial_logit()` : 
 
@@ -164,14 +171,14 @@ $$y_{ij}=\begin{cases}
 It can be easily shown that: $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$. 
 
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default q=2).
-We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,10)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
+We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients: $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$. We use a prior distribution $\mathcal{N}(0,1)$ for all lambdas not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
 
 - Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,nsite}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
 The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$.
 
-- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10^6)$ for all betas. 
+- $\beta_{0j}$ correspond to the intercept for species $j$ which is assume to be a fixed effect. We use a prior distribution $\mathcal{N}(0,1)$ for all betas. 
 
-- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.1, \text{rate}=0.1)$ as prior distribution by default. 
 
 
 ## Occurrence data-set
@@ -192,7 +199,7 @@ head(frogs)
 
 We rearrange the data in two data-sets: a first one for the presence-absence observations for each species (columns) at each site (rows), and a second one for the site characteristics.
 
-We also normalize the continuous explicative variables to facilitate MCMC convergence. 
+We also normalize the continuous explanatory variables to facilitate MCMC convergence. 
 
 ```{r arranging-frogs-data}
 # data.obs
@@ -240,9 +247,9 @@ np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
 par(mfrow=c(np,2))
 for (j in 1:2) {
   for (p in 1:np) {
-    coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,p]))
-    coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,p]), 
-                   main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]])[p],
+    coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,p]))
+    coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,p]), 
+                   main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[j]])[p],
                                 ", species : ",j))
   }
 }
@@ -252,9 +259,9 @@ n_latent <- mod_frogs_jSDM_probit$model_spec$n_latent
 par(mfrow=c(n_latent*2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
-    coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,np+l]))
-    coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]][,np+l]), 
-                   main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[paste0("sp_",j)]])
+    coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,np+l]))
+    coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,np+l]), 
+                   main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[j]])
                                 [np+l],", species : ",j))
   }
 }
