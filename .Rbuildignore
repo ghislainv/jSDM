@@ -18,8 +18,14 @@
 ^_pkgdown\.yml$
 
 # vignettes
+
 ^vignettes/jagsboralmodel\.txt$
-^vignettes/proof\.Rmd$
+^vignettes/Madagascar\.Rmd$
+^vignettes/jSDM_binomial_probit\.Rmd$
+^vignettes/jSDM_Hmsc\.Rmd$
+^vignettes/jSDM_boral\.Rmd$
+^vignettes/SDM_JSDM\.Rmd$
+^vignettes/jSDM_binomial_probit_long_format\.Rmd$
 ^vignettes/grassdata
 ^vignettes/figure/.*$
 ^vignettes/.*_cache/.*$

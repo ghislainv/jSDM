@@ -1,4 +1,4 @@
-# jSDM 0.1.2
+# jSDM 0.2.0
 * New function `jSDM_binomial_probit_sp_constrained()` which aims to improve the convergence of latent variable models fitting by selecting the species constrained to have positive values of factor loadings $\lambda$ and new vignette "Bernoulli probit regression with selected constrained species" to illustrate its use. 
 * New vignettes “Bernoulli probit regression including species traits" and "Estimation of Madagascar's plant biodiversity" available. 
 * Add the possibility of considering an additional hierarchical level in the Bayesian models of the `jSDM_binomial_probit()`, `jSDM_binomial_logit()` and `jSDM_poisson_log()` functions to take into account interactions between species-specific traits and the environment in estimating species effects.

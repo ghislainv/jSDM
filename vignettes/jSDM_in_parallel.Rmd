@@ -400,7 +400,7 @@ knitr::include_graphics("jSDM_in_parallel_files/figure-html/MCMC-convergence-ran
 
 We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$, the site effects $\alpha$ and their variance $V_{alpha}$; we can therefore be fairly confident that convergence has been achieved for these parameters.  
 
-However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are far from 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to the identifiability issue between $W$ and $lambda$. 
+However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are far from 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to the identifiability issue between $W$ and $\lambda$. 
 Consequently, if we center the latent variables $W$ and  factor loadings $\lambda$  estimated before computing the $\hat{R}$, we get values well closer to 1, we can therefore consider that convergence has been reached for these parameters. 
 
 # Representation of results
