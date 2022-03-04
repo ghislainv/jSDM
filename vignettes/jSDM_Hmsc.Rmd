@@ -43,7 +43,7 @@ $$y_{ij} \sim \mathcal{B}inomial(t_i, \theta_{ij})$$
   
 $$ \mathrm{g}(\theta_{ij}) = X_i\beta_j + W_i\lambda_j $$
   
-- $\theta_{ij}$: occurence probability of the species $j$ on site $i$. 
+- $\theta_{ij}$: occurrence probability of the species $j$ on site $i$. 
 - $t_i$: number of visits at site $i$ 
 - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 
@@ -170,11 +170,16 @@ In a first step, we fit joint species distribution models from previous datasets
 We generate a data-set following the previous model with 300 sites, 100 species and as parameters :
 
 ```{r simulated-data, echo=TRUE, eval=FALSE}
-
-# Toy example : 
+#==================
+#== Data simulation
+#==================
+#= Number of species
 nsp <- 100
+#= Number of sites
 nsite <- 300
+#= Number of latent variables
 nl <- 2
+#= Set seed for repeatability
 seed <- 123
 set.seed(seed)
 
@@ -183,21 +188,22 @@ x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 np <- ncol(X)
-# Simulation of parameters
-W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
+#= Latent variables W
+W <- matrix(rnorm(nsite*nl,0,1), nrow=nsite, ncol=nl)
+#= Fixed species effect beta 
 beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*2-3,-2,2)
-lambda.target <- t(matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]),
-                          byrow=T, nrow=nsp))
-param.target <- rbind(beta.target,lambda.target)
-
+#= Factor loading lambda  
+mat <- t(matrix(runif(nsp*nl,-2,2), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(nl,0,2)
+lambda.target <- matrix(0,nl,nsp)
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 # Simulation of response data with probit link
 probit_theta <- X %*% beta.target + W %*% lambda.target
 theta <- pnorm(probit_theta)
 e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
+# Latent variable Z 
 Z_true <- probit_theta + e
+# Presence-absence matrix Y
 Y <- matrix(NA, nsite,nsp)
 for (i in 1:nsite){
   for (j in 1:nsp){
@@ -603,7 +609,7 @@ In a second step, we fit the same joint species distribution models from each of
 
 We fit a binomial joint species distribution model, including latent variables, from the simulated dataset using the `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-simulation}
+```{r jSDM-simulation, eval=FALSE}
 load("jSDM_Hmsc_cache/Hmsc_simulation.RData")
 np <- ncol(X)
 library(jSDM)
@@ -652,14 +658,14 @@ mean_beta <- matrix(0,nsp,np)
 par(mfrow=c(ncol(X),2))
 for (j in 1:nsp) {
   for (p in 1:ncol(X)) {
-    mean_beta[j,p] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p])
+    mean_beta[j,p] <-mean(mod_jSDM_sim$mcmc.sp[[j]][,p])
     if (j < 3){
-      coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]),
+      coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[j]][,p]),
                       main=paste("Trace of ", colnames(mod_jSDM_sim$mcmc.sp
-                                         [[paste0("sp_",j)]])[p],", species : ",j))
-      coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p]), 
+                                         [[j]])[p],", species : ",j))
+      coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[j]][,p]), 
                      main=paste("Density of ", colnames(mod_jSDM_sim$mcmc.sp
-                                         [[paste0("sp_",j)]])[p],", species : ",j))
+                                         [[j]])[p],", species : ",j))
       abline(v=beta.target[p,j],col='red')
     }
   }
@@ -670,15 +676,15 @@ mean_lambda <- matrix(0,nsp,nl)
 par(mfrow=c(nl,2))
 for (j in 1:nsp) {
   for (l in 1:nl) {
-    mean_lambda[j,l] <-mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l])
+    mean_lambda[j,l] <-mean(mod_jSDM_sim$mcmc.sp[[j]][,ncol(X)+l])
     
     if (j < 3){
-      coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]),
+      coda::traceplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[j]][,ncol(X)+l]),
                       main=paste("Trace of", colnames(mod_jSDM_sim$mcmc.sp
-                                         [[paste0("sp_",j)]])[ncol(X)+l],", species : ",j))
-      coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,ncol(X)+l]), 
+                                         [[j]])[ncol(X)+l],", species : ",j))
+      coda::densplot(coda::as.mcmc(mod_jSDM_sim$mcmc.sp[[j]][,ncol(X)+l]), 
                      main=paste("Density of", colnames(mod_jSDM_sim$mcmc.sp
-                                         [[paste0("sp_",j)]])[ncol(X)+l],", species : ",j))
+                                         [[j]])[ncol(X)+l],", species : ",j))
       abline(v=lambda.target[l,j],col='red')
     }
   }
@@ -734,7 +740,7 @@ knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-8.png"
 
 We fit a binomial joint species distribution model, including latent variables, from the [`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-mosquitos }
+```{r jSDM-mosquitos, eval=FALSE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_Mosquitos <- jSDM_binomial_probit(
@@ -765,7 +771,7 @@ save(T_jSDM_Mosquitos, mod_jSDM_Mosquitos,
 
 We fit a binomial joint species distribution model, including latent variables, from the [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-eucalypts }
+```{r jSDM-eucalypts, eval=FALSE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_Eucalypts <- jSDM_binomial_probit(
@@ -796,7 +802,7 @@ save(T_jSDM_Eucalypts, mod_jSDM_Eucalypts,
 
 We fit a binomial joint species distribution model, including latent variables, from the [`frogs`](https://ecology.ghislainv.fr/jSDM/reference/frogs.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-frogs }
+```{r jSDM-frogs, eval=FALSE}
 # Fit the model 
 T1 <- Sys.time()
 mod_jSDM_Frogs <- jSDM_binomial_probit(
@@ -827,7 +833,7 @@ save(T_jSDM_Frogs, mod_jSDM_Frogs,
 
 We fit a binomial joint species distribution model, including latent variables, from the [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-fungi }
+```{r jSDM-fungi, eval=FALSE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_Fungi <- jSDM_binomial_probit(
@@ -857,7 +863,7 @@ save(T_jSDM_Fungi, mod_jSDM_Fungi,
 
 We fit a binomial joint species distribution model including latent variables, from the [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html) dataset using `jSDM_binomial_probit()` function to perform binomial probit regression.
 
-```{r jSDM-birds}
+```{r jSDM-birds, eval=FALSE}
 # Birds dataset
 data("birds")
 PA_Birds <- birds[,1:158]
@@ -900,7 +906,7 @@ save(T_jSDM_Birds, mod_jSDM_Birds,
 
 We fit a joint species distribution model, including latent variables, from the [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html) abundance dataset using `jSDM_poisson_log()` function to perform a poisson log-linear regression. 
 
-```{r jSDM-mites}
+```{r jSDM-mites, eval=FALSE}
 # Fit the model
 T1 <- Sys.time()
 mod_jSDM_Mites <- jSDM_poisson_log(
@@ -1050,7 +1056,7 @@ Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_sim, parName='Beta')$mean)
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
   for (p in 1:np){
-    jSDM_beta[j,p] <- mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,p])
+    jSDM_beta[j,p] <- mean(mod_jSDM_sim$mcmc.sp[[j]][,p])
   }
 }
 par(mfrow=c(1,2))
@@ -1061,7 +1067,7 @@ abline(a=0,b=1,col='red')
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
   for (l in 1:nl){
-    jSDM_lambda[j,l] <- mean(mod_jSDM_sim$mcmc.sp[[paste0("sp_",j)]][,np+l])
+    jSDM_lambda[j,l] <- mean(mod_jSDM_sim$mcmc.sp[[j]][,np+l])
   }
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_sim, parName='Lambda')$mean)
@@ -1136,7 +1142,7 @@ np <- nrow(mod_jSDM_Mosquitos$model_spec$beta_start)
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Mosquitos$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Mosquitos$mcmc.sp[[j]],2,mean)[1:np]
 }
 par(mfrow=c(1,2))
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Beta')$mean)
@@ -1147,11 +1153,11 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Mosquitos$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Mosquitos$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda, jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1160,7 +1166,8 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Mosquitos$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
@@ -1214,7 +1221,7 @@ np <- nrow(mod_jSDM_Eucalypts$model_spec$beta_start)
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Eucalypts$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Eucalypts$mcmc.sp[[j]],2,mean)[1:np]
 }
 par(mfrow=c(1,2))
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Eucalypts, parName='Beta')$mean)
@@ -1225,7 +1232,7 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Eucalypts$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Eucalypts$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Eucalypts, parName='Lambda')$mean)
 
@@ -1290,7 +1297,7 @@ np <- nrow(mod_jSDM_Frogs$model_spec$beta_start)
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Frogs$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Frogs$mcmc.sp[[j]],2,mean)[1:np]
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Frogs, parName='Beta')$mean)
 par(mfrow=c(1,2))
@@ -1300,7 +1307,7 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Frogs$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Frogs$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Frogs, parName='Lambda')$mean)
 
@@ -1375,7 +1382,7 @@ par(mfrow=c(1,2))
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Fungi$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Fungi$mcmc.sp[[j]],2,mean)[1:np]
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Fungi, parName='Beta')$mean)
 par(mfrow=c(1,2))
@@ -1385,7 +1392,7 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Fungi$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Fungi$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Fungi, parName='Lambda')$mean)
 
@@ -1447,7 +1454,7 @@ np <- nrow(mod_jSDM_Birds$model_spec$beta_start)
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[j]],2,mean)[1:np]
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Birds, parName='Beta')$mean)
 par(mfrow=c(1,2))
@@ -1457,7 +1464,7 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Birds, parName='Lambda')$mean)
 
@@ -1522,7 +1529,7 @@ np <- nrow(mod_jSDM_Mites$model_spec$beta_start)
 # species fixed effect beta
 jSDM_beta <- matrix(0,nsp,np)
 for (j in 1:nsp){
-  jSDM_beta[j,] <- apply(mod_jSDM_Mites$mcmc.sp[[paste0("sp_",j)]],2,mean)[1:np]
+  jSDM_beta[j,] <- apply(mod_jSDM_Mites$mcmc.sp[[j]],2,mean)[1:np]
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Mites, parName='Beta')$mean)
 par(mfrow=c(1,2))
@@ -1532,7 +1539,7 @@ abline(a=0,b=1,col='red')
 # factor loadings lambda
 jSDM_lambda <- matrix(0,nsp,nl)
 for (j in 1:nsp){
-  jSDM_lambda[j,] <- apply(mod_jSDM_Mites$mcmc.sp[[paste0("sp_",j)]],2,mean)[(np+1):(np+nl)]
+  jSDM_lambda[j,] <- apply(mod_jSDM_Mites$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Mites, parName='Lambda')$mean)
 
