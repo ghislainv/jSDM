@@ -356,11 +356,14 @@ arr2mcmc <- function(x) {
 mcmc_list_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.alpha"), arr2mcmc))
 mcmc_list_V_alpha <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.V_alpha"), arr2mcmc))
 mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.latent"), arr2mcmc))
-mcmc_list_centered_lv <- mcmc.list(lapply(lapply(mcmc_list_lv, scale, scale=FALSE),arr2mcmc))
+mcmc_list_abs_lv <- mcmc.list(lapply(lapply(mcmc_list_lv, abs),arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_lambda <- mcmc.list(lapply(mcmc_list_param[,grep("lambda", colnames(mcmc_list_param[[1]]), value=TRUE)], arr2mcmc))
-mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(mcmc_list_lambda, scale, scale=FALSE),arr2mcmc))
+mcmc_list_lambda <- mcmc.list(lapply(mcmc_list_param[,grep("lambda", 
+                                                           colnames(mcmc_list_param[[1]]),
+                                                           value=TRUE)], arr2mcmc))
+mcmc_list_abs_lambda <- mcmc.list(lapply(lapply(mcmc_list_lambda, abs),
+                                         arr2mcmc))
 mcmc_list_deviance <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.Deviance"), arr2mcmc))
 nsamp <- nrow(mcmc_list_alpha[[1]])
 # psrf gelman indice 
@@ -373,15 +376,15 @@ psrf_lambda <- mean(gelman.diag(mcmc_list_lambda,
                                 multivariate=FALSE)$psrf[,2], na.rm=TRUE)
 psrf_lv <- mean(gelman.diag(mcmc_list_lv,
                             multivariate=FALSE)$psrf[,2 ])
-psrf_lambda_centered <- mean(gelman.diag(mcmc_list_centered_lambda,
+psrf_lambda_abs <- mean(gelman.diag(mcmc_list_abs_lambda,
                                 multivariate=FALSE)$psrf[,2], na.rm=TRUE)
-psrf_lv_centered <- mean(gelman.diag(mcmc_list_centered_lv,
+psrf_lv_abs <- mean(gelman.diag(mcmc_list_abs_lv,
                             multivariate=FALSE)$psrf[,2 ])
 save(psrf_lambda, psrf_lv, psrf_alpha, psrf_V_alpha, psrf_beta,
      file="jSDM_in_parallel_cache/psrf.rda")
 
-Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta, psrf_lambda, psrf_lambda_centered, psrf_lv, psrf_lv_centered),
-                   Variable=c("alpha", "Valpha", "beta", "lambda", "centered lambda", "W", "centered W"))
+Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta, psrf_lambda, psrf_lambda_abs, psrf_lv, psrf_lv_abs),
+                   Variable=c("alpha", "Valpha", "beta", "lambda", "absolute lambda values", "W", "absolute W values"))
 # Barplot
 library(ggplot2)
 ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
@@ -398,10 +401,10 @@ ggplot(Rhat, aes(x=Variable, y=Rhat)) +
 knitr::include_graphics("jSDM_in_parallel_files/figure-html/MCMC-convergence-randsite-lv-1.png")
 ```
 
-We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$, the site effects $\alpha$ and their variance $V_{alpha}$; we can therefore be fairly confident that convergence has been achieved for these parameters.  
+We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$, the site effects $\alpha$ and their variance $V_{alpha}$. We can therefore be fairly confident that convergence has been achieved for these parameters.    
 
-However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are far from 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to the identifiability issue between $W$ and $\lambda$. 
-Consequently, if we center the latent variables $W$ and  factor loadings $\lambda$  estimated before computing the $\hat{R}$, we get values well closer to 1, we can therefore consider that convergence has been reached for these parameters. 
+However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are much greater than 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to identifiability issues between $W$ and $\lambda$.  
+Consequently, if we consider the absolute values of the latent variables $W$ and  factor loadings $\lambda$ estimated to compute the $\hat{R}$, we get values well closer to 1. We can therefore consider that convergence has been almost reached for these parameters in absolute value. 
 
 # Representation of results
 

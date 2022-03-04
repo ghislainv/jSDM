@@ -384,7 +384,7 @@ knitr::include_graphics(paste0("Madagascar_files/figure-html/results-Mada-"
                                , 1:18, ".png"))
 ```
 
-Overall, the traces and densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing any upward or downward trend and we see that the densities are quite smooth and for most of them of gaussian form.
+Overall, the traces and densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing any upward or downward trend and we see that the densities are quite smooth and for most of them of Gaussian form.
 
 # Representation of results at inventory sites
 
@@ -462,9 +462,9 @@ knitr::include_graphics(c("Madagascar_files/figure-html/species-richness-represe
 knitr::include_graphics("Madagascar_files/figure-html/species-richness-representation-3.png")
 ```
 
-It can be seen that the observed species richness on the inventory sites corresponds fairly well to that estimated by summing the estimated probabilities of occurrence of all species on each site.  
+It can be seen that the observed species richness on the inventory sites corresponds fairly well to that estimated by summing the estimated probabilities of occurrence of all species on each site.    
 
-Moreover, we can see that the observed species richness is greater in the moist forest of the north-east of the island, particularly on the Masoala peninsula. 
+Moreover, we can see that the observed species richness is greater in the moist forest of the north-east of the island, particularly in the Masoala peninsula. 
 
 ## Residual correlation 
 
@@ -521,13 +521,13 @@ jSDM::plot_associations(R, env_effect=effects, top=50,
                   species_order="main env_effect")
 ```
 
-```{r plot-associations2, echo=FALSE, out.width=500, out.height=550, eval=TRUE}
+```{r plot-associations2, echo=FALSE, out.width=500, out.height=555, eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/plot-associations-1.png")
 ```
 
 The figure above shows the correlations between species, with the 483 species sorted according to the number of sites where they occur out of the 751 inventoried.
 
-```{r plot-associations3,  echo=FALSE, out.width=500, out.height=550, eval=TRUE}
+```{r plot-associations3,  echo=FALSE, out.width=500, out.height=555, eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/plot-associations-2.png")
 ```
 
@@ -749,23 +749,40 @@ for (n in 1:npart){
 }
 ```
 
-We represent the occurrence probabilities of two species interpolated at the Madagascar scale. 
+We represent the presence probabilities of two species interpolated at the scale of Madagascar as well as their observed occurrences at the inventory sites represented by black crosses.
 
-```{r plot-theta}
+```{r plot-theta, eval=FALSE}
 params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+nsp <- nrow(params_species)
+load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+# Observed presence absence
+id_pres_Ocotea <- which(PA[,"Ocotea laevis"]==1)
+obs_pres_Ocotea <- data.frame(obs_pres=PA[id_pres_Ocotea,"Ocotea laevis"])
+obs_pres_Ocotea <-  sp::SpatialPointsDataFrame(xy[id_pres_Ocotea,],
+                                               obs_pres_Ocotea)
+id_pres_Manilkara <- which(PA[,6]==1)
+obs_pres_Manilkara <- data.frame(obs_pres=PA[id_pres_Manilkara,6])
+obs_pres_Manilkara <-  sp::SpatialPointsDataFrame(xy[id_pres_Manilkara,], obs_pres_Manilkara)
+# Representation
 npart <- 10
 first.species <- seq(1,nsp,by=floor(nsp/npart)+1)
 theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
 names(theta) <- make.names(params_species$species[first.species[1]:(first.species[1]+floor(nsp/npart))])
-par(mfrow=c(1,2), oma=c(1, 0, 1.4,1))
-plot(theta[[c(1,6)]], cex.main=0.7)
+par(mfrow=c(1,2), oma=c(1, 0, 2, 1), mar=c(5, 4, 3, 2))
+plot(theta[[1]], main=names(theta)[[1]])
+points(obs_pres_Ocotea, pch=3, cex=0.7)
+plot(theta[[6]], main=names(theta)[[6]])
+points(obs_pres_Manilkara, pch=3, cex=0.7)
 title(main="Interpolated current probabilities of presence",
-      outer=T, cex.main=0.9)
+      outer=T, cex.main=1.3)
 ```
 
 ```{r plot-theta2, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/plot-theta-1.png")
 ```
+
+We can see that the areas with high estimated probabilities of occurrence for these species correspond well to the inventory sites where these species have been observed. 
 
 ## Predictive maps of species richness (diversity $\alpha$)
 
@@ -832,8 +849,16 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-defo
 knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-deforest-2.png")
 ```
 
-We can see that the species richness, computed from interpolated occurrence probabilities, is greater in the moist forest of the north-east of the island, particularly on the Masoala peninsula as expected given the observed species richness on inventory sites.  
-It can be explained by the fact its the area the most humid and the closer to equator of the island, that benefits a long vegetative season due to high level of light ressources and high water availability [@Vieilledent2013].
+We can see that the species richness, computed from interpolated occurrence probabilities, is greater in the moist forest of the north-east of the island, particularly in the Masoala peninsula as expected given the observed species richness on inventory sites.  
+t can be explained by the fact that this area is located close to the
+Equator and is receiving the highest level of precipitation in
+Madagascar. As a consequence, this area benefits from high levels of
+resources (light and water) and is characterized by a low environmental
+stress and a long growing season [@Vieilledent2013].    
+
+Note that the estimated species richness does not necessarily stand for
+a 'true' number of present species but represent a relative species
+richness between sites (one site is richer in species than another site).
 
 ## Predictive maps of species turnover (diversity $\beta$)
 
@@ -960,10 +985,16 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-diversity-beta-1.png"
 knitr::include_graphics("Madagascar_files/figure-html/mada_forest_type.jpg")
 ```
 
-We can see that the estimated diversity  $\beta$ agrees with the Madagascar's forest types described in the article @Vieilledent2018.  
-Indeed the communities of species represented by shades of blue and green seems to correspond to the eastern moist forest and to mangroves, the ones represented by shades of red match pretty well with the western dry forest and the species communities in magenta color could represent the southern spiny forest.
-Moreover the $\beta$-diversity map allows to identify more complex and more precise species communities assemblage than the five types of forest represented on the other map.  
-In addition, the $\beta$-diversity map allows the identification of a more complex and precise assemblage of species communities than the five forest types represented on the other map. 
+We can see that the estimated map of $\beta$-diversity agrees with the map of
+Madagascar’s forest types from @Vieilledent2018.     
+
+Indeed, communities of species represented by shades of blue and green
+correspond to the eastern moist forest, communities represented by
+shades of red match the western dry forest and communities in magenta
+correspond to the southern spiny forest.    
+
+Moreover, the $\beta$-diversity map we obtain allows to identify substantially
+different species communities within these three forest types. For example, we can clearly identify three different tree communities (in blue, green, and black) within the eastern moist forest.
 
 # References
 

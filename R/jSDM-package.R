@@ -89,6 +89,7 @@
 #' @author \tabular{l}{
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr
+#' Frédéric Gosselin <frederic.gosselin@inrae.fr>\cr
 #'}
 #' @keywords MCMC Metropolis algorithm binomial biodiversity logistic model multivariate regression
 #' @importFrom Rcpp evalCpp
