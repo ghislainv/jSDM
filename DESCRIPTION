@@ -10,13 +10,13 @@ SystemRequirements: GNU GSL
 Suggests: knitr, kableExtra, raster, sp, rgdal, dplyr, rmarkdown, bookdown,
           testthat, boral, Hmsc, BayesComm, snow, snowfall
 Authors@R: c(
-    person("Ghislain", "Vieilledent", , "ghislain.vieilledent@cirad.fr", role = c("aut", "cre"),
+    person("Ghislain", "Vieilledent", , "ghislain.vieilledent@cirad.fr", role = "aut",
            comment = c(ORCID = "0000-0002-1685-4997")),
     person("CIRAD", role = c("cph", "fnd")),
-    person("Jeanne", "Clement", , "jeanne.clement16@laposte.net", role = "aut",
+    person("Jeanne", "Clement", , "jeanne.clement16@laposte.net", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5228-5015"))
   )
-Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+Maintainer: Jeanne Clement <jeanne.clement16@laposte.net>
 Description: Fits joint species distribution models ('jSDM')
     in a hierarchical Bayesian framework (Warton et al. 2015
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
