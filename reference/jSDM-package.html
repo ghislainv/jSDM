@@ -78,7 +78,7 @@ LazyLoad:yes
     <div id="details">
     <h2>Details</h2>
     <p>The package includes the following functions to fit various species distribution models :</p>
-<table class="table table"><tr><td>function</td><td>data-type</td></tr><tr><td><code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></code></td><td>abundance</td></tr></table><ul><li><p><code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code> : <br><br><b>Ecological process:</b>
+<table class="table table"><tr><td>function</td><td>data-type</td></tr><tr><td><code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format</a></code></td><td>presence-absence</td></tr><tr><td><code><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></code></td><td>abundance</td></tr></table><ul><li><p><code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code> : <br><br><b>Ecological process:</b>
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
 where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = X_i \beta_j\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr></table></li>
 <li><p><code><a href="jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained</a></code> : <br><br>
@@ -109,7 +109,7 @@ where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <cod
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>, Jeanne Clément.</p>
+  <p></p><p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/images/logos/logo-cirad.svg" height="24"></a>, Jeanne Clement.</p>
 </div>
 
 <div class="pkgdown">
