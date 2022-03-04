@@ -129,11 +129,21 @@ The package includes the following functions to fit various species distribution
 
 Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. 
 
-In this vignette, we illustrate the use of the `jSDM` R package wich aims at providing user-friendly statistical functions using field observations (occurence or abundance data) to fit jSDMs models.
+In this vignette, we illustrate the use of the `jSDM` R package which aims at providing user-friendly statistical functions using field observations (occurrence or abundance data) to fit jSDMs models.
 
-Package's functions are developped in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
+Package's functions are developed in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
 
 Model types available in `jSDM` R package are not limited to those described in this example. `jSDM` includes various model types for occurrence and abundance data: 
+
+<center> __Directed Acyclic Graph (DAG)__ </center>
+
+(ref:cap-DAG) A graphical summary of the `jSDM-package` statistical framework. In this Directed Acyclic Graph (DAG), the orange boxes refer to data, the blue ellipses to parameters to be estimated, and the arrows to functional relationships described with the help of statistical distributions.
+
+```{r plot-DAG, echo=FALSE, out.width=500, fig.cap="(ref:cap-DAG)", eval=TRUE}
+knitr::include_graphics("figures/DAG-jSDM-rand.png")
+```
+
+# Load librairies 
 
 We first load the `jSDM` library.
 

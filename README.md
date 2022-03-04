@@ -52,13 +52,13 @@ version 4.0.5 can be found here :
 The package includes the following functions to fit various species
 distribution models :
 
-| function                              |    data type     |
-|:--------------------------------------|:----------------:|
-| `jSDM_binomial_logit`                 | presence-absence |
-| `jSDM_binomial_probit`                | presence-absence |
-| `jSDM_binomial_probit_sp_constrained` | presence-absence |
-| `jSDM_binomial_probit_long_format`    | presence-absence |
-| `jSDM_poisson_log`                    |    abundance     |
+| function                                | data type        | data format |
+|:----------------------------------------|:-----------------|:------------|
+| `jSDM_binomial_logit()`                 | presence-absence | wide        |
+| `jSDM_binomial_probit()`                | presence-absence | wide        |
+| `jSDM_binomial_probit_sp_constrained()` | presence-absence | wide        |
+| `jSDM_binomial_probit_long_format()`    | presence-absence | long        |
+| `jSDM_poisson_log()`                    | abundance        | wide        |
 
 ## Contributing
 
