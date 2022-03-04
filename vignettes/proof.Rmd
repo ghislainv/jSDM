@@ -6,7 +6,7 @@ output:
     #highlight: tango
     number_sections: true
     toc: true
-    #toc_float: true
+    toc_float: true
     fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib

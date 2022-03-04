@@ -198,7 +198,7 @@ plot(mod$mcmc.gamma)
 ## beta_j of the first two species
 par(mfrow=c(np,2), oma=c(0,0,2,0))
 for (j in 1:2) {
-    plot(mod$mcmc.sp[[paste0("sp_",j)]][,1:np])
+    plot(mod$mcmc.sp[[j]][,1:np])
     title(outer=TRUE, main=paste0( "species ", j ," : ",
                                    unique(data$species)[j]), cex.main=1.5)
 }
@@ -207,7 +207,7 @@ for (j in 1:2) {
 n_latent <- mod$model_spec$n_latent
 par(mfrow=c(n_latent,2), oma=c(0,0,2,0))
 for (j in 1:2) {
-    plot(mod$mcmc.sp[[paste0("sp_",j)]][,(np+1):(np+n_latent)])
+    plot(mod$mcmc.sp[[j]][,(np+1):(np+n_latent)])
     title(outer=TRUE, main=paste0( "species ", j ," : ",
                                    unique(data$species)[j]), cex.main=1.5)
 }
