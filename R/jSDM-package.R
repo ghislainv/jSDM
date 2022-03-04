@@ -2,7 +2,7 @@
 #' @name jSDM-package
 #' @aliases jSDM-package
 #' @title joint species distribution models
-#' @description \code{jSDM} is an R package for fitting joint species distribution models (jSDM) in a hierarchical Bayesian framework.
+#' @description \code{jSDM} is an R package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework.
 #'
 #' The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
 #'\tabular{ll}{
@@ -37,6 +37,14 @@
 #'  if \code{n_latent>0} and \code{site_effect="random"} \tab probit\eqn{(\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) =  X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 #' }}
 #' 
+#' \item{ \code{\link{jSDM_binomial_probit_sp_constrained}} : \cr
+#' \cr
+#' This function allows to fit the same models than the function \code{\link{jSDM_binomial_probit}} except for models not including latent variables, indeed \code{n_latent} must be greater than zero in this function. 
+#' It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the \eqn{\Lambda} matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
+#' This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the Gelman–Rubin convergence diagnostic (\eqn{\hat{R}}{Rhat}) computed from the factor loadings \eqn{\lambda }
+#' of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+#'}
+#'
 #'\item{ \code{\link{jSDM_binomial_logit}} : \cr
 #' \cr
 #' \bold{Ecological process : }
@@ -53,7 +61,7 @@
 #' \item{ \code{\link{jSDM_poisson_log}} : \cr
 #' \cr
 #' \bold{Ecological process : }
-#' \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij Poisson(\theta_ij),}
+#' \deqn{y_{ij} \sim \mathcal{P}oisson(\theta_{ij})}{y_ij ~ Poisson(\theta_ij),}
 #' where \tabular{ll}{
 #'  if \code{n_latent=0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) =  X_i \beta_j}{(\theta_ij) =  X_i \beta_j} \cr
 #'  if \code{n_latent>0} and \code{site_effect="none"} \tab log\eqn{(\theta_{ij}) =  X_i \beta_j + W_i \lambda_j}{(\theta_ij) =  X_i \beta_j +  W_i \lambda_j} \cr
@@ -81,7 +89,7 @@
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 #' Jeanne Clément <jeanne.clement16@laposte.net>\cr
 #'}
-#' @keywords MCMC, Metropolis, algorithm, binomial, biodiversity, logistic model multivariate regression
+#' @keywords MCMC Metropolis algorithm binomial biodiversity logistic model multivariate regression
 #' @importFrom Rcpp evalCpp
 #' @importFrom graphics par
 #' @importFrom stats median model.frame model.matrix pnorm quantile nobs

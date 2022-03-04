@@ -7,11 +7,6 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^NEWS\.Rmd$
-^vignettes/figure/.*$
-^vignettes/cache/.*$
-vignettes/.*_files/
-vignettes/.*\.html
-vignettes/.*\.md
 ^.git$
 ^.gitignore$
 
@@ -19,18 +14,15 @@ vignettes/.*\.md
 ^docs$
 ^logos$
 ^pkgdown$
-
-# vignettes
-^vignettes/SDM_jSDM\.Rmd$
-^vignettes/jSDM_boral\.Rmd$
-^vignettes/jSDM_Box2_Warton2015\.Rmd$
-^vignettes/jSDM_Hmsc\.Rmd$
-^vignettes/jSDM_in_parallel\.Rmd$
-^vignettes/Madagascar\.Rmd$
-^vignettes/Convergence_LVM\.Rmd$
-^vignettes/jagsboralmodel\.txt$
-^vignettes/proof\.Rmd$
-^vignettes/.*_cache$
-^vignettes/grassdata
 ^\.github$
 ^_pkgdown\.yml$
+
+# vignettes
+^vignettes/jagsboralmodel\.txt$
+^vignettes/proof\.Rmd$
+^vignettes/grassdata
+^vignettes/figure/.*$
+^vignettes/.*_cache/.*$
+^vignettes/.*_files\.tif
+^vignettes/.*\.html
+^vignettes/.*\.md

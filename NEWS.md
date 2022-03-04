@@ -1,7 +1,8 @@
 # jSDM 0.1.2
-* New vignettes “Analyzing Response of Alpine Plants to Snowmelt Date according to their SLA” available
+* New function `jSDM_binomial_probit_sp_constrained()` which aims to improve the convergence of latent variable models fitting by selecting the species constrained to have positive values of factor loadings $\lambda$ and new vignette "Bernoulli probit regression with selected constrained species" to illustrate its use. 
+* New vignettes “Bernoulli probit regression including species traits" and "Estimation of Madagascar's plant biodiversity" available. 
 * Add the possibility of considering an additional hierarchical level in the Bayesian models of the `jSDM_binomial_probit()`, `jSDM_binomial_logit()` and `jSDM_poisson_log()` functions to take into account interactions between species-specific traits and the environment in estimating species effects.
-* Separate the drawing of species effects beta and factor loadings lambda in the functions `jSDM_binomial_probit_block()` and `jSDM_binomial_probit_block_long_format()` renamed `jSDM_binomial_probit()` and `jSDM_binomial_probit_long_format()`.
+* Separate the drawing of species effects beta and factor loading lambda in the functions `jSDM_binomial_probit_block()` and `jSDM_binomial_probit_block_long_format()` renamed `jSDM_binomial_probit()` and `jSDM_binomial_probit_long_format()`.
 
 # jSDM 0.1.1
 * Add Code of conduct and Contributing section 
@@ -16,7 +17,7 @@
 * Add datasets ([`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html), [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html), [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html), [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html), [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html), [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html)). 
 * Seven new vignettes (“Bayesian inference methods”, "Poisson log-linear regression" "Bernoulli probit regression", "Bernoulli probit regression with data in long format", “Binomial logistic regression, "Running jSDM in parallel", "Comparing SDMs and JSDMs" and "Comparison jSDM-Hmsc") are available.
 * Complete and correct the vignette "Comparison jSDM-boral". 
-* New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM>.
+* New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM/>.
 
 # jSDM 0.1.0
 
@@ -26,4 +27,4 @@
 * Use of Armadillo (RcppArmadillo) for vector and matrix operations
 * Functions to fit models from Warton et al. 2014 _Trends in Ecology and Evolution_ (doi:10.1016/j.tree.2015.09.007).
 * We use `pkgdown` to build package website.
-* Package website available on GitHub: <https://ecology.ghislainv.fr/jSDM>.
+* Package website available on GitHub: <https://ecology.ghislainv.fr/jSDM/>.

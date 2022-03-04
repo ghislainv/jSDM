@@ -43,6 +43,7 @@ articles:
   navbar: Usage
   contents:
   - '`jSDM_binomial_probit`'
+  - '`jSDM_binomial_probit_sp_constrained`'
   - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
@@ -64,6 +65,7 @@ reference:
   desc: Functions for joint species distribution models
   contents:  
   - '`jSDM_binomial_probit`'
+  - '`jSDM_binomial_probit_sp_constrained`'
   - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'

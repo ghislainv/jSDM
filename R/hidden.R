@@ -619,7 +619,8 @@ form.beta.start.sp <- function (beta.start, np, nsp) {
     beta.start.mat <- matrix(beta.start, np, nsp) 
   }
   else if(sum(dim(beta.start) != c(np, nsp)) > 0) {
-    stop("Error: beta.start not conformable.\n")
+    stop("Error: beta.start not conformable. \n Please respecify and call ", calling.function(), " again.\n",
+         call.=FALSE)
   }
   return(beta.start.mat)
 }
