@@ -95,6 +95,7 @@ where \tabular{ll}{
 \tabular{l}{
 Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
 Jeanne Clément <jeanne.clement16@laposte.net>\cr
+Frédéric Gosselin <frederic.gosselin@inrae.fr>\cr
 }
 }
 \keyword{MCMC}
