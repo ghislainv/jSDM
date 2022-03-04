@@ -2,7 +2,7 @@ Package: jSDM
 Type: Package
 Title: Joint Species Distribution Models
 Version: 0.1.2
-Date: 2021-11-23
+Date: 2022-03-04
 Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS, parallel, doParallel, foreach, ggplot2
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
@@ -10,13 +10,13 @@ SystemRequirements: GNU GSL
 Suggests: knitr, kableExtra, raster, sp, rgdal, dplyr, rmarkdown, bookdown,
           testthat, boral, Hmsc, BayesComm, snow, snowfall
 Authors@R: c(
-    person("Ghislain", "Vieilledent", , "jeanne.clement16@laposte.net", role = c("aut", "cre"),
+    person("Ghislain", "Vieilledent", , "ghislain.vieilledent@cirad.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1685-4997")),
     person("CIRAD", role = c("cph", "fnd")),
-    person("Jeanne", "Clément", , "jeanne.clement16@laposte.net", role = "aut",
+    person("Jeanne", "Clement", , "jeanne.clement16@laposte.net", role = "aut",
            comment = c(ORCID = "0000-0002-5228-5015"))
   )
-Maintainer: Jeanne Clement <jeanne.clement16@laposte.net>
+Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Fits joint species distribution models ('jSDM')
     in a hierarchical Bayesian framework (Warton et al. 2015
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
