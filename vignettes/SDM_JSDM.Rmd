@@ -5,9 +5,9 @@ output:
   #base_format: rmarkdown::html_vignette
   #highlight: tango
   number_sections: true
-toc: true
-toc_float: true
-fig_caption: yes
+  toc: true
+  toc_float: true
+  fig_caption: yes
 link-citations: yes
 bibliography: bib/biblio-jSDM.bib
 biblio-style: bib/jae.bst
@@ -277,7 +277,7 @@ We can also visually evaluate the convergence of MCMCs by representing the trace
 
 ```{r plot-jSDM}
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mcmc_list_beta[,grep("sp_2.beta",colnames(mcmc_list_beta[[1]]))])
+plot(mcmc_list_beta[,grep("Milvus.milvus.beta",colnames(mcmc_list_beta[[1]]))])
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
@@ -457,7 +457,7 @@ We then evaluate if the chains have ‘forgotten’ their initial values, and if
 # psrf
 mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
 mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(
-  mcmc_list_param[,grep("lambda", grep("sp_1.lambda_2", colnames(mcmc_list_param[[1]]),
+  mcmc_list_param[,grep("lambda", grep("Anas.platyrhynchos.lambda_2", colnames(mcmc_list_param[[1]]),
                                        invert=TRUE, value=TRUE),value=TRUE)],
   scale, scale=FALSE),arr2mcmc))
 mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,
@@ -485,7 +485,7 @@ We visually evaluate the convergence of MCMCs by representing the trace and dens
 ```{r plot-jSDM-lv}
 par(mfrow=c(1,1), oma=c(0,0,2,0))
 
-plot(mcmc_list_param[,grep("sp_2.beta",colnames(mcmc_list_param[[1]]))])
+plot(mcmc_list_param[,grep("Milvus.milvus.beta",colnames(mcmc_list_param[[1]]))])
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
@@ -500,7 +500,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/plot-jSDM-lv-1.png")
 
 (ref:cap-comp-dev) **Deviance and compilation time**. of SDM and JSDM fitted by `jSDM` or `BayesComm`. \vspace{0.5cm}
 
-```{r comp-dev, echo=FALSE}
+```{r comp-dev, echo=FALSE, eval=TRUE}
 load("SDM_JSDM_files/BC.rda")
 load("SDM_JSDM_files/BC_comm.rda")
 load("SDM_JSDM_files/jSDM.rda")
