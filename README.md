@@ -65,9 +65,10 @@ distribution models :
 The `jSDM` R package is Open Source and released under the [GNU GPL
 version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 Anybody who is interested can contribute to the package development
-following our [Community guidelines](articles/Contributing.html). Every
-contributor must agree to follow the project’s [Code of
-Conduct](articles/Code_of_conduct.html).
+following our [Community
+guidelines](https://ecology.ghislainv.fr/jSDM/articles/Contributing.html).
+Every contributor must agree to follow the project’s [Code of
+Conduct](https://ecology.ghislainv.fr/jSDM/articles/Code_of_conduct.html).
 
 ## References
 

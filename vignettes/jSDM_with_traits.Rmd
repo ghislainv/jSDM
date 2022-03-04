@@ -77,7 +77,7 @@ knitr::include_graphics("figures/alpine_plants.png")
 ```
 
 We consider alpine plants in Aravo (Valloire), south east France [@Choler2005]. The data are available from the R package `ade4` [@Dray2007]. The original dataset includes abundance data for 82 species in 75 sites. 
-This data-set is also available in the [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) R package. It can be loaded with the `data()` command. The [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html) dataset is a list containing a data.frame with the abundance values of 82 species (columns) in 75 sites (rows), a data.frame with the measurements of 6 environmental variables for the sites and data.frame with the measurements of 8 traits for the species.
+This data-set is also available in the [`jSDM-package`](https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html) R package. It can be loaded with the `data()` command. The [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html) data-set is a list containing a data.frame with the abundance values of 82 species (columns) in 75 sites (rows), a data.frame with the measurements of 6 environmental variables for the sites and data.frame with the measurements of 8 traits for the species.
 
 
 ```{r aravo}
