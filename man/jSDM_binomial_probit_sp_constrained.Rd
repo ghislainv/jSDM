@@ -232,7 +232,7 @@ for (i in 1:nsite){
 
 # Increase number of iterations (burnin and mcmc) to get convergence
 mod <- jSDM_binomial_probit_sp_constrained(# Iteration
-                                           burnin=200,
+                                           burnin=100,
                                            mcmc=200,
                                            thin=1,
                                            # parallel MCMCs
@@ -287,9 +287,10 @@ psrf_beta0 <- mean(gelman.diag(mcmc_list_beta0)$psrf[,2])
 psrf_beta <- mean(gelman.diag(mcmc_list_beta[,grep("Intercept",
                                                    colnames(mcmc_list_beta[[1]]),
                                                    invert=TRUE)])$psrf[,2])
-psrf_lambda <- mean(gelman.diag(mcmc_list_lambda, multivariate=FALSE)$psrf[,2],
+psrf_lambda <- mean(gelman.diag(mcmc_list_lambda,
+                                multivariate=FALSE)$psrf[,2],
                     na.rm=TRUE)
-psrf_lv <- mean(gelman.diag(mcmc_list_lv)$psrf[,2])
+psrf_lv <- mean(gelman.diag(mcmc_list_lv, multivariate=FALSE)$psrf[,2])
 Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta0, psrf_beta,
                           psrf_lambda, psrf_lv),
                    Variable=c("alpha", "Valpha", "beta0", "beta",

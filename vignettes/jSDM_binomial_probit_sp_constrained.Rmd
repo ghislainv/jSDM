@@ -133,7 +133,7 @@ clust <- makeCluster(ncores)
 registerDoParallel(clust)
 
 # Seeds
-seed_mcmc <- c(12, 123, 1234, 12345)
+seed_mcmc <- c(1, 12, 123, 1234)
 
 # Model
 mod_Fungi <-
@@ -233,12 +233,13 @@ psrf_alpha <- mean(gelman.diag(mcmc_list_alpha, multivariate=FALSE)$psrf[,2])
 psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf[,2]
 psrf_beta0 <- mean(gelman.diag(mcmc_list_beta0)$psrf[,2])
 psrf_beta <- mean(gelman.diag(mcmc_list_beta[,grep("Intercept", colnames(mcmc_list_beta[[1]]), invert=TRUE)])$psrf[,2])
-psrf_lambda_diag <- mean(gelman.diag(mcmc_list_lambda[,c(1, n_latent+2)])$psrf[,2])
+psrf_lambda_diag <- mean(gelman.diag(mcmc_list_lambda[,c(1, n_latent+2)],
+                                     multivariate=FALSE)$psrf[,2])
 # mean(psrf, na.rm=TRUE) because zeros on upper triangular Lambda matrix give NaN in psrf
 psrf_lambda_others <- mean(gelman.diag(mcmc_list_lambda[,-c(1, n_latent+2)],
                                        multivariate=FALSE)$psrf[,2],
                            na.rm=TRUE)
-psrf_lv <- mean(gelman.diag(mcmc_list_lv)$psrf[,2])
+psrf_lv <- mean(gelman.diag(mcmc_list_lv, multivariate=FALSE)$psrf[,2])
 Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta0, psrf_beta,
                           psrf_lambda_diag, psrf_lambda_others, psrf_lv),
                    Variable=c("alpha", "Valpha", "beta0", "beta",
@@ -448,7 +449,8 @@ psrf_lambda_diag <- mean(gelman.diag(
 # mean(psrf, na.rm=TRUE) because zeros on upper triangular Lambda matrix give NaN in psrf
 psrf_lambda_others <- mean(gelman.diag(mcmc_list_lambda[,-id_sp_constrained],
                                        multivariate=FALSE)$psrf[,2])
-psrf_lv <- mean(gelman.diag(mcmc_list_lv)$psrf[,2])
+psrf_lv <- mean(gelman.diag(mcmc_list_lv,
+                            multivariate=FALSE)$psrf[,2])
 Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta0, psrf_beta,
                           psrf_lambda_diag, psrf_lambda_others, psrf_lv),
                    Variable=c("alpha", "Valpha", "beta0", "beta",
@@ -470,7 +472,7 @@ ggplot2::ggplot(Rhat, aes(x=Variable, y=Rhat)) +
 knitr::include_graphics("jSDM_binomial_probit_sp_constrained_files/figure-html/Rhat-ord-1.png")
 ```
 
-It can be seen that the $\hat{R}$'s associated with the factor loadings $\lambda$ are much closer to 1 than previously after the same number of iterations. Consequently the convergence of factor loadings has improved by selecting the constrained species.
+It can be seen that the $\hat{R}$'s associated with the factor loadings $\lambda$ are  closer to 1 than previously after the same number of iterations and with the same random number generator seeds. Consequently the convergence of factor loadings has improved by selecting the constrained species.
 
 ## Analysis of the results
 
