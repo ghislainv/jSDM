@@ -10,12 +10,19 @@ Using [R-hub builder](https://builder.r-hub.io/) to build on :
   
 There were no ERRORs or WARNINGs.   
 
-There was sometimes 1 NOTE:
+There was sometimes 2 NOTES:
 
 * checking installed package size ... NOTE  
-  installed size is 51.5Mb  
+  installed size is 4.5Mb  
   sub-directories of 1Mb or more:  
-    - doc   47.7Mb  
-    - libs   3.2Mb  
-       
-We have change of maintainer for the package. 
+    - libs   3.2Mb 
+
+* checking CRAN incoming feasibility ... NOTE
+  Maintainer: '
+  Jeanne Clément <jeanne.clement16@laposte.net>'
+  New maintainer:
+  Jeanne Clément <jeanne.clement16@laposte.net>
+  Old maintainer(s):
+  Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+
+Ghislain Vieilledent wants to transfer the maintainership of the package to Jeanne Clément. 
