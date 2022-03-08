@@ -129,6 +129,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_rand_site_lv_long_format(
       } else {
         Z_run(n) = rtnorm(s, 0, R_PosInf, probit_theta_run(n), 1);
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     
@@ -166,6 +167,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_rand_site_lv_long_format(
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+      R_CheckUserInterrupt(); // allow user interrupt
+    }
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
     }
     
     // center alpha 
@@ -222,6 +230,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_rand_site_lv_long_format(
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     } 
     
     //////////////////////////////////////////////////
@@ -239,6 +248,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_rand_site_lv_long_format(
       
       /* log Likelihood */
       logL += R::dbinom(Y(n), 1, theta_run(n), 1);
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on observations
     
     // Deviance

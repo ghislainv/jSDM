@@ -125,6 +125,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
           Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     // Loop on sites
@@ -153,6 +154,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
       
       // Draw in the posterior distribution
       alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
+      R_CheckUserInterrupt(); // allow user interrupt
+    }
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
     }
     
     // center alpha 
@@ -217,6 +225,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -234,6 +243,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance

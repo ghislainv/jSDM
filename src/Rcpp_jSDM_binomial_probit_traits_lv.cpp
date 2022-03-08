@@ -116,6 +116,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv(const int ngibbs,const int nthin,
           Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     // Loop on sites
@@ -132,6 +133,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv(const int ngibbs,const int nthin,
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
+      R_CheckUserInterrupt(); // allow user interrupt
+    }
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
     }
     
     /////////////////////////////////////////////
@@ -167,7 +175,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv(const int ngibbs,const int nthin,
       
       //////////////////////////////////
       // mat lambda : Gibbs algorithm //
-      for (int l=0; l<NL; l++) {
+      for (int l=0; l<NL; l++){
         if (l > j) {
           lambda_run(l,j) = 0;
         } else {
@@ -185,6 +193,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv(const int ngibbs,const int nthin,
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -196,12 +205,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv(const int ngibbs,const int nthin,
       for (int j = 0; j < NSP; j++ ) {
         // probit(theta_ij) = X_i*beta_j + W_i*lambda_j
         probit_theta_run(i,j) = arma::as_scalar(X.row(i)*beta_run.col(j) + W_run.row(i)*lambda_run.col(j));
-        // link function probit is the inverse of N(0,1) repartition function 
+        // link function probit is the inverse of N(0,1) distribution function 
         theta_run(i,j) = gsl_cdf_ugaussian_P(probit_theta_run(i,j));
         
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance

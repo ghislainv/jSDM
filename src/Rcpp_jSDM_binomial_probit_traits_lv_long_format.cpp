@@ -130,6 +130,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
       } else {
         Z_run(n) = rtnorm(s, 0, R_PosInf, probit_theta_run(n), 1);
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     
@@ -152,6 +153,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
+      R_CheckUserInterrupt(); // allow user interrupt
+    }
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
     }
     
     //////////////////////////////////
@@ -160,6 +168,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
     // Loop on species
     arma::vec small_v; small_v.zeros(ND);
     for (int j=0; j<NSP; j++) {
+      R_CheckUserInterrupt(); // allow user interrupt
       // small_v
       small_v += D.rows(rowId_sp[j]).t()*(Z_run(rowId_sp[j]) 
                                             - X.rows(rowId_sp[j])*beta_run.col(j)
@@ -217,6 +226,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     } 
     
     //////////////////////////////////////////////////
@@ -234,6 +244,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
       
       /* log Likelihood */
       logL += R::dbinom(Y(n), 1, theta_run(n), 1);
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on observations
     
     // Deviance
@@ -310,14 +321,14 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 # ## X
 # x1 <- rnorm(nsite,0,1)
 # x1.2 <- scale(x1^2)
-# X <- cbind(rep(1,nsite),x1,x1.2)
-# colnames(X) <- c("Int","x1","x1.2")
+# X <- cbind(rep(1,nsite),x1)
+# colnames(X) <- c("Int","x1")
 # np <- ncol(X)
 # ## W
 # W <- matrix(rnorm(nsite*nl,0,1),nrow=nsite,byrow=TRUE)
 # ## D
 # SLA <- runif(nsp,-1,1)
-# D <- data.frame(Int=1, x1=x1, x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
+# D <- data.frame(x1.2=x1.2, x1.SLA= scale(c(x1 %*% t(SLA))))
 # nd <- ncol(D)
 # ## parameters
 # beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
@@ -332,7 +343,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 # probit_theta <- c(X %*% beta.target) + c(W %*% lambda.target) + as.matrix(D) %*% gamma.target
 # # x1_supObs <- rnorm(nsite)
 # # X_supObs <- cbind(rep(1,nsite),x1_supObs,scale(x1_supObs^2))
-# # D_supObs <- data.frame(Int=1, x1=x1_supObs, x1.2=scale(x1_supObs^2), x1.SLA= scale(c(x1_supObs %*% t(SLA))))
+# # D_supObs <- data.frame(x1.2=scale(x1_supObs^2), x1.SLA= scale(c(x1_supObs %*% t(SLA))))
 # # probit_theta_supObs <- c(X_supObs%*%beta.target) + as.matrix(D_supObs) %*% gamma.target
 # # probit_theta <- c(probit_theta, probit_theta_supObs)
 # nobs <- length(probit_theta)
@@ -347,10 +358,10 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 # Id_site <- rep(1:nsite,nsp)-1
 # Id_sp <- rep(1:nsp,each=nsite)-1
 # # data <- data.frame(site=rep(Id_site,2), species=rep(Id_sp,2), Y=Y,
-# #                    intercept=rep(1,nobs), x1=c(D$x1,D_supObs$x1),
+# #                    intercept=rep(1,nobs), x1=c(x1,x1_supObs),
 # #                    x1.2=c(D$x1.2,D_supObs$x1.2),x1.SLA=c(D$x1.SLA,D_supObs$x1.SLA))
 # data <- data.frame(site=Id_site, species=Id_sp, Y=Y,
-#                    intercept=rep(1,nobs), x1=D$x1,
+#                    intercept=rep(1,nobs), x1=x1,
 #                    x1.2=D$x1.2,x1.SLA=D$x1.SLA, SLA=rep(SLA,each=nsite),
 #                    W1=W[,1], W2=W[,2])
 # # missing observation
@@ -375,8 +386,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 # for (i in 1:nl){
 #   lambda_start[i,i] = 1
 # }
-# X=as.matrix(data[,c("intercept","x1","x1.2")])
-# D=as.matrix(data[,c("intercept","x1","x1.2","x1.SLA")])
+# X=as.matrix(data[,c("intercept","x1")])
+# D=as.matrix(data[,c("x1.2","x1.SLA")])
 # # Call to C++ function
 # # Iterations
 # nsamp <- 10000
@@ -387,7 +398,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 # mod <- Rcpp_jSDM_binomial_probit_traits_lv_long_format(
 #   ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #   Y=data$Y, X=X, D=D, Id_site=data$site, Id_sp=data$species,
-##   Id_common_var=c(0,1,2),
+# #   Id_common_var=c(0,1,2),
 #   gamma_start=rep(0,nd), V_gamma=diag(rep(1,nd)),
 #   mu_gamma = rep(0,nd),
 #   beta_start=matrix(0,np,nsp),

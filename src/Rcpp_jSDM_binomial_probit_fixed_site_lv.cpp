@@ -115,6 +115,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nt
           Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     // Loop on sites
@@ -144,6 +145,13 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nt
         // Draw in the posterior distribution
         alpha_run(i) = big_V2*small_v2 + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V2));
       }
+      R_CheckUserInterrupt(); // allow user interrupt
+    }// loop on sites
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
     }
     
     //////////////////////////////////
@@ -178,6 +186,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nt
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -195,6 +204,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nt
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
@@ -282,7 +292,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_lv(const int ngibbs,const int nt
 # lambda.target <- matrix(0,nl,nsp)
 # lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
 # alpha.target <- runif(nsite,-2,2)
-# alpha.target[1] <- 0 
+# alpha.target[1] <- 0
 # probit_theta <- X %*% beta.target + W %*% lambda.target + alpha.target
 # e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
 # Z_true <- probit_theta + e

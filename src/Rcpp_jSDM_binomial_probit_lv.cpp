@@ -108,6 +108,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
           Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     // Loop on sites
@@ -124,7 +125,15 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
       // Draw in the posterior distribution
       arma::vec W_i = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
       W_run.row(i) = W_i.t();
+      R_CheckUserInterrupt(); // allow user interrupt
     }
+    
+    // Centering and reducing W_i
+    for ( int q = 0; q < NL; q++ ) {
+      W_run.col(q) = W_run.col(q) - arma::mean(W_run.col(q));
+      W_run.col(q) = W_run.col(q)*1.0/arma::stddev(W_run.col(q));
+    }
+    
     //////////////////////////////////
     // mat beta: Gibbs algorithm //
     // Loop on species
@@ -157,6 +166,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
           }
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -174,6 +184,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_lv(const int ngibbs,const int nthin,const i
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
