@@ -47,14 +47,21 @@ $$ \mathrm{g}(\theta_{ij}) = X_i\beta_j + W_i\lambda_j $$
 - $t_i$: number of visits at site $i$ 
 - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 
-The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$.
+The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$.  
 
-- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
-- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
-- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
-- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$. Also known as "factor loadings" [@Warton2015].
+- $X_i$: Vector of explanatory variables for site $i$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bio-climatic variables considered (including intercept $\forall i, x_i^1=1$).  
+ 
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$ including species intercept ($\beta_{0j}$). We use a prior distribution $\beta_j \sim \mathcal{N}_p(0,\Sigma_{\beta})$ with $\Sigma_{\beta}$ a specified diagonal matrix of size $p \times p$.  
 
-This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables $q$ must be fixed by the user (default to $q=2$).  
+
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$ also known as "factor loadings" [@Warton2015]. We use the following prior distribution in the `jSDM` package to constraint values to $0$ on upper diagonal and to strictly positive values on diagonal, for $j=1,\ldots,J$ and $l=1,\ldots,q$ : $$\lambda_{jl} \sim \begin{cases}
+\mathcal{N}(0,1) & \text{if } l < j \\
+\mathcal{N}(0,1) \text{ left truncated by } 0 & \text{if } l=j \\
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  & \text{if } l>j
+\end{cases}$$.  
+
+This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns.   
 
 Using this model we can compute the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ from the covariance in the latent variables such as : 
  $$\Sigma_{ij} = \begin{cases}
@@ -998,7 +1005,6 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_Hmsc_sim, T_Hmsc_sim, De
 ## Compilation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
-
 load("jSDM_Hmsc_files/jSDM-Hmsc-comparison.rda")
 result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time Hmsc (secondes)","Compilation time jSDM (secondes)", "Deviance Hmsc", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
@@ -1033,7 +1039,6 @@ kable(result)%>%
 Computed for the probabilities of presences $\theta_{ij}$ on the simulated data-set.
 
 ```{r RMSE, eval=TRUE, echo=FALSE}
-
 result <- data.frame(matrix(NA,1,2),row.names=  c("RMSE"))
 colnames(result) <- c("Hmsc","jSDM")
 result$Hmsc <- RMSE_Hmsc_sim
@@ -1049,8 +1054,9 @@ kable(result, digits=3) %>%
 ### Simulated dataset
 
 ```{r jSDM-Hmsc-simulation, echo=FALSE}
+
 np <- ncol(X)
-print(paste(nrow(Y),"sites and ",ncol(Y)," species"),quote = FALSE)
+print(paste(nrow(Y),"sites and ", ncol(Y)," species"), quote = FALSE)
 # species fixed effect beta
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_sim, parName='Beta')$mean)
 jSDM_beta <- matrix(0,nsp,np)

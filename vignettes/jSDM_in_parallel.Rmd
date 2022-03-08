@@ -70,7 +70,7 @@ library(jSDM)
 nsite <- 210
 
 #= Set seed for repeatability
-seed <- 123
+seed <- 1234
 set.seed(seed)
 
 #= Number of species
@@ -247,7 +247,7 @@ listData <- list(Y=Y, X=X[,-1], beta_start, lambda_start, W_start, alpha_start, 
 
 
 ```{r mod-probit-2}
-
+ 
 ## Defining the function that will run MCMC on each CPU
 # Arguments:
 # i - will be 1 or 2
@@ -318,7 +318,8 @@ cat("content of each chain :", str_mod,"\n")
 
 The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
 
-Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$. Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
+Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$.  
+Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
 
 The between-chains and within-chain variances are given by
 $$B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2$$
@@ -389,7 +390,7 @@ Rhat <- data.frame(Rhat=c(psrf_alpha, psrf_V_alpha, psrf_beta, psrf_lambda, psrf
 library(ggplot2)
 ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
   ggtitle("Averages of Rhat obtained for each type of parameter") +
-  theme(plot.title = element_text(hjust = 0.5, size=14)) +
+  theme(plot.title = element_text(hjust = 0.5, size=13)) +
   geom_bar(fill="skyblue", stat = "identity") +
   geom_text(aes(label=round(Rhat,3)), vjust=0, hjust=-0.1) +
   geom_hline(yintercept=1, color='red') +
@@ -402,38 +403,37 @@ knitr::include_graphics("jSDM_in_parallel_files/figure-html/MCMC-convergence-ran
 ```
 
 We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$, the site effects $\alpha$ and their variance $V_{alpha}$. We can therefore be fairly confident that convergence has been achieved for these parameters.    
+The $\hat{R}$ obtained for the latent variables $W$ and the factor loadings $\lambda$ are also very close to 1, indicating that convergence has been reached for these parameters.    
 
-However the $\hat{R}$ obtained for latent variables $W$ and factor loadings $\lambda$ are much greater than 1. It can be explained by the fact that $W$ and $\lambda$ can takes alternately positive and negative values between and even within MCMC chains, due to identifiability issues between $W$ and $\lambda$.  
-Consequently, if we consider the absolute values of the latent variables $W$ and  factor loadings $\lambda$ estimated to compute the $\hat{R}$, we get values well closer to 1. We can therefore consider that convergence has been almost reached for these parameters in absolute value. 
+However $\hat{R}$ associated to latent variables and factor loadings can be much greater than 1 in some cases. This can be explained by the fact that $W$ and $\lambda$ can alternatively take positive and negative values between and even within MCMC chains, due to identifiability issues between $W$ and $\lambda$.  
+Consequently, we also consider the absolute values of the latent variables $W$ and the factor loadings $\lambda$ estimated to compute the $\hat{R}$ in order to obtain values closer to 1. In this case, we can consider that convergence has been reached for these parameters in absolute value. 
 
 # Representation of results
 
 ```{r est-probit}
 ## Plot trace and posterior distributions 
 # for two first species
-plot(mcmc_list_param[,1:((np+n_latent)*2)])
+par(mfrow=c(2,2), cex.main=0.9)
+plot(mcmc_list_param[,1:((np+n_latent)*2)],
+     auto.layout=FALSE)
 # for two first sites 
-plot(mcmc_list_lv[,c(1:2,nsite+1:2)])
-par(mfrow=c(1,2))
+plot(mcmc_list_lv[,c(1:2,nsite+1:2)],
+     auto.layout=FALSE)
+par(mfrow=c(2,2))
 coda::traceplot(mcmc_list_V_alpha)
 coda::densplot(mcmc_list_V_alpha)
 abline(v=V_alpha.target, col='red')
 legend("topright", legend="V_alpha.target",
-       lwd=1,col='red', cex=0.6, bty="n")
-
-plot(mcmc_list_alpha[,c(1,2)])
+       lwd=1, col='red', cex=0.7, bty="n")
+plot(mcmc_list_alpha[,c(1,2)],
+     auto.layout=FALSE)
 # Deviance 
-plot(mcmc_list_deviance)
+plot(mcmc_list_deviance,
+     auto.layout=FALSE)
 ```
 
 ```{r est-probit-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-1.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-2.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-3.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-4.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-5.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-6.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/est-probit-7.png")
+knitr::include_graphics(paste0("jSDM_in_parallel_files/figure-html/est-probit-", 1:9, ".png"))
 ```
 
 # Accuracy of predictions 
@@ -528,10 +528,7 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r obs-fitted-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/obs-fitted-1.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/obs-fitted-2.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/obs-fitted-3.png")
-knitr::include_graphics("jSDM_in_parallel_files/figure-html/obs-fitted-4.png")
+knitr::include_graphics(paste0("jSDM_in_parallel_files/figure-html/obs-fitted-", 1:4, ".png"))
 ```
 
 # References
