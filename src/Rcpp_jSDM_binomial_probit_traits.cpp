@@ -104,6 +104,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits(const int ngibbs,const int nthin,con
           Z_run(i,j) = rtnorm(s, 0, R_PosInf, probit_theta_run(i,j), 1);
         }
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     /////////////////////////////////////////////
@@ -136,6 +137,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits(const int ngibbs,const int nthin,con
       
       // Draw in the posterior distribution
       beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -152,7 +154,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits(const int ngibbs,const int nthin,con
         
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance

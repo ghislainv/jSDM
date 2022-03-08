@@ -151,6 +151,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
           nA_W(i,q)++;
         } 
       } // loop on rank of latent variable 
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites 
     
     // Centering and reducing W_i
@@ -231,6 +232,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
           dens_data.lambda_run(q,j) = 0;
         } 
       } // loop on rank of latent variable
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on species
     
     ///////////////
@@ -253,6 +255,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
         /* log Likelihood */
         logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
@@ -303,6 +306,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
           else sigmaq_lambda(j,q) = sigmaq_lambda(j,q) / (2-Ar_lambda(j,q) / ROPT);
           nA_lambda(j,q) = 0.0; // We reinitialize the number of acceptance to zero for lambda 
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species 
       for (int i=0; i<NSITE; i++) {
         for ( int q=0; q<NL; q++ ) {
@@ -311,6 +315,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
           else sigmaq_W(i,q) = sigmaq_W(i,q) / (2-Ar_W(i,q) / ROPT);
           nA_W(i,q) = 0.0; // We reinitialize the number of acceptance to zero for z
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     
@@ -325,12 +330,14 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
           Ar_lambda(j,q) = ((double) nA_lambda(j,q)) / DIV;
           nA_lambda(j,q) = 0.0; // We reinitialize the number of acceptance to zero for lambda
         } // loop on rank of latent variable 
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species
       for (int i=0; i<NSITE; i++) {
         for (int q=0; q<NL; q++) {
           Ar_W(i,q) = ((double) nA_W(i,q)) / DIV;
           nA_W(i,q) = 0.0; // We reinitialize the number of acceptance to zero for z
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     

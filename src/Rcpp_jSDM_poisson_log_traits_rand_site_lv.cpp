@@ -174,6 +174,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           nA_W(i,q)++;
         } 
       } // loop on rank of latent variable 
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites 
     
     
@@ -190,7 +191,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
     // Centering and reducing W_i
     for ( int q = 0; q < NL; q++ ) {
       dens_data.W_run.col(q) = dens_data.W_run.col(q) - arma::mean(dens_data.W_run.col(q));
-      dens_data.W_run.col(q) = dens_data.W_run.col(q)*1/arma::stddev(dens_data.W_run.col(q));
+      dens_data.W_run.col(q) = dens_data.W_run.col(q)*1.0/arma::stddev(dens_data.W_run.col(q));
     }
     
     /////////////////////////////////////////////
@@ -264,6 +265,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           dens_data.lambda_run(q,j) = 0;
         } 
       } // loop on rank of latent variable
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on species
     
     ///////////////
@@ -287,6 +289,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
         /* log Likelihood */
         logL += R::dpois(dens_data.Y(i,j), theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
@@ -338,6 +341,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           else sigmaq_lambda(j,q) = sigmaq_lambda(j,q) / (2-Ar_lambda(j,q) / ROPT);
           nA_lambda(j,q) = 0.0; // We reinitialize the number of acceptance to zero for lambda 
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species 
       for (int i=0; i<NSITE; i++) {
         Ar_alpha(i) = ((double) nA_alpha(i)) / DIV;
@@ -350,6 +354,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           else sigmaq_W(i,q) = sigmaq_W(i,q) / (2-Ar_W(i,q) / ROPT);
           nA_W(i,q) = 0.0; // We reinitialize the number of acceptance to zero for z
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     
@@ -364,6 +369,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           Ar_lambda(j,q) = ((double) nA_lambda(j,q)) / DIV;
           nA_lambda(j,q) = 0.0; // We reinitialize the number of acceptance to zero for lambda
         } // loop on rank of latent variable 
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species
       for (int i=0; i<NSITE; i++) {
         Ar_alpha(i) = ((double) nA_alpha(i)) / DIV;
@@ -372,6 +378,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site_lv(
           Ar_W(i,q) = ((double) nA_W(i,q)) / DIV;
           nA_W(i,q) = 0.0; // We reinitialize the number of acceptance to zero for z
         } // loop on rank of latent variable
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     

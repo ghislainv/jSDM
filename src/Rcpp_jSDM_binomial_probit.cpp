@@ -109,6 +109,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit(const int ngibbs,const int nthin,const int 
       
       // Draw in the posterior distribution
       beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      //////////////////////////////////////////////////
+      // User interrupt
+      R_CheckUserInterrupt(); // allow user interrupts 	 
     }
     
     //////////////////////////////////////////////////
@@ -125,7 +128,9 @@ Rcpp::List Rcpp_jSDM_binomial_probit(const int ngibbs,const int nthin,const int 
         
         /* log Likelihood */
         logL += R::dbinom(Y(i,j), 1, theta_run(i,j), 1);
+        R_CheckUserInterrupt(); // allow user interrupts 	 
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupts 	 
     } // loop on sites
     
     // Deviance
@@ -185,8 +190,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit(const int ngibbs,const int nthin,const int 
 # #Data
 # #===================================================
 # 
-# nsp <- 70
-# nsite <- 210
+# nsp <- 7000
+# nsite <- 2100
 # np <- 3
 # seed <- 123
 # set.seed(seed)
@@ -243,7 +248,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit(const int ngibbs,const int nthin,const int 
 #   }
 # }
 # 
-# ## Species effect beta 
+# ## Species effect beta
 # par(mfrow=c(1,1),oma=c(1, 0, 1, 0))
 # plot(t(beta.target),mean_beta, xlab="obs", ylab="fitted",main="beta")
 # abline(a=0,b=1,col='red')

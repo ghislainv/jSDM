@@ -134,6 +134,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
           nA_alpha(i)++;
         } 
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites 
     
     for ( int j = 0; j < NSP; j++ ) {
@@ -153,6 +154,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
           nA_beta(j,p)++;
         } 
       } // loop on rank of parameters
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on species
     
     
@@ -174,6 +176,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
         /* log Likelihood */
         logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
@@ -210,12 +213,14 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
           else sigmap_beta(j,p) = sigmap_beta(j,p) / (2-Ar_beta(j,p) / ROPT);
           nA_beta(j,p) = 0.0; // We reinitialize the number of acceptance to zero for beta
         } // loop on rank of parameters
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species 
       for (int i=0; i<NSITE; i++) {
         Ar_alpha(i) = ((double) nA_alpha(i)) / DIV;
         if ( Ar_alpha(i) >= ROPT ) sigma_alpha(i) = sigma_alpha(i) * (2-(1-Ar_alpha(i)) / (1-ROPT));
         else sigma_alpha(i) = sigma_alpha(i) / (2-Ar_alpha(i) / ROPT);
         nA_alpha(i) = 0.0; // We reinitialize the number of acceptance for alpha to zero
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     
@@ -226,10 +231,12 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_fixed_site(
           Ar_beta(j,p) = ((double) nA_beta(j,p)) / DIV;
           nA_beta(j,p) = 0.0; // We reinitialize the number of acceptance to zero for beta
         } // loop on rank of parameters
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species
       for (int i=0; i<NSITE; i++) {
         Ar_alpha(i) = ((double) nA_alpha(i)) / DIV;
         nA_alpha(i) = 0.0; // We reinitialize the number of acceptance for alpha to zero
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on sites
     }
     

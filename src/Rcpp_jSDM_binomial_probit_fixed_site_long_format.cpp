@@ -114,6 +114,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_long_format(
       } else {
         Z_run(n) = rtnorm(s, 0, R_PosInf, probit_theta_run(n), 1);
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     
@@ -138,6 +139,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_long_format(
         // Draw in the posterior distribution
         alpha_run(i) = big_V*small_v + gsl_ran_gaussian_ziggurat(s, std::sqrt(big_V));
       }
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////
@@ -154,6 +156,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_long_format(
       
       // Draw in the posterior distribution
       beta_run.col(j) = arma_mvgauss(s, big_V*small_v, chol_decomp(big_V));
+      R_CheckUserInterrupt(); // allow user interrupt
     }
     
     //////////////////////////////////////////////////
@@ -169,6 +172,7 @@ Rcpp::List Rcpp_jSDM_binomial_probit_fixed_site_long_format(
       
       /* log Likelihood */
       logL += R::dbinom(Y(n), 1, theta_run(n), 1);
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on observations
     
     // Deviance

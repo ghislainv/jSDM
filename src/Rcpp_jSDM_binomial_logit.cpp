@@ -127,6 +127,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
           nA_beta(p,j)++;
         } 
       } // loop on rank of parameters
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on species
     
     ///////////////
@@ -146,6 +147,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
         /* log Likelihood */
         logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
       } // loop on species
+      R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
     
     // Deviance
@@ -181,6 +183,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
           else sigmap_beta(p,j) = sigmap_beta(p,j) / (2-Ar_beta(p,j) / ROPT);
           nA_beta(p,j) = 0.0; // We reinitialize the number of acceptance to zero for beta
         } // loop on rank of parameters
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species 
     }
     
@@ -191,6 +194,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
           Ar_beta(p,j) = ((double) nA_beta(p,j)) / DIV;
           nA_beta(p,j) = 0.0; // We reinitialize the number of acceptance to zero for beta
         } // loop on rank of parameters
+        R_CheckUserInterrupt(); // allow user interrupt
       } // loop on species
     }
     
