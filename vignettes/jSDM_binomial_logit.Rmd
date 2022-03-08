@@ -24,6 +24,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 fig.align = "center",
+fig.retina=1,
 fig.width = 6, fig.height = 6,
 cache = FALSE,
 collapse = TRUE,
@@ -64,7 +65,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-birds) **_Swiss Breeding Bird Atlas_** [@Kery2006].
 
-```{r birds-picture, echo=FALSE, out.width=600, out.height=300, fig.cap="(ref:cap-birds)"}
+```{r birds-picture, echo=FALSE, out.width=600, fig.retina=1, out.height=300, fig.cap="(ref:cap-birds)"}
 knitr::include_graphics("figures/swiss_breeding_birds_atlas.jpg")
 ```
 

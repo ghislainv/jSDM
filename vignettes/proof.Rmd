@@ -16,7 +16,7 @@ pkgdown:
   as_is: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Mathematical proof}
+  %\VignetteIndexEntry{Bayesian inference methods}
   %\VignetteEncoding{UTF-8}
 ---
 

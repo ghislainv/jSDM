@@ -24,6 +24,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 fig.align = "center",
+fig.retina=1,
 fig.width = 6, fig.height = 6,
 cache = FALSE,
 collapse = TRUE,
@@ -64,7 +65,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-mites) **_Oribatid mites_** [@Borcard1994].
 
-```{r mites-picture, echo=FALSE, out.width=500, out.height=400, fig.cap="(ref:cap-mites)"}
+```{r mites-picture, echo=FALSE, fig.retina=1, out.width=500, out.height=400, fig.cap="(ref:cap-mites)"}
 knitr::include_graphics("figures/Oribatid_mites.jpg")
 ```
 

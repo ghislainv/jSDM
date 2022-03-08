@@ -3,7 +3,6 @@ title: "Get started with jSDM"
 output:
   bookdown::html_document2:
     #base_format: rmarkdown::html_vignette
-    #highlight: tango
     number_sections: true
     toc: true
     toc_float: true
@@ -23,6 +22,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 fig.align = "center",
+fig.retina = 1,
 fig.width = 6, fig.height = 6,
 cache = FALSE,
 collapse = TRUE,
@@ -133,15 +133,15 @@ In this vignette, we illustrate the use of the `jSDM` R package which aims at pr
 
 Package's functions are developed in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model's parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity. 
 
-Model types available in `jSDM` R package are not limited to those described in this example. `jSDM` includes various model types for occurrence and abundance data: 
-
 <center> __Directed Acyclic Graph (DAG)__ </center>
 
 (ref:cap-DAG) A graphical summary of the `jSDM-package` statistical framework. In this Directed Acyclic Graph (DAG), the orange boxes refer to data, the blue ellipses to parameters to be estimated, and the arrows to functional relationships described with the help of statistical distributions.
 
-```{r plot-DAG, echo=FALSE, out.width=500, fig.cap="(ref:cap-DAG)", eval=TRUE}
+```{r plot-DAG, echo=FALSE, out.width=500, fig.retina=1, fig.cap="(ref:cap-DAG)", eval=TRUE}
 knitr::include_graphics("figures/DAG-jSDM-rand.png")
 ```
+
+Model types available in `jSDM` R package are not limited to those described in this example. `jSDM` includes various model types for occurrence and abundance data, you can find more examples of use on the [jSDM website](https://ecology.ghislainv.fr/jSDM/). 
 
 # Load librairies 
 
@@ -195,7 +195,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 (ref:cap-frog) **_Litoria ewingii_** [@Wilkinson2019].
 
-```{r frog-picture, echo=FALSE, out.width=400, out.height=300, fig.cap="(ref:cap-frog)"}
+```{r frog-picture, echo=FALSE, out.width=400, out.height=300, fig.retina=1, fig.cap="(ref:cap-frog)"}
 knitr::include_graphics("figures/Litoria_ewingii.jpg")
 ```
 
@@ -254,25 +254,25 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit(
 np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
 
 ## beta_j of the first two species
-par(mfrow=c(np,2))
+par(mfrow=c(2,2))
 for (j in 1:2) {
   for (p in 1:np) {
     coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,p]))
     coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,p]), 
                    main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[j]])[p],
-                                ", species : ",j))
+                                ", species : ",j), cex.main=0.9)
   }
 }
 
 ## lambda_j of the first two species
 n_latent <- mod_frogs_jSDM_probit$model_spec$n_latent
-par(mfrow=c(n_latent*2,2))
+par(mfrow=c(2,2))
 for (j in 1:2) {
   for (l in 1:n_latent) {
     coda::traceplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,np+l]))
     coda::densplot(coda::as.mcmc(mod_frogs_jSDM_probit$mcmc.sp[[j]][,np+l]), 
                    main = paste(colnames(mod_frogs_jSDM_probit$mcmc.sp[[j]])
-                                [np+l],", species : ",j))
+                                [np+l],", species : ",j), cex.main=0.9)
   }
 }
 
@@ -281,9 +281,11 @@ par(mfrow=c(2,2))
 for (l in 1:n_latent) {
   for (i in 1:2) {
   coda::traceplot(mod_frogs_jSDM_probit$mcmc.latent[[paste0("lv_",l)]][,i],
-                  main = paste0("Latent variable W_", l, ", site ", i))
+                  main = paste0("Latent variable W_", l, ", site ", i),
+                  cex.main=0.9)
   coda::densplot(mod_frogs_jSDM_probit$mcmc.latent[[paste0("lv_",l)]][,i],
-                 main = paste0("Latent variable W_", l, ", site ", i))
+                 main = paste0("Latent variable W_", l, ", site ", i),
+                 cex.main=0.9)
   }
 }
 
@@ -301,9 +303,11 @@ coda::densplot(mod_frogs_jSDM_probit$mcmc.Deviance)
 ## probit_theta
 par (mfrow=c(1,2))
 hist(mod_frogs_jSDM_probit$probit_theta_latent,
-     main = "Predicted probit theta", xlab ="predicted probit theta")
+     main = "Predicted probit theta",
+     xlab ="predicted probit theta")
 hist(mod_frogs_jSDM_probit$theta_latent,
-     main = "Predicted theta", xlab ="predicted theta")
+     main = "Predicted theta", 
+     xlab ="predicted theta")
 ```
 
 ## Matrice of correlations 

@@ -23,6 +23,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 fig.align = "center",
+fig.retina=1,
 fig.width = 6, fig.height = 6,
 cache = FALSE,
 collapse = TRUE,
@@ -72,7 +73,7 @@ We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coeffi
 
 (ref:cap-alpine-plant) **_Alpine plants_** [@Choler2005].
 
-```{r alpine-plant, echo=FALSE, fig.cap="(ref:cap-alpine-plant)"}
+```{r alpine-plant, echo=FALSE, out.width=600, fig.cap="(ref:cap-alpine-plant)"}
 knitr::include_graphics("figures/alpine_plants.png")
 ```
 
