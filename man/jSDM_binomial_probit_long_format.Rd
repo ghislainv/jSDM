@@ -21,9 +21,9 @@ jSDM_binomial_probit_long_format(
   shape = 0.5,
   rate = 5e-04,
   mu_gamma = 0,
-  V_gamma = 1e+06,
+  V_gamma = 10,
   mu_beta = 0,
-  V_beta = 1e+06,
+  V_beta = 10,
   mu_lambda = 0,
   V_lambda = 10,
   seed = 1234,
@@ -46,8 +46,8 @@ jSDM_binomial_probit_long_format(
 \tab (species may not have been recorded at all sites).\cr 
 \code{x1,...,xp} \tab columns of explanatory variables for the suitability process of the model.\cr}}
 
-\item{site_formula}{A one-sided formula with the form '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{d} terms related to \eqn{\gamma} parameters and \eqn{p} terms related to species effects \eqn{\beta},
-specifying the explanatory variables for the suitability process of the model as formula used by the \code{\link[stats]{lm}} function.}
+\item{site_formula}{A one-sided formula, as the formulas used by the \code{\link[stats]{lm}} function, of the form: '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{p} terms related to species effects \eqn{\beta},
+specifying the explanatory variables for the suitability process of the model, including the intercept, different from the \eqn{d} terms related to \eqn{\gamma} parameters.}
 
 \item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
 
