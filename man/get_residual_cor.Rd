@@ -4,23 +4,31 @@
 \alias{get_residual_cor}
 \title{Calculate the residual correlation matrix from a latent variable model (LVM)}
 \usage{
-get_residual_cor(mod)
+get_residual_cor(mod, prob = 0.95)
 }
 \arguments{
 \item{mod}{An object of class \code{"jSDM"}}
+
+\item{prob}{A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.}
 }
 \value{
 results A list including : 
 \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.} 
 \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
+\item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
+\item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
+\item{sig.cov}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
 \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
 \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
+\item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
+\item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
+\item{sig.cor}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
 }
 \description{
-This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_species and l=1,\dots,n_latent)}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
+This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_{species} and l=1,\dots,n_{latent})}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 }
 \details{
-After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies}{R=(R_ij) avec i=1,..., nspecies et j=1,..., nspecies} can be derived from the covariance in the latent variables such as : 
+After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, n_{species} et j=1,\ldots, n_{species}}{R=(R_ij) avec i=1,..., n_species et j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
 \tabular{lll}{
 \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
          \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
@@ -63,9 +71,15 @@ library(jSDM)
                              # Various
                              seed=1234, verbose=1)
 # Calcul of residual correlation between species 
- result <- get_residual_cor(mod)
- result$cov.mean
- result$cor.mean
+result <- get_residual_cor(mod, prob=0.95)
+# Residual variance-covariance matrix
+result$cov.mean
+## All non-significant co-variances are set to zero.
+result$cov.mean * result$sig.cov
+# Residual correlation matrix
+result$cor.mean
+## All non-significant correlations are set to zero.
+result$cor.mean * result$sig.cor
 }
 \references{
 \tabular{l}{

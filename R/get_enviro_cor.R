@@ -166,5 +166,8 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
     }
   }
   
-  return(list(cor = enviro_cor_mat, cor.lower = enviro_cor_mat_cilower, cor.upper = enviro_cor_mat_ciupper, sig.cor = sig_enviro_cor_mat, cov = enviro_cov_mat))
+  return(list(cor = enviro_cor_mat, cor.lower = enviro_cor_mat_cilower,
+              cor.upper = enviro_cor_mat_ciupper,
+              sig.cor = sig_enviro_cor_mat,
+              cov = enviro_cov_mat))
 }

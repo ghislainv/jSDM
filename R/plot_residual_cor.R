@@ -10,6 +10,9 @@
 #' @title Plot the residual correlation matrix from a latent variable model (LVM).
 #' @description Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{\link[corrplot]{corrplot}} function from the package of the same name.
 #' @param mod An object of class \code{"jSDM"}.
+#' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
+#'   If \code{prob=0.95} is specified only significant correlations, whose \eqn{95\%} HPD interval does not contain zero, are represented. 
+#'   Defaults to \code{prob=NULL} to represent all correlations significant or not.
 #' @param title Character, title of the graph.
 #' @param diag Logical, whether display the correlation coefficients on the principal diagonal.
 #' @param type Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.
@@ -68,9 +71,18 @@
 #' @export 
 
 ## Plot of residual correlation matrix (posterior mean estimator, and reordered by first principal component)
-plot_residual_cor <- function(mod, title = "Residual Correlation Matrix from LVM", diag = F, type = "lower",
-                              method = "color",  mar = c(1,1,3,1), tl.srt = 45, tl.cex = 0.5, ...) {
-  lv2.cor <- get_residual_cor(mod)
+plot_residual_cor <- function(mod, prob=NULL,
+                              title = "Residual Correlation Matrix from LVM",
+                              diag = F, type = "lower",
+                              method = "color", 
+                              mar = c(1,1,3,1),
+                              tl.srt = 45, tl.cex = 0.5, ...) {
+  lv2.cor <- get_residual_cor(mod, prob=ifelse(is.null(prob), 0.95, prob))
+  # All non-significant correlations are set to zero, 
+  # according to the (100 x prob)% HPD interval.
+  if(!is.null(prob)){
+  lv2.cor$cor.mean <- lv2.cor$cor.mean * lv2.cor$sig.cor
+  }
   lv2.cor$reorder.cor.mean <- corrplot::corrMatOrder(lv2.cor$cor.mean, order = "FPC", hclust.method = "average")
   if(!is.null(mod$model_spec$presence_data)){
   rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- colnames(mod$model_spec$presence_data)

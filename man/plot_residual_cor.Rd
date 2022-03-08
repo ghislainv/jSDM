@@ -6,6 +6,7 @@
 \usage{
 plot_residual_cor(
   mod,
+  prob = NULL,
   title = "Residual Correlation Matrix from LVM",
   diag = F,
   type = "lower",
@@ -18,6 +19,10 @@ plot_residual_cor(
 }
 \arguments{
 \item{mod}{An object of class \code{"jSDM"}.}
+
+\item{prob}{A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
+If \code{prob=0.95} is specified only significant correlations, whose \eqn{95\%} HPD interval does not contain zero, are represented. 
+Defaults to \code{prob=NULL} to represent all correlations significant or not.}
 
 \item{title}{Character, title of the graph.}
 
