@@ -392,7 +392,6 @@ where</p>
 <p>Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>. jSDM is becoming an increasingly popular statistical method in conservation biology.</p>
 <p>In this vignette, we illustrate the use of the <code>jSDM</code> R package which aims at providing user-friendly statistical functions using field observations (occurrence or abundance data) to fit jSDMs models.</p>
 <p>Package’s functions are developed in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model’s parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity.</p>
-<p>Model types available in <code>jSDM</code> R package are not limited to those described in this example. <code>jSDM</code> includes various model types for occurrence and abundance data:</p>
 <center>
 <strong>Directed Acyclic Graph (DAG)</strong>
 </center>
@@ -403,6 +402,7 @@ where</p>
 Figure 1.1: A graphical summary of the <code>jSDM-package</code> statistical framework. In this Directed Acyclic Graph (DAG), the orange boxes refer to data, the blue ellipses to parameters to be estimated, and the arrows to functional relationships described with the help of statistical distributions.
 </p>
 </div>
+<p>Model types available in <code>jSDM</code> R package are not limited to those described in this example. <code>jSDM</code> includes various model types for occurrence and abundance data, you can find more examples of use on the <a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM website</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="load-librairies">
@@ -498,8 +498,7 @@ Figure 3.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <h3 id="parameter-inference">
 <span class="header-section-number">3.3</span> Parameter inference<a class="anchor" aria-label="anchor" href="#parameter-inference"></a>
 </h3>
-<p>We use the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code>
-function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
+<p>We use the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to fit the jSDM (increase the number of iterations to achieve convergence).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod_frogs_jSDM_probit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span>
   <span class="co"># Chains</span>
@@ -539,34 +538,35 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <h3 id="analysis-of-the-results">
 <span class="header-section-number">3.4</span> Analysis of the results<a class="anchor" aria-label="anchor" href="#analysis-of-the-results"></a>
 </h3>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">beta_start</span><span class="op">)</span>
 
 <span class="co">## beta_j of the first two species</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">np</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
     <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span>, 
                    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">p</span><span class="op">]</span>,
-                                <span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span>
+                                <span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-probit-1.png" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-2.png" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-3.png" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-4.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## lambda_j of the first two species</span>
 <span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">n_latent</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">np</span><span class="op">+</span><span class="va">l</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
     <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">np</span><span class="op">+</span><span class="va">l</span><span class="op">]</span><span class="op">)</span>, 
                    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-                                <span class="op">[</span><span class="va">np</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,<span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span>
+                                <span class="op">[</span><span class="va">np</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,<span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-probit-5.png" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-6.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## Latent variables W_i for the first two sites</span>
@@ -574,17 +574,19 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>,
-                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span>
+                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="va">i</span><span class="op">)</span>,
+                  cex.main<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
   <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>,
-                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span>
+                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="va">i</span><span class="op">)</span>,
+                 cex.main<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-probit-7.png" style="display: block; margin: auto;"><img src="jSDM_files/figure-html/plot-results-probit-8.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-probit-9.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## V_alpha</span>
@@ -594,16 +596,19 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <span class="co">## Deviance</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/plot-results-probit-10.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">probit_theta_latent</span>,
-     main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
+     main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>,
+     xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">$</span><span class="va">theta_latent</span>,
-     main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"></p>
+     main <span class="op">=</span> <span class="st">"Predicted theta"</span>, 
+     xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
+<p><img src="jSDM_files/figure-html/plot-results-probit-11.png" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.</p>
 </div>
 <div class="section level3">
 <h3 id="matrice-of-correlations">
@@ -618,7 +623,7 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <p>We use the function <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/correlation-matrix-probit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/correlation-matrix-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="predictions">
@@ -644,7 +649,7 @@ function to fit the jSDM (increase the number of iterations to achieve convergen
 <span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span>, newdata<span class="op">=</span><span class="va">simdata</span>, Id_species<span class="op">=</span><span class="va">Id_species</span>,
                       Id_sites<span class="op">=</span><span class="va">Id_sites</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated data"</span>, xlab<span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_files/figure-html/predictions-probit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_files/figure-html/predictions-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">

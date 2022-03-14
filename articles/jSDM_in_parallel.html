@@ -138,7 +138,7 @@
 <span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">210</span>
 
 <span class="co">#= Set seed for repeatability</span>
-<span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span>
+<span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span>
 
 <span class="co">#= Number of species</span>
@@ -185,108 +185,108 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
 <span class="co">#&gt;      Species1 Species2 Species3 Species4 Species5 Species6 Species7 Species8</span>
-<span class="co">#&gt; [1,]        0        0        0        1        0        0        1        0</span>
-<span class="co">#&gt; [2,]        1        0        0        0        0        1        0        0</span>
-<span class="co">#&gt; [3,]        1        0        1        1        0        1        0        0</span>
-<span class="co">#&gt; [4,]        1        1        1        1        0        1        0        0</span>
-<span class="co">#&gt; [5,]        0        0        0        1        0        1        1        0</span>
-<span class="co">#&gt; [6,]        1        0        1        0        1        1        0        0</span>
+<span class="co">#&gt; [1,]        0        1        1        1        1        0        1        0</span>
+<span class="co">#&gt; [2,]        0        0        0        0        0        1        0        0</span>
+<span class="co">#&gt; [3,]        0        0        0        0        0        1        0        0</span>
+<span class="co">#&gt; [4,]        0        1        1        1        0        0        0        1</span>
+<span class="co">#&gt; [5,]        1        0        0        0        0        1        0        1</span>
+<span class="co">#&gt; [6,]        0        0        0        0        0        1        0        1</span>
 <span class="co">#&gt;      Species9 Species10 Species11 Species12 Species13 Species14 Species15</span>
-<span class="co">#&gt; [1,]        1         0         0         1         1         0         1</span>
-<span class="co">#&gt; [2,]        0         0         0         1         1         0         0</span>
-<span class="co">#&gt; [3,]        0         1         0         1         1         1         0</span>
-<span class="co">#&gt; [4,]        1         1         0         1         1         1         1</span>
-<span class="co">#&gt; [5,]        1         0         1         0         0         1         1</span>
-<span class="co">#&gt; [6,]        0         1         0         1         1         0         0</span>
+<span class="co">#&gt; [1,]        0         1         0         0         1         0         0</span>
+<span class="co">#&gt; [2,]        0         1         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]        1         0         0         0         0         0         0</span>
+<span class="co">#&gt; [4,]        0         1         0         0         0         0         0</span>
+<span class="co">#&gt; [5,]        0         1         0         0         0         0         1</span>
+<span class="co">#&gt; [6,]        0         0         1         0         0         0         0</span>
 <span class="co">#&gt;      Species16 Species17 Species18 Species19 Species20 Species21 Species22</span>
-<span class="co">#&gt; [1,]         1         1         1         1         0         0         0</span>
-<span class="co">#&gt; [2,]         1         1         0         1         0         0         0</span>
-<span class="co">#&gt; [3,]         1         1         1         0         1         1         0</span>
-<span class="co">#&gt; [4,]         1         1         0         1         1         1         0</span>
-<span class="co">#&gt; [5,]         0         0         0         1         0         1         1</span>
-<span class="co">#&gt; [6,]         0         0         1         1         1         1         0</span>
-<span class="co">#&gt;      Species23 Species24 Species25 Species26 Species27 Species28 Species29</span>
-<span class="co">#&gt; [1,]         1         0         0         0         0         0         0</span>
-<span class="co">#&gt; [2,]         1         0         0         1         0         0         0</span>
-<span class="co">#&gt; [3,]         1         1         1         1         1         0         1</span>
-<span class="co">#&gt; [4,]         1         1         0         1         1         0         0</span>
-<span class="co">#&gt; [5,]         1         0         0         1         0         0         0</span>
-<span class="co">#&gt; [6,]         1         1         1         1         1         0         1</span>
-<span class="co">#&gt;      Species30 Species31 Species32 Species33 Species34 Species35 Species36</span>
-<span class="co">#&gt; [1,]         1         0         0         1         0         1         1</span>
-<span class="co">#&gt; [2,]         1         0         0         0         0         1         1</span>
-<span class="co">#&gt; [3,]         1         1         0         0         0         1         1</span>
-<span class="co">#&gt; [4,]         1         1         0         1         1         1         1</span>
-<span class="co">#&gt; [5,]         0         1         1         0         1         1         0</span>
-<span class="co">#&gt; [6,]         1         0         1         0         0         1         1</span>
-<span class="co">#&gt;      Species37 Species38 Species39 Species40 Species41 Species42 Species43</span>
-<span class="co">#&gt; [1,]         0         0         0         1         0         1         1</span>
-<span class="co">#&gt; [2,]         1         0         1         0         0         0         1</span>
-<span class="co">#&gt; [3,]         1         1         0         1         1         0         1</span>
-<span class="co">#&gt; [4,]         1         0         0         1         0         1         1</span>
-<span class="co">#&gt; [5,]         1         1         1         1         0         1         1</span>
-<span class="co">#&gt; [6,]         1         1         1         1         0         0         0</span>
-<span class="co">#&gt;      Species44 Species45 Species46 Species47 Species48 Species49 Species50</span>
-<span class="co">#&gt; [1,]         0         1         1         1         1         0         1</span>
-<span class="co">#&gt; [2,]         0         1         0         0         1         0         0</span>
-<span class="co">#&gt; [3,]         0         1         0         1         0         0         1</span>
-<span class="co">#&gt; [4,]         1         1         1         1         1         1         1</span>
-<span class="co">#&gt; [5,]         1         0         0         1         0         1         1</span>
-<span class="co">#&gt; [6,]         1         1         1         1         1         1         1</span>
-<span class="co">#&gt;      Species51 Species52 Species53 Species54 Species55 Species56 Species57</span>
 <span class="co">#&gt; [1,]         1         1         0         0         0         0         1</span>
-<span class="co">#&gt; [2,]         0         0         0         0         0         0         1</span>
-<span class="co">#&gt; [3,]         1         0         1         0         1         0         1</span>
-<span class="co">#&gt; [4,]         1         1         0         1         0         0         1</span>
-<span class="co">#&gt; [5,]         1         1         0         0         0         1         0</span>
-<span class="co">#&gt; [6,]         1         0         0         0         1         1         1</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         0         1         1         1         1         0         0</span>
+<span class="co">#&gt; [4,]         1         0         0         1         0         1         0</span>
+<span class="co">#&gt; [5,]         1         1         1         1         0         1         0</span>
+<span class="co">#&gt; [6,]         0         0         1         1         0         1         0</span>
+<span class="co">#&gt;      Species23 Species24 Species25 Species26 Species27 Species28 Species29</span>
+<span class="co">#&gt; [1,]         1         1         1         0         0         0         0</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         0         1         1         1         1         0         0</span>
+<span class="co">#&gt; [4,]         1         0         0         0         0         1         0</span>
+<span class="co">#&gt; [5,]         0         0         1         1         0         0         0</span>
+<span class="co">#&gt; [6,]         0         0         1         0         0         0         0</span>
+<span class="co">#&gt;      Species30 Species31 Species32 Species33 Species34 Species35 Species36</span>
+<span class="co">#&gt; [1,]         1         0         0         1         1         1         0</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         1         0         0         1         1         1         0</span>
+<span class="co">#&gt; [4,]         0         1         0         0         1         0         0</span>
+<span class="co">#&gt; [5,]         1         1         0         0         0         0         1</span>
+<span class="co">#&gt; [6,]         1         1         0         0         1         1         0</span>
+<span class="co">#&gt;      Species37 Species38 Species39 Species40 Species41 Species42 Species43</span>
+<span class="co">#&gt; [1,]         1         1         1         0         0         1         1</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         0         0         1         0         0         0         0</span>
+<span class="co">#&gt; [4,]         0         0         0         0         0         1         1</span>
+<span class="co">#&gt; [5,]         0         0         1         1         0         0         0</span>
+<span class="co">#&gt; [6,]         0         0         1         1         0         0         1</span>
+<span class="co">#&gt;      Species44 Species45 Species46 Species47 Species48 Species49 Species50</span>
+<span class="co">#&gt; [1,]         0         1         0         0         1         0         1</span>
+<span class="co">#&gt; [2,]         1         1         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         1         0         1         1         0         1         0</span>
+<span class="co">#&gt; [4,]         0         1         0         0         1         0         1</span>
+<span class="co">#&gt; [5,]         1         0         0         1         1         1         1</span>
+<span class="co">#&gt; [6,]         1         0         0         1         1         0         0</span>
+<span class="co">#&gt;      Species51 Species52 Species53 Species54 Species55 Species56 Species57</span>
+<span class="co">#&gt; [1,]         0         1         0         0         0         1         0</span>
+<span class="co">#&gt; [2,]         0         1         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         1         1         0         0         0         0         0</span>
+<span class="co">#&gt; [4,]         0         1         0         1         0         0         0</span>
+<span class="co">#&gt; [5,]         1         1         0         0         0         0         0</span>
+<span class="co">#&gt; [6,]         1         0         0         0         0         0         1</span>
 <span class="co">#&gt;      Species58 Species59 Species60 Species61 Species62 Species63 Species64</span>
-<span class="co">#&gt; [1,]         1         1         0         1         1         1         1</span>
-<span class="co">#&gt; [2,]         0         1         0         0         0         1         0</span>
-<span class="co">#&gt; [3,]         1         1         1         0         0         1         1</span>
-<span class="co">#&gt; [4,]         1         0         0         1         1         1         0</span>
-<span class="co">#&gt; [5,]         0         1         1         1         0         1         1</span>
-<span class="co">#&gt; [6,]         0         1         1         1         0         1         1</span>
+<span class="co">#&gt; [1,]         1         0         0         1         0         0         1</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         0         1         0         1         1         1         1</span>
+<span class="co">#&gt; [4,]         0         1         0         0         0         0         1</span>
+<span class="co">#&gt; [5,]         1         1         0         0         1         0         1</span>
+<span class="co">#&gt; [6,]         0         1         0         0         1         0         0</span>
 <span class="co">#&gt;      Species65 Species66 Species67 Species68 Species69 Species70</span>
-<span class="co">#&gt; [1,]         0         1         1         0         1         0</span>
-<span class="co">#&gt; [2,]         0         1         1         1         0         0</span>
-<span class="co">#&gt; [3,]         0         0         1         0         0         1</span>
-<span class="co">#&gt; [4,]         0         1         1         1         1         0</span>
-<span class="co">#&gt; [5,]         0         1         0         1         1         0</span>
-<span class="co">#&gt; [6,]         1         0         1         0         0         0</span>
+<span class="co">#&gt; [1,]         0         0         0         1         0         0</span>
+<span class="co">#&gt; [2,]         0         0         0         0         0         0</span>
+<span class="co">#&gt; [3,]         1         0         1         0         0         0</span>
+<span class="co">#&gt; [4,]         0         0         0         1         0         1</span>
+<span class="co">#&gt; [5,]         0         1         1         0         1         1</span>
+<span class="co">#&gt; [6,]         0         0         1         0         0         1</span>
 <span class="co"># Number of observations per site</span>
 <span class="va">nobs_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span>
 <span class="va">nobs_site</span>
-<span class="co">#&gt;   [1] 35 23 42 49 37 43 44 45 15 38 60 51 52 43 25 43 24 28 45 14 42 39 37 59 20</span>
-<span class="co">#&gt;  [26] 38 37 31 41 24 24 22 56 35 44 40 37 21 46 44 19 37 39 47 59 34 52 48 32 26</span>
-<span class="co">#&gt;  [51] 19 42 41 59 42 41 27 30 37 34 45 27 32 26 55 31 38  8 42 37 26 38 36 15 57</span>
-<span class="co">#&gt;  [76] 16 38 43 22 48 47 57 39 31 51 42 32 26 30 34 28 39 17 37 30 51 53 30 58 42</span>
-<span class="co">#&gt; [101] 30 29 50 11 24 21 48 31 34 64 34 32 28 14 38 39 35 22 26 25 27 47 43 38 38</span>
-<span class="co">#&gt; [126] 20 30 33 36 30 29 56 31 45 31 26 44 38 51 33 39 39 22 25 43 26 32 31 29 20</span>
-<span class="co">#&gt; [151] 37 41 21 50 39 56 22 39 43 39 36 35 13 34 39 23 31 34 47 48 26 31 55 17 32</span>
-<span class="co">#&gt; [176] 58 63 35 21 41 30 48 24 41 41 30 50 25 40 54 25 48 31 40 34 35 36 27 34 47</span>
-<span class="co">#&gt; [201] 15 18 17 16 38 25 11 30 35 37</span>
+<span class="co">#&gt;   [1] 31  5 28 23 32 23 36 24 26 30 51 42 35 16 47 15 26 17 20 21 53 30 24 38 39</span>
+<span class="co">#&gt;  [26] 23 34 38 58 49 41 39 12 25 25 45 33 31 58 34 32 27 40 18 48 28 30 26 41 19</span>
+<span class="co">#&gt;  [51] 26 31 34 36 16 30 13 21 46 34 32 28 25 25 39 35 37 19 37 40 43 29 26 31 39</span>
+<span class="co">#&gt;  [76] 56 34 41 38 56 50 28 30 34 32 31 37 19 17 45 40 26 50 30 24 22 33 36 37 37</span>
+<span class="co">#&gt; [101] 45 36 47 52  4 27 43 19 19 40 21  9 43 27 36 40 48 39 52 50 29 17 38 50 20</span>
+<span class="co">#&gt; [126] 47 33 32 28 47 52 55 23 42 30 24 42 38 46 54 45 20 37 52 48 17 39 26 21 21</span>
+<span class="co">#&gt; [151] 30 33 48 38 35 31 48 25 34 39 48 42 14 19 27 11 30 54  7 41 34 25 48 41 33</span>
+<span class="co">#&gt; [176] 26 20 20 55 29 29 23 29 26 20 60 43 11 51 41 38 39 33 41 22 21 25 32 37 40</span>
+<span class="co">#&gt; [201] 38 52 40 47 48 28 37 38 38 18</span>
 <span class="co"># Number of observations per species</span>
 <span class="va">nobs_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span>
 <span class="va">nobs_sp</span>
 <span class="co">#&gt;  Species1  Species2  Species3  Species4  Species5  Species6  Species7  Species8 </span>
-<span class="co">#&gt;        89        94       114       155        68       141       104        62 </span>
+<span class="co">#&gt;        60        93       126       122       114       128        53       101 </span>
 <span class="co">#&gt;  Species9 Species10 Species11 Species12 Species13 Species14 Species15 Species16 </span>
-<span class="co">#&gt;       144       115        78       143       116        69       111       145 </span>
+<span class="co">#&gt;        66       125        84        77        58        71       124        80 </span>
 <span class="co">#&gt; Species17 Species18 Species19 Species20 Species21 Species22 Species23 Species24 </span>
-<span class="co">#&gt;       100        92       147       128        60        70       137        87 </span>
+<span class="co">#&gt;        95       109       105       125       105        86       110       128 </span>
 <span class="co">#&gt; Species25 Species26 Species27 Species28 Species29 Species30 Species31 Species32 </span>
-<span class="co">#&gt;       131       103        98        61       101        89       128       121 </span>
+<span class="co">#&gt;       114       127        83        67        95       127       129       108 </span>
 <span class="co">#&gt; Species33 Species34 Species35 Species36 Species37 Species38 Species39 Species40 </span>
-<span class="co">#&gt;        67       108       126        77       116        47        84       150 </span>
+<span class="co">#&gt;       148       147       156        99        84        75       106        78 </span>
 <span class="co">#&gt; Species41 Species42 Species43 Species44 Species45 Species46 Species47 Species48 </span>
-<span class="co">#&gt;        65       124       148       109       137       100       115       102 </span>
+<span class="co">#&gt;        42        83       126       143       124        61        92       125 </span>
 <span class="co">#&gt; Species49 Species50 Species51 Species52 Species53 Species54 Species55 Species56 </span>
-<span class="co">#&gt;       108       146       142        75       108       128        95        50 </span>
+<span class="co">#&gt;       133       119        97       148        75        63        86        71 </span>
 <span class="co">#&gt; Species57 Species58 Species59 Species60 Species61 Species62 Species63 Species64 </span>
-<span class="co">#&gt;       137       143       108        85       111       146       104       123 </span>
+<span class="co">#&gt;        65       107       136        64        97       147        56       137 </span>
 <span class="co">#&gt; Species65 Species66 Species67 Species68 Species69 Species70 </span>
-<span class="co">#&gt;        72       149       156        74        50        81</span>
+<span class="co">#&gt;        61       125        65       123       102        80</span>
 
 <span class="co"># Remove species with less than 5 presences</span>
 <span class="va">rare_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Y</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> 
@@ -406,7 +406,7 @@
 <span class="co"># list of data and starting parameters </span>
 <span class="va">listData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Y<span class="op">=</span><span class="va">Y</span>, X<span class="op">=</span><span class="va">X</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">beta_start</span>, <span class="va">lambda_start</span>, <span class="va">W_start</span>, <span class="va">alpha_start</span>, <span class="va">V_alpha_start</span>, <span class="va">seed_mcmc</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
+<code class="sourceCode R"> 
 <span class="co">## Defining the function that will run MCMC on each CPU</span>
 <span class="co"># Arguments:</span>
 <span class="co"># i - will be 1 or 2</span>
@@ -467,22 +467,22 @@
 <span class="co">#&gt; number of chains : 4</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"content of each chain :"</span>, <span class="va">str_mod</span>,<span class="st">"\n"</span><span class="op">)</span>
 <span class="co">#&gt; content of each chain : List of 9</span>
-<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 11786 11812 11903 11925 11938 ...</span>
+<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 11892 11903 11993 11911 11955 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ mcmc.alpha         : 'mcmc' num [1:1000, 1:210] -0.08918 -0.11077 0.00951 -0.29685 -0.20246 ...</span>
+<span class="co">#&gt;  $ mcmc.alpha         : 'mcmc' num [1:1000, 1:210] -0.0559 -0.1139 0.0947 -0.2999 -0.1052 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ mcmc.V_alpha       : 'mcmc' num [1:1000, 1] 0.494 0.522 0.441 0.415 0.482 ...</span>
+<span class="co">#&gt;  $ mcmc.V_alpha       : 'mcmc' num [1:1000, 1] 0.454 0.393 0.474 0.436 0.42 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ mcmc.sp            :List of 70</span>
 <span class="co">#&gt;  $ mcmc.latent        :List of 2</span>
-<span class="co">#&gt;  $ Z_latent           : num [1:210, 1:70] -0.593 0.733 1.584 1.059 -1.888 ...</span>
+<span class="co">#&gt;  $ Z_latent           : num [1:210, 1:70] -1.758 -2.42 -1.414 -1.491 0.657 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ probit_theta_latent: num [1:210, 1:70] 0.634 -0.277 1.437 0.542 -1.807 ...</span>
+<span class="co">#&gt;  $ probit_theta_latent: num [1:210, 1:70] -1.628 -2.394 -1.203 -1.271 -0.523 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ theta_latent       : num [1:210, 1:70] 0.7245 0.3959 0.909 0.6923 0.0457 ...</span>
+<span class="co">#&gt;  $ theta_latent       : num [1:210, 1:70] 0.0666 0.0128 0.1321 0.1247 0.3084 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ model_spec         :List of 24</span>
 <span class="co">#&gt;  - attr(*, "class")= chr "jSDM"</span></code></pre></div>
@@ -500,8 +500,9 @@
 <h4 id="definition">
 <span class="header-section-number">3.1.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
 </h4>
-<p>The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See <span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span> and <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> for the detailed description of the method.</p>
-<p>Suppose we have <span class="math inline">\(M\)</span> chains, each of length <span class="math inline">\(N\)</span>, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter <span class="math inline">\(\theta\)</span>, let <span class="math inline">\(\left(\theta_{𝑚t}\right)_{t=1}^N\)</span> be the <span class="math inline">\(𝑚\)</span>th simulated chain, <span class="math inline">\(𝑚=1,\dots,𝑀\)</span>. Let <span class="math inline">\(\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}\)</span> and <span class="math inline">\(\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2\)</span> be the sample posterior mean and variance of the <span class="math inline">\(𝑚\)</span>th chain, and let the overall sample posterior mean be <span class="math inline">\(\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m\)</span>.</p>
+<p>The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate non convergence. See <span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span> and <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> for the detailed description of the method.</p>
+<p>Suppose we have <span class="math inline">\(M\)</span> chains, each of length <span class="math inline">\(N\)</span>, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter <span class="math inline">\(\theta\)</span>, let <span class="math inline">\(\left(\theta_{𝑚t}\right)_{t=1}^N\)</span> be the <span class="math inline">\(𝑚\)</span>th simulated chain, <span class="math inline">\(𝑚=1,\dots,𝑀\)</span>.<br>
+Let <span class="math inline">\(\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}\)</span> and <span class="math inline">\(\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2\)</span> be the sample posterior mean and variance of the <span class="math inline">\(𝑚\)</span>th chain, and let the overall sample posterior mean be <span class="math inline">\(\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m\)</span>.</p>
 <p>The between-chains and within-chain variances are given by
 <span class="math display">\[B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2\]</span>
 <span class="math display">\[W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m\]</span></p>
@@ -566,16 +567,17 @@ If the convergence diagnostic gives values of potential scale reduction factor (
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Rhat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Variable</span>, y<span class="op">=</span><span class="va">Rhat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Averages of Rhat obtained for each type of parameter"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size<span class="op">=</span><span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size<span class="op">=</span><span class="fl">13</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"skyblue"</span>, stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Rhat</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, vjust<span class="op">=</span><span class="fl">0</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">1</span>, color<span class="op">=</span><span class="st">'red'</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Rhat</span><span class="op">$</span><span class="va">Rhat</span><span class="op">)</span><span class="op">+</span><span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
 <p><img src="jSDM_in_parallel_files/figure-html/MCMC-convergence-randsite-lv-1.png" width="700" style="display: block; margin: auto;"></p>
-<p>We can see that the <span class="math inline">\(\hat{R}\)</span> are very close to 1 for the species effects <span class="math inline">\(\beta\)</span>, the site effects <span class="math inline">\(\alpha\)</span> and their variance <span class="math inline">\(V_{alpha}\)</span>. We can therefore be fairly confident that convergence has been achieved for these parameters.</p>
-<p>However the <span class="math inline">\(\hat{R}\)</span> obtained for latent variables <span class="math inline">\(W\)</span> and factor loadings <span class="math inline">\(\lambda\)</span> are much greater than 1. It can be explained by the fact that <span class="math inline">\(W\)</span> and <span class="math inline">\(\lambda\)</span> can takes alternately positive and negative values between and even within MCMC chains, due to identifiability issues between <span class="math inline">\(W\)</span> and <span class="math inline">\(\lambda\)</span>.<br>
-Consequently, if we consider the absolute values of the latent variables <span class="math inline">\(W\)</span> and factor loadings <span class="math inline">\(\lambda\)</span> estimated to compute the <span class="math inline">\(\hat{R}\)</span>, we get values well closer to 1. We can therefore consider that convergence has been almost reached for these parameters in absolute value.</p>
+<p>We can see that the <span class="math inline">\(\hat{R}\)</span> are very close to 1 for the species effects <span class="math inline">\(\beta\)</span>, the site effects <span class="math inline">\(\alpha\)</span> and their variance <span class="math inline">\(V_{alpha}\)</span>. We can therefore be fairly confident that convergence has been achieved for these parameters.<br>
+The <span class="math inline">\(\hat{R}\)</span> obtained for the latent variables <span class="math inline">\(W\)</span> and the factor loadings <span class="math inline">\(\lambda\)</span> are also very close to 1, indicating that convergence has been reached for these parameters.</p>
+<p>However <span class="math inline">\(\hat{R}\)</span> associated to latent variables and factor loadings can be much greater than 1 in some cases. This can be explained by the fact that <span class="math inline">\(W\)</span> and <span class="math inline">\(\lambda\)</span> can alternatively take positive and negative values between and even within MCMC chains, due to identifiability issues between <span class="math inline">\(W\)</span> and <span class="math inline">\(\lambda\)</span>.<br>
+Consequently, we also consider the absolute values of the latent variables <span class="math inline">\(W\)</span> and the factor loadings <span class="math inline">\(\lambda\)</span> estimated to compute the <span class="math inline">\(\hat{R}\)</span> in order to obtain values closer to 1. In this case, we can consider that convergence has been reached for these parameters in absolute value.</p>
 </div>
 </div>
 </div>
@@ -583,28 +585,35 @@ Consequently, if we consider the absolute values of the latent variables <span c
 <h2 id="representation-of-results">
 <span class="header-section-number">4</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results"></a>
 </h2>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Plot trace and posterior distributions </span>
 <span class="co"># for two first species</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,
+     auto.layout<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="co"># for two first sites </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="va">nsite</span><span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="va">nsite</span><span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span>,
+     auto.layout<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mcmc_list_V_alpha</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>, col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend<span class="op">=</span><span class="st">"V_alpha.target"</span>,
-       lwd<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span>, cex<span class="op">=</span><span class="fl">0.6</span>, bty<span class="op">=</span><span class="st">"n"</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+       lwd<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">'red'</span>, cex<span class="op">=</span><span class="fl">0.7</span>, bty<span class="op">=</span><span class="st">"n"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_alpha</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>,
+     auto.layout<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="co"># Deviance </span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_deviance</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_in_parallel_files/figure-html/est-probit-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-7.png" width="800" style="display: block; margin: auto;"></p>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_deviance</span>,
+     auto.layout<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="jSDM_in_parallel_files/figure-html/est-probit-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-7.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-8.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/est-probit-9.png" width="800" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.</p>
 </div>
 <div class="section level2">
 <h2 id="accuracy-of-predictions">
 <span class="header-section-number">5</span> Accuracy of predictions<a class="anchor" aria-label="anchor" href="#accuracy-of-predictions"></a>
 </h2>
+<p>We evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Predictive posterior mean for each observation</span>
 <span class="va">nchains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">)</span>
@@ -693,6 +702,7 @@ Consequently, if we consider the absolute values of the latent variables <span c
 <span class="op">}</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_in_parallel_files/figure-html/obs-fitted-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_in_parallel_files/figure-html/obs-fitted-4.png" width="800" style="display: block; margin: auto;"></p>
+<p>On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

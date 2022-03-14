@@ -60,9 +60,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.2.0" id="jsdm-020">jSDM 0.2.0<a class="anchor" aria-label="anchor" href="#jsdm-020"></a></h2>
+<h2 class="page-header" data-toc-text="0.2.0" id="jsdm-020">jSDM 0.2.0<small>2022-03-08</small><a class="anchor" aria-label="anchor" href="#jsdm-020"></a></h2>
 <ul><li>New function <code><a href="../reference/jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained()</a></code> which aims to improve the convergence of latent variable models fitting by selecting the species constrained to have positive values of factor loadings <span class="math inline"><em>λ</em></span> and new vignette “Bernoulli probit regression with selected constrained species” to illustrate its use.</li>
 <li>New vignettes “Bernoulli probit regression including species traits” and “Estimation of Madagascar’s plant biodiversity” available.</li>
+<li>Add the possibility to consider only significant correlations in the <code>get_residual_cor</code> and <code>plot_residual_cor</code> functions.</li>
 <li>Add the possibility of considering an additional hierarchical level in the Bayesian models of the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code>, <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> and <code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code> functions to take into account interactions between species-specific traits and the environment in estimating species effects.</li>
 <li>Separate the drawing of species effects beta and factor loading lambda in the functions <code>jSDM_binomial_probit_block()</code> and <code>jSDM_binomial_probit_block_long_format()</code> renamed <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> and <code><a href="../reference/jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format()</a></code>.</li>
 </ul></div>

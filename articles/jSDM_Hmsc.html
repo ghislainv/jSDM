@@ -115,16 +115,16 @@
 <li>
 <span class="math inline">\(\mathrm{g}(\cdot)\)</span>: Link function (eg. logit or probit).</li>
 </ul>
-<p>The inference method is able to handle only one visit by site with a <strong>probit</strong> link function so <span class="math inline">\(\forall i, \ t_i=1\)</span> and <span class="math inline">\(y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\)</span>.</p>
+<p>The inference method is able to handle only one visit by site with a <strong>probit</strong> link function so <span class="math inline">\(\forall i, \ t_i=1\)</span> and <span class="math display">\[y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\]</span>.</p>
 <ul>
-<li>
-<span class="math inline">\(X_i\)</span>: Vector of explanatory variables for site <span class="math inline">\(i\)</span> (including intercept).</li>
-<li>
-<span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span>.</li>
-<li>
-<span class="math inline">\(W_i\)</span>: Vector of random latent variables for site <span class="math inline">\(i\)</span>. <span class="math inline">\(W_i \sim N(0, 1)\)</span>. The number of latent variables must be fixed by the user (default to 2).</li>
-<li>
-<span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span>. Also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>.</li>
+<li><p><span class="math inline">\(X_i\)</span>: Vector of explanatory variables for site <span class="math inline">\(i\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bio-climatic variables considered (including intercept <span class="math inline">\(\forall i, x_i^1=1\)</span>).</p></li>
+<li><p><span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span> including species intercept (<span class="math inline">\(\beta_{0j}\)</span>). We use a prior distribution <span class="math inline">\(\beta_j \sim \mathcal{N}_p(0,\Sigma_{\beta})\)</span> with <span class="math inline">\(\Sigma_{\beta}\)</span> a specified diagonal matrix of size <span class="math inline">\(p \times p\)</span>.</p></li>
+<li><p><span class="math inline">\(W_i\)</span>: Vector of random latent variables for site <span class="math inline">\(i\)</span>. <span class="math inline">\(W_i \sim N(0, 1)\)</span>. The number of latent variables <span class="math inline">\(q\)</span> must be fixed by the user (default to <span class="math inline">\(q=2\)</span>).</p></li>
+<li><p><span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span> also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>. We use the following prior distribution in the <code>jSDM</code> package to constraint values to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal, for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> : <span class="math display">\[\lambda_{jl} \sim \begin{cases}
+\mathcal{N}(0,1) &amp; \text{if } l &lt; j \\
+\mathcal{N}(0,1) \text{ left truncated by } 0 &amp; \text{if } l=j \\
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
+\end{cases}\]</span>.</p></li>
 </ul>
 <p>This model is equivalent to a multivariate GLMM <span class="math inline">\(\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}\)</span>, where <span class="math inline">\(u_{ij} \sim \mathcal{N}(0, \Sigma)\)</span> with the constraint that the variance-covariance matrix <span class="math inline">\(\Sigma = \Lambda \Lambda^{\prime}\)</span>, where <span class="math inline">\(\Lambda\)</span> is the full matrix of factor loadings, with the <span class="math inline">\(\lambda_j\)</span> as its columns.</p>
 <p>Using this model we can compute the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> from the covariance in the latent variables such as :
@@ -531,6 +531,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
      <span class="va">mod_Hmsc_sim</span>, <span class="va">rL</span>, <span class="va">probit_theta_latent_sim</span>,
      <span class="va">RMSE_Hmsc_sim</span>, <span class="va">Deviance_Hmsc_sim</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_simulation.RData"</span><span class="op">)</span></code></pre></div>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters and we evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_simulation.RData"</span><span class="op">)</span>
 <span class="va">codaObject</span> <span class="op">&lt;-</span> <span class="fu">Hmsc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/convertToCodaObject.html" class="external-link">convertToCodaObject</a></span><span class="op">(</span><span class="va">mod_Hmsc_sim</span>, start<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
@@ -590,6 +591,8 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
      main<span class="op">=</span><span class="st">"probit(theta)"</span>, xlab <span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-7.png" width="800" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
 <div class="section level3">
 <h3 id="mosquitos-dataset">
@@ -913,6 +916,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_sim</span>, <span class="va">mod_jSDM_sim</span>, <span class="va">RMSE_jSDM_sim</span>,
      file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_simulation.RData"</span><span class="op">)</span></code></pre></div>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters and we evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_simulation.RData"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_simulation.RData"</span><span class="op">)</span>
@@ -992,6 +996,8 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="co">#      xlab="obs",ylab="fitted", main="theta")</span>
 <span class="co"># abline(a=0,b=1,col='red')</span></code></pre></div>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-7.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-8.png" width="800" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
 <div class="section level3">
 <h3 id="mosquitos-dataset-1">
@@ -1258,25 +1264,25 @@ Compilation time Hmsc (secondes)
 Compilation time jSDM (secondes)
 </td>
 <td style="text-align:left;">
-85
+95
 </td>
 <td style="text-align:left;">
-11
+12
 </td>
 <td style="text-align:left;">
-19
+23
 </td>
 <td style="text-align:left;">
-3
+5
 </td>
 <td style="text-align:left;">
-19
+23
 </td>
 <td style="text-align:left;">
-82
+91
 </td>
 <td style="text-align:left;">
-62
+67
 </td>
 </tr>
 <tr>
@@ -1310,22 +1316,22 @@ Deviance Hmsc
 Deviance jSDM
 </td>
 <td style="text-align:left;">
-15193
+15201
 </td>
 <td style="text-align:left;">
-1275
+1267
 </td>
 <td style="text-align:left;">
-1865
+1846
 </td>
 <td style="text-align:left;">
-205
+211
 </td>
 <td style="text-align:left;">
-1329
+1377
 </td>
 <td style="text-align:left;">
-14128
+14117
 </td>
 <td style="text-align:left;">
 6812
@@ -1358,7 +1364,7 @@ Deviance jSDM
 </tr>
 </tbody>
 </table>
-<p><code>jSDM</code> is <strong>8 to 36</strong> times faster than <code>Hmsc</code>.</p>
+<p><code>jSDM</code> is <strong>7 to 28</strong> times faster than <code>Hmsc</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="root-mean-square-error-rmse-for-simulated-data">
@@ -1393,6 +1399,7 @@ RMSE
 <h3 id="estimated-parameters">
 <span class="header-section-number">5.3</span> Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
+<p>We plot the parameters estimated with <code>jSDM</code> against those estimated with <code>Hmsc</code> to compare the results obtained with both packages.</p>
 <div class="section level4">
 <h4 id="simulated-dataset-2">
 <span class="header-section-number">5.3.1</span> Simulated dataset<a class="anchor" aria-label="anchor" href="#simulated-dataset-2"></a>
@@ -1434,6 +1441,7 @@ RMSE
 <span class="header-section-number">5.3.7</span> Mites dataset<a class="anchor" aria-label="anchor" href="#mites-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-4.png" width="800" style="display: block; margin: auto;"></p>
+<p>On the figures above, the parameters estimated with <code>jSDM</code> are close to those obtained with <code>Hmsc</code> if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 <div id="refs" class="references">
 <div id="ref-Borcard1994">
 <p>Borcard, D. &amp; Legendre, P. (1994) Environmental control and spatial structure in ecological communities: An example using oribatid mites (Acari, Oribatei). <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.</p>

@@ -247,7 +247,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">p</span><span class="op">]</span>,
                               <span class="st">", species : "</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-1.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-3.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-4.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-1.png" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-2.png" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-3.png" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-4.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## lambda_j of the first two species</span>
@@ -261,7 +261,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
                                 <span class="op">[</span><span class="va">np</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>, <span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-5.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-6.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-5.png" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-6.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Latent variables W_i for the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
@@ -273,12 +273,12 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-7.png" width="576" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-8.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-7.png" style="display: block; margin: auto;"><img src="jSDM_poisson_log_files/figure-html/plot-results-log-8.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-9.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-9.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## V_alpha</span>
@@ -288,14 +288,14 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <span class="co">## Deviance</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span>
 <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-10.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-10.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## probit_theta</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span> <span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">log_theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted log theta"</span>, xlab <span class="op">=</span><span class="st">"predicted log theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span><span class="op">$</span><span class="va">theta_latent</span>, main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-11.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/plot-results-log-11.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="matrice-of-correlations">
@@ -310,7 +310,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <p>We use the function <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span>, tl.cex<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/correlation-matrix-log-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/correlation-matrix-log-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="predictions">
@@ -338,7 +338,7 @@ Figure 2.1: <strong><em>Oribatid mites</em></strong> <span class="citation">(Bor
 <span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod_mites_jSDM_log</span>, newdata<span class="op">=</span><span class="va">simdata</span>, Id_species<span class="op">=</span><span class="va">Id_species</span>,
                            Id_sites<span class="op">=</span><span class="va">Id_sites</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated data"</span>, xlab<span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_poisson_log_files/figure-html/predictions-log-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_poisson_log_files/figure-html/predictions-log-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

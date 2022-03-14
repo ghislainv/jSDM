@@ -138,7 +138,7 @@ We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> 
 
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:alpine-plant"></span>
-<img src="figures/alpine_plants.png" alt="Alpine plants (Choler 2005)."><p class="caption">
+<img src="figures/alpine_plants.png" alt="Alpine plants (Choler 2005)." width="600"><p class="caption">
 Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Choler <a href="#ref-Choler2005" role="doc-biblioref">2005</a>)</span>.
 </p>
 </div>
@@ -345,7 +345,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
    <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>outer<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Covariable : "</span>,
                                   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.gamma</span><span class="op">)</span><span class="op">[</span><span class="va">p</span><span class="op">]</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-1.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-2.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-3.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-1.png" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-2.png" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-3.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## beta_j of the first two species</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">np</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
@@ -354,7 +354,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
     <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>outer<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span> <span class="st">"species "</span>, <span class="va">j</span> ,<span class="st">" : "</span>,
                                    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA_aravo</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-4.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-5.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-4.png" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-5.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## lambda_j of the first two species</span>
@@ -365,7 +365,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
     <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>outer<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span> <span class="st">"species "</span>, <span class="va">j</span> ,<span class="st">" : "</span>,
                                    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA_aravo</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-6.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-7.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-6.png" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-7.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## species effects for all species</span>
@@ -383,21 +383,21 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
                  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span>, <span class="st">", site "</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PA_aravo</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-8.png" width="576" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-9.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-8.png" style="display: block; margin: auto;"><img src="jSDM_with_traits_files/figure-html/plot-results-probit-9.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## alpha_i of the first two sites</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-10.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-10.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## V_alpha</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-11.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-11.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Deviance</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-12.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-12.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## probit_theta</span>
@@ -406,7 +406,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
      main <span class="op">=</span> <span class="st">"Predicted probit theta"</span>, xlab <span class="op">=</span><span class="st">"predicted probit theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">theta_latent</span>,
      main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-13.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-13.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="matrice-of-correlations">
@@ -421,7 +421,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <p>We use the <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> function to compute and display the residual correlation matrix :</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod</span>, tl.srt <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/correlation-matrix-probit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/correlation-matrix-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="predictions">
@@ -444,7 +444,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">simdata</span>,
                       Id_species<span class="op">=</span><span class="va">Id_species</span>,   Id_sites<span class="op">=</span><span class="va">Id_sites</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated data"</span>, xlab<span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_with_traits_files/figure-html/predictions-probit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_with_traits_files/figure-html/predictions-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

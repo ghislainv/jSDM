@@ -84,9 +84,9 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
   shape <span class="op">=</span> <span class="fl">0.5</span>,
   rate <span class="op">=</span> <span class="fl">5e-04</span>,
   mu_gamma <span class="op">=</span> <span class="fl">0</span>,
-  V_gamma <span class="op">=</span> <span class="fl">1e+06</span>,
+  V_gamma <span class="op">=</span> <span class="fl">10</span>,
   mu_beta <span class="op">=</span> <span class="fl">0</span>,
-  V_beta <span class="op">=</span> <span class="fl">1e+06</span>,
+  V_beta <span class="op">=</span> <span class="fl">10</span>,
   mu_lambda <span class="op">=</span> <span class="fl">0</span>,
   V_lambda <span class="op">=</span> <span class="fl">10</span>,
   seed <span class="op">=</span> <span class="fl">1234</span>,
@@ -105,8 +105,8 @@ The function calls a Gibbs sampler written in C++ code which uses conjugate prio
 <dt>data</dt>
 <dd><p>A <code>data.frame</code> with at least the following columns :</p><table class="table table"><tr><td><code>Y</code></td><td>\(n_{obs}\)-length vector indicating the presence by a 1 (or absence by a 0),</td></tr><tr><td></td><td>of the species observed during each visit of the sites.</td></tr><tr><td><code>site</code></td><td>numeric or character \(n_{obs}\)-length vector indicating the visited site,</td></tr><tr><td></td><td>(sites can be visited several times).</td></tr><tr><td><code>species</code></td><td>numeric or character eqnn_obsn_obs-length vector indicating the species observed,</td></tr><tr><td></td><td>(species may not have been recorded at all sites).</td></tr><tr><td><code>x1,...,xp</code></td><td>columns of explanatory variables for the suitability process of the model.</td></tr></table></dd>
 <dt>site_formula</dt>
-<dd><p>A one-sided formula with the form '~ x1 + ... + xd + species:x1 + ... + species:xp' with \(d\) terms related to \(\gamma\) parameters and \(p\) terms related to species effects \(\beta\),
-specifying the explanatory variables for the suitability process of the model as formula used by the <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code> function.</p></dd>
+<dd><p>A one-sided formula, as the formulas used by the <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code> function, of the form: '~ x1 + ... + xd + species:x1 + ... + species:xp' with \(p\) terms related to species effects \(\beta\),
+specifying the explanatory variables for the suitability process of the model, including the intercept, different from the \(d\) terms related to \(\gamma\) parameters.</p></dd>
 <dt>n_latent</dt>
 <dd><p>An integer which specifies the number of latent variables to generate. Defaults to <code>0</code>.</p></dd>
 <dt>site_effect</dt>

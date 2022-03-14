@@ -296,6 +296,10 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <h2 id="fitting-species-distribution-models-sdm">
 <span class="header-section-number">2</span> Fitting species distribution models (SDM)<a class="anchor" aria-label="anchor" href="#fitting-species-distribution-models-sdm"></a>
 </h2>
+<div class="section level3">
+<h3 id="definition-of-model">
+<span class="header-section-number">2.1</span> Definition of model<a class="anchor" aria-label="anchor" href="#definition-of-model"></a>
+</h3>
 <p>We consider a simple generalized linear multivariate model (GLMM) to estimate the occurrence probabilities on sites for each species such as :</p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\]</span></p>
 <p><span class="math display">\[ \mathrm{g}(\theta_{ij}) = X_i\beta_j \]</span></p>
@@ -307,14 +311,18 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <li>
 <span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span>.</li>
 </ul>
-<p>We consider below binomial models with a probit link.</p>
+<p>We consider below binomial models with a probit link. We want to compare the parameters of the SDMs fitted using <code>BayesComm</code> and <code>jSDM</code> packages.</p>
+</div>
 <div class="section level3">
 <h3 id="using-bayescomm">
-<span class="header-section-number">2.1</span> Using <code>BayesComm</code><a class="anchor" aria-label="anchor" href="#using-bayescomm"></a>
+<span class="header-section-number">2.2</span> Using <code>BayesComm</code><a class="anchor" aria-label="anchor" href="#using-bayescomm"></a>
 </h3>
 <p>In a first step, we use the package <code>BayesComm</code> described in the article <span class="citation">(Golding, Nunn &amp; Purse <a href="#ref-Golding2015" role="doc-biblioref">2015</a>)</span> to fit binomial models with a probit link function.
-The package <code>BayesComm</code> fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly.
-We want to compare the parameters of the models fitted with <code>BayesComm</code> and <code>jSDM</code>.</p>
+The package <code>BayesComm</code> fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly.</p>
+<div class="section level4">
+<h4 id="parameters-inference">
+<span class="header-section-number">2.2.1</span> Parameters inference<a class="anchor" aria-label="anchor" href="#parameters-inference"></a>
+</h4>
 <p>We estimate the parameters of the species distribution model (SDM) with the function <code><a href="https://rdrr.io/pkg/BayesComm/man/BC.html" class="external-link">BC()</a></code> and the argument <code>model="environment"</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BayesComm</span><span class="op">)</span>
@@ -343,20 +351,38 @@ We want to compare the parameters of the models fitted with <code>BayesComm</cod
 <span class="va">deviance_BC</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">logL</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">mod_BC</span>, file<span class="op">=</span><span class="st">"SDM_JSDM_cache/BC.rda"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">beta_est_BC</span>, <span class="va">T_BC</span>, <span class="va">deviance_BC</span>, <span class="va">probit_theta_latent_BC</span>, file<span class="op">=</span><span class="st">"SDM_JSDM_files/BC.rda"</span><span class="op">)</span></code></pre></div>
-<p>We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.</p>
+<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">beta_est_BC</span>, <span class="va">T_BC</span>, <span class="va">deviance_BC</span>,
+     <span class="va">probit_theta_latent_BC</span>,
+     file<span class="op">=</span><span class="st">"SDM_JSDM_files/BC.rda"</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="evaluation-of-mcmc-convergence">
+<span class="header-section-number">2.2.2</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence"></a>
+</h4>
+<div class="section level5">
+<h5 id="representation-of-results">
+<span class="header-section-number">2.2.2.1</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results"></a>
+</h5>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of the estimated parameters.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BayesComm</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"SDM_JSDM_cache/BC.rda"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod_BC</span>, chain<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"B$"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"species "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, outer<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.</p>
+</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="using-jsdm">
-<span class="header-section-number">2.2</span> Using <code>jSDM</code><a class="anchor" aria-label="anchor" href="#using-jsdm"></a>
+<span class="header-section-number">2.3</span> Using <code>jSDM</code><a class="anchor" aria-label="anchor" href="#using-jsdm"></a>
 </h3>
 <p>In a second step, we use the package <code>jSDM</code> to fit binomial models with a probit link.</p>
+<div class="section level4">
+<h4 id="parameters-inference-1">
+<span class="header-section-number">2.3.1</span> Parameters inference<a class="anchor" aria-label="anchor" href="#parameters-inference-1"></a>
+</h4>
 <p>We estimate the parameters of the SDM with the function <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> and the argument <code>n_latent=0</code> set by default.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load libraries</span>
@@ -406,9 +432,81 @@ We want to compare the parameters of the models fitted with <code>BayesComm</cod
 
 <span class="co"># Stop cluster</span>
 <span class="co">#stopCluster(clust)</span></code></pre></div>
-<p>Overview of the results :</p>
+</div>
+<div class="section level4">
+<h4 id="evaluation-of-mcmc-convergence-1">
+<span class="header-section-number">2.3.2</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence-1"></a>
+</h4>
+<div class="section level5">
+<h5 id="the-gelmanrubin-convergence-diagnostic">
+<span class="header-section-number">2.3.2.1</span> The Gelman–Rubin convergence diagnostic<a class="anchor" aria-label="anchor" href="#the-gelmanrubin-convergence-diagnostic"></a>
+</h5>
+<p><strong>Definition</strong>:</p>
+<p>The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate non-convergence. See <span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span> and <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> for the detailed description of the method.</p>
+<p>Suppose we have <span class="math inline">\(M\)</span> chains, each of length <span class="math inline">\(N\)</span>, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter <span class="math inline">\(\theta\)</span>, let <span class="math inline">\(\left(\theta_{𝑚t}\right)_{t=1}^N\)</span> be the <span class="math inline">\(𝑚\)</span>th simulated chain, <span class="math inline">\(𝑚=1,\dots,𝑀\)</span>. Let <span class="math inline">\(\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}\)</span> and <span class="math inline">\(\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2\)</span> be the sample posterior mean and variance of the <span class="math inline">\(𝑚\)</span>th chain, and let the overall sample posterior mean be <span class="math inline">\(\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m\)</span>.</p>
+<p>The between-chains and within-chain variances are given by
+<span class="math display">\[B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2\]</span>
+<span class="math display">\[W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m\]</span></p>
+<p>Under certain stationarity conditions, the pooled variance :</p>
+<p><span class="math display">\[\hat{V}=\frac{N-1}{N}W + \frac{M+1}{MN}B\]</span></p>
+<p>is an unbiased estimator of the marginal posterior variance of <span class="math inline">\(\theta\)</span> (<span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span>). The potential scale reduction factor (PSRF) is defined to be the ratio of <span class="math inline">\(\hat{𝑉}\)</span> and <span class="math inline">\(𝑊\)</span>. If the <span class="math inline">\(𝑀\)</span> chains have converged to the target posterior distribution, then PSRF should be close to 1. The article <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> corrected the original PSRF by accounting for sampling variability as follows:
+<span class="math display">\[ \hat{R}= \sqrt{\frac{\hat{d}+3}{\hat{d}+1}\frac{\hat{V}}{W}}\]</span></p>
+<p>where <span class="math inline">\(\hat{d}\)</span> is the degrees of freedom estimate of a <span class="math inline">\(𝑡\)</span> distribution.</p>
+<p>PSRF estimates the potential decrease in the between-chains variability <span class="math inline">\(𝐵\)</span> with respect to the within-chain variability <span class="math inline">\(𝑊\)</span>. If <span class="math inline">\(\hat{R}\)</span> is large, then longer simulation sequences are expected to either decrease <span class="math inline">\(𝐵\)</span> or increase <span class="math inline">\(𝑊\)</span> because the simulations have not yet explored the full posterior distribution. As the article <span class="citation">Brooks &amp; Gelman (<a href="#ref-Brooks1998" role="doc-biblioref">1998</a>)</span> have suggested, if <span class="math inline">\(\hat{R} &lt; 1.2\)</span> for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition <span class="math inline">\(\hat{R} &lt; 1.1\)</span>.</p>
+<p><strong>Compute <span class="math inline">\(\hat{R}\)</span></strong>:</p>
+<p>We evaluate the convergence of the MCMC output in which two parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or <span class="math inline">\(\hat{R}\)</span> substantially above 1, its indicates lack of convergence.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Output</span>
+<code class="sourceCode R">
+<span class="va">burnin</span> <span class="op">&lt;-</span> <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">burnin</span>
+<span class="va">ngibbs</span> <span class="op">&lt;-</span> <span class="va">burnin</span> <span class="op">+</span> <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">mcmc</span>
+<span class="va">thin</span> <span class="op">&lt;-</span>  <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">thin</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
+<span class="va">arr2mcmc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+              start<span class="op">=</span><span class="va">burnin</span><span class="op">+</span><span class="fl">1</span> , end<span class="op">=</span><span class="va">ngibbs</span>, thin<span class="op">=</span><span class="va">thin</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co"># MCMC lists</span>
+<span class="va">mcmc_list_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_beta0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Intercept"</span>, 
+                                                           <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,
+                                                           value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># psrf gelman indice </span>
+<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Intercept"</span>,
+                                                     <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,
+                                                     invert<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>,
+                              multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">psrf_beta0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_beta0</span>, multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+
+<span class="va">Rhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Rhat<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">psrf_beta</span>, <span class="va">psrf_beta0</span><span class="op">)</span>,
+                   Variable<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"beta0"</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Barplot</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Rhat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Variable</span>, y<span class="op">=</span><span class="va">Rhat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Averages of Rhat obtained for species effect"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size<span class="op">=</span><span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"skyblue"</span>, stat <span class="op">=</span> <span class="st">"identity"</span>, width<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Rhat</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, vjust<span class="op">=</span><span class="fl">0</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">1</span>, color<span class="op">=</span><span class="st">'red'</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Rhat</span><span class="op">$</span><span class="va">Rhat</span><span class="op">)</span><span class="op">+</span><span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">12</span><span class="op">)</span>,
+        axis.title.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">11</span><span class="op">)</span>,
+        axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<p><img src="SDM_JSDM_files/figure-html/MCMC-convergence-SDM-1.png" width="700" style="display: block; margin: auto;"></p>
+<p>We can see that the <span class="math inline">\(\hat{R}\)</span> are very close to 1 for the species effects <span class="math inline">\(\beta\)</span> and the species intercept <span class="math inline">\(\beta_0\)</span>. We can therefore be fairly confident that convergence has been achieved for these parameters.</p>
+</div>
+<div class="section level5">
+<h5 id="representation-of-results-1">
+<span class="header-section-number">2.3.2.2</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results-1"></a>
+</h5>
+<p>Overview of the results :</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Output</span>
 <span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mod_probit</span><span class="op">)</span>
 <span class="va">mod_jSDM</span> <span class="op">&lt;-</span> <span class="va">mod_probit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">str_jSDM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_jSDM</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
@@ -427,35 +525,25 @@ We want to compare the parameters of the models fitted with <code>BayesComm</cod
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ mcmc.sp            :List of 93</span>
 <span class="co">#&gt;  $ Z_latent           : num [1:266, 1:93] -0.745 -0.732 0.458 -1.388 -1.741 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ probit_theta_latent: num [1:266, 1:93] 0.175 0.175 -1.374 -1.173 -1.552 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ theta_latent       : num [1:266, 1:93] 0.5689 0.5689 0.0877 0.1231 0.0634 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ model_spec         :List of 15</span>
-<span class="co">#&gt;  $ T_jSDM             : 'difftime' num 2.98265340328217</span>
-<span class="co">#&gt;   ..- attr(*, "units")= chr "mins"</span>
+<span class="co">#&gt;  $ T_jSDM             : 'difftime' num 54.7729182243347</span>
+<span class="co">#&gt;   ..- attr(*, "units")= chr "secs"</span>
 <span class="co">#&gt;  - attr(*, "class")= chr "jSDM"</span></code></pre>
-<p>We evaluate the convergence of the MCMC output in which two parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
-Convergence is diagnosed when the chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
-If the convergence diagnostic gives values of potential scale reduction factor or psrf
-substantially above 1, its indicates lack of convergence.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
-<span class="va">arr2mcmc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="co"># MCMC lists</span>
-<span class="va">mcmc_list_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># psrf gelman indice </span>
-<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">psrf_beta</span>, file<span class="op">=</span><span class="st">"SDM_JSDM_files/psrf.rda"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; psrf beta: 1.01313</span></code></pre>
-<p>We can also visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Milvus.milvus.beta"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<p>We can also visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of the estimated parameters.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Milvus.milvus.beta"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"species "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, outer<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/plot-jSDM-1.png" width="600" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -483,14 +571,21 @@ substantially above 1, its indicates lack of convergence.</p>
 <h3 id="using-bayescomm-1">
 <span class="header-section-number">3.1</span> Using <code>BayesComm</code><a class="anchor" aria-label="anchor" href="#using-bayescomm-1"></a>
 </h3>
+<div class="section level4">
+<h4 id="parameters-inference-2">
+<span class="header-section-number">3.1.1</span> Parameters inference<a class="anchor" aria-label="anchor" href="#parameters-inference-2"></a>
+</h4>
 <p>We estimate the parameters of the JSDM with the function <code><a href="https://rdrr.io/pkg/BayesComm/man/BC.html" class="external-link">BC()</a></code> and the argument <code>model="full"</code> (intercept, covariates and community matrix).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">T1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod_BC_comm</span> <span class="op">&lt;-</span> <span class="fu">BayesComm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BayesComm/man/BC.html" class="external-link">BC</a></span><span class="op">(</span>Y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">Env_Birds</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"full"</span>, its<span class="op">=</span><span class="fl">20000</span>, thin<span class="op">=</span><span class="fl">10</span>, burn<span class="op">=</span><span class="fl">10000</span><span class="op">)</span>
+<span class="va">mod_BC_comm</span> <span class="op">&lt;-</span> <span class="fu">BayesComm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BayesComm/man/BC.html" class="external-link">BC</a></span><span class="op">(</span>Y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">Env_Birds</span><span class="op">)</span>, 
+                             model<span class="op">=</span><span class="st">"full"</span>, its<span class="op">=</span><span class="fl">20000</span>, thin<span class="op">=</span><span class="fl">10</span>, burn<span class="op">=</span><span class="fl">10000</span><span class="op">)</span>
 <span class="co"># Estimates</span>
 <span class="va">beta_est_BC_comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span>, intercept<span class="op">=</span><span class="cn">NA</span>, elev<span class="op">=</span><span class="cn">NA</span>, elev2<span class="op">=</span><span class="cn">NA</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">beta_est_BC_comm</span><span class="op">[</span><span class="va">j</span>, <span class="fl">2</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod_BC_comm</span>, chain<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"B$"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">statistics</span><span class="op">[</span>, <span class="st">"Mean"</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">beta_est_BC_comm</span><span class="op">[</span><span class="va">j</span>, <span class="fl">2</span><span class="op">:</span><span class="op">(</span><span class="va">np</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod_BC_comm</span>,
+                                                      chain<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"B$"</span>, 
+                                                                   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">statistics</span><span class="op">[</span>, <span class="st">"Mean"</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span>
 <span class="co">#Z_BayesComm_com &lt;- apply(mod_BC_comm$trace$z,c(2,3), mean)</span>
 <span class="va">T2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
@@ -526,21 +621,37 @@ substantially above 1, its indicates lack of convergence.</p>
 <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">beta_est_BC_comm</span>, <span class="va">T_BC_comm</span>, <span class="va">R_mat</span>,
      <span class="va">deviance_BC_comm</span>, <span class="va">probit_theta_latent_BC_comm</span>,
      file<span class="op">=</span><span class="st">"SDM_JSDM_files/BC_comm.rda"</span><span class="op">)</span></code></pre></div>
-<p>We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+</div>
+<div class="section level4">
+<h4 id="evaluation-of-mcmc-convergence-2">
+<span class="header-section-number">3.1.2</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence-2"></a>
+</h4>
+<div class="section level5">
+<h5 id="representation-of-results-2">
+<span class="header-section-number">3.1.2.1</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results-2"></a>
+</h5>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of the estimated parameters.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"SDM_JSDM_cache/BC_comm.rda"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod_BC_comm</span>, chain<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"B$"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"species "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, outer<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/plot-BC_comm-1.png" width="600" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.</p>
+</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="using-jsdm-1">
 <span class="header-section-number">3.2</span> Using <code>jSDM</code><a class="anchor" aria-label="anchor" href="#using-jsdm-1"></a>
 </h3>
+<div class="section level4">
+<h4 id="parameters-inference-3">
+<span class="header-section-number">3.2.1</span> Parameters inference<a class="anchor" aria-label="anchor" href="#parameters-inference-3"></a>
+</h4>
 <p>We estimate the latent variables model parameters with the function <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> and the argument <code>n_latent=2</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
 <span class="co">## Make a cluster for parallel MCMCs</span>
@@ -550,14 +661,16 @@ substantially above 1, its indicates lack of convergence.</p>
 <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">clust</span><span class="op">)</span>
 
 <span class="co"># Starting parameters </span>
+<span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fl">2</span> 
+<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">lambda_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="va">beta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
-<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>
+<span class="va">W_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="va">nsite</span><span class="op">)</span>, <span class="va">nsite</span><span class="op">)</span>,
+                <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="va">nsite</span><span class="op">)</span>, <span class="va">nsite</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#formatting of starting parameters</span>
 <span class="co">#and constraints on lambda generated by the function </span>
 <span class="co"># Seeds</span>
 <span class="va">seed_mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1234</span>, <span class="fl">4321</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Model</span>
 <span class="va">mod_probit_lv</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span> <span class="op">(</span>i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nchains</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">%dopar%</a></span> <span class="op">{</span>
@@ -579,9 +692,9 @@ substantially above 1, its indicates lack of convergence.</p>
       mu_lambda <span class="op">=</span> <span class="fl">0</span>,
       V_lambda<span class="op">=</span> <span class="fl">10</span>,
       <span class="co"># Starting values</span>
-      beta_start <span class="op">=</span> <span class="va">beta_start</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
-      lambda_start <span class="op">=</span> <span class="va">lambda_start</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
-      W_start <span class="op">=</span> <span class="va">W_start</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
+      beta_start <span class="op">=</span> <span class="va">beta_start</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,
+      lambda_start <span class="op">=</span> <span class="va">lambda_start</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,
+      W_start <span class="op">=</span> <span class="va">W_start</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,
       <span class="co"># Other</span>
       seed <span class="op">=</span> <span class="va">seed_mcmc</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
       verbose <span class="op">=</span> <span class="fl">0</span>
@@ -592,9 +705,77 @@ substantially above 1, its indicates lack of convergence.</p>
   <span class="op">}</span>
 <span class="co"># Stop cluster</span>
 <span class="co">#stopCluster(clust)</span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="evaluation-of-mcmc-convergence-3">
+<span class="header-section-number">3.2.2</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence-3"></a>
+</h4>
+<div class="section level5">
+<h5 id="the-gelmanrubin-convergence-diagnostic-1">
+<span class="header-section-number">3.2.2.1</span> The Gelman–Rubin convergence diagnostic<a class="anchor" aria-label="anchor" href="#the-gelmanrubin-convergence-diagnostic-1"></a>
+</h5>
+<p><strong>Compute <span class="math inline">\(\hat{R}\)</span></strong>:</p>
+<p>We evaluate the convergence of the MCMC output in which two parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or <span class="math inline">\(\hat{R}\)</span> substantially above 1, its indicates lack of convergence.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">burnin</span> <span class="op">&lt;-</span> <span class="va">mod_probit_lv</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">burnin</span>
+<span class="va">ngibbs</span> <span class="op">&lt;-</span> <span class="va">burnin</span> <span class="op">+</span> <span class="va">mod_probit_lv</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">mcmc</span>
+<span class="va">thin</span> <span class="op">&lt;-</span>  <span class="va">mod_probit_lv</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">thin</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">coda</span><span class="op">)</span>
+<span class="va">arr2mcmc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+              start<span class="op">=</span><span class="va">burnin</span><span class="op">+</span><span class="fl">1</span> , end<span class="op">=</span><span class="va">ngibbs</span>, thin<span class="op">=</span><span class="va">thin</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co"># MCMC lists</span>
+<span class="va">mcmc_list_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit_lv</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"lambda"</span>,
+                                                            <span class="fu"><a href="https://rdrr.io/pkg/coda/man/varnames.html" class="external-link">varnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">)</span>,
+                                                            value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit_lv</span>,
+                                        <span class="st">"[["</span>,<span class="st">"mcmc.latent"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"beta"</span>,
+                                                          <span class="fu"><a href="https://rdrr.io/pkg/coda/man/varnames.html" class="external-link">varnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">)</span>,
+                                                          value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mcmc_list_beta0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Intercept"</span>, 
+                                                   <span class="fu"><a href="https://rdrr.io/pkg/coda/man/varnames.html" class="external-link">varnames</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">)</span>,
+                                                   value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="co"># psrf gelman indice </span>
+<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Intercept"</span>,
+                                                     <span class="fu"><a href="https://rdrr.io/pkg/coda/man/varnames.html" class="external-link">varnames</a></span><span class="op">(</span><span class="va">mcmc_list_beta</span><span class="op">)</span>,
+                                                     invert<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>,
+                              multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">psrf_beta0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_beta0</span>, multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+
+<span class="va">psrf_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_lambda</span>,
+                                multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">psrf_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span>,
+                            multivariate<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">2</span> <span class="op">]</span><span class="op">)</span>
+<span class="va">Rhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Rhat<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">psrf_beta0</span>, <span class="va">psrf_beta</span>, <span class="va">psrf_lambda</span>, <span class="va">psrf_lv</span><span class="op">)</span>,
+                   Variable<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta0"</span>, <span class="st">"beta"</span>, <span class="st">"lambda"</span>, <span class="st">"W"</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Barplot</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Rhat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Variable</span>, y<span class="op">=</span><span class="va">Rhat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Averages of Rhat obtained for each type of parameter"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size<span class="op">=</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"skyblue"</span>, stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Rhat</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, vjust<span class="op">=</span><span class="fl">0</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">1</span>, color<span class="op">=</span><span class="st">'red'</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Rhat</span><span class="op">$</span><span class="va">Rhat</span><span class="op">)</span><span class="op">+</span><span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.1</span>, r <span class="op">=</span> <span class="fl">0.2</span>, b <span class="op">=</span> <span class="fl">0.1</span>, l <span class="op">=</span> <span class="fl">0.2</span>,<span class="st">"cm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<p><img src="SDM_JSDM_files/figure-html/MCMC-convergence-JSDM-1.png" width="700" style="display: block; margin: auto;"></p>
+<p>We can see that the <span class="math inline">\(\hat{R}\)</span> are very close to 1 for the species effects <span class="math inline">\(\beta\)</span> and the species intercept <span class="math inline">\(\beta_0\)</span>. We can therefore be fairly confident that convergence has been achieved for these parameters.<br>
+The <span class="math inline">\(\hat{R}\)</span> obtained for the latent variables <span class="math inline">\(W\)</span> and the factor loadings <span class="math inline">\(\lambda\)</span> are also pretty close to 1, indicating that convergence has been reached for these parameters.</p>
+</div>
+<div class="section level5">
+<h5 id="representation-of-results-3">
+<span class="header-section-number">3.2.2.2</span> Representation of results<a class="anchor" aria-label="anchor" href="#representation-of-results-3"></a>
+</h5>
 <p>Overview of the results :</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Output</span>
+<code class="sourceCode R">
+<span class="co"># Output</span>
 <span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mod_probit_lv</span><span class="op">)</span>
 <span class="va">mod_jSDM_lv</span> <span class="op">&lt;-</span> <span class="va">mod_probit_lv</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">str_jSDM_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_jSDM_lv</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
@@ -608,66 +789,47 @@ substantially above 1, its indicates lack of convergence.</p>
 <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_lv</span>, <span class="va">n_chains</span>, <span class="va">str_jSDM_lv</span>, <span class="va">param_jSDM_lv</span>, <span class="va">probit_theta_jSDM_lv</span>, <span class="va">deviance_jSDM_lv</span>, <span class="va">residual_corr_mat</span>, 
      file<span class="op">=</span><span class="st">"SDM_JSDM_files/jSDM_lv.rda"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"SDM_JSDM_files/jSDM_lv.rda"</span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"SDM_JSDM_files/jSDM_lv.rda"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"number of chains :"</span>, <span class="va">n_chains</span>,<span class="st">"\n"</span><span class="op">)</span>
 <span class="co">#&gt; number of chains : 2</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"content of each chain :"</span>, <span class="va">str_jSDM_lv</span>,<span class="st">"\n"</span><span class="op">)</span>
 <span class="co">#&gt; content of each chain : List of 8</span>
-<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 14761 14802 14823 14695 14738 ...</span>
+<span class="co">#&gt;  $ mcmc.Deviance      : 'mcmc' num [1:1000, 1] 14762 14827 14802 14851 14806 ...</span>
 <span class="co">#&gt;   ..- attr(*, "mcpar")= num [1:3] 10001 19991 10</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ mcmc.sp            :List of 93</span>
 <span class="co">#&gt;  $ mcmc.latent        :List of 2</span>
-<span class="co">#&gt;  $ Z_latent           : num [1:266, 1:93] -0.8 -0.772 0.508 -1.395 -1.518 ...</span>
-<span class="co">#&gt;  $ probit_theta_latent: num [1:266, 1:93] 0.0568 0.0533 -1.1742 -1.175 -1.3546 ...</span>
+<span class="co">#&gt;  $ Z_latent           : num [1:266, 1:93] -0.694 -0.796 0.494 -1.343 -1.54 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;  $ theta_latent       : num [1:266, 1:93] 0.5223 0.521 0.1259 0.1245 0.0936 ...</span>
+<span class="co">#&gt;  $ probit_theta_latent: num [1:266, 1:93] 0.2704 0.0943 -1.2707 -1.041 -1.3303 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;  $ theta_latent       : num [1:266, 1:93] 0.6037 0.537 0.1081 0.1551 0.0978 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
 <span class="co">#&gt;  $ model_spec         :List of 20</span>
-<span class="co">#&gt;  $ T_jSDM             : 'difftime' num 4.76114460229874</span>
+<span class="co">#&gt;  $ T_jSDM             : 'difftime' num 1.87375484307607</span>
 <span class="co">#&gt;   ..- attr(*, "units")= chr "mins"</span>
 <span class="co">#&gt;  - attr(*, "class")= chr "jSDM"</span></code></pre></div>
-<p>We then evaluate if the chains have ‘forgotten’ their initial values, and if the output from all chains is indistinguishable.</p>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of the estimated parameters.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># psrf</span>
-<span class="va">mcmc_list_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit_lv</span>,<span class="st">"[["</span>,<span class="st">"mcmc.sp"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_centered_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span>
-  <span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Anas.platyrhynchos.lambda_2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,
-                                       invert<span class="op">=</span><span class="cn">TRUE</span>, value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>,
-  <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mod_probit_lv</span>,
-                                        <span class="st">"[["</span>,<span class="st">"mcmc.latent"</span><span class="op">)</span>, <span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mcmc_list_centered_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.list.html" class="external-link">mcmc.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mcmc_list_lv</span>, <span class="va">scale</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,<span class="va">arr2mcmc</span><span class="op">)</span><span class="op">)</span>
-<span class="va">psrf_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">np</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="va">psrf_lv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lv</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="va">psrf_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/gelman.diag.html" class="external-link">gelman.diag</a></span><span class="op">(</span><span class="va">mcmc_list_centered_lambda</span><span class="op">)</span><span class="op">$</span><span class="va">psrf</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">psrf_beta</span>, <span class="va">psrf_lv</span>, <span class="va">psrf_lambda</span>, file<span class="op">=</span><span class="st">"SDM_JSDM_files/psrf_lv.rda"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; psrf latent variables W : 1.142961</span>
-<span class="co">#&gt; psrf lambda: 1.176642</span>
-<span class="co">#&gt; psrf beta: 1.066504</span></code></pre>
-<p>The convergence diagnostic gives values of potential scale reduction factor or psrf
-not substantially above 1, its indicates some convergence.</p>
-<p>We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Milvus.milvus.beta"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mcmc_list_param</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"species "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">PA_Birds</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, outer<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/plot-jSDM-lv-1.png" width="600" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
+# Comparison of results</p>
+<p>We want to compare the deviance, computation time and parameters of the SDM and the JSDM fitted using <code>jSDM</code> or <code>BayesComm</code> packages for fitting.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="comparison-of-results">
-<span class="header-section-number">4</span> Comparison of results<a class="anchor" aria-label="anchor" href="#comparison-of-results"></a>
-</h2>
+</div>
 <div class="section level3">
 <h3 id="deviance-and-compilation-time">
-<span class="header-section-number">4.1</span> Deviance and compilation time<a class="anchor" aria-label="anchor" href="#deviance-and-compilation-time"></a>
+<span class="header-section-number">3.3</span> Deviance and compilation time<a class="anchor" aria-label="anchor" href="#deviance-and-compilation-time"></a>
 </h3>
 
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:comp-dev">Table 4.1: </span><strong>Deviance and compilation time</strong>. of SDM and JSDM fitted by <code>jSDM</code> or <code>BayesComm</code>. 
+<span id="tab:comp-dev">Table 3.1: </span><strong>Deviance and computation time</strong>. of SDM and JSDM fitted by <code>jSDM</code> or <code>BayesComm</code>. 
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -692,7 +854,7 @@ BayesComm
 SDM
 </td>
 <td style="text-align:left;">
-3.8 mins
+228.3 secs
 </td>
 <td style="text-align:right;">
 17555
@@ -706,7 +868,7 @@ jSDM
 SDM
 </td>
 <td style="text-align:left;">
-3.0 mins
+54.8 secs
 </td>
 <td style="text-align:right;">
 17809
@@ -720,7 +882,7 @@ BayesComm
 JSDM (GLMM)
 </td>
 <td style="text-align:left;">
-5.5 mins
+329.4 secs
 </td>
 <td style="text-align:right;">
 13448
@@ -734,10 +896,10 @@ jSDM
 JSDM (LVM)
 </td>
 <td style="text-align:left;">
-4.8 mins
+112.4 secs
 </td>
 <td style="text-align:right;">
-14771
+14770
 </td>
 </tr>
 </tbody>
@@ -745,12 +907,13 @@ JSDM (LVM)
 </div>
 <div class="section level3">
 <h3 id="parameter-values">
-<span class="header-section-number">4.2</span> Parameter values<a class="anchor" aria-label="anchor" href="#parameter-values"></a>
+<span class="header-section-number">3.4</span> Parameter values<a class="anchor" aria-label="anchor" href="#parameter-values"></a>
 </h3>
 <p>The sizes of the dots on the following graphs are proportional to the number of observations per species. Parameters related to abundant species are represented by larger dots than those associated with rare species.</p>
 <p>First, we compare the intercept for each species between classical or joint species distribution model that takes into account co-occurrences between species, fitted using <code>BayesComm</code> or <code>jSDM</code>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Intercepts</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Intercepts</span>
 <span class="co">## jSDM</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">beta_jSDM</span>,<span class="st">"["</span>, <span class="fl">1</span><span class="op">)</span> , <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">param_jSDM_lv</span>, <span class="st">"["</span>, <span class="fl">1</span><span class="op">)</span>, cex<span class="op">=</span><span class="va">nobs_sp</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,
      main<span class="op">=</span><span class="st">"Fixed species intercept beta"</span>,
@@ -763,8 +926,9 @@ JSDM (LVM)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>, b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/comp-intercept-1.png" width="600" style="display: block; margin: auto;"></p>
 <p>We compare the effect of the environmental variables for each species between the four models.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Environmental variable effects</span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Environmental variable effects</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">np</span><span class="op">)</span><span class="op">{</span>
 <span class="co">## jSDM</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">beta_jSDM</span>, <span class="st">"["</span>, <span class="va">k</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">param_jSDM_lv</span>,<span class="st">"["</span>, <span class="va">k</span><span class="op">)</span>, cex<span class="op">=</span><span class="va">nobs_sp</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,
@@ -780,11 +944,12 @@ JSDM (LVM)
 </div>
 <div class="section level3">
 <h3 id="predictions">
-<span class="header-section-number">4.3</span> Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
+<span class="header-section-number">3.5</span> Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
 </h3>
-<p>We compare the probit of occurence probabilities predicted by the classical or joint species distribution, fitted using <code>BayesComm</code> or <code>jSDM</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Predictions</span>
+<p>We compare the probit of occurrence probabilities predicted by the classical or joint species distribution, fitted using <code>BayesComm</code> or <code>jSDM</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Predictions</span>
 <span class="co">## jSDM</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probit_theta_jSDM</span>, <span class="va">probit_theta_jSDM_lv</span>,
      cex<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">nobs_sp</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>, <span class="fl">75</span><span class="op">)</span>,
@@ -797,10 +962,12 @@ JSDM (LVM)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>, b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fitted by BayesComm"</span>,<span class="st">"fitted by jSDM"</span><span class="op">)</span>, pch<span class="op">=</span><span class="fl">1</span>, cex<span class="op">=</span><span class="fl">1.2</span>, col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'blue'</span>,<span class="st">'black'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/comp-pred-1.png" width="600" style="display: block; margin: auto;"></p>
+<p>In one hand, the results obtained with <code>jSDM</code> and <code>BayesComm</code> are quite similar and therefore the use of a latent variable model (LVM) rather than a classical GLMM has only a minimal influence on the estimated values of the species effects (<span class="math inline">\(\beta\)</span>).</p>
+<p>On the other hand, the estimated values of the species intercept are quite similar using a classical species distribution model (SDM) or a joint species distribution model (JSDM), but the estimated values of the other species effects differ slightly.</p>
 </div>
 <div class="section level3">
 <h3 id="residual-correlaton-matrix">
-<span class="header-section-number">4.4</span> Residual correlaton matrix<a class="anchor" aria-label="anchor" href="#residual-correlaton-matrix"></a>
+<span class="header-section-number">3.6</span> Residual correlaton matrix<a class="anchor" aria-label="anchor" href="#residual-correlaton-matrix"></a>
 </h3>
 <p>After fitting the jSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can be derived from the covariance in the latent variables such as :
 <span class="math display">\[\Sigma_{ij} = \begin{cases}
@@ -808,8 +975,9 @@ JSDM (LVM)
   \lambda_i .\lambda_j^T + 1 &amp; \text{ if } i=j
  \end{cases}\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Residual correlation matrix obtained with BayesComm</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Residual correlation matrix obtained with BayesComm</span>
 <span class="va">reorder.cor.mean</span> <span class="op">&lt;-</span> <span class="fu">corrplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrMatOrder.html" class="external-link">corrMatOrder</a></span><span class="op">(</span><span class="va">R_mat</span>, order <span class="op">=</span> <span class="st">"FPC"</span>, hclust.method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>cex<span class="op">=</span><span class="fl">1</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
 <span class="fu">corrplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="va">R_mat</span><span class="op">[</span><span class="va">reorder.cor.mean</span>,<span class="va">reorder.cor.mean</span><span class="op">]</span>, title <span class="op">=</span> <span class="st">"Residual Correlation Matrix from BayesComm"</span>, diag <span class="op">=</span> <span class="cn">F</span>, type <span class="op">=</span> <span class="st">"lower"</span>, method <span class="op">=</span> <span class="st">"color"</span>,  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, tl.srt <span class="op">=</span> <span class="fl">40</span>, tl.cex <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span>
@@ -820,14 +988,18 @@ JSDM (LVM)
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>cex<span class="op">=</span><span class="fl">1</span>, cex.main<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>
 <span class="fu">corrplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="va">residual_corr_mat</span><span class="op">[</span><span class="va">reorder.cor.mean</span>,<span class="va">reorder.cor.mean</span><span class="op">]</span>, title <span class="op">=</span> <span class="st">"Residual Correlation Matrix from jSDM"</span>, diag <span class="op">=</span> <span class="cn">F</span>, type <span class="op">=</span> <span class="st">"lower"</span>, method <span class="op">=</span> <span class="st">"color"</span>,  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, tl.srt <span class="op">=</span> <span class="fl">40</span>, tl.cex <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></code></pre></div>
 <p><img src="SDM_JSDM_files/figure-html/residual_correlation_matrix-1.png" width="600" style="display: block; margin: auto;"><img src="SDM_JSDM_files/figure-html/residual_correlation_matrix-2.png" width="600" style="display: block; margin: auto;"></p>
-<p>In one hand, the results obtained with <code>jSDM</code> and <code>BayesComm</code> are quite similar and therefore the use of a latent variable model (LVM) rather than a classical GLMM has only a minimal influence on the estimated values of the species effects (<span class="math inline">\(\beta\)</span>).</p>
-<p>On the other hand, the estimated values of the species intercept are quite similar using a classical species distribution model (SDM) or a joint species distribution model (JSDM), but the estimated values of the other species effects differ slightly.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references">
+<div id="ref-Brooks1998">
+<p>Brooks, S. &amp; Gelman, A. (1998) General Methods for Monitoring Convergence of Iterative Simulations. <em>J. Comput. Graphi. Stat.</em>, <strong>7</strong>, 434–455.</p>
+</div>
+<div id="ref-Gelman1992">
+<p>Gelman, A. &amp; Rubin, D.B. (1992) Inference from Iterative Simulation Using Multiple Sequences. <em>Statistical Science</em>, <strong>7</strong>, 457–472.</p>
+</div>
 <div id="ref-Golding2015">
 <p>Golding, N., Nunn, M.A. &amp; Purse, B.V. (2015) Identifying biotic interactions which drive the spatial distribution of a mosquito community. <em>Parasites &amp; Vectors</em>, <strong>8</strong>, 367.</p>
 </div>

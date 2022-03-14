@@ -109,18 +109,17 @@
 - <span class="math inline">\(\theta_{ij}\)</span>: occurrence probability of the species <span class="math inline">\(j\)</span> on site <span class="math inline">\(i\)</span>.
 - <span class="math inline">\(t_i\)</span>: number of visits at site <span class="math inline">\(i\)</span>
 - <span class="math inline">\(\mathrm{g}(\cdot)\)</span>: Link function (eg. logit or probit).</p>
-<p>The inference method is able to handle only one visit by site with a <strong>probit</strong> link function so <span class="math inline">\(\forall i, \ t_i=1\)</span> and <span class="math inline">\(y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\)</span>.</p>
+<p>The inference method is able to handle only one visit by site with a <strong>probit</strong> link function so <span class="math inline">\(\forall i, \ t_i=1\)</span> and <span class="math display">\[y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})\]</span>.</p>
 <ul>
-<li>
-<span class="math inline">\(\alpha_i\)</span>: Site random effect with <span class="math inline">\(\alpha_i \sim \mathcal{N}(0, V_{\alpha})\)</span>. Corresponds to a mean suitability for site <span class="math inline">\(i\)</span>.</li>
-<li>
-<span class="math inline">\(X_i\)</span>: Vector of explanatory variables for site <span class="math inline">\(i\)</span> (including intercept).</li>
-<li>
-<span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span>.</li>
-<li>
-<span class="math inline">\(W_i\)</span>: Vector of random latent variables for site <span class="math inline">\(i\)</span>. <span class="math inline">\(W_i \sim N(0, 1)\)</span>. The number of latent variables must be fixed by the user (default to 2).</li>
-<li>
-<span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span>, also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>.</li>
+<li><p><span class="math inline">\(\alpha_i\)</span>: Random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0, V_{\alpha})\)</span>, corresponds to a mean suitability for site <span class="math inline">\(i\)</span>. We assumed that <span class="math inline">\(V_{\alpha} \sim \mathcal{IG}(\text{shape}=0.1, \text{rate}=0.1)\)</span> as prior distribution in <code>jSDM</code> package and that <span class="math inline">\(V_{\alpha} \sim \mathcal{U}(0,30)\)</span> in <code>boral</code> package.</p></li>
+<li><p><span class="math inline">\(X_i\)</span>: Vector of explanatory variables for site <span class="math inline">\(i\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bio-climatic variables considered (including intercept <span class="math inline">\(\forall i, x_i^1=1\)</span>).</p></li>
+<li><p><span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span> including species intercept (<span class="math inline">\(\beta_{0j}\)</span>). We use a prior distribution <span class="math inline">\(\beta_j \sim \mathcal{N}_p(0,\Sigma_{\beta})\)</span> with <span class="math inline">\(\Sigma_{\beta}\)</span> a diagonal matrix of size <span class="math inline">\(p \times p\)</span> whose values on the diagonal are fixed at <span class="math inline">\(10\)</span>.</p></li>
+<li><p><span class="math inline">\(W_i\)</span>: Vector of random latent variables for site <span class="math inline">\(i\)</span>. <span class="math inline">\(W_i \sim N(0, 1)\)</span>. The number of latent variables <span class="math inline">\(q\)</span> must be fixed by the user (default to <span class="math inline">\(q=2\)</span>).</p></li>
+<li><p><span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span> also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>. We use the following prior distribution in both packages to constraint values to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal, for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> : <span class="math display">\[\lambda_{jl} \sim \begin{cases}
+\mathcal{N}(0,10) &amp; \text{if } l &lt; j \\
+\mathcal{N}(0,10) \text{ left truncated by } 0 &amp; \text{if } l=j \\
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
+\end{cases}\]</span>.</p></li>
 </ul>
 <p>This model is equivalent to a multivariate GLMM <span class="math inline">\(\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}\)</span>, where <span class="math inline">\(u_{ij} \sim \mathcal{N}(0, \Sigma)\)</span> with the constraint that the variance-covariance matrix <span class="math inline">\(\Sigma = \Lambda \Lambda^{\prime}\)</span>, where <span class="math inline">\(\Lambda\)</span> is the full matrix of factor loadings, with the <span class="math inline">\(\lambda_j\)</span> as its columns.</p>
 </div>
@@ -549,7 +548,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span id="cb3-36"><a href="#cb3-36"></a>     mod_boral_sim, probit_theta_latent_sim,</span>
 <span id="cb3-37"><a href="#cb3-37"></a>     RMSE_boral_sim, Deviance_boral_sim,</span>
 <span id="cb3-38"><a href="#cb3-38"></a>     <span class="dt">file=</span><span class="st">"boral_simulation.RData"</span>)</span></code></pre></div>
-<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters using the <code>jSDM</code> package and we plot the estimated parameters according to the expected ones to assess the accuracy of the package <code>jSDM</code> results.</p>
+<p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of some estimated parameters using the <code>boral</code> package and we plot the estimated parameters according to the expected ones to assess the accuracy of the package <code>boral</code> results.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"jSDM_boral_cache/boral_simulation.RData"</span><span class="op">)</span>
 <span class="va">mcmcsamps</span> <span class="op">&lt;-</span> <span class="fu">boral</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/boral/man/get.mcmcsamples.html" class="external-link">get.mcmcsamples</a></span><span class="op">(</span><span class="va">mod_boral_sim</span><span class="op">)</span>
@@ -623,7 +622,9 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">probit_theta_latent_sim</span><span class="op">)</span>,
      main<span class="op">=</span><span class="st">"theta"</span>, xlab <span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
-<p><img src="jSDM_boral_files/figure-html/boral-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-4.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_boral_files/figure-html/boral-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/boral-simulation-plot-7.png" width="800" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
 <div class="section level3">
 <h3 id="mosquitos-dataset">
@@ -998,7 +999,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>, 
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1096,6 +1097,8 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
      xlab<span class="op">=</span><span class="st">"obs"</span>,ylab<span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"theta"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-6.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-7.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-8.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-9.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-simulation-plot-10.png" width="800" style="display: block; margin: auto;"></p>
+<p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
 <div class="section level3">
 <h3 id="mosquitos-dataset-1">
@@ -1120,7 +1123,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span> ,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1153,7 +1156,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span> ,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1186,7 +1189,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1219,7 +1222,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1253,7 +1256,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span> ,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1287,7 +1290,7 @@ This package and the package <code>jSDM</code> allow to fit the model defined pr
   lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,
   V_alpha<span class="op">=</span><span class="fl">1</span>,
   <span class="co"># Priors </span>
-  shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,
+  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,
   mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span> ,
   mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,
   <span class="co"># Various </span>
@@ -1366,25 +1369,25 @@ Compilation time boral (secondes)
 Compilation time jSDM (secondes)
 </td>
 <td style="text-align:left;">
-86
+133
 </td>
 <td style="text-align:left;">
-11
+17
 </td>
 <td style="text-align:left;">
-21
+33
 </td>
 <td style="text-align:left;">
-4
+6
 </td>
 <td style="text-align:left;">
-20
+32
 </td>
 <td style="text-align:left;">
-1123
+1164
 </td>
 <td style="text-align:left;">
-99
+109
 </td>
 </tr>
 <tr>
@@ -1418,25 +1421,25 @@ Deviance boral
 Deviance jSDM
 </td>
 <td style="text-align:left;">
-23166
+23164
 </td>
 <td style="text-align:left;">
-968
+996
 </td>
 <td style="text-align:left;">
-1656
+1598
 </td>
 <td style="text-align:left;">
-102
+101
 </td>
 <td style="text-align:left;">
-1236
+1155
 </td>
 <td style="text-align:left;">
-30122
+30133
 </td>
 <td style="text-align:left;">
-6081
+6089
 </td>
 </tr>
 <tr>
@@ -1466,7 +1469,7 @@ Deviance jSDM
 </tr>
 </tbody>
 </table>
-<p>jSDM is <strong>3 to 412</strong> times faster than boral/jags.</p>
+<p>jSDM is <strong>3 to 268</strong> times faster than boral/jags.</p>
 </div>
 <div class="section level3">
 <h3 id="root-mean-square-error-rmse-for-simulated-data">
@@ -1501,7 +1504,7 @@ RMSE
 <h3 id="estimated-parameters">
 <span class="header-section-number">5.3</span> Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
-<p>We plot the parameters estimated with <code>jSDM</code> against those fitted with <code>boral</code>.</p>
+<p>We plot the parameters estimated with <code>jSDM</code> against those estimated with <code>boral</code> to compare the results obtained with both packages.</p>
 <div class="section level4">
 <h4 id="simulated-dataset-2">
 <span class="header-section-number">5.3.1</span> Simulated dataset<a class="anchor" aria-label="anchor" href="#simulated-dataset-2"></a>
@@ -1536,13 +1539,15 @@ RMSE
 <h4 id="birds-dataset-2">
 <span class="header-section-number">5.3.6</span> Birds dataset<a class="anchor" aria-label="anchor" href="#birds-dataset-2"></a>
 </h4>
-<p><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-4.png" width="800" style="display: block; margin: auto;"></p>
+<p><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-4.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-5.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-birds-6.png" width="800" style="display: block; margin: auto;"></p>
+<p>We can see an inversion of the order and signs of the latent axes estimated between <code>jSDM</code> and <code>boral</code>, indeed the first latent axis fitted with <code>jSDM</code> <span class="math inline">\(W_1\)</span> corresponds to the second axis <span class="math inline">\(W_2\)</span> in the results of <code>boral</code>, with opposite signs. Nevertheless, the presence probabilities and residual correlations predicted by the two packages are very close.</p>
 </div>
 <div class="section level4">
 <h4 id="mites-dataset-2">
 <span class="header-section-number">5.3.7</span> Mites dataset<a class="anchor" aria-label="anchor" href="#mites-dataset-2"></a>
 </h4>
 <p><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_boral_files/figure-html/jSDM-boral-mites-4.png" width="800" style="display: block; margin: auto;"></p>
+<p>On the figures above, the parameters estimated with <code>jSDM</code> are close to those obtained with <code>boral</code> if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 <div id="refs" class="references">
 <div id="ref-Borcard1994">
 <p>Borcard, D. &amp; Legendre, P. (1994) Environmental control and spatial structure in ecological communities: An example using oribatid mites (Acari, Oribatei). <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.</p>
