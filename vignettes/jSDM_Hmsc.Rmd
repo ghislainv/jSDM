@@ -258,6 +258,8 @@ save(np, nl, nsp, nsite, beta.target, lambda.target, X, W, theta, probit_theta, 
      file="jSDM_Hmsc_cache/Hmsc_simulation.RData")
 ```
 
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters and we evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.   
+
 ```{r Hmsc-simulation-plot, echo=TRUE}
 load(file="jSDM_Hmsc_cache/Hmsc_simulation.RData")
 codaObject <- Hmsc::convertToCodaObject(mod_Hmsc_sim, start=1)
@@ -320,14 +322,11 @@ abline(a=0,b=1,col='red')
 
 
 ```{r Hmsc-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-4.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-5.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-6.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-7.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/Hmsc-simulation-plot-", 1:7, ".png"))
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.  
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function ($y=x$). 
 
 ## Mosquitos dataset
 
@@ -651,6 +650,8 @@ save(T_jSDM_sim, mod_jSDM_sim, RMSE_jSDM_sim,
      file="jSDM_Hmsc_cache/jSDM_simulation.RData")
 ```
 
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters and we evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.   
+
 ```{r jSDM-simulation-plot}
 load(file="jSDM_Hmsc_cache/jSDM_simulation.RData")
 load(file="jSDM_Hmsc_cache/Hmsc_simulation.RData")
@@ -733,15 +734,11 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-4.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-5.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-6.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-7.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-8.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-simulation-plot-", 1:8, ".png"))
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.  
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function ($y=x$). 
 
 ## Mosquitos dataset
 
@@ -1051,6 +1048,8 @@ kable(result, digits=3) %>%
 
 ## Estimated  Parameters
 
+We plot the parameters estimated with `jSDM` against those estimated with `Hmsc` to compare the results obtained with both packages. 
+
 ### Simulated dataset
 
 ```{r jSDM-Hmsc-simulation, echo=FALSE}
@@ -1066,7 +1065,9 @@ for (j in 1:nsp){
   }
 }
 par(mfrow=c(1,2))
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta, jSDM_beta,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1078,7 +1079,9 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_sim, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1087,11 +1090,17 @@ jSDM_lvs <- matrix(0,nsite,nl)
 for (l in 1:nl){
   jSDM_lvs[,l] <- colMeans(mod_jSDM_sim$mcmc.latent[[paste0("lv_",l)]])
 }
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda) ,
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual Covariance Matrix
@@ -1111,7 +1120,10 @@ Sigma.target <- t(lambda.target) %*% lambda.target + diag(nsp)
 RMSE_Sigma_jSDM <- sqrt(sum((Sigma.target-jSDM_Sigma)^2)/(nsp*nsp))
 RMSE_Sigma_Hmsc <- sqrt(sum((Sigma.target-Hmsc_Sigma)^2)/(nsp*nsp))
 par(mfrow=c(1,1))
-plot(Sigma.target,Hmsc_Sigma, col='blue',main=expression(paste("Residual covariance matrix ",Sigma)), xlab="obs", ylab="fitted")
+plot(Sigma.target, Hmsc_Sigma,
+     col='blue',
+     main=expression(paste("Residual covariance matrix ",Sigma)),
+     xlab="obs", ylab="fitted")
 points(Sigma.target,jSDM_Sigma, col=scales::alpha('black',alpha = 0.6))
 legend("topleft",pch="o",bty="n",
        c(paste("fitted by jSDM, RMSE: ",round(RMSE_Sigma_jSDM,2)),
@@ -1121,15 +1133,16 @@ abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(probit_theta_latent_sim, mod_jSDM_sim$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
+plot(probit_theta_latent_sim,
+     mod_jSDM_sim$probit_theta_latent,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Predicted probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-Hmsc-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-", 1:4, ".png"))
 ```
 
 ### Mosquitos dataset
@@ -1153,7 +1166,10 @@ for (j in 1:nsp){
 par(mfrow=c(1,2))
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Beta')$mean)
 
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1163,7 +1179,10 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Lambda')$mean)
 
-plot(Hmsc_lambda, jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda, jSDM_lambda,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1172,12 +1191,17 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Mosquitos$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Mosquitos, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM",
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
      main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1193,21 +1217,24 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Mosquitos)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Mosquitos)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma, 
+     main=expression(paste("Residual covariance matrix ",Sigma)),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(probit_theta_latent_Mosquitos, mod_jSDM_Mosquitos$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
+plot(probit_theta_latent_Mosquitos,
+     mod_jSDM_Mosquitos$probit_theta_latent,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Predicted probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
 ```{r jSDM-Hmsc-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-", 1:4, ".png"))
 ```
 
 ### Eucalypts dataset
@@ -1218,7 +1245,8 @@ data(eucalypts, package="jSDM")
 PA_Eucalypts <- eucalypts[,1:12]
 # Remove sites where none species was recorded
 PA_Eucalypts<- PA_Eucalypts[rowSums(PA_Eucalypts) != 0,]
-print(paste(nrow(PA_Eucalypts),"sites and ",ncol(PA_Eucalypts)," species"),quote = FALSE)
+print(paste(nrow(PA_Eucalypts),"sites and ",ncol(PA_Eucalypts)," species"),
+      quote = FALSE)
 nsp <- ncol(mod_jSDM_Eucalypts$model_spec$presence_data)
 nsite <- nrow(mod_jSDM_Eucalypts$model_spec$presence_data)
 nl <- mod_jSDM_Eucalypts$model_spec$n_latent
@@ -1232,7 +1260,10 @@ for (j in 1:nsp){
 par(mfrow=c(1,2))
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Eucalypts, parName='Beta')$mean)
 
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1242,7 +1273,10 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Eucalypts, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1251,11 +1285,18 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Eucalypts$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Eucalypts, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1271,20 +1312,22 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Eucalypts)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Eucalypts)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma,
+     main=expression(paste("Residual covariance matrix ",Sigma)),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(probit_theta_latent_Eucalypts, mod_jSDM_Eucalypts$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
+plot(probit_theta_latent_Eucalypts,
+     mod_jSDM_Eucalypts$probit_theta_latent,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Predicted probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-Hmsc-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-", 1:4, ".png"))
 ```
 
 ### Frogs dataset
@@ -1307,7 +1350,10 @@ for (j in 1:nsp){
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Frogs, parName='Beta')$mean)
 par(mfrow=c(1,2))
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1317,7 +1363,10 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Frogs, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1326,11 +1375,18 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Frogs$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Frogs, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1346,20 +1402,24 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Frogs)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Frogs)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma, 
+     main=expression(paste("Residual covariance matrix ",Sigma)),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(probit_theta_latent_Frogs, mod_jSDM_Frogs$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
+plot(probit_theta_latent_Frogs,
+     mod_jSDM_Frogs$probit_theta_latent,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Predicted probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-Hmsc-frogs-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-", 1:4, ".png"))
 ```
 
 ### Fungi dataset
@@ -1378,7 +1438,8 @@ Env_Fungi <- Env_Fungi[rowSums(PA_Fungi) != 0,]
 # Remove sites where none species was recorded
 PA_Fungi<- PA_Fungi[rowSums(PA_Fungi) != 0,]
 
-print(paste(nrow(PA_Fungi),"sites and ",ncol(PA_Fungi)," species"),quote = FALSE)
+print(paste(nrow(PA_Fungi),"sites and ",ncol(PA_Fungi)," species"),
+      quote = FALSE)
 nsp <- ncol(mod_jSDM_Fungi$model_spec$presence_data)
 nsite <- nrow(mod_jSDM_Fungi$model_spec$presence_data)
 nl <- mod_jSDM_Fungi$model_spec$n_latent
@@ -1392,7 +1453,10 @@ for (j in 1:nsp){
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Fungi, parName='Beta')$mean)
 par(mfrow=c(1,2))
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1402,7 +1466,10 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Fungi, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1411,11 +1478,18 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Fungi$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Fungi, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1431,21 +1505,24 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Fungi)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Fungi)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma,
+     main=expression(paste("Residual covariance matrix ",Sigma)),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(probit_theta_latent_Fungi, mod_jSDM_Fungi$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Predicted probit(theta)")
+plot(probit_theta_latent_Fungi,
+     mod_jSDM_Fungi$probit_theta_latent,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Predicted probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
 ```{r jSDM-Hmsc-fungi-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-", 1:4, ".png"))
 ```
 
 ### Birds dataset
@@ -1464,7 +1541,10 @@ for (j in 1:nsp){
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Birds, parName='Beta')$mean)
 par(mfrow=c(1,2))
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1474,7 +1554,10 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Birds, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1483,11 +1566,18 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Birds$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Birds, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc",
+     ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1503,21 +1593,23 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Birds)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Birds)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma,
+     main=expression(paste("Residual covariance matrix ", Sigma)),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(c(probit_theta_latent_Birds), mod_jSDM_Birds$probit_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="probit(theta)")
+plot(c(probit_theta_latent_Birds),
+     mod_jSDM_Birds$probit_theta_latent,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="probit(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
 ```{r jSDM-Hmsc-birds-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-", 1:4, ".png"))
 ```
 
 ### Mites dataset
@@ -1539,7 +1631,9 @@ for (j in 1:nsp){
 }
 Hmsc_beta <- t(getPostEstimate(hM=mod_Hmsc_Mites, parName='Beta')$mean)
 par(mfrow=c(1,2))
-plot(Hmsc_beta,jSDM_beta, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Fixed species effect beta")
+plot(Hmsc_beta,jSDM_beta,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Fixed species effect beta")
 abline(a=0,b=1,col='red')
 
 # factor loadings lambda
@@ -1549,7 +1643,9 @@ for (j in 1:nsp){
 }
 Hmsc_lambda <- t(getPostEstimate(hM=mod_Hmsc_Mites, parName='Lambda')$mean)
 
-plot(Hmsc_lambda,jSDM_lambda, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Loading factors lambda")
+plot(Hmsc_lambda,jSDM_lambda,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1558,11 +1654,16 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Mites$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 Hmsc_lvs <- getPostEstimate(hM=mod_Hmsc_Mites, parName='Eta')$mean
-plot(Hmsc_lvs, jSDM_lvs, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="Latent variables W")
+plot(Hmsc_lvs, jSDM_lvs,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # W.Lambda
-plot(Hmsc_lvs %*% t(Hmsc_lambda) , jSDM_lvs %*% t(jSDM_lambda), xlab="fitted by Hmsc", ylab="fitted by jSDM", main="W.Lambda")
+plot(Hmsc_lvs %*% t(Hmsc_lambda),
+     jSDM_lvs %*% t(jSDM_lambda),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="W.Lambda")
 abline(a=0,b=1,col='red') 
 
 # Residual covariance Matrix
@@ -1578,21 +1679,23 @@ Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_Mites)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_Mites)$cov.mean
 par(mfrow=c(1,1))
-plot(Hmsc_Sigma,jSDM_Sigma,main=expression(paste("Residual covariance matrix ",Sigma)), xlab="fitted by Hmsc", ylab="fitted by jSDM")
+plot(Hmsc_Sigma,jSDM_Sigma,
+     main=expression(paste("Residual covariance matrix ", Sigma)),
+     xlab="fitted by Hmsc", ylab="fitted by jSDM")
 abline(a=0,b=1, col='red')
-
 
 # Predictions 
 par(mfrow=c(1,1))
-plot(log_theta_latent_Mites, mod_jSDM_Mites$log_theta_latent, xlab="fitted by Hmsc", ylab="fitted by jSDM", main="log(theta)")
+plot(log_theta_latent_Mites,
+     mod_jSDM_Mites$log_theta_latent,
+     xlab="fitted by Hmsc", ylab="fitted by jSDM",
+     main="log(theta)")
 abline(a=0,b=1,col='red')
 ```
 
 
 ```{r jSDM-Hmsc-mites-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png")
-knitr::include_graphics("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-4.png")
+knitr::include_graphics(paste0("jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-", 1:4, ".png"))
 ```
 
+On the figures above, the parameters estimated with `jSDM` are close to those obtained with `Hmsc` if the points are near the red line representing the identity function ($y=x$). 
