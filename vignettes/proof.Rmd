@@ -88,8 +88,8 @@ We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coeffi
   * traits data about each species. $T=(T_j)_{j=1,\ldots,nspecies}$ with $T_j=(t_{j0},t_{j1},\ldots,t_{jq},\ldots,t_{jnt})\in \mathbb{R}^{nt+1}$ where $nt$ is the number of species specific traits considered and $t_{j0}=1,\forall j$.
 
 - The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_{j0},\beta_{j1},\ldots,\beta_{jp})'$ where $\beta_{j0}$ represents the intercept for species $j$ which is assume to be a fixed effect.
-  * In the absence of data on species traits, the effect of species $j$: $\beta_j$; follows the same a priori Gaussian distribution such that $\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta},V_{\beta})$, for each species. 
-  * If species traits data are provided, the effect of species $j$: $\beta_j$; follows an a priori Gaussian distribution such that $\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta_j},V_{\beta})$, where $\mu_{\beta_{jk}} = \sum_{r=0}^{nt} t_{jr}.\gamma_{rk}$ for $k=0,\ldots,p$, takes different values for each species. We assume that $\gamma_{rk} \sim \mathcal{N}(\mu_{\gamma_{rk}},V_{\gamma_{rk}})$ as prior distribution. 
+  * In the absence of data on species traits, the effect of species $j$: $\beta_j$; follows the same *a priori* Gaussian distribution such that $\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta},V_{\beta})$, for each species. 
+  * If species traits data are provided, the effect of species $j$: $\beta_j$; follows an *a priori* Gaussian distribution such that $\beta_j \sim \mathcal{N}_{p+1}(\mu_{\beta_j},V_{\beta})$, where $\mu_{\beta_{jk}} = \sum_{r=0}^{nt} t_{jr}.\gamma_{rk}$ for $k=0,\ldots,p$, takes different values for each species. We assume that $\gamma_{rk} \sim \mathcal{N}(\mu_{\gamma_{rk}},V_{\gamma_{rk}})$ as prior distribution. 
 
 - $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assumed that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
 
