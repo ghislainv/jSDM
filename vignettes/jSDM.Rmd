@@ -222,8 +222,7 @@ colnames(Env_frogs) <- colnames(frogs[,1:3])
 
 ## Parameter inference
 
-We use the `jSDM_binomial_probit()`
-function to fit the jSDM (increase the number of iterations to achieve convergence). 
+We use the `jSDM_binomial_probit()` function to fit the jSDM (increase the number of iterations to achieve convergence). 
 
 ```{r jSDM-probit}
 mod_frogs_jSDM_probit <- jSDM_binomial_probit(
@@ -249,6 +248,8 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit(
 ```
 
 ## Analysis of the results
+
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters.
 
 ```{r plot-results-probit}
 np <- nrow(mod_frogs_jSDM_probit$model_spec$beta_start)
@@ -309,6 +310,8 @@ hist(mod_frogs_jSDM_probit$theta_latent,
      main = "Predicted theta", 
      xlab ="predicted theta")
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
 
 ## Matrice of correlations 
 

@@ -435,7 +435,9 @@ mcmc_list_lambda <- mcmc.list(
 psrf_alpha <- mean(gelman.diag(mcmc_list_alpha, multivariate=FALSE)$psrf[,2])
 psrf_V_alpha <- gelman.diag(mcmc_list_V_alpha)$psrf[,2]
 psrf_beta0 <- mean(gelman.diag(mcmc_list_beta0)$psrf[,2])
-psrf_beta <- mean(gelman.diag(mcmc_list_beta[,grep("Intercept", colnames(mcmc_list_beta[[1]]),invert=TRUE)])$psrf[,2])
+psrf_beta <- mean(gelman.diag(mcmc_list_beta[,grep("Intercept",
+                                                   colnames(mcmc_list_beta[[1]]),
+                                                   invert=TRUE)])$psrf[,2])
 id_sp_constrained <- NULL
 for(l in 1:n_latent){
 id_sp_constrained <- c(id_sp_constrained,

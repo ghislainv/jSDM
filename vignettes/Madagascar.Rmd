@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
   collapse=TRUE,
   comment="#>",
   highlight=TRUE,
-  eval=FALSE 
+  eval=FALSE
 )
 ```
 
@@ -204,7 +204,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 - $\beta_{0j}$ correspond to the intercept for species $j$ which is assumed to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10)$ for the species intercept. 
 
-- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assume that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assume that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.1, \text{rate}=0.1)$ as prior distribution by default. 
 
 This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = \alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
 
@@ -217,6 +217,7 @@ We use species's prevalence as starting values for species intercept $\beta_0$.
 load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
 load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
 # Prevalence of species 
+np <- ncol(dplyr::select(scaled_data_clim2, -site, -lat, -long)) +1
 prevalence <- colSums(PA)/nrow(PA)
 beta_start <- matrix(0,np,ncol(PA))
 beta_start[1,] <- qnorm(prevalence)
@@ -237,8 +238,8 @@ mod_all <- jSDM::jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1, 
   # Priors
-  shape=0.5, rate=0.0005,
-  mu_beta=0, V_beta=c(10,rep(1,ncol(X)-1)),
+  shape=0.1, rate=0.1,
+  mu_beta=0, V_beta=c(10,rep(1,np-1)),
   mu_lambda=0, V_lambda=1,
   # Various 
   seed=1234, verbose=1)
@@ -850,7 +851,7 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-species-richness-defo
 ```
 
 We can see that the species richness, computed from interpolated occurrence probabilities, is greater in the moist forest of the north-east of the island, particularly in the Masoala peninsula as expected given the observed species richness on inventory sites.  
-t can be explained by the fact that this area is located close to the
+It can be explained by the fact that this area is located close to the
 Equator and is receiving the highest level of precipitation in
 Madagascar. As a consequence, this area benefits from high levels of
 resources (light and water) and is characterized by a low environmental
@@ -894,6 +895,7 @@ coords <- theta[[c(1,2,3)]]
 values(coords) <- 0 
 names(coords) <- colnames(pca_theta$li)
 for(k in 1:nrow(theta)){
+  cat(k, "/", nrow(theta),"\n")
   theta <- raster::stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
   ## Make a cluster for parallel computation
   # detect the number of CPU cores on the current host
@@ -910,7 +912,6 @@ for(k in 1:nrow(theta)){
   colnames(theta_k) <- params_species$species
   theta_k <- data.frame(theta_k)
   coords[k,] <- as.matrix(ade4::suprow(pca_theta,theta_k)$lisup)
-  cat(k, "/", nrow(theta),"\n")
 }
 writeRaster(coords,file="~/Documents/projet_BioSceneMada/Report/data/coords.tif",
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
@@ -985,16 +986,14 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-diversity-beta-1.png"
 knitr::include_graphics("Madagascar_files/figure-html/mada_forest_type.jpg")
 ```
 
-We can see that the estimated map of $\beta$-diversity agrees with the map of
-Madagascar’s forest types from @Vieilledent2018.     
+We can see that the estimated map of $\beta$-diversity agrees with the map of Madagascar’s forest types from @Vieilledent2018.     
 
 Indeed, communities of species represented by shades of blue and green
 correspond to the eastern moist forest, communities represented by
 shades of red match the western dry forest and communities in magenta
 correspond to the southern spiny forest.    
 
-Moreover, the $\beta$-diversity map we obtain allows to identify substantially
-different species communities within these three forest types. For example, we can clearly identify three different tree communities (in blue, green, and black) within the eastern moist forest.
+Moreover, the $\beta$-diversity map we obtain allows to identify substantially different species communities within these three forest types. For example, we can clearly identify three different tree communities (in blue, green, and black) within the eastern moist forest.
 
 # References
 

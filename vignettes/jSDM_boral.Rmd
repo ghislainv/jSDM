@@ -46,13 +46,21 @@ $$y_{ij} \sim \mathcal{B}iniomial(t_i, \theta_{ij})$$
 - $t_i$: number of visits at site $i$ 
 - $\mathrm{g}(\cdot)$: Link function (eg. logit or probit).
 
-The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$.
+The inference method is able to handle only one visit by site with a **probit** link function so $\forall i, \ t_i=1$ and $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$.
 
-- $\alpha_i$: Site random effect with $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$. Corresponds to a mean suitability for site $i$.
-- $X_i$: Vector of explanatory variables for site $i$ (including intercept).
-- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
-- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables must be fixed by the user (default to 2).
-- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$, also known as "factor loadings" [@Warton2015].
+- $\alpha_i$: Random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0, V_{\alpha})$, corresponds to a mean suitability for site $i$. We assumed that $V_{\alpha} \sim \mathcal{IG}(\text{shape}=0.1, \text{rate}=0.1)$ as prior distribution in `jSDM` package and that $V_{\alpha} \sim \mathcal{U}(0,30)$ in `boral` package. 
+
+- $X_i$: Vector of explanatory variables for site $i$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bio-climatic variables considered (including intercept $\forall i, x_i^1=1$).  
+ 
+- $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$ including species intercept ($\beta_{0j}$). We use a prior distribution $\beta_j \sim \mathcal{N}_p(0,\Sigma_{\beta})$ with $\Sigma_{\beta}$ a diagonal matrix of size $p \times p$ whose values on the diagonal are fixed at $10$.  
+
+- $W_i$: Vector of random latent variables for site $i$. $W_i \sim N(0, 1)$. The number of latent variables $q$ must be fixed by the user (default to $q=2$). 
+
+- $\lambda_j$: Effects of the latent variables on the probability of presence of species $j$ also known as "factor loadings" [@Warton2015]. We use the following prior distribution in both packages to constraint values to $0$ on upper diagonal and to strictly positive values on diagonal, for $j=1,\ldots,J$ and $l=1,\ldots,q$ : $$\lambda_{jl} \sim \begin{cases}
+\mathcal{N}(0,10) & \text{if } l < j \\
+\mathcal{N}(0,10) \text{ left truncated by } 0 & \text{if } l=j \\
+P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  & \text{if } l>j
+\end{cases}$$.  
 
 This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) =\alpha_i + X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns. 
 
@@ -266,7 +274,7 @@ save(np, nl, nsp, nsite, beta.target, lambda.target, alpha.target,
      file="boral_simulation.RData")
 ```
 
-We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters using the `jSDM` package and we plot the estimated parameters according to the expected ones to assess the accuracy of the package `jSDM` results.
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters using the `boral` package and we plot the estimated parameters according to the expected ones to assess the accuracy of the package `boral` results.
 
 ```{r boral-simulation-plot}
 load(file="jSDM_boral_cache/boral_simulation.RData")
@@ -345,11 +353,11 @@ abline(a=0,b=1,col='red')
 
 
 ```{r boral-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/boral-simulation-plot-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/boral-simulation-plot-", 1:7, ".png"))
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.  
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function ($y=x$). 
 
 ## Mosquitos dataset
 
@@ -730,7 +738,7 @@ mod_jSDM_sim <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1, 
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -834,18 +842,11 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-simulation-plot2, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-4.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-5.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-6.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-7.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-8.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-9.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-simulation-plot-10.png")
-
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-simulation-plot-", 1:10, ".png"))
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.  
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function ($y=x$). 
 
 ## Mosquitos dataset
 
@@ -869,7 +870,7 @@ mod_jSDM_Mosquitos <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -902,7 +903,7 @@ mod_jSDM_Eucalypts <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -935,7 +936,7 @@ mod_jSDM_Frogs <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -968,7 +969,7 @@ mod_jSDM_Fungi <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -1002,7 +1003,7 @@ mod_jSDM_Birds <- jSDM_binomial_logit(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -1037,7 +1038,7 @@ mod_jSDM_Mites <- jSDM_poisson_log(
   lambda_start=0, W_start=0,
   V_alpha=1,
   # Priors 
-  shape=0.5, rate=0.0005,
+  shape=0.1, rate=0.1,
   mu_beta=0, V_beta=10 ,
   mu_lambda=0, V_lambda=10,
   # Various 
@@ -1161,7 +1162,7 @@ kable(result, digits=3) %>%
 
 ## Estimated  Parameters
 
-We plot the parameters estimated with `jSDM` against those fitted with `boral`.
+We plot the parameters estimated with `jSDM` against those estimated with `boral` to compare the results obtained with both packages. 
 
 ### Simulated dataset
 
@@ -1244,10 +1245,7 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-simulation-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-simulation-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-simulation-", 1:4, ".png"))
 ```
 
 ### Mosquitos dataset
@@ -1316,10 +1314,7 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-mosquitos-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-mosquitos-", 1:4, ".png"))
 ```
 
 ### Eucalypts dataset
@@ -1389,10 +1384,7 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-Eucalypts-plot, echo=FALSE, eval=TRUE, out.width=800}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-Eucalypts-", 1:4, ".png"))
 ```
 
 ### Frogs dataset
@@ -1461,10 +1453,7 @@ abline(a=0,b=1,col='red')
 ```
 
 ```{r jSDM-boral-frogs-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-frogs-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-frogs-", 1:4, ".png"))
 ```
 
 ### Fungi dataset
@@ -1543,10 +1532,7 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-fungi-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-fungi-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-fungi-", 1:4, ".png"))
 ```
 
 ### Birds dataset
@@ -1586,8 +1572,16 @@ for (j in 1:nsp){
   jSDM_lambda[j,] <- apply(mod_jSDM_Birds$mcmc.sp[[j]],2,mean)[(np+1):(np+nl)]
 }
 boral_lambda <- mod_boral_Birds$mean$lv.coefs[,-1]
-
 plot(boral_lambda,jSDM_lambda, xlab="fitted by boral", ylab="fitted by jSDM", main="Loading factors lambda")
+abline(a=0,b=1,col='red')
+# Order inversion of estimated latent axes between jSDM and boral
+plot(boral_lambda[,1],jSDM_lambda[,2],
+     xlab="lambda_1 fitted by boral", ylab="Lambda_2 fitted by jSDM",
+     main="Loading factors lambda")
+abline(a=0,b=1,col='red')
+plot(boral_lambda[,2],jSDM_lambda[,1],
+     xlab="lambda_2 fitted by boral", ylab="lambda_1 fitted by jSDM",
+     main="Loading factors lambda")
 abline(a=0,b=1,col='red')
 
 # Ws
@@ -1596,6 +1590,17 @@ for (l in 1:nl){
   jSDM_lvs[,l] <- apply(mod_jSDM_Birds$mcmc.latent[[paste0("lv_",l)]],2,mean)
 }
 plot(mod_boral_Birds$mean$lvs, jSDM_lvs, xlab="fitted by boral", ylab="fitted by jSDM", main="Latent variables W")
+abline(a=0,b=1,col='red')
+# Order inversion of estimated latent axes between jSDM and boral
+plot(mod_boral_Birds$mean$lvs[,1], jSDM_lvs[,2],
+     xlab="W1 fitted by boral",
+     ylab="W2 fitted by jSDM",
+     main="Latent variables W")
+abline(a=0,b=1,col='red')
+plot(mod_boral_Birds$mean$lvs[,2], jSDM_lvs[,1],
+     xlab="W2 fitted by boral",
+     ylab="W1 fitted by jSDM",
+     main="Latent variables W")
 abline(a=0,b=1,col='red')
 
 # Residual covariance Matrix
@@ -1623,13 +1628,12 @@ plot(inv_logit(logit_theta_latent_Birds), mod_jSDM_Birds$theta_latent, xlab="fit
 abline(a=0,b=1,col='red')
 ```
 
-
 ```{r jSDM-boral-birds-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-birds-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-birds-", 1:6, ".png"))
 ```
+
+
+We can see an inversion of the order and signs of the latent axes estimated between `jSDM` and `boral`, indeed the first latent axis fitted with `jSDM` $W_1$ corresponds to the second axis $W_2$ in the results of `boral`, with opposite signs. Nevertheless, the presence probabilities and residual correlations predicted by the two packages are very close.
 
 ### Mites dataset
 
@@ -1697,9 +1701,7 @@ abline(a=0,b=1,col='red')
 
 
 ```{r jSDM-boral-mites-plot, echo=FALSE, out.width=800, eval=TRUE}
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-1.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-2.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-3.png")
-knitr::include_graphics("jSDM_boral_files/figure-html/jSDM-boral-mites-4.png")
+knitr::include_graphics(paste0("jSDM_boral_files/figure-html/jSDM-boral-mites-", 1:4, ".png"))
 ```
 
+On the figures above, the parameters estimated with `jSDM` are close to those obtained with `boral` if the points are near the red line representing the identity function ($y=x$). 

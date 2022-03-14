@@ -104,6 +104,8 @@ np
 
 # Fitting species distribution models (SDM) 
 
+## Definition of model
+
 We consider a simple generalized linear multivariate model (GLMM) to estimate the occurrence probabilities on sites for each species such as :
 
 $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
@@ -114,13 +116,14 @@ $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
 - $X_i$: Vector of explanatory variables for site $i$ (including intercept).
 - $\beta_j$: Effects of the explanatory variables on the probability of presence of species $j$.
 
-We consider below binomial models with a probit link.
+We consider below binomial models with a probit link. We want to compare the parameters of the SDMs fitted using `BayesComm` and `jSDM` packages. 
 
 ## Using `BayesComm`
 
 In a first step, we use the package `BayesComm` described in the article [@Golding2015] to fit binomial models with a probit link function. 
 The package `BayesComm` fits Bayesian multivariate binary (probit) regression models for analysis of ecological communities. These models can be used to make inference about underlying inter-species interactions in communities and to separate the effects of environmental covariates and inter-species interactions on community assembly. 
-We want to compare the parameters of the models fitted with `BayesComm` and `jSDM`. 
+
+### Parameters inference
 
 We estimate the parameters of the species distribution model (SDM) with the function `BC()` and the argument `model="environment"`.  
 
@@ -151,10 +154,16 @@ for (i in 1:nsite){
 deviance_BC <- -2*logL
 
 save(mod_BC, file="SDM_JSDM_cache/BC.rda")
-save(beta_est_BC, T_BC, deviance_BC, probit_theta_latent_BC, file="SDM_JSDM_files/BC.rda")
+save(beta_est_BC, T_BC, deviance_BC,
+     probit_theta_latent_BC,
+     file="SDM_JSDM_files/BC.rda")
 ```
 
-We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
+### Evaluation of MCMC convergence 
+
+#### Representation of results
+
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of the estimated parameters.
 
 ```{r plot-BayesComm}
 library(BayesComm)
@@ -164,14 +173,17 @@ plot(mod_BC, chain=paste0("B$",names(PA_Birds)[2]))
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
-
 ```{r plot2-BayesComm, out.width=600, echo=FALSE}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BayesComm-1.png")
 ```
 
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
+
 ## Using `jSDM`
 
 In a second step, we use the package `jSDM` to fit binomial models with a probit link. 
+
+### Parameters inference 
 
 We estimate the parameters of the SDM with the function `jSDM_binomial_probit()` and the argument `n_latent=0` set by default. 
 
@@ -228,9 +240,91 @@ mod_probit <-
 #stopCluster(clust)
 ```
 
+### Evaluation of MCMC convergence 
+
+#### The Gelman–Rubin convergence diagnostic
+
+**Definition**:
+
+The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate non-convergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
+
+Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$. Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
+
+The between-chains and within-chain variances are given by
+$$B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2$$
+$$W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m$$
+
+ Under certain stationarity conditions, the pooled variance : 
+ 
+ $$\hat{V}=\frac{N-1}{N}W + \frac{M+1}{MN}B$$
+ 
+is an unbiased estimator of the marginal posterior variance of $\theta$ (@Gelman1992). The potential scale reduction factor (PSRF) is defined to be the ratio of $\hat{𝑉}$ and $𝑊$. If the $𝑀$ chains have converged to the target posterior distribution, then PSRF should be close to 1. The article @Brooks1998 corrected the original PSRF by accounting for sampling variability as follows:
+$$ \hat{R}= \sqrt{\frac{\hat{d}+3}{\hat{d}+1}\frac{\hat{V}}{W}}$$
+
+where $\hat{d}$  is the degrees of freedom estimate of a $𝑡$ distribution.
+
+PSRF estimates the potential decrease in the between-chains variability $𝐵$ with respect to the within-chain variability $𝑊$. If $\hat{R}$ is large, then longer simulation sequences are expected to either decrease $𝐵$ or increase $𝑊$ because the simulations have not yet explored the full posterior distribution. As the article @Brooks1998 have suggested, if $\hat{R} < 1.2$ for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition $\hat{R} < 1.1$.
+
+**Compute $\hat{R}$**:
+
+We evaluate the convergence of the MCMC output in which two parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or $\hat{R}$ substantially above 1, its indicates lack of convergence.
+
+
+```{r MCMC-convergence-SDM, echo=TRUE}
+
+burnin <- mod_probit[[1]]$model_spec$burnin
+ngibbs <- burnin + mod_probit[[1]]$model_spec$mcmc
+thin <-  mod_probit[[1]]$model_spec$thin
+require(coda)
+arr2mcmc <- function(x) {
+  return(mcmc(as.data.frame(x),
+              start=burnin+1 , end=ngibbs, thin=thin))
+}
+# MCMC lists
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_beta0 <- mcmc.list(lapply(mcmc_list_param[,grep("Intercept", 
+                                                           colnames(mcmc_list_param[[1]]),
+                                                           value=TRUE)], arr2mcmc))
+# psrf gelman indice 
+psrf_beta <- mean(gelman.diag(mcmc_list_param[, grep("Intercept",
+                                                     colnames(mcmc_list_param[[1]]),
+                                                     invert=TRUE)],
+                              multivariate=FALSE)$psrf[,2])
+psrf_beta0 <- mean(gelman.diag(mcmc_list_beta0, multivariate=FALSE)$psrf[,2])
+
+Rhat <- data.frame(Rhat=c(psrf_beta, psrf_beta0),
+                   Variable=c("beta", "beta0"))
+# Barplot
+library(ggplot2)
+ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
+  ggtitle("Averages of Rhat obtained for species effect") +
+  theme(plot.title = element_text(hjust = 0.5, size=14)) +
+  geom_bar(fill="skyblue", stat = "identity", width=0.5) +
+  geom_text(aes(label=round(Rhat,3)), vjust=0, hjust=-0.1) +
+  geom_hline(yintercept=1, color='red') +
+  ylim(0, max(Rhat$Rhat)+0.2) +
+  theme(axis.title.y = element_text(size=12),
+        axis.title.x = element_text(size=12)) +
+  theme(axis.text.y = element_text(size=11),
+        axis.text.x = element_text(size=11)) +
+  theme() +
+  coord_flip() 
+```
+
+```{r Rhat-plot, echo=FALSE, out.width=700, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/MCMC-convergence-SDM-1.png")
+```
+
+We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$ and the species intercept $\beta_0$. We can therefore be fairly confident that convergence has been achieved for these parameters.    
+
+#### Representation of results 
+
 Overview of the results :
 
 ```{r output-jSDM-probit}
+
 # Output
 n_chains <- length(mod_probit)
 mod_jSDM <- mod_probit[[1]]
@@ -246,38 +340,18 @@ save(T_jSDM, n_chains, str_jSDM, beta_jSDM, probit_theta_jSDM, deviance_jSDM,
 ```
 
 ```{r output-probit, eval=TRUE, echo=FALSE}
+
 load("SDM_JSDM_files/jSDM.rda")
 cat("number of chains :", n_chains,"\n")
 cat("content of each chain :", str_jSDM,"\n")
 ```
 
-We evaluate the convergence of the MCMC output in which two parallel chains are run with starting values that are overdispersed relative to the posterior distribution.
-Convergence is diagnosed when the chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
-If the convergence diagnostic gives values of potential scale reduction factor or psrf
-substantially above 1, its indicates lack of convergence.
-
-```{r MCMC-convergence}
-require(coda)
-arr2mcmc <- function(x) {
-  return(mcmc(as.data.frame(x)))
-}
-# MCMC lists
-mcmc_list_beta <- mcmc.list(lapply(lapply(mod_probit,"[[","mcmc.sp"), arr2mcmc))
-# psrf gelman indice 
-psrf_beta <- mean(gelman.diag(mcmc_list_beta)$psrf[,1])
-save(psrf_beta, file="SDM_JSDM_files/psrf.rda")
-```
-
-```{r psrf, echo=FALSE, eval=TRUE}
-load("SDM_JSDM_files/psrf.rda")
-cat("psrf beta:", psrf_beta, "\n")
-```
-
-We can also visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
+We can also visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of the estimated parameters.
 
 ```{r plot-jSDM}
+
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-plot(mcmc_list_beta[,grep("Milvus.milvus.beta",colnames(mcmc_list_beta[[1]]))])
+plot(mcmc_list_param[,grep("Milvus.milvus.beta",colnames(mcmc_list_param[[1]]))])
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
 
@@ -285,6 +359,8 @@ title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```{r plot2-jSDM, out.width=600, echo=FALSE, eval=TRUE}
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-jSDM-1.png")
 ```
+
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
 
 # Fitting joint species distribution models (JSDM)
 
@@ -306,15 +382,20 @@ We consider below binomial models with a probit link.
 
 ## Using `BayesComm`
 
+### Parameters inference 
+
 We estimate the parameters of the JSDM with the function `BC()` and the argument `model="full"` (intercept, covariates and community matrix).  
 
 ```{r BayesComm_community, eval=FALSE}
 T1 <- Sys.time()
-mod_BC_comm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(Env_Birds), model="full", its=20000, thin=10, burn=10000)
+mod_BC_comm <- BayesComm::BC(Y=as.matrix(PA_Birds), X=as.matrix(Env_Birds), 
+                             model="full", its=20000, thin=10, burn=10000)
 # Estimates
 beta_est_BC_comm <- data.frame(sp=names(PA_Birds), intercept=NA, elev=NA, elev2=NA)
 for (j in 1:nsp) {
-  beta_est_BC_comm[j, 2:(np+1)] <- as.numeric(summary(mod_BC_comm, chain=paste0("B$", names(PA_Birds)[j]))$statistics[, "Mean"])
+  beta_est_BC_comm[j, 2:(np+1)] <- as.numeric(summary(mod_BC_comm,
+                                                      chain=paste0("B$", 
+                                                                   names(PA_Birds)[j]))$statistics[, "Mean"])
 }
 #Z_BayesComm_com <- apply(mod_BC_comm$trace$z,c(2,3), mean)
 T2 <- Sys.time()
@@ -352,7 +433,11 @@ save(beta_est_BC_comm, T_BC_comm, R_mat,
      file="SDM_JSDM_files/BC_comm.rda")
 ```
 
-We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
+### Evaluation of MCMC convergence 
+
+#### Representation of results 
+
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of the estimated parameters.
 
 ```{r plot-BC_comm}
 load("SDM_JSDM_cache/BC_comm.rda")
@@ -366,7 +451,11 @@ title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-BC_comm-1.png")
 ```
 
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
+
 ## Using `jSDM`
+
+### Parameters inference 
 
 We estimate the latent variables model parameters with the function `jSDM_binomial_probit()` and the argument `n_latent=2`. 
 
@@ -380,9 +469,11 @@ clust <- makeCluster(ncores)
 registerDoParallel(clust)
 
 # Starting parameters 
+n_latent <- 2 
+beta_start <- c(1, -1)
 lambda_start <- c(-1, 1)
-beta_start <- c(-1,1)
-W_start <- c(0.1,-0.1)
+W_start <- list(matrix(rnorm(n_latent*nsite), nsite),
+                matrix(rnorm(n_latent*nsite), nsite))
 #formatting of starting parameters
 #and constraints on lambda generated by the function 
 # Seeds
@@ -412,9 +503,9 @@ mod_probit_lv <-
       mu_lambda = 0,
       V_lambda= 10,
       # Starting values
-      beta_start = beta_start[i],
-      lambda_start = lambda_start[i],
-      W_start = W_start[i],
+      beta_start = beta_start[[i]],
+      lambda_start = lambda_start[[i]],
+      W_start = W_start[[i]],
       # Other
       seed = seed_mcmc[i],
       verbose = 0
@@ -427,9 +518,77 @@ mod_probit_lv <-
 #stopCluster(clust)
 ```
 
+### Evaluation of MCMC convergence 
+
+#### The Gelman–Rubin convergence diagnostic
+
+**Compute $\hat{R}$**:
+
+We evaluate the convergence of the MCMC output in which two parallel chains are run (with starting values that are over dispersed relative to the posterior distribution).
+Convergence is diagnosed when the four chains have ‘forgotten’ their initial values, and the output from all chains is indistinguishable.
+If the convergence diagnostic gives values of potential scale reduction factor (PSRF) or $\hat{R}$ substantially above 1, its indicates lack of convergence.
+
+```{r MCMC-convergence-JSDM}
+burnin <- mod_probit_lv[[1]]$model_spec$burnin
+ngibbs <- burnin + mod_probit_lv[[1]]$model_spec$mcmc
+thin <-  mod_probit_lv[[1]]$model_spec$thin
+require(coda)
+arr2mcmc <- function(x) {
+  return(mcmc(as.data.frame(x),
+              start=burnin+1 , end=ngibbs, thin=thin))
+}
+# MCMC lists
+mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
+mcmc_list_lambda <- mcmc.list(lapply(mcmc_list_param[, grep("lambda",
+                                                            varnames(mcmc_list_param),
+                                                            value=TRUE)], arr2mcmc))
+mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,
+                                        "[[","mcmc.latent"), arr2mcmc))
+mcmc_list_beta <- mcmc.list(lapply(mcmc_list_param[, grep("beta",
+                                                          varnames(mcmc_list_param),
+                                                          value=TRUE)], arr2mcmc))
+mcmc_list_beta0 <- mcmc.list(mcmc_list_beta[, grep("Intercept", 
+                                                   varnames(mcmc_list_beta),
+                                                   value=TRUE)])
+# psrf gelman indice 
+psrf_beta <- mean(gelman.diag(mcmc_list_beta[, grep("Intercept",
+                                                     varnames(mcmc_list_beta),
+                                                     invert=TRUE)],
+                              multivariate=FALSE)$psrf[,2])
+psrf_beta0 <- mean(gelman.diag(mcmc_list_beta0, multivariate=FALSE)$psrf[,2])
+
+psrf_lambda <- mean(gelman.diag(mcmc_list_lambda,
+                                multivariate=FALSE)$psrf[,2], na.rm=TRUE)
+psrf_lv <- mean(gelman.diag(mcmc_list_lv,
+                            multivariate=FALSE)$psrf[,2 ])
+Rhat <- data.frame(Rhat=c(psrf_beta0, psrf_beta, psrf_lambda, psrf_lv),
+                   Variable=c("beta0", "beta", "lambda", "W"))
+# Barplot
+library(ggplot2)
+ggplot(Rhat, aes(x=Variable, y=Rhat)) + 
+  ggtitle("Averages of Rhat obtained for each type of parameter") +
+  theme(plot.title = element_text(hjust = 0.5, size=12)) +
+  geom_bar(fill="skyblue", stat = "identity") +
+  geom_text(aes(label=round(Rhat,3)), vjust=0, hjust=-0.1) +
+  geom_hline(yintercept=1, color='red') +
+  ylim(0, max(Rhat$Rhat)+0.2) +
+  theme(plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.2,"cm")) +
+  coord_flip() 
+```
+
+```{r Rhat-plot-JSDM, echo=FALSE, out.width=700, eval=TRUE}
+knitr::include_graphics("SDM_JSDM_files/figure-html/MCMC-convergence-JSDM-1.png")
+```
+
+We can see that the $\hat{R}$ are very close to 1 for the species effects $\beta$ and the species intercept $\beta_0$. We can therefore be fairly confident that convergence has been achieved for these parameters.    
+The $\hat{R}$ obtained for the latent variables $W$ and the factor loadings $\lambda$ are also pretty close to 1, indicating that convergence has been reached for these parameters.  
+
+#### Representation of results 
+
 Overview of the results :
 
 ```{r output-jSDM-probit-lv}
+
 # Output
 n_chains <- length(mod_probit_lv)
 mod_jSDM_lv <- mod_probit_lv[[1]]
@@ -446,45 +605,16 @@ save(T_jSDM_lv, n_chains, str_jSDM_lv, param_jSDM_lv, probit_theta_jSDM_lv, devi
 ```
 
 ```{r outputjSDM-probit-lv, eval=TRUE}
+
 load("SDM_JSDM_files/jSDM_lv.rda")
 cat("number of chains :", n_chains,"\n")
 cat("content of each chain :", str_jSDM_lv,"\n")
 ```
 
-We then evaluate if the chains have ‘forgotten’ their initial values, and if the output from all chains is indistinguishable.
-
-```{r MCMC-convergence-probit-lv}
-# psrf
-mcmc_list_param <- mcmc.list(lapply(lapply(mod_probit_lv,"[[","mcmc.sp"), arr2mcmc))
-mcmc_list_centered_lambda <- mcmc.list(lapply(lapply(
-  mcmc_list_param[,grep("lambda", grep("Anas.platyrhynchos.lambda_2", colnames(mcmc_list_param[[1]]),
-                                       invert=TRUE, value=TRUE),value=TRUE)],
-  scale, scale=FALSE),arr2mcmc))
-mcmc_list_lv <- mcmc.list(lapply(lapply(mod_probit_lv,
-                                        "[[","mcmc.latent"), arr2mcmc))
-mcmc_list_centered_lv <- mcmc.list(lapply(lapply(mcmc_list_lv, scale, scale=FALSE),arr2mcmc))
-psrf_beta <- mean(gelman.diag(mcmc_list_param[,1:np])$psrf[,1])
-psrf_lv <- mean(gelman.diag(mcmc_list_centered_lv)$psrf[,1])
-psrf_lambda <- mean(gelman.diag(mcmc_list_centered_lambda)$psrf[,1])
-save(psrf_beta, psrf_lv, psrf_lambda, file="SDM_JSDM_files/psrf_lv.rda")
-```
-
-```{r psrf_lv, echo=FALSE, eval=TRUE}
-load("SDM_JSDM_files/psrf_lv.rda")
-cat("psrf latent variables W :", psrf_lv, "\n")
-cat("psrf lambda:", psrf_lambda, "\n")
-cat("psrf beta:", psrf_beta, "\n")
-```
-
-The convergence diagnostic gives values of potential scale reduction factor or psrf
-not substantially above 1, its indicates some convergence.
-
-
-We visually evaluate the convergence of MCMCs by representing the trace and density a posteriori of the estimated parameters.
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of the estimated parameters.
 
 ```{r plot-jSDM-lv}
 par(mfrow=c(1,1), oma=c(0,0,2,0))
-
 plot(mcmc_list_param[,grep("Milvus.milvus.beta",colnames(mcmc_list_param[[1]]))])
 title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 ```
@@ -494,18 +624,20 @@ title(main=paste0("species ", names(PA_Birds)[2]), outer=TRUE)
 knitr::include_graphics("SDM_JSDM_files/figure-html/plot-jSDM-lv-1.png")
 ```
 
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
 # Comparison of results
+
+We want to compare the deviance, computation time and parameters of the SDM and the JSDM fitted using `jSDM` or `BayesComm` packages for fitting.
 
 ## Deviance and compilation time
 
-(ref:cap-comp-dev) **Deviance and compilation time**. of SDM and JSDM fitted by `jSDM` or `BayesComm`. \vspace{0.5cm}
+(ref:cap-comp-dev) **Deviance and computation time**. of SDM and JSDM fitted by `jSDM` or `BayesComm`. \vspace{0.5cm}
 
 ```{r comp-dev, echo=FALSE, eval=TRUE}
 load("SDM_JSDM_files/BC.rda")
 load("SDM_JSDM_files/BC_comm.rda")
 load("SDM_JSDM_files/jSDM.rda")
 load("SDM_JSDM_files/jSDM_lv.rda")
-
 # Deviance
 df <- data.frame(package=c("BayesComm","jSDM","BayesComm","jSDM"),
                  model=c("SDM", "SDM","JSDM (GLMM)", "JSDM (LVM)"),
@@ -524,6 +656,7 @@ The sizes of the dots on the following graphs are proportional to the number of 
 First, we compare the intercept for each species between classical or joint species distribution model that takes into account co-occurrences between species, fitted using `BayesComm` or `jSDM`. 
 
 ```{r comp-intercept}
+
 # Intercepts
 ## jSDM
 plot(lapply(beta_jSDM,"[", 1) , lapply(param_jSDM_lv, "[", 1), cex=nobs_sp^(1/5),
@@ -544,6 +677,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-intercept-1.png")
 We compare the effect of the environmental variables for each species between the four models.
 
 ```{r comp-env-effect}
+
 # Environmental variable effects
 for(k in 2:np){
 ## jSDM
@@ -565,9 +699,10 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-env-effect-2.png")
 
 ## Predictions
 
-We compare the probit of occurence probabilities predicted by the classical or joint species distribution, fitted using `BayesComm` or `jSDM`.
+We compare the probit of occurrence probabilities predicted by the classical or joint species distribution, fitted using `BayesComm` or `jSDM`.
 
 ```{r comp-pred}
+
 # Predictions
 ## jSDM
 plot(probit_theta_jSDM, probit_theta_jSDM_lv,
@@ -587,6 +722,10 @@ legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=
 knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-1.png")
 ```
 
+In one hand, the results obtained with `jSDM` and `BayesComm` are quite similar and therefore the use of a latent variable model (LVM) rather than a classical GLMM has only a minimal influence on the estimated values of the species effects ($\beta$). 
+
+On the other hand, the estimated values of the species intercept are quite similar using a classical species distribution model (SDM) or a joint species distribution model (JSDM), but the estimated values of the other species effects differ slightly. 
+
 ## Residual correlaton matrix 
 
  After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
@@ -599,6 +738,7 @@ knitr::include_graphics("SDM_JSDM_files/figure-html/comp-pred-1.png")
 
 
 ```{r residual_correlation_matrix}
+
 # Residual correlation matrix obtained with BayesComm
 reorder.cor.mean <- corrplot::corrMatOrder(R_mat, order = "FPC", hclust.method = "average")
 par(cex=1, cex.main=1.5)
@@ -615,9 +755,5 @@ corrplot::corrplot(residual_corr_mat[reorder.cor.mean,reorder.cor.mean], title =
 knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-1.png")
 knitr::include_graphics("SDM_JSDM_files/figure-html/residual_correlation_matrix-2.png")
 ```
-
-In one hand, the results obtained with `jSDM` and `BayesComm` are quite similar and therefore the use of a latent variable model (LVM) rather than a classical GLMM has only a minimal influence on the estimated values of the species effects ($\beta$). 
-
-On the other hand, the estimated values of the species intercept are quite similar using a classical species distribution model (SDM) or a joint species distribution model (JSDM), but the estimated values of the other species effects differ slightly. 
 
 # References

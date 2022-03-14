@@ -316,7 +316,7 @@ cat("content of each chain :", str_mod,"\n")
 
 ### Definition 
 
-The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
+The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate non convergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
 
 Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$.  
 Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
@@ -410,6 +410,8 @@ Consequently, we also consider the absolute values of the latent variables $W$ a
 
 # Representation of results
 
+We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of some estimated parameters.
+
 ```{r est-probit}
 ## Plot trace and posterior distributions 
 # for two first species
@@ -436,7 +438,11 @@ plot(mcmc_list_deviance,
 knitr::include_graphics(paste0("jSDM_in_parallel_files/figure-html/est-probit-", 1:9, ".png"))
 ```
 
+Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.
+
 # Accuracy of predictions 
+
+We evaluate the accuracy of the estimated parameters by plotting them against the parameters used to simulate the data-set.   
 
 ```{r obs-fitted}
 ## Predictive posterior mean for each observation
@@ -530,5 +536,7 @@ abline(a=0,b=1,col='red')
 ```{r obs-fitted-plot, echo=FALSE, out.width=800, eval=TRUE}
 knitr::include_graphics(paste0("jSDM_in_parallel_files/figure-html/obs-fitted-", 1:4, ".png"))
 ```
+
+On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function ($y=x$). 
 
 # References
