@@ -17,12 +17,12 @@ results A list including :
 \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
 \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 \item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
-\item{sig.cov}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
+\item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
 \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
 \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
 \item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 \item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
-\item{sig.cor}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
+\item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
 }
 \description{
 This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_{species} and l=1,\dots,n_{latent})}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
@@ -75,11 +75,11 @@ result <- get_residual_cor(mod, prob=0.95)
 # Residual variance-covariance matrix
 result$cov.mean
 ## All non-significant co-variances are set to zero.
-result$cov.mean * result$sig.cov
+result$cov.mean * result$cov.sig
 # Residual correlation matrix
 result$cor.mean
 ## All non-significant correlations are set to zero.
-result$cor.mean * result$sig.cor
+result$cor.mean * result$cor.sig
 }
 \references{
 \tabular{l}{

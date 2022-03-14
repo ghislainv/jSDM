@@ -16,12 +16,12 @@
 #' \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
 #' \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 #' \item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
-#' \item{sig.cov}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
+#' \item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
 #' \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
 #' \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
 #' \item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 #' \item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
-#' \item{sig.cor}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
+#' \item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
 #'
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, n_{species} et j=1,\ldots, n_{species}}{R=(R_ij) avec i=1,..., n_species et j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
 #' \tabular{lll}{
@@ -77,11 +77,11 @@
 #' # Residual variance-covariance matrix
 #' result$cov.mean
 #' ## All non-significant co-variances are set to zero.
-#' result$cov.mean * result$sig.cov
+#' result$cov.mean * result$cov.sig
 #' # Residual correlation matrix
 #' result$cor.mean
 #' ## All non-significant correlations are set to zero.
-#' result$cor.mean * result$sig.cor
+#' result$cor.mean * result$cor.sig
 #' @keywords stats::cov2cor
 #' @importFrom stats cov2cor
 #' @importFrom coda HPDinterval
@@ -142,14 +142,14 @@ get_residual_cor <- function(mod, prob=0.95) {
       cov.lower[j, jprim] <- get.hpd.covs[1]
       cov.upper[j, jprim] <- get.hpd.covs[2]
       ## Significant values whose HPD interval does not contain zero
-      sig.Tau.mat[j, jprim] <- ifelse((0 > get.hpd.covs[1] & 0 < get.hpd.covs[2]), 0, 1)
+      sig.Tau.mat[j, jprim] <- ifelse((0 > get.hpd.covs[1]) & (0 < get.hpd.covs[2]), 0, 1)
       ## Residual correlations matrices
       get.hpd.cors <- coda::HPDinterval(coda::as.mcmc(Tau.cor.arr[,(j-1)*n.species + jprim]),
                                         prob = prob)
       cor.lower[j, jprim] <- get.hpd.cors[1]
-      cor.upper[j, jprim] <- get.hpd.cors[1]
+      cor.upper[j, jprim] <- get.hpd.cors[2]
       ## Significant values whose HPD interval does not contain zero
-      sig.Tau.cor[j, jprim] <-  ifelse((0 > get.hpd.cors[1] & 0 < get.hpd.cors[2]), 0, 1)
+      sig.Tau.cor[j, jprim] <-  ifelse((0 > get.hpd.cors[1]) & (0 < get.hpd.cors[2]), 0, 1)
     }
   }
   ## Average/Median over the MCMC samples
@@ -171,7 +171,7 @@ get_residual_cor <- function(mod, prob=0.95) {
   dimnames(Tau.cor.mean) <- dimnames(Tau.cor.median) <- dimnames(cor.lower) <- dimnames(cor.upper) <- dimnames(sig.Tau.cor) <- list(names.sp, names.sp)
   # Results 
   results <- list(cov.mean = Tau.mat.mean, cov.median = Tau.mat.median,
-                  cov.lower=cov.lower, cov.upper=cov.upper, cov.sig=sig.Tau.mat,
+                  cov.lower= cov.lower, cov.upper = cov.upper, cov.sig = sig.Tau.mat,
                   cor.mean = Tau.cor.mean, cor.median = Tau.cor.median,
                   cor.lower=cor.lower, cor.upper=cor.upper, cor.sig=sig.Tau.cor)
   return(results)

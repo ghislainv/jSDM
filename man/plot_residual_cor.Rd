@@ -75,13 +75,14 @@ mod<-jSDM_binomial_probit(# Response variable
                            W_start=0,
                            V_alpha=1,
                            # Priors
-                           shape=0.5, rate=0.0005,
-                           mu_beta=0, V_beta=1.0E6,
-                           mu_lambda=0, V_lambda=10,
+                           shape=0.1, rate=0.1,
+                           mu_beta=0, V_beta=1,
+                           mu_lambda=0, V_lambda=1,
                            # Various
                            seed=1234, verbose=1)
-# Representation of residual correlation between species 
+# Representation of residual correlation between species
 plot_residual_cor(mod)
+plot_residual_cor(mod, prob=0.95)
 }
 \references{
 \tabular{l}{
