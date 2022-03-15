@@ -8,11 +8,7 @@
 #' @name jSDM_binomial_probit_sp_constrained 
 #' @aliases jSDM_binomial_probit_sp_constrained 
 #' @title Binomial probit regression with the chosen constrained species
-#' @description The \code{jSDM_binomial_probit_sp_constrained } function performs in parallel Binomial probit regressions in a Bayesian framework. 
-#' The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
-#' Then the function evaluate the convergence of mcmc \eqn{\lambda} chains generated according to \eqn{\hat{R}} computed using the \code{\link[coda]{gelman.diag}} function,
-#' to identify the reference species (\eqn{\hat{j}_l}) that structures itself most clearly on each latent axis \eqn{l}, chosen such as \eqn{\lambda_{\hat{j}_l}} maximize the \eqn{\hat{R}} computed on all chains.
-#' The \eqn{lambda} corresponding to this species are constrained to be positive by being placed on the diagonal of the \eqn{\Lambda} matrix for fitting the second model whose estimated conditional posterior distributions of parameters are returned by the function.
+#' @description The \code{jSDM_binomial_probit_sp_constrained} function performs in parallel Binomial probit regressions in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters. Then the function evaluates the convergence of MCMC \eqn{\lambda} chains using the Gelman-Rubin convergence diagnostic (\eqn{\hat{R}}). \eqn{\hat{R}} is computed using the \code{\link[coda]{gelman.diag}} function. We identify the species (\eqn{\hat{j}_l}) having the higher \eqn{\hat{R}} for \eqn{\lambda_{\hat{j}_l}}. These species drive the structure of the latent axis \eqn{l}. The \eqn{\lambda} corresponding to this species are constrained to be positive and placed on the diagonal of the \eqn{\Lambda} matrix for fitting a second model. This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.
 #' @param burnin The number of burn-in iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc} for each chain.
 #' \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
