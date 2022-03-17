@@ -41,9 +41,12 @@
 #' \item{ \code{\link{jSDM_binomial_probit_sp_constrained}} : \cr
 #' \cr
 #' This function allows to fit the same models than the function \code{\link{jSDM_binomial_probit}} except for models not including latent variables, indeed \code{n_latent} must be greater than zero in this function. 
-#' It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the \eqn{\Lambda} matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
-#' This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the Gelman–Rubin convergence diagnostic (\eqn{\hat{R}}{Rhat}) computed from the factor loadings \eqn{\lambda }
-#' of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+#' At first, the function fit a JSDM with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+#' Then, the function evaluates the convergence of MCMC \eqn{\lambda} chains using the Gelman-Rubin convergence diagnostic (\eqn{\hat{R}}).
+#' It identifies the species (\eqn{\hat{j}_l}) having the higher \eqn{\hat{R}} for \eqn{\lambda_{\hat{j}_l}}.
+#' These species drive the structure of the latent axis \eqn{l}.
+#' The \eqn{\lambda} corresponding to this species are constrained to be positive and placed on the diagonal of the \eqn{\Lambda} matrix for fitting a second model.
+#' This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.
 #'}
 #'
 #'\item{ \code{\link{jSDM_binomial_logit}} : \cr
@@ -86,11 +89,20 @@
 #' }}
 #' 
 #' }
-#' @author \tabular{l}{
-#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-#' Jeanne Clément <jeanne.clement16@laposte.net>\cr
-#' Frédéric Gosselin <frederic.gosselin@inrae.fr>\cr
-#'}
+#' @author 
+#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+#' 
+#' Jeanne Clément <jeanne.clement16@laposte.net>
+#' 
+#' Frédéric Gosselin <frederic.gosselin@inrae.fr>
+#'
+#'@references
+#' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. 
+#' 
+#' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.
+#'
+#' Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. \emph{Ecology Letters}, 20, 561-576.
+#' 
 #' @keywords MCMC Metropolis algorithm binomial biodiversity logistic model multivariate regression
 #' @importFrom Rcpp evalCpp
 #' @importFrom graphics par

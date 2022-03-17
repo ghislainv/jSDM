@@ -23,10 +23,12 @@
 
 \item{Id_sites}{An vector of integer indicating for which sites the probabilities of presence of specified species will be predicted.}
 
-\item{type}{Type of prediction. Can be : \tabular{l}{
-\code{"mean"} for predictive posterior mean, \cr
-\code{"quantile"} for producing sample quantiles from the predictive posterior corresponding to the given probabilities (see \code{probs} argument), \cr
-\code{"posterior"} for the full predictive posterior for each prediction. \cr }
+\item{type}{Type of prediction. Can be :
+\tabular{ll}{
+\code{"mean"} \tab for predictive posterior mean. \cr
+\code{"quantile"} \tab for producing sample quantiles from the predictive posterior, \cr
+\tab corresponding to the given probabilities (see \code{probs} argument). \cr
+\code{"posterior"} \tab for the full predictive posterior for each prediction. \cr }
 Using \code{"quantile"} or \code{"posterior"} might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.}
 
 \item{probs}{Numeric vector of probabilities with values in [0,1], \cr
@@ -92,9 +94,9 @@ hist(theta_pred, main="Predicted theta with simulated covariates")
 \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_poisson_log}}
 }
 \author{
-\tabular{l}{
-Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-Jeanne Clément <jeanne.clement16@laposte.net>\cr }
+Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+
+Jeanne Clément <jeanne.clement16@laposte.net>
 }
 \keyword{credible}
 \keyword{interval}

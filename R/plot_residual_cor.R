@@ -22,10 +22,13 @@
 #' @param tl.srt Numeric, for text label string rotation in degrees, see \code{\link[graphics]{text}}.
 #' @param ... Further arguments passed to \code{\link[corrplot]{corrplot}} function
 #' @return Displays a reordered correlation matrix
-#' @author \tabular{l}{
-#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-#' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @seealso \code{\link[corrplot]{corrplot}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
+#' @author 
+#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+#' 
+#' Jeanne Clément <jeanne.clement16@laposte.net>
+#' 
+#' @seealso \code{\link[corrplot]{corrplot}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \cr
+#'          \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -63,10 +66,11 @@
 #' # Representation of residual correlation between species
 #' plot_residual_cor(mod)
 #' plot_residual_cor(mod, prob=0.95)
-#' @references \tabular{l}{
-#' Taiyun Wei and Viliam Simko (2017). R package "corrplot": Visualization of a Correlation Matrix (Version 0.84) \cr
-#' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr
-#' }
+#' @references
+#' Taiyun Wei and Viliam Simko (2017). R package "corrplot": Visualization of a Correlation Matrix (Version 0.84)   
+#' 
+#' Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.
+#'
 #' @keywords corrplot
 #' @importFrom corrplot corrplot
 #' @export 

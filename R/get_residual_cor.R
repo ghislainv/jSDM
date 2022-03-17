@@ -10,33 +10,40 @@
 #' @title Calculate the residual correlation matrix from a latent variable model (LVM)
 #' @description This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_{species} and l=1,\dots,n_{latent})}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 #' @param mod An object of class \code{"jSDM"}
-#' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.
+#' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.
 #' @return results A list including : 
 #' \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.} 
 #' \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
 #' \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 #' \item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
-#' \item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples does not contain zero.}
+#' \item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 1 corresponding to the “significant" co-variances and the value 0 corresponding to "non-significant" co-variances, whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 #' \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
 #' \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
 #' \item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 #' \item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
-#' \item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\eqn{100 \times prob \%}{100 x prob \%})  HPD interval over the MCMC samples does not contain zero.}
+#' \item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value \eqn{1} corresponding to the “significant" correlations and the value \eqn{0} corresponding to "non-significant" correlations,
+#'  whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 #'
-#' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, n_{species} et j=1,\ldots, n_{species}}{R=(R_ij) avec i=1,..., n_species et j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
+#' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
 #' \tabular{lll}{
 #' \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
 #'          \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
 #' then we compute correlations from covariances :
 #'\deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
-#' @author \tabular{l}{
-#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-#' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#' @references  \tabular{l}{
-#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750. \cr
-#' Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. Methods in Ecology and Evolution, 7, 549-555.\cr
-#' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.\cr }
-#' @seealso \code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}} 
+#' @author
+#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+#' 
+#' Jeanne Clément <jeanne.clement16@laposte.net>
+#' 
+#' @references  
+#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” \emph{Methods in Ecology and Evolution}, 7, 744–750.
+#' 
+#' Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. \emph{Methods in Ecology and Evolution}, 7, 549-555.
+#' 
+#' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). \emph{Methods in Ecology and Evolution}, 5, 397-406.
+#' 
+#' @seealso \code{\link{get_enviro_cor}} \code{\link[stats]{cov2cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \cr 
+#'  \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}} 
 #' @examples 
 #' library(jSDM)
 #' # frogs data

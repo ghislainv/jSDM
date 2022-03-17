@@ -20,7 +20,8 @@ The environmental variables are :
  \tabular{ll}{
  \code{Aspect} \tab Relative south aspect (opposite of the sine of aspect with flat coded 0) \cr
  \code{Slope} \tab Slope inclination (degrees) \cr
-    \code{Form} \tab Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); 4 (concave slope); 5 (concavity) \cr
+    \code{Form} \tab Microtopographic landform index: 1 (convexity); 2 (convex slope); 3 (right slope); \cr
+    \tab 4 (concave slope); 5 (concavity) \cr
     \code{Snow} \tab Mean snowmelt date (Julian day) averaged over 1997-1999 \cr
     \code{PhysD} \tab Physical disturbance, i.e., percentage of unvegetated soil due to physical processes \cr
     \code{ZoogD} \tab Zoogenic disturbance, i.e., quantity of unvegetated soil due to marmot activity: no; some; high \cr }

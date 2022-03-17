@@ -57,7 +57,7 @@ plot_associations
 plot species-species associations
 }
 \details{
-After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_ij) avec i=1,\ldots, nspecies et j=1,\ldots, nspecies}{R=(R_ij) avec i=1,..., nspecies et j=1,..., nspecies}
+After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
  can be derived from the covariance in the latent variables such as : 
 \tabular{lll}{
 \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
@@ -104,19 +104,22 @@ mod <- jSDM_poisson_log(# Response variable
 R <- get_residual_cor(mod)$cor.mean
 plot_associations(R, circleBreak = TRUE, occ = PA_mites, species_order="abundance")
 # Average of MCMC samples of species enrironmental effect beta except the intercept
-env_effect <- t(sapply(mod$mcmc.sp,colMeans)[grep("beta_",colnames(mod$mcmc.sp[[1]]))[-1],])
+env_effect <- t(sapply(mod$mcmc.sp,
+                       colMeans)[grep("beta_", colnames(mod$mcmc.sp[[1]]))[-1],])
 colnames(env_effect) <-  gsub("beta_", "", colnames(env_effect))
 plot_associations(R, env_effect = env_effect, species_order="main env_effect")
 }
 \references{
-\tabular{l}{
-Pichler M. and Hartig F. (2020). “A new method for faster and more accurate inference of species associations from big community data”. \cr}
+Pichler M. and Hartig F. (2021) A new method for faster and more accurate inference of species associations from big community data. \cr
+            \emph{Methods in Ecology and Evolution}, 12, 2159-2173 \doi{10.1111/2041-210X.13687}.
 }
 \seealso{
-\code{\link{jSDM-package}} \code{\link{get_residual_cor}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_probit_long_format}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}
+\code{\link{jSDM-package}} \code{\link{get_residual_cor}} \cr
+\code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_probit_long_format}} \cr
+\code{\link{jSDM_binomial_probit_sp_constrained}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_poisson_log}}
 }
 \author{
-\tabular{l}{
-Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-Jeanne Clément <jeanne.clement16@laposte.net>\cr }
+Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+
+Jeanne Clément <jeanne.clement16@laposte.net>
 }

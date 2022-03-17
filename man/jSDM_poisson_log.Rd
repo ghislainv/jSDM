@@ -54,10 +54,10 @@ Default to \code{NULL} to fit a model without species traits.}
 
 \item{trait_formula}{A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,\cr
 used to form the trait design matrix \eqn{Tr} of size \eqn{n_{species} \times nt}{n_species x nt} \cr 
-and to set to \code{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
-Default to \code{NULL} to fit a model with all possible interactions between environmental variables defined by \code{site_formula} and species traits found in \code{trait_data}.}
+and to set to \eqn{0} the \eqn{\gamma} parameters corresponding to interactions not taken into account according to the formula. 
+Default to \code{NULL} to fit a model with all possible interactions between species traits found in \code{trait_data} and environmental variables defined by \code{site_formula}.}
 
-\item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
+\item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \eqn{0}.}
 
 \item{site_effect}{A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}),\cr
 or not included (\code{"none"}) in the model. 
@@ -84,8 +84,8 @@ If \code{W_start} takes a scalar value, then that value will serve for all of th
 \item{alpha_start}{Starting values for random site effect parameters must be either a scalar or a \eqn{n_{site}}{n_site}-length vector, ignored if \code{site_effect="none"}.
 If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.}
 
-\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
+\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Gaussian prior distribution for the fixed site effect if 
+\code{site_effect="fixed"}. Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
@@ -141,7 +141,7 @@ An object of class \code{"jSDM"} acting like a list including :
  \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.}
  \item{mcmc.sp}{A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta_j} and \eqn{\lambda_j} if \code{n_latent>0}.}
  \item{mcmc.gamma}{A list by covariates of mcmc objects that contains the posterior samples for \eqn{\gamma_p} parameters with \eqn{p=1,\ldots,np}{p=1,...,np} if \code{trait_data} is specified.}
- \item{mcmc.Deviance}{The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.}
+ \item{mcmc.Deviance}{The posterior sample of the deviance (\eqn{D}) is also provided, with \eqn{D} defined as : \eqn{D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_ij P(y_ij|\beta_j,\lambda_j, \alpha_i, W_i))}.} 
  \item{log_theta_latent}{Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function.}
  \item{theta_latent}{Predictive posterior mean of the probability to each species to be present on each site.}
  \item{model_spec}{Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.}
@@ -165,20 +165,25 @@ where \tabular{ll}{
  if \code{n_latent>0} and \code{site_effect="random"} \tab log\eqn{(\theta_{ij}) = X_i \beta_j + W_i \lambda_j + \alpha_i}{(\theta_ij) = X_i  \beta_j +  W_i \lambda_j + \alpha_i} and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
 }
 
+
 In the absence of data on species traits (\code{trait_data=NULL}), the effect of species \eqn{j}: \eqn{\beta_j};
-follows the same a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_p},V_{\beta_p})}{\beta_jp ~ N(\mu_\beta.p,V_\beta.p)},
+follows the same \emph{a priori} Gaussian distribution such that \eqn{\beta_j \sim \mathcal{N}_{np}(\mu_{\beta},V_{\beta})}{\beta_j ~ N_np(\mu_\beta,V_\beta)},
 for each species. 
 
 If species traits data are provided, the effect of species \eqn{j}: \eqn{\beta_j};
-follows an a priori Gaussian distribution such that \eqn{\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})}{\beta_jp ~ N(\mu_\beta.jp,V_\beta.p)},
-where \eqn{\mu_{\beta_jp} = \sum\limits_{k=1}^{nt} t_{jk}.\gamma_{kp}}{mu_\beta.jp=\Sigma_(k=1,...,nt) t_jk.\gamma_kp}, takes different values for each species.
-We assume that \eqn{\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})}{\gamma.kp ~ N(\mu_\gamma.kp,V_\gamma.kp)} as prior distribution. 
+follows an \emph{a priori} Gaussian distribution such that \eqn{\beta_j \sim \mathcal{N}_{np}(\mu_{\beta_j},V_{\beta})}{\beta_j ~ N_np(\mu_\betaj,V_\beta)},
+where \eqn{\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}}{mu_\beta.jp=\Sigma_(k=1,...,nt) t_jk.\gamma_kp}, takes different values for each species.
+
+We assume that \eqn{\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})}{\gamma.kp ~ N(\mu_\gamma.kp,V_\gamma.kp)} as prior distribution.   
+
 We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma=(\gamma_kp) for k=1,...,nt and p=1,...,np} such as : 
+
 \tabular{rccccccl}{
 \tab \strong{\eqn{x_0}} \tab \strong{\eqn{x_1}} \tab... \tab \strong{\eqn{x_p}} \tab ... \tab \strong{\eqn{x_{np}}{x_np}} \tab  \cr 
 \tab__________\tab________\tab________\tab________\tab________\tab________\tab \cr 
-\strong{\eqn{t_0}} | \tab  \strong{\eqn{\gamma_{0,0}}{\gamma_(0,0)}} \tab \emph{\eqn{\gamma_{0,1}}{\gamma_(0,1)}} \tab ... \tab \emph{\eqn{\gamma_{0,p}}{\gamma_(0,p)}} \tab... \tab \emph{\eqn{\gamma_{0,np}}{\gamma_(0,np)}} \tab \{ \emph{effect of environmental variables} \cr
-  | \tab \strong{intercept} \tab \tab \tab \tab \tab \tab \cr 
+\strong{\eqn{t_0}} | \tab  \strong{\eqn{\gamma_{0,0}}{\gamma_(0,0)}} \tab \emph{\eqn{\gamma_{0,1}}{\gamma_(0,1)}} \tab ... \tab \emph{\eqn{\gamma_{0,p}}{\gamma_(0,p)}} \tab... \tab \emph{\eqn{\gamma_{0,np}}{\gamma_(0,np)}} \tab \{ \emph{effect of } \cr
+  | \tab \strong{intercept} \tab \tab \tab \tab \tab \tab \emph{environmental} \cr 
+  | \tab \tab \tab \tab \tab \tab \tab \emph{   variables} \cr 
   \strong{\eqn{t_1}} | \tab  \eqn{\gamma_{1,0}}{\gamma_(1,0)} \tab \emph{\eqn{\gamma_{1,1}}{\gamma_(1,1)}} \tab ... \tab \emph{\eqn{\gamma_{1,p}}{\gamma_(1,p)}} \tab... \tab \emph{\eqn{\gamma_{1,np}}{\gamma_(1,np)}} \tab \cr
   ... | \tab ... \tab ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
   \strong{\eqn{t_k}} | \tab \emph{\eqn{\gamma_{k,0}}{\gamma_(k,0)}} \tab \emph{\eqn{\gamma_{k,1}}{\gamma_(k,1)}} \tab... \tab \eqn{\gamma_{k,p}}{\gamma_(k,p)} \tab... \tab \eqn{\gamma_{k,np}}{\gamma_(k,np)} \tab \cr
@@ -190,7 +195,7 @@ We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma
 }
 \examples{
 #==============================================
-# jSDM_poisson_log ()
+# jSDM_poisson_log()
 # Example with simulated data
 #==============================================
 
@@ -354,19 +359,19 @@ plot(theta, mod$theta_latent,
 abline(a=0 ,b=1, col="red")
 }
 \references{
-\tabular{l}{
-Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.\cr
-Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. \emph{Ecological Applications}, 16, 33-50.\cr
-Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. \emph{Ecology Letters}, 20, 561-576.\cr
-}
+Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.
+
+Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. \emph{Ecological Applications}, 16, 33-50.
+
+Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. \emph{Ecology Letters}, 20, 561-576.
 }
 \seealso{
 \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}}  \code{\link{jSDM_binomial_logit}}
 }
 \author{
-\tabular{l}{
- Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-Jeanne Clément <jeanne.clement16@laposte.net>\cr }
+Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+ 
+Jeanne Clément <jeanne.clement16@laposte.net>
 }
 \keyword{MCMC}
 \keyword{Metropolis}

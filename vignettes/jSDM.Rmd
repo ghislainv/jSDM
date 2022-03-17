@@ -48,7 +48,7 @@ The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize
 The package includes the following functions to fit various species distribution models :
 
 | function |  data type   | data format |
-|:---------|:-------------|:------------|
+|:---------|:-------------|:------------:|
 | `jSDM_binomial_logit()` | presence-absence | wide | 
 | `jSDM_binomial_probit()` | presence-absence | wide |
 | `jSDM_binomial_probit_sp_constrained()` | presence-absence | wide |
@@ -73,9 +73,10 @@ The package includes the following functions to fit various species distribution
 
 * `jSDM_binomial_probit_sp_constrained()` : 
 
-  This function allows to fit the same models than the function `jSDM_binomial_probit` except for models not including latent variables, indeed `n_latent` must be greater than zero in this function. 
-  It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the $\Lambda$ matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
-  This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the $\hat{R}$s (@Gelman1992) computed from the factor loadings $\lambda$ of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+  This function allows to fit the same models than the function `jSDM_binomial_probit` except for models not including latent variables, indeed `n_latent` must be greater than zero in this function.  
+  At first, the function fit a JSDM with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.  
+  Then, the function evaluates the convergence of MCMC $\lambda$ chains using the Gelman-Rubin convergence diagnostic [@Gelman1992] ($\hat{R}$). It identifies the species ($\hat{j}_l$) having the higher $\hat{R}$ for $\lambda_{\hat{j}_l}$. These species drive the structure of the latent axis $l$. The $\lambda$ corresponding to this species are constrained to be positive and placed on the diagonal of the $\Lambda$ matrix for fitting a second model.  
+  This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.  
 
 * `jSDM_binomial_logit()` : 
 

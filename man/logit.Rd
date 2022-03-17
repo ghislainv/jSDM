@@ -20,7 +20,7 @@ y Transformed value(s).
 Compute generalized logit function.
 }
 \details{
-The generalized logit function takes values on [min, max] and transforms them to span [-Inf,Inf] it is defined as:
+The generalized logit function takes values on \eqn{[min, max]} and transforms them to span \eqn{[ -\infty, +\infty ]}{[-Inf,+Inf]} it is defined as:
 \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))} 
 \deqn{where}
 \deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}

@@ -49,7 +49,7 @@ jSDM_binomial_probit_long_format(
 \item{site_formula}{A one-sided formula, as the formulas used by the \code{\link[stats]{lm}} function, of the form: '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{p} terms related to species effects \eqn{\beta},
 specifying the explanatory variables for the suitability process of the model, including the intercept, different from the \eqn{d} terms related to \eqn{\gamma} parameters.}
 
-\item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \code{0}.}
+\item{n_latent}{An integer which specifies the number of latent variables to generate. Defaults to \eqn{0}.}
 
 \item{site_effect}{A string indicating whether row effects are included as fixed effects (\code{"fixed"}), as random effects (\code{"random"}), or not included (\code{"none"}) in the model. 
 If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
@@ -68,8 +68,8 @@ If \code{lambda_start} takes a scalar value, then that value will serve for all 
 \item{W_start}{Starting values for latent variables must be either a scalar or a \eqn{nsite \times n_latent}{n_site x n_latent} matrix, ignored if \code{n_latent=0}.
 If \code{W_start} takes a scalar value, then that value will serve for all of the \eqn{W_{il}}{W_il} with \eqn{i=1,\ldots,n_{site}}{l=1,...,n_site} and \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}.}
 
-\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Normal prior for the fixed site effect if \code{site_effect="fixed"}.
-Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
+\item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"}  or constant variance of the Gaussian prior distribution for the fixed site effect if
+\code{site_effect="fixed"}. Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
 
 \item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
@@ -110,7 +110,7 @@ An object of class \code{"jSDM"} acting like a list including :
  \item{mcmc.latent}{A list by latent variable of mcmc objects that contains the posterior samples for latent variables  \eqn{W_l} with \eqn{l=1,\ldots,n_{latent}}{l=1,...,n_latent}, not returned if \code{n_latent=0}.}
  \item{mcmc.sp}{A list by species of mcmc objects that contains the posterior samples for species effects \eqn{\beta} and the loading factors \eqn{\lambda} if \code{n_latent>0}.}
  \item{mcmc.gamma}{An mcmc objects that contains the posterior samples for parameters \eqn{\gamma} not returned if \code{d=0}.}
- \item{mcmc.Deviance}{The posterior sample of the deviance \eqn{D}{D}, with \eqn{D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_n P(y_n|\beta_j,\lambda_j, \alpha_i, W_i))}, is also provided.} 
+ \item{mcmc.Deviance}{The posterior sample of the deviance \eqn{D} is also provided, with \eqn{D} defined as:\eqn{D=-2\log(\prod_{n} P(y_{n}|\beta_j,\lambda_j, \alpha_i, W_i))}{D=-2log(\prod_n P(y_n|\beta_j,\lambda_j, \alpha_i, W_i))}.} 
  \item{Z_latent}{Predictive posterior mean of the latent variable Z. }
  \item{probit_theta_latent}{Predictive posterior mean of the probability to each species to be present on each site, transformed by probit link function.}
  \item{theta_latent}{Predictive posterior mean of the probability to each species to be present on each site.}
@@ -126,7 +126,8 @@ We model an ecological process where the presence or absence of species \eqn{j} 
 
 \bold{Ecological process:}
 \deqn{y_n \sim \mathcal{B}ernoulli(\theta_n)}{y_n ~ Bernoulli(\theta_n)} such as \eqn{species_n=j} and \eqn{site_n=i},
- where \tabular{ll}{
+ where :
+  \tabular{ll}{
  if \code{n_latent=0} and \code{site_effect="none"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j} \cr
  if \code{n_latent>0} and \code{site_effect="none"} \tab probit\eqn{(\theta_n) = D_n \gamma+ X_n \beta_j + W_i \lambda_j} \cr
  if \code{n_latent=0} and \code{site_effect="fixed"} \tab probit\eqn{(\theta_n) = D_n \gamma + X_n \beta_j  + \alpha_i}  and \eqn{\alpha_i \sim \mathcal{N}(0,V_\alpha)}{\alpha_i ~ N(0,V_\alpha)} \cr
@@ -180,7 +181,8 @@ mat <- t(matrix(runif(nsp*n_latent,-2,2), byrow=TRUE, nrow=nsp))
 diag(mat) <- runif(n_latent,0,2)
 lambda.target <- matrix(0,n_latent,nsp)
 gamma.target <-runif(nd,-1,1)
-lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat,
+                                                         diag=TRUE)]
 #= Variance of random site effect 
 V_alpha.target <- 0.5
 #= Random site effect 
@@ -207,7 +209,8 @@ for (n in 1:nobs){
 Id_site <- rep(1:nsite,nsp)
 Id_sp <- rep(1:nsp,each=nsite)
 data <- data.frame(site=rep(Id_site,2), species=rep(Id_sp,2), Y=Y,
-                   x1=c(rep(x1,nsp),rep(x1_supObs,nsp)), x1.2=c(rep(x1.2,nsp),rep(x1.2_supObs,nsp)),
+                   x1=c(rep(x1,nsp),rep(x1_supObs,nsp)),
+                   x1.2=c(rep(x1.2,nsp),rep(x1.2_supObs,nsp)),
                    x1.SLA=c(D$x1.SLA,D_supObs$x1.SLA))
 # missing observation
 data <- data[-1,]
@@ -344,17 +347,18 @@ abline(a=0,b=1,col='red')
 
 }
 \references{
-\tabular{l}{
-Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. \cr
-Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.\cr}
+Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. 
+
+Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. \emph{Trends in Ecology & Evolution}, 30, 766-779.
 }
 \seealso{
-\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}}
+\code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_probit}}
+ \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}}
 }
 \author{
-\tabular{l}{
-Ghislain Vieilledent <ghislain.vieilledent@cirad.fr> \cr
-Jeanne Clément <jeanne.clement16@laposte.net> \cr }
+Ghislain Vieilledent <ghislain.vieilledent@cirad.fr> 
+
+Jeanne Clément <jeanne.clement16@laposte.net>
 }
 \keyword{Bayesian}
 \keyword{Binomial}

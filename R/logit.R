@@ -11,7 +11,7 @@
 #' @param x value(s) to be transformed
 #' @param min Lower end of logit interval
 #' @param max Upper end of logit interval 
-#' @details The generalized logit function takes values on [min, max] and transforms them to span [-Inf,Inf] it is defined as:
+#' @details The generalized logit function takes values on \eqn{[min, max]} and transforms them to span \eqn{[ -\infty, +\infty ]}{[-Inf,+Inf]} it is defined as:
 #' \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))} 
 #' \deqn{where}
 #'\deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}

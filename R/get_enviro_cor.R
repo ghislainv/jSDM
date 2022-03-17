@@ -8,7 +8,8 @@
 #' @name get_enviro_cor
 #' @aliases get_enviro_cor
 #' @title Extract covariances and correlations due to shared environmental responses
-#' @description Calculates the correlation between columns of the response matrix, due to similarities in the response to explanatory variables i.e., shared environmental response.
+#' @description Calculates the correlation between columns of the response matrix,
+#'  due to similarities in the response to explanatory variables i.e., shared environmental response.
 #' @param mod An object of class \code{"jSDM"}
 #' @param type A choice of either the posterior median (\code{type = "median"}) or posterior mean (\code{type = "mean"}), which are then treated as estimates and the fitted values are calculated from.
 #' Default is posterior mean.
@@ -16,21 +17,28 @@
 #' Defaults to 0.95.
 #' @return results A list including : 
 #' \item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
-#' \item{sig.cor}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior interval does not contain zero. All non-significant correlations are set to zero.}
+#' \item{sig.cor}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior density (HPD) interval does not contain zero. All non-significant correlations are set to zero.}
 #' \item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}
 #' 
-#' @details In both independent response and correlated response models, where the each of the columns of the response matrix y are fitted to a set of explanatory variables given by X,
-#' the covariance and thus between two columns \eqn{j} and \eqn{j'} due to similarities in their response to the model matrix is calculated based on the linear predictors \eqn{X \beta_j} and \eqn{X \beta_j'}, where \eqn{\beta_j} are species effects relating to the explanatory variables.
+#' @details In both independent response and correlated response models, where each of the columns of the response matrix \eqn{Y} are fitted to a set of explanatory variables given by \eqn{X},
+#' the covariance between two columns \eqn{j} and \eqn{j'}, due to similarities in their response to the model matrix, is thus calculated based on the linear predictors \eqn{X \beta_j} and \eqn{X \beta_j'}, where \eqn{\beta_j} are species effects relating to the explanatory variables.
 #  For multivariate abundance data, the correlation calculated by this function can be interpreted as the correlation attributable to similarities in the environmental response between species. 
-#' Such correlation matrices are discussed and found in Ovaskainen et al., (2010), Pollock et al., 2014
-#' @author \tabular{l}{
-#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>\cr
-#' Jeanne Clément <jeanne.clement16@laposte.net>\cr }
-#'@references \tabular{l}{
-#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750. \cr 
-#' Ovaskainen et al. (2010). Modeling species co-occurrence by multivariate logistic regression generates new hypotheses on fungal interactions. Ecology, 91, 2514-2521. \cr
-#' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406. \cr }
-#'@seealso \code{\link[stats]{cov2cor}} \code{\link{get_residual_cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_binomial_logit}} 
+#' Such correlation matrices are discussed and found in Ovaskainen et al., (2010), Pollock et al., (2014). 
+#' @author 
+#' 
+#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+#' 
+#' Jeanne Clément <jeanne.clement16@laposte.net> 
+#' 
+#'@references
+#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” \emph{Methods in Ecology and Evolution}, 7, 744–750.  
+#' 
+#' Ovaskainen et al. (2010). Modeling species co-occurrence by multivariate logistic regression generates new hypotheses on fungal interactions. \emph{Ecology}, 91, 2514-2521. 
+#' 
+#' Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). \emph{Methods in Ecology and Evolution}, 5, 397-406. 
+#' 
+#'@seealso \code{\link[stats]{cov2cor}} \code{\link{get_residual_cor}} \code{\link{jSDM-package}} \code{\link{jSDM_binomial_probit}} \cr
+#' \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -38,7 +46,8 @@
 #'  # Arranging data
 #'  PA_frogs <- frogs[,4:12]
 #'  # Normalized continuous variables
-#'  Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
+#'  Env_frogs <- cbind(scale(frogs[,1]),frogs[,2], 
+#'                     scale(frogs[,3]))
 #'  colnames(Env_frogs) <- colnames(frogs[,1:3])
 #'  Env_frogs <- as.data.frame(Env_frogs)
 #'  # Parameter inference
