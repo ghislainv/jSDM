@@ -27,7 +27,7 @@ LazyLoad:yes
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -83,9 +83,12 @@ $$y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$$
 where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) = X_i \beta_j\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr></table></li>
 <li><p><code><a href="jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained</a></code> : <br><br>
 This function allows to fit the same models than the function <code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code> except for models not including latent variables, indeed <code>n_latent</code> must be greater than zero in this function. 
-It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the \(\Lambda\) matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
-This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the Gelman–Rubin convergence diagnostic (\(\hat{R}\)) computed from the factor loadings \(\lambda \)
-of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.</p></li>
+At first, the function fit a JSDM with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.
+Then, the function evaluates the convergence of MCMC \(\lambda\) chains using the Gelman-Rubin convergence diagnostic (\(\hat{R}\)).
+It identifies the species (\(\hat{j}_l\)) having the higher \(\hat{R}\) for \(\lambda_{\hat{j}_l}\).
+These species drive the structure of the latent axis \(l\).
+The \(\lambda\) corresponding to this species are constrained to be positive and placed on the diagonal of the \(\Lambda\) matrix for fitting a second model.
+This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.</p></li>
 <li><p><code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code> : <br><br><b>Ecological process : </b>
 $$y_{ij} \sim \mathcal{B}inomial(\theta_{ij},t_i)$$
 where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>logit\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr></table></li>
@@ -96,10 +99,18 @@ where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <cod
 $$y_n \sim \mathcal{B}ernoulli(\theta_n)$$ such as \(species_n=j\) and \(site_n=i\),
 where </p><table class="table table"><tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j +  W_i \lambda_j\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i\)  and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n  \beta_j +  W_i \lambda_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>probit\((\theta_n) = D_n \gamma + X_n  \beta_j +  W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr></table></li>
 </ul></div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. <em>Biometrika</em>, 85, 347-361.</p>
+<p>Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Taskinen, S.; Walker, S. C. and Hui, F. K. C. (2015) So Many Variables: Joint Modeling in Community Ecology. <em>Trends in Ecology &amp; Evolution</em>, 30, 766-779.</p>
+<p>Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. <em>Ecology Letters</em>, 20, 561-576.</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
-    
-<table class="table table"><tr><td>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</td></tr><tr><td>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</td></tr><tr><td>Frédéric Gosselin &lt;frederic.gosselin@inrae.fr&gt;</td></tr><tr><td></td></tr></table></div>
+    <p>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</p>
+<p>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</p>
+<p>Frédéric Gosselin &lt;frederic.gosselin@inrae.fr&gt;</p>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

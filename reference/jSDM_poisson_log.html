@@ -18,7 +18,7 @@ The function calls a Gibbs sampler written in C++ code which uses an adaptive Me
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -119,10 +119,10 @@ Default to <code>NULL</code> to fit a model without species traits.</p></dd>
 <dt>trait_formula</dt>
 <dd><p>A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,<br>
 used to form the trait design matrix \(Tr\) of size \(n_{species} \times nt\) <br> 
-and to set to <code>0</code> the \(\gamma\) parameters corresponding to interactions not taken into account according to the formula. 
-Default to <code>NULL</code> to fit a model with all possible interactions between environmental variables defined by <code>site_formula</code> and species traits found in <code>trait_data</code>.</p></dd>
+and to set to \(0\) the \(\gamma\) parameters corresponding to interactions not taken into account according to the formula. 
+Default to <code>NULL</code> to fit a model with all possible interactions between species traits found in <code>trait_data</code> and environmental variables defined by <code>site_formula</code>.</p></dd>
 <dt>n_latent</dt>
-<dd><p>An integer which specifies the number of latent variables to generate. Defaults to <code>0</code>.</p></dd>
+<dd><p>An integer which specifies the number of latent variables to generate. Defaults to \(0\).</p></dd>
 <dt>site_effect</dt>
 <dd><p>A string indicating whether row effects are included as fixed effects (<code>"fixed"</code>), as random effects (<code>"random"</code>),<br>
 or not included (<code>"none"</code>) in the model. 
@@ -149,8 +149,8 @@ If <code>W_start</code> takes a scalar value, then that value will serve for all
 <dd><p>Starting values for random site effect parameters must be either a scalar or a \(n_{site}\)-length vector, ignored if <code>site_effect="none"</code>.
 If <code>alpha_start</code> takes a scalar value, then that value will serve for all of the \(\alpha\) parameters.</p></dd>
 <dt>V_alpha</dt>
-<dd><p>Starting value for variance of random site effect if <code>site_effect="random"</code> or constant variance of the Normal prior for the fixed site effect if <code>site_effect="fixed"</code>.
-Must be a strictly positive scalar, ignored if <code>site_effect="none"</code>.</p></dd>
+<dd><p>Starting value for variance of random site effect if <code>site_effect="random"</code> or constant variance of the Gaussian prior distribution for the fixed site effect if 
+<code>site_effect="fixed"</code>. Must be a strictly positive scalar, ignored if <code>site_effect="none"</code>.</p></dd>
 <dt>shape</dt>
 <dd><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.</p></dd>
@@ -213,7 +213,7 @@ The default variance is large and set to 10 for an uninformative flat prior.</p>
 <dt>mcmc.gamma</dt>
 <dd><p>A list by covariates of mcmc objects that contains the posterior samples for \(\gamma_p\) parameters with \(p=1,\ldots,np\) if <code>trait_data</code> is specified.</p></dd>
 <dt>mcmc.Deviance</dt>
-<dd><p>The posterior sample of the deviance \(D\), with \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\), is also provided.</p></dd>
+<dd><p>The posterior sample of the deviance (\(D\)) is also provided, with \(D\) defined as : \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\).</p></dd>
 <dt>log_theta_latent</dt>
 <dd><p>Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function.</p></dd>
 <dt>theta_latent</dt>
@@ -228,30 +228,34 @@ The default variance is large and set to 10 for an uninformative flat prior.</p>
 <p><b>Ecological process : </b>
 $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$
 where</p><table class="table table"><tr><td>if <code>n_latent=0</code> and <code>site_effect="none"</code></td><td>log\((\theta_{ij}) =  X_i \beta_j\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="none"</code></td><td>log\((\theta_{ij}) =  X_i \beta_j + W_i \lambda_j\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="fixed"</code></td><td>log\((\theta_{ij}) = X_i \beta_j  + \alpha_i\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code></td><td>log\((\theta_{ij}) = X_i \beta_j + W_i \lambda_j + \alpha_i\)</td></tr><tr><td>if <code>n_latent=0</code> and <code>site_effect="random"</code></td><td>log\((\theta_{ij}) = X_i \beta_j  + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr><tr><td>if <code>n_latent&gt;0</code> and <code>site_effect="random"</code></td><td>log\((\theta_{ij}) = X_i \beta_j + W_i \lambda_j + \alpha_i\) and \(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</td></tr></table><p>In the absence of data on species traits (<code>trait_data=NULL</code>), the effect of species \(j\): \(\beta_j\);
-follows the same a priori Gaussian distribution such that \(\beta_{jp} \sim \mathcal{N}(\mu_{\beta_p},V_{\beta_p})\),
+follows the same <em>a priori</em> Gaussian distribution such that \(\beta_j \sim \mathcal{N}_{np}(\mu_{\beta},V_{\beta})\),
 for each species.</p>
 <p>If species traits data are provided, the effect of species \(j\): \(\beta_j\);
-follows an a priori Gaussian distribution such that \(\beta_{jp} \sim \mathcal{N}(\mu_{\beta_{jp}},V_{\beta_p})\),
-where \(\mu_{\beta_jp} = \sum\limits_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different values for each species.
-We assume that \(\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})\) as prior distribution. 
-We define the matrix \(\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}\) such as :</p><table class="table table"><tr><td></td><td><strong>\(x_0\)</strong></td><td><strong>\(x_1\)</strong></td><td>...</td><td><strong>\(x_p\)</strong></td><td>...</td><td><strong>\(x_{np}\)</strong></td><td></td></tr><tr><td></td><td>__________</td><td>________</td><td>________</td><td>________</td><td>________</td><td>________</td><td></td></tr><tr><td><strong>\(t_0\)</strong> |</td><td><strong>\(\gamma_{0,0}\)</strong></td><td><em>\(\gamma_{0,1}\)</em></td><td>...</td><td><em>\(\gamma_{0,p}\)</em></td><td>...</td><td><em>\(\gamma_{0,np}\)</em></td><td>{ <em>effect of environmental variables</em></td></tr><tr><td>|</td><td><strong>intercept</strong></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><strong>\(t_1\)</strong> |</td><td>\(\gamma_{1,0}\)</td><td><em>\(\gamma_{1,1}\)</em></td><td>...</td><td><em>\(\gamma_{1,p}\)</em></td><td>...</td><td><em>\(\gamma_{1,np}\)</em></td><td></td></tr><tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr><tr><td><strong>\(t_k\)</strong> |</td><td><em>\(\gamma_{k,0}\)</em></td><td><em>\(\gamma_{k,1}\)</em></td><td>...</td><td>\(\gamma_{k,p}\)</td><td>...</td><td>\(\gamma_{k,np}\)</td><td></td></tr><tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr><tr><td><strong>\(t_{nt}\)</strong> |</td><td><em>\(\gamma_{nt,0}\)</em></td><td>\(\gamma_{nt,1}\)</td><td>...</td><td>\(\gamma_{nt,p}\)</td><td>...</td><td>\(\gamma_{nt,np}\)</td><td></td></tr><tr><td></td><td><em>average</em></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td><em>trait effect</em></td><td></td><td>interaction</td><td>traits</td><td>environment</td><td></td><td></td></tr></table></div>
+follows an <em>a priori</em> Gaussian distribution such that \(\beta_j \sim \mathcal{N}_{np}(\mu_{\beta_j},V_{\beta})\),
+where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different values for each species.</p>
+<p>We assume that \(\gamma_{kp} \sim \mathcal{N}(\mu_{\gamma_{kp}},V_{\gamma_{kp}})\) as prior distribution.</p>
+<p>We define the matrix \(\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}\) such as :</p>
+<table class="table table"><tr><td></td><td><strong>\(x_0\)</strong></td><td><strong>\(x_1\)</strong></td><td>...</td><td><strong>\(x_p\)</strong></td><td>...</td><td><strong>\(x_{np}\)</strong></td><td></td></tr><tr><td></td><td>__________</td><td>________</td><td>________</td><td>________</td><td>________</td><td>________</td><td></td></tr><tr><td><strong>\(t_0\)</strong> |</td><td><strong>\(\gamma_{0,0}\)</strong></td><td><em>\(\gamma_{0,1}\)</em></td><td>...</td><td><em>\(\gamma_{0,p}\)</em></td><td>...</td><td><em>\(\gamma_{0,np}\)</em></td><td>{ <em>effect of </em></td></tr><tr><td>|</td><td><strong>intercept</strong></td><td></td><td></td><td></td><td></td><td></td><td><em>environmental</em></td></tr><tr><td>|</td><td></td><td></td><td></td><td></td><td></td><td></td><td><em>   variables</em></td></tr><tr><td><strong>\(t_1\)</strong> |</td><td>\(\gamma_{1,0}\)</td><td><em>\(\gamma_{1,1}\)</em></td><td>...</td><td><em>\(\gamma_{1,p}\)</em></td><td>...</td><td><em>\(\gamma_{1,np}\)</em></td><td></td></tr><tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr><tr><td><strong>\(t_k\)</strong> |</td><td><em>\(\gamma_{k,0}\)</em></td><td><em>\(\gamma_{k,1}\)</em></td><td>...</td><td>\(\gamma_{k,p}\)</td><td>...</td><td>\(\gamma_{k,np}\)</td><td></td></tr><tr><td>... |</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td></td></tr><tr><td><strong>\(t_{nt}\)</strong> |</td><td><em>\(\gamma_{nt,0}\)</em></td><td>\(\gamma_{nt,1}\)</td><td>...</td><td>\(\gamma_{nt,p}\)</td><td>...</td><td>\(\gamma_{nt,np}\)</td><td></td></tr><tr><td></td><td><em>average</em></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td><em>trait effect</em></td><td></td><td>interaction</td><td>traits</td><td>environment</td><td></td><td></td></tr></table></div>
     <div id="references">
     <h2>References</h2>
-    
-<table class="table table"><tr><td>Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. <em>Applied Statistics</em>, 54, 1-20.</td></tr><tr><td>Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. <em>Ecological Applications</em>, 16, 33-50.</td></tr><tr><td>Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. <em>Ecology Letters</em>, 20, 561-576.</td></tr><tr><td></td></tr></table></div>
+    <p>Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. <em>Applied Statistics</em>, 54, 1-20.</p>
+<p>Latimer, A. M.; Wu, S. S.; Gelfand, A. E. and Silander, J. A. (2006) Building statistical models to analyze species distributions. <em>Ecological Applications</em>, 16, 33-50.</p>
+<p>Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. <em>Ecology Letters</em>, 20, 561-576.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/coda/man/plot.mcmc.html" class="external-link">plot.mcmc</a></code>, <code><a href="https://rdrr.io/pkg/coda/man/summary.mcmc.html" class="external-link">summary.mcmc</a></code> <code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code>  <code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
-    
-<table class="table table"><tr><td>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</td></tr><tr><td>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</td></tr><tr><td></td></tr></table></div>
+    <p>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</p> 
+<p>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#==============================================</span></span>
-<span class="r-in"><span class="co"># jSDM_poisson_log ()</span></span>
+<span class="r-in"><span class="co"># jSDM_poisson_log()</span></span>
 <span class="r-in"><span class="co"># Example with simulated data</span></span>
 <span class="r-in"><span class="co">#==============================================</span></span>
 <span class="r-in"></span>

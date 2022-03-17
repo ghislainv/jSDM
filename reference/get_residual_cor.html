@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
     <dl><dt>mod</dt>
 <dd><p>An object of class <code>"jSDM"</code></p></dd>
 <dt>prob</dt>
-<dd><p>A numeric scalar in the interval \((0,1)\) giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.</p></dd>
+<dd><p>A numeric scalar in the interval \((0,1)\) giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -87,7 +87,7 @@
 <dt>cov.upper</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the upper limits of the  (\(100 \times prob \%\)) HPD interval of variance-covariance matrices over the MCMC samples.</p></dd>
 <dt>cov.sig</dt>
-<dd><p>A \(n_{species} \times n_{species}\) matrix containing the value 0 corresponding to non-significant co-variances and the value 1 corresponding to the “significant" co-variances whose (\(100 \times prob \%\)) HPD interval over the MCMC samples does not contain zero.</p></dd>
+<dd><p>A \(n_{species} \times n_{species}\) matrix containing the value 1 corresponding to the “significant" co-variances and the value 0 corresponding to "non-significant" co-variances, whose (\(100 \times prob \%\)) HPD interval over the MCMC samples contain zero.</p></dd>
 <dt>cor.mean</dt>
 <dd><p>Average over the MCMC samples of the residual correlation matrix.</p></dd>
 <dt>cor.median</dt>
@@ -97,25 +97,29 @@
 <dt>cor.upper</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the upper limits of the  (\(100 \times prob \%\)) HPD interval of correlation matrices over the MCMC samples.</p></dd>
 <dt>cor.sig</dt>
-<dd><p>A \(n_{species} \times n_{species}\) matrix containing the value 0 corresponding to non-significant correlations and the value 1 corresponding to the “significant" correlations whose (\(100 \times prob \%\))  HPD interval over the MCMC samples does not contain zero.</p></dd>
+<dd><p>A \(n_{species} \times n_{species}\) matrix containing the value \(1\) corresponding to the “significant" correlations and the value \(0\) corresponding to "non-significant" correlations,
+ whose (\(100 \times prob \%\)) HPD interval over the MCMC samples contain zero.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_ij) avec i=1,\ldots, n_{species} et j=1,\ldots, n_{species}\) can be derived from the covariance in the latent variables such as :</p><table class="table table"><tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr><tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr></table><p>then we compute correlations from covariances :
+    <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_{ij})\) with \(i=1,\ldots, n_{species}\) and \(j=1,\ldots, n_{species}\) can be derived from the covariance in the latent variables such as :</p><table class="table table"><tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr><tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr></table><p>then we compute correlations from covariances :
 $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    
-<table class="table table"><tr><td>Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” Methods in Ecology and Evolution, 7, 744–750.</td></tr><tr><td>Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. Methods in Ecology and Evolution, 7, 549-555.</td></tr><tr><td>Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). Methods in Ecology and Evolution, 5, 397-406.</td></tr><tr><td></td></tr></table></div>
+    <p>Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” <em>Methods in Ecology and Evolution</em>, 7, 744–750.</p>
+<p>Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. <em>Methods in Ecology and Evolution</em>, 7, 549-555.</p>
+<p>Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). <em>Methods in Ecology and Evolution</em>, 5, 397-406.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="get_enviro_cor.html">get_enviro_cor</a></code> <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov2cor</a></code> <code><a href="jSDM-package.html">jSDM-package</a></code> <code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code> <code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code>  <code><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></code></p></div>
+    <div class="dont-index"><p><code><a href="get_enviro_cor.html">get_enviro_cor</a></code> <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov2cor</a></code> <code><a href="jSDM-package.html">jSDM-package</a></code> <code><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></code> <br><code><a href="jSDM_binomial_logit.html">jSDM_binomial_logit</a></code>  <code><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></code></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
-    
-<table class="table table"><tr><td>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</td></tr><tr><td>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</td></tr><tr><td></td></tr></table></div>
+    <p>Ghislain Vieilledent &lt;ghislain.vieilledent@cirad.fr&gt;</p>
+<p>Jeanne Clément &lt;jeanne.clement16@laposte.net&gt;</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>

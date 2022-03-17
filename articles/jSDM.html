@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -134,33 +134,33 @@
 <thead><tr class="header">
 <th align="left">function</th>
 <th align="left">data type</th>
-<th align="left">data format</th>
+<th align="center">data format</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left"><code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code></td>
 <td align="left">presence-absence</td>
-<td align="left">wide</td>
+<td align="center">wide</td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code></td>
 <td align="left">presence-absence</td>
-<td align="left">wide</td>
+<td align="center">wide</td>
 </tr>
 <tr class="odd">
 <td align="left"><code><a href="../reference/jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained()</a></code></td>
 <td align="left">presence-absence</td>
-<td align="left">wide</td>
+<td align="center">wide</td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/jSDM_binomial_probit_long_format.html">jSDM_binomial_probit_long_format()</a></code></td>
 <td align="left">presence-absence</td>
-<td align="left">long</td>
+<td align="center">long</td>
 </tr>
 <tr class="odd">
 <td align="left"><code><a href="../reference/jSDM_poisson_log.html">jSDM_poisson_log()</a></code></td>
 <td align="left">abundance</td>
-<td align="left">wide</td>
+<td align="center">wide</td>
 </tr>
 </tbody>
 </table>
@@ -221,9 +221,10 @@ where</p>
 </li>
 <li>
 <p><code><a href="../reference/jSDM_binomial_probit_sp_constrained.html">jSDM_binomial_probit_sp_constrained()</a></code> :</p>
-<p>This function allows to fit the same models than the function <code>jSDM_binomial_probit</code> except for models not including latent variables, indeed <code>n_latent</code> must be greater than zero in this function.
-It aims to improve the convergence of latent variable models fitting by selecting the species constrained to positive values on the diagonal of the <span class="math inline">\(\Lambda\)</span> matrix of factor loadings as the ones that structure themselves most clearly on each latent axis.
-This function returns the fitted JSDM considering as constrained species those that maximize on each latent axis the <span class="math inline">\(\hat{R}\)</span>s (<span class="citation">Gelman &amp; Rubin (<a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span>) computed from the factor loadings <span class="math inline">\(\lambda\)</span> of a first JSDM adjusted with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.</p>
+<p>This function allows to fit the same models than the function <code>jSDM_binomial_probit</code> except for models not including latent variables, indeed <code>n_latent</code> must be greater than zero in this function.<br>
+At first, the function fit a JSDM with the constrained species arbitrarily chosen as the first ones in the presence-absence data-set.<br>
+Then, the function evaluates the convergence of MCMC <span class="math inline">\(\lambda\)</span> chains using the Gelman-Rubin convergence diagnostic <span class="citation">(Gelman &amp; Rubin <a href="#ref-Gelman1992" role="doc-biblioref">1992</a>)</span> (<span class="math inline">\(\hat{R}\)</span>). It identifies the species (<span class="math inline">\(\hat{j}_l\)</span>) having the higher <span class="math inline">\(\hat{R}\)</span> for <span class="math inline">\(\lambda_{\hat{j}_l}\)</span>. These species drive the structure of the latent axis <span class="math inline">\(l\)</span>. The <span class="math inline">\(\lambda\)</span> corresponding to this species are constrained to be positive and placed on the diagonal of the <span class="math inline">\(\Lambda\)</span> matrix for fitting a second model.<br>
+This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.</p>
 </li>
 <li>
 <p><code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> :</p>
