@@ -72,7 +72,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site_lv(
   // Y
   dens_data.Y = Y;
   // T
-  dens_data.T = NA_REAL;
+  dens_data.T = arma::ones<arma::uvec>(NSITE);
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
@@ -97,8 +97,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_fixed_site_lv(
   dens_data.site_alpha = 0;
   dens_data.V_alpha_run = V_alpha;
   dens_data.alpha_run = alpha_start.t();
-  dens_data.shape = NA_REAL;
-  dens_data.rate = NA_REAL;
+  dens_data.shape = 0.0;
+  dens_data.rate = 0.0;
   
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //

@@ -75,7 +75,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site(
   // Y
   dens_data.Y = Y;
   // T
-  dens_data.T = NA_REAL;
+  dens_data.T = arma::ones<arma::uvec>(NSITE);
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
@@ -86,16 +86,16 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_rand_site(
   dens_data.V_beta = V_beta;
   dens_data.beta_run = beta_start;
   // lambda 
-  dens_data.pos_lambda =  NA_REAL;
-  dens_data.sp_lambda =  NA_REAL;
-  dens_data.mu_lambda = NA_REAL;
-  dens_data.V_lambda = NA_REAL;
-  dens_data.lambda_run = NA_REAL;
+  dens_data.pos_lambda = 0;
+  dens_data.sp_lambda = 0;
+  dens_data.mu_lambda = arma::zeros(NL);
+  dens_data.V_lambda = arma::zeros(NL);
+  dens_data.lambda_run = arma::zeros(NL,NSP);
   // W
-  dens_data.site_W = NA_REAL;
-  dens_data.pos_W = NA_REAL;
-  dens_data.V_W = NA_REAL;
-  dens_data.W_run = NA_REAL;
+  dens_data.site_W = 0;
+  dens_data.pos_W = 0;
+  dens_data.V_W = arma::zeros(NL);
+  dens_data.W_run = arma::zeros(NSITE,NL);
   // alpha
   dens_data.site_alpha = 0;
   dens_data.shape = shape;

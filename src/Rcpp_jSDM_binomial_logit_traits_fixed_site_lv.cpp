@@ -106,6 +106,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(
   dens_data.site_alpha = 0;
   dens_data.V_alpha_run = V_alpha;
   dens_data.alpha_run = alpha_start.t();
+  dens_data.shape = 0.0;
+  dens_data.rate = 0.0;
   
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //

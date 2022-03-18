@@ -100,11 +100,11 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_lv(
   dens_data.V_W = V_W;
   dens_data.W_run = W_start;
   // alpha
-  dens_data.site_alpha = NA_REAL;
-  dens_data.shape = NA_REAL;
-  dens_data.rate = NA_REAL;
-  dens_data.V_alpha_run = NA_REAL;
-  dens_data.alpha_run = NA_REAL;
+  dens_data.site_alpha = 0;
+  dens_data.shape = 0.0;
+  dens_data.rate = 0.0;
+  dens_data.V_alpha_run = 0.0;
+  dens_data.alpha_run = arma::zeros<arma::rowvec>(NSITE);
   
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //

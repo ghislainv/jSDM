@@ -87,16 +87,16 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_rand_site(
   dens_data.V_alpha_run = V_alpha_start;
   dens_data.alpha_run = alpha_start.t();
   // lambda 
-  dens_data.pos_lambda = NA_REAL;
-  dens_data.sp_lambda = NA_REAL;
-  dens_data.mu_lambda = NA_REAL;
-  dens_data.V_lambda = NA_REAL;
-  dens_data.lambda_run = NA_REAL;
+  dens_data.pos_lambda = 0;
+  dens_data.sp_lambda = 0;
+  dens_data.mu_lambda = arma::zeros(NL);
+  dens_data.V_lambda = arma::zeros(NL);
+  dens_data.lambda_run = arma::zeros(NL,NSP);
   // W
-  dens_data.site_W = NA_REAL;
-  dens_data.pos_W = NA_REAL;
-  dens_data.V_W = NA_REAL;
-  dens_data.W_run = NA_REAL;
+  dens_data.site_W = 0;
+  dens_data.pos_W = 0;
+  dens_data.V_W = arma::zeros(NL);
+  dens_data.W_run = arma::zeros(NSITE,NL);
 
   ////////////////////////////////////////////////////////////
   // Proposal variance and acceptance for adaptive sampling //

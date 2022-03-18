@@ -75,7 +75,7 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
   // Y
   dens_data.Y = Y;
   // T
-  dens_data.T = NA_REAL;
+  dens_data.T = arma::ones<arma::uvec>(NSITE);
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
