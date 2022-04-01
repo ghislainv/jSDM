@@ -14,7 +14,6 @@
 * New function [`plot_associations`](https://ecology.ghislainv.fr/jSDM/reference/plot_associations.html) to plot species-species associations.
 
 # jSDM 0.1.1
-* Add Code of conduct and Contributing section 
 * Use of `roxygen2` for documentation and NAMESPACE 
 * Rename  `jSDM_binomial_probit_block` the function `jSDM_probit_block`.
 * New function `jSDM_binomial_probit_block_long_format` for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.  
@@ -26,6 +25,7 @@
 * Add datasets ([`mosquitos`](https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html), [`fungi`](https://ecology.ghislainv.fr/jSDM/reference/fungi.html), [`eucalypts`](https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html), [`birds`](https://ecology.ghislainv.fr/jSDM/reference/birds.html), [`mites`](https://ecology.ghislainv.fr/jSDM/reference/mites.html), [`aravo`](https://ecology.ghislainv.fr/jSDM/reference/aravo.html)). 
 * Seven new vignettes ([Bayesian inference methods](https://ecology.ghislainv.fr/jSDM/articles/proof.html), [Poisson log-linear regression](https://ecology.ghislainv.fr/jSDM/articles/jSDM_poisson_log.html), [Bernoulli probit regression](https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_probit.html), [Bernoulli probit regression with missing data and species traits](https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_probit_long_format.html), [Binomial logistic regression](https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_logit.html), [Running jSDM in parallel](https://ecology.ghislainv.fr/jSDM/articles/jSDM_in_parallel.html), [Comparing SDMs and JSDMs](https://ecology.ghislainv.fr/jSDM/articles/SDM_JSDM.html) and [Comparison jSDM-Hmsc](https://ecology.ghislainv.fr/jSDM/articles/jSDM_Hmsc.html)) are available.
 * Complete and correct the vignette [Comparison jSDM-boral](https://ecology.ghislainv.fr/jSDM/articles/jSDM_boral.html). 
+* Add Code of conduct and Contributing section  
 * New package website available on GitHub: <https://ecology.ghislainv.fr/jSDM/>.
 
 # jSDM 0.1.0
@@ -34,6 +34,6 @@
 * Use of Rcpp and C++ code for Gibbs sampling
 * Use of GSL (RcppGSL) for random draws
 * Use of Armadillo (RcppArmadillo) for vector and matrix operations
-* Functions to fit models from Warton et al. 2014 _Trends in Ecology and Evolution_ (doi:10.1016/j.tree.2015.09.007).
+* Functions to fit models from Warton et al. 2014 _Trends in Ecology and Evolution_ ([doi:10.1016/j.tree.2015.09.007](https://doi.org/10.1016/j.tree.2015.09.007)).
 * We use `pkgdown` to build package website.
 * Package website available on GitHub: <https://ecology.ghislainv.fr/jSDM/>.
