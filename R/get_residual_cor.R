@@ -8,7 +8,7 @@
 #' @name get_residual_cor
 #' @aliases get_residual_cor
 #' @title Calculate the residual correlation matrix from a latent variable model (LVM)
-#' @description This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_{species} and l=1,\dots,n_{latent})}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
+#' @description This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\dots,n_{species}}{j=1,...,n_species} and \eqn{l=1,\dots,n_{latent})}{l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 #' @param mod An object of class \code{"jSDM"}
 #' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.
 #' @return results A list including : 

@@ -26,7 +26,7 @@ results A list including :
  whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 }
 \description{
-This function use coefficients \eqn{(\lambda_{jl} with j=1,\dots,n_{species} and l=1,\dots,n_{latent})}{(\lambda_jl with j=1,...,n_species and l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
+This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\dots,n_{species}}{j=1,...,n_species} and \eqn{l=1,\dots,n_{latent})}{l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 }
 \details{
 After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
