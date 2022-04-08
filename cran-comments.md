@@ -18,6 +18,17 @@ There was sometimes 1 NOTE:
   sub-directories of 1Mb or more:  
     - libs   3.2Mb 
     
+ 
+## clang-UBSAN
+
+jSDM-Ex.Rout:Rcpp_jSDM_poisson_log_rand_site_lv.cpp:78:17: runtime
+error: nan is outside the range of representable values of type
+'unsigned int'
+
+and lots more.
+
+I have fixed this issues. 
+    
 # jSDM v0.2.0
 ## R CMD check results 
 
