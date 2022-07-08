@@ -1,4 +1,4 @@
-context("test-jSDM_binomial_logit")
+#context("test-jSDM_binomial_logit")
 
 #================ Single species distribution model (SDM) =======================
 

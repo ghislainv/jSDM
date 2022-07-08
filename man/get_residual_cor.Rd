@@ -4,22 +4,25 @@
 \alias{get_residual_cor}
 \title{Calculate the residual correlation matrix from a latent variable model (LVM)}
 \usage{
-get_residual_cor(mod, prob = 0.95)
+get_residual_cor(mod, prob = 0.95, type = "mean")
 }
 \arguments{
 \item{mod}{An object of class \code{"jSDM"}}
 
 \item{prob}{A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.}
+
+\item{type}{A choice of either the posterior median (\code{type = "median"}) or posterior mean (\code{type = "mean"}), which are then treated as estimates and the fitted values are calculated from.
+Default is posterior mean.}
 }
 \value{
 results A list including : 
-\item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.} 
-\item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
+\item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix, if \code{type = "mean"}.} 
+\item{cov.median}{Median over the MCMC samples of the variance-covariance matrix, if \code{type = "median"}.}
 \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 \item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 \item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 1 corresponding to the “significant" co-variances and the value 0 corresponding to "non-significant" co-variances, whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
-\item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
-\item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
+\item{cor.mean}{Average over the MCMC samples of the residual correlation matrix, if \code{type = "mean"}.}
+\item{cor.median}{Median over the MCMC samples of the residual correlation matrix, if \code{type = "median"}.}
 \item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 \item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 \item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value \eqn{1} corresponding to the “significant" correlations and the value \eqn{0} corresponding to "non-significant" correlations,
@@ -30,9 +33,7 @@ This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\d
 }
 \details{
 After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
-\tabular{lll}{
-\eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
-         \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
+\eqn{\Sigma_{ij}=\lambda_i .\lambda_j'}{Sigma_ij=\lambda_i . \lambda_j'},
 then we compute correlations from covariances :
 \deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 }
@@ -72,7 +73,7 @@ library(jSDM)
                              # Various
                              seed=1234, verbose=1)
 # Calcul of residual correlation between species 
-result <- get_residual_cor(mod, prob=0.95)
+result <- get_residual_cor(mod, prob=0.95, type="mean")
 # Residual variance-covariance matrix
 result$cov.mean
 ## All non-significant co-variances are set to zero.

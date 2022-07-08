@@ -135,7 +135,8 @@
 #'   \tab \emph{trait effect} \tab \tab interaction \tab traits \tab environment \tab \tab \cr 
 #' }
 #'  
-#' @examples #==============================================
+#' @examples 
+#' #==============================================
 #' # jSDM_poisson_log()
 #' # Example with simulated data
 #' #==============================================

@@ -11,23 +11,23 @@
 #' @description This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\dots,n_{species}}{j=1,...,n_species} and \eqn{l=1,\dots,n_{latent})}{l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 #' @param mod An object of class \code{"jSDM"}
 #' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.
+#' @param type A choice of either the posterior median (\code{type = "median"}) or posterior mean (\code{type = "mean"}), which are then treated as estimates and the fitted values are calculated from.
+#' Default is posterior mean.
 #' @return results A list including : 
-#' \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix.} 
-#' \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix.}
+#' \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix, if \code{type = "mean"}.} 
+#' \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix, if \code{type = "median"}.}
 #' \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 #' \item{cov.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
 #' \item{cov.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value 1 corresponding to the “significant" co-variances and the value 0 corresponding to "non-significant" co-variances, whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
-#' \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix.}
-#' \item{cor.median}{Median over the MCMC samples of the residual correlation matrix.}
+#' \item{cor.mean}{Average over the MCMC samples of the residual correlation matrix, if \code{type = "mean"}.}
+#' \item{cor.median}{Median over the MCMC samples of the residual correlation matrix, if \code{type = "median"}.}
 #' \item{cor.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 #' \item{cor.upper}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the upper limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of correlation matrices over the MCMC samples.}
 #' \item{cor.sig}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the value \eqn{1} corresponding to the “significant" correlations and the value \eqn{0} corresponding to "non-significant" correlations,
 #'  whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 #'
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
-#' \tabular{lll}{
-#' \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
-#'          \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
+#' \eqn{\Sigma_{ij}=\lambda_i .\lambda_j'}{Sigma_ij=\lambda_i . \lambda_j'},
 #' then we compute correlations from covariances :
 #'\deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 #' @author
@@ -80,7 +80,7 @@
 #'                              # Various
 #'                              seed=1234, verbose=1)
 #' # Calcul of residual correlation between species 
-#' result <- get_residual_cor(mod, prob=0.95)
+#' result <- get_residual_cor(mod, prob=0.95, type="mean")
 #' # Residual variance-covariance matrix
 #' result$cov.mean
 #' ## All non-significant co-variances are set to zero.
@@ -96,7 +96,7 @@
 
 
 # Calculate the residual correlation matrix from a LVM
-get_residual_cor <- function(mod, prob=0.95) {
+get_residual_cor <- function(mod, prob=0.95, type="mean") {
   #== Check
   if(!class(mod)=="jSDM"){
     stop("Please provide an object of class jSDM in", calling.function(), call.=FALSE)
@@ -118,6 +118,7 @@ get_residual_cor <- function(mod, prob=0.95) {
     stop("Please specify a probability for prob and call ", calling.function(), " again.",
          call.=FALSE)
   }
+  if (!(type %in% c("mean","median"))) {stop("type must be \"mean\" or \"median\"")}
   if(!is.null(mod$model_spec$presence_data)){
     n.species <- ncol(mod$model_spec$presence_data)
   }
@@ -133,7 +134,7 @@ get_residual_cor <- function(mod, prob=0.95) {
   
   for(t in 1:n.mcmc) { 
     lv.coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("lambda",colnames(mod$mcmc.sp[[1]]))))
-    Tau.mat <- lv.coefs%*%t(lv.coefs) + diag(n.species)
+    Tau.mat <- lv.coefs%*%t(lv.coefs) 
     Tau.arr[t,] <- as.vector(Tau.mat) 
     Tau.cor.mat <- cov2cor(Tau.mat)
     Tau.cor.arr[t,] <- as.vector(Tau.cor.mat) 
@@ -159,11 +160,7 @@ get_residual_cor <- function(mod, prob=0.95) {
       sig.Tau.cor[j, jprim] <-  ifelse((0 > get.hpd.cors[1]) & (0 < get.hpd.cors[2]), 0, 1)
     }
   }
-  ## Average/Median over the MCMC samples
-  Tau.mat.mean <-  matrix(apply(Tau.arr,2,mean),n.species,byrow=F)
-  Tau.mat.median <-  matrix(apply(Tau.arr,2,median),n.species,byrow=F)
-  Tau.cor.mean <- matrix(apply(Tau.cor.arr,2,mean),n.species,byrow=F)
-  Tau.cor.median <- matrix(apply(Tau.cor.arr,2,median),n.species,byrow=F)
+  
   # Species names in results 
   if(!is.null(mod$model_spec$presence_data)){
     names.sp <- colnames(mod$model_spec$presence_data)
@@ -174,13 +171,31 @@ get_residual_cor <- function(mod, prob=0.95) {
   if(!is.null(mod$model_spec$data)){
     names.sp <- unique(mod$model_spec$data$species)
   }
-  dimnames(Tau.mat.mean) <- dimnames(Tau.mat.median) <- dimnames(cov.lower) <- dimnames(cov.upper) <- dimnames(sig.Tau.mat) <- list(names.sp, names.sp)
-  dimnames(Tau.cor.mean) <- dimnames(Tau.cor.median) <- dimnames(cor.lower) <- dimnames(cor.upper) <- dimnames(sig.Tau.cor) <- list(names.sp, names.sp)
+  dimnames(cor.lower) <- dimnames(cor.upper) <- dimnames(sig.Tau.cor) <- list(names.sp, names.sp)
+  dimnames(cov.lower) <- dimnames(cov.upper) <- dimnames(sig.Tau.mat) <- list(names.sp, names.sp)
+  ## Average/Median over the MCMC samples
+  if (type == "median") {
+  Tau.mat.median <-  matrix(apply(Tau.arr,2,median),n.species,byrow=F)
+  Tau.cor.median <- matrix(apply(Tau.cor.arr,2,median),n.species,byrow=F)
+  dimnames(Tau.cor.median) <- dimnames(Tau.mat.median) <- list(names.sp, names.sp)
   # Results 
-  results <- list(cov.mean = Tau.mat.mean, cov.median = Tau.mat.median,
+  results <- list(cov.median = Tau.mat.median,
                   cov.lower= cov.lower, cov.upper = cov.upper, cov.sig = sig.Tau.mat,
-                  cor.mean = Tau.cor.mean, cor.median = Tau.cor.median,
+                  cor.median = Tau.cor.median,
                   cor.lower=cor.lower, cor.upper=cor.upper, cor.sig=sig.Tau.cor)
-  return(results)
+  }
+  if (type == "mean") {
+  Tau.mat.mean <-  matrix(apply(Tau.arr,2,mean),n.species,byrow=F)
+  Tau.cor.mean <- matrix(apply(Tau.cor.arr,2,mean),n.species,byrow=F)
+  dimnames(Tau.cor.mean) <- dimnames(Tau.mat.mean) <- list(names.sp, names.sp)
+  # Results 
+  results <- list(cov.mean = Tau.mat.mean, 
+                  cov.lower= cov.lower, cov.upper = cov.upper, cov.sig = sig.Tau.mat,
+                  cor.mean = Tau.cor.mean, 
+                  cor.lower=cor.lower, cor.upper=cor.upper, cor.sig=sig.Tau.cor)
+  
+  }
+
+    return(results)
 }	
 

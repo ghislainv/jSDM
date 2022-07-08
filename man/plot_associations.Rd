@@ -9,6 +9,7 @@ plot_associations(
   R,
   radius = 5,
   main = NULL,
+  cex.main = NULL,
   circleBreak = FALSE,
   top = 10L,
   occ = NULL,
@@ -28,6 +29,8 @@ plot_associations(
 \item{radius}{circle's radius}
 
 \item{main}{title}
+
+\item{cex.main}{title's character size. NULL and NA are equivalent to 1.0.}
 
 \item{circleBreak}{circle break or not}
 

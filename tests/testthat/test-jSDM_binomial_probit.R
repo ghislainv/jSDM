@@ -1,4 +1,4 @@
-context("test-jSDM_binomial_probit")
+#context("test-jSDM_binomial_probit")
 #== Without traits ======
 #===== Simple species distribution model (SDM) ==========
 

@@ -1,4 +1,4 @@
-context("test-jSDM_poisson_log")
+#context("test-jSDM_poisson_log")
 
 #================= Single species distribution model (SDM) ======================
 

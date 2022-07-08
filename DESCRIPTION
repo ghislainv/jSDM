@@ -7,8 +7,23 @@ Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS, parall
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
-Suggests: knitr, kableExtra, raster, sp, rgdal, dplyr, rmarkdown, bookdown,
-          testthat, boral, Hmsc, BayesComm, snow, snowfall, ggplot2
+Suggests: 
+    knitr,
+    kableExtra,
+    raster,
+    sp,
+    rgdal,
+    dplyr,
+    rmarkdown,
+    bookdown,
+    testthat (>= 3.0.0),
+    boral,
+    Hmsc,
+    BayesComm,
+    snow,
+    snowfall,
+    ggplot2,
+    covr
 Authors@R: c(
     person("Jeanne", "Clément", , "jeanne.clement16@laposte.net", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5228-5015")),
@@ -30,5 +45,6 @@ URL: https://ecology.ghislainv.fr/jSDM/, https://github.com/ghislainv/jSDM
 BugReports: https://github.com/ghislainv/jSDM/issues
 LazyLoad: yes
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr
+Config/testthat/edition: 3

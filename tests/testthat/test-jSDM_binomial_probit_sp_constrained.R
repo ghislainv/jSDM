@@ -1,4 +1,4 @@
-context("test-jSDM_binomial_probit_sp_constrained")
+#context("test-jSDM_binomial_probit_sp_constrained")
 #== Without traits ======
 #======== Joint species distribution model (JSDM) ====================
 #============= JSDM with latent variables ===============

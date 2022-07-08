@@ -17,7 +17,7 @@
 #' Defaults to 0.95.
 #' @return results A list including : 
 #' \item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
-#' \item{sig.cor}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior density (HPD) interval does not contain zero. All non-significant correlations are set to zero.}
+#' \item{cor.sig}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior density (HPD) interval does not contain zero. All non-significant correlations are set to zero.}
 #' \item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}
 #' 
 #' @details In both independent response and correlated response models, where each of the columns of the response matrix \eqn{Y} are fitted to a set of explanatory variables given by \eqn{X},
@@ -74,7 +74,7 @@
 #'                              seed=1234, verbose=1)
 #' # Calcul of residual correlation between species 
 #'  enviro.cors <- get_enviro_cor(mod)
-# corrplot::corrplot(enviro.cors$sig.cor, title = "Shared response correlations",
+# corrplot::corrplot(enviro.cors$cor.sig, title = "Shared response correlations",
 #                    type = "lower", diag = FALSE, mar = c(3,0.5,2,1), tl.srt = 45)
 #' @keywords stats::cov2cor
 #' @importFrom stats cov cor
@@ -90,12 +90,7 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   if (prob<0 | prob>1) {stop("prob must be a probability between (0,1)")}
   model.spec <- mod$model_spec
   n.X.coeff <- nrow(model.spec$beta_start)
-  if (n.X.coeff==0) {
-    cat("Error: The object provided is not a latent variable model (LVM).\n
-        The lambdas parameters needed to compute the residual correlation matrix have not been estimated. \n")
-    stop("Please fit a LVM on your data and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
+
   if(!is.null(model.spec$presence_data)){
     y <- model.spec$presence_data
     species <- colnames(y)
@@ -138,6 +133,12 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   if (length(grep("beta",colnames(mod$mcmc.sp[[1]]))) == 0) {
     stop("Cannot find MCMC sample corresponding to coefficients for X")
   }
+  if (n.X.coeff==0) {
+    cat("Error: The model provided don't include covariates.\n
+        The beta parameters needed to compute the environmental correlation matrix have not been estimated. \n")
+    stop("Please fit a model including covariates on your data and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
   enviro_cor_mat <- enviro_cor_mat_cilower <- enviro_cor_mat_ciupper <- enviro_cov_mat <- matrix(0, n.species, n.species)
   sig_enviro_cor_mat <- matrix(0, n.species, n.species)
   rownames(enviro_cor_mat) <- rownames(enviro_cor_mat_cilower) <- rownames(enviro_cor_mat_ciupper) <- rownames(enviro_cov_mat) <- rownames(sig_enviro_cor_mat) <- species
@@ -177,6 +178,6 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   
   return(list(cor = enviro_cor_mat, cor.lower = enviro_cor_mat_cilower,
               cor.upper = enviro_cor_mat_ciupper,
-              sig.cor = sig_enviro_cor_mat,
+              cor.sig = sig_enviro_cor_mat,
               cov = enviro_cov_mat))
 }

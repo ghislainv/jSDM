@@ -7,7 +7,7 @@
 
 #' @name jSDM_binomial_probit_sp_constrained 
 #' @aliases jSDM_binomial_probit_sp_constrained 
-#' @title Binomial probit regression with the chosen constrained species
+#' @title Binomial probit regression with selected constrained species
 #' @description The \code{jSDM_binomial_probit_sp_constrained} function performs in parallel Binomial probit regressions in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters. Then the function evaluates the convergence of MCMC \eqn{\lambda} chains using the Gelman-Rubin convergence diagnostic (\eqn{\hat{R}}). \eqn{\hat{R}} is computed using the \code{\link[coda]{gelman.diag}} function. We identify the species (\eqn{\hat{j}_l}) having the higher \eqn{\hat{R}} for \eqn{\lambda_{\hat{j}_l}}. These species drive the structure of the latent axis \eqn{l}. The \eqn{\lambda} corresponding to this species are constrained to be positive and placed on the diagonal of the \eqn{\Lambda} matrix for fitting a second model. This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.
 #' @param burnin The number of burn-in iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc} for each chain.
@@ -419,6 +419,7 @@
 #' 
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
+#' 
 if(getRversion() >= "2.15.1"){ 
   utils::globalVariables(c("i"))
 }
@@ -443,6 +444,7 @@ jSDM_binomial_probit_sp_constrained <- function(# Iteration
                                                 shape=0.5, rate=0.0005,
                                                 seed=c(123, 1234), verbose=1)
 {   
+  
   #===== Iterations =====
   ngibbs <- mcmc+burnin
   nthin <- thin

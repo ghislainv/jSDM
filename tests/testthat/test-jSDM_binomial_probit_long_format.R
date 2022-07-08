@@ -1,4 +1,4 @@
-context("test-jSDM_binomial_probit_long_format")
+#context("test-jSDM_binomial_probit_long_format")
 
 #=== Without traits =======
 

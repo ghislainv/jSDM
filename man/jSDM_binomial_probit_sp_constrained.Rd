@@ -2,7 +2,7 @@
 % Please edit documentation in R/jSDM_binomial_probit_sp_constrained.R
 \name{jSDM_binomial_probit_sp_constrained}
 \alias{jSDM_binomial_probit_sp_constrained}
-\title{Binomial probit regression with the chosen constrained species}
+\title{Binomial probit regression with selected constrained species}
 \arguments{
 \item{burnin}{The number of burn-in iterations for the sampler.}
 

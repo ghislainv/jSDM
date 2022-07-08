@@ -157,6 +157,7 @@ add_species_arrows = function(radius = 5.0, label = "Species", reverse = TRUE, s
 #' @param R  matrix of correlation \eqn{R}
 #' @param radius circle's radius
 #' @param main title
+#' @param cex.main title's character size. NULL and NA are equivalent to 1.0.
 #' @param circleBreak circle break or not
 #' @param top number of top negative and positive associations to consider
 #' @param occ species occurence data
@@ -232,7 +233,7 @@ add_species_arrows = function(radius = 5.0, label = "Species", reverse = TRUE, s
 #' plot_associations(R, env_effect = env_effect, species_order="main env_effect")
 #' @importFrom graphics polygon text 
 #' @export
-plot_associations = function(R, radius = 5.0, main = NULL, 
+plot_associations = function(R, radius = 5.0, main = NULL, cex.main=NULL, 
                              circleBreak = FALSE, top = 10L, occ = NULL, env_effect=NULL, 
                              cols_association = c("#FF0000", "#BF003F", "#7F007F",
                                                   "#3F00BF", "#0000FF"),
@@ -252,7 +253,7 @@ plot_associations = function(R, radius = 5.0, main = NULL,
     lineSeq = 0.94*radius
     nseg = 100
     graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = F, xlab = "", ylab = "")
-    if(!is.null(main)) graphics::text(x = 0, y = radius*1.35, pos = 3, xpd = NA, labels = main)
+    if(!is.null(main)) graphics::text(x = 0, y = radius*1.25, pos = 3, xpd = NA, labels = main, cex=cex.main)
     xx = lineSeq*cos( seq(0,2*pi, length.out=nseg))
     yy = lineSeq*sin( seq(0,2*pi, length.out=nseg))
     
@@ -347,7 +348,7 @@ plot_associations = function(R, radius = 5.0, main = NULL,
     lineSeq = 0.94*radius
     nseg = 100
     graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = F, xlab = "", ylab = "")
-    if(!is.null(main)) graphics::text(x = 0, y = radius*1.35, pos = 3, xpd = NA, labels = main)
+    if(!is.null(main)) graphics::text(x = 0, y = radius*1.35, pos = 3, xpd = NA, labels = main, cex=cex.main)
     xx = lineSeq*cos( seq(0,2*pi, length.out=nseg))
     yy = lineSeq*sin( seq(0,2*pi, length.out=nseg))
     polygon(xx,yy, col= "white", border = "black", lty = 1, lwd = 1)
@@ -386,7 +387,8 @@ plot_associations = function(R, radius = 5.0, main = NULL,
       angleName = (from+to)/2
       if(angleName > 180) reverse = TRUE
       else reverse = FALSE
-      curve_text(angleName, label = colnames(env_effect)[i],reverse = reverse, radius=radius+d, middle = TRUE, extend = 1.17, col = cols[i])
+      curve_text(angleName, label = colnames(env_effect)[i],reverse = reverse, radius=radius+d,
+                 middle = TRUE, extend = 1.17, col = cols[i])
       #y
       polygon(x, y, xpd = NA,col = cols[i])
       text(srt = 0, 
