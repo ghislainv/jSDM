@@ -187,7 +187,7 @@ p(\sigma^2 \ | \ x) & \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 
 ## Gibbs sampler principle 
 
-In the Bayesian framework, Gibbs' algorithm produces a realization of the parameter $\theta=(\theta_),\ldots,\theta_m)$ according to the *a posteriori* law $\Pi(\theta \ | \ x)$ as soon as we are able to express the conditional laws: $\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)$ for $i =1,\ldots,m$.  
+In the Bayesian framework, Gibbs' algorithm produces a realization of the parameter $\theta=(\theta_1,\ldots,\theta_m)$ according to the *a posteriori* law $\Pi(\theta \ | \ x)$ as soon as we are able to express the conditional laws: $\Pi(\theta_i | \theta_1,\dots,\theta_{i-1},\theta_{i+1},\ldots,\theta_m, x)$ for $i =1,\ldots,m$.  
 
 **Gibbs sampling** consists of: 
 
