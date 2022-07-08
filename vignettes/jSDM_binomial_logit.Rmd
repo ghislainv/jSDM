@@ -190,10 +190,7 @@ hist(mod_birds_jSDM_logit$theta_latent, main = "Predicted theta", xlab ="predict
 # Matrice of correlations 
 
  After fitting the jSDM with latent variables, the **fullspecies residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can bederived from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \begin{cases}
- \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
- \end{cases}$$, then we compute correlations from covariances :
+ $$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 We use the function `plot_residual_cor()` to compute and display the residual correlation matrix between species : 

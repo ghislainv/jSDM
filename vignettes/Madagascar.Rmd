@@ -84,9 +84,8 @@ save(PA, file="~/Documents/projet_BioSceneMada/Report/data/PA.RData")
 
 ## Current environmental variables
 
-Among the climatic and environmental data available on the site \url{https://madaclim.cirad.fr} concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1950-2000).
+Among the climatic and environmental data available on the site \url{https://madaclim.cirad.fr} concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1960-1990).
 We choose to use the following variables because they have an ecological meaning which makes them easily interpretable and are little correlated between them according to the article @Vieilledent2013 : 
-the average annual precipitation (mm)
 
 - **temp**: the average annual temperature ($^\circ C\times 10$).
 - **prec**: the average annual precipitation (mm).
@@ -210,7 +209,7 @@ This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = \alph
 
 ## Parameters inference
 
-We fit a binomial joint species distribution model, including two latent variables and random site effect using the `jSDM_binomial_probit()` function to perform binomial probit regression considering all the species from the data described above, by performing $100 000$ iterations including $40 000$ of burn-in and we retain $N_{samp}=1 000$ values for each parameter of the model.
+We fit a binomial joint species distribution model, including two latent variables and random site effect using the `jSDM_binomial_probit()` function to perform binomial probit regression considering all the species from the data described above, by performing $80 000$ iterations including $40 000$ of burn-in and we retain $N_{samp}=1 000$ values for each parameter of the model.
 We use species's prevalence as starting values for species intercept $\beta_0$. 
 
 ```{r fit-jSDM-Mada-data, echo=TRUE, eval=FALSE}
@@ -470,10 +469,7 @@ Moreover, we can see that the observed species richness is greater in the moist 
 ## Residual correlation 
 
  After fitting the JSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, n_{site}}_{j=1,\ldots, n_{species}}$ can be derived from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \begin{cases}
- \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
- \end{cases}$$, then we compute correlations from covariances :
+ $$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
   
 ```{r residual-correlation, eval=FALSE}
@@ -484,7 +480,7 @@ Tau.cor.arr <- matrix(NA,n.mcmc,n.species^2)
 
 for(t in 1:n.mcmc) { 
   lv.coefs <- t(sapply(mod_all$mcmc.sp, "[", t, grep("lambda",colnames(mod_all$mcmc.sp[[1]]))))
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(n.species)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) 
   Tau.cor.mat <- cov2cor(Tau.mat)
   Tau.cor.arr[t,] <- as.vector(Tau.cor.mat) 
 }
@@ -493,7 +489,7 @@ R <- matrix(apply(Tau.cor.arr,2,mean),n.species,byrow=F)
 write.csv(R, file ="~/Documents/projet_BioSceneMada/Report/data/R.csv", row.names = F)
 ```
 
-We plot the top 100 estimated residual correlations between species based on their number of observed occurrences and environmental preferences. 
+We plot the top 50 estimated residual correlations between species based on their number of observed occurrences and environmental preferences. 
 
 ```{r plot-associations, echo=TRUE, fig.dim=c(6,6)}
 # Forest inventory 
@@ -532,10 +528,9 @@ The figure above shows the correlations between species, with the 483 species so
 knitr::include_graphics("Madagascar_files/figure-html/plot-associations-2.png")
 ```
 
-The figure above shows the same covariance structure but with the species sorted according to their largest environmental coefficients ($\beta$) (the outer ring shows the distribution of
-environmental effect for species within the sample).
+The figure above shows the same covariance structure but with the species sorted according to their largest environmental coefficients ($\beta$) (the outer ring shows the distribution of environmental effect for species within the sample).
 
-This representation of associations between species allows us to observe the positive or negative correlations between species which can be interpreted in terms of positive or negative influence of the presence of a species on the on the probability of occurrence of another.
+This representation of associations between species allows us to observe the positive or negative correlations between species which can be interpreted in terms of positive or negative influence of the presence of a species on the probability of occurrence of another.
 
 # Intrapolation of parameters between inventory sites 
 
@@ -671,7 +666,7 @@ knitr::include_graphics("Madagascar_files/figure-html/RST-W2-1.png")
 
 We calculate the probabilities of species presences between inventory sites using interpolated site's parameters.
 
-```{r calcul-theta, eval=FALSE, echo=FALSE}
+```{r calcul-theta, eval=FALSE}
 remove(list = ls())
 # RST interpolation of sites parameters 
 rst_alpha <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst.tif")
@@ -865,7 +860,7 @@ richness between sites (one site is richer in species than another site).
 
 Diversity $\beta$ is a measure of biodiversity that compares the diversity of species between ecosystems or along environmental gradients, using the number of taxa that are unique to each ecosystem.  
 
-In order to estimate this indicator, we proceed in the same way as in the @Allnutt2008 article by performing a standard PCA on the interpolated probabilities of occurrence of species for each pixel of the displayed image. We use the coordinates obtained for the first three axes of the PCA that reflect the composition of the species community likely to occupy the corresponding pixel. These coordinates are scaled $[0.255]$ so that they can be represented by red color levels for the first axis, green for the second and blue for the third. The combination of these three color levels determines the coloring of each pixel in the displayed $\beta$ diversity map. Therefore, a color difference between two pixels indicates that the species present are not the same, while pixels of identical color host communities of similar species. 
+In order to estimate this indicator, we proceed in the same way as in the article @Allnutt2008 by performing a standard PCA on the interpolated probabilities of occurrence of species for each pixel of the displayed image. We use the coordinates obtained for the first three axes of the PCA that reflect the composition of the species community likely to occupy the corresponding pixel. These coordinates are scaled $[0.255]$ so that they can be represented by red color levels for the first axis, green for the second and blue for the third. The combination of these three color levels determines the coloring of each pixel in the displayed $\beta$ diversity map. Therefore, a color difference between two pixels indicates that the species present are not the same, while pixels of identical color host communities of similar species. 
 
 ### Current species turn-over
 
@@ -986,12 +981,9 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-diversity-beta-1.png"
 knitr::include_graphics("Madagascar_files/figure-html/mada_forest_type.jpg")
 ```
 
-We can see that the estimated map of $\beta$-diversity agrees with the map of Madagascar’s forest types from @Vieilledent2018.     
+We can see that the estimated map of $\beta$-diversity agrees with the map of Madagascar’s forest types from the article @Vieilledent2018.     
 
-Indeed, communities of species represented by shades of blue and green
-correspond to the eastern moist forest, communities represented by
-shades of red match the western dry forest and communities in magenta
-correspond to the southern spiny forest.    
+Indeed, communities of species represented by shades of blue and green correspond to the eastern moist forest, communities represented by shades of red match the western dry forest and communities in magenta correspond to the southern spiny forest.    
 
 Moreover, the $\beta$-diversity map we obtain allows to identify substantially different species communities within these three forest types. For example, we can clearly identify three different tree communities (in blue, green, and black) within the eastern moist forest.
 

@@ -181,22 +181,22 @@ stopCluster(clust)
 
 The Gelman–Rubin diagnostic evaluates MCMC convergence by analyzing the difference between multiple Markov chains. The convergence is assessed by comparing the estimated between-chains and within-chain variances for each model parameter. Large differences between these variances indicate nonconvergence. See @Gelman1992 and @Brooks1998 for the detailed description of the method.
 
-Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{𝑚t}\right)_{t=1}^N$ be the $𝑚$th simulated chain, $𝑚=1,\dots,𝑀$. Let $\hat{\theta}_𝑚=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_𝑚=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_𝑚)^2$ be the sample posterior mean and variance of the $𝑚$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{𝑀}\sum\limits_{m=1}^𝑀 \hat{\theta}_m$.
+Suppose we have $M$ chains, each of length $N$, although the chains may be of different lengths. The same-length assumption simplifies the formulas and is used for convenience. For a model parameter $\theta$, let $\left(\theta_{mt}\right)_{t=1}^N$ be the $m$th simulated chain, $m=1,\dots,M$. Let $\hat{\theta}_m=\frac{1}{N}\sum\limits_{t=1}^N \hat{\theta}_{mt}$ and $\hat{\sigma}^2_m=\frac{1}{N-1}\sum\limits_{t=1}^N (\hat{\theta}_{mt}-\hat{\theta}_m)^2$ be the sample posterior mean and variance of the $m$th chain, and let the overall sample posterior mean be $\hat{\theta}=\frac{1}{M}\sum\limits_{m=1}^M \hat{\theta}_m$.
 
 The between-chains and within-chain variances are given by
-$$B=\frac{N}{M-1}\sum\limits_{m=1}^𝑀 (\hat{\theta}_m - \hat{\theta})^2$$
-$$W=\frac{1}{M}\sum\limits_{m=1}^𝑀\hat{\sigma}^2_m$$
+$$B=\frac{N}{M-1}\sum\limits_{m=1}^M (\hat{\theta}_m - \hat{\theta})^2$$
+$$W=\frac{1}{M}\sum\limits_{m=1}^M\hat{\sigma}^2_m$$
 
  Under certain stationarity conditions, the pooled variance : 
  
  $$\hat{V}=\frac{N-1}{N}W + \frac{M+1}{MN}B$$
  
-is an unbiased estimator of the marginal posterior variance of $\theta$ (@Gelman1992). The potential scale reduction factor (PSRF) is defined to be the ratio of $\hat{𝑉}$ and $𝑊$. If the $𝑀$ chains have converged to the target posterior distribution, then PSRF should be close to 1. The article @Brooks1998 corrected the original PSRF by accounting for sampling variability as follows:
+is an unbiased estimator of the marginal posterior variance of $\theta$ (@Gelman1992). The potential scale reduction factor (PSRF) is defined to be the ratio of $\hat{V}$ and $W$. If the $M$ chains have converged to the target posterior distribution, then PSRF should be close to 1. The article @Brooks1998 corrected the original PSRF by accounting for sampling variability as follows:
 $$ \hat{R}= \sqrt{\frac{\hat{d}+3}{\hat{d}+1}\frac{\hat{V}}{W}}$$
 
-where $\hat{d}$  is the degrees of freedom estimate of a $𝑡$ distribution.
+where $\hat{d}$  is the degrees of freedom estimate of a $t$ distribution.
 
-PSRF estimates the potential decrease in the between-chains variability $𝐵$ with respect to the within-chain variability $𝑊$. If $\hat{R}$ is large, then longer simulation sequences are expected to either decrease $𝐵$ or increase $𝑊$ because the simulations have not yet explored the full posterior distribution. As the article @Brooks1998 have suggested, if $\hat{R} < 1.2$ for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition $\hat{R} < 1.1$.
+PSRF estimates the potential decrease in the between-chains variability $B$ with respect to the within-chain variability $W$. If $\hat{R}$ is large, then longer simulation sequences are expected to either decrease $B$ or increase $W$ because the simulations have not yet explored the full posterior distribution. As the article @Brooks1998 have suggested, if $\hat{R} < 1.2$ for all model parameters, one can be fairly confident that convergence has been reached. Otherwise, longer chains or other means for improving the convergence may be needed. Even more reassuring is to apply the more stringent condition $\hat{R} < 1.1$.
 
 ### Compute $\hat{R}$  
 
@@ -262,7 +262,7 @@ ggplot(Rhat, aes(x=Variable, y=Rhat)) +
 knitr::include_graphics("jSDM_binomial_probit_sp_constrained_files/figure-html/jSDM-model-convergence-1.png")
 ```
 
-It can be seen that the $\hat{R}$'s associated with the factor loadings $\lambda$ are well above 1, which indicates a lack of convergence for these parameters, even after $15000$ iterations including $5000$ burn-in. 
+It can be seen that the $\hat{R}$s associated with the factor loadings $\lambda$ are well above 1, which indicates a lack of convergence for these parameters, even after $15000$ iterations including $5000$ burn-in. 
 
 ## Analysis of the results
 
@@ -324,20 +324,17 @@ knitr::include_graphics(paste0("jSDM_binomial_probit_sp_constrained_files/figure
 ```
 
 Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form, except for the factor loadings $\lambda$.  
-In fact the values estimated for $\lambda$ differ between the four chains and within each chain, the traces of these parameters oscillate very strongly showing upward or downward trends and we see that the densities are not of Gaussian form, as expected.  
+In fact the values estimated for $\lambda$ differ between the four chains and within each chain. The traces of these parameters oscillate very strongly showing upward or downward trends and we see that the densities are not of Gaussian form, as expected.  
 
-This lack of convergence can be explained by the arbitrary choice of the species constrained to have positive values of $\lambda$ as being the first ones in the presence-absence data set. Indeed, the constrained species are supposed to be the ones that structure themselves most clearly on each latent axis but by arbitrarily choosing them this is not necessarily the case.
+This lack of convergence can be explained by the arbitrary choice of the species constrained to have positive values of $\lambda$ as being the first ones in the presence-absence data set. Indeed, the constrained species are supposed to be the ones that structure most clearly each latent axis but by arbitrarily choosing them this is not necessarily the case.
 
 ### Matrice of residual correlations 
 
 After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
-$$\Sigma_{ij} = \begin{cases}
-\lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-\lambda_i .\lambda_j^T + 1 & \text{ if } i=j
-\end{cases}$$, then we compute correlations from covariances :
+$$\Sigma_{ij} = \lambda_i .\lambda_j^T$$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
-We use the `get_residual_cor()` function to compute the residual correlation matrix $R$ for each chain and we  and display the average of the $R$ matrices for all chains:
+We use the `get_residual_cor()` function to compute the residual correlation matrix $R$ for each chain and we display the average of the $R$ matrices for all chains:
 
 ```{r correlation-matrix-probit}
 nsp <- ncol(mod_Fungi[[1]]$model_spec$beta_start)
@@ -476,7 +473,7 @@ ggplot2::ggplot(Rhat, aes(x=Variable, y=Rhat)) +
 knitr::include_graphics("jSDM_binomial_probit_sp_constrained_files/figure-html/Rhat-ord-1.png")
 ```
 
-It can be seen that the $\hat{R}$'s associated with the factor loadings $\lambda$ are  closer to 1 than previously after the same number of iterations and with the same random number generator seeds. Consequently the convergence of factor loadings has improved by selecting the constrained species.
+It can be seen that the $\hat{R}$s associated with the factor loadings $\lambda$ are closer to 1 than previously, after the same number of iterations and with the same random number generator seeds. Consequently the convergence of factor loadings has improved by selecting the constrained species.
 
 ## Analysis of the results
 
@@ -554,13 +551,10 @@ Overall, the traces and the densities of the parameters indicate the convergence
 ### Matrice of residual correlations 
 
 After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
-$$\Sigma_{ij} = \begin{cases}
-\lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-\lambda_i .\lambda_j^T + 1 & \text{ if } i=j
-\end{cases}$$, then we compute correlations from covariances :
+$$\Sigma_{ij} = \lambda_i .\lambda_j^T$$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
-We use the `get_residual_cor()` function to compute the residual correlation matrix $R$ for each chain and we  and display the average of the $R$ matrices for all chains:
+We use the `get_residual_cor()` function to compute the residual correlation matrix $R$ for each chain and we display the average of the $R$ matrices for all chains:
 
 ```{r correlation-matrix-ord}
 nsp <- ncol(mod_Fungi_ord[[1]]$model_spec$beta_start)
@@ -571,7 +565,7 @@ R <- R + get_residual_cor(mod_Fungi_ord[[i]])$cor.mean/nchains
 }
 colnames(R) <- rownames(R) <- colnames(PA_Fungi)
 R.reorder <- corrplot::corrMatOrder(R, order = "FPC", hclust.method = "average")
-corrplot::corrplot(R[R.reorder,R.reorder],  diag = F, type = "lower",
+corrplot::corrplot(R[R.reorder,R.reorder],  diag = F, type = "lower", cex.main=0.8,
                    method = "color",  mar = c(1,1,3,1),
                    tl.srt = 45, tl.cex = 0.7,
                    title = "Residual Correlation Matrix from LVM with selected constrained species")

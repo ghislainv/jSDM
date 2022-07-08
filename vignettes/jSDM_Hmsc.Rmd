@@ -33,6 +33,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+Hierarchical Modelling of Species Communities (HMSC) is a model-based approach for analyzing community ecological data ([@Ovaskainen2017]). The obligatory data for HMSC-analyses includes a matrix of species occurrences or abundances and a matrix of environmental covariates. Additional and optional data include information about species traits and phylogenetic relationships, and information about the spatiotemporal context of the sampling design. HMSC partitions variation in species occurrences to components that relate to environmental filtering, species interactions, and random processes. `Hmsc` yields inference both at species and community levels. 
+This package and the package `jSDM` allow to fit the models defined below, so we can compare the results obtained by each of them on different data-sets. 
+
 # Models definition 
 
 ## Binomial model for presence-absence data 
@@ -64,11 +67,8 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  & \text{if } l>j
 This model is equivalent to a multivariate GLMM $\mathrm{g}(\theta_{ij}) = X_i.\beta_j + u_{ij}$, where $u_{ij} \sim \mathcal{N}(0, \Sigma)$ with the constraint that the variance-covariance matrix $\Sigma = \Lambda \Lambda^{\prime}$, where $\Lambda$ is the full matrix of factor loadings, with the $\lambda_j$ as its columns.   
 
 Using this model we can compute the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \begin{cases}
- \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
- \end{cases}$$, then we compute correlations from covariances :
-  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+$$\Sigma_{ij} = \lambda_i .\lambda_j^T$$, then we compute correlations from covariances :
+$$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 ## Poisson model for abundance data
 
@@ -79,7 +79,59 @@ $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$.
 $$ \mathrm{log}(\theta_{ij}) = \beta_{0j} + X_i\beta_j + W_i\lambda_j $$
 
 # Data-sets
- 
+
+## Data simulation 
+
+We start by simulating the data-set that we will then analyze among real data-sets.  
+
+We generate a data-set, following the previous model, with $300$ sites, $100$ species and as parameters :
+
+```{r simulated-data, echo=TRUE, eval=FALSE}
+#==================
+#== Data simulation
+#==================
+#= Number of species
+nsp <- 100
+#= Number of sites
+nsite <- 300
+#= Number of latent variables
+nl <- 2
+#= Set seed for repeatability
+seed <- 123
+set.seed(seed)
+
+# Ecological process (suitability)
+x1 <- rnorm(nsite,0,1)
+x2 <- rnorm(nsite,0,1)
+X <- cbind(rep(1,nsite),x1,x2)
+np <- ncol(X)
+#= Latent variables W
+W <- matrix(rnorm(nsite*nl,0,1), nrow=nsite, ncol=nl)
+#= Fixed species effect beta 
+beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
+#= Factor loading lambda  
+mat <- t(matrix(runif(nsp*nl,-2,2), byrow=TRUE, nrow=nsp))
+diag(mat) <- runif(nl,0,2)
+lambda.target <- matrix(0,nl,nsp)
+lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
+# Simulation of response data with probit link
+probit_theta <- X %*% beta.target + W %*% lambda.target
+theta <- pnorm(probit_theta)
+e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
+# Latent variable Z 
+Z_true <- probit_theta + e
+# Presence-absence matrix Y
+Y <- matrix(NA, nsite,nsp)
+for (i in 1:nsite){
+  for (j in 1:nsp){
+    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
+    else {Y[i,j] <- 0}
+  }
+}
+```
+
+## Data-sets description 
+
 Among the following datasets, the presence-absence data are from the [@Wilkinson2019] article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of `birds` is from the [@Kery2006] article and the `mites` abundance data-set is from the [@Borcard1994] article.
  
 ```{r data-sets, echo=FALSE, eval=TRUE}
@@ -165,61 +217,11 @@ knitr::kable(datasets, booktabs=TRUE) %>%
   kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) 
 ```
 
-Hierarchical Modelling of Species Communities (HMSC) is a model-based approach for analyzing community ecological data ([@Ovaskainen2017]). The obligatory data for HMSC-analyses includes a matrix of species occurrences or abundances and a matrix of environmental covariates. Additional and optional data include information about species traits and phylogenetic relationships, and information about the spatiotemporal context of the sampling design. HMSC partitions variation in species occurrences to components that relate to environmental filtering, species interactions, and random processes. `HMSC` yields inference both at species and community levels. 
-This package and the package `jSDM` allow to fit the model defined previously, so we can compare the results obtained by each of them on different datasets. 
-
 # Package `Hmsc`
 
-In a first step, we fit joint species distribution models from previous datasets using the `Hmsc()` function from package of the same name  whose functionalities are developed in the article [@Ovaskainen2017]. 
+In a first step, we fit joint species distribution models from previous data-sets using the `Hmsc()` function from package of the same name whose features are developed in the article [@Ovaskainen2017]. 
 
 ## Simulated dataset
-
-We generate a data-set following the previous model with 300 sites, 100 species and as parameters :
-
-```{r simulated-data, echo=TRUE, eval=FALSE}
-#==================
-#== Data simulation
-#==================
-#= Number of species
-nsp <- 100
-#= Number of sites
-nsite <- 300
-#= Number of latent variables
-nl <- 2
-#= Set seed for repeatability
-seed <- 123
-set.seed(seed)
-
-# Ecological process (suitability)
-x1 <- rnorm(nsite,0,1)
-x2 <- rnorm(nsite,0,1)
-X <- cbind(rep(1,nsite),x1,x2)
-np <- ncol(X)
-#= Latent variables W
-W <- matrix(rnorm(nsite*nl,0,1), nrow=nsite, ncol=nl)
-#= Fixed species effect beta 
-beta.target <- t(matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp))
-#= Factor loading lambda  
-mat <- t(matrix(runif(nsp*nl,-2,2), byrow=TRUE, nrow=nsp))
-diag(mat) <- runif(nl,0,2)
-lambda.target <- matrix(0,nl,nsp)
-lambda.target[upper.tri(mat,diag=TRUE)] <- mat[upper.tri(mat, diag=TRUE)]
-# Simulation of response data with probit link
-probit_theta <- X %*% beta.target + W %*% lambda.target
-theta <- pnorm(probit_theta)
-e <- matrix(rnorm(nsp*nsite,0,1),nsite,nsp)
-# Latent variable Z 
-Z_true <- probit_theta + e
-# Presence-absence matrix Y
-Y <- matrix(NA, nsite,nsp)
-for (i in 1:nsite){
-  for (j in 1:nsp){
-    if ( Z_true[i,j] > 0) {Y[i,j] <- 1}
-    else {Y[i,j] <- 0}
-  }
-}
-```
-
 
 We fit a binomial joint species distribution model, including latent variables, from the simulated dataset using the `Hmsc()` function to perform binomial probit regression.
 
@@ -940,7 +942,7 @@ save(T_jSDM_Mites, mod_jSDM_Mites,
 
 # Comparison
 
-Then we compare the compilation time and the results obtained with each package.  
+Then we compare the computation time and the results obtained with each package.  
 
 ```{r load-fitted-models, echo=FALSE, include=FALSE}
 # Simulated dataset
@@ -999,11 +1001,11 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_Hmsc_sim, T_Hmsc_sim, De
      file="jSDM_Hmsc_files/jSDM-Hmsc-comparison.rda")
 ```
 
-## Compilation time and deviance 
+## Computation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
 load("jSDM_Hmsc_files/jSDM-Hmsc-comparison.rda")
-result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time Hmsc (secondes)","Compilation time jSDM (secondes)", "Deviance Hmsc", "Deviance jSDM",""))
+result <- data.frame(matrix(NA,5,7),row.names=c("Computation time Hmsc (secondes)","Computation time jSDM (secondes)", "Deviance Hmsc", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_Hmsc_sim, T_Hmsc_Mosquitos, T_Hmsc_Eucalypts, T_Hmsc_Frogs, T_Hmsc_Fungi,
              T_Hmsc_Birds, T_Hmsc_Mites)
@@ -1110,13 +1112,13 @@ nsp <- mod_Hmsc_sim$ns
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs) 
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
 #Hmsc_R <- Hmsc::computeAssociations(mod_Hmsc_sim)[[1]]$mean
 jSDM_Sigma <- jSDM::get_residual_cor(mod_jSDM_sim)$cov.mean
-Sigma.target <- t(lambda.target) %*% lambda.target + diag(nsp)
+Sigma.target <- t(lambda.target) %*% lambda.target 
 RMSE_Sigma_jSDM <- sqrt(sum((Sigma.target-jSDM_Sigma)^2)/(nsp*nsp))
 RMSE_Sigma_Hmsc <- sqrt(sum((Sigma.target-Hmsc_Sigma)^2)/(nsp*nsp))
 par(mfrow=c(1,1))
@@ -1210,7 +1212,7 @@ n.mcmc <- mod_Hmsc_Mosquitos$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
@@ -1305,7 +1307,7 @@ n.mcmc <- mod_Hmsc_Eucalypts$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
@@ -1395,7 +1397,7 @@ n.mcmc <- mod_Hmsc_Frogs$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
@@ -1498,7 +1500,7 @@ n.mcmc <- mod_Hmsc_Fungi$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
@@ -1586,7 +1588,7 @@ n.mcmc <- mod_Hmsc_Birds$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)
@@ -1672,7 +1674,7 @@ n.mcmc <- mod_Hmsc_Mites$samples
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(codaObject$Lambda[[1]][[1]][t,],nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 Hmsc_Sigma <- matrix(apply(Tau.cov.arr,2,mean),nsp)

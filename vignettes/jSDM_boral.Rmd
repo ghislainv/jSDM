@@ -33,6 +33,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+In the article [@Warton2015] the fitting of joint species distributions models is performed using the package `boral` which runs with `JAGS` (Just Another Gibbs Sampler) a simulation program from hierarchical Bayesian models using MCMC methods implemented in C++. 
+This package and the package `jSDM` allow to fit the models defined below, so we can compare the results obtained by each of them on different data-sets. 
+
 # Models definition 
 
 ## Binomial models for presence-absence data
@@ -73,17 +76,14 @@ $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$.
 $$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j} + X_i\beta_j + W_i\lambda_j $$
 
 Using this models we can compute the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nsp}_{j=1,\ldots, nsp}$ from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \begin{cases}
- \lambda_i .\lambda_j^T & \text{ if } i \neq j \\
-  \lambda_i .\lambda_j^T + 1 & \text{ if } i=j
- \end{cases}$$, then we compute correlations from covariances :
-  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+$$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
+$$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
   
 # Data-sets
 
 ## Data simulation 
 
-We start by simulating the dataset that we will then analyze among other real datasets.  
+We start by simulating the data-set that we will then analyze among real data-sets.  
 
 We generate a data-set following the previous model with $300$ sites, $100$ species and as parameters :
 
@@ -215,15 +215,12 @@ datasets["distribution",] <- c("bernoulli", "bernoulli","bernoulli","bernoulli",
 sp_pictures <- c("figures/des.jpg",
                  "figures/Mosquitos_.jpg","figures/Eucalyptus_.jpg",
                  "figures/Frogs_.jpg","figures/Fungi_.jpg",
-                 "figures/birds.jpg",
+                 "figures/birds_.jpg",
                  "figures/oribatid-mites.png")
 datasets["",] <- sprintf('![](%s){height="100px" width="100px"}',sp_pictures)
 knitr::kable(datasets, booktabs=TRUE) %>%
   kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) 
 ```
-
-In the article [@Warton2015] the fitting of joint species distributions models is performed using the package `boral` which runs with `JAGS` (Just Another Gibbs Sampler) a simulation program from hierarchical Bayesian models using MCMC methods implemented in C++. 
-This package and the package `jSDM` allow to fit the model defined previously, so we can compare the results obtained by each of them on different data-sets. 
 
 # Package `boral`
 
@@ -240,7 +237,7 @@ setwd(paste0(dirname(rstudioapi::getSourceEditorContext()$path),"/jSDM_boral_cac
 mod_boral_sim <- boral(y=Y, X=X[,-1], lv.control=list(num.lv=nl),
                        family="binomial", row.eff="random",
                        prior.control = list(type = c("normal","normal","normal","uniform"),
-                                            hypparams = c(10, 10, 10, 30))
+                                            hypparams = c(10, 10, 10, 30)),
                        save.model=TRUE, model.name="sim_jagsboralmodel.txt", 
                        mcmc.control=list(n.burnin=10000, n.iteration=15000,
                                          n.thin=5,seed=123))
@@ -379,7 +376,7 @@ mod_boral_Mosquitos <- boral(y=PA_Mosquitos, X=Env_Mosquitos,
                              lv.control=list(num.lv=2), family="binomial",
                              prior.control = list(type=c("normal","normal",
                                                          "normal","uniform"),
-                                            hypparams = c(10, 10, 10, 30))
+                                            hypparams = c(10, 10, 10, 30)),
                              row.eff="random",
                              mcmc.control=list(n.burnin=10000,n.iteration=15000,
                                                n.thin=5,seed=123))
@@ -429,7 +426,7 @@ mod_boral_Eucalypts <- boral(y=PA_Eucalypts, X=Env_Eucalypts,
                              lv.control=list(num.lv=2), family="binomial",
                              prior.control=list(type=c("normal","normal",
                                                        "normal","uniform"),
-                                                hypparams = c(10, 10, 10, 30))
+                                                hypparams = c(10, 10, 10, 30)),
                              row.eff="random",
                              mcmc.control=list(n.burnin=10000,
                                                n.iteration=15000,
@@ -478,7 +475,7 @@ mod_boral_Frogs <- boral(y=PA_Frogs, X=Env_Frogs,
                          lv.control=list(num.lv=2), family="binomial",
                          prior.control=list(type=c("normal","normal",
                                                    "normal","uniform"),
-                                            hypparams = c(10, 10, 10, 30))
+                                            hypparams = c(10, 10, 10, 30)),
                          row.eff="random",
                          mcmc.control=list(n.burnin=10000,
                                            n.iteration=15000,
@@ -533,7 +530,7 @@ mod_boral_Fungi <- boral(y=PA_Fungi, X=Env_Fungi,
                          lv.control=list(num.lv=2), family="binomial",
                          prior.control=list(type=c("normal","normal",
                                                    "normal","uniform"),
-                                            hypparams = c(10, 10, 10, 30))
+                                            hypparams = c(10, 10, 10, 30)),
                          row.eff="random",
                          mcmc.control=list(n.burnin=10000,
                                            n.iteration=15000,
@@ -597,7 +594,7 @@ T1 <- Sys.time()
 #                          trial.size=max(Env_Birds$nsurvey),
 #                          prior.control=list(type=c("normal","normal",
 #                                                    "normal","uniform"),
-#                                             hypparams = c(10, 10, 10, 30))
+#                                             hypparams = c(10, 10, 10, 30)),
 #                          row.eff="random",
 #                          mcmc.control=list(n.burnin=10000,
 #                                            n.iteration=15000,
@@ -678,7 +675,7 @@ mod_boral_Mites <- boral(y=PA_Mites, X=X_Mites[,-1],
                          lv.control=list(num.lv=2), family="poisson",
                          prior.control=list(type=c("normal","normal",
                                                    "normal","uniform"),
-                                            hypparams = c(10, 10, 10, 30))
+                                            hypparams = c(10, 10, 10, 30)),
                          row.eff="random", 
                          mcmc.control=list(n.burnin=10000,
                                            n.iteration=15000,
@@ -1052,7 +1049,7 @@ save(T_jSDM_Mites, mod_jSDM_Mites,
 
 # Comparison
 
-Then we compare the compilation time and the results obtained with each package.  
+Then we compare the computation time and the results obtained with each package.  
 
 ```{r load-fitted-models, echo=FALSE, include=FALSE}
 # Simulated data-set
@@ -1112,11 +1109,11 @@ save(T_jSDM_sim, Deviance_jSDM_sim, RMSE_jSDM_sim, RMSE_boral_sim, T_boral_sim, 
      file="jSDM_boral_files/jSDM-boral-comparison.rda")
 ```
 
-## Compilation time and deviance 
+## Computation time and deviance 
 
 ```{r time-deviance, echo=FALSE, eval=TRUE, out.width=900}
 load("jSDM_boral_files/jSDM-boral-comparison.rda")
-result <- data.frame(matrix(NA,5,7),row.names=c("Compilation time boral (secondes)","Compilation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
+result <- data.frame(matrix(NA,5,7),row.names=c("Computation time boral (secondes)","Computation time jSDM (secondes)", "Deviance boral", "Deviance jSDM",""))
 colnames(result) <- c("Simulated","Mosquitos","Eucalypts","Frogs","Fungi","Birds","Mites") 
 result[1,]=c(T_boral_sim, T_boral_Mosquitos, T_boral_Eucalypts, T_boral_Frogs, T_boral_Fungi,
              T_boral_Birds, T_boral_Mites)
@@ -1135,18 +1132,18 @@ result <- apply(result,c(1,2),round, 0)
 sp_pictures <- c("figures/des.jpg",
                  "figures/Mosquitos_.jpg","figures/Eucalyptus_.jpg",
                  "figures/Frogs_.jpg","figures/Fungi_.jpg",
-                 "figures/birds.jpg",
+                 "figures/birds_.jpg",
                  "figures/oribatid-mites.png")
 result[5,] <- sprintf('![](%s){height="80px" width="80px"}',sp_pictures)
 kable(result)%>%
   kable_styling(bootstrap_options="striped",latex_options=c("HOLD_position","striped"), full_width=FALSE)
 ```
 
-jSDM is **`r min_ratio` to `r max_ratio`** times faster than boral/jags.
+`jSDM` is **`r min_ratio` to `r max_ratio`** times faster than `boral`/`JAGS`.
 
 ## Root-Mean-Square Error (RMSE) for simulated data
 
-Computed for or the probabilities of presences $\theta_{ij}$ with the simulated data-set.
+Computed for the probabilities of presences $\theta_{ij}$ with the simulated data-set.
 
 ```{r RMSE, eval=TRUE, echo=FALSE}
 
@@ -1219,7 +1216,7 @@ plot(mod_boral_sim$lv.mean, jSDM_lvs,
 abline(a=0,b=1,col='red')
 
 # Residual covariance Matrix
-Sigma.target <- t(lambda.target) %*% lambda.target + diag(nsp)
+Sigma.target <- t(lambda.target) %*% lambda.target
 RMSE_Sigma_jSDM <- RMSE_Sigma_boral <- 0
 par(mfrow=c(1,1))
 boral_Sigma <- boral::get.residual.cor(mod_boral_sim, est="mean")$cov
@@ -1609,7 +1606,7 @@ n.mcmc <- nrow(boral_mcmc_lambda)
 Tau.cov.arr <- matrix(NA,n.mcmc,nsp^2)
 for(t in 1:n.mcmc) { 
   lv.coefs <- matrix(boral_mcmc_lambda[t,,], nrow=nsp)
-  Tau.mat <- lv.coefs %*% t(lv.coefs) + diag(nsp)
+  Tau.mat <- lv.coefs %*% t(lv.coefs)
   Tau.cov.arr[t,] <- as.vector(Tau.mat) 
 }
 boral_Sigma <- matrix(apply(Tau.cov.arr, 2, mean), nsp)
