@@ -203,6 +203,17 @@ year = {1993}
 	pages = {367},
 }
 
+@article{Niku2019,
+    title = {gllvm - Fast analysis of multivariate abundance data with
+      generalized linear latent variable models in R},
+    author = {Jenni Niku and Francis K. C. Hui and Sara Taskinen and
+      David I. Warton},
+    journal = {Methods in Ecology and Evolution},
+    year = {2019},
+    volume = {10},
+    pages = {2173--2182},
+}
+
 @article{Ovaskainen2017,
 	title = {How to make more out of community data? A conceptual framework and its implementation as models and software},
 	volume = {20},
@@ -260,26 +271,6 @@ year = {1993}
 	month = jun,
 	year = {2018},
 	pages = {189--197},
-}
-
-@article{Ovaskainen_2017,
-	title = {How to make more out of community data? {A} conceptual framework and its implementation as models and software},
-	volume = {20},
-	copyright = {© 2017 The Authors. Ecology Letters published by CNRS and John Wiley \& Sons Ltd},
-	issn = {1461-0248},
-	shorttitle = {How to make more out of community data?},
-	url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.12757},
-	doi = {10.1111/ele.12757},
-	abstract = {Community ecology aims to understand what factors determine the assembly and dynamics of species assemblages at different spatiotemporal scales. To facilitate the integration between conceptual and statistical approaches in community ecology, we propose Hierarchical Modelling of Species Communities (HMSC) as a general, flexible framework for modern analysis of community data. While non-manipulative data allow for only correlative and not causal inference, this framework facilitates the formulation of data-driven hypotheses regarding the processes that structure communities. We model environmental filtering by variation and covariation in the responses of individual species to the characteristics of their environment, with potential contingencies on species traits and phylogenetic relationships. We capture biotic assembly rules by species-to-species association matrices, which may be estimated at multiple spatial or temporal scales. We operationalise the HMSC framework as a hierarchical Bayesian joint species distribution model, and implement it as R- and Matlab-packages which enable computationally efficient analyses of large data sets. Armed with this tool, community ecologists can make sense of many types of data, including spatially explicit data and time-series data. We illustrate the use of this framework through a series of diverse ecological examples.},
-	language = {en},
-	number = {5},
-	urldate = {2020-04-09},
-	journal = {Ecology Letters},
-	author = {Ovaskainen, Otso and Tikhonov, Gleb and Norberg, Anna and Blanchet, F. Guillaume and Duan, Leo and Dunson, David and Roslin, Tomas and Abrego, Nerea},
-	year = {2017},
-	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1111/ele.12757},
-	keywords = {environmental filtering, joint species distribution model, community modelling, community similarity, Assembly process, biotic filtering, community distribution, functional trait, metacommunity, phylogenetic signal},
-	pages = {561--576},
 }
 
 @article{Liu2005,
@@ -365,6 +356,7 @@ year = {1993}
 	keywords = {community modelling, insects, Jaccard index, null model, plants, Sørensen index, stacked species distribution models, validation},
 	pages = {51--63},
 }
+
 @article{Pichler2021,
 	title = {A new joint species distribution model for faster and more accurate inference of species associations from big community data},
 	volume = {12},
@@ -381,4 +373,22 @@ year = {1993}
 	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1111/2041-210X.13687},
 	keywords = {big data, co-occurrence, machine learning, metacommunity, regularization, statistics},
 	pages = {2159--2173},
+}
+
+@article{Norberg2019,
+	title = {A comprehensive evaluation of predictive performance of 33 species distribution models at species and community levels},
+	volume = {89},
+	issn = {1557-7015},
+	url = {https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/ecm.1370},
+	doi = {10.1002/ecm.1370},
+	abstract = {A large array of species distribution model (SDM) approaches has been developed for explaining and predicting the occurrences of individual species or species assemblages. Given the wealth of existing models, it is unclear which models perform best for interpolation or extrapolation of existing data sets, particularly when one is concerned with species assemblages. We compared the predictive performance of 33 variants of 15 widely applied and recently emerged SDMs in the context of multispecies data, including both joint SDMs that model multiple species together, and stacked SDMs that model each species individually combining the predictions afterward. We offer a comprehensive evaluation of these SDM approaches by examining their performance in predicting withheld empirical validation data of different sizes representing five different taxonomic groups, and for prediction tasks related to both interpolation and extrapolation. We measure predictive performance by 12 measures of accuracy, discrimination power, calibration, and precision of predictions, for the biological levels of species occurrence, species richness, and community composition. Our results show large variation among the models in their predictive performance, especially for communities comprising many species that are rare. The results do not reveal any major trade-offs among measures of model performance; the same models performed generally well in terms of accuracy, discrimination, and calibration, and for the biological levels of individual species, species richness, and community composition. In contrast, the models that gave the most precise predictions were not well calibrated, suggesting that poorly performing models can make overconfident predictions. However, none of the models performed well for all prediction tasks. As a general strategy, we therefore propose that researchers fit a small set of models showing complementary performance, and then apply a cross-validation procedure involving separate data to establish which of these models performs best for the goal of the study.},
+	language = {en},
+	number = {3},
+	urldate = {2020-04-09},
+	journal = {Ecological Monographs},
+	author = {Norberg, Anna and Abrego, Nerea and Blanchet, F. Guillaume and Adler, Frederick R. and Anderson, Barbara J. and Anttila, Jani and Araújo, Miguel B. and Dallas, Tad and Dunson, David and Elith, Jane and Foster, Scott D. and Fox, Richard and Franklin, Janet and Godsoe, William and Guisan, Antoine and O'Hara, Bob and Hill, Nicole A. and Holt, Robert D. and Hui, Francis K. C. and Husby, Magne and Kålås, John Atle and Lehikoinen, Aleksi and Luoto, Miska and Mod, Heidi K. and Newell, Graeme and Renner, Ian and Roslin, Tomas and Soininen, Janne and Thuiller, Wilfried and Vanhatalo, Jarno and Warton, David and White, Matt and Zimmermann, Niklaus E. and Gravel, Dominique and Ovaskainen, Otso},
+	year = {2019},
+	note = {\_eprint: https://esajournals.onlinelibrary.wiley.com/doi/pdf/10.1002/ecm.1370},
+	keywords = {community assembly, community modeling, environmental filtering, joint species distribution model, model performance, prediction, predictive power, species interactions, stacked species distribution model},
+	pages = {e01370},
 }
