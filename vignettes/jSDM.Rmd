@@ -40,7 +40,7 @@ The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize
 |Package: |jSDM |
 |:------|:-----|
 | Type: |Package|
-|Version: |0.1.1|
+|Version: |0.2.1|
 |Date: |2019-01-11|
 |License:|GPL-3|
 |LazyLoad:|yes| 

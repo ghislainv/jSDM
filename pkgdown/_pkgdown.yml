@@ -22,7 +22,7 @@ navbar:
         href: articles/Code_of_conduct.html
     intro:
       text: Get started
-      href: articles/jSDM.html
+      href: Get_started/index.html
     articles:
       text: Articles
       href: articles/index.html
@@ -53,12 +53,25 @@ articles:
   - '`jSDM_with_traits`'
   - '`Madagascar`'
   
+- title: test
+  navbar: 
+  contents:
+  - '`Code_of_conduct`'
+  - '`Contributing`'
+  - '`jSDM`'
+  
 - title: Comparison
   navbar: Comparison
   contents:
   - '`SDM_JSDM`'
   - '`jSDM_boral`'
   - '`jSDM_Hmsc`'
+
+Get_started:
+- title: Get started
+  navbar:
+  contents:
+  - '`jSDM`'
   
 reference:
 - title: Package
