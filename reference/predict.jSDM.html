@@ -29,7 +29,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -65,39 +65,54 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for jSDM</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span>
-  <span class="va">object</span>,
-  newdata <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">Id_species</span>,
-  <span class="va">Id_sites</span>,
-  type <span class="op">=</span> <span class="st">"mean"</span>,
-  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for jSDM</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  newdata <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">Id_species</span>,</span>
+<span>  <span class="va">Id_sites</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>An object of class <code>"jSDM"</code>.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>An optional data frame in which explanatory variables can be searched for prediction. If omitted, the adjusted values are used.</p></dd>
+
+
 <dt>Id_species</dt>
 <dd><p>An vector of character or integer indicating for which species the probabilities of presence on chosen sites will be predicted.</p></dd>
+
+
 <dt>Id_sites</dt>
 <dd><p>An vector of integer indicating for which sites the probabilities of presence of specified species will be predicted.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Type of prediction. Can be :</p><table class="table table"><tr><td><code>"mean"</code></td><td>for predictive posterior mean.</td></tr><tr><td><code>"quantile"</code></td><td>for producing sample quantiles from the predictive posterior,</td></tr><tr><td></td><td>corresponding to the given probabilities (see <code>probs</code> argument).</td></tr><tr><td><code>"posterior"</code></td><td>for the full predictive posterior for each prediction.</td></tr></table><p>Using <code>"quantile"</code> or <code>"posterior"</code> might lead to memory problem depending on the number of predictions and the number of samples for the jSDM model's parameters.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>Numeric vector of probabilities with values in [0,1], <br>
 used when <code>type="quantile"</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to or from other methods.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Return a vector for the predictive posterior mean when <code>type="mean"</code>, a data-frame with the mean and quantiles when <code>type="quantile"</code> or an <code>mcmc</code> object (see <code>coda</code> package) with posterior distribution for each prediction when <code>type="posterior"</code>.</p>
+    
+
+<p>Return a vector for the predictive posterior mean when <code>type="mean"</code>, a data-frame with the mean and quantiles when <code>type="quantile"</code> or an <code>mcmc</code> object (see <code>coda</code> package) with posterior distribution for each prediction when <code>type="posterior"</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -111,39 +126,39 @@ used when <code>type="quantile"</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># frogs data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Arranging data</span></span>
-<span class="r-in"><span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span>
-<span class="r-in"><span class="co"># Normalized continuous variables</span></span>
-<span class="r-in"><span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Parameter inference</span></span>
-<span class="r-in"><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span>
-<span class="r-in"><span class="va">mod</span><span class="op">&lt;-</span><span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span>
-<span class="r-in">                          presence_data<span class="op">=</span><span class="va">PA_frogs</span>,</span>
-<span class="r-in">                          <span class="co"># Explanatory variables</span></span>
-<span class="r-in">                          site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span>
-<span class="r-in">                          site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span>
-<span class="r-in">                          n_latent<span class="op">=</span><span class="fl">2</span>,</span>
-<span class="r-in">                          site_effect<span class="op">=</span><span class="st">"random"</span>,</span>
-<span class="r-in">                          <span class="co"># Chains</span></span>
-<span class="r-in">                          burnin<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                          mcmc<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                          thin<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                          <span class="co"># Starting values</span></span>
-<span class="r-in">                          alpha_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                          beta_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                          lambda_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                          W_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                          V_alpha<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                          <span class="co"># Priors</span></span>
-<span class="r-in">                          shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span>
-<span class="r-in">                          mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                          mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                          <span class="co"># Various</span></span>
-<span class="r-in">                          seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># frogs data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Arranging data</span></span></span>
+<span class="r-in"><span><span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># Normalized continuous variables</span></span></span>
+<span class="r-in"><span><span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Parameter inference</span></span></span>
+<span class="r-in"><span><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span></span>
+<span class="r-in"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span></span>
+<span class="r-in"><span>                          presence_data<span class="op">=</span><span class="va">PA_frogs</span>,</span></span>
+<span class="r-in"><span>                          <span class="co"># Explanatory variables</span></span></span>
+<span class="r-in"><span>                          site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span></span>
+<span class="r-in"><span>                          site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span></span>
+<span class="r-in"><span>                          n_latent<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                          site_effect<span class="op">=</span><span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>                          <span class="co"># Chains</span></span></span>
+<span class="r-in"><span>                          burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                          mcmc<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                          thin<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                          <span class="co"># Starting values</span></span></span>
+<span class="r-in"><span>                          alpha_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                          beta_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                          lambda_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                          W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                          V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                          <span class="co"># Priors</span></span></span>
+<span class="r-in"><span>                          shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
+<span class="r-in"><span>                          mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                          mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                          <span class="co"># Various</span></span></span>
+<span class="r-in"><span>                          seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -157,19 +172,19 @@ used when <code>type="quantile"</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0% </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Select site and species for predictions</span></span>
-<span class="r-in"><span class="co">## 30 sites</span></span>
-<span class="r-in"><span class="va">Id_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">PA_frogs</span><span class="op">)</span>, <span class="fl">30</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## 5 species</span></span>
-<span class="r-in"><span class="va">Id_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA_frogs</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Predictions </span></span>
-<span class="r-in"><span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod</span>,</span>
-<span class="r-in">                     Id_species<span class="op">=</span><span class="va">Id_species</span>,</span>
-<span class="r-in">                     Id_sites<span class="op">=</span><span class="va">Id_sites</span>,</span>
-<span class="r-in">                     type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated covariates"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Select site and species for predictions</span></span></span>
+<span class="r-in"><span><span class="co">## 30 sites</span></span></span>
+<span class="r-in"><span><span class="va">Id_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">PA_frogs</span><span class="op">)</span>, <span class="fl">30</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## 5 species</span></span></span>
+<span class="r-in"><span><span class="va">Id_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA_frogs</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Predictions </span></span></span>
+<span class="r-in"><span><span class="va">theta_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mod</span>,</span></span>
+<span class="r-in"><span>                     Id_species<span class="op">=</span><span class="va">Id_species</span>,</span></span>
+<span class="r-in"><span>                     Id_sites<span class="op">=</span><span class="va">Id_sites</span>,</span></span>
+<span class="r-in"><span>                     type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">theta_pred</span>, main<span class="op">=</span><span class="st">"Predicted theta with simulated covariates"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="predict.jSDM-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -185,7 +200,7 @@ used when <code>type="quantile"</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

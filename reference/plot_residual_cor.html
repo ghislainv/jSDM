@@ -29,7 +29,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -65,48 +65,69 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_residual_cor</span><span class="op">(</span>
-  <span class="va">mod</span>,
-  prob <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="st">"Residual Correlation Matrix from LVM"</span>,
-  diag <span class="op">=</span> <span class="cn">F</span>,
-  type <span class="op">=</span> <span class="st">"lower"</span>,
-  method <span class="op">=</span> <span class="st">"color"</span>,
-  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>,
-  tl.srt <span class="op">=</span> <span class="fl">45</span>,
-  tl.cex <span class="op">=</span> <span class="fl">0.5</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_residual_cor</span><span class="op">(</span></span>
+<span>  <span class="va">mod</span>,</span>
+<span>  prob <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"Residual Correlation Matrix from LVM"</span>,</span>
+<span>  diag <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"lower"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"color"</span>,</span>
+<span>  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  tl.srt <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>  tl.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mod</dt>
 <dd><p>An object of class <code>"jSDM"</code>.</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>A numeric scalar in the interval \((0,1)\) giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
 If <code>prob=0.95</code> is specified only significant correlations, whose \(95\%\) HPD interval does not contain zero, are represented. 
 Defaults to <code>prob=NULL</code> to represent all correlations significant or not.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Character, title of the graph.</p></dd>
+
+
 <dt>diag</dt>
 <dd><p>Logical, whether display the correlation coefficients on the principal diagonal.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Character, the visualization method of correlation matrix to be used. Currently, it supports seven methods, named "circle" (default), "square", "ellipse", "number", "pie", "shade" and "color".</p></dd>
+
+
 <dt>mar</dt>
 <dd><p>See <code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></code></p></dd>
+
+
 <dt>tl.srt</dt>
 <dd><p>Numeric, for text label string rotation in degrees, see <code><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></code>.</p></dd>
+
+
 <dt>tl.cex</dt>
 <dd><p>Numeric, for the size of text label (variable names).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to <code><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></code> function</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Displays a reordered correlation matrix</p>
+    
+
+<p>Displays a reordered correlation matrix</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -125,39 +146,39 @@ Defaults to <code>prob=NULL</code> to represent all correlations significant or 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># frogs data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Arranging data</span></span>
-<span class="r-in"><span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span>
-<span class="r-in"><span class="co"># Normalized continuous variables</span></span>
-<span class="r-in"> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Parameter inference</span></span>
-<span class="r-in"><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span>
-<span class="r-in"><span class="va">mod</span><span class="op">&lt;-</span><span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span>
-<span class="r-in">                           presence_data <span class="op">=</span> <span class="va">PA_frogs</span>,</span>
-<span class="r-in">                           <span class="co"># Explanatory variables</span></span>
-<span class="r-in">                           site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span>
-<span class="r-in">                           site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span>
-<span class="r-in">                           n_latent<span class="op">=</span><span class="fl">2</span>,</span>
-<span class="r-in">                           site_effect<span class="op">=</span><span class="st">"random"</span>,</span>
-<span class="r-in">                           <span class="co"># Chains</span></span>
-<span class="r-in">                           burnin<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                           mcmc<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                           thin<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                           <span class="co"># Starting values</span></span>
-<span class="r-in">                           alpha_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                           beta_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                           lambda_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                           W_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                           V_alpha<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                           <span class="co"># Priors</span></span>
-<span class="r-in">                           shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,</span>
-<span class="r-in">                           mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                           mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                           <span class="co"># Various</span></span>
-<span class="r-in">                           seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># frogs data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Arranging data</span></span></span>
+<span class="r-in"><span><span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># Normalized continuous variables</span></span></span>
+<span class="r-in"><span> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Parameter inference</span></span></span>
+<span class="r-in"><span><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span></span>
+<span class="r-in"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span></span>
+<span class="r-in"><span>                           presence_data <span class="op">=</span> <span class="va">PA_frogs</span>,</span></span>
+<span class="r-in"><span>                           <span class="co"># Explanatory variables</span></span></span>
+<span class="r-in"><span>                           site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span></span>
+<span class="r-in"><span>                           site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span></span>
+<span class="r-in"><span>                           n_latent<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                           site_effect<span class="op">=</span><span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>                           <span class="co"># Chains</span></span></span>
+<span class="r-in"><span>                           burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                           mcmc<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                           thin<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                           <span class="co"># Starting values</span></span></span>
+<span class="r-in"><span>                           alpha_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                           beta_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                           lambda_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                           W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                           V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                           <span class="co"># Priors</span></span></span>
+<span class="r-in"><span>                           shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>                           mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                           mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                           <span class="co"># Various</span></span></span>
+<span class="r-in"><span>                           seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -171,10 +192,10 @@ Defaults to <code>prob=NULL</code> to represent all correlations significant or 
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0% </span>
-<span class="r-in"><span class="co"># Representation of residual correlation between species</span></span>
-<span class="r-in"><span class="fu">plot_residual_cor</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Representation of residual correlation between species</span></span></span>
+<span class="r-in"><span><span class="fu">plot_residual_cor</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_residual_cor-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu">plot_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">plot_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_residual_cor-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -190,7 +211,7 @@ Defaults to <code>prob=NULL</code> to represent all correlations significant or 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

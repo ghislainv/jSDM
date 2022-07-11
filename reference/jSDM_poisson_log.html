@@ -30,7 +30,7 @@ The function calls a Gibbs sampler written in C++ code which uses an adaptive Me
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -67,106 +67,146 @@ The function calls a Gibbs sampler written in C++ code which uses an adaptive Me
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">jSDM_poisson_log</span><span class="op">(</span>
-  burnin <span class="op">=</span> <span class="fl">5000</span>,
-  mcmc <span class="op">=</span> <span class="fl">10000</span>,
-  thin <span class="op">=</span> <span class="fl">10</span>,
-  <span class="va">count_data</span>,
-  <span class="va">site_data</span>,
-  <span class="va">site_formula</span>,
-  trait_data <span class="op">=</span> <span class="cn">NULL</span>,
-  trait_formula <span class="op">=</span> <span class="cn">NULL</span>,
-  n_latent <span class="op">=</span> <span class="fl">0</span>,
-  site_effect <span class="op">=</span> <span class="st">"none"</span>,
-  beta_start <span class="op">=</span> <span class="fl">0</span>,
-  gamma_start <span class="op">=</span> <span class="fl">0</span>,
-  lambda_start <span class="op">=</span> <span class="fl">0</span>,
-  W_start <span class="op">=</span> <span class="fl">0</span>,
-  alpha_start <span class="op">=</span> <span class="fl">0</span>,
-  V_alpha <span class="op">=</span> <span class="fl">1</span>,
-  shape <span class="op">=</span> <span class="fl">0.5</span>,
-  rate <span class="op">=</span> <span class="fl">5e-04</span>,
-  mu_beta <span class="op">=</span> <span class="fl">0</span>,
-  V_beta <span class="op">=</span> <span class="fl">10</span>,
-  mu_gamma <span class="op">=</span> <span class="fl">0</span>,
-  V_gamma <span class="op">=</span> <span class="fl">10</span>,
-  mu_lambda <span class="op">=</span> <span class="fl">0</span>,
-  V_lambda <span class="op">=</span> <span class="fl">10</span>,
-  ropt <span class="op">=</span> <span class="fl">0.44</span>,
-  seed <span class="op">=</span> <span class="fl">1234</span>,
-  verbose <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">jSDM_poisson_log</span><span class="op">(</span></span>
+<span>  burnin <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>  mcmc <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  thin <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  <span class="va">count_data</span>,</span>
+<span>  <span class="va">site_data</span>,</span>
+<span>  <span class="va">site_formula</span>,</span>
+<span>  trait_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trait_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n_latent <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  site_effect <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  beta_start <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  gamma_start <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lambda_start <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  W_start <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  alpha_start <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  V_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  shape <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  rate <span class="op">=</span> <span class="fl">5e-04</span>,</span>
+<span>  mu_beta <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  V_beta <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  mu_gamma <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  V_gamma <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  mu_lambda <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  V_lambda <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  ropt <span class="op">=</span> <span class="fl">0.44</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1234</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>burnin</dt>
 <dd><p>The number of burnin iterations for the sampler.</p></dd>
+
+
 <dt>mcmc</dt>
 <dd><p>The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to <code>burnin+mcmc</code>.<br><code>burnin+mcmc</code> must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.</p></dd>
+
+
 <dt>thin</dt>
 <dd><p>The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.</p></dd>
+
+
 <dt>count_data</dt>
 <dd><p>A matrix \(n_{site} \times n_{species}\) indicating the abundance of each species on each site.</p></dd>
+
+
 <dt>site_data</dt>
 <dd><p>A data frame containing the model's explanatory variables by site.</p></dd>
+
+
 <dt>site_formula</dt>
 <dd><p>A one-sided formula of the form '~x1+...+xp' specifying the explanatory variables for the suitability process of the model,<br>
 used to form the design matrix \(X\) of size \(n_{site} \times np\).</p></dd>
+
+
 <dt>trait_data</dt>
 <dd><p>A data frame containing the species traits which can be included as part of the model.<br>
 Default to <code>NULL</code> to fit a model without species traits.</p></dd>
+
+
 <dt>trait_formula</dt>
 <dd><p>A one-sided formula of the form '~ t1 + ... + tk + x1:t1 + ... + xp:tk' specifying the interactions between the environmental variables and the species traits to be considered in the model,<br>
 used to form the trait design matrix \(Tr\) of size \(n_{species} \times nt\) <br> 
 and to set to \(0\) the \(\gamma\) parameters corresponding to interactions not taken into account according to the formula. 
 Default to <code>NULL</code> to fit a model with all possible interactions between species traits found in <code>trait_data</code> and environmental variables defined by <code>site_formula</code>.</p></dd>
+
+
 <dt>n_latent</dt>
 <dd><p>An integer which specifies the number of latent variables to generate. Defaults to \(0\).</p></dd>
+
+
 <dt>site_effect</dt>
 <dd><p>A string indicating whether row effects are included as fixed effects (<code>"fixed"</code>), as random effects (<code>"random"</code>),<br>
 or not included (<code>"none"</code>) in the model. 
 If fixed effects, then for parameter identifiability the first row effect is set to zero, which analogous to acting as a reference level when dummy variables are used.
 If random effects, they are drawn from a normal distribution with mean zero and unknown variance, analogous to a random intercept in mixed models. Defaults to <code>"none"</code>.</p></dd>
+
+
 <dt>beta_start</dt>
 <dd><p>Starting values for \(\beta\) parameters of the suitability process for each species must be either a scalar or a \(np \times n_{species}\) matrix. 
 If <code>beta_start</code> takes a scalar value, then that value will serve for all of the \(\beta\) parameters.</p></dd>
+
+
 <dt>gamma_start</dt>
 <dd><p>Starting values for \(\gamma\) parameters that represent the influence of species-specific traits on species' responses \(\beta\),
 <code>gamma_start</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) matrix.
  If <code>gamma_start</code> takes a scalar value, then that value will serve for all of the \(\gamma\) parameters.
  If <code>gamma_start</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
   if a \(np\)-length vector is given, the matrix is filled by row.</p></dd>
+
+
 <dt>lambda_start</dt>
 <dd><p>Starting values for \(\lambda\) parameters corresponding to the latent variables for each species must be either a scalar
 or a \(n_{latent} \times n_{species}\) upper triangular matrix with strictly positive values on the diagonal,
 ignored if <code>n_latent=0</code>.
 If <code>lambda_start</code> takes a scalar value, then that value will serve for all of the \(\lambda\) parameters except those concerned by the constraints explained above.</p></dd>
+
+
 <dt>W_start</dt>
 <dd><p>Starting values for latent variables must be either a scalar or a \(nsite \times n_latent\) matrix, ignored if <code>n_latent=0</code>.
 If <code>W_start</code> takes a scalar value, then that value will serve for all of the \(W_{il}\) with \(i=1,\ldots,n_{site}\) and \(l=1,\ldots,n_{latent}\).</p></dd>
+
+
 <dt>alpha_start</dt>
 <dd><p>Starting values for random site effect parameters must be either a scalar or a \(n_{site}\)-length vector, ignored if <code>site_effect="none"</code>.
 If <code>alpha_start</code> takes a scalar value, then that value will serve for all of the \(\alpha\) parameters.</p></dd>
+
+
 <dt>V_alpha</dt>
 <dd><p>Starting value for variance of random site effect if <code>site_effect="random"</code> or constant variance of the Gaussian prior distribution for the fixed site effect if 
 <code>site_effect="fixed"</code>. Must be a strictly positive scalar, ignored if <code>site_effect="none"</code>.</p></dd>
+
+
 <dt>shape</dt>
 <dd><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.</p></dd>
+
+
 <dt>rate</dt>
 <dd><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>
 Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.</p></dd>
+
+
 <dt>mu_beta</dt>
 <dd><p>Means of the Normal priors for the \(\beta\) parameters of the suitability process. <code>mu_beta</code> must be either a scalar or a \(np\)-length vector.
 If <code>mu_beta</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\beta\) parameters.
  The default value is set to 0 for an uninformative prior, ignored if <code>trait_data</code> is specified.</p></dd>
+
+
 <dt>V_beta</dt>
 <dd><p>Variances of the Normal priors for the \(\beta\) parameters of the suitability process.
  <code>V_beta</code> must be either a scalar or a \(np \times np\) symmetric positive semi-definite square matrix.
  If <code>V_beta</code> takes a scalar value, then that value will serve as the prior variance for all of the \(\beta\) parameters,
   so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal. 
 The default variance is large and set to 10 for an uninformative flat prior.</p></dd>
+
+
 <dt>mu_gamma</dt>
 <dd><p>Means of the Normal priors for the \(\gamma\) parameters.
 <code>mu_gamma</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) matrix.
@@ -174,6 +214,8 @@ If <code>mu_gamma</code> takes a scalar value, then that value will serve as the
 If <code>mu_gamma</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
  if a \(np\)-length vector is given, the matrix is filled by row. 
 The default value is set to 0 for an uninformative prior, ignored if <code>trait_data=NULL</code>.</p></dd>
+
+
 <dt>V_gamma</dt>
 <dd><p>Variances of the Normal priors for the \(\gamma\) parameters.
 <code>V_gamma</code> must be either a scalar, a vector of length \(nt\), \(np\) or \(nt.np\) or a \(nt \times np\) positive matrix.
@@ -181,45 +223,67 @@ If <code>V_gamma</code> takes a scalar value, then that value will serve as the 
 If <code>V_gamma</code> is a vector of length \(nt\) or \(nt.np\) the resulting \(nt \times np\) matrix is filled by column with specified values,
  if a \(np\)-length vector is given, the matrix is filled by row. 
 The default variance is large and set to 10 for an uninformative flat prior, ignored if <code>trait_data=NULL</code>.</p></dd>
+
+
 <dt>mu_lambda</dt>
 <dd><p>Means of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables. 
 <code>mu_lambda</code> must be either a scalar or a \(n_{latent}\)-length vector. 
 If <code>mu_lambda</code> takes a scalar value, then that value will serve as the prior mean for all of the \(\lambda\) parameters.
  The default value is set to 0 for an uninformative prior.</p></dd>
+
+
 <dt>V_lambda</dt>
 <dd><p>Variances of the Normal priors for the \(\lambda\) parameters corresponding to the latent variables.
  <code>V_lambda</code> must be either a scalar or a \(n_{latent} \times n_{latent}\) symmetric positive semi-definite square matrix.
 If <code>V_lambda</code> takes a scalar value, then that value will serve as the prior variance for all of \(\lambda\) parameters,
  so the variance covariance matrix used in this case is diagonal with the specified value on the diagonal.
 The default variance is large and set to 10 for an uninformative flat prior.</p></dd>
+
+
 <dt>ropt</dt>
 <dd><p>Target acceptance rate for the adaptive Metropolis algorithm. Default to 0.44.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>The seed for the random number generator. Default to 1234.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>A switch (0,1) which determines whether or not the progress of the sampler is printed to the screen. Default is 1: a progress bar is printed, indicating the step (in %) reached by the Gibbs sampler.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>"jSDM"</code> acting like a list including :</p>
+    
+
+<p>An object of class <code>"jSDM"</code> acting like a list including :</p>
 <dl><dt>mcmc.alpha</dt>
 <dd><p>An mcmc object that contains the posterior samples for site effects \(\alpha_i\), not returned if <code>site_effect="none"</code>.</p></dd>
-<dt>mcmc.V_alpha</dt>
+
+ <dt>mcmc.V_alpha</dt>
 <dd><p>An mcmc object that contains the posterior samples for variance of random site effect, not returned if <code>site_effect="none"</code> or  <code>site_effect="fixed"</code>.</p></dd>
-<dt>mcmc.latent</dt>
+
+ <dt>mcmc.latent</dt>
 <dd><p>A list by latent variable of mcmc objects that contains the posterior samples for latent variables \(W_l\) with \(l=1,\ldots,n_{latent}\), not returned if <code>n_latent=0</code>.</p></dd>
-<dt>mcmc.sp</dt>
+
+ <dt>mcmc.sp</dt>
 <dd><p>A list by species of mcmc objects that contains the posterior samples for species effects \(\beta_j\) and \(\lambda_j\) if <code>n_latent&gt;0</code>.</p></dd>
-<dt>mcmc.gamma</dt>
+
+ <dt>mcmc.gamma</dt>
 <dd><p>A list by covariates of mcmc objects that contains the posterior samples for \(\gamma_p\) parameters with \(p=1,\ldots,np\) if <code>trait_data</code> is specified.</p></dd>
-<dt>mcmc.Deviance</dt>
+
+ <dt>mcmc.Deviance</dt>
 <dd><p>The posterior sample of the deviance (\(D\)) is also provided, with \(D\) defined as : \(D=-2\log(\prod_{ij} P(y_{ij}|\beta_j,\lambda_j, \alpha_i, W_i))\).</p></dd>
-<dt>log_theta_latent</dt>
+ 
+ <dt>log_theta_latent</dt>
 <dd><p>Predictive posterior mean of the probability to each species to be present on each site, transformed by log link function.</p></dd>
-<dt>theta_latent</dt>
+
+ <dt>theta_latent</dt>
 <dd><p>Predictive posterior mean of the probability to each species to be present on each site.</p></dd>
-<dt>model_spec</dt>
+
+ <dt>model_spec</dt>
 <dd><p>Various attributes of the model fitted, including the response and model matrix used, distributional assumptions as link function, family and number of latent variables, hyperparameters used in the Bayesian estimation and mcmc, burnin and thin.</p></dd>
+
 </dl><p>The <code>mcmc.</code> objects can be summarized by functions provided by the <code>coda</code> package.</p>
     </div>
     <div id="details">
@@ -254,78 +318,78 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#==============================================</span></span>
-<span class="r-in"><span class="co"># jSDM_poisson_log()</span></span>
-<span class="r-in"><span class="co"># Example with simulated data</span></span>
-<span class="r-in"><span class="co">#==============================================</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#=================</span></span>
-<span class="r-in"><span class="co">#== Load libraries</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#==================</span></span>
-<span class="r-in"><span class="co">#== Data simulation</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#= Number of sites</span></span>
-<span class="r-in"><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">60</span></span>
-<span class="r-in"><span class="co">#= Number of species</span></span>
-<span class="r-in"><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
-<span class="r-in"><span class="co">#= Set seed for repeatability</span></span>
-<span class="r-in"><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#= Ecological process (suitability)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">seed</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsite</span><span class="op">)</span>,<span class="va">x1</span>,<span class="va">x2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">*</span><span class="va">seed</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">l.zero</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in"><span class="va">l.diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">l.other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fl">2</span><span class="op">-</span><span class="fl">3</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">l.diag</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.zero</span>,<span class="va">l.other</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span class="r-in">                          <span class="va">l.diag</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">l.other</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
-<span class="r-in">                        byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">np</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">V_alpha.target</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span class="r-in"><span class="va">alpha.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">V_alpha.target</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">log.theta</span> <span class="op">&lt;-</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span> <span class="op">+</span> <span class="va">W</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span> <span class="op">+</span> <span class="va">alpha.target</span></span>
-<span class="r-in"><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">log.theta</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">theta</span>, <span class="fl">2</span>, <span class="va">rpois</span>, n<span class="op">=</span><span class="va">nsite</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#= Site-occupancy model</span></span>
-<span class="r-in"><span class="co"># Increase number of iterations (burnin and mcmc) to get convergence</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">jSDM_poisson_log</span><span class="op">(</span><span class="co"># Chains</span></span>
-<span class="r-in">                        burnin<span class="op">=</span><span class="fl">200</span>,</span>
-<span class="r-in">                        mcmc<span class="op">=</span><span class="fl">200</span>,</span>
-<span class="r-in">                        thin<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                        <span class="co"># Response variable</span></span>
-<span class="r-in">                        count_data<span class="op">=</span><span class="va">Y</span>,</span>
-<span class="r-in">                        <span class="co"># Explanatory variables</span></span>
-<span class="r-in">                        site_formula<span class="op">=</span><span class="op">~</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span>,</span>
-<span class="r-in">                        site_data<span class="op">=</span><span class="va">X</span>,</span>
-<span class="r-in">                        n_latent<span class="op">=</span><span class="va">n_latent</span>,</span>
-<span class="r-in">                        site_effect<span class="op">=</span><span class="st">"random"</span>,</span>
-<span class="r-in">                        <span class="co"># Starting values</span></span>
-<span class="r-in">                        beta_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        lambda_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        W_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        alpha_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        V_alpha<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                        <span class="co"># Priors</span></span>
-<span class="r-in">                        shape<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span class="r-in">                        rate<span class="op">=</span><span class="fl">0.0005</span>,</span>
-<span class="r-in">                        mu_beta<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        V_beta<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                        mu_lambda<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        V_lambda<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                        <span class="co"># Various</span></span>
-<span class="r-in">                        seed<span class="op">=</span><span class="fl">1234</span>,</span>
-<span class="r-in">                        ropt<span class="op">=</span><span class="fl">0.44</span>,</span>
-<span class="r-in">                        verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#==============================================</span></span></span>
+<span class="r-in"><span><span class="co"># jSDM_poisson_log()</span></span></span>
+<span class="r-in"><span><span class="co"># Example with simulated data</span></span></span>
+<span class="r-in"><span><span class="co">#==============================================</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#=================</span></span></span>
+<span class="r-in"><span><span class="co">#== Load libraries</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#==================</span></span></span>
+<span class="r-in"><span><span class="co">#== Data simulation</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#= Number of sites</span></span></span>
+<span class="r-in"><span><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">60</span></span></span>
+<span class="r-in"><span><span class="co">#= Number of species</span></span></span>
+<span class="r-in"><span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span><span class="co">#= Set seed for repeatability</span></span></span>
+<span class="r-in"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#= Ecological process (suitability)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">seed</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsite</span><span class="op">)</span>,<span class="va">x1</span>,<span class="va">x2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">*</span><span class="va">seed</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">n_latent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">l.zero</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">l.diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">l.other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="fl">2</span><span class="op">-</span><span class="fl">3</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lambda.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">l.diag</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">l.zero</span>,<span class="va">l.other</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                          <span class="va">l.diag</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">l.other</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">beta.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">*</span><span class="va">np</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, byrow<span class="op">=</span><span class="cn">TRUE</span>, nrow<span class="op">=</span><span class="va">nsp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">V_alpha.target</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span></span>
+<span class="r-in"><span><span class="va">alpha.target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">nsite</span>,<span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">V_alpha.target</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">log.theta</span> <span class="op">&lt;-</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">beta.target</span><span class="op">)</span> <span class="op">+</span> <span class="va">W</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">lambda.target</span><span class="op">)</span> <span class="op">+</span> <span class="va">alpha.target</span></span></span>
+<span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">log.theta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">theta</span>, <span class="fl">2</span>, <span class="va">rpois</span>, n<span class="op">=</span><span class="va">nsite</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#= Site-occupancy model</span></span></span>
+<span class="r-in"><span><span class="co"># Increase number of iterations (burnin and mcmc) to get convergence</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">jSDM_poisson_log</span><span class="op">(</span><span class="co"># Chains</span></span></span>
+<span class="r-in"><span>                        burnin<span class="op">=</span><span class="fl">200</span>,</span></span>
+<span class="r-in"><span>                        mcmc<span class="op">=</span><span class="fl">200</span>,</span></span>
+<span class="r-in"><span>                        thin<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Response variable</span></span></span>
+<span class="r-in"><span>                        count_data<span class="op">=</span><span class="va">Y</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Explanatory variables</span></span></span>
+<span class="r-in"><span>                        site_formula<span class="op">=</span><span class="op">~</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span>,</span></span>
+<span class="r-in"><span>                        site_data<span class="op">=</span><span class="va">X</span>,</span></span>
+<span class="r-in"><span>                        n_latent<span class="op">=</span><span class="va">n_latent</span>,</span></span>
+<span class="r-in"><span>                        site_effect<span class="op">=</span><span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Starting values</span></span></span>
+<span class="r-in"><span>                        beta_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        lambda_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        alpha_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Priors</span></span></span>
+<span class="r-in"><span>                        shape<span class="op">=</span><span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                        rate<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
+<span class="r-in"><span>                        mu_beta<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        V_beta<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                        mu_lambda<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        V_lambda<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Various</span></span></span>
+<span class="r-in"><span>                        seed<span class="op">=</span><span class="fl">1234</span>,</span></span>
+<span class="r-in"><span>                        ropt<span class="op">=</span><span class="fl">0.44</span>,</span></span>
+<span class="r-in"><span>                        verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -339,105 +403,105 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.443 lambda:0.423 W:0.420 alpha:0.450</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.444 lambda:0.426 W:0.436 alpha:0.440</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.452 lambda:0.452 W:0.433 alpha:0.450</span>
-<span class="r-in"><span class="co">#' #==========</span></span>
-<span class="r-in"><span class="co">#' #== Outputs</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#= Parameter estimates</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## beta_j</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span></span>
-<span class="r-in"><span class="va">mean_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">np</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_beta_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">mean_beta</span><span class="op">[</span><span class="va">j</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">                         <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span>,</span>
-<span class="r-in">      main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">p</span><span class="op">]</span>,</span>
-<span class="r-in">        <span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">beta.target</span><span class="op">[</span><span class="va">j</span>,<span class="va">p</span><span class="op">]</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co">#' #==========</span></span></span>
+<span class="r-in"><span><span class="co">#' #== Outputs</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#= Parameter estimates</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## beta_j</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span></span></span>
+<span class="r-in"><span><span class="va">mean_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">np</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_beta_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">mean_beta</span><span class="op">[</span><span class="va">j</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                         <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>      main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">p</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>        <span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">beta.target</span><span class="op">[</span><span class="va">j</span>,<span class="va">p</span><span class="op">]</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> agg_png </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## lambda_j</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span>
-<span class="r-in"><span class="va">mean_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">n_latent</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_lambda_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">mean_lambda</span><span class="op">[</span><span class="va">j</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in">                           <span class="op">[</span>,<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,</span>
-<span class="r-in">                   main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">                              <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,<span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">lambda.target</span><span class="op">[</span><span class="va">j</span>,<span class="va">l</span><span class="op">]</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## lambda_j</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
+<span class="r-in"><span><span class="va">mean_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">n_latent</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_lambda_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">mean_lambda</span><span class="op">[</span><span class="va">j</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span>                           <span class="op">[</span>,<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">n_latent</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                   main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                              <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">+</span><span class="va">l</span><span class="op">]</span>,<span class="st">", species : "</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">lambda.target</span><span class="op">[</span><span class="va">j</span>,<span class="va">l</span><span class="op">]</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> agg_png </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Species effects beta and factor loadings lambda</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beta.target</span>, <span class="va">mean_beta</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"species effect beta"</span>,</span>
-<span class="r-in">     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lambda.target</span>, <span class="va">mean_lambda</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"factor loadings lambda"</span>,</span>
-<span class="r-in">     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Species effects beta and factor loadings lambda</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beta.target</span>, <span class="va">mean_beta</span>,</span></span>
+<span class="r-in"><span>     main<span class="op">=</span><span class="st">"species effect beta"</span>,</span></span>
+<span class="r-in"><span>     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lambda.target</span>, <span class="va">mean_lambda</span>,</span></span>
+<span class="r-in"><span>     main<span class="op">=</span><span class="st">"factor loadings lambda"</span>,</span></span>
+<span class="r-in"><span>     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## W latent variables</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,</span>
-<span class="r-in">       <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span>
-<span class="r-in">       main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span><span class="op">)</span>,</span>
-<span class="r-in">       xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## W latent variables</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">l</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_latent</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">W</span><span class="op">[</span>,<span class="va">l</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"lv_"</span>,<span class="va">l</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>       main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Latent variable W_"</span>, <span class="va">l</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## alpha</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.alpha)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span>
-<span class="r-in">     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"site effect alpha"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## Valpha</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.V_alpha)</span></span>
-<span class="r-in"><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## alpha</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.alpha)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"site effect alpha"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Valpha</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.V_alpha)</span></span></span>
+<span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## Deviance</span></span>
-<span class="r-in"><span class="co"># summary(mod$mcmc.Deviance)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Deviance</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$mcmc.Deviance)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#= Predictions</span></span>
-<span class="r-in"><span class="co"># summary(mod$theta_latent)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">log.theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">log_theta_latent</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"log(theta)"</span>,</span>
-<span class="r-in">     xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span> ,b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">theta_latent</span>,</span>
-<span class="r-in">     main<span class="op">=</span><span class="st">"Expected abundance theta"</span>,</span>
-<span class="r-in">     xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span> ,b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#= Predictions</span></span></span>
+<span class="r-in"><span><span class="co"># summary(mod$theta_latent)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">log.theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">log_theta_latent</span>,</span></span>
+<span class="r-in"><span>     main<span class="op">=</span><span class="st">"log(theta)"</span>,</span></span>
+<span class="r-in"><span>     xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span> ,b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">theta_latent</span>,</span></span>
+<span class="r-in"><span>     main<span class="op">=</span><span class="st">"Expected abundance theta"</span>,</span></span>
+<span class="r-in"><span>     xlab<span class="op">=</span><span class="st">"obs"</span>, ylab<span class="op">=</span><span class="st">"fitted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span> ,b<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -453,7 +517,7 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

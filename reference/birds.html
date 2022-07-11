@@ -31,7 +31,7 @@ Surveys are conducted along a transect that does not change over the years. The 
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -69,7 +69,7 @@ Surveys are conducted along a transect that does not change over the years. The 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"birds"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"birds"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -92,8 +92,8 @@ Surveys are conducted along a transect that does not change over the years. The 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">birds</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">birds</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">birds</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">birds</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Tachybaptus ruficollis Podiceps cristatus Ardea cinerea Ixobrychus minutus</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                      0                  0             0                  0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                      0                  0             0                  0</span>
@@ -374,8 +374,8 @@ Surveys are conducted along a transect that does not change over the years. The 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4                    0   Q004 934942  95276  950     4.5       3      9   293</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5                    0   Q005 934942 111276 1150     5.4       3     35    77</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                    0   Q006 946942  95276  550     3.6       3      2   361</span>
-<span class="r-in"><span class="co"># find species not recorded in 2014</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">birds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">158</span><span class="op">]</span><span class="op">)</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># find species not recorded in 2014</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">birds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">158</span><span class="op">]</span><span class="op">)</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Ixobrychus minutus         Charadrius dubius                 Tyto alba </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         4                        31                        41 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Bubo bubo             Athene noctua               Upupa epops </span>
@@ -400,7 +400,7 @@ Surveys are conducted along a transect that does not change over the years. The 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

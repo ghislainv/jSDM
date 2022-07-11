@@ -29,7 +29,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -65,44 +65,66 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob <span class="op">=</span> <span class="fl">0.95</span>, type <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mod</dt>
 <dd><p>An object of class <code>"jSDM"</code></p></dd>
+
+
 <dt>prob</dt>
 <dd><p>A numeric scalar in the interval \((0,1)\) giving the target probability coverage of the highest posterior density (HPD) intervals, by which to determine whether the correlations are "significant". Defaults to 0.95.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>A choice of either the posterior median (<code>type = "median"</code>) or posterior mean (<code>type = "mean"</code>), which are then treated as estimates and the fitted values are calculated from.
+Default is posterior mean.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>results A list including :</p>
+    
+
+<p>results A list including :</p>
 <dl><dt>cov.mean</dt>
-<dd><p>Average over the MCMC samples of the variance-covariance matrix.</p></dd>
+<dd><p>Average over the MCMC samples of the variance-covariance matrix, if <code>type = "mean"</code>.</p></dd>
+ 
 <dt>cov.median</dt>
-<dd><p>Median over the MCMC samples of the variance-covariance matrix.</p></dd>
+<dd><p>Median over the MCMC samples of the variance-covariance matrix, if <code>type = "median"</code>.</p></dd>
+
 <dt>cov.lower</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the lower limits of the  (\(100 \times prob \%\)) HPD interval of variance-covariance matrices over the MCMC samples.</p></dd>
+
 <dt>cov.upper</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the upper limits of the  (\(100 \times prob \%\)) HPD interval of variance-covariance matrices over the MCMC samples.</p></dd>
+
 <dt>cov.sig</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the value 1 corresponding to the “significant" co-variances and the value 0 corresponding to "non-significant" co-variances, whose (\(100 \times prob \%\)) HPD interval over the MCMC samples contain zero.</p></dd>
+
 <dt>cor.mean</dt>
-<dd><p>Average over the MCMC samples of the residual correlation matrix.</p></dd>
+<dd><p>Average over the MCMC samples of the residual correlation matrix, if <code>type = "mean"</code>.</p></dd>
+
 <dt>cor.median</dt>
-<dd><p>Median over the MCMC samples of the residual correlation matrix.</p></dd>
+<dd><p>Median over the MCMC samples of the residual correlation matrix, if <code>type = "median"</code>.</p></dd>
+
 <dt>cor.lower</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the lower limits of the  (\(100 \times prob \%\)) HPD interval of correlation matrices over the MCMC samples.</p></dd>
+
 <dt>cor.upper</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the upper limits of the  (\(100 \times prob \%\)) HPD interval of correlation matrices over the MCMC samples.</p></dd>
+
 <dt>cor.sig</dt>
 <dd><p>A \(n_{species} \times n_{species}\) matrix containing the value \(1\) corresponding to the “significant" correlations and the value \(0\) corresponding to "non-significant" correlations,
  whose (\(100 \times prob \%\)) HPD interval over the MCMC samples contain zero.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_{ij})\) with \(i=1,\ldots, n_{species}\) and \(j=1,\ldots, n_{species}\) can be derived from the covariance in the latent variables such as :</p><table class="table table"><tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr><tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr></table><p>then we compute correlations from covariances :
+    <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_{ij})\) with \(i=1,\ldots, n_{species}\) and \(j=1,\ldots, n_{species}\) can be derived from the covariance in the latent variables such as : 
+\(\Sigma_{ij}=\lambda_i .\lambda_j'\),
+then we compute correlations from covariances :
 $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     </div>
     <div id="references">
@@ -123,40 +145,40 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># frogs data</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span class="r-in"> <span class="co"># Arranging data</span></span>
-<span class="r-in"> <span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span>
-<span class="r-in"> <span class="co"># Normalized continuous variables</span></span>
-<span class="r-in"> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span></span>
-<span class="r-in"> <span class="co"># Parameter inference</span></span>
-<span class="r-in"><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span>
-<span class="r-in"> <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span>
-<span class="r-in">                             presence_data<span class="op">=</span><span class="va">PA_frogs</span>,</span>
-<span class="r-in">                             <span class="co"># Explanatory variables</span></span>
-<span class="r-in">                             site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span>
-<span class="r-in">                             site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span>
-<span class="r-in">                             n_latent<span class="op">=</span><span class="fl">2</span>,</span>
-<span class="r-in">                             site_effect<span class="op">=</span><span class="st">"random"</span>,</span>
-<span class="r-in">                             <span class="co"># Chains</span></span>
-<span class="r-in">                             burnin<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                             mcmc<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                             thin<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                             <span class="co"># Starting values</span></span>
-<span class="r-in">                             alpha_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                             beta_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                             lambda_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                             W_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                             V_alpha<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                             <span class="co"># Priors</span></span>
-<span class="r-in">                             shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span>
-<span class="r-in">                             mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                             mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                             <span class="co"># Various</span></span>
-<span class="r-in">                             seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># frogs data</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">frogs</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="co"># Arranging data</span></span></span>
+<span class="r-in"><span> <span class="va">PA_frogs</span> <span class="op">&lt;-</span> <span class="va">frogs</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span></span>
+<span class="r-in"><span> <span class="co"># Normalized continuous variables</span></span></span>
+<span class="r-in"><span> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="co"># Parameter inference</span></span></span>
+<span class="r-in"><span><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span></span>
+<span class="r-in"><span> <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="jSDM_binomial_probit.html">jSDM_binomial_probit</a></span><span class="op">(</span><span class="co"># Response variable</span></span></span>
+<span class="r-in"><span>                             presence_data<span class="op">=</span><span class="va">PA_frogs</span>,</span></span>
+<span class="r-in"><span>                             <span class="co"># Explanatory variables</span></span></span>
+<span class="r-in"><span>                             site_formula <span class="op">=</span> <span class="op">~</span><span class="va">.</span>,</span></span>
+<span class="r-in"><span>                             site_data <span class="op">=</span> <span class="va">Env_frogs</span>,</span></span>
+<span class="r-in"><span>                             n_latent<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                             site_effect<span class="op">=</span><span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>                             <span class="co"># Chains</span></span></span>
+<span class="r-in"><span>                             burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                             mcmc<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                             thin<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                             <span class="co"># Starting values</span></span></span>
+<span class="r-in"><span>                             alpha_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                             beta_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                             lambda_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                             W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                             V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                             <span class="co"># Priors</span></span></span>
+<span class="r-in"><span>                             shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
+<span class="r-in"><span>                             mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                             mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                             <span class="co"># Various</span></span></span>
+<span class="r-in"><span>                             seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -170,16 +192,16 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0% </span>
-<span class="r-in"><span class="co"># Calcul of residual correlation between species </span></span>
-<span class="r-in"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Residual variance-covariance matrix</span></span>
-<span class="r-in"><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span></span>
+<span class="r-in"><span><span class="co"># Calcul of residual correlation between species </span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_residual_cor</span><span class="op">(</span><span class="va">mod</span>, prob<span class="op">=</span><span class="fl">0.95</span>, type<span class="op">=</span><span class="st">"mean"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Residual variance-covariance matrix</span></span></span>
+<span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Species_1    Species_2   Species_3   Species_4    Species_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.028882555 -0.007876968  0.08220698  0.18385053 -0.008026972</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.007876968  1.367200045  0.82346312  0.01437718  0.379921651</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.082206977  0.823463117  4.35857738  1.71557417  1.038789611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.183850526  0.014377183  1.71557417  3.89708189  0.116712133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.008026972  0.379921651  1.03878961  0.11671213  1.779679094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.028882555 -0.007876968  0.08220698  0.18385053 -0.008026972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.007876968  0.367200045  0.82346312  0.01437718  0.379921651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.082206977  0.823463117  3.35857738  1.71557417  1.038789611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.183850526  0.014377183  1.71557417  2.89708189  0.116712133</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.008026972  0.379921651  1.03878961  0.11671213  0.779679094</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.380765818  1.202071230  1.04778506 -4.01288022  1.801902935</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.036068277  0.786743770  2.78420513  1.10364430  1.030323022</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.123438283 -0.574513979 -1.31553380  0.76553198 -0.824786864</span>
@@ -190,22 +212,22 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  1.0477851  2.78420513 -1.3155338  1.9581446</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_4 -4.0128802  1.10364430  0.7655320 -1.0135853</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  1.8019029  1.03032302 -0.8247869  1.4235009</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 14.1758173  1.95290308 -4.8547885  6.5710472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.9529031  3.55760875 -1.4172244  2.1176398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -4.8547885 -1.41722435  3.4062092 -2.9009955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  6.5710472  2.11763979 -2.9009955  5.3619409</span>
-<span class="r-in"><span class="co">## All non-significant co-variances are set to zero.</span></span>
-<span class="r-in"><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cov.sig</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 13.1758173  1.95290308 -4.8547885  6.5710472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.9529031  2.55760875 -1.4172244  2.1176398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -4.8547885 -1.41722435  2.4062092 -2.9009955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  6.5710472  2.11763979 -2.9009955  4.3619409</span>
+<span class="r-in"><span><span class="co">## All non-significant co-variances are set to zero.</span></span></span>
+<span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cov.sig</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Species_1  Species_2  Species_3  Species_4 Species_5  Species_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.02888255  0.0000000 0.08220698  0.1838505  0.000000 -0.3807658</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.00000000  1.3672000 0.00000000  0.0000000  0.000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.08220698  0.0000000 4.35857738  1.7155742  0.000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.18385053  0.0000000 1.71557417  3.8970819  0.000000 -4.0128802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.00000000  0.0000000 0.00000000  0.0000000  1.779679  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.38076582  0.0000000 0.00000000 -4.0128802  0.000000 14.1758173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.00000000  0.7867438 2.78420513  1.1036443  0.000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.00000000 -0.5745140 0.00000000  0.0000000  0.000000 -4.8547885</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.13211506  0.0000000 1.95814456 -1.0135853  0.000000  6.5710472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.02888255  0.0000000 0.08220698  0.1838505 0.0000000 -0.3807658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.00000000  0.3672000 0.00000000  0.0000000 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.08220698  0.0000000 3.35857738  1.7155742 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.18385053  0.0000000 1.71557417  2.8970819 0.0000000 -4.0128802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.00000000  0.0000000 0.00000000  0.0000000 0.7796791  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.38076582  0.0000000 0.00000000 -4.0128802 0.0000000 13.1758173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.00000000  0.7867438 2.78420513  1.1036443 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.00000000 -0.5745140 0.00000000  0.0000000 0.0000000 -4.8547885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.13211506  0.0000000 1.95814456 -1.0135853 0.0000000  6.5710472</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7 Species_8  Species_9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.000000 -0.1321151</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.7867438 -0.574514  0.0000000</span>
@@ -213,53 +235,53 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  1.1036443  0.000000 -1.0135853</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.000000  0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -4.854788  6.5710472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  3.5576087 -1.417224  2.1176398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -1.4172244  3.406209 -2.9009955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  2.1176398 -2.900995  5.3619409</span>
-<span class="r-in"><span class="co"># Residual correlation matrix</span></span>
-<span class="r-in"><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              Species_1    Species_2   Species_3   Species_4    Species_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.000000000 -0.006420698  0.03787855  0.08622153 -0.003755463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.006420698  1.000000000  0.32161509  0.02044693  0.216723443</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.037878555  0.321615092  1.00000000  0.41771369  0.347708300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.086221529  0.020446926  0.41771369  1.00000000  0.029542562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.003755463  0.216723443  0.34770830  0.02954256  1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.094501181  0.274031639  0.14011883 -0.51521807  0.340215161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.018789636  0.338175661  0.70408058  0.30044881  0.376942002</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.057668553 -0.272943811 -0.35050974  0.21174072 -0.333238029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.057174069  0.321780386  0.38661712 -0.24303820  0.402580598</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Species_6   Species_7   Species_8   Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1 -0.09450118  0.01878964  0.05766855 -0.05717407</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.27403164  0.33817566 -0.27294381  0.32178039</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.14011883  0.70408058 -0.35050974  0.38661712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4 -0.51521807  0.30044881  0.21174072 -0.24303820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.34021516  0.37694200 -0.33323803  0.40258060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  1.00000000  0.27926077 -0.68919059  0.77508067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.27926077  1.00000000 -0.42411198  0.47943283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.68919059 -0.42411198  1.00000000 -0.67708279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.77508067  0.47943283 -0.67708279  1.00000000</span>
-<span class="r-in"><span class="co">## All non-significant correlations are set to zero.</span></span>
-<span class="r-in"><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cor.sig</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Species_1  Species_2   Species_3   Species_4 Species_5   Species_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.00000000  0.0000000  0.03787855  0.08622153         0 -0.09450118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.00000000  1.0000000  0.00000000  0.00000000         0  0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.03787855  0.0000000  1.00000000  0.41771369         0  0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.08622153  0.0000000  0.41771369  1.00000000         0 -0.51521807</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.00000000  0.0000000  0.00000000  0.00000000         1  0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.09450118  0.0000000  0.00000000 -0.51521807         0  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.00000000  0.3381757  0.70408058  0.30044881         0  0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.00000000 -0.2729438 -0.35050974  0.00000000         0 -0.68919059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.05717407  0.3217804  0.38661712 -0.24303820         0  0.77508067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8   Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.05717407</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.3381757 -0.2729438  0.32178039</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.7040806 -0.3505097  0.38661712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.3004488  0.0000000 -0.24303820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.0000000  0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -0.6891906  0.77508067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.4241120  0.47943283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.4241120  1.0000000 -0.67708279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.4794328 -0.6770828  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  2.5576087 -1.417224  2.1176398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -1.4172244  2.406209 -2.9009955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  2.1176398 -2.900995  4.3619409</span>
+<span class="r-in"><span><span class="co"># Residual correlation matrix</span></span></span>
+<span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_1  Species_2  Species_3   Species_4   Species_5  Species_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000 -0.1157947  0.3637145  0.94087354 -0.13249535 -0.8370996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.1157947  1.0000000  0.7610558  0.11203673  0.73889826  0.5629360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637145  0.7610558  1.0000000  0.59980549  0.67624581  0.1655668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408735  0.1120367  0.5998055  1.00000000  0.09158138 -0.6619493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.1324954  0.7388983  0.6762458  0.09158138  1.00000000  0.5139518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370996  0.5629360  0.1655668 -0.66194925  0.51395178  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.1865080  0.8292760  0.9651347  0.44529230  0.75206507  0.3439450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.5742129 -0.7128116 -0.5100968  0.33583173 -0.66523008 -0.8892339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094297  0.7456526  0.4947678 -0.35522110  0.71224991  0.9091302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8  Species_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.1865080  0.5742129 -0.6094297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292760 -0.7128116  0.7456526</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651347 -0.5100968  0.4947678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452923  0.3358317 -0.3552211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520651 -0.6652301  0.7122499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.3439450 -0.8892339  0.9091302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6456995  0.6451023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6456995  1.0000000 -0.9473245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451023 -0.9473245  1.0000000</span>
+<span class="r-in"><span><span class="co">## All non-significant correlations are set to zero.</span></span></span>
+<span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cor.sig</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_1  Species_2  Species_3  Species_4 Species_5  Species_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000  0.0000000  0.3637145  0.9408735 0.0000000 -0.8370996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.0000000  1.0000000  0.0000000  0.0000000 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637145  0.0000000  1.0000000  0.5998055 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408735  0.0000000  0.5998055  1.0000000 0.0000000 -0.6619493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.0000000  0.0000000  0.0000000 1.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370996  0.0000000  0.0000000 -0.6619493 0.0000000  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.0000000  0.8292760  0.9651347  0.4452923 0.7520651  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.0000000 -0.7128116 -0.5100968  0.0000000 0.0000000 -0.8892339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094297  0.7456526  0.4947678 -0.3552211 0.0000000  0.9091302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8  Species_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.6094297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292760 -0.7128116  0.7456526</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651347 -0.5100968  0.4947678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452923  0.0000000 -0.3552211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520651  0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -0.8892339  0.9091302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6456995  0.6451023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6456995  1.0000000 -0.9473245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451023 -0.9473245  1.0000000</span>
 </code></pre></div>
     </div>
   </div>
@@ -274,7 +296,7 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

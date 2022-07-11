@@ -32,7 +32,7 @@ plot species-species associations"><meta property="og:image" content="/logo.png"
   </a>
 </li>
 <li>
-  <a href="../articles/jSDM.html">Get started</a>
+  <a href="../Get_started/index.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -70,52 +70,82 @@ plot species-species associations</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_associations</span><span class="op">(</span>
-  <span class="va">R</span>,
-  radius <span class="op">=</span> <span class="fl">5</span>,
-  main <span class="op">=</span> <span class="cn">NULL</span>,
-  circleBreak <span class="op">=</span> <span class="cn">FALSE</span>,
-  top <span class="op">=</span> <span class="fl">10L</span>,
-  occ <span class="op">=</span> <span class="cn">NULL</span>,
-  env_effect <span class="op">=</span> <span class="cn">NULL</span>,
-  cols_association <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FF0000"</span>, <span class="st">"#BF003F"</span>, <span class="st">"#7F007F"</span>, <span class="st">"#3F00BF"</span>, <span class="st">"#0000FF"</span><span class="op">)</span>,
-  cols_occurrence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#BEBEBE"</span>, <span class="st">"#8E8E8E"</span>, <span class="st">"#5F5F5F"</span>, <span class="st">"#2F2F2F"</span>, <span class="st">"#000000"</span><span class="op">)</span>,
-  cols_env_effect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#1B9E77"</span>, <span class="st">"#D95F02"</span>, <span class="st">"#7570B3"</span>, <span class="st">"#E7298A"</span>, <span class="st">"#66A61E"</span>, <span class="st">"#E6AB02"</span>,
-    <span class="st">"#A6761D"</span>, <span class="st">"#666666"</span><span class="op">)</span>,
-  lwd_occurrence <span class="op">=</span> <span class="fl">1</span>,
-  species_order <span class="op">=</span> <span class="st">"abundance"</span>,
-  species_indices <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_associations</span><span class="op">(</span></span>
+<span>  <span class="va">R</span>,</span>
+<span>  radius <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cex.main <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  circleBreak <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  top <span class="op">=</span> <span class="fl">10L</span>,</span>
+<span>  occ <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  env_effect <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols_association <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FF0000"</span>, <span class="st">"#BF003F"</span>, <span class="st">"#7F007F"</span>, <span class="st">"#3F00BF"</span>, <span class="st">"#0000FF"</span><span class="op">)</span>,</span>
+<span>  cols_occurrence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#BEBEBE"</span>, <span class="st">"#8E8E8E"</span>, <span class="st">"#5F5F5F"</span>, <span class="st">"#2F2F2F"</span>, <span class="st">"#000000"</span><span class="op">)</span>,</span>
+<span>  cols_env_effect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#1B9E77"</span>, <span class="st">"#D95F02"</span>, <span class="st">"#7570B3"</span>, <span class="st">"#E7298A"</span>, <span class="st">"#66A61E"</span>, <span class="st">"#E6AB02"</span>,</span>
+<span>    <span class="st">"#A6761D"</span>, <span class="st">"#666666"</span><span class="op">)</span>,</span>
+<span>  lwd_occurrence <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  species_order <span class="op">=</span> <span class="st">"abundance"</span>,</span>
+<span>  species_indices <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>R</dt>
 <dd><p>matrix of correlation \(R\)</p></dd>
+
+
 <dt>radius</dt>
 <dd><p>circle's radius</p></dd>
+
+
 <dt>main</dt>
 <dd><p>title</p></dd>
+
+
+<dt>cex.main</dt>
+<dd><p>title's character size. NULL and NA are equivalent to 1.0.</p></dd>
+
+
 <dt>circleBreak</dt>
 <dd><p>circle break or not</p></dd>
+
+
 <dt>top</dt>
 <dd><p>number of top negative and positive associations to consider</p></dd>
+
+
 <dt>occ</dt>
 <dd><p>species occurence data</p></dd>
+
+
 <dt>env_effect</dt>
 <dd><p>environmental species effects \(\beta\)</p></dd>
+
+
 <dt>cols_association</dt>
 <dd><p>color gradient for association lines</p></dd>
+
+
 <dt>cols_occurrence</dt>
 <dd><p>color gradient for species</p></dd>
+
+
 <dt>cols_env_effect</dt>
 <dd><p>color gradient for environmental effect</p></dd>
+
+
 <dt>lwd_occurrence</dt>
 <dd><p>lwd for occurrence lines</p></dd>
+
+
 <dt>species_order</dt>
 <dd><p>order species according to :</p><table class="table table"><tr><td><code>"abundance"</code></td><td>their mean abundance at sites by default)</td></tr><tr><td><code>"frequency"</code></td><td>the number of sites where they occur</td></tr><tr><td><code>"main environmental effect"</code></td><td>their most important environmental coefficients</td></tr></table></dd>
+
+
 <dt>species_indices</dt>
 <dd><p>indices for sorting species</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -125,7 +155,7 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Pichler M. and Hartig F. (2021) A new method for faster and more accurate inference of species associations from big community data. <br><em>Methods in Ecology and Evolution</em>, 12, 2159-2173 doi: <a href="https://doi.org/10.1111/2041-210X.13687" class="external-link">10.1111/2041-210X.13687</a>
+    <p>Pichler M. and Hartig F. (2021) A new method for faster and more accurate inference of species associations from big community data. <br><em>Methods in Ecology and Evolution</em>, 12, 2159-2173 <a href="https://doi.org/10.1111/2041-210X.13687" class="external-link">doi:10.1111/2041-210X.13687</a>
 .</p>
     </div>
     <div id="see-also">
@@ -140,40 +170,40 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># frogs data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mites</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Arranging data</span></span>
-<span class="r-in"><span class="va">PA_mites</span> <span class="op">&lt;-</span> <span class="va">mites</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">35</span><span class="op">]</span></span>
-<span class="r-in"><span class="co"># Normalized continuous variables</span></span>
-<span class="r-in"><span class="va">Env_mites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">36</span><span class="op">:</span><span class="fl">38</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">39</span><span class="op">:</span><span class="fl">40</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_mites</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">36</span><span class="op">:</span><span class="fl">40</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Env_mites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Env_mites</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Parameter inference</span></span>
-<span class="r-in"><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></span><span class="op">(</span><span class="co"># Response variable</span></span>
-<span class="r-in">                        count_data<span class="op">=</span><span class="va">PA_mites</span>,</span>
-<span class="r-in">                        <span class="co"># Explanatory variables</span></span>
-<span class="r-in">                        site_formula <span class="op">=</span> <span class="op">~</span>  <span class="va">water</span> <span class="op">+</span> <span class="va">topo</span> <span class="op">+</span> <span class="va">density</span>,</span>
-<span class="r-in">                        site_data <span class="op">=</span> <span class="va">Env_mites</span>,</span>
-<span class="r-in">                        n_latent<span class="op">=</span><span class="fl">2</span>,</span>
-<span class="r-in">                        site_effect<span class="op">=</span><span class="st">"random"</span>,</span>
-<span class="r-in">                        <span class="co"># Chains</span></span>
-<span class="r-in">                        burnin<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                        mcmc<span class="op">=</span><span class="fl">100</span>,</span>
-<span class="r-in">                        thin<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                        <span class="co"># Starting values</span></span>
-<span class="r-in">                        alpha_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        beta_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        lambda_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        W_start<span class="op">=</span><span class="fl">0</span>,</span>
-<span class="r-in">                        V_alpha<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">                        <span class="co"># Priors</span></span>
-<span class="r-in">                        shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span>
-<span class="r-in">                        mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                        mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                        <span class="co"># Various</span></span>
-<span class="r-in">                        seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># frogs data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mites</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Arranging data</span></span></span>
+<span class="r-in"><span><span class="va">PA_mites</span> <span class="op">&lt;-</span> <span class="va">mites</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">35</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># Normalized continuous variables</span></span></span>
+<span class="r-in"><span><span class="va">Env_mites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">36</span><span class="op">:</span><span class="fl">38</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">39</span><span class="op">:</span><span class="fl">40</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_mites</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mites</span><span class="op">[</span>,<span class="fl">36</span><span class="op">:</span><span class="fl">40</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Env_mites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Env_mites</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Parameter inference</span></span></span>
+<span class="r-in"><span><span class="co"># Increase the number of iterations to reach MCMC convergence</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="jSDM_poisson_log.html">jSDM_poisson_log</a></span><span class="op">(</span><span class="co"># Response variable</span></span></span>
+<span class="r-in"><span>                        count_data<span class="op">=</span><span class="va">PA_mites</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Explanatory variables</span></span></span>
+<span class="r-in"><span>                        site_formula <span class="op">=</span> <span class="op">~</span>  <span class="va">water</span> <span class="op">+</span> <span class="va">topo</span> <span class="op">+</span> <span class="va">density</span>,</span></span>
+<span class="r-in"><span>                        site_data <span class="op">=</span> <span class="va">Env_mites</span>,</span></span>
+<span class="r-in"><span>                        n_latent<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                        site_effect<span class="op">=</span><span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Chains</span></span></span>
+<span class="r-in"><span>                        burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                        mcmc<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                        thin<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Starting values</span></span></span>
+<span class="r-in"><span>                        alpha_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        beta_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        lambda_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                        V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Priors</span></span></span>
+<span class="r-in"><span>                        shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
+<span class="r-in"><span>                        mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                        mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                        <span class="co"># Various</span></span></span>
+<span class="r-in"><span>                        seed<span class="op">=</span><span class="fl">1234</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -187,15 +217,15 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.412 lambda:0.414 W:0.388 alpha:0.429</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.435 lambda:0.425 W:0.386 alpha:0.433</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.412 lambda:0.424 W:0.382 alpha:0.425</span>
-<span class="r-in"><span class="co"># Calcul of residual correlation between species</span></span>
-<span class="r-in"><span class="va">R</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_residual_cor.html">get_residual_cor</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">$</span><span class="va">cor.mean</span></span>
-<span class="r-in"><span class="fu">plot_associations</span><span class="op">(</span><span class="va">R</span>, circleBreak <span class="op">=</span> <span class="cn">TRUE</span>, occ <span class="op">=</span> <span class="va">PA_mites</span>, species_order<span class="op">=</span><span class="st">"abundance"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Calcul of residual correlation between species</span></span></span>
+<span class="r-in"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_residual_cor.html">get_residual_cor</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">$</span><span class="va">cor.mean</span></span></span>
+<span class="r-in"><span><span class="fu">plot_associations</span><span class="op">(</span><span class="va">R</span>, circleBreak <span class="op">=</span> <span class="cn">TRUE</span>, occ <span class="op">=</span> <span class="va">PA_mites</span>, species_order<span class="op">=</span><span class="st">"abundance"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_associations-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># Average of MCMC samples of species enrironmental effect beta except the intercept</span></span>
-<span class="r-in"><span class="va">env_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span>,</span>
-<span class="r-in">                       <span class="va">colMeans</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"beta_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,<span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">env_effect</span><span class="op">)</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"beta_"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">env_effect</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot_associations</span><span class="op">(</span><span class="va">R</span>, env_effect <span class="op">=</span> <span class="va">env_effect</span>, species_order<span class="op">=</span><span class="st">"main env_effect"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Average of MCMC samples of species enrironmental effect beta except the intercept</span></span></span>
+<span class="r-in"><span><span class="va">env_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span>,</span></span>
+<span class="r-in"><span>                       <span class="va">colMeans</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"beta_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.sp</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,<span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">env_effect</span><span class="op">)</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"beta_"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">env_effect</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_associations</span><span class="op">(</span><span class="va">R</span>, env_effect <span class="op">=</span> <span class="va">env_effect</span>, species_order<span class="op">=</span><span class="st">"main env_effect"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_associations-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -211,7 +241,7 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
