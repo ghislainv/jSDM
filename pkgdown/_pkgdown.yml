@@ -22,7 +22,7 @@ navbar:
         href: articles/Code_of_conduct.html
     intro:
       text: Get started
-      href: Get_started/index.html
+      href: articles/jSDM.html
     articles:
       text: Articles
       href: articles/index.html
@@ -35,12 +35,14 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/ghislainv/jSDM
-
+      
 articles:
+
 - title: Method
   navbar: Method
   contents: 
   - '`proof`'
+  
 - title: Usage
   navbar: Usage
   contents:
@@ -49,16 +51,11 @@ articles:
   - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
-  - '`jSDM_in_parallel`'
   - '`jSDM_with_traits`'
-  - '`Madagascar`'
-  
-- title: test
-  navbar: 
-  contents:
-  - '`Code_of_conduct`'
-  - '`Contributing`'
   - '`jSDM`'
+  - '`jSDM_in_parallel`'
+  - '`Madagascar`'
+
   
 - title: Comparison
   navbar: Comparison
@@ -66,18 +63,20 @@ articles:
   - '`SDM_JSDM`'
   - '`jSDM_boral`'
   - '`jSDM_Hmsc`'
-
-Get_started:
-- title: Get started
-  navbar:
+  
+- title: Policy
+  navbar: Policy
   contents:
-  - '`jSDM`'
+  - '`Code_of_conduct`'
+  - '`Contributing`'
   
 reference:
+
 - title: Package
   desc: Package description
   contents:
   - '`jSDM-package`'
+  
 - title: jSDM
   desc: Functions for joint species distribution models
   contents:  
@@ -86,6 +85,7 @@ reference:
   - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
+  
 - title: Data
   desc: Data-sets used in examples
   contents:
@@ -96,6 +96,7 @@ reference:
   - '`birds`'
   - '`mites`'
   - '`aravo`'
+  
 - title: Miscellaneous
   desc: Miscellaneous functions
   contents:
@@ -105,8 +106,10 @@ reference:
   - '`get_enviro_cor`'
   - '`plot_residual_cor`'
   - '`plot_associations`'
-
+  
 - title: Predict
   desc: S3 method to predict from a jSDM model
   contents:
   - '`predict.jSDM`'
+  
+  
