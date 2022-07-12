@@ -46,13 +46,13 @@ articles:
 - title: Usage
   navbar: Usage
   contents:
+  - '`jSDM`'
   - '`jSDM_binomial_probit`'
   - '`jSDM_binomial_probit_sp_constrained`'
   - '`jSDM_binomial_probit_long_format`'
   - '`jSDM_binomial_logit`'
   - '`jSDM_poisson_log`'
   - '`jSDM_with_traits`'
-  - '`jSDM`'
   - '`jSDM_in_parallel`'
   - '`Madagascar`'
 

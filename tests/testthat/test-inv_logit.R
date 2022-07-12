@@ -1,4 +1,4 @@
-context("test-inv_logit")
+#context("test-inv_logit")
 
 test_that("inv_logit works", {
   expect_equal(inv_logit(0.4054651), 0.6)
