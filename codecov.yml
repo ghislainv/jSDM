@@ -12,5 +12,3 @@ coverage:
         target: auto
         threshold: 1%
         informational: true
-
-Rscript -e 'covr::codecov()'
