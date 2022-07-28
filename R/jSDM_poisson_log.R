@@ -441,7 +441,7 @@ jSDM_poisson_log  <- function(# Iteration
       
       # Form and check priors
       mubeta <- check.mubeta(mu_beta,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -449,7 +449,7 @@ jSDM_poisson_log  <- function(# Iteration
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                       Y=Y, X=as.matrix(X),
-                                      beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
+                                      beta_start=beta_start, mu_beta = mubeta, V_beta=V_beta,
                                       lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                       W_start = W_start, V_W = V_W,
                                       ropt=ropt, seed=seed, verbose=verbose)
@@ -482,7 +482,7 @@ jSDM_poisson_log  <- function(# Iteration
                          count_data=Y,
                          site_formula=site_formula,
                          site_data=site_data, n_latent=n_latent,
-                         beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                         beta_start=beta_start, mu_beta=mubeta, V_beta=V_beta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          W_start=W_start, V_W=V_W,
                          site_effect=site_effect, family="poisson", link="log",
@@ -512,13 +512,13 @@ jSDM_poisson_log  <- function(# Iteration
       
       # Form and check priors
       mubeta <- check.mubeta(mu_beta,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       V_alpha <- check.Valpha(V_alpha)
       
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                              Y=Y, X=as.matrix(X),
-                                             beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
+                                             beta_start=beta_start, mu_beta = mubeta, V_beta=V_beta,
                                              alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                                              ropt=ropt, seed=seed, verbose=verbose)
       
@@ -545,7 +545,7 @@ jSDM_poisson_log  <- function(# Iteration
                          count_data=Y,
                          site_formula=site_formula,
                          site_data=site_data,  n_latent=n_latent,
-                         beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                         beta_start=beta_start, mu_beta=mubeta, V_beta=V_beta,
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
@@ -574,13 +574,13 @@ jSDM_poisson_log  <- function(# Iteration
       
       # Form and check priors
       mubeta <- check.mubeta(mu_beta,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       V_alpha <- check.Valpha(V_alpha)
       
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_fixed_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                               Y=Y, X=as.matrix(X),
-                                              beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
+                                              beta_start=beta_start, mu_beta = mubeta, V_beta=V_beta,
                                               alpha_start=alpha_start, V_alpha=V_alpha, 
                                               ropt=ropt, seed=seed, verbose=verbose)
       
@@ -605,7 +605,7 @@ jSDM_poisson_log  <- function(# Iteration
                          count_data=Y,
                          site_formula=site_formula,
                          site_data=site_data,  n_latent=n_latent,
-                         beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                         beta_start=beta_start, mu_beta=mubeta, V_beta=V_beta,
                          alpha_start=alpha_start, V_alpha=V_alpha, 
                          site_effect=site_effect, family="poisson", link="log",
                          ropt=ropt, seed=seed, verbose=verbose)
@@ -636,7 +636,7 @@ jSDM_poisson_log  <- function(# Iteration
       
       # Form and check priors
       mubeta <- check.mubeta(mu_beta,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -645,7 +645,7 @@ jSDM_poisson_log  <- function(# Iteration
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                                  Y=Y, X=as.matrix(X),
-                                                 beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
+                                                 beta_start=beta_start, mu_beta = mubeta, V_beta=V_beta,
                                                  lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                                  W_start = W_start, V_W = V_W,
                                                  alpha_start=alpha_start, V_alpha=V_alpha,
@@ -682,7 +682,7 @@ jSDM_poisson_log  <- function(# Iteration
                          count_data=Y,
                          site_formula=site_formula,
                          site_data=site_data, n_latent=n_latent,
-                         beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                         beta_start=beta_start, mu_beta=mubeta, V_beta=V_beta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          W_start=W_start, V_W=V_W,
                          alpha_start=alpha_start, V_alpha=V_alpha, site_effect=site_effect,
@@ -715,7 +715,7 @@ jSDM_poisson_log  <- function(# Iteration
       
       # Form and check priors
       mubeta <- check.mubeta(mu_beta,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -724,7 +724,7 @@ jSDM_poisson_log  <- function(# Iteration
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_rand_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                                 Y=Y, X=as.matrix(X),
-                                                beta_start=beta_start, mu_beta = mubeta, V_beta=Vbeta,
+                                                beta_start=beta_start, mu_beta = mubeta, V_beta=V_beta,
                                                 lambda_start=lambda_start, mu_lambda = mulambda, V_lambda=Vlambda,
                                                 W_start = W_start, V_W = V_W,
                                                 alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
@@ -763,7 +763,7 @@ jSDM_poisson_log  <- function(# Iteration
                          count_data=Y, 
                          site_formula=site_formula,
                          site_data=site_data, n_latent=n_latent,
-                         beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
+                         beta_start=beta_start, mu_beta=mubeta, V_beta=V_beta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          W_start=W_start, V_W=V_W,
                          alpha_start=alpha_start, V_alpha_start=V_alpha, shape=shape, rate=rate,
@@ -892,7 +892,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
@@ -927,7 +927,7 @@ jSDM_poisson_log  <- function(# Iteration
       # Form and check priors
       mugamma <- check.mugamma.mat(mu_gamma,nt,np)
       Vgamma <- check.Vgamma.mat(V_gamma,nt,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -939,7 +939,7 @@ jSDM_poisson_log  <- function(# Iteration
                                              gamma_start=gamma_start,
                                              V_gamma=Vgamma, mu_gamma=mugamma,
                                              gamma_zeros=gamma_zeros, 
-                                             V_beta=Vbeta,
+                                             V_beta=V_beta,
                                              lambda_start=lambda_start,
                                              mu_lambda = mulambda, V_lambda=Vlambda,
                                              W_start = W_start, V_W = V_W,
@@ -983,7 +983,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
@@ -1020,14 +1020,14 @@ jSDM_poisson_log  <- function(# Iteration
       # Form and check priors
       mugamma <- check.mugamma.mat(mu_gamma,nt,np)
       Vgamma <- check.Vgamma.mat(V_gamma,nt,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       V_alpha <- check.Valpha(V_alpha)
       
       # call Rcpp function
       mod <- Rcpp_jSDM_poisson_log_traits_rand_site(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
                                                     Y=Y, X=as.matrix(X), Tr=as.matrix(Tr),
                                                     beta_start=beta_start,
-                                                    V_beta=Vbeta,
+                                                    V_beta=V_beta,
                                                     gamma_start=gamma_start,
                                                     V_gamma=Vgamma, mu_gamma=mugamma,
                                                     gamma_zeros=gamma_zeros,
@@ -1068,7 +1068,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
@@ -1104,7 +1104,7 @@ jSDM_poisson_log  <- function(# Iteration
       # Form and check priors
       mugamma <- check.mugamma.mat(mu_gamma,nt,np)
       Vgamma <- check.Vgamma.mat(V_gamma,nt,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       V_alpha <- check.Valpha(V_alpha)
       
       # call Rcpp function
@@ -1114,7 +1114,7 @@ jSDM_poisson_log  <- function(# Iteration
                                                      gamma_start=gamma_start,
                                                      V_gamma=Vgamma, mu_gamma=mugamma,
                                                      gamma_zeros=gamma_zeros,
-                                                     V_beta=Vbeta,
+                                                     V_beta=V_beta,
                                                      alpha_start=alpha_start, V_alpha=V_alpha, 
                                                      ropt=ropt, seed=seed, verbose=verbose)
       
@@ -1149,7 +1149,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
@@ -1186,7 +1186,7 @@ jSDM_poisson_log  <- function(# Iteration
       # Form and check priors
       mugamma <- check.mugamma.mat(mu_gamma,nt,np)
       Vgamma <- check.Vgamma.mat(V_gamma,nt,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -1199,7 +1199,7 @@ jSDM_poisson_log  <- function(# Iteration
                                                         gamma_start=gamma_start,
                                                         V_gamma=Vgamma, mu_gamma=mugamma,
                                                         gamma_zeros=gamma_zeros,
-                                                        V_beta=Vbeta,
+                                                        V_beta=V_beta,
                                                         lambda_start=lambda_start,
                                                         mu_lambda = mulambda, V_lambda=Vlambda,
                                                         W_start = W_start, V_W = V_W,
@@ -1248,7 +1248,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
@@ -1289,7 +1289,7 @@ jSDM_poisson_log  <- function(# Iteration
       # Form and check priors
       mugamma <- check.mugamma.mat(mu_gamma,nt,np)
       Vgamma <- check.Vgamma.mat(V_gamma,nt,np)
-      Vbeta <- check.Vbeta(V_beta,np)
+      V_beta <- check.Vbeta(V_beta,np)
       mulambda <- check.mubeta(mu_lambda,n_latent)
       Vlambda <- check.Vlambda(V_lambda,n_latent)
       V_W <- rep(1,n_latent)
@@ -1302,7 +1302,7 @@ jSDM_poisson_log  <- function(# Iteration
                                                        gamma_start=gamma_start,
                                                        V_gamma=Vgamma, mu_gamma=mugamma,
                                                        gamma_zeros=gamma_zeros,
-                                                       V_beta=Vbeta,
+                                                       V_beta=V_beta,
                                                        lambda_start=lambda_start,
                                                        mu_lambda = mulambda, V_lambda=Vlambda,
                                                        W_start = W_start, V_W = V_W,
@@ -1355,7 +1355,7 @@ jSDM_poisson_log  <- function(# Iteration
                          trait_formula=trait_formula,
                          n_latent=n_latent, 
                          beta_start=beta_start, 
-                         V_beta=Vbeta,
+                         V_beta=V_beta,
                          gamma_start=gamma_start,
                          V_gamma=Vgamma, mu_gamma=mugamma,
                          gamma_zeros=gamma_zeros,
