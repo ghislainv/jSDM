@@ -1,4 +1,4 @@
-pandoc: 2.7.3
+pandoc: 2.14.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
@@ -17,5 +17,5 @@ articles:
   jSDM_poisson_log: jSDM_poisson_log.html
   jSDM_with_traits: jSDM_with_traits.html
   proof: proof.html
-last_built: 2022-07-19T10:08Z
+last_built: 2022-07-28T09:14Z
 

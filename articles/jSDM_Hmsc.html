@@ -95,17 +95,17 @@
 
     
     
-<p>Hierarchical Modelling of Species Communities (HMSC) is a model-based approach for analyzing community ecological data (<span class="citation">(Ovaskainen <em>et al.</em> <a href="#ref-Ovaskainen2017" role="doc-biblioref">2017</a>)</span>). The obligatory data for HMSC-analyses includes a matrix of species occurrences or abundances and a matrix of environmental covariates. Additional and optional data include information about species traits and phylogenetic relationships, and information about the spatiotemporal context of the sampling design. HMSC partitions variation in species occurrences to components that relate to environmental filtering, species interactions, and random processes. <code>Hmsc</code> yields inference both at species and community levels.
+<p>Hierarchical Modelling of Species Communities (HMSC) is a model-based approach for analyzing community ecological data (<span class="citation">(<a href="#ref-Ovaskainen2017" role="doc-biblioref">Ovaskainen <em>et al.</em> 2017</a>)</span>). The obligatory data for HMSC-analyses includes a matrix of species occurrences or abundances and a matrix of environmental covariates. Additional and optional data include information about species traits and phylogenetic relationships, and information about the spatiotemporal context of the sampling design. HMSC partitions variation in species occurrences to components that relate to environmental filtering, species interactions, and random processes. <code>Hmsc</code> yields inference both at species and community levels.
 This package and the package <code>jSDM</code> allow to fit the models defined below, so we can compare the results obtained by each of them on different data-sets.</p>
-<div class="section level2">
+<div class="section level2" number="1">
 <h2 id="models-definition">
 <span class="header-section-number">1</span> Models definition<a class="anchor" aria-label="anchor" href="#models-definition"></a>
 </h2>
-<div class="section level3">
+<div class="section level3" number="1.1">
 <h3 id="binomial-model-for-presence-absence-data">
 <span class="header-section-number">1.1</span> Binomial model for presence-absence data<a class="anchor" aria-label="anchor" href="#binomial-model-for-presence-absence-data"></a>
 </h3>
-<p>We consider a latent variable model (LVM) to account for species co-occurrence <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span> on all sites .</p>
+<p>We consider a latent variable model (LVM) to account for species co-occurrence <span class="citation">(<a href="#ref-Warton2015" role="doc-biblioref">Warton <em>et al.</em> 2015</a>)</span> on all sites .</p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{B}inomial(t_i, \theta_{ij})\]</span></p>
 <p><span class="math display">\[ \mathrm{g}(\theta_{ij}) = X_i\beta_j + W_i\lambda_j \]</span></p>
 <ul>
@@ -122,7 +122,7 @@ This package and the package <code>jSDM</code> allow to fit the models defined b
 <li><p><span class="math inline">\(X_i\)</span>: Vector of explanatory variables for site <span class="math inline">\(i\)</span> with <span class="math inline">\(X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p\)</span> where <span class="math inline">\(p\)</span> is the number of bio-climatic variables considered (including intercept <span class="math inline">\(\forall i, x_i^1=1\)</span>).</p></li>
 <li><p><span class="math inline">\(\beta_j\)</span>: Effects of the explanatory variables on the probability of presence of species <span class="math inline">\(j\)</span> including species intercept (<span class="math inline">\(\beta_{0j}\)</span>). We use a prior distribution <span class="math inline">\(\beta_j \sim \mathcal{N}_p(0,\Sigma_{\beta})\)</span> with <span class="math inline">\(\Sigma_{\beta}\)</span> a specified diagonal matrix of size <span class="math inline">\(p \times p\)</span>.</p></li>
 <li><p><span class="math inline">\(W_i\)</span>: Vector of random latent variables for site <span class="math inline">\(i\)</span>. <span class="math inline">\(W_i \sim N(0, 1)\)</span>. The number of latent variables <span class="math inline">\(q\)</span> must be fixed by the user (default to <span class="math inline">\(q=2\)</span>).</p></li>
-<li><p><span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span> also known as “factor loadings” <span class="citation">(Warton <em>et al.</em> <a href="#ref-Warton2015" role="doc-biblioref">2015</a>)</span>. We use the following prior distribution in the <code>jSDM</code> package to constraint values to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal, for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> : <span class="math display">\[\lambda_{jl} \sim \begin{cases}
+<li><p><span class="math inline">\(\lambda_j\)</span>: Effects of the latent variables on the probability of presence of species <span class="math inline">\(j\)</span> also known as “factor loadings” <span class="citation">(<a href="#ref-Warton2015" role="doc-biblioref">Warton <em>et al.</em> 2015</a>)</span>. We use the following prior distribution in the <code>jSDM</code> package to constraint values to <span class="math inline">\(0\)</span> on upper diagonal and to strictly positive values on diagonal, for <span class="math inline">\(j=1,\ldots,J\)</span> and <span class="math inline">\(l=1,\ldots,q\)</span> : <span class="math display">\[\lambda_{jl} \sim \begin{cases}
 \mathcal{N}(0,1) &amp; \text{if } l &lt; j \\
 \mathcal{N}(0,1) \text{ left truncated by } 0 &amp; \text{if } l=j \\
 P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
@@ -133,20 +133,20 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
 <span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 </div>
-<div class="section level3">
+<div class="section level3" number="1.2">
 <h3 id="poisson-model-for-abundance-data">
 <span class="header-section-number">1.2</span> Poisson model for abundance data<a class="anchor" aria-label="anchor" href="#poisson-model-for-abundance-data"></a>
 </h3>
-<p>Referring to the models used in the articles <span class="citation">(Hui <a href="#ref-Hui2016" role="doc-biblioref">2016</a>)</span>, we define the following model to account for species abundances on all sites.</p>
+<p>Referring to the models used in the articles <span class="citation">(<a href="#ref-Hui2016" role="doc-biblioref">Hui 2016</a>)</span>, we define the following model to account for species abundances on all sites.</p>
 <p><span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij})\]</span>.</p>
 <p><span class="math display">\[ \mathrm{log}(\theta_{ij}) = \beta_{0j} + X_i\beta_j + W_i\lambda_j \]</span></p>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="2">
 <h2 id="data-sets">
 <span class="header-section-number">2</span> Data-sets<a class="anchor" aria-label="anchor" href="#data-sets"></a>
 </h2>
-<div class="section level3">
+<div class="section level3" number="2.1">
 <h3 id="data-simulation">
 <span class="header-section-number">2.1</span> Data simulation<a class="anchor" aria-label="anchor" href="#data-simulation"></a>
 </h3>
@@ -195,11 +195,11 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="2.2">
 <h3 id="data-sets-description">
 <span class="header-section-number">2.2</span> Data-sets description<a class="anchor" aria-label="anchor" href="#data-sets-description"></a>
 </h3>
-<p>Among the following datasets, the presence-absence data are from the <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019" role="doc-biblioref">2019</a>)</span> article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of <code>birds</code> is from the <span class="citation">(Kéry &amp; Schmid <a href="#ref-Kery2006" role="doc-biblioref">2006</a>)</span> article and the <code>mites</code> abundance data-set is from the <span class="citation">(Borcard &amp; Legendre <a href="#ref-Borcard1994" role="doc-biblioref">1994</a>)</span> article.</p>
+<p>Among the following datasets, the presence-absence data are from the <span class="citation">(<a href="#ref-Wilkinson2019" role="doc-biblioref">Wilkinson <em>et al.</em> 2019</a>)</span> article in which they are used to compare joint species distribution models for presence-absence data, the dataset that records the presence or absence of <code>birds</code> is from the <span class="citation">(<a href="#ref-Kery2006" role="doc-biblioref">Kéry &amp; Schmid 2006</a>)</span> article and the <code>mites</code> abundance data-set is from the <span class="citation">(<a href="#ref-Borcard1994" role="doc-biblioref">Borcard &amp; Legendre 1994</a>)</span> article.</p>
 <pre><code><span><span class="co">#&gt; ##</span></span>
 <span><span class="co">#&gt; ## jSDM R package </span></span>
 <span><span class="co">#&gt; ## For joint species distribution models </span></span>
@@ -496,12 +496,12 @@ n.mcmc
 </table>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="3">
 <h2 id="package-hmsc">
 <span class="header-section-number">3</span> Package <code>Hmsc</code><a class="anchor" aria-label="anchor" href="#package-hmsc"></a>
 </h2>
-<p>In a first step, we fit joint species distribution models from previous data-sets using the <code><a href="https://rdrr.io/pkg/Hmsc/man/Hmsc.html" class="external-link">Hmsc()</a></code> function from package of the same name whose features are developed in the article <span class="citation">(Ovaskainen <em>et al.</em> <a href="#ref-Ovaskainen2017" role="doc-biblioref">2017</a>)</span>.</p>
-<div class="section level3">
+<p>In a first step, we fit joint species distribution models from previous data-sets using the <code><a href="https://rdrr.io/pkg/Hmsc/man/Hmsc.html" class="external-link">Hmsc()</a></code> function from package of the same name whose features are developed in the article <span class="citation">(<a href="#ref-Ovaskainen2017" role="doc-biblioref">Ovaskainen <em>et al.</em> 2017</a>)</span>.</p>
+<div class="section level3" number="3.1">
 <h3 id="simulated-dataset">
 <span class="header-section-number">3.1</span> Simulated dataset<a class="anchor" aria-label="anchor" href="#simulated-dataset"></a>
 </h3>
@@ -602,7 +602,7 @@ n.mcmc
 <p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
 On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.2">
 <h3 id="mosquitos-dataset">
 <span class="header-section-number">3.2</span> Mosquitos dataset<a class="anchor" aria-label="anchor" href="#mosquitos-dataset"></a>
 </h3>
@@ -645,7 +645,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     <span class="va">probit_theta_latent_Mosquitos</span>, <span class="va">Deviance_Hmsc_Mosquitos</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Mosquitos.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.3">
 <h3 id="eucalypts-dataset">
 <span class="header-section-number">3.3</span> Eucalypts dataset<a class="anchor" aria-label="anchor" href="#eucalypts-dataset"></a>
 </h3>
@@ -690,7 +690,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     <span class="va">probit_theta_latent_Eucalypts</span>, <span class="va">Deviance_Hmsc_Eucalypts</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Eucalypts.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.4">
 <h3 id="frogs-dataset">
 <span class="header-section-number">3.4</span> Frogs dataset<a class="anchor" aria-label="anchor" href="#frogs-dataset"></a>
 </h3>
@@ -734,7 +734,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     <span class="va">probit_theta_latent_Frogs</span>, <span class="va">Deviance_Hmsc_Frogs</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Frogs.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.5">
 <h3 id="fungi-dataset">
 <span class="header-section-number">3.5</span> Fungi dataset<a class="anchor" aria-label="anchor" href="#fungi-dataset"></a>
 </h3>
@@ -784,7 +784,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     <span class="va">probit_theta_latent_Fungi</span>, <span class="va">Deviance_Hmsc_Fungi</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Fungi.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.6">
 <h3 id="birds-dataset">
 <span class="header-section-number">3.6</span> Birds dataset<a class="anchor" aria-label="anchor" href="#birds-dataset"></a>
 </h3>
@@ -831,7 +831,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     <span class="va">probit_theta_latent_Birds</span>, <span class="va">Deviance_Hmsc_Birds</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Birds.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.7">
 <h3 id="mites-dataset">
 <span class="header-section-number">3.7</span> Mites dataset<a class="anchor" aria-label="anchor" href="#mites-dataset"></a>
 </h3>
@@ -881,12 +881,12 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/Hmsc_Mites.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="4">
 <h2 id="package-jsdm">
 <span class="header-section-number">4</span> Package <code>jSDM</code><a class="anchor" aria-label="anchor" href="#package-jsdm"></a>
 </h2>
 <p>In a second step, we fit the same joint species distribution models from each of the previous datasets using the <code>jSDM</code> package.</p>
-<div class="section level3">
+<div class="section level3" number="4.1">
 <h3 id="simulated-dataset-1">
 <span class="header-section-number">4.1</span> Simulated dataset<a class="anchor" aria-label="anchor" href="#simulated-dataset-1"></a>
 </h3>
@@ -1007,7 +1007,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <p>Overall, the traces and the densities of the parameters indicate the convergence of the algorithm. Indeed, we observe on the traces that the values oscillate around averages without showing an upward or downward trend and we see that the densities are quite smooth and for the most part of Gaussian form.<br>
 On the above figures, the estimated parameters are close to the expected values if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.2">
 <h3 id="mosquitos-dataset-1">
 <span class="header-section-number">4.2</span> Mosquitos dataset<a class="anchor" aria-label="anchor" href="#mosquitos-dataset-1"></a>
 </h3>
@@ -1038,7 +1038,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_Mosquitos</span>, <span class="va">mod_jSDM_Mosquitos</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Mosquitos.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.3">
 <h3 id="eucalypts-dataset-1">
 <span class="header-section-number">4.3</span> Eucalypts dataset<a class="anchor" aria-label="anchor" href="#eucalypts-dataset-1"></a>
 </h3>
@@ -1069,7 +1069,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_Eucalypts</span>, <span class="va">mod_jSDM_Eucalypts</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Eucalypts.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.4">
 <h3 id="frogs-dataset-1">
 <span class="header-section-number">4.4</span> Frogs dataset<a class="anchor" aria-label="anchor" href="#frogs-dataset-1"></a>
 </h3>
@@ -1100,7 +1100,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_Frogs</span>, <span class="va">mod_jSDM_Frogs</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Frogs.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.5">
 <h3 id="fungi-dataset-1">
 <span class="header-section-number">4.5</span> Fungi dataset<a class="anchor" aria-label="anchor" href="#fungi-dataset-1"></a>
 </h3>
@@ -1130,7 +1130,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_Fungi</span>, <span class="va">mod_jSDM_Fungi</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Fungi.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.6">
 <h3 id="birds-dataset-1">
 <span class="header-section-number">4.6</span> Birds dataset<a class="anchor" aria-label="anchor" href="#birds-dataset-1"></a>
 </h3>
@@ -1172,7 +1172,7 @@ On the above figures, the estimated parameters are close to the expected values 
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">T_jSDM_Birds</span>, <span class="va">mod_jSDM_Birds</span>,</span>
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Birds.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="4.7">
 <h3 id="mites-dataset-1">
 <span class="header-section-number">4.7</span> Mites dataset<a class="anchor" aria-label="anchor" href="#mites-dataset-1"></a>
 </h3>
@@ -1205,12 +1205,12 @@ On the above figures, the estimated parameters are close to the expected values 
 <span>     file<span class="op">=</span><span class="st">"jSDM_Hmsc_cache/jSDM_Mites.RData"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="5">
 <h2 id="comparison">
 <span class="header-section-number">5</span> Comparison<a class="anchor" aria-label="anchor" href="#comparison"></a>
 </h2>
 <p>Then we compare the computation time and the results obtained with each package.</p>
-<div class="section level3">
+<div class="section level3" number="5.1">
 <h3 id="computation-time-and-deviance">
 <span class="header-section-number">5.1</span> Computation time and deviance<a class="anchor" aria-label="anchor" href="#computation-time-and-deviance"></a>
 </h3>
@@ -1374,7 +1374,7 @@ Deviance jSDM
 </table>
 <p><code>jSDM</code> is <strong>7 to 28</strong> times faster than <code>Hmsc</code>.</p>
 </div>
-<div class="section level3">
+<div class="section level3" number="5.2">
 <h3 id="root-mean-square-error-rmse-for-simulated-data">
 <span class="header-section-number">5.2</span> Root-Mean-Square Error (RMSE) for simulated data<a class="anchor" aria-label="anchor" href="#root-mean-square-error-rmse-for-simulated-data"></a>
 </h3>
@@ -1403,71 +1403,71 @@ RMSE
 </tr></tbody>
 </table>
 </div>
-<div class="section level3">
+<div class="section level3" number="5.3">
 <h3 id="estimated-parameters">
 <span class="header-section-number">5.3</span> Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
 <p>We plot the parameters estimated with <code>jSDM</code> against those estimated with <code>Hmsc</code> to compare the results obtained with both packages.</p>
-<div class="section level4">
+<div class="section level4" number="5.3.1">
 <h4 id="simulated-dataset-2">
 <span class="header-section-number">5.3.1</span> Simulated dataset<a class="anchor" aria-label="anchor" href="#simulated-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-simulation-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.2">
 <h4 id="mosquitos-dataset-2">
 <span class="header-section-number">5.3.2</span> Mosquitos dataset<a class="anchor" aria-label="anchor" href="#mosquitos-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mosquitos-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.3">
 <h4 id="eucalypts-dataset-2">
 <span class="header-section-number">5.3.3</span> Eucalypts dataset<a class="anchor" aria-label="anchor" href="#eucalypts-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-Eucalypts-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.4">
 <h4 id="frogs-dataset-2">
 <span class="header-section-number">5.3.4</span> Frogs dataset<a class="anchor" aria-label="anchor" href="#frogs-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-frogs-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.5">
 <h4 id="fungi-dataset-2">
 <span class="header-section-number">5.3.5</span> Fungi dataset<a class="anchor" aria-label="anchor" href="#fungi-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-fungi-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.6">
 <h4 id="birds-dataset-2">
 <span class="header-section-number">5.3.6</span> Birds dataset<a class="anchor" aria-label="anchor" href="#birds-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-birds-4.png" width="800" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="5.3.7">
 <h4 id="mites-dataset-2">
 <span class="header-section-number">5.3.7</span> Mites dataset<a class="anchor" aria-label="anchor" href="#mites-dataset-2"></a>
 </h4>
 <p><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-1.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-2.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-3.png" width="800" style="display: block; margin: auto;"><img src="jSDM_Hmsc_files/figure-html/jSDM-Hmsc-mites-4.png" width="800" style="display: block; margin: auto;"></p>
 <p>On the figures above, the parameters estimated with <code>jSDM</code> are close to those obtained with <code>Hmsc</code> if the points are near the red line representing the identity function (<span class="math inline">\(y=x\)</span>).</p>
-<div id="refs" class="references">
-<div id="ref-Borcard1994">
-<p>Borcard, D. &amp; Legendre, P. (1994) Environmental control and spatial structure in ecological communities: An example using oribatid mites (Acari, Oribatei). <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Borcard1994" class="csl-entry">
+Borcard, D. &amp; Legendre, P. (1994) <a href="https://doi.org/10.1007/BF00714196" class="external-link">Environmental control and spatial structure in ecological communities: An example using oribatid mites (<span>Acari</span>, <span>Oribatei</span>)</a>. <em>Environmental and Ecological Statistics</em>, <strong>1</strong>, 37–61.
 </div>
-<div id="ref-Hui2016">
-<p>Hui, F.K.C. (2016) Boral – Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in r. <em>Methods in Ecology and Evolution</em>, <strong>7</strong>, 744–750.</p>
+<div id="ref-Hui2016" class="csl-entry">
+Hui, F.K.C. (2016) <a href="https://doi.org/10.1111/2041-210X.12514" class="external-link">Boral – <span>Bayesian</span> <span>Ordination</span> and <span>Regression</span> <span>Analysis</span> of <span>Multivariate</span> <span>Abundance</span> <span>Data</span> in r</a>. <em>Methods in Ecology and Evolution</em>, <strong>7</strong>, 744–750.
 </div>
-<div id="ref-Kery2006">
-<p>Kéry, M. &amp; Schmid, H. (2006) Estimating species richness: Calibrating a large avian monitoring programme. <em>Journal of Applied Ecology</em>, <strong>43</strong>, 101–110.</p>
+<div id="ref-Kery2006" class="csl-entry">
+Kéry, M. &amp; Schmid, H. (2006) <a href="https://doi.org/10.1111/j.1365-2664.2005.01111.x" class="external-link">Estimating species richness: Calibrating a large avian monitoring programme</a>. <em>Journal of Applied Ecology</em>, <strong>43</strong>, 101–110.
 </div>
-<div id="ref-Ovaskainen2017">
-<p>Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F.G., Duan, L., Dunson, D., Roslin, T. &amp; Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. <em>Ecology Letters</em>, <strong>20</strong>, 561–576.</p>
+<div id="ref-Ovaskainen2017" class="csl-entry">
+Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F.G., Duan, L., Dunson, D., Roslin, T. &amp; Abrego, N. (2017) <a href="https://doi.org/10.1111/ele.12757" class="external-link">How to make more out of community data? A conceptual framework and its implementation as models and software</a>. <em>Ecology Letters</em>, <strong>20</strong>, 561–576.
 </div>
-<div id="ref-Warton2015">
-<p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
+<div id="ref-Warton2015" class="csl-entry">
+Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) <a href="https://doi.org/10.1016/j.tree.2015.09.007" class="external-link">So many variables: Joint modeling in community ecology</a>. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.
 </div>
-<div id="ref-Wilkinson2019">
-<p>Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.</p>
+<div id="ref-Wilkinson2019" class="csl-entry">
+Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) <a href="https://doi.org/10.1111/2041-210X.13106" class="external-link">A comparison of joint species distribution models for presence-absence data</a>. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.
 </div>
 </div>
 </div>

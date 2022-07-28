@@ -95,7 +95,7 @@
 
     
     
-<div class="section level2">
+<div class="section level2" number="1">
 <h2 id="model-definition">
 <span class="header-section-number">1</span> Model definition<a class="anchor" aria-label="anchor" href="#model-definition"></a>
 </h2>
@@ -126,7 +126,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assume that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div class="section level2">
+<div class="section level2" number="2">
 <h2 id="occurrence-data-set">
 <span class="header-section-number">2</span> Occurrence data-set<a class="anchor" aria-label="anchor" href="#occurrence-data-set"></a>
 </h2>
@@ -134,7 +134,7 @@ The corresponding regression coefficients for each species <span class="math inl
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:frog-picture"></span>
 <img src="figures/Litoria_ewingii.jpg" alt="Litoria ewingii (Wilkinson et al. 2019)." width="400" height="300"><p class="caption">
-Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wilkinson <em>et al.</em> <a href="#ref-Wilkinson2019" role="doc-biblioref">2019</a>)</span>.
+Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(<a href="#ref-Wilkinson2019" role="doc-biblioref">Wilkinson <em>et al.</em> 2019</a>)</span>.
 </p>
 </div>
 <p>This data-set is available in the <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html" class="external-link"><code>jSDM-package</code></a> R package. It can be loaded with the <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> command. The <a href="https://ecology.ghislainv.fr/jSDM/reference/frogs.html" class="external-link"><code>frogs</code></a> dataset is in “wide” format: each line is a site and the occurrence data (from Species_1 to Species_9) are in columns. A site is characterized by its x-y geographical coordinates, one discrete covariate and two other continuous covariates.</p>
@@ -172,7 +172,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span><span class="va">Env_frogs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="va">frogs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Env_frogs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">frogs</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
+<div class="section level2" number="3">
 <h2 id="parameter-inference">
 <span class="header-section-number">3</span> Parameter inference<a class="anchor" aria-label="anchor" href="#parameter-inference"></a>
 </h2>
@@ -212,7 +212,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span><span class="co">#&gt; **********:90.0% </span></span>
 <span><span class="co">#&gt; **********:100.0%</span></span></code></pre></div>
 </div>
-<div class="section level2">
+<div class="section level2" number="4">
 <h2 id="analysis-of-the-results">
 <span class="header-section-number">4</span> Analysis of the results<a class="anchor" aria-label="anchor" href="#analysis-of-the-results"></a>
 </h2>
@@ -282,7 +282,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <span>     main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/plot-results-probit-11.png" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
+<div class="section level2" number="5">
 <h2 id="matrice-of-correlations">
 <span class="header-section-number">5</span> Matrice of correlations<a class="anchor" aria-label="anchor" href="#matrice-of-correlations"></a>
 </h2>
@@ -294,7 +294,7 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod_frogs_jSDM_probit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="jSDM_binomial_probit_files/figure-html/correlation-matrix-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
+<div class="section level2" number="6">
 <h2 id="predictions">
 <span class="header-section-number">6</span> Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
 </h2>
@@ -323,15 +323,15 @@ Figure 2.1: <strong><em>Litoria ewingii</em></strong> <span class="citation">(Wi
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-Albert1993">
-<p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Albert1993" class="csl-entry">
+Albert, J.H. &amp; Siddhartha, C. (1993) <a href="https://doi.org/10.1080/01621459.1993.10476321" class="external-link">Bayesian analysis of binary and polychotomous response data</a>. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.
 </div>
-<div id="ref-Warton2015">
-<p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
+<div id="ref-Warton2015" class="csl-entry">
+Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) <a href="https://doi.org/10.1016/j.tree.2015.09.007" class="external-link">So many variables: Joint modeling in community ecology</a>. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.
 </div>
-<div id="ref-Wilkinson2019">
-<p>Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) A comparison of joint species distribution models for presence-absence data. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.</p>
+<div id="ref-Wilkinson2019" class="csl-entry">
+Wilkinson, D.P., Golding, N., Guillera-Arroita, G., Tingley, R. &amp; McCarthy, M.A. (2019) <a href="https://doi.org/10.1111/2041-210X.13106" class="external-link">A comparison of joint species distribution models for presence-absence data</a>. <em>Methods in Ecology and Evolution</em>, <strong>10</strong>, 198–211.
 </div>
 </div>
 </div>

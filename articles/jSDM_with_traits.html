@@ -95,7 +95,7 @@
 
     
     
-<div class="section level2">
+<div class="section level2" number="1">
 <h2 id="model-definition">
 <span class="header-section-number">1</span> Model definition<a class="anchor" aria-label="anchor" href="#model-definition"></a>
 </h2>
@@ -127,11 +127,11 @@ We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> 
 <li><p><span class="math inline">\(\alpha_i\)</span> represents the random effect of site <span class="math inline">\(i\)</span> such as <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_{\alpha})\)</span> and we assume that <span class="math inline">\(V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)\)</span> as prior distribution by default.</p></li>
 </ul>
 </div>
-<div class="section level2">
+<div class="section level2" number="2">
 <h2 id="dataset">
 <span class="header-section-number">2</span> Dataset<a class="anchor" aria-label="anchor" href="#dataset"></a>
 </h2>
-<div class="section level3">
+<div class="section level3" number="2.1">
 <h3 id="presence-absence-of-alpine-plants">
 <span class="header-section-number">2.1</span> Presence-absence of alpine plants<a class="anchor" aria-label="anchor" href="#presence-absence-of-alpine-plants"></a>
 </h3>
@@ -139,10 +139,10 @@ We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> 
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:alpine-plant"></span>
 <img src="figures/alpine_plants.png" alt="Alpine plants (Choler 2005)." width="600"><p class="caption">
-Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(Choler <a href="#ref-Choler2005" role="doc-biblioref">2005</a>)</span>.
+Figure 2.1: <strong><em>Alpine plants</em></strong> <span class="citation">(<a href="#ref-Choler2005" role="doc-biblioref">Choler 2005</a>)</span>.
 </p>
 </div>
-<p>We consider alpine plants in Aravo (Valloire), south east France <span class="citation">(Choler <a href="#ref-Choler2005" role="doc-biblioref">2005</a>)</span>. The data are available from the R package <code>ade4</code> <span class="citation">(Dray &amp; Dufour <a href="#ref-Dray2007" role="doc-biblioref">2007</a>)</span>. The original dataset includes abundance data for 82 species in 75 sites.
+<p>We consider alpine plants in Aravo (Valloire), south east France <span class="citation">(<a href="#ref-Choler2005" role="doc-biblioref">Choler 2005</a>)</span>. The data are available from the R package <code>ade4</code> <span class="citation">(<a href="#ref-Dray2007" role="doc-biblioref">Dray &amp; Dufour 2007</a>)</span>. The original dataset includes abundance data for 82 species in 75 sites.
 This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html" class="external-link"><code>jSDM-package</code></a> R package. It can be loaded with the <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code> command. The <a href="https://ecology.ghislainv.fr/jSDM/reference/aravo.html" class="external-link"><code>aravo</code></a> data-set is a list containing a data.frame with the abundance values of 82 species (columns) in 75 sites (rows), a data.frame with the measurements of 6 environmental variables for the sites and data.frame with the measurements of 8 traits for the species.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ecology.ghislainv.fr/jSDM/" class="external-link">jSDM</a></span><span class="op">)</span></span>
@@ -218,7 +218,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span><span class="co">#&gt; Trif.thal </span></span>
 <span><span class="co">#&gt;         5</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="2.2">
 <h3 id="environmental-variables">
 <span class="header-section-number">2.2</span> Environmental variables<a class="anchor" aria-label="anchor" href="#environmental-variables"></a>
 </h3>
@@ -253,7 +253,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span><span class="co"># Number of environmental variables plus intercept</span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">Env_aravo</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="2.3">
 <h3 id="species-traits">
 <span class="header-section-number">2.3</span> Species traits<a class="anchor" aria-label="anchor" href="#species-traits"></a>
 </h3>
@@ -290,7 +290,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span><span class="va">Trait_aravo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">traits</span><span class="op">[</span><span class="op">-</span><span class="va">rare_sp</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="3">
 <h2 id="parameter-inference">
 <span class="header-section-number">3</span> Parameter inference<a class="anchor" aria-label="anchor" href="#parameter-inference"></a>
 </h2>
@@ -332,7 +332,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span><span class="co">#&gt; **********:90.0% </span></span>
 <span><span class="co">#&gt; **********:100.0%</span></span></code></pre></div>
 </div>
-<div class="section level2">
+<div class="section level2" number="4">
 <h2 id="analysis-of-the-results">
 <span class="header-section-number">4</span> Analysis of the results<a class="anchor" aria-label="anchor" href="#analysis-of-the-results"></a>
 </h2>
@@ -408,7 +408,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <span>     main <span class="op">=</span> <span class="st">"Predicted theta"</span>, xlab <span class="op">=</span><span class="st">"predicted theta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/plot-results-probit-13.png" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
+<div class="section level2" number="5">
 <h2 id="matrice-of-correlations">
 <span class="header-section-number">5</span> Matrice of correlations<a class="anchor" aria-label="anchor" href="#matrice-of-correlations"></a>
 </h2>
@@ -420,7 +420,7 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_residual_cor.html">plot_residual_cor</a></span><span class="op">(</span><span class="va">mod</span>, tl.srt <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="jSDM_with_traits_files/figure-html/correlation-matrix-probit-1.png" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
+<div class="section level2" number="6">
 <h2 id="predictions">
 <span class="header-section-number">6</span> Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
 </h2>
@@ -446,18 +446,18 @@ This data-set is also available in the <a href="https://ecology.ghislainv.fr/jSD
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-Albert1993">
-<p>Albert, J.H. &amp; Siddhartha, C. (1993) Bayesian analysis of binary and polychotomous response data. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Albert1993" class="csl-entry">
+Albert, J.H. &amp; Siddhartha, C. (1993) <a href="https://doi.org/10.1080/01621459.1993.10476321" class="external-link">Bayesian analysis of binary and polychotomous response data</a>. <em>Journal of the American Statistical Association</em>, <strong>88</strong>, 669–679.
 </div>
-<div id="ref-Choler2005">
-<p>Choler, P. (2005) Consistent shifts in alpine plant traits along a mesotopographical gradient. <em>Arctic, Antarctic, and Alpine Research</em>, <strong>37</strong>, 444–453.</p>
+<div id="ref-Choler2005" class="csl-entry">
+Choler, P. (2005) <a href="https://doi.org/10.1657/1523-0430(2005)037%5B0444:csiapt%5D2.0.co;2" class="external-link">Consistent shifts in alpine plant traits along a mesotopographical gradient</a>. <em>Arctic, Antarctic, and Alpine Research</em>, <strong>37</strong>, 444–453.
 </div>
-<div id="ref-Dray2007">
-<p>Dray, S. &amp; Dufour, A.-B. (2007) The ade4 package: Implementing the duality diagram for ecologists. <em>Journal of Statistical Software</em>, <strong>22</strong>.</p>
+<div id="ref-Dray2007" class="csl-entry">
+Dray, S. &amp; Dufour, A.-B. (2007) <a href="https://doi.org/10.18637/jss.v022.i04" class="external-link">The ade4 package: Implementing the duality diagram for ecologists</a>. <em>Journal of Statistical Software</em>, <strong>22</strong>.
 </div>
-<div id="ref-Warton2015">
-<p>Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) So many variables: Joint modeling in community ecology. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.</p>
+<div id="ref-Warton2015" class="csl-entry">
+Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walker, S.C. &amp; Hui, F.K.C. (2015) <a href="https://doi.org/10.1016/j.tree.2015.09.007" class="external-link">So many variables: Joint modeling in community ecology</a>. <em>Trends in Ecology &amp; Evolution</em>, <strong>30</strong>, 766–779.
 </div>
 </div>
 </div>
