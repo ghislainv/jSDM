@@ -244,27 +244,37 @@ mod_all <- jSDM::jSDM_binomial_probit(
   seed=1234, verbose=1)
 T2 <- Sys.time()
 T_all <- difftime(T2,T1)
-save(mod_all,T_all,file="~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
+save(mod_all,T_all,file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 ```
 
-```{r fit-JSDM-Mada-table, echo=FALSE, include=TRUE}
-load("~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
+```{r fit-JSDM-Mada-table, echo=FALSE}
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 nsp<-ncol(mod_all$model_spec$presence_data)
 nplot<-nrow(mod_all$model_spec$presence_data)
 p <- ncol(mod_all$model_spec$beta_start)
 T_all <- as.numeric(T_all,units="hours")
-results <- data.frame(nsp,nplot,n_obs=nsp*nplot,n_param=(p+1)*nsp+2*nsp-1+2*nplot+nplot+1, ngibbs="80000","Time"= T_all, dev=mean(mod_all$mcmc.Deviance))
+results <- data.frame(nsp,nplot,
+                      n_obs=nsp*nplot,n_param=(p+1)*nsp+2*nsp-1+2*nplot+nplot+1,
+                      ngibbs="80000","Time"= T_all, dev=mean(mod_all$mcmc.Deviance))
 colnames(results)<- c("Number of species", "Number of sites", "Number of observations","Number of estimated parameters", "Iterations performed","Compilation time (hours)","Deviance")
 knitr::kable(results, row.names=F, digits=1, booktabs=TRUE, align = 'c') %>%
-		kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE)
+		kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) %>% 
+  kableExtra::save_kable(file="~/Documents/jSDM/vignettes/Madagascar_files/mod_mada.png")
+
 ```
 
+\cr 
+\cr
+```{r mada-fitting-mod, echo=FALSE, out.width=900, eval=TRUE}
+knitr::include_graphics("Madagascar_files/mod_mada.png")
+```
 
+   
 The MCMC algorithm is used to obtain draws from the posterior distribution of the parameters. We use as estimator for each parameter the mean of the $N_{samp}$ values estimated in corresponding MCMC chain and we save the estimated parameters in .csv format.
 
 ```{r save-params, echo=TRUE, eval=FALSE}
-load("~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
-load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
 
 species <- colnames(mod_all$model_spec$presence_data)
 nplot <- nrow(mod_all$model_spec$presence_data)
@@ -285,7 +295,7 @@ params_sites <- data.frame(plot = scaled_data_clim2$site,
                            lat = scaled_data_clim2$lat,
                            long = scaled_data_clim2$long,
                            alphas, V_alpha = rep(V_alpha,nplot),W1,W2)
-write.csv(params_sites, file = "~/Documents/projet_BioSceneMada/Report/data/params_sites.csv",row.names = F)
+write.csv(params_sites, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_sites.csv",row.names = F)
 
 ### fixed species effect lambdas and betas 
 lambdas <- matrix(0,nsp,n_latent)
@@ -302,12 +312,12 @@ for (j in 1:nsp){
 colnames(betas) <- colnames(mod_all$mcmc.sp[[1]])[1:np]
 params_species <- data.frame(species=species, Id_species = c(1:nsp),
                              betas, lambda_1 = lambdas[,1], lambda_2 = lambdas[,2])
-write.csv(params_species, file ="~/Documents/projet_BioSceneMada/Report/data/params_species.csv",row.names = F)
+write.csv(params_species, file ="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv",row.names = F)
 
 ## probit_theta_latent
-write.csv(mod_all$probit_theta_latent, file = "~/Documents/projet_BioSceneMada/Report/data/probit_theta_latent.csv", row.names = F)
+write.csv(mod_all$probit_theta_latent, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/probit_theta_latent.csv", row.names = F)
 ## theta_latent
-write.csv(mod_all$theta_latent, file = "~/Documents/projet_BioSceneMada/Report/data/theta_latent.csv", row.names = F)
+write.csv(mod_all$theta_latent, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/theta_latent.csv", row.names = F)
 ```
 
 ## Evaluation of MCMC convergence 
@@ -315,7 +325,7 @@ write.csv(mod_all$theta_latent, file = "~/Documents/projet_BioSceneMada/Report/d
 We visually evaluate the convergence of MCMCs by representing the trace and density *a posteriori* of the estimated parameters.
 
 ```{r results-Mada}
-load("~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 np <- nrow(mod_all$model_spec$beta_start)
 species <- colnames(mod_all$model_spec$presence_data)
 ## alpha_i of the first site
@@ -391,13 +401,13 @@ Overall, the traces and densities of the parameters indicate the convergence of 
 ## Presence probabilities 
 
 ```{r proba_representation}
-theta_latent <- read.csv("~/Documents/projet_BioSceneMada/Report/data/theta_latent.csv")
-load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
-load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+theta_latent <- read.csv("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/theta_latent.csv")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 
 # Madagascar borders
 TA <- CRS("+init=epsg:32738 +units=m")
-MADA <- readRDS("~/Documents/projet_BioSceneMada/Report/data/MADA.rds")
+MADA <- readRDS("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/MADA.rds")
 MADA <- sp::spTransform(MADA, TA)
 # define groups for mapping
 cuts <- c(0,0.1,0.2,0.3,0.4,0.5,0.7,0.8,0.9)
@@ -473,7 +483,7 @@ Moreover, we can see that the observed species richness is greater in the moist 
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
   
 ```{r residual-correlation, eval=FALSE}
-load("~/Documents/projet_BioSceneMada/Report/data/mada_mod.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 n.species <- ncol(mod_all$model_spec$presence_data)
 n.mcmc <- nrow(mod_all$mcmc.latent[[1]])
 Tau.cor.arr <- matrix(NA,n.mcmc,n.species^2)
@@ -486,18 +496,18 @@ for(t in 1:n.mcmc) {
 }
 ## Average over the MCMC samples
 R <- matrix(apply(Tau.cor.arr,2,mean),n.species,byrow=F)
-write.csv(R, file ="~/Documents/projet_BioSceneMada/Report/data/R.csv", row.names = F)
+write.csv(R, file ="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/R.csv", row.names = F)
 ```
 
 We plot the top 50 estimated residual correlations between species based on their number of observed occurrences and environmental preferences. 
 
 ```{r plot-associations, echo=TRUE, fig.dim=c(6,6)}
 # Forest inventory 
-load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 # Species parameters 
-params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 # Residual correlation matrix R
-R <- read.csv("~/Documents/projet_BioSceneMada/Report/data/R.csv")
+R <- read.csv("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/R.csv")
 colnames(R) <- rownames(R) <- make.names(params_species$species)
 R <- as.matrix(R)
 library(viridis)
@@ -547,7 +557,7 @@ setwd("~/Documents/jSDM/vignettes")
 Sys.setenv(LD_LIBRARY_PATH=paste("/usr/lib/grass78/lib", Sys.getenv("LD_LIBRARY_PATH"),sep=":"))
 library(rgrass7)
 # use a georeferenced raster
-system('grass -c ~/Documents/projet_BioSceneMada/Report/data/scaled_clim.tif grassdata/interpolation')
+system('grass -c ~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_clim.tif grassdata/interpolation')
 # connect to grass database
 initGRASS(gisBase="/usr/lib/grass78", 
           gisDbase="grassdata",
@@ -560,7 +570,7 @@ We interpolate the random site effect at Madagascar scale using RST method.
 ```{r RST_alpha}
 library(rgrass7)
 # Import sites parameters
-params_sites <- read.csv("~/Documents/projet_BioSceneMada/Report/data/params_sites.csv")
+params_sites <- read.csv("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_sites.csv")
 longlat <- SpatialPoints(params_sites[,c("long","lat")])
 proj4string(longlat) <- CRS("+proj=longlat +ellps=clrk66 +units=m")
 # lat-long to UTM38S projection 
@@ -570,7 +580,7 @@ alpha_sp <- SpatialPointsDataFrame(xy, data.frame(alpha=params_sites$alphas))
 use_sp()
 rgrass7::writeVECT(alpha_sp, "alpha", v.in.ogr_flags="overwrite")
 # Import Madagascar shape file
-clim <- stack("~/Documents/projet_BioSceneMada/Report/data/current.tif")
+clim <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/current.tif")
 Madagascar <- as(clim[[1]], 'SpatialGridDataFrame')
 rgrass7::writeRAST(Madagascar, "Madagascar", flags="overwrite")
 # Re-sample with RST
@@ -674,11 +684,11 @@ rst_W1 <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/W1_rst.tif")
 rst_W2 <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/W2_rst.tif")
 
 # Species parameters 
-params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 nsp <- nrow(params_species)
 # Current climatic variables 
-X <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/X.csv")
-scaled_clim_var <- stack("~/Documents/projet_BioSceneMada/Report/data/scaled_clim.tif")
+X <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/X.csv")
+scaled_clim_var <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_clim.tif")
 names(scaled_clim_var) <- colnames(X[,-1])
 extent(scaled_clim_var) <- extent(rst_alpha)
 proj4string(scaled_clim_var) <- proj4string(rst_alpha)
@@ -730,7 +740,7 @@ for (n in 1:npart){
   probit_theta <- predfun(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2,
                           species.range=c(first.species[n],min(nsp,first.species[n]+floor(nsp/npart))))
   writeRaster(probit_theta,
-              file=paste0("~/Documents/projet_BioSceneMada/Report/data/RST_probit_theta_", n, ".tif"),
+              file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_probit_theta_", n, ".tif"),
               format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
   # Compute probabilities of presence theta
   theta <- probit_theta
@@ -739,7 +749,7 @@ for (n in 1:npart){
     values(theta[[j]]) <- pnorm(values(theta[[j]]))
   }
   writeRaster(theta, 
-              file=paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_",n,".tif"),
+              file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",n,".tif"),
               format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
   remove(theta)
 }
@@ -748,10 +758,10 @@ for (n in 1:npart){
 We represent the presence probabilities of two species interpolated at the scale of Madagascar as well as their observed occurrences at the inventory sites represented by black crosses.
 
 ```{r plot-theta, eval=FALSE}
-params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 nsp <- nrow(params_species)
-load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
-load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 # Observed presence absence
 id_pres_Ocotea <- which(PA[,"Ocotea laevis"]==1)
 obs_pres_Ocotea <- data.frame(obs_pres=PA[id_pres_Ocotea,"Ocotea laevis"])
@@ -763,7 +773,7 @@ obs_pres_Manilkara <-  sp::SpatialPointsDataFrame(xy[id_pres_Manilkara,], obs_pr
 # Representation
 npart <- 10
 first.species <- seq(1,nsp,by=floor(nsp/npart)+1)
-theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
+theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
 names(theta) <- make.names(params_species$species[first.species[1]:(first.species[1]+floor(nsp/npart))])
 par(mfrow=c(1,2), oma=c(1, 0, 2, 1), mar=c(5, 4, 3, 2))
 plot(theta[[1]], main=names(theta)[[1]])
@@ -789,15 +799,15 @@ Species richness also called diversity $\alpha$ reflects the number of species c
 We compute at Madagascar scale the species richness by summing the interpolated probabilities of occurrence for each map's cell $i$ :  $\widehat{R}_i=\sum\limits_ {j=1}^{n_{species}} \widehat{\theta}_{ij}$.
 
 ```{r species-richness, eval=FALSE}
-theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
+theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
 species_richness <- sum(theta)
 npart <- 10
 for(n in 2:npart){
-theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_", n, ".tif"))
+theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_", n, ".tif"))
 species_richness <- species_richness + sum(theta)
 }
 writeRaster(species_richness,
-            file=paste0("~/Documents/projet_BioSceneMada/Report/data/species_richness.tif"), 
+            file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness.tif"), 
             format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
@@ -808,28 +818,28 @@ However, the model used does not take into account human presence, which is mani
 ```{r species-richness-deforest, eval=FALSE}
 library(glue)
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/data/for2000.tif")
+forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 # change resolution of species richness raster from 1000x1000m to 30x30m
-in_f <- "~/Documents/projet_BioSceneMada/Report/data/species_richness.tif"
-out_f <- "~/Documents/projet_BioSceneMada/Report/data/species_richness_30m.tif"
+in_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness.tif"
+out_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif"
 cmd <- glue('gdalwarp -tr 30 30 -te {xmin(forest)} {ymin(forest)} {xmax(forest)} {ymax(forest)} -r near -co "COMPRESS=LZW" -co "PREDICTOR=2" -overwrite {in_f} {out_f}')
 system(cmd)
 # remove species richness values where there was no forest in 2000s
-species_richness <- stack("~/Documents/projet_BioSceneMada/Report/data/species_richness_30m.tif")
+species_richness <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
 species_richness_deforest <- mask(species_richness,forest)
-writeRaster(species_richness_deforest,file="~/Documents/projet_BioSceneMada/Report/data/species_richness_deforest.tif",
+writeRaster(species_richness_deforest,file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif",
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 ```{r plot-species-richness-deforest, echo=FALSE, eval=FALSE}
 
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/data/for2000.tif")
+forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 par(mfrow=c(1,1))
 plot(forest, main="Forest cover in 2000", legend=F)
 # Representation of species richness restricted to forest cover in 2000's 
-species_richness <- raster("~/Documents/projet_BioSceneMada/Report/data/species_richness_30m.tif")
-species_richness_deforest <- raster("~/Documents/projet_BioSceneMada/Report/data/species_richness_deforest.tif")
+species_richness <- raster("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
+species_richness_deforest <- raster("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif")
 par(oma=c(0,0,1,1))
 plot(stack(species_richness, species_richness_deforest),
      breaks=c(0,2,4,6,8,10,12,14,16,20,24,28,32,36,40,45,50,55,60,65), 
@@ -867,21 +877,21 @@ In order to estimate this indicator, we proceed in the same way as in the articl
 ```{r diversity-beta, eval=FALSE}
 # Sample 10000 cells of presence probabilities raster
 npart <- 10
-theta <- stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
+theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
 samp_theta <- raster::sampleRandom(theta, size=10000, ext=extent(theta), na.rm=TRUE, cells=TRUE)
 samp_cells <- samp_theta[,"cell"]
 samp_theta <- samp_theta[,-1]
 for(n in 2:npart){
-  theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_", n, ".tif"))
+  theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_", n, ".tif"))
   samp_theta <- cbind(samp_theta, theta[samp_cells])
 }
-params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/data/params_species.csv")
+params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 colnames(samp_theta) <- params_species$species
 
 # Data frame to compute PCA on pixels dissimilarity 
 theta_df <- data.frame(samp_theta)
 pca_theta <- ade4::dudi.pca(theta_df, center=TRUE, scale=TRUE, nf=3, scannf = FALSE)
-save(pca_theta, samp_cells, file="~/Documents/projet_BioSceneMada/Report/data/PCA_theta.RData")
+save(pca_theta, samp_cells, file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PCA_theta.RData")
 str(pca_theta)
 
 # Perform projections of PCA results on all raster's rows in parallel
@@ -891,14 +901,14 @@ values(coords) <- 0
 names(coords) <- colnames(pca_theta$li)
 for(k in 1:nrow(theta)){
   cat(k, "/", nrow(theta),"\n")
-  theta <- raster::stack("~/Documents/projet_BioSceneMada/Report/data/RST_theta_1.tif")
+  theta <- raster::stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
   ## Make a cluster for parallel computation
   # detect the number of CPU cores on the current host
   ncores <- parallel::detectCores()
   clust <- makeCluster(ncores)
   registerDoParallel(clust)
   theta_k <- foreach(n=1:npart, .combine = "cbind") %dopar%{
-    theta <- raster::stack(paste0("~/Documents/projet_BioSceneMada/Report/data/RST_theta_",
+    theta <- raster::stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",
                                   n, ".tif"))
     theta_k <- raster::getValues(theta, row=k)
     return(theta_k)
@@ -908,7 +918,7 @@ for(k in 1:nrow(theta)){
   theta_k <- data.frame(theta_k)
   coords[k,] <- as.matrix(ade4::suprow(pca_theta,theta_k)$lisup)
 }
-writeRaster(coords,file="~/Documents/projet_BioSceneMada/Report/data/coords.tif",
+writeRaster(coords,file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.tif",
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 
 # Change the coordinate scale for [0.255]. 
@@ -933,7 +943,7 @@ Max2 <- maxValue(coords_RGB)
 Max2
 
 # Coloration RGB
-writeRaster(coords_RGB,file=paste0("~/Documents/projet_BioSceneMada/Report/data/species_turnover.tif"),
+writeRaster(coords_RGB,file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover.tif"),
                 format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
@@ -944,7 +954,7 @@ In the same way as above, we restrict the values obtained for diversity $\beta$ 
 ```{r species-turnover-deforest, eval=FALSE}
 library(glue)
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/data/for2000.tif")
+forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 # current species turnover
 # change resolution of species richness raster from 1000x1000m to 30x30m
 in_f <- "~/Documents/projet_BioSceneMada/Report/data/species_turnover.tif"
