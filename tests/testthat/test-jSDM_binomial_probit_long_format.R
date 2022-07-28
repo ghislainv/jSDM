@@ -1285,7 +1285,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_lambda=0, V_lambda=10,
                                               seed=1234, verbose=1)
 # Tests
-test_that("jSDM_binomial_probit_long_format works with random site effect and latent variables", {
+test_that("jSDM_binomial_probit_long_format works with intercept only, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
   expect_equal(dim(mod$mcmc.sp[["sp_1"]]),c(nsamp,ncol(X)+n_latent))
   expect_equal(dim(mod$mcmc.gamma),c(nsamp,ncol(D)))

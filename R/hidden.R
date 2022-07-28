@@ -96,7 +96,7 @@ check.Y.poisson <- function (Y) {
   return(0)
 }
 
-check.T.binomial <- function (T,nobs) { # = This version of the function assumes T>0
+check.T.binomial <- function (T, nobs) { # = This version of the function assumes T>0
   if(length(T)!=nobs) {
     cat("Error: 'trials' must have the same length as the response variable.\n")
     stop("Please respecify and call ", calling.function(), " again.",
