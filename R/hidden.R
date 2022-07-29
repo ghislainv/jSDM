@@ -144,29 +144,29 @@ check.Y.binomial <- function (Y,T) {
   return(0)
 }
 
-check.U <- function (U,nobs) {
-  if(length(U)!=nobs) {
-    cat("Error: 'alteration' must have the same length as the response variable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if(!is.numeric(U)) {
-    cat("Error: 'alteration' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(U))>0) {
-    cat("Error: 'alteration' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (!all(U>=0 && U<=1)) {
-    cat("Error: 'alteration' must be in the interval [0,1].\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(0)
-}
+# check.U <- function (U,nobs) {
+#   if(length(U)!=nobs) {
+#     cat("Error: 'alteration' must have the same length as the response variable.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if(!is.numeric(U)) {
+#     cat("Error: 'alteration' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(U))>0) {
+#     cat("Error: 'alteration' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (!all(U>=0 && U<=1)) {
+#     cat("Error: 'alteration' must be in the interval [0,1].\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(0)
+# }
 
 check.X <- function (X,n) {
   if(!is.numeric(c(X))) {
@@ -187,166 +187,299 @@ check.X <- function (X,n) {
   return(0)
 }
 
-check.W <- function (W,n) {
-  if(!is.numeric(c(W))) {
-    cat("Error: 'observability' only accept vectors of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(c(W)))>0) {
-    cat("Error: 'observability' do not accept vectors with missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (dim(W)[1]!=n) {
-    cat("Error: Incorrect vector length for the 'observability' argument.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(0)
-}
+# check.W <- function (W,n) {
+#   if(!is.numeric(c(W))) {
+#     cat("Error: 'observability' only accept vectors of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(c(W)))>0) {
+#     cat("Error: 'observability' do not accept vectors with missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (dim(W)[1]!=n) {
+#     cat("Error: Incorrect vector length for the 'observability' argument.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(0)
+# }
 
-check.neighbors <- function (n.neighbors,ncell,neighbors) {
-  # Length of n.neighbors=ncell
-  if(length(n.neighbors)!=ncell) {
-    cat("Error: 'n.neighbors' must have a length equal to the number of cells.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Numeric values
-  if(!is.numeric(neighbors)) {
-    cat("Error: 'neighbors' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if(!is.numeric(n.neighbors)) {
-    cat("Error: 'n.neighbors' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # NA
-  if (sum(is.na(neighbors))>0) {
-    cat("Error: 'neighbors' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(n.neighbors))>0) {
-    cat("Error: 'n.neighbors' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Positive integer
-  if (sum(neighbors<=0 | neighbors%%1!=0)>0) {
-    cat("Error: 'neighbors' must be a vector of integers superior to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(n.neighbors<=0 | n.neighbors%%1!=0)>0) {
-    cat("Error: 'n.neighbors' must be a vector of integers superior to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Number of neighbors inferior to ncell-1
-  if (!all(n.neighbors < (ncell-1))) {
-    cat("Error: 'n.neighbors' must not contain values superior to ncell-1.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Number of neighbors and length of neighbors
-  if (sum(n.neighbors)!=length(neighbors)) {
-    cat("Error: 'neighbors' must be a vector of length equal to sum(n.neighbors).\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Check values in neighbors
-  if (sum(!(neighbors %in% c(1:ncell)))>0) {
-    cat("Error: 'neighbors' must be a vector of integers between 1 and ncell.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  # Check that the target cell is not in the list of neighbors: --> ToDoList
-  return(0)
-}
+# check.neighbors <- function (n.neighbors,ncell,neighbors) {
+#   # Length of n.neighbors=ncell
+#   if(length(n.neighbors)!=ncell) {
+#     cat("Error: 'n.neighbors' must have a length equal to the number of cells.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Numeric values
+#   if(!is.numeric(neighbors)) {
+#     cat("Error: 'neighbors' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if(!is.numeric(n.neighbors)) {
+#     cat("Error: 'n.neighbors' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # NA
+#   if (sum(is.na(neighbors))>0) {
+#     cat("Error: 'neighbors' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(n.neighbors))>0) {
+#     cat("Error: 'n.neighbors' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Positive integer
+#   if (sum(neighbors<=0 | neighbors%%1!=0)>0) {
+#     cat("Error: 'neighbors' must be a vector of integers superior to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(n.neighbors<=0 | n.neighbors%%1!=0)>0) {
+#     cat("Error: 'n.neighbors' must be a vector of integers superior to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Number of neighbors inferior to ncell-1
+#   if (!all(n.neighbors < (ncell-1))) {
+#     cat("Error: 'n.neighbors' must not contain values superior to ncell-1.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Number of neighbors and length of neighbors
+#   if (sum(n.neighbors)!=length(neighbors)) {
+#     cat("Error: 'neighbors' must be a vector of length equal to sum(n.neighbors).\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Check values in neighbors
+#   if (sum(!(neighbors %in% c(1:ncell)))>0) {
+#     cat("Error: 'neighbors' must be a vector of integers between 1 and ncell.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   # Check that the target cell is not in the list of neighbors: --> ToDoList
+#   return(0)
+# }
+# 
+# check.sites <- function (sites,nobs) {
+#   if(length(sites)!=nobs) {
+#     cat("Error: 'sites' must have the same length as the response variable.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if(!is.numeric(sites)) {
+#     cat("Error: 'sites' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(sites))>0) {
+#     cat("Error: 'sites' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(sites<=0 | sites%%1!=0)>0) {
+#     cat("Error: 'sites' must be a vector of integers superior to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(0)
+# }
+# 
+# check.cells <- function (cells,nsite) {
+#   if(length(cells)!=nsite) {
+#     cat("Error: 'spatial.entity' must be of length equals to the number of sites.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if(!is.numeric(cells)) {
+#     cat("Error: 'spatial.entity' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(cells))>0) {
+#     cat("Error: 'spatial.entity' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(cells<=0 | cells%%1!=0)>0) {
+#     cat("Error: 'spatial.entity' must be a vector of integers superior to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(0)
+# }
+# 
+# check.cells.pred <- function (cells.pred,npred) {
+#   if(length(cells.pred)!=npred) {
+#     cat("Error: 'spatial.entity.pred' must be of length equals to the number of predictions.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if(!is.numeric(cells.pred)) {
+#     cat("Error: 'spatial.entity.pred' must be a vector of numeric values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(is.na(cells.pred))>0) {
+#     cat("Error: 'spatial.entity.pred' must not contain missing values.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (sum(cells.pred<=0 | cells.pred%%1!=0)>0) {
+#     cat("Error: 'spatial.entity.pred' must be a vector of integers superior to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(0)
+# }
+# 
+# # =======================================================================
+# #
+# # Check and form starting parameters
+# #
+# # =======================================================================
+# 
+#
+# check.Vrho.start <- function (Vrho.start) {
+#   if (length(Vrho.start)!=1) {
+#     cat("Error: Vrho.start should be a scalar.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (!is.numeric(Vrho.start)) {
+#     cat("Error: Vrho.start should be a numeric.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (Vrho.start<=0) {
+#     cat("Error: Vrho.start should be strictly positive.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(Vrho.start)
+# }
+#
+# =======================================================================
+#
+# Check and form priors
+#
+# =======================================================================
 
-check.sites <- function (sites,nobs) {
-  if(length(sites)!=nobs) {
-    cat("Error: 'sites' must have the same length as the response variable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if(!is.numeric(sites)) {
-    cat("Error: 'sites' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(sites))>0) {
-    cat("Error: 'sites' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(sites<=0 | sites%%1!=0)>0) {
-    cat("Error: 'sites' must be a vector of integers superior to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(0)
-}
+# check.Vbeta <- function(Vbeta, np) {
+#   if (!all(Vbeta>0)) {
+#     cat("Error: Vbeta should be strictly positive.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (is.null(dim(Vbeta))) {
+#     Vbeta <- rep(Vbeta,np) 
+#   }
+#   else if (length(Vbeta)!=np) {
+#     cat("Error: Vbeta not conformable.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(Vbeta)
+# }
 
-check.cells <- function (cells,nsite) {
-  if(length(cells)!=nsite) {
-    cat("Error: 'spatial.entity' must be of length equals to the number of sites.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if(!is.numeric(cells)) {
-    cat("Error: 'spatial.entity' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(cells))>0) {
-    cat("Error: 'spatial.entity' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(cells<=0 | cells%%1!=0)>0) {
-    cat("Error: 'spatial.entity' must be a vector of integers superior to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(0)
-}
+# check.mugamma <- function(mugamma, nq) {
+#   if (is.null(dim(mugamma))) {
+#     mugamma <- rep(mugamma,nq) 
+#   }
+#   else if (length(mugamma)!=nq) {
+#     cat("Error: mugamma not conformable.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(mugamma)
+# }
 
-check.cells.pred <- function (cells.pred,npred) {
-  if(length(cells.pred)!=npred) {
-    cat("Error: 'spatial.entity.pred' must be of length equals to the number of predictions.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if(!is.numeric(cells.pred)) {
-    cat("Error: 'spatial.entity.pred' must be a vector of numeric values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(is.na(cells.pred))>0) {
-    cat("Error: 'spatial.entity.pred' must not contain missing values.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (sum(cells.pred<=0 | cells.pred%%1!=0)>0) {
-    cat("Error: 'spatial.entity.pred' must be a vector of integers superior to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(0)
-}
+# check.Vgamma <- function(Vgamma, nq) {
+#   if (!all(Vgamma>0)) {
+#     cat("Error: Vgamma should be strictly positive.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (is.null(dim(Vgamma))) {
+#     Vgamma <- rep(Vgamma,nq) 
+#   }
+#   else if (length(Vgamma)!=nq) {
+#     cat("Error: Vgamma not conformable.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(Vgamma)
+#}
+#
+# check.ig.prior <- function(nu, delta) {
+#   
+#   if(nu <= 0) {
+#     cat("Error: in IG(nu,delta) prior, nu less than or equal to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.\n",
+#          call.=FALSE)
+#   }
+#   if(delta <= 0) {
+#     cat("Error: in IG(nu,delta) prior, delta less than or equal to zero.\n")
+#     stop("Please respecify and call ", calling.function(), " again.\n",
+#          call.=FALSE)    
+#   }
+#   return(0)
+# }
+# 
+# check.Vrho.max <- function (Vrho.max) {
+#   if (length(Vrho.max)!=1) {
+#     cat("Error: Vrho.max should be a scalar.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (!is.numeric(Vrho.max)) {
+#     cat("Error: Vrho.max should be a numeric.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   if (Vrho.max<=0) {
+#     cat("Error: Vrho.max should be strictly positive.\n")
+#     stop("Please respecify and call ", calling.function(), " again.",
+#          call.=FALSE)
+#   }
+#   return(Vrho.max)
+# }
+# 
+# form.priorVrho <- function (priorVrho) {
+#   if (is.numeric(priorVrho[1]) && priorVrho[1] > 0.0) {
+#     priorVrho <- priorVrho[1]
+#   }
+#   else if (priorVrho=="Uniform") {
+#     priorVrho <- -2.0
+#   }
+#   else if (priorVrho=="1/Gamma") {
+#     priorVrho <- -1.0
+#   }
+#   else {
+#     priorVrho <- -1.0
+#     cat("priorVrho has been set to \"1/Gamma\" \n")
+#   }
+#   return(priorVrho)
+# }
 
 # =======================================================================
 #
-# Check and form starting parameters for Metropolis-Hastings
+# Check and form starting parameters 
 #
 # =======================================================================
 
-form.beta.start <- function (beta.start,np) {
+is.scalar <- function(x) {
+  is.atomic(x) && length(x) == 1L
+}
+
+form.beta.start <- function (beta.start, np) {
   if (sum(is.na(beta.start))>0) { 
     beta.start <- rep(0,np)
   }
@@ -362,11 +495,11 @@ form.beta.start <- function (beta.start,np) {
 }
 
 form.gamma.start <- function (gamma.start,nq) {
-  if (sum(is.na(gamma.start))>0) { 
+  if (sum(is.na(gamma.start))>0) {
     gamma.start <- rep(0,nq)
   }
   else if(!is.na(gamma.start)[1] && length(gamma.start)!=nq) {
-    gamma.start <- rep(gamma.start[1],nq)  
+    gamma.start <- rep(gamma.start[1],nq)
   }
   else if(length(gamma.start)!=nq) {
     cat("Error: gamma.start not conformable.\n")
@@ -376,137 +509,6 @@ form.gamma.start <- function (gamma.start,nq) {
   return(gamma.start)
 }
 
-check.Vrho.start <- function (Vrho.start) {
-  if (length(Vrho.start)!=1) {
-    cat("Error: Vrho.start should be a scalar.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (!is.numeric(Vrho.start)) {
-    cat("Error: Vrho.start should be a numeric.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (Vrho.start<=0) {
-    cat("Error: Vrho.start should be strictly positive.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(Vrho.start)
-}
-
-# =======================================================================
-#
-# Check and form priors
-#
-# =======================================================================
-
-check.Vbeta <- function(Vbeta, np) {
-  if (!all(Vbeta>0)) {
-    cat("Error: Vbeta should be strictly positive.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (is.null(dim(Vbeta))) {
-    Vbeta <- rep(Vbeta,np) 
-  }
-  else if (length(Vbeta)!=np) {
-    cat("Error: Vbeta not conformable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(Vbeta)
-}
-
-check.mugamma <- function(mugamma, nq) {
-  if (is.null(dim(mugamma))) {
-    mugamma <- rep(mugamma,nq) 
-  }
-  else if (length(mugamma)!=nq) {
-    cat("Error: mugamma not conformable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(mugamma)
-}
-
-check.Vgamma <- function(Vgamma, nq) {
-  if (!all(Vgamma>0)) {
-    cat("Error: Vgamma should be strictly positive.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (is.null(dim(Vgamma))) {
-    Vgamma <- rep(Vgamma,nq) 
-  }
-  else if (length(Vgamma)!=nq) {
-    cat("Error: Vgamma not conformable.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(Vgamma)
-}
-
-check.ig.prior <- function(nu, delta) {
-  
-  if(nu <= 0) {
-    cat("Error: in IG(nu,delta) prior, nu less than or equal to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.\n",
-         call.=FALSE)
-  }
-  if(delta <= 0) {
-    cat("Error: in IG(nu,delta) prior, delta less than or equal to zero.\n")
-    stop("Please respecify and call ", calling.function(), " again.\n",
-         call.=FALSE)    
-  }
-  return(0)
-}
-
-check.Vrho.max <- function (Vrho.max) {
-  if (length(Vrho.max)!=1) {
-    cat("Error: Vrho.max should be a scalar.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (!is.numeric(Vrho.max)) {
-    cat("Error: Vrho.max should be a numeric.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  if (Vrho.max<=0) {
-    cat("Error: Vrho.max should be strictly positive.\n")
-    stop("Please respecify and call ", calling.function(), " again.",
-         call.=FALSE)
-  }
-  return(Vrho.max)
-}
-
-form.priorVrho <- function (priorVrho) {
-  if (is.numeric(priorVrho[1]) && priorVrho[1] > 0.0) {
-    priorVrho <- priorVrho[1]
-  }
-  else if (priorVrho=="Uniform") {
-    priorVrho <- -2.0
-  }
-  else if (priorVrho=="1/Gamma") {
-    priorVrho <- -1.0
-  }
-  else {
-    priorVrho <- -1.0
-    cat("priorVrho has been set to \"1/Gamma\" \n")
-  }
-  return(priorVrho)
-}
-
-# =======================================================================
-#
-# Check and form starting parameters for jSDM_binomial_probit
-#
-# =======================================================================
-
-is.scalar <- function(x) {
-  is.atomic(x) && length(x) == 1L
-}
 
 form.gamma.start.mat <- function(gamma.start,nt,np){
   if(!all(!is.na(gamma.start))){
@@ -642,9 +644,11 @@ form.W.start.sp <- function (W.start, nsite, n_latent) {
   }
   return(W.start.mat)
 }
-#==================================================================
-# Check and form priors for jSDM_binomial_probit
-#==================================================================
+
+#======================
+# Check and form prior
+#======================
+
 check.mugamma.mat <- function(mugamma,nt,np){
   if(!all(!is.na(mugamma))){
     cat("Error: mu_gamma must no contain missing values.\n")
@@ -735,6 +739,24 @@ check.mubeta <- function(mubeta, np){
          call.=FALSE)
   }
   return(mubeta)
+}
+
+check.Vbeta <- function(Vbeta, np) {
+  if (!all(Vbeta>0) && sum(is.na(Vbeta))!=0) {
+    cat("Error: Vbeta should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.", call.=FALSE)
+  }
+  if (is.scalar(Vbeta)) {
+    Vbeta <- rep(Vbeta,np)
+  }
+  else if (length(Vbeta)!=np){
+    cat("Error: Vbeta not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",call.=FALSE)
+  }
+  if(!is.null(dim(Vbeta)) && length(Vbeta)==np){
+    Vbeta <- as.vector(Vbeta)
+  }
+  return(Vbeta)
 }
 
 check.Vbeta.mat <- function(Vbeta, np) {
