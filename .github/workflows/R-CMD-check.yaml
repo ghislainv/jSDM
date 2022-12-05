@@ -45,7 +45,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
       
-      - name: Install jags, stringi and latex packages on Linux
+      - name: Install stringi and latex packages on Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
