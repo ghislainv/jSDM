@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
 <ul>
 <li>Proposition</li>
 </ul>
-<p><span class="math display">\[ 
+<p><span class="math display">\[
 \begin{aligned}
 &amp;z_{ij} = \alpha_i X_i'\beta_j+ W_i'\lambda_j + \epsilon_{ij},\\
 &amp;\text{ with } \epsilon_{ij} \sim \mathcal{N}(0,1) \ \forall ij  \text{ and such as : } \\
@@ -115,7 +115,7 @@
 \begin{cases}
 1 &amp; \text{ if } z_{ij} &gt; 0 \\
 0 &amp;  \text{ otherwise.}
-\end{cases} 
+\end{cases}
 \end{aligned}
 \Rightarrow  
 \begin{cases}
@@ -176,14 +176,14 @@ We assume that <span class="math inline">\(W_i \sim \mathcal{N}(0,I_q)\)</span> 
 </ul>
 <p>We go back to a model of the form: <span class="math inline">\(Z' = X\beta + \epsilon\)</span> to estimate the posterior distributions of betas, lambdas and latent variables <span class="math inline">\(W_i\)</span> of the model. For example concerning <span class="math inline">\(\lambda_j\)</span>, we define <span class="math inline">\(Z'_{ij} = Z_{ij} - \alpha_i - X_i'\beta_j\)</span> such as <span class="math inline">\(Z'_{ij} = W_i'\lambda_j + \epsilon_{ij}\)</span> so <span class="math inline">\(Z'_{ij} \ | \ W_i \ , \ \lambda_j \  \sim \mathcal{N}( W_i'\lambda_j, 1)\)</span>.</p>
 <p>In this case we can use the following proposition:</p>
-<p><span class="math display">\[\begin{cases} 
+<p><span class="math display">\[\begin{cases}
 Y \ | \ \beta &amp;\sim \mathcal{N}_n ( X\beta, I_n) \\
 \beta  &amp;\sim \mathcal{N}_p (m,V)
 \end{cases}
 \Rightarrow \begin{cases}
 \beta|Y &amp;\sim \mathcal{N}_p (m^*,V^*) \text{ with }  \\
 m^* &amp;= (V^{-1} + X'X)^{-1}(V^{-1}m + X'Y)\\
-V^*&amp;=(V^{-1} + X'X)^{-1} 
+V^*&amp;=(V^{-1} + X'X)^{-1}
 \end{cases}\]</span>.</p>
 <ul>
 <li>Proof</li>
@@ -210,13 +210,13 @@ p(\beta \ | \ Y) &amp; \propto  p(Y \ | \ \beta) \ p(\beta) \\
 <li>Proposition</li>
 </ul>
 <p>About the posterior distribution of the random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we can use a transformation of the form <span class="math inline">\(Z'_{ij} = \alpha_i + \epsilon_{ij}\)</span>, with <span class="math inline">\(Z'_{ij} = Z_{ij} - W_i'\lambda_j - X_i'\beta_j\)</span> so <span class="math inline">\(Z'_{ij} \ | \ W_i, \ \lambda_j, \ \beta_j, \ \alpha_i \ \sim \mathcal{N}(\alpha_i,1)\)</span>. We then use the following proposition:</p>
-<p><span class="math display">\[\begin{cases} 
+<p><span class="math display">\[\begin{cases}
 x \ | \ \theta &amp; \sim \mathcal{N}(\theta, \ \sigma^2) \\
 \theta  &amp; \sim \mathcal{N}(\mu_0,{\tau_0}^2) \\
 \sigma^2 &amp; \text{ known}
 \end{cases}
 \Rightarrow
-\begin{cases} 
+\begin{cases}
 \theta | \ x &amp;\sim \mathcal{N}(\mu_1,{\tau_1}^2) \text{ with }\\
 \mu_1 &amp;= \dfrac{{\tau_0}^2\mu_0 + x\sigma^2}{{\tau_0}^{-2}+\sigma^{-2}} \\
 {\tau_1}^{-2} &amp;={\tau_0}^{-2}+\sigma^{-2}
@@ -241,15 +241,15 @@ p(\theta \ | \ x) &amp; \propto  p(x \ | \ \theta) \ p(\theta) \\
 <li>Proposition</li>
 </ul>
 <p>Concerning posterior distribution of <span class="math inline">\(V_{\alpha}\)</span>, the variance of random site effects <span class="math inline">\((\alpha_i)_{i=1,\dots,nsite}\)</span>, we use the following proposition :<br>
-If <span class="math display">\[\begin{cases} 
+If <span class="math display">\[\begin{cases}
 x \ | \ \sigma^2 &amp; \sim \mathcal{N}_n (\theta, \ \sigma^2I_n) \\
 \sigma^2  &amp; \sim \mathcal{IG} (a,b) \\
 \theta &amp; \text{ known}
-\end{cases} \Rightarrow 
+\end{cases} \Rightarrow
 \begin{cases}
 \sigma^2|x \sim \mathcal{IG}(a',b') \text{ with } \\
-a' = a + \frac{n}{2} \\ 
-b' = \frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2 + b. 
+a' = a + \frac{n}{2} \\
+b' = \frac{1}{2}\sum\limits_{i=1}^n(x_i-\theta)^2 + b.
 \end{cases}\]</span></p>
 <ul>
 <li>Proof</li>
@@ -296,8 +296,8 @@ p(\sigma^2 \ | \ x) &amp; \propto  p(x \ | \ \sigma^2) \ p(\sigma^2) \\
 <p>Gibbs sampler: at each iteration <span class="math inline">\(t\)</span> for <span class="math inline">\(t=1,\ldots,N_{Gibbs}\)</span> we repeat each of these steps :</p>
 <ul>
 <li><p>Generate the <strong>latent variable</strong> <span class="math inline">\(Z^{(t)}=\left(Z_{ij}^{(t)}\right)_{i=1,\ldots,I}^{j=1,\ldots,J}\)</span> such that
-<span class="math display">\[Z_{ij}^{(t)} \sim  \begin{cases} 
-\mathcal{N}\left(\alpha_i^{(t−1)} + X_i\beta_j^{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 &amp; \text{ if } y_{ij } =0 \\ 
+<span class="math display">\[Z_{ij}^{(t)} \sim  \begin{cases}
+\mathcal{N}\left(\alpha_i^{(t−1)} + X_i\beta_j^{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ right truncated by } 0 &amp; \text{ if } y_{ij } =0 \\
 \mathcal{N}\left(\alpha_i^{(t−1)} + X_i\beta_j^{(t−1)} + W_i^{(t−1)}\lambda_j^{(t−1)}, \ 1 \right) \text{ left truncated by } 0 &amp; \text{ if } y_{ij} =1
 \end{cases}\]</span>
 , the latent variable is thus initialized at the first iteration by generating it according to these centered normal laws.</p></li>
@@ -356,8 +356,8 @@ V_{\alpha} &amp; \sim &amp; \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005) \
 \beta_{jk} &amp; \sim &amp; \begin{cases}
 \mathcal{N}(\mu_{\beta_{jk}},V_{\beta_{k}}) \text{ for } j=1,\ldots,J \text{ and } k=0,\ldots,p, &amp; \text{if species traits data are provided} \\
 \text{ where } \mu_{\beta_{jk}} = \sum_{r=0}^{nt} t_{jr}.\gamma_{rk} \text{ and } \gamma_{rk} \sim \mathcal{N}(\mu_{\gamma_{rk}},V_{\gamma_{rk}}) &amp; \\
- \text{ for } r=0,\ldots,nt \text{ and } k=0,\ldots,p. &amp; \\
-\mathcal{N}(\mu_{\beta_{k}},V_{\beta_{k}})  \text{ for } j=1,\ldots,J \text{ and } k=0,\ldots,p,  &amp; \text{if species traits data are not provided} \\ 
+\text{ for } r=0,\ldots,nt \text{ and } k=0,\ldots,p. &amp; \\
+\mathcal{N}(\mu_{\beta_{k}},V_{\beta_{k}})  \text{ for } j=1,\ldots,J \text{ and } k=0,\ldots,p,  &amp; \text{if species traits data are not provided} \\
 \end{cases} \\
 \lambda_{jl} &amp; \sim &amp; \begin{cases}
 \mathcal{N}(\mu_{\lambda_{l}},V_{\lambda_{l}}) &amp; \text{if } l &lt; j \\
@@ -383,7 +383,7 @@ It is called adaptive because the variance of the conditional instrumental densi
 <li><p>Calculate the probability of acceptance :
 <span class="math display">\[\gamma=  min\left(1,\dfrac{\Pi\left(\theta_i^\star \ | \ \theta_1^{(t-1)},\dots,\theta_{i-1}^{(t-1)},\theta_{i+1}^{(t-1)},\ldots,\theta_m^{(t-1)}, x \right)}{\Pi\left(\theta_i^{(t-1)} \ | \ \theta_1^{(t-1)},\dots,\theta_{i-1}^{ (t-1)},\theta_{i+1}^{(t-1)},\ldots,\theta_m^{(t-1)},x\right)}\right)\]</span>.</p></li>
 <li><p><span class="math display">\[\theta_i^{(t)} =  
-\begin{cases} 
+\begin{cases}
 \theta_i^\star &amp; \text{ with probability } \gamma \\
 &amp;\text{ if we are in this case the acceptance number becomes : } n^A_{i} \leftarrow n^A_{i} +1 \\
 \theta_i^{(t-1)} &amp; \text{ with probability } 1-\gamma. \\
@@ -392,7 +392,7 @@ It is called adaptive because the variance of the conditional instrumental densi
 </li>
 <li>
 <p><strong>During the burn-in</strong>, every <span class="math inline">\(\mathrm{DIV}\)</span> iteration, with
-<span class="math display">\[\mathrm{DIV} =  \begin{cases} 
+<span class="math display">\[\mathrm{DIV} =  \begin{cases}
 100 &amp; \text{ if } N_{Gibbs} \geq 1000 \\
 \dfrac{N_{Gibbs}}{10}&amp; \text{ else }  \\
 \end{cases}\]</span>
@@ -431,7 +431,7 @@ We thus use the following relations to approach the conditional <em>a posteriori
 &amp;p(\lambda_{jl} \ |  \ \lambda_{j1},\ldots,\lambda_{jl-1},\lambda_{jl+1},\ldots,\lambda_{jq}, \beta_j,\alpha_1,\ldots,\alpha_I, W_1,\ldots,W_I,Y) \propto  \Pi(\lambda_{jl}) \prod\limits_{1\leq i \leq I}\mathrm{L}(\theta_{ij})\\
 &amp;p(W_{il} \ |  \ W_{i1},\ldots,W_{il-1},W_{il+1},\ldots,W_{iq},\alpha_i,\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_J,Y) \propto \Pi(W_{il}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
 &amp;p(\alpha_i \ |  \ W_i,\beta_1,\ldots,\beta_J,\lambda_1,\ldots, \lambda_j,V_{\alpha},Y) \propto \Pi(\alpha_i \ | \ V_{\alpha}) \prod\limits_{1\leq j\leq J}\mathrm{L}(\theta_{ij})\\
-&amp; \text{, for $i=1,\ldots,I$, $j=1,\ldots,J$, $k=1,\ldots,p$ and $l=1,\ldots,q$. 
+&amp; \text{, for $i=1,\ldots,I$, $j=1,\ldots,J$, $k=1,\ldots,p$ and $l=1,\ldots,q$.
 }
 \end{aligned}\]</span></p>
 <p>The algorithm implemented in <code><a href="../reference/jSDM_binomial_logit.html">jSDM_binomial_logit()</a></code> on the basis of <span class="citation">Rosenthal (<a href="#ref-Rosenthal2009" role="doc-biblioref">2009</a>)</span> and <span class="citation">Roberts &amp; Rosenthal (<a href="#ref-Roberts2001" role="doc-biblioref">2001</a>)</span> articles, to estimate the parameters of the logit model is the following :</p>

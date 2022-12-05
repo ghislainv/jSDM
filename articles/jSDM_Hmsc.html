@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
       </span>
     </div>
 
@@ -507,7 +507,7 @@ n.mcmc
 </h3>
 <p>We fit a binomial joint species distribution model, including latent variables, from the simulated dataset using the <code><a href="https://rdrr.io/pkg/Hmsc/man/Hmsc.html" class="external-link">Hmsc()</a></code> function to perform binomial probit regression.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.helsinki.fi/en/researchgroups/statistical-ecology/hmsc" class="external-link">Hmsc</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.helsinki.fi/en/researchgroups/statistical-ecology/software/hmsc" class="external-link">Hmsc</a></span><span class="op">)</span></span>
 <span><span class="va">studyDesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sample<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">rL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/HmscRandomLevel.html" class="external-link">HmscRandomLevel</a></span><span class="op">(</span>units<span class="op">=</span><span class="va">studyDesign</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span></span>
 <span><span class="va">rL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Hmsc/man/setPriors.html" class="external-link">setPriors</a></span><span class="op">(</span><span class="va">rL</span>, nfMax<span class="op">=</span><span class="fl">2</span>, nfMin<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
