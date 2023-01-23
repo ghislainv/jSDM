@@ -1,5 +1,5 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   Code_of_conduct: Code_of_conduct.html
@@ -17,5 +17,5 @@ articles:
   jSDM_poisson_log: jSDM_poisson_log.html
   jSDM_with_traits: jSDM_with_traits.html
   proof: proof.html
-last_built: 2022-12-05T16:43Z
+last_built: 2023-01-23T16:53Z
 
