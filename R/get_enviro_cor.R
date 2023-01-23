@@ -80,10 +80,11 @@
 #' @importFrom stats cov cor
 #' @importFrom coda as.mcmc HPDinterval
 #' @importFrom stringi stri_remove_empty
+#' @importFrom methods is
 #' @export
 get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   ##= Check
-  if (!class(mod)=="jSDM"){
+  if (!is(mod)=="jSDM"){
     stop("Please provide an object of class jSDM in", calling.function(),call.=FALSE)
   }
   if (!(type %in% c("mean","median"))) {stop("type must be \"mean\" or \"median\"")}

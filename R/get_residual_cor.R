@@ -92,13 +92,14 @@
 #' @keywords stats::cov2cor
 #' @importFrom stats cov2cor
 #' @importFrom coda HPDinterval
+#' @importFrom methods is
 #' @export
 
 
 # Calculate the residual correlation matrix from a LVM
 get_residual_cor <- function(mod, prob=0.95, type="mean") {
   #== Check
-  if(!class(mod)=="jSDM"){
+  if(!is(mod)=="jSDM"){
     stop("Please provide an object of class jSDM in", calling.function(), call.=FALSE)
   }
   if(mod$model_spec$n_latent==0) {

@@ -79,12 +79,13 @@
 #'hist(theta_pred, main="Predicted theta with simulated covariates")
 #' @keywords prediction predictive posterior credible interval
 #' @importFrom stringi stri_remove_empty
+#' @importFrom methods is
 #' @export 
 #' 
 #' 
 predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean", probs=c(0.025,0.975), ...) {
   ##= Check
-  if (!class(object)=="jSDM"){
+  if (!is(object)=="jSDM"){
     stop("Please provide an object of class jSDM in", calling.function(),
          call.=FALSE)
   }

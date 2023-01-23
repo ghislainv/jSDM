@@ -40,10 +40,8 @@ We want to identify biodiversity refuge zones in Madagascar
 library(ade4)
 library(parallel)
 library(doParallel)
-#library(readr)
-#library(dplyr)
-library(raster)
-#library(rgdal)
+library(terra)
+library(sf)
 library(jSDM)
 library(kableExtra)
 ```
@@ -79,12 +77,78 @@ for (i in 1:nplot){
   }
 }
 # save presence/absence at inventory sites matrix
-save(PA, file="~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+save(PA, file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 ```
 
 ## Current environmental variables
 
-Among the climatic and environmental data available on the site \url{https://madaclim.cirad.fr} concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1960-1990).
+We use the function [`get_chelsa_current`](https://ecology.ghislainv.fr/gecevar/reference/get_chelsa_current.html) from the R package [`gecevar`](https://ecology.ghislainv.fr/gecevar) to download a set of climatic data for Madagascar Island from the website: \url{chelsa-climate.org}.  
+
+```{r download-climate-data, eval=FALSE}
+library(gecevar)
+name <- "Madagascar"
+epsg <- 32738
+output_file <- "/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data"
+setwd("/home/clement/Documents/jSDM/vignettes/Madagascar_files/")
+# Get Madagascar extent in the specified coordinates system (EPSG)
+output <- transform_shp_country_extent(EPSG = epsg,
+                                       country_name = name, 
+                                       rm_download=FALSE)
+save(output, file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/output.RData")
+extent <- output[[1]][1]
+extent_latlon <- as.numeric(output[[1]][2:5])
+clim_path <- get_chelsa_current(extent_latlon = extent_latlon,
+                                extent = extent,
+                                EPSG = epsg,
+                                destination = output_file,
+                                resolution = 1000,
+                                rm_download = TRUE)
+```
+
+\begin{table}[H]
+\caption{Climate data downloaded by the function \texttt{get\_chelsa\_current} and \texttt{get\_chelsa\_future}.}
+\begin{tabular}{l|l|l}
+\rowcolor{gray!50}
+\textbf{Variable} & \textbf{Unit} & \textbf{Source}
+Minimum monthly temperatures & $ \celsius \times 10 $ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
+Maximum monthly temperatures & $ \celsius \times $10 & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
+Average monthly temperatures & $ \celsius \times $10 & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Monthly precipitation & $kg.m^{-2}.month^-1$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Cloud cover & \% & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
+Climatic water deficit (Thornthwaite) & $kg.m^{-2}$ & calculated from data from
+& & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Potential evapotranspiration (Thornthwaite) & $kg.m^{-2}.month^-1$ & calculated from data from 
+& &\href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Number of dry months (Thornthwaite) & months & calculated from data in 
+& & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Climatic water deficit (Penman-Monteith) & $kg.m^{-2}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Potential evapotranspiration (Penman-Monteith) & $kg.m^{-2}.month^-1$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Number of dry months (Penman-Monteith) & months & calculated from data from 
+& &\href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Average annual temperature & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Annual mean temperature (bio1) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Diurnal temperature range (bio2) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Isothermality (bio3=bio2/bio7) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Seasonality of temperatures (bio4) & $\celsius / 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Maximum temperature of the warmest month (bio5) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Minimum temperature of the coldest month (bio6) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Annual temperature range (bio7=bio5-bio6) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Average temperature of the wettest quarter (bio8) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Average temperature of the driest quarter (bio9) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Average temperature of the warmest quarter (bio10) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Average temperature of the coldest quarter (bio11) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Cumulative annual precipitation (bio12) & $kg.m^{-2}.year^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Cumulative precipitation of wettest month (bio13) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Cumulative precipitation of the driest month (bio14) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Seasonality of rainfall (bio15) & $kg.m^{-2}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Precipitation in wettest quarter (bio16) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Precipitation of driest quarter (bio17) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Warmest quarter precipitation (bio18) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+Coldest quarter precipitation (bio19) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
+\end{tabular}
+\end{table}
+
+Among the climatic data downloaded, concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1960-1990).
 We choose to use the following variables because they have an ecological meaning which makes them easily interpretable and are little correlated between them according to the article @Vieilledent2013 : 
 
 - **temp**: the average annual temperature ($^\circ C\times 10$).
@@ -96,37 +160,46 @@ We choose to use the following variables because they have an ecological meaning
 We consider also the quadratic effects of these climate variables to perform a quadratic regression, which is more suitable for fitting a niche model than a linear regression. 
 
 ```{r current-environmental-variables}
-# climatic variables 
-s <- stack("~/Documents/projet_BioSceneMada/Report/data/current.tif")
-names(s) <- c(paste("tmin",1:12,sep=""),paste("tmax",1:12,sep=""),
-              paste("prec",1:12,sep=""),paste("bio",1:19,sep=""),
-              paste("pet",1:12,sep=""),"pet","cwd","ndm")
-# get interesting covariates
-clim_var <- dropLayer(s, c(1:36,38,39,41:47,49,50,52:68,70))
-names(clim_var) <- c("temp","prec","sais_temp","sais_prec","cwd")
+load(file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/output.RData")
+clim_path <- "/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/data_raw/current_chelsa.tif"
+# get interesting covariates among the climatic variables downloaded  
+clim_var <- terra::rast(clim_path,
+                        lyrs=c("bio1", "bio4", "bio12", "bio15", "cwd_penman"))
+names(clim_var) <- c("temp", "sais_temp", "prec", "sais_prec", "cwd")
+proj <- terra::crs(clim_var)
+
+# Data restricted to Madagascar's borders
+borders <- terra::vect(output[[2]], layer="gadm36_MDG_0")
+borders <- terra::project(borders, proj)
+clim_var_mada <- terra::mask(clim_var, borders)
 # representation
 par(oma=c(0,0,2,1))
-plot(clim_var)
+terra::plot(clim_var_mada, legend=TRUE)
 title("Current bioclimatic variables", outer=TRUE, cex=0.8)
 
 # spatial points of each plot
 coords <- unique(cbind(trees$long,trees$lat, as.numeric(trees$plot)))
 coords <- coords[sort(coords[,3], index.return=TRUE)$ix,]
-longlat <- SpatialPoints(coords[,1:2])
-proj4string(longlat) <- CRS("+proj=longlat +ellps=clrk66")
+longlat <- terra::vect(coords[,1:2], crs="+proj=longlat +ellps=clrk66")
 
 # lat long to UTM38S projection 
-xy <- spTransform(longlat, CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+xy <- terra::project(longlat, proj)
+terra::writeVector(xy, overwrite=TRUE, 
+                   "/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp")
+
+# Add squared data
+clim_var2 <- c(clim_var_mada, clim_var_mada^2)
+names(clim_var2) <- c(names(clim_var), paste0(names(clim_var),
+                                              rep("2", dim(clim_var)[3])))
+
 
 # extract climatic data on each plot
-clim <-  raster::extract(clim_var,xy)
-clim2 <- clim^2
-colnames(clim2)<-paste(colnames(clim),rep("2",ncol(clim)),sep="")
+clim2 <-  terra::extract(clim_var2,xy)
 pos <- coords
 colnames(pos) <- c("long","lat","site")
 
 # Add squared data
-data_clim2 <- data.frame(cbind(clim,clim2,pos))
+data_clim2 <- data.frame(cbind(clim2[,-1],pos))
 nparam <- ncol(data_clim2) -3
 library(tidyverse)
 
@@ -134,25 +207,30 @@ library(tidyverse)
 scaled_data_clim2 <- scale(data_clim2[,1:nparam])
 means <- attr(scaled_data_clim2,"scaled:center")
 sds <- attr(scaled_data_clim2,"scaled:scale")
-scaled_data_clim2 <- as_tibble(cbind(site=data_clim2$site,scaled_data_clim2,lat=data_clim2$lat,long=data_clim2$long))
+scaled_data_clim2 <- as_tibble(cbind(site=data_clim2$site,
+                                     scaled_data_clim2,
+                                     lat=data_clim2$lat, 
+                                     long=data_clim2$long))
 
 ## Design matrix
-X <- data.frame(intercept=rep(1,nplot),dplyr::select(scaled_data_clim2,-lat,-long, -site))
+X <- data.frame(intercept=rep(1,nplot),
+                dplyr::select(scaled_data_clim2,-lat,-long, -site))
 np <- ncol(X)
-write.csv(X, file = "~/Documents/projet_BioSceneMada/Report/data/X.csv",row.names = F)
+write.csv(X, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/X.csv",
+          row.names = F)
 
 # save climatic data at inventory sites
-save(scaled_data_clim2, means, sds, xy,
-     file="~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
+save(scaled_data_clim2, means, sds,
+     file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
 
 # save raster in .tif format
-# Add squared data
-clim_var <- stack(clim_var,clim_var^2)
 # Center and reduce climatic variables 
 # using means and standard deviations of climatic variables at inventory sites
-scaled_clim_var <- (clim_var-means)/sds
-writeRaster(scaled_clim_var,"~/Documents/projet_BioSceneMada/Report/data/scaled_clim.tif",
-            format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+scaled_clim_var <- (clim_var2-means)/sds
+names(scaled_clim_var) <- names(clim_var2)
+terra::writeRaster(scaled_clim_var,
+                   "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_clim.tif",
+                   gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 ```{r current-environmental-variables2, echo=FALSE, out.width=800, eval=TRUE}
@@ -162,7 +240,7 @@ knitr::include_graphics("Madagascar_files/figure-html/current-environmental-vari
 The values of these climate variables corresponding to the coordinates of the inventory plots are extracted and scaled to obtain the following data-set where coordinates of the sites will then be used for spatial interpolation and to spatially represent the results.
 
 ```{r current-environmental-data, echo=FALSE, out.width=800}
-load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
 kable(head(scaled_data_clim2), digits=3) %>%
   kable_styling(bootstrap_options = "striped", 
                 latex_options= c("HOLD_position","striped"),
@@ -213,8 +291,8 @@ We fit a binomial joint species distribution model, including two latent variabl
 We use species's prevalence as starting values for species intercept $\beta_0$. 
 
 ```{r fit-jSDM-Mada-data, echo=TRUE, eval=FALSE}
-load("~/Documents/projet_BioSceneMada/Report/data/scaled_data_clim.RData")
-load("~/Documents/projet_BioSceneMada/Report/data/PA.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
+load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 # Prevalence of species 
 np <- ncol(dplyr::select(scaled_data_clim2, -site, -lat, -long)) +1
 prevalence <- colSums(PA)/nrow(PA)
@@ -258,7 +336,7 @@ results <- data.frame(nsp,nplot,
                       ngibbs="80000","Time"= T_all, dev=mean(mod_all$mcmc.Deviance))
 colnames(results)<- c("Number of species", "Number of sites", "Number of observations","Number of estimated parameters", "Iterations performed","Compilation time (hours)","Deviance")
 knitr::kable(results, row.names=F, digits=1, booktabs=TRUE, align = 'c') %>%
-		kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) %>% 
+  kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE) %>% 
   kableExtra::save_kable(file="~/Documents/jSDM/vignettes/Madagascar_files/mod_mada.png")
 
 ```
@@ -269,7 +347,7 @@ knitr::kable(results, row.names=F, digits=1, booktabs=TRUE, align = 'c') %>%
 knitr::include_graphics("Madagascar_files/mod_mada.png")
 ```
 
-   
+
 The MCMC algorithm is used to obtain draws from the posterior distribution of the parameters. We use as estimator for each parameter the mean of the $N_{samp}$ values estimated in corresponding MCMC chain and we save the estimated parameters in .csv format.
 
 ```{r save-params, echo=TRUE, eval=FALSE}
@@ -312,10 +390,14 @@ for (j in 1:nsp){
 colnames(betas) <- colnames(mod_all$mcmc.sp[[1]])[1:np]
 params_species <- data.frame(species=species, Id_species = c(1:nsp),
                              betas, lambda_1 = lambdas[,1], lambda_2 = lambdas[,2])
-write.csv(params_species, file ="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv",row.names = F)
+write.csv(params_species,
+          file ="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv",
+          row.names = F)
 
 ## probit_theta_latent
-write.csv(mod_all$probit_theta_latent, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/probit_theta_latent.csv", row.names = F)
+write.csv(mod_all$probit_theta_latent,
+          file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/probit_theta_latent.csv",
+          row.names = F)
 ## theta_latent
 write.csv(mod_all$theta_latent, file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/theta_latent.csv", row.names = F)
 ```
@@ -401,39 +483,42 @@ Overall, the traces and densities of the parameters indicate the convergence of 
 ## Presence probabilities 
 
 ```{r proba_representation}
+load(file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/output.RData")
 theta_latent <- read.csv("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/theta_latent.csv")
-load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
 load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
+xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp")
 
 # Madagascar borders
-TA <- CRS("+init=epsg:32738 +units=m")
-MADA <- readRDS("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/MADA.rds")
-MADA <- sp::spTransform(MADA, TA)
-# define groups for mapping
-cuts <- c(0,0.1,0.2,0.3,0.4,0.5,0.7,0.8,0.9)
-col <- c('red3','red','orange','yellow', 'yellow green', 'green3', 'forest green','dark green')
-pols <- list("sp.polygons", MADA, fill = "lightgray")
+Mada_borders <- terra::vect(output[[2]], layer = "gadm36_MDG_0")
+Mada_borders <- terra::project(Mada_borders, terra::crs(xy))
 
 # Observed presence absence
 id_pres <- which(PA[,"Ocotea laevis"]==1)
 id_abs <- which(PA[,"Ocotea laevis"]==0)
-obs_pres <- data.frame(obs_pres=PA[id_pres,"Ocotea laevis"])
-obs_abs <- data.frame(obs_abs=PA[id_abs,"Ocotea laevis"])
-obs_pres <-  sp::SpatialPointsDataFrame(xy[id_pres,], obs_pres)
-obs_abs <-  sp::SpatialPointsDataFrame(xy[id_abs,], obs_abs)
+obs_pres <-  terra::vect(terra::crds(xy[id_pres,]), type="point", crs=terra::crs(xy))
+obs_abs <-  terra::vect(terra::crds(xy[id_abs,]), type="point", crs=terra::crs(xy))
 # Representation
 par(mfrow=c(1,1))
-sp::plot(MADA, main ="Observed occurences of Ocotea laevis",cex.main=1.4) 
-points(obs_pres,pch=16,cex=1.2)
-points(obs_abs,pch=1,cex=1.2)
-legend("right",legend=c("presence","absence") ,pch=c(16,1))
+terra::plot(Mada_borders, col="lightgray",
+            main ="Observed occurences of Ocotea laevis",
+            cex.main=1.4)
+terra::points(obs_pres, pch=16, cex=1.1)
+terra::points(obs_abs, pch=1)
+legend("right", legend=c("presence","absence"), pch=c(16,1))
 
 # Estimated probabilities of presence
-theta_latent_sp <- SpatialPointsDataFrame(xy,theta_latent)
-names(theta_latent_sp) <- make.names(colnames(PA))
+theta_latent_sp <- terra::vect(cbind(terra::crds(xy), theta_latent),
+                               geom=c("x", "y"), crs=terra::crs(xy))
 # Representation
-sp::spplot(theta_latent_sp, 'Ocotea.laevis', cuts=cuts, col.regions=col, sp.layout=pols, pch=20, cex=1.6, key.space
-           ="right", main ="Estimated probabilities of presence for Ocotea laevis",cex.main=5)
+# define groups for mapping
+cuts <- c(0,0.1,0.2,0.3,0.4,0.5,0.7,0.8,0.9)
+col <- c('red3','red','orange','yellow', 'yellow green', 'green3', 'forest green','dark green')
+terra::plot(Mada_borders, col="lightgray",
+            main ="Estimated probabilities of presence for Ocotea laevis",
+            cex.main=1.4)
+terra::plot(theta_latent_sp, y="Ocotea.laevis", pch=20, cex=1.1,
+            legend="topright", plg=list(cex=1.01), add=TRUE, col=col,
+            type="interval", breaks=cuts)
 ```
 
 ```{r proba-representation2, echo=FALSE,  fig.show = "hold", out.width = "50%",  fig.align = "default", eval=TRUE}
@@ -449,18 +534,43 @@ Species richness also called diversity $\alpha$ reflects the number of species c
 We spatially represent the species richness observed at each inventory site defined by $R_i=\sum\limits_ {j=1}^{n_{species}} y_{ij}$ and the species richness estimated, following @Scherrer2020, by summing the estimated occurrence probabilities of all species on each site: $\widehat{R}_i=\sum\limits_ {j=1}^{n_{species}} \widehat{\theta}_{ij}$.
 
 ```{r species-richness-representation}
-par(mfrow=c(1,1))
-species_richness <- data.frame(species_richness= apply(theta_latent,1,sum))
-species_richness_sp <- SpatialPointsDataFrame(xy, species_richness)
-cuts <- c(0,2,4,8,12,16,20,24,ncol(theta_latent))
-col <- c('red4','red','orange','yellow', 'yellow green', 'green3', 'forest green','dark green')
-pols <- list("sp.polygons", MADA, fill = "lightgray")
-spplot(species_richness_sp, 'species_richness', cuts=cuts, col.regions=col, sp.layout=pols, pch=20, cex=1.6, key.space="right", main ="Estimated species richness")
+# Madagascar borders
+Mada_borders <- terra::vect(output[[2]], layer = "gadm36_MDG_0")
+Mada_borders <- terra::project(Mada_borders, terra::crs(xy))
+# Representation of observed species richness 
 
 species_richness_obs <- data.frame(species_richness_obs=rowSums(PA))
-species_richness_obs_sp <- SpatialPointsDataFrame(xy, species_richness_obs)
-spplot(species_richness_obs_sp, 'species_richness_obs', cuts=cuts, col.regions=col, sp.layout=pols, pch=20, cex=1.6, key.space="right", main ="Observed species richness")
-plot(species_richness_obs$species_richness_obs,species_richness$species_richness, main="Species richness", xlab="observed", ylab="estimated", cex.main=1.4, cex.lab=1.3)
+species_richness_obs_sp <- terra::vect(cbind(terra::crds(xy), species_richness_obs),
+                                       geom=c("x","y"), crs=terra::crs(xy))
+par(mfrow=c(1,1))
+cuts <- c(0,2,4,8,12,16,20,24, ncol(theta_latent))
+col <- c('red4','red','orange','yellow', 'yellow green', 'green3', 'forest green','dark green')
+
+terra::plot(Mada_borders, col="lightgray",
+            main ="Observed species richness",
+            cex.main=1.4)
+terra::plot(species_richness_obs_sp, 'species_richness_obs', breaks=cuts, col=col,
+            pch=20, cex=1.1, add=TRUE, 
+           legend="topright", plg=list(cex=1.01), type="interval")
+
+# Representation of estimated species richness 
+par(mfrow=c(1,1))
+species_richness <- data.frame(species_richness= apply(theta_latent,1,sum))
+species_richness_sp <- terra::vect(cbind(terra::crds(xy),
+                                         species_richness), 
+                                   geom=c("x","y"), crs=terra::crs(xy))
+terra::plot(Mada_borders, col="lightgray",
+            main ="Estimated species richness",
+            cex.main=1.4)
+terra::plot(species_richness_sp, 'species_richness', col=col,
+           breaks=cuts, pch=20, cex=1.1, add=TRUE, 
+           legend="topright", plg=list(cex=1.01), type="interval")
+
+# Comparison between observed and estimated species richness at inventory sites
+plot(species_richness_obs$species_richness_obs,
+     species_richness$species_richness,
+     main="Species richness", xlab="observed", ylab="estimated",
+     cex.main=1.4, cex.lab=1.3)
 abline(a=0,b=1,col='red')
 ```
 
@@ -478,10 +588,10 @@ Moreover, we can see that the observed species richness is greater in the moist 
 
 ## Residual correlation 
 
- After fitting the JSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, n_{site}}_{j=1,\ldots, n_{species}}$ can be derived from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
-  $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
-  
+After fitting the JSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, n_{site}}_{j=1,\ldots, n_{species}}$ can be derived from the covariance in the latent variables such as : 
+$$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
+$$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
+
 ```{r residual-correlation, eval=FALSE}
 load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 n.species <- ncol(mod_all$model_spec$presence_data)
@@ -512,10 +622,10 @@ colnames(R) <- rownames(R) <- make.names(params_species$species)
 R <- as.matrix(R)
 library(viridis)
 jSDM::plot_associations(R, circleBreak=TRUE, occ=PA, top=50,
-                  main="Species-species association sorted after their frequency",
-                  cols_association=viridis::viridis(10),
-                  cols_occurrence=viridis::magma(10),
-                  species_order="frequency")
+                        main="Species-species association sorted after their frequency",
+                        cols_association=viridis::viridis(10),
+                        cols_occurrence=viridis::magma(10),
+                        species_order="frequency")
 # Average of MCMC samples of species effect beta except the intercept
 effects = params_species[,grep("beta", colnames(params_species))[-1]]
 np <- ncol(effects)
@@ -523,9 +633,9 @@ np <- ncol(effects)
 effects <- abs(effects[,1:(np/2)]) + abs(effects[,(np/2 +1):np])
 colnames(effects) <-  gsub("beta_", "",colnames(effects))
 jSDM::plot_associations(R, env_effect=effects, top=50,
-                  main="Species-species association sorted after their main environmental effect",
-                  cols_association=viridis::viridis(10),
-                  species_order="main env_effect")
+                        main="Species-species association sorted after their main environmental effect",
+                        cols_association=viridis::viridis(10),
+                        species_order="main env_effect")
 ```
 
 ```{r plot-associations2, echo=FALSE, out.width=500, out.height=555, eval=TRUE}
@@ -571,34 +681,50 @@ We interpolate the random site effect at Madagascar scale using RST method.
 library(rgrass7)
 # Import sites parameters
 params_sites <- read.csv("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_sites.csv")
-longlat <- SpatialPoints(params_sites[,c("long","lat")])
-proj4string(longlat) <- CRS("+proj=longlat +ellps=clrk66 +units=m")
-# lat-long to UTM38S projection 
-xy = spTransform(longlat, CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+# inventory sites coordinates in UTM38S projection 
+xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp")
+
 # alpha 
-alpha_sp <- SpatialPointsDataFrame(xy, data.frame(alpha=params_sites$alphas))
-use_sp()
-rgrass7::writeVECT(alpha_sp, "alpha", v.in.ogr_flags="overwrite")
-# Import Madagascar shape file
-clim <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/current.tif")
-Madagascar <- as(clim[[1]], 'SpatialGridDataFrame')
-rgrass7::writeRAST(Madagascar, "Madagascar", flags="overwrite")
+alpha_sp <- terra::vect(data.frame(alpha=params_sites$alphas, terra::crds(xy)),
+                        geom=c("x","y"), crs=terra::crs(xy))
+rgrass7::write_VECT(alpha_sp, "alpha", flags="overwrite")
 # Re-sample with RST
-# Note: use maskmap=Madagascar to save computation time
 # for punctual data use function v.surf.rst
 system("v.surf.rst --overwrite --verbose -t tension=3 input=alpha zcolumn=alpha \\
-       smooth=0.0 elevation=alpha_rst mask=Madagascar")
+       smooth=0.0 elevation=alpha_rst")
 # Export
 system("r.out.gdal --overwrite input=alpha_rst \\
 			 output=Madagascar_cache/alpha_rst.tif type=Float32 \\
 			 createopt='compress=lzw,predictor=2'")
 # Representation
-test_in <- raster("Madagascar_cache/alpha_rst.tif")
-plot(test_in, main="Site effect alpha interpolated by RST")
-test_xy <- raster::extract(test_in, xy)
-plot(test_xy, params_sites$alphas, xlab="alpha interpolated by RST", ylab="alpha estimated by JSDM",
-          main="Random site effect")
+alpha_rst <- terra::rast("/home/clement/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst.tif")
+# Data restricted to Madagascar's borders
+borders <- terra::vect(output[[2]], layer="gadm36_MDG_0")
+borders <- terra::project(borders, terra::crs(alpha_rst))
+alpha_rst  <- terra::mask(alpha_rst, borders)
+# terra::writeRaster(alpha_rst, 
+#                    filename="/home/clement/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst.tif",
+#                    gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+terra::plot(alpha_rst, main="Site effect alpha interpolated by RST")
+alpha_rst_xy <- terra::extract(alpha_rst, xy)[,"alpha_rst"]
+plot(alpha_rst_xy, params_sites$alphas,
+     xlab="alpha interpolated by RST",
+     ylab="alpha estimated by JSDM",
+     main="Random site effect")
 abline(a=0, b=1, col='red')
+
+# Center interpolated site effect 
+alpha_rst_centered <- terra::app(alpha_rst, fun=scale, scale=FALSE)
+names(alpha_rst_centered) <- names(alpha_rst)
+terra::plot(alpha_rst_centered, main="Site effect alpha interpolated by RST")
+alpha_rst_centered_xy <- terra::extract(alpha_rst_centered, xy)[,"alpha_rst"]
+plot(alpha_rst_centered_xy, params_sites$alphas,
+     xlab="alpha interpolated by RST",
+     ylab="alpha estimated by JSDM",
+     main="Random site effect")
+abline(a=0, b=1, col='red')
+terra::writeRaster(alpha_rst_centered, "Madagascar_cache/alpha_rst_centered.tif",
+                   gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 We represent the random site effect interpolated at Madagascar scale. 
@@ -613,24 +739,44 @@ We interpolate the first axis of latent variables at the Madagascar scale using 
 
 ```{r RST-W1}
 # W1 
-W1_sp <- SpatialPointsDataFrame(xy, data.frame(W1=params_sites$W1))
-rgrass7::writeVECT(W1_sp, "W1", v.in.ogr_flags="overwrite")
+W1_sp <- terra::vect(data.frame(W1=params_sites$W1, terra::crds(xy)),
+                     geom=c("x","y"), crs=terra::crs(xy))
+rgrass7::write_VECT(W1_sp, "W1", flags="overwrite")
 # Re-sample with RST
-# Note: use maskmap=Madagascar to save computation time
+# Note: use mask=Madagascar to save computation time
 # for punctual data use function v.surf.rst
 system("v.surf.rst --overwrite --verbose -t tension=3 input=W1 zcolumn=W1 \\
-       smooth=0.0 elevation=W1_rst mask=Madagascar")
+       smooth=0.0 elevation=W1_rst")
 # Export
 system("r.out.gdal --overwrite input=W1_rst \\
 			 output=Madagascar_cache/W1_rst.tif type=Float32 \\
 			 createopt='compress=lzw,predictor=2'")
 # Representation
-test_in <- raster("Madagascar_cache/W1_rst.tif")
-plot(test_in, main="Latent variable W1 interpolated by RST")
-test_xy <- raster::extract(test_in, xy)
-plot(test_xy, params_sites$W1,xlab="W1 nterpolated by RST", ylab="W1 estimated by JSDM", 
-     main="First latent axe")
+W1_rst <- terra::rast("Madagascar_cache/W1_rst.tif")
+# Data restricted to Madagascar's borders
+borders <- terra::vect(output[[2]], layer="gadm36_MDG_0")
+borders <- terra::project(borders, terra::crs(W1_rst))
+W1_rst  <- terra::mask(W1_rst, borders)
+terra::plot(W1_rst, main="Latent variable W1 interpolated by RST")
+W1_rst_xy <- terra::extract(W1_rst, xy)[, "W1_rst"]
+plot(W1_rst_xy, params_sites$W1,
+     xlab="W1 interpolated by RST",
+     ylab="W1 estimated by JSDM", 
+     main="First latent axis")
 abline(a=0, b=1, col='red')
+
+# Center interpolated first latent axis 
+W1_rst_centered <- terra::app(W1_rst, scale, scale=FALSE)
+names(W1_rst_centered) <- names(W1_rst)
+terra::plot(W1_rst_centered, main="First latent axis interpolated by RST")
+W1_rst_centered_xy <- terra::extract(W1_rst_centered, xy)[,"W1_rst"]
+plot(W1_rst_centered_xy, params_sites$W1,
+     xlab="W1 interpolated by RST",
+     ylab="W1 estimated by JSDM",
+     main="First latent axis")
+abline(a=0, b=1, col='red')
+terra::writeRaster(W1_rst_centered, "Madagascar_cache/W1_rst_centered.tif",
+                   gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 We represent the first latent variable interpolated at Madagascar scale. 
@@ -644,24 +790,44 @@ We interpolate the second axis of latent variables at the Madagascar scale using
 
 ```{r RST-W2}
 # W2 
-W2_sp <- SpatialPointsDataFrame(xy, data.frame(W2=params_sites$W2))
-rgrass7::writeVECT(W2_sp, "W2", v.in.ogr_flags="overwrite")
+W2_sp <- terra::vect(data.frame(W2=params_sites$W2, terra::crds(xy)),
+                     geom=c("x","y"), crs=terra::crs(xy))
+rgrass7::write_VECT(W2_sp, "W2", flags="overwrite")
 # Re-sample with RST
-# Note: use maskmap=Madagascar to save computation time
+# Note: use mask=Madagascar to save computation time
 # for punctual data use function v.surf.rst
 system("v.surf.rst --overwrite --verbose -t tension=3 input=W2 zcolumn=W2 \\
-       smooth=0.0 elevation=W2_rst mask=Madagascar")
+       smooth=0.0 elevation=W2_rst")
 # Export
 system("r.out.gdal --overwrite input=W2_rst \\
 			 output=Madagascar_cache/W2_rst.tif type=Float32 \\
 			 createopt='compress=lzw,predictor=2'")
 # Representation
-test_in <- raster("Madagascar_cache/W2_rst.tif")
-plot(test_in, main="Latent variable W2 interpolated by RST")
-test_xy <- raster::extract(test_in, xy)
-plot(test_xy, params_sites$W2, xlab="W2 nterpolated by RST", ylab="W2 estimated by JSDM",
-     main="Second latent axe")
+W2_rst <- terra::rast("Madagascar_cache/W2_rst.tif")
+# Data restricted to Madagascar's borders
+borders <- terra::vect(output[[2]], layer="gadm36_MDG_0")
+borders <- terra::project(borders, terra::crs(W2_rst))
+W2_rst  <- terra::mask(W2_rst, borders)
+terra::plot(W2_rst, main="Latent variable W2 interpolated by RST")
+W2_rst_xy <- terra::extract(W2_rst, xy)[, "W2_rst"]
+plot(W2_rst_xy, params_sites$W2,
+     xlab="W2 interpolated by RST",
+     ylab="W2 estimated by JSDM", 
+     main="Second latent axis")
 abline(a=0, b=1, col='red')
+
+# Center interpolated first latent axis 
+W2_rst_centered <- terra::app(W2_rst, scale, scale=FALSE)
+names(W2_rst_centered) <- names(W2_rst)
+terra::plot(W2_rst_centered, main="Second latent axis interpolated by RST")
+W2_rst_centered_xy <- terra::extract(W2_rst_centered, xy)[,"W2_rst"]
+plot(W2_rst_centered_xy, params_sites$W2,
+     xlab="W2 interpolated by RST",
+     ylab="W2 estimated by JSDM",
+     main="Second latent axis")
+abline(a=0, b=1, col='red')
+terra::writeRaster(W2_rst_centered, "Madagascar_cache/W2_rst_centered.tif",
+                   gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 We represent the second latent variable interpolated at Madagascar scale. 
@@ -679,19 +845,21 @@ We calculate the probabilities of species presences between inventory sites usin
 ```{r calcul-theta, eval=FALSE}
 remove(list = ls())
 # RST interpolation of sites parameters 
-rst_alpha <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst.tif")
-rst_W1 <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/W1_rst.tif")
-rst_W2 <- stack("~/Documents/jSDM/vignettes/Madagascar_cache/W2_rst.tif")
+rst_alpha <- terra::rast("~/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst_centered.tif")
+rst_W1 <- terra::rast("~/Documents/jSDM/vignettes/Madagascar_cache/W1_rst_centered.tif")
+rst_W2 <- terra::rast("~/Documents/jSDM/vignettes/Madagascar_cache/W2_rst_centered.tif")
 
 # Species parameters 
 params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 nsp <- nrow(params_species)
 # Current climatic variables 
 X <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/X.csv")
-scaled_clim_var <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_clim.tif")
+scaled_clim_var <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_clim.tif")
 names(scaled_clim_var) <- colnames(X[,-1])
-extent(scaled_clim_var) <- extent(rst_alpha)
-proj4string(scaled_clim_var) <- proj4string(rst_alpha)
+terra::ext(scaled_clim_var) <- terra::ext(rst_alpha)
+if(terra::crs(scaled_clim_var) != terra::crs(rst_alpha)){
+  scaled_clim_var <- terra::project(scaled_clim_var, terra::crs(rst_alpha))
+}
 
 # Function to compute probit_theta at Madagascar scale 
 predfun <- function(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2, species.range){
@@ -700,11 +868,11 @@ predfun <- function(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2, 
   beta <- as.matrix(params_species[,3:13])
   
   ## Xbeta_1
-  np <- nlayers(scaled_clim_var)
-  Xbeta_1 <- raster(ncols=ncol(rst_alpha), nrows=nrow(rst_alpha))
-  extent(Xbeta_1) <- extent(rst_alpha)
-  proj4string(Xbeta_1) <- proj4string(rst_alpha)
-  values(Xbeta_1) <- rep(beta[1,1][[1]], ncell(Xbeta_1))
+  np <- terra::nlyr(scaled_clim_var)
+  Xbeta_1 <- terra::rast(ncols=dim(rst_alpha)[2], nrows=dim(rst_alpha)[1],
+                         ext=terra::ext(rst_alpha), crs=terra::crs(rst_alpha),
+                         resolution=terra::res(rst_alpha))
+  terra::values(Xbeta_1) <- rep(beta[1,1][[1]], terra::ncell(Xbeta_1))
   for (p in 1:np) {
     Xbeta_1 <- Xbeta_1 + scaled_clim_var[[p]]*beta[1,p+1] 
   }
@@ -718,7 +886,7 @@ predfun <- function(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2, 
   for (j in (species.range[1]+1):species.range[2]) {
     ## Xbeta_j
     Xbeta_j <- Xbeta_1
-    values(Xbeta_j) <- rep(beta[j,1][[1]], ncell(Xbeta_j))
+    terra::values(Xbeta_j) <- rep(beta[j,1][[1]], terra::ncell(Xbeta_j))
     for (p in 1:np) {
       Xbeta_j <- Xbeta_j + scaled_clim_var[[p]]*beta[j,p+1] 
     }
@@ -726,7 +894,7 @@ predfun <- function(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2, 
     Wlambda_j <- rst_W1*lambda_1[j] + rst_W2*lambda_2[j]  
     ## probit_theta_j
     probit_theta_j <- Xbeta_j + Wlambda_j + rst_alpha
-    probit_theta <- stack(probit_theta, probit_theta_j)
+    probit_theta <- c(probit_theta, probit_theta_j)
     remove(list=c("probit_theta_j", "Xbeta_j", "Wlambda_j"))
   }
   names(probit_theta) <- make.names(params_species$species[species.range[1]:species.range[2]])
@@ -737,49 +905,47 @@ predfun <- function(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2, 
 npart <- 10
 first.species <- seq(1, nsp, by=floor(nsp/npart)+1)
 for (n in 1:npart){
-  probit_theta <- predfun(scaled_clim_var, params_species, rst_alpha, rst_W1, rst_W2,
-                          species.range=c(first.species[n],min(nsp,first.species[n]+floor(nsp/npart))))
-  writeRaster(probit_theta,
-              file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_probit_theta_", n, ".tif"),
-              format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
-  # Compute probabilities of presence theta
-  theta <- probit_theta
+  probit_theta <- predfun(scaled_clim_var, params_species,
+                          rst_alpha, rst_W1, rst_W2,
+                          species.range=c(first.species[n],
+                                          min(nsp,first.species[n]+floor(nsp/npart))))
+  terra::writeRaster(probit_theta,
+                     filename=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_centered_probit_theta_", n, ".tif"),
+                     filetype="GTiff",
+                     gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+  # Compute and save SpatRaster of probabilities of presence theta
+  terra::app(probit_theta, pnorm, cores=2,
+             filename=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_centered_theta_",n,".tif"), overwrite=TRUE, wopt=list(gdal=c("COMPRESS=LZW", "PREDICTOR=2"), filetype="GTiff"))
   remove(probit_theta)
-  for (j in 1:nlayers(theta)){
-    values(theta[[j]]) <- pnorm(values(theta[[j]]))
-  }
-  writeRaster(theta, 
-              file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",n,".tif"),
-              format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
-  remove(theta)
 }
 ```
 
 We represent the presence probabilities of two species interpolated at the scale of Madagascar as well as their observed occurrences at the inventory sites represented by black crosses.
 
-```{r plot-theta, eval=FALSE}
+```{r plot-theta}
 params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
 nsp <- nrow(params_species)
-load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData")
+xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp")
 load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData")
 # Observed presence absence
 id_pres_Ocotea <- which(PA[,"Ocotea laevis"]==1)
-obs_pres_Ocotea <- data.frame(obs_pres=PA[id_pres_Ocotea,"Ocotea laevis"])
-obs_pres_Ocotea <-  sp::SpatialPointsDataFrame(xy[id_pres_Ocotea,],
-                                               obs_pres_Ocotea)
-id_pres_Manilkara <- which(PA[,6]==1)
-obs_pres_Manilkara <- data.frame(obs_pres=PA[id_pres_Manilkara,6])
-obs_pres_Manilkara <-  sp::SpatialPointsDataFrame(xy[id_pres_Manilkara,], obs_pres_Manilkara)
+obs_pres_Ocotea <-  terra::vect(terra::crds(xy[id_pres_Ocotea,]),
+                                type="point", crs=terra::crs(xy))
+id_pres_Manilkara <- which(PA[,"Manilkara hexandra"]==1)
+obs_pres_Manilkara <-  terra::vect(terra::crds(xy[id_pres_Manilkara,]),
+                                   type="point", crs=terra::crs(xy))
 # Representation
 npart <- 10
 first.species <- seq(1,nsp,by=floor(nsp/npart)+1)
-theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
+theta <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
 names(theta) <- make.names(params_species$species[first.species[1]:(first.species[1]+floor(nsp/npart))])
 par(mfrow=c(1,2), oma=c(1, 0, 2, 1), mar=c(5, 4, 3, 2))
-plot(theta[[1]], main=names(theta)[[1]])
-points(obs_pres_Ocotea, pch=3, cex=0.7)
-plot(theta[[6]], main=names(theta)[[6]])
-points(obs_pres_Manilkara, pch=3, cex=0.7)
+terra::plot(theta$Ocotea.laevis,
+            main=names(theta)[1])
+terra::points(obs_pres_Ocotea, pch=3, cex=0.7)
+terra::plot(theta$Manilkara.hexandra,
+            main=names(theta)[6])
+terra::points(obs_pres_Manilkara, pch=3, cex=0.7)
 title(main="Interpolated current probabilities of presence",
       outer=T, cex.main=1.3)
 ```
@@ -799,16 +965,18 @@ Species richness also called diversity $\alpha$ reflects the number of species c
 We compute at Madagascar scale the species richness by summing the interpolated probabilities of occurrence for each map's cell $i$ :  $\widehat{R}_i=\sum\limits_ {j=1}^{n_{species}} \widehat{\theta}_{ij}$.
 
 ```{r species-richness, eval=FALSE}
-theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
-species_richness <- sum(theta)
+theta <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
+species_richness <- terra::app(theta, sum)
 npart <- 10
 for(n in 2:npart){
-theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_", n, ".tif"))
-species_richness <- species_richness + sum(theta)
+  theta <- terra::rast(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",
+                              n, ".tif"))
+  species_richness <- species_richness + terra::app(theta, sum)
 }
-writeRaster(species_richness,
-            file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness.tif"), 
-            format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+names(species_richness) <- "species_richness"
+terra::writeRaster(species_richness,
+                   filename=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness.tif"), 
+                   filetype="GTiff", gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 ### Current species richness restricted to forest cover
@@ -818,35 +986,35 @@ However, the model used does not take into account human presence, which is mani
 ```{r species-richness-deforest, eval=FALSE}
 library(glue)
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
+forest <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 # change resolution of species richness raster from 1000x1000m to 30x30m
 in_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness.tif"
 out_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif"
 cmd <- glue('gdalwarp -tr 30 30 -te {xmin(forest)} {ymin(forest)} {xmax(forest)} {ymax(forest)} -r near -co "COMPRESS=LZW" -co "PREDICTOR=2" -overwrite {in_f} {out_f}')
 system(cmd)
 # remove species richness values where there was no forest in 2000s
-species_richness <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
-species_richness_deforest <- mask(species_richness,forest)
-writeRaster(species_richness_deforest,file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif",
-                format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+species_richness <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
+species_richness_deforest <- terra::mask(species_richness, forest)
+terra::writeRaster(species_richness_deforest,
+                   filename="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif",
+                   filetype="GTiff", gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
-```{r plot-species-richness-deforest, echo=FALSE, eval=FALSE}
-
+```{r plot-species-richness-deforest, echo=FALSE}
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
+forest <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 par(mfrow=c(1,1))
-plot(forest, main="Forest cover in 2000", legend=F)
+terra::plot(forest, main="Forest cover in 2000", legend=F)
 # Representation of species richness restricted to forest cover in 2000's 
-species_richness <- raster("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
-species_richness_deforest <- raster("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif")
-par(oma=c(0,0,1,1))
-plot(stack(species_richness, species_richness_deforest),
-     breaks=c(0,2,4,6,8,10,12,14,16,20,24,28,32,36,40,45,50,55,60,65), 
-     col=terrain.colors(200)[seq.int(from=200, to=1, length.out=20)],
-     main=c("Estimated current species richness",
-            "Current species richness restricted to forest cover"),
-     cex.main=0.85)
+species_richness <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_30m.tif")
+species_richness_deforest <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_richness_deforest.tif")
+terra::plot(c(species_richness, species_richness_deforest),
+            breaks=c(0,2,4,6,8,10,12,14,16,20,24,28,32,36,40,45,50,55,60,65), 
+            col=terrain.colors(200)[seq.int(from=200, to=1, length.out=20)],
+            mar=c(3.1, 3.1, 2.1, 4.1),
+            main=c("Estimated current species richness",
+                   "Current species richness restricted to forest cover"),
+            cex.main=0.85)
 ```
 
 ```{r plot-species-richness-deforest2, echo=FALSE, out.width=800, eval=TRUE}
@@ -877,12 +1045,13 @@ In order to estimate this indicator, we proceed in the same way as in the articl
 ```{r diversity-beta, eval=FALSE}
 # Sample 10000 cells of presence probabilities raster
 npart <- 10
-theta <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
-samp_theta <- raster::sampleRandom(theta, size=10000, ext=extent(theta), na.rm=TRUE, cells=TRUE)
+theta <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
+samp_theta <- terra::spatSample(theta, size=10000, method="random",
+                                ext=terra::ext(theta), na.rm=TRUE, cells=TRUE)
 samp_cells <- samp_theta[,"cell"]
 samp_theta <- samp_theta[,-1]
 for(n in 2:npart){
-  theta <- stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_", n, ".tif"))
+  theta <- terra::rast(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_", n, ".tif"))
   samp_theta <- cbind(samp_theta, theta[samp_cells])
 }
 params_species <- read.csv(file = "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv")
@@ -897,20 +1066,20 @@ str(pca_theta)
 # Perform projections of PCA results on all raster's rows in parallel
 # Coordinates on the 3 axes retained in the PCA
 coords <- theta[[c(1,2,3)]]
-values(coords) <- 0 
+terra::values(coords) <- 0 
 names(coords) <- colnames(pca_theta$li)
 for(k in 1:nrow(theta)){
   cat(k, "/", nrow(theta),"\n")
-  theta <- raster::stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
+  theta <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif")
   ## Make a cluster for parallel computation
   # detect the number of CPU cores on the current host
   ncores <- parallel::detectCores()
   clust <- makeCluster(ncores)
   registerDoParallel(clust)
   theta_k <- foreach(n=1:npart, .combine = "cbind") %dopar%{
-    theta <- raster::stack(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",
-                                  n, ".tif"))
-    theta_k <- raster::getValues(theta, row=k)
+    theta <- terra::rast(paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_",
+                                n, ".tif"))
+    theta_k <- terra::values(theta, row=k, nrows=1)
     return(theta_k)
   }
   stopCluster(clust)
@@ -918,67 +1087,71 @@ for(k in 1:nrow(theta)){
   theta_k <- data.frame(theta_k)
   coords[k,] <- as.matrix(ade4::suprow(pca_theta,theta_k)$lisup)
 }
-writeRaster(coords,file="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.tif",
-                format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+terra::writeRaster(coords,
+                   filename="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.tif",
+                   filetype="GTiff", gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 
 # Change the coordinate scale for [0.255]. 
 ## Min reduced to 0
-Min <- minValue(coords)
+Min <- terra::minmax(coords)["min",]
 Min
 coords_RGB <- coords
 for (l in 1:3) {
   coords_RGB[[l]] <- coords[[l]] - Min[l]
 }
 
-Min2 <- minValue(coords_RGB)
+Min2 <- terra::minmax(coords_RGB)["min",]
 Min2
 ## Max at 255
 remove(coords)
-Max <- maxValue(coords_RGB)
+Max <- terra::minmax(coords_RGB)["max",]
 Max
 for (l in 1:3) {
   coords_RGB[[l]] <- (coords_RGB[[l]] / Max[l])*255
 }
-Max2 <- maxValue(coords_RGB)
+Max2 <- terra::minmax(coords_RGB)["max",]
 Max2
 
 # Coloration RGB
-writeRaster(coords_RGB,file=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover.tif"),
-                format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+terra::writeRaster(coords_RGB,
+                   filename=paste0("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover.tif"),
+                   filetype="GTiff", gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 ### Current species turn over restricted to forest cover
 
 In the same way as above, we restrict the values obtained for diversity $\beta$ to the forest cover remaining in 2000.
 
-```{r species-turnover-deforest, eval=FALSE}
+```{r species-turnover-deforest}
 library(glue)
 # raster of Madagascar's forest cover in 2000
-forest <- stack("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
+forest <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif")
 # current species turnover
 # change resolution of species richness raster from 1000x1000m to 30x30m
-in_f <- "~/Documents/projet_BioSceneMada/Report/data/species_turnover.tif"
-out_f <- "~/Documents/projet_BioSceneMada/Report/data/species_turnover_30m.tif"
+in_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover.tif"
+out_f <- "~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_30m.tif"
 cmd <- glue('gdalwarp -tr 30 30 -te {xmin(forest)} {ymin(forest)} {xmax(forest)} {ymax(forest)} -r near -co "COMPRESS=LZW" -co "PREDICTOR=2" -overwrite {in_f} {out_f}')
 system(cmd)
 # remove species richness values where there was no forest in 2000s
-species_turnover <- stack("~/Documents/projet_BioSceneMada/Report/data/species_turnover_30m.tif")
-species_turnover_deforest <- mask(species_turnover,forest)
-writeRaster(species_turnover_deforest,file="~/Documents/projet_BioSceneMada/Report/data/species_turnover_deforest.tif",
-                format="GTiff", options=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
+species_turnover <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_30m.tif")
+species_turnover_deforest <- terra::mask(species_turnover,forest)
+terra::writeRaster(species_turnover_deforest,
+                   filename="~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_deforest.tif",
+                   filetype="GTiff", gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
 ```
 
 
 ```{r plot-diversity-beta}
 # Representation of species turn over restricted to forest cover in 2000's
-species_turnover_current <- stack("~/Documents/projet_BioSceneMada/Report/data/species_turnover_30m.tif")
-species_turnover_deforest <- stack("~/Documents/projet_BioSceneMada/Report/data/species_turnover_deforest.tif")
-par(mfrow=c(1,2), mar=c(1,1,2,1))
-plotRGB(species_turnover_current, margins=T, stretch="hist",
+species_turnover_current <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_30m.tif")
+species_turnover_deforest <- terra::rast("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_deforest.tif")
+par(mfrow=c(1,2))
+terra::plotRGB(species_turnover_current, stretch="hist",
+               mar=c(1,1,1,1),
         main="Estimated current species turn over")
-plotRGB(species_turnover_deforest,margins=T, stretch="hist")
-title(main="Current species turn over restricted to forest cover",
-      cex.main=0.85)
+terra::plotRGB(species_turnover_deforest, stretch="hist",
+               mar=c(1,1,1,1),
+               main="Current species turn over on forest cover")
 ```
 
 ```{r plot-diversity-beta2, echo=FALSE, out.width=800, eval=TRUE}
