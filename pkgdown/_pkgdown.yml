@@ -3,9 +3,11 @@ authors:
     href: "https://ecology.ghislainv.fr"
   Jeanne Clément:
     href: "https://jeanneclement.github.io/"
+  Frédéric Gosselin:
+    href: "https://cv.hal.science/frederic-gosselin"
   CIRAD:
     href: "https://www.cirad.fr"
-    html: "<img src='https://ecology.ghislainv.fr/images/logos/logo-cirad.svg' height=24>"
+    html: "<img src='https://github.com/ghislainv/ghislainv.github.io/blob/master/org/images/logos/logo-cirad.svg' height=24>"
     
 navbar:
   structure:
