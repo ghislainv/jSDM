@@ -105,48 +105,43 @@ clim_path <- get_chelsa_current(extent_latlon = extent_latlon,
                                 rm_download = TRUE)
 ```
 
-\begin{table}[H]
-\caption{Climate data downloaded by the function \texttt{get\_chelsa\_current} and \texttt{get\_chelsa\_future}.}
-\begin{tabular}{l|l|l}
-\rowcolor{gray!50}
-\textbf{Variable} & \textbf{Unit} & \textbf{Source}
-Minimum monthly temperatures & $ \celsius \times 10 $ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
-Maximum monthly temperatures & $ \celsius \times $10 & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
-Average monthly temperatures & $ \celsius \times $10 & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Monthly precipitation & $kg.m^{-2}.month^-1$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Cloud cover & \% & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\ 
-Climatic water deficit (Thornthwaite) & $kg.m^{-2}$ & calculated from data from
-& & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Potential evapotranspiration (Thornthwaite) & $kg.m^{-2}.month^-1$ & calculated from data from 
-& &\href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Number of dry months (Thornthwaite) & months & calculated from data in 
-& & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Climatic water deficit (Penman-Monteith) & $kg.m^{-2}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Potential evapotranspiration (Penman-Monteith) & $kg.m^{-2}.month^-1$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Number of dry months (Penman-Monteith) & months & calculated from data from 
-& &\href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Average annual temperature & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Annual mean temperature (bio1) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Diurnal temperature range (bio2) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Isothermality (bio3=bio2/bio7) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Seasonality of temperatures (bio4) & $\celsius / 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Maximum temperature of the warmest month (bio5) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Minimum temperature of the coldest month (bio6) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Annual temperature range (bio7=bio5-bio6) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Average temperature of the wettest quarter (bio8) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Average temperature of the driest quarter (bio9) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Average temperature of the warmest quarter (bio10) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Average temperature of the coldest quarter (bio11) & $\celsius \times 10$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Cumulative annual precipitation (bio12) & $kg.m^{-2}.year^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Cumulative precipitation of wettest month (bio13) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Cumulative precipitation of the driest month (bio14) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Seasonality of rainfall (bio15) & $kg.m^{-2}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Precipitation in wettest quarter (bio16) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Precipitation of driest quarter (bio17) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Warmest quarter precipitation (bio18) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-Coldest quarter precipitation (bio19) & $kg.m^{-2}.month^{-1}$ & \href{https://chelsa-climate.org/}{chelsa-climate.org} \\
-\end{tabular}
-\end{table}
+```{r clim-data-table, eval=TRUE, echo=FALSE}
+Variable <- c("Minimum monthly temperatures", "Maximum monthly temperatures",
+              "Average monthly temperatures", "Monthly precipitation", "Cloud cover", 
+              "Climatic water deficit (Thornthwaite)",
+              "Potential evapotranspiration (Thornthwaite)", "Number of dry months (Thornthwaite)",
+              "Climatic water deficit (Penman-Monteith)", "Potential evapotranspiration (Penman-Monteith)", 
+              "Number of dry months (Penman-Monteith)", "Annual mean temperature (bio1 or temp)",
+              "Diurnal temperature range (bio2)", "Isothermality (bio3=bio2/bio7)",
+              "Seasonality of temperatures (bio4 or sais_temp)", 
+              "Maximum temperature of the warmest month (bio5)",
+              "Minimum temperature of the coldest month (bio6)",
+              "Annual temperature range (bio7=bio5-bio6)",
+              "Average temperature of the wettest quarter (bio8)",
+              "Average temperature of the driest quarter (bio9)",
+              "Average temperature of the warmest quarter (bio10)",
+              "Average temperature of the coldest quarter (bio11)",
+              "Cumulative annual precipitation (bio12 or prec)",
+              "Cumulative precipitation of wettest month (bio13)",
+              "Cumulative precipitation of the driest month (bio14)",
+              "Seasonality of rainfall (bio15 or sais_prec)",
+              "Precipitation in wettest quarter (bio16)",
+              "Precipitation of driest quarter (bio17)",
+              "Warmest quarter precipitation (bio18)",
+              "Coldest quarter precipitation (bio19)")
+
+Unit <- c(rep("°C x 10", 3),
+          "$kg.m^{-2}.month^-1$", "\\%", "$kg.m^{-2}$", "$kg.m^{-2}.month^-1$", "months", 
+          "$kg.m^{-2}$", "$kg.m^{-2}.month^-1$", "months", rep("°C x 10",11),
+          "$kg.m^{-2}.year^{-1}$", "$kg.m^{-2}.month^{-1}$", "$kg.m^{-2}.month^{-1}$",
+          "$kg.m^{-2}$", rep("$kg.m^{-2}.month^{-1}$", 4))
+
+dataset <- data.frame(Variable, Unit)
+colnames(dataset )<- c("Variable", "Unit")
+knitr::kable(dataset, row.names=F, booktabs=TRUE, align = 'l', escape=FALSE, 
+             caption="Climate data downloaded from https://chelsa-climate.org/") %>%
+  kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE)
+```
 
 Among the climatic data downloaded, concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1960-1990).
 We choose to use the following variables because they have an ecological meaning which makes them easily interpretable and are little correlated between them according to the article @Vieilledent2013 : 
