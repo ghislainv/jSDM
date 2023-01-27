@@ -44,6 +44,7 @@ library(terra)
 library(sf)
 library(jSDM)
 library(kableExtra)
+library(dplyr)
 ```
 
 # Datasets
