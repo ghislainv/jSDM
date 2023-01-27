@@ -43,8 +43,6 @@ library(doParallel)
 library(terra)
 library(sf)
 library(jSDM)
-library(kableExtra)
-library(dplyr)
 ```
 
 # Datasets
@@ -107,6 +105,7 @@ clim_path <- get_chelsa_current(extent_latlon = extent_latlon,
 ```
 
 ```{r clim-data-table, eval=TRUE, echo=FALSE}
+library(kableExtra)
 Variable <- c("Minimum monthly temperatures", "Maximum monthly temperatures",
               "Average monthly temperatures", "Monthly precipitation", "Cloud cover", 
               "Climatic water deficit (Thornthwaite)",
@@ -240,7 +239,12 @@ load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_
 kable(head(scaled_data_clim2), digits=3) %>%
   kable_styling(bootstrap_options = "striped", 
                 latex_options= c("HOLD_position","striped"),
-                full_width = FALSE)
+                full_width = FALSE) %>% 
+  kableExtra::save_kable(file="~/Documents/jSDM/vignettes/Madagascar_files/scaled_data_clim.png")
+```
+
+```{r scaled_data_clim, echo=FALSE, out.width=900, eval=TRUE}
+knitr::include_graphics("Madagascar_files/scaled_data_clim.png")
 ```
 
 # Fitting joint species distribution model (JSDM) 
