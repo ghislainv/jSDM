@@ -29,7 +29,7 @@
 #' 
 #' Jeanne Clément <jeanne.clement16@laposte.net>
 #' 
-#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_poisson_log}}
+#' @seealso \code{\link{jSDM-package}} \code{\link{jSDM_gaussian}} \code{\link{jSDM_binomial_logit}}  \code{\link{jSDM_binomial_probit}} \code{\link{jSDM_poisson_log}}
 #' @examples 
 #' library(jSDM)
 #' # frogs data
@@ -106,23 +106,29 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     species <- unique(model.spec$data$species)
     sites <- unique(model.spec$data$site)
   }
+  if(!is.null(model.spec$response_data)){
+    species <- colnames(model.spec$response_data)
+    sites <- rownames(model.spec$response_data)
+  }
   
   ##= Link function probit for family=="binomial"
   if( model.spec$link=="probit") inv.link <- function (x) {pnorm(x)}
   if( model.spec$link=="logit") inv.link <- function (x) {inv_logit(x)}
   if( model.spec$link=="log") inv.link <- function (x) {exp(x)}
+  if( model.spec$link=="identity") inv.link <- function (x) {x}
   
   ##= Matrix for predictions
   if(!is.null(model.spec$site_data)){
     if(is.null(newdata)) newdata <- model.spec$site_data[Id_sites,]
-    if (!all(colnames(newdata) %in% colnames(model.spec$site_data)) && !(ncol(newdata)==ncol(model.spec$site_data))) {stop("newdata must have the same number of columns as object$model_spec$site_data and identical columns names\n")}
+    if (!all(colnames(newdata) %in% colnames(model.spec$site_data)) && !(ncol(newdata)==ncol(model.spec$site_data))) {
+      stop("newdata must have the same number of columns as object$model_spec$site_data and identical columns names\n")}
   }
   if(!is.null(model.spec$data)){
     nobs <- length(Id_sites)
     if (is.null(newdata)){
       for (i in 1:nobs){
         rowId_site <- which(model.spec$data$site==Id_sites[i] & model.spec$data$species==Id_species[i])
-        newdata <- rbind(newdata, model.spec$data[rowId_site,!c(grepl("Y",colnames(model.spec$data)) | grepl("species",colnames(model.spec$data)) | grepl("site",colnames(model.spec$data)))])
+        newdata <- rbind(newdata, model.spec$data[rowId_site, !c(grepl("Y",colnames(model.spec$data)) | grepl("species",colnames(model.spec$data)) | grepl("site",colnames(model.spec$data)))])
       }
     }
     if (!all(colnames(newdata) %in% colnames(model.spec$data)) &&
@@ -153,10 +159,10 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     }
   }
   
-  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
+  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data) | !is.null(model.spec$response_data)){
     # Suitability process
     suitability <- model.spec$site_formula
-    mf.pred <- model.frame(formula=suitability,data=as.data.frame(newdata))
+    mf.pred <- model.frame(formula=suitability, data=as.data.frame(newdata))
     X.pred <- model.matrix(attr(mf.pred,"terms"),data=mf.pred)
   }
   
@@ -170,7 +176,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
     nl <- model.spec$n_latent
   }
   if (is.character(Id_species) || is.factor(Id_species)) {
-    if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
+    if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)  | !is.null(model.spec$response_data) ){
       num_species <- rep(0,nsp)
       for(j in 1:nsp) {
         num_species[j] <- which(species == Id_species[j])
@@ -189,7 +195,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   }
   
   if (is.character(Id_sites) || is.factor(Id_sites)) {
-    if(!is.null(model.spec$presence_data)| !is.null(model.spec$count_data)){
+    if(!is.null(model.spec$presence_data)| !is.null(model.spec$count_data) | !is.null(model.spec$response_data)){
       num_sites <- rep(0,nsite)
       for(i in 1:nsite) {
         num_sites[i] <- which(sites == Id_sites[i])
@@ -213,7 +219,7 @@ predict.jSDM <- function(object, newdata=NULL, Id_species, Id_sites, type="mean"
   nburn <- model.spec$burnin
   nsamp <- model.spec$mcmc/nthin
   
-  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data)){
+  if(!is.null(model.spec$presence_data) | !is.null(model.spec$count_data) | !is.null(model.spec$response_data)){
     ##= Posterior mean
     if (type=="mean") {
       term.pred <- matrix(0, npred, nsp)

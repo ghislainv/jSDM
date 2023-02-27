@@ -76,7 +76,7 @@ $$y_{ij} \sim \mathcal{P}oisson(\theta_{ij})$$.
 $$ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j} + X_i\beta_j + W_i\lambda_j $$
 
 Using this models we can compute the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nsp}_{j=1,\ldots, nsp}$ from the covariance in the latent variables such as : 
-$$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
+$$\Sigma_{ij} = \lambda_i^T .\lambda_j $$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
   
 # Data-sets

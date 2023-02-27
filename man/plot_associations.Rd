@@ -62,9 +62,10 @@ plot species-species associations
 \details{
 After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
  can be derived from the covariance in the latent variables such as : 
+ \eqn{\Sigma_{ij}=\lambda_i' .\lambda_j}{Sigma_ij=\lambda_i' . \lambda_j}, in the case of a regression with probit, logit or poisson link function and 
 \tabular{lll}{
-\eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i .\lambda_j' + 1}{= \lambda_i . \lambda_j' + 1} \tab if i=j \cr
-         \tab \eqn{= \lambda_i .\lambda_j'}{= \lambda_i . \lambda_j'} \tab else, \cr}
+\eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i' .\lambda_j + V}{= \lambda_i' . \lambda_j + V} \tab if i=j \cr
+         \tab \eqn{= \lambda_i' .\lambda_j}{= \lambda_i' . \lambda_j} \tab else, \cr}
 this function represents the correlations computed from covariances :
 \deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 }

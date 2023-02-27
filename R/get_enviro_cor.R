@@ -112,6 +112,16 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
     mf.suit <- model.frame(formula=suitability,data=as.data.frame(model.spec$site_data))
     X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
   }
+  if(!is.null(model.spec$response_data)){
+    y <- model.spec$response_data
+    species <- colnames(y)
+    n.species <- ncol(model.spec$response_data)
+    n.sites <- nrow(model.spec$response_data)
+    # Suitability process
+    suitability <- model.spec$site_formula
+    mf.suit <- model.frame(formula=suitability,data=as.data.frame(model.spec$site_data))
+    X <- model.matrix(attr(mf.suit,"terms"),data=mf.suit)
+  }
   if(!is.null(model.spec$data)){
     y <- model.spec$data$Y
     species <- unique(model.spec$data$species)

@@ -145,6 +145,54 @@ Rcpp_jSDM_binomial_probit_traits_rand_site_lv_long_format <- function(ngibbs, nt
     .Call(`_jSDM_Rcpp_jSDM_binomial_probit_traits_rand_site_lv_long_format`, ngibbs, nthin, nburn, Y, Id_sp, Id_site, X, D, beta_start, lambda_start, alpha_start, V_beta, mu_beta, V_lambda, mu_lambda, gamma_start, V_gamma, mu_gamma, V_W, W_start, V_alpha_start, shape, rate, seed, verbose)
 }
 
+Rcpp_jSDM_gaussian <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_fixed_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_fixed_site`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_fixed_site_lv <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_fixed_site_lv`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_lv <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_lv`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_rand_site <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_rand_site`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_rand_site_lv <- function(ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_rand_site_lv`, ngibbs, nthin, nburn, Y, X, beta_start, V_beta, mu_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits_fixed_site <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits_fixed_site`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits_fixed_site_lv <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, mu_gamma, V_gamma, beta_start, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits_fixed_site_lv`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, mu_gamma, V_gamma, beta_start, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits_lv <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, mu_gamma, V_gamma, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits_lv`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, mu_gamma, V_gamma, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits_rand_site <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits_rand_site`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, beta_start, V_beta, mu_gamma, V_gamma, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
+Rcpp_jSDM_gaussian_traits_rand_site_lv <- function(ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, mu_gamma, V_gamma, beta_start, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose) {
+    .Call(`_jSDM_Rcpp_jSDM_gaussian_traits_rand_site_lv`, ngibbs, nthin, nburn, Y, X, Tr, gamma_start, gamma_zeros, mu_gamma, V_gamma, beta_start, V_beta, lambda_start, W_start, mu_lambda, V_lambda, V_W, alpha_start, V_alpha_start, shape_Valpha, rate_Valpha, V_start, shape_V, rate_V, seed, verbose)
+}
+
 Rcpp_jSDM_poisson_log <- function(ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose) {
     .Call(`_jSDM_Rcpp_jSDM_poisson_log`, ngibbs, nthin, nburn, Y, X, beta_start, mu_beta, V_beta, seed, ropt, verbose)
 }

@@ -729,7 +729,7 @@ On the other hand, the estimated values of the species intercept are quite simil
 ## Residual correlaton matrix 
 
  After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, n_{species}}_{j=1,\ldots, n_{species}}$ can be derived from the covariance in the latent variables such as : 
-$$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
+$$\Sigma_{ij} = \lambda_i^T .\lambda_j $$, then we compute correlations from covariances :
   $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 

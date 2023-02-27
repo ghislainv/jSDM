@@ -64,7 +64,7 @@ The corresponding regression coefficients for each species $j$ are noted : $\bet
 
 - $\beta_{0j}$ correspond to the intercept for species $j$ which is assumed to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10)$ for all betas. 
 
-- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assume that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.5, \text{rate}=0.005)$ as prior distribution by default. 
+- $\alpha_i$ represents the random effect of site $i$ such as $\alpha_i \sim \mathcal{N}(0,V_{\alpha})$ and we assume that $V_{\alpha} \sim \mathcal {IG}(\text{shape}=0.1, \text{rate}=0.1)$ as prior distribution. 
 
 
 # Occurrence data-set
@@ -185,7 +185,7 @@ hist(mod_frogs_jSDM_probit$theta_latent,
 # Matrice of correlations 
 
 After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
- $$\Sigma_{ij} = \lambda_i .\lambda_j^T $$, then we compute correlations from covariances :
+ $$\Sigma_{ij} = \lambda_i^T .\lambda_j $$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 We use the `plot_residual_cor()` function to compute and display  the residual correlation matrix :

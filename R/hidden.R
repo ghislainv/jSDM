@@ -187,6 +187,19 @@ check.X <- function (X,n) {
   return(0)
 }
 
+check.Y.gaussian <- function(Y) {
+  if(!is.numeric(Y)) {
+    cat("Error: 'response_data' must be a vector or a matrix of numeric values.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  if (sum(is.na(Y))>0) {
+    cat("Error: 'response_data' must not contain missing values.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(0)
+}
 # check.W <- function (W,n) {
 #   if(!is.numeric(c(W))) {
 #     cat("Error: 'observability' only accept vectors of numeric values.\n")
@@ -910,4 +923,17 @@ check.Valpha <- function(V_alpha_start) {
   return(V_alpha_start)
 }
 
+check.V <- function(V_start) {
+  if (!(V_start>0)) {
+    cat("Error: The variance of residuals V should be strictly positive.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  else if (!is.null(dim(V_start))) {
+    cat("Error: V_start not conformable.\n")
+    stop("Please respecify and call ", calling.function(), " again.",
+         call.=FALSE)
+  }
+  return(V_start)
+}
 # End

@@ -331,7 +331,7 @@ This lack of convergence can be explained by the arbitrary choice of the species
 ### Matrice of residual correlations 
 
 After fitting the jSDM with latent variables, the **full species residual correlation matrix** $R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}$ can be derived from the covariance in the latent variables such as : 
-$$\Sigma_{ij} = \lambda_i .\lambda_j^T$$, then we compute correlations from covariances :
+$$\Sigma_{ij} = \lambda_i^T .\lambda_j$$, then we compute correlations from covariances :
 $$R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}$$.
 
 We use the `get_residual_cor()` function to compute the residual correlation matrix $R$ for each chain and we display the average of the $R$ matrices for all chains:

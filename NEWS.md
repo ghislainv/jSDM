@@ -1,3 +1,7 @@
+# jSDM 0.2.2
+* New function [`jSDM_gaussian`](https://ecology.ghislainv.fr/jSDM/reference/jSDM_gaussian.html) for fitting joint species distribution models from continuous Gaussian data, including an overdispersion parameter.
+* Use of the R package `terra` instead of `raster` and `sp`, which are depreciated, in the vignette [Estimation of Madagascar's plant biodiversity](https://ecology.ghislainv.fr/jSDM/articles/Madagascar.html). 
+
 # jSDM 0.2.1
 * Add the possibility to consider only significant correlations in the [`get_residual_cor`](https://ecology.ghislainv.fr/jSDM/reference/get_residual_cor.html) and [`plot_residual_cor`](https://ecology.ghislainv.fr/jSDM/reference/plot_residual_cor.html) functions. 
 * Documentation correction

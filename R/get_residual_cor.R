@@ -27,8 +27,11 @@
 #'  whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 #'
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
-#' \eqn{\Sigma_{ij}=\lambda_i .\lambda_j'}{Sigma_ij=\lambda_i . \lambda_j'},
-#' then we compute correlations from covariances :
+#' \eqn{\Sigma_{ij}=\lambda_i' .\lambda_j}{Sigma_ij=\lambda_i' . \lambda_j}, in the case of a regression with probit, logit or poisson link function and 
+#' \tabular{lll}{
+#' \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i' .\lambda_j + V}{= \lambda_i' . \lambda_j + V} \tab if i=j \cr
+#'          \tab \eqn{= \lambda_i' .\lambda_j}{= \lambda_i' . \lambda_j} \tab else, \cr}, in the case of a linear regression with a response variable such as \deqn{y_{ij} \sim \mathcal{N}(\theta_{ij}, V)}{y_ij ~ N(\theta_ij, V),}.
+#' Then we compute correlations from covariances :
 #'\deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 #' @author
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
@@ -126,6 +129,9 @@ get_residual_cor <- function(mod, prob=0.95, type="mean") {
   if(!is.null(mod$model_spec$count_data)){
     n.species <- ncol(mod$model_spec$count_data)
   }
+  if(!is.null(mod$model_spec$response_data)){
+    n.species <- ncol(mod$model_spec$response_data)
+  }
   if(!is.null(mod$model_spec$data)){
     n.species <- length(unique(mod$model_spec$data$species))
   }
@@ -136,6 +142,9 @@ get_residual_cor <- function(mod, prob=0.95, type="mean") {
   for(t in 1:n.mcmc) { 
     lv.coefs <- t(sapply(mod$mcmc.sp, "[", t, grep("lambda",colnames(mod$mcmc.sp[[1]]))))
     Tau.mat <- lv.coefs%*%t(lv.coefs) 
+    if(mod$model_spec$family == "gaussian"){
+      Tau.mat <- Tau.mat + diag(rep(mod$mcmc.V[t,], n.species))
+    }
     Tau.arr[t,] <- as.vector(Tau.mat) 
     Tau.cor.mat <- cov2cor(Tau.mat)
     Tau.cor.arr[t,] <- as.vector(Tau.cor.mat) 
@@ -168,6 +177,9 @@ get_residual_cor <- function(mod, prob=0.95, type="mean") {
   }
   if(!is.null(mod$model_spec$count_data)){
     names.sp <-  colnames(mod$model_spec$count_data)
+  }
+  if(!is.null(mod$model_spec$response_data)){
+    names.sp <-  colnames(mod$model_spec$response_data)
   }
   if(!is.null(mod$model_spec$data)){
     names.sp <- unique(mod$model_spec$data$species)

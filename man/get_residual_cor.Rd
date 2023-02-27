@@ -33,8 +33,11 @@ This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\d
 }
 \details{
 After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
-\eqn{\Sigma_{ij}=\lambda_i .\lambda_j'}{Sigma_ij=\lambda_i . \lambda_j'},
-then we compute correlations from covariances :
+\eqn{\Sigma_{ij}=\lambda_i' .\lambda_j}{Sigma_ij=\lambda_i' . \lambda_j}, in the case of a regression with probit, logit or poisson link function and 
+\tabular{lll}{
+\eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i' .\lambda_j + V}{= \lambda_i' . \lambda_j + V} \tab if i=j \cr
+         \tab \eqn{= \lambda_i' .\lambda_j}{= \lambda_i' . \lambda_j} \tab else, \cr}, in the case of a linear regression with a response variable such as \deqn{y_{ij} \sim \mathcal{N}(\theta_{ij}, V)}{y_ij ~ N(\theta_ij, V),}.
+Then we compute correlations from covariances :
 \deqn{R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}}{R_ij = Sigma_ij / sqrt(Sigma_ii.Sigma _jj)}.
 }
 \examples{
