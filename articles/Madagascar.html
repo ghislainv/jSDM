@@ -811,7 +811,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span class="header-section-number">4.3</span> Residual correlation<a class="anchor" aria-label="anchor" href="#residual-correlation"></a>
 </h3>
 <p>After fitting the JSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, n_{site}}_{j=1,\ldots, n_{species}}\)</span> can be derived from the covariance in the latent variables such as :
-<span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T \]</span>, then we compute correlations from covariances :
+<span class="math display">\[\Sigma_{ij} = \lambda_i^T .\lambda_j \]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData"</span><span class="op">)</span></span>

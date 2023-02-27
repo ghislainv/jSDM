@@ -133,7 +133,7 @@ P \text{ such as } \mathbb{P}(\lambda_{jl} = 0)=1  &amp; \text{if } l&gt;j
 <p><span class="math display">\[y_{ij} \sim \mathcal{P}oisson(\theta_{ij})\]</span>.</p>
 <p><span class="math display">\[ \mathrm{log}(\theta_{ij}) =\alpha_i + \beta_{0j} + X_i\beta_j + W_i\lambda_j \]</span></p>
 <p>Using this models we can compute the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nsp}_{j=1,\ldots, nsp}\)</span> from the covariance in the latent variables such as :
-<span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T \]</span>, then we compute correlations from covariances :
+<span class="math display">\[\Sigma_{ij} = \lambda_i^T .\lambda_j \]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 </div>
 </div>

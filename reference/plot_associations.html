@@ -150,7 +150,8 @@ plot species-species associations</p>
     <div id="details">
     <h2>Details</h2>
     <p>After fitting the jSDM with latent variables, the <b>fullspecies residual correlation matrix</b> : \(R=(R_{ij})\) with \(i=1,\ldots, n_{species}\) and \(j=1,\ldots, n_{species}\) can be derived from the covariance in the latent variables such as : 
- can be derived from the covariance in the latent variables such as :</p><table class="table table"><tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i .\lambda_j' + 1\)</td><td>if i=j</td></tr><tr><td></td><td>\(= \lambda_i .\lambda_j'\)</td><td>else,</td></tr></table><p>this function represents the correlations computed from covariances :
+ can be derived from the covariance in the latent variables such as : 
+ \(\Sigma_{ij}=\lambda_i' .\lambda_j\), in the case of a regression with probit, logit or poisson link function and</p><table class="table table"><tr><td>\(\Sigma_{ij}\)</td><td>\(= \lambda_i' .\lambda_j + V\)</td><td>if i=j</td></tr><tr><td></td><td>\(= \lambda_i' .\lambda_j\)</td><td>else,</td></tr></table><p>this function represents the correlations computed from covariances :
 $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     </div>
     <div id="references">

@@ -970,7 +970,7 @@ JSDM (LVM)
 <span class="header-section-number">3.6</span> Residual correlaton matrix<a class="anchor" aria-label="anchor" href="#residual-correlaton-matrix"></a>
 </h3>
 <p>After fitting the jSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, n_{species}}_{j=1,\ldots, n_{species}}\)</span> can be derived from the covariance in the latent variables such as :
-<span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T \]</span>, then we compute correlations from covariances :
+<span class="math display">\[\Sigma_{ij} = \lambda_i^T .\lambda_j \]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>

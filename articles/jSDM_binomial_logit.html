@@ -278,8 +278,8 @@ It lists 158 bird species named in Latin and whose occurrences are expressed as 
 <h2 id="matrice-of-correlations">
 <span class="header-section-number">5</span> Matrice of correlations<a class="anchor" aria-label="anchor" href="#matrice-of-correlations"></a>
 </h2>
-<p>After fitting the jSDM with latent variables, the <strong>fullspecies residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can bederived from the covariance in the latent variables such as :
-<span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T \]</span>, then we compute correlations from covariances :
+<p>After fitting the jSDM with latent variables, the <strong>fullspecies residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can be derived from the covariance in the latent variables such as :
+<span class="math display">\[\Sigma_{ij} = \lambda_i^T.\lambda_j \]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <p>We use the function <code><a href="../reference/plot_residual_cor.html">plot_residual_cor()</a></code> to compute and display the residual correlation matrix between species :</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

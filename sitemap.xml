@@ -64,6 +64,12 @@
     <loc>/articles/jSDM_files/jqueryui-1.11.4/index.html</loc>
   </url>
   <url>
+    <loc>/articles/jSDM_gaussian.html</loc>
+  </url>
+  <url>
+    <loc>/articles/jSDM_gaussian_files/jqueryui-1.11.4/index.html</loc>
+  </url>
+  <url>
     <loc>/articles/jSDM_in_parallel.html</loc>
   </url>
   <url>
@@ -134,6 +140,9 @@
   </url>
   <url>
     <loc>/reference/jSDM_binomial_probit_sp_constrained.html</loc>
+  </url>
+  <url>
+    <loc>/reference/jSDM_gaussian.html</loc>
   </url>
   <url>
     <loc>/reference/jSDM_poisson_log.html</loc>

@@ -409,7 +409,7 @@ In fact the values estimated for <span class="math inline">\(\lambda\)</span> di
 <span class="header-section-number">4.3.2</span> Matrice of residual correlations<a class="anchor" aria-label="anchor" href="#matrice-of-residual-correlations"></a>
 </h4>
 <p>After fitting the jSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, nspecies}_{j=1,\ldots, nspecies}\)</span> can be derived from the covariance in the latent variables such as :
-<span class="math display">\[\Sigma_{ij} = \lambda_i .\lambda_j^T\]</span>, then we compute correlations from covariances :
+<span class="math display">\[\Sigma_{ij} = \lambda_i^T .\lambda_j\]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
 <p>We use the <code><a href="../reference/get_residual_cor.html">get_residual_cor()</a></code> function to compute the residual correlation matrix <span class="math inline">\(R\)</span> for each chain and we display the average of the <span class="math inline">\(R\)</span> matrices for all chains:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
