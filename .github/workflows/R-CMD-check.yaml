@@ -48,8 +48,10 @@ jobs:
       - name: Install stringi and latex packages on Linux
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
+          sudo apt-mark hold grub-efi-amd64-signed
+          sudo apt-get update --fix-missing
           sudo apt-get -y upgrade
+          sudo apt-get update
           sudo Rscript -e "install.packages('stringi',repos='http://cran.us.r-project.org')"
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra
           
