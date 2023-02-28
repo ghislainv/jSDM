@@ -61,6 +61,7 @@ distribution models :
 | `jSDM_binomial_probit_sp_constrained()` | presence-absence |    wide     |
 | `jSDM_binomial_probit_long_format()`    | presence-absence |    long     |
 | `jSDM_poisson_log()`                    | abundance        |    wide     |
+| `jSDM_gaussian()`                       | continuous       |    wide     |
 
 ## Contributing
 

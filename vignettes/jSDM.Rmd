@@ -54,6 +54,7 @@ The package includes the following functions to fit various species distribution
 | `jSDM_binomial_probit_sp_constrained()` | presence-absence | wide |
 | `jSDM_binomial_probit_long_format()` | presence-absence | long |
 | `jSDM_poisson_log()` | abundance | wide |
+| `jSDM_gaussian` | continuous | wide |
 
 * `jSDM_binomial_probit()` : 
 
@@ -128,6 +129,21 @@ The package includes the following functions to fit various species distribution
   | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i$ |
   | if `n_latent>0` and `site_effect="random"` | probit$(\theta_n) = D_n \gamma + X_n \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
+* `jSDM_binomial_probit()` : 
+
+  **Ecological process:**
+
+  $$y_{ij} \sim \mathcal{N}(\theta_{ij}, V),$$ 
+  where
+
+  | conditions                                   | model specification                              |
+  |:---------------------------------------------|:-------------------------------------------------|
+  | if `n_latent=0` and `site_effect="none"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j$ |
+  | if `n_latent>0` and `site_effect="none"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j$ |
+  | if `n_latent=0` and `site_effect="random"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j  + \alpha_i$ and   $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
+  | if `n_latent>0` and `site_effect="fixed"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ |
+  | if `n_latent=0` and `site_effect="fixed"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j  + \alpha_i$ |
+  | if `n_latent>0` and `site_effect="random"` | $\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations [@Warton2015]. jSDM is becoming an increasingly popular statistical method in conservation biology. 
 
 In this vignette, we illustrate the use of the `jSDM` R package which aims at providing user-friendly statistical functions using field observations (occurrence or abundance data) to fit jSDMs models.
