@@ -162,6 +162,11 @@
 <td align="left">abundance</td>
 <td align="center">wide</td>
 </tr>
+<tr class="even">
+<td align="left"><code>jSDM_gaussian</code></td>
+<td align="left">continuous</td>
+<td align="center">wide</td>
+</tr>
 </tbody>
 </table>
 <ul>
@@ -389,8 +394,60 @@ where</p>
 </tbody>
 </table>
 </li>
-</ul>
+<li>
+<p><code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> :</p>
+<p><strong>Ecological process:</strong></p>
+<p><span class="math display">\[y_{ij} \sim \mathcal{N}(\theta_{ij}, V),\]</span>
+where</p>
+<table class="table">
+<colgroup>
+<col width="47%">
+<col width="52%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">conditions</th>
+<th align="left">model specification</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="none"</code>
+</td>
+<td align="left"><span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="none"</code>
+</td>
+<td align="left"><span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="random"</code>
+</td>
+<td align="left">
+<span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j + \alpha_i\)</span> and <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</span>
+</td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="fixed"</code>
+</td>
+<td align="left"><span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">if <code>n_latent=0</code> and <code>site_effect="fixed"</code>
+</td>
+<td align="left"><span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j + \alpha_i\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">if <code>n_latent&gt;0</code> and <code>site_effect="random"</code>
+</td>
+<td align="left">
+<span class="math inline">\(\theta_{ij} = \beta_{0j} + X_i \beta_j + W_i \lambda_j + \alpha_i\)</span> and <span class="math inline">\(\alpha_i \sim \mathcal{N}(0,V_\alpha)\)</span>
+</td>
+</tr>
+</tbody>
+</table>
 <p>Joint Species distribution models (jSDM) are useful tools to explain or predict species range and abundance from various environmental factors and species correlations <span class="citation">(<a href="#ref-Warton2015" role="doc-biblioref">Warton <em>et al.</em> 2015</a>)</span>. jSDM is becoming an increasingly popular statistical method in conservation biology.</p>
+</li>
+</ul>
 <p>In this vignette, we illustrate the use of the <code>jSDM</code> R package which aims at providing user-friendly statistical functions using field observations (occurrence or abundance data) to fit jSDMs models.</p>
 <p>Package’s functions are developed in a hierarchical Bayesian framework and use adaptive rejection Metropolis sampling algorithms or conjugate priors within Gibbs sampling to estimate model’s parameters. Using compiled C++ code for the Gibbs sampler reduce drastically the computation time. By making these new statistical tools available to the scientific community, we hope to democratize the use of more complex, but more realistic, statistical models for increasing knowledge in ecology and conserving biodiversity.</p>
 <center>
