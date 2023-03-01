@@ -152,7 +152,8 @@ mod <- jSDM_gaussian(# Iteration
   V_alpha=1,
   V_start=1 ,
   # Priors
-  shape_Valpha=0.5, rate_Valpha=0.0005,
+  shape_Valpha=0.5,
+  rate_Valpha=0.0005,
   shape_V=0.5, rate_V=0.0005,
   mu_beta=0, V_beta=1,
   mu_lambda=0, V_lambda=1,

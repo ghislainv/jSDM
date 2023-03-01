@@ -714,7 +714,8 @@ plot(probit_theta_jSDM, probit_theta_jSDM_lv,
 points(probit_theta_latent_BC, probit_theta_latent_BC_comm,
        cex=rep(nobs_sp^(1/5),75), col='blue')
 abline(a=0, b=1, col="red")
-legend("topleft",c("fitted by BayesComm","fitted by jSDM"), pch=1, cex=1.2, col=c('blue','black'))
+legend("topleft",c("fitted by BayesComm","fitted by jSDM"),
+       pch=1, cex=1.2, col=c('blue','black'))
 ```
 
 

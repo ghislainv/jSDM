@@ -19,8 +19,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
     const double &V_alpha_start,
     const arma::vec &mu_beta, // Priors 
     const arma::vec &V_beta,
-    const double &shape,
-    const double &rate,
+    const double &shape_Valpha,
+    const double &rate_Valpha,
     const int &seed, // Various 
     const double &ropt,
     const int &verbose) {
@@ -91,8 +91,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
   dens_data.W_run = arma::zeros(NSITE,NL);
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.shape = shape;
-  dens_data.rate = rate;
+  dens_data.shape_Valpha = shape_Valpha;
+  dens_data.rate_Valpha = rate_Valpha;
   dens_data.V_alpha_run = V_alpha_start;
   dens_data.alpha_run = alpha_start.t();
   
@@ -141,8 +141,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
     
     // V_alpha
     double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
-    double shape_posterior = dens_data.shape + 0.5*NSITE;
-    double rate_posterior = dens_data.rate + 0.5*sum;
+    double shape_posterior = dens_data.shape_Valpha + 0.5*NSITE;
+    double rate_posterior = dens_data.rate_Valpha + 0.5*sum;
     
     dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
     
@@ -328,7 +328,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site(
 #                                        Y=Y, X=X,
 #                                        beta_start=matrix(0,np,nsp),
 #                                        alpha_start=rep(0,nsite),
-#                                        V_alpha_start=1, shape = 0.5, rate = 0.0005,
+#                                        V_alpha_start=1,
+#                                        shape_Valpha = 0.5, rate_Valpha = 0.0005,
 #                                        mu_beta=rep(0,np), V_beta=rep(100,np),
 #                                        seed=1234, ropt=0.44, verbose=1)
 # 

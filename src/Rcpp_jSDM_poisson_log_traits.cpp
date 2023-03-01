@@ -93,8 +93,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits(
   dens_data.W_run = arma::zeros(NSITE,NL);
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.shape = 0.0;
-  dens_data.rate = 0.0;
+  dens_data.shape_Valpha = 0.0;
+  dens_data.rate_Valpha = 0.0;
   dens_data.V_alpha_run = 0.0;
   dens_data.alpha_run = arma::zeros<arma::rowvec>(NSITE);
   

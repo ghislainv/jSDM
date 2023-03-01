@@ -190,8 +190,8 @@ We define the matrix \eqn{\gamma=(\gamma_{kp})_{k=1,...,nt}^{p=1,...,np}}{\gamma
 \tab \strong{\eqn{x_0}} \tab \strong{\eqn{x_1}} \tab... \tab \strong{\eqn{x_p}} \tab ... \tab \strong{\eqn{x_{np}}{x_np}} \tab  \cr 
 \tab__________\tab________\tab________\tab________\tab________\tab________\tab \cr 
 \strong{\eqn{t_0}} | \tab  \strong{\eqn{\gamma_{0,0}}{\gamma_(0,0)}} \tab \emph{\eqn{\gamma_{0,1}}{\gamma_(0,1)}} \tab ... \tab \emph{\eqn{\gamma_{0,p}}{\gamma_(0,p)}} \tab... \tab \emph{\eqn{\gamma_{0,np}}{\gamma_(0,np)}} \tab \{ \emph{effect of } \cr
-  | \tab \strong{intercept} \tab \tab \tab \tab \tab \tab \emph{environmental} \cr 
-  | \tab \tab \tab \tab \tab \tab \tab \emph{variables} \cr 
+   \tab intercept \tab \tab \tab \tab \tab \tab \emph{environmental} \cr 
+   \tab \tab \tab \tab \tab \tab \tab \emph{variables} \cr 
   \strong{\eqn{t_1}} | \tab  \eqn{\gamma_{1,0}}{\gamma_(1,0)} \tab \emph{\eqn{\gamma_{1,1}}{\gamma_(1,1)}} \tab ... \tab \emph{\eqn{\gamma_{1,p}}{\gamma_(1,p)}} \tab... \tab \emph{\eqn{\gamma_{1,np}}{\gamma_(1,np)}} \tab \cr
   ... | \tab ... \tab ... \tab ... \tab ... \tab ... \tab ... \tab \cr 
   \strong{\eqn{t_k}} | \tab \emph{\eqn{\gamma_{k,0}}{\gamma_(k,0)}} \tab \emph{\eqn{\gamma_{k,1}}{\gamma_(k,1)}} \tab... \tab \eqn{\gamma_{k,p}}{\gamma_(k,p)} \tab... \tab \eqn{\gamma_{k,np}}{\gamma_(k,np)} \tab \cr

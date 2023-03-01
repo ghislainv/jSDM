@@ -194,8 +194,8 @@ mod_probit_1 <-
       mu_beta = 0,
       mu_lambda = 0,
       V_lambda= 1,
-      shape=0.5, 
-      rate=0.0005,
+      shape_Valpha=0.5, 
+      rate_Valpha=0.0005,
       # Starting values
       beta_start = beta_start[i],
       lambda_start = lambda_start[i],
@@ -277,8 +277,8 @@ mod.MCMChregress <- function (i,listData) {
     mu_beta = 0,
     mu_lambda = 0,
     V_lambda= 1,
-    shape=0.5, 
-    rate=0.0005,
+    shape_Valpha=0.5, 
+    rate_Valpha=0.0005,
     # Starting values
     beta_start = beta_start[i],
     lambda_start = lambda_start[i],

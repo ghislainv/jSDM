@@ -29,8 +29,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_rand_site_lv(
     const arma::vec &mu_lambda,
     const arma::vec &V_lambda,
     const arma::vec &V_W,
-    const double &shape,
-    const double &rate,
+    const double &shape_Valpha,
+    const double &rate_Valpha,
     const int &seed, // Various 
     const double &ropt,
     const int &verbose) {
@@ -106,8 +106,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_rand_site_lv(
   dens_data.W_run = W_start;
   // alpha
   dens_data.site_alpha = 0;
-  dens_data.shape = shape;
-  dens_data.rate = rate;
+  dens_data.shape_Valpha = shape_Valpha;
+  dens_data.rate_Valpha = rate_Valpha;
   dens_data.V_alpha_run = V_alpha_start;
   dens_data.alpha_run = alpha_start.t();
   
@@ -182,8 +182,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_rand_site_lv(
     
     // V_alpha
     double sum = arma::as_scalar(dens_data.alpha_run*dens_data.alpha_run.t());
-    double shape_posterior = dens_data.shape + 0.5*NSITE;
-    double rate_posterior = dens_data.rate + 0.5*sum;
+    double shape_posterior = dens_data.shape_Valpha + 0.5*NSITE;
+    double rate_posterior = dens_data.rate_Valpha + 0.5*sum;
     
     dens_data.V_alpha_run = rate_posterior/gsl_ran_gamma_mt(r, shape_posterior, 1.0);
     
@@ -494,7 +494,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_rand_site_lv(
 #                                                     gamma_zeros=matrix(1,nt,np),
 #                                                     mu_gamma=matrix(0,nt,np),V_gamma=matrix(10,nt,np),
 #                                                     W_start=matrix(0,nsite,nl), alpha_start=rep(0,nsite),
-#                                                     V_alpha_start=1, shape = 0.5, rate = 0.0005,
+#                                                     V_alpha_start=1,
+#                                                     shape_Valpha = 0.5, rate_Valpha = 0.0005,
 #                                                     V_beta=c(10,rep(1,np-1)),
 #                                                     mu_lambda=rep(0,nl), V_lambda=rep(10,nl),
 #                                                     V_W=rep(1,nl),

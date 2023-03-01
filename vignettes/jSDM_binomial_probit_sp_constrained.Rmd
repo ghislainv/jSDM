@@ -389,8 +389,8 @@ mod_Fungi_ord <- jSDM::jSDM_binomial_probit_sp_constrained(# Chains
                                                            W_start=0,
                                                            V_alpha=1, 
                                                            # Priors
-                                                           shape=0.1, 
-                                                           rate=0.1,
+                                                           shape_Valpha=0.1, 
+                                                           rate_Valpha=0.1,
                                                            mu_beta=0, 
                                                            V_beta=1,
                                                            mu_lambda=0,

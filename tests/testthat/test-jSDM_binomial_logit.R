@@ -182,7 +182,7 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            beta_start=0,
                            V_alpha=1,
                            # Priors
-                           shape=0.5, rate=0.0005,
+                           shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1.0E6,
                            # Various
                            seed=1234, ropt=0.44, verbose=1)
@@ -361,7 +361,7 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            W_start=0,
                            V_alpha=1,
                            # Priors
-                           shape=0.5, rate=0.0005,
+                           shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1.0E6,
                            mu_lambda=0, V_lambda=10,
                            # Various
@@ -426,7 +426,7 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            W_start=0,
                            V_alpha=1,
                            # Priors
-                           shape=0.5, rate=0.0005,
+                           shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1.0E6,
                            mu_lambda=0, V_lambda=10,
                            # Various
@@ -686,7 +686,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   mu_gamma=0, V_gamma=10,
                                   alpha_start=0, beta_start=0,
                                   V_alpha=10,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   seed=1234, verbose=1)
 # Tests
@@ -752,7 +752,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   mu_gamma=0, V_gamma=10,
                                   alpha_start=0, beta_start=0,
                                   V_alpha=1,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   seed=1234, verbose=1)
 # Tests
@@ -827,7 +827,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   alpha_start=0, beta_start=0,
                                   lambda_start=0, W_start=0,
                                   V_alpha=10,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
                                   seed=1234, verbose=1)
@@ -907,7 +907,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   alpha_start=0, beta_start=0,
                                   lambda_start=0, W_start=0,
                                   V_alpha=1,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
                                   seed=1234, verbose=1)
@@ -984,7 +984,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   alpha_start=0, beta_start=0,
                                   lambda_start=0, W_start=0,
                                   V_alpha=1,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
                                   seed=1234, verbose=1)
@@ -1066,7 +1066,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   alpha_start=0, beta_start=0,
                                   lambda_start=0, W_start=0,
                                   V_alpha=1,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=1,
                                   mu_lambda=0, V_lambda=1,
                                   seed=1234, verbose=1)
@@ -1142,7 +1142,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   alpha_start=0, beta_start=0,
                                   lambda_start=0, W_start=0,
                                   V_alpha=1,
-                                  shape=0.5, rate=0.0005,
+                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=1,
                                   mu_lambda=0, V_lambda=1,
                                   seed=1234, verbose=1)

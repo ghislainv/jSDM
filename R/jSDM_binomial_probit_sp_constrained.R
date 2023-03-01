@@ -50,9 +50,9 @@
 #' @param V_alpha Starting value for variance of random site effect if \code{site_effect="random"} or constant variance of the Gaussian prior distribution for the fixed site effect if 
 #' \code{site_effect="fixed"}. Must be a strictly positive scalar, ignored if \code{site_effect="none"}.
 #'  Different starting values for each chain can be specified by a list or a vector of length \code{nchains}, by default the same starting values are considered for all chains. 
-#' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
+#' @param shape_Valpha Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 #' Must be a strictly positive scalar. Default to 0.5 for weak informative prior.
-#' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
+#' @param rate_Valpha Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 #' Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.
 #' @param mu_beta Means of the Normal priors for the \eqn{\beta}{\beta} parameters of the suitability process. \code{mu_beta} must be either a scalar or a \eqn{np}-length vector.
 #'  If \code{mu_beta} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\beta} parameters.
@@ -241,7 +241,8 @@
 #'                                            W_start=0,
 #'                                            V_alpha=1,
 #'                                            # Priors
-#'                                            shape=0.5, rate=0.0005,
+#'                                            shape_Valpha=0.5,
+#'                                            rate_Valpha=0.0005,
 #'                                            mu_beta=0, V_beta=1,
 #'                                            mu_lambda=0, V_lambda=1,
 #'                                            seed=c(123,1234), verbose=1)
@@ -441,7 +442,7 @@ jSDM_binomial_probit_sp_constrained <- function(# Iteration
                                                 mu_beta=0, V_beta=10,
                                                 mu_lambda=0, V_lambda=10,
                                                 mu_gamma=0, V_gamma=10, 
-                                                shape=0.5, rate=0.0005,
+                                                shape_Valpha=0.5, rate_Valpha=0.0005,
                                                 seed=c(123, 1234), verbose=1)
 {   
   
@@ -521,7 +522,8 @@ jSDM_binomial_probit_sp_constrained <- function(# Iteration
         n_latent=n_latent,
         site_effect=site_effect,
         # Priors
-        shape=shape, rate=rate,
+        shape_Valpha=shape_Valpha,
+        rate_Valpha=rate_Valpha,
         V_beta = V_beta,
         mu_beta = mu_beta,
         V_lambda = V_lambda,
@@ -591,7 +593,8 @@ jSDM_binomial_probit_sp_constrained <- function(# Iteration
         n_latent=n_latent,
         site_effect=site_effect,
         # Priors
-        shape=shape, rate=rate,
+        shape_Valpha=shape_Valpha,
+        rate_Valpha=rate_Valpha,
         V_beta = V_beta,
         mu_beta = mu_beta,
         V_lambda = V_lambda,

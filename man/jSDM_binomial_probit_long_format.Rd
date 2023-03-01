@@ -18,8 +18,8 @@ jSDM_binomial_probit_long_format(
   lambda_start = 0,
   W_start = 0,
   V_alpha = 1,
-  shape = 0.5,
-  rate = 5e-04,
+  shape_Valpha = 0.5,
+  rate_Valpha = 5e-04,
   mu_gamma = 0,
   V_gamma = 10,
   mu_beta = 0,
@@ -71,10 +71,10 @@ If \code{W_start} takes a scalar value, then that value will serve for all of th
 \item{V_alpha}{Starting value for variance of random site effect if \code{site_effect="random"}  or constant variance of the Gaussian prior distribution for the fixed site effect if
 \code{site_effect="fixed"}. Must be a strictly positive scalar, ignored if \code{site_effect="none"}.}
 
-\item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
+\item{shape_Valpha}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
 
-\item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
+\item{rate_Valpha}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.}
 
 \item{mu_gamma}{Means of the Normal priors for the \eqn{\gamma} parameters of the suitability process. \code{mu_gamma} must be either a scalar or a \eqn{d}-length vector.
@@ -237,7 +237,7 @@ mod<-jSDM_binomial_probit_long_format( # Iteration
   W_start=0,
   V_alpha=1,
   # Priors
-  shape=0.5, rate=0.0005,
+  shape_Valpha=0.5, rate_Valpha=0.0005,
   mu_gamma=0, V_gamma=10,
   mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,

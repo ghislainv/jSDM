@@ -39,8 +39,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
                                                          const arma::mat &V_lambda,
                                                          const arma::vec &mu_lambda,
                                                          const arma::mat &V_W,
-                                                         const double &shape,
-                                                         const double &rate,
+                                                         const double &shape_Valpha,
+                                                         const double &rate_Valpha,
                                                          const int &seed,
                                                          const int &verbose) {
   
@@ -169,8 +169,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
     ////////////////////////////////////////////////
     // V_alpha
     double sum = arma::as_scalar(alpha_run.t()*alpha_run);
-    double shape_posterior = shape + 0.5*NSITE;
-    double rate_posterior = rate + 0.5*sum;
+    double shape_posterior = shape_Valpha + 0.5*NSITE;
+    double rate_posterior = rate_Valpha + 0.5*sum;
     
     V_alpha_run = rate_posterior/gsl_ran_gamma_mt(s, shape_posterior, 1.0);
     
@@ -379,7 +379,8 @@ Rcpp::List Rcpp_jSDM_binomial_probit_traits_rand_site_lv(const int ngibbs,const 
 #                                                      lambda_start=lambda_start,
 #                                                      V_lambda=diag(rep(1,nl)), mu_lambda = rep(0,nl),
 #                                                      W_start=matrix(0,nsite,nl), V_W=diag(rep(1,nl)),
-#                                                      alpha_start=rep(0,nsite), V_alpha_start=1, shape=0.5, rate=0.0005,
+#                                                      alpha_start=rep(0,nsite), V_alpha_start=1,
+#                                                      shape_Valpha=0.5, rate_Valpha=0.0005,
 #                                                      seed=1234, verbose=1)
 # 
 # # ===================================================

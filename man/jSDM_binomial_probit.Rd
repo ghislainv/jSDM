@@ -27,8 +27,8 @@ jSDM_binomial_probit(
   V_lambda = 10,
   mu_gamma = 0,
   V_gamma = 10,
-  shape = 0.5,
-  rate = 5e-04,
+  shape_Valpha = 0.5,
+  rate_Valpha = 5e-04,
   seed = 1234,
   verbose = 1
 )
@@ -118,10 +118,10 @@ If \code{V_gamma} is a vector of length \eqn{nt} or \eqn{nt.np} the resulting \e
  if a \eqn{np}-length vector is given, the matrix is filled by row. 
 The default variance is large and set to 10 for an uninformative flat prior, ignored if \code{trait_data=NULL}.}
 
-\item{shape}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
+\item{shape_Valpha}{Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.}
 
-\item{rate}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
+\item{rate_Valpha}{Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.}
 
 \item{seed}{The seed for the random number generator. Default to 1234.}
@@ -271,7 +271,8 @@ mod<-jSDM_binomial_probit(# Iteration
                            W_start=0,
                            V_alpha=1,
                            # Priors
-                           shape=0.5, rate=0.0005,
+                           shape_Valpha=0.5,
+                           rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1,
                            mu_lambda=0, V_lambda=1,
                            seed=1234, verbose=1)

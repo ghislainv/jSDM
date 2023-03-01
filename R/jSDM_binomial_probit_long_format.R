@@ -37,9 +37,9 @@
 #'  If \code{alpha_start} takes a scalar value, then that value will serve for all of the \eqn{\alpha} parameters.
 #' @param V_alpha Starting value for variance of random site effect if \code{site_effect="random"}  or constant variance of the Gaussian prior distribution for the fixed site effect if
 #'  \code{site_effect="fixed"}. Must be a strictly positive scalar, ignored if \code{site_effect="none"}.
-#' @param shape Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
+#' @param shape_Valpha Shape parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}. 
 #' Must be a strictly positive scalar. Default to 0.5 for weak informative prior.
-#' @param rate Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
+#' @param rate_Valpha Rate parameter of the Inverse-Gamma prior for the random site effect variance \code{V_alpha}, ignored if \code{site_effect="none"} or \code{site_effect="fixed"}
 #' Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.
 #' @param mu_gamma Means of the Normal priors for the \eqn{\gamma} parameters of the suitability process. \code{mu_gamma} must be either a scalar or a \eqn{d}-length vector.
 #'  If \code{mu_gamma} takes a scalar value, then that value will serve as the prior mean for all of the \eqn{\gamma} parameters. The default value is set to 0 for an uninformative prior.
@@ -199,7 +199,7 @@
 #'   W_start=0,
 #'   V_alpha=1,
 #'   # Priors
-#'   shape=0.5, rate=0.0005,
+#'   shape_Valpha=0.5, rate_Valpha=0.0005,
 #'   mu_gamma=0, V_gamma=10,
 #'   mu_beta=0, V_beta=10,
 #'   mu_lambda=0, V_lambda=10,
@@ -321,7 +321,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                                              lambda_start=0, W_start=0,
                                              V_alpha=1,
                                              # Priors 
-                                             shape=0.5, rate=0.0005,
+                                             shape_Valpha=0.5, rate_Valpha=0.0005,
                                              mu_gamma=0, V_gamma=10,
                                              mu_beta=0, V_beta=10,
                                              mu_lambda=0, V_lambda=10,
@@ -915,7 +915,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                                                              Id_sp=Id_sp, Id_site=Id_site,
                                                              beta_start=beta_start, V_beta=Vbeta, mu_beta=mubeta,
                                                              alpha_start=alpha_start, V_alpha_start=V_alpha,
-                                                             shape = shape, rate = rate,
+                                                             shape_Valpha = shape_Valpha, rate_Valpha = rate_Valpha,
                                                              seed=seed, verbose=verbose)
       
       #= Transform Sample list in an MCMC object
@@ -945,7 +945,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          n_latent=n_latent,
                          burnin=burnin, mcmc=mcmc, thin=thin,
                          beta_start=beta_start, alpha_start=alpha_start,
-                         V_alpha_start=V_alpha, shape=shape, rate=rate,
+                         V_alpha_start=V_alpha,
+                         shape_Valpha=shape_Valpha, rate_Valpha=rate_Valpha,
                          site_effect=site_effect, mu_beta=mubeta, V_beta=Vbeta, 
                          family="binomial", link="probit",
                          seed=seed, verbose=verbose)
@@ -986,7 +987,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                                                                     beta_start=beta_start, 
                                                                     V_beta=Vbeta, mu_beta=mubeta,
                                                                     alpha_start=alpha_start, V_alpha_start=V_alpha,
-                                                                    shape = shape, rate = rate,
+                                                                    shape_Valpha = shape_Valpha,
+                                                                    rate_Valpha = rate_Valpha,
                                                                     seed=seed, verbose=verbose)
       
       #= Transform Sample list in an MCMC object
@@ -1017,7 +1019,9 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          burnin=burnin, mcmc=mcmc, thin=thin,
                          gamma_start=gamma_start,
                          beta_start=beta_start, alpha_start=alpha_start,
-                         V_alpha_start=V_alpha, shape=shape, rate=rate,
+                         V_alpha_start=V_alpha,
+                         shape_Valpha=shape_Valpha,
+                         rate_Valpha=rate_Valpha,
                          site_effect=site_effect,
                          mu_gamma=mugamma, V_gamma=Vgamma, 
                          mu_beta=mubeta, V_beta=Vbeta, 
@@ -1079,7 +1083,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                                                                 W_start=W_start, V_W=V_W,
                                                                 alpha_start=alpha_start,
                                                                 V_alpha_start=V_alpha_start,
-                                                                shape = shape, rate = rate,
+                                                                shape_Valpha = shape_Valpha,
+                                                                rate_Valpha = rate_Valpha,
                                                                 seed=seed, verbose=verbose)
       
       #= Transform Sample list in an MCMC object
@@ -1118,7 +1123,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          alpha_start=alpha_start, V_alpha_start=V_alpha_start, 
-                         shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
+                         shape_Valpha=shape_Valpha, rate_Valpha=rate_Valpha,
+                         site_effect=site_effect, W_start=W_start, V_W=V_W,
                          family="binomial", link="probit",
                          seed=seed)
       
@@ -1168,7 +1174,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                                                                        W_start=W_start, V_W=V_W,
                                                                        alpha_start=alpha_start,
                                                                        V_alpha_start=V_alpha_start,
-                                                                       shape = shape, rate = rate,
+                                                                       shape_Valpha = shape_Valpha,
+                                                                       rate_Valpha = rate_Valpha,
                                                                        seed=seed, verbose=verbose)
       
       #= Transform Sample list in an MCMC object
@@ -1210,7 +1217,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          alpha_start=alpha_start, V_alpha_start=V_alpha_start, 
-                         shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
+                         shape_Valpha=shape_Valpha, rate_Valpha=rate_Valpha,
+                         site_effect=site_effect, W_start=W_start, V_W=V_W,
                          family="binomial", link="probit",
                          seed=seed)
       
@@ -1304,7 +1312,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          alpha_start=alpha_start, V_alpha=V_alpha, 
-                         shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
+                         shape_Valpha=shape_Valpha, rate_Valpha=rate_Valpha,
+                         site_effect=site_effect, W_start=W_start, V_W=V_W,
                          family="binomial", link="probit",
                          seed=seed)
       
@@ -1392,7 +1401,8 @@ jSDM_binomial_probit_long_format <- function(#Iteration
                          beta_start=beta_start, mu_beta=mubeta, V_beta=Vbeta,
                          lambda_start=lambda_start, mu_lambda=mulambda, V_lambda=Vlambda,
                          alpha_start=alpha_start, V_alpha=V_alpha, 
-                         shape=shape, rate=rate, site_effect=site_effect, W_start=W_start, V_W=V_W,
+                         shape_Valpha=shape_Valpha, rate_Valpha=rate_Valpha,
+                         site_effect=site_effect, W_start=W_start, V_W=V_W,
                          family="binomial", link="probit",
                          seed=seed)
       

@@ -42,8 +42,8 @@ struct dens_par {
   //alpha
   int site_alpha; 
   double V_alpha_run;
-  double shape;
-  double rate;
+  double shape_Valpha;
+  double rate_Valpha;
   arma::rowvec alpha_run;
 };
 

@@ -54,7 +54,7 @@ The package includes the following functions to fit various species distribution
 | `jSDM_binomial_probit_sp_constrained()` | presence-absence | wide |
 | `jSDM_binomial_probit_long_format()` | presence-absence | long |
 | `jSDM_poisson_log()` | abundance | wide |
-| `jSDM_gaussian` | continuous | wide |
+| `jSDM_gaussian()` | continuous | wide |
 
 * `jSDM_binomial_probit()` : 
 
@@ -129,7 +129,7 @@ The package includes the following functions to fit various species distribution
   | if `n_latent=0` and `site_effect="fixed"` | probit$(\theta_n) = D_n \gamma + X_n \beta_j + \alpha_i$ |
   | if `n_latent>0` and `site_effect="random"` | probit$(\theta_n) = D_n \gamma + X_n \beta_j + W_i \lambda_j + \alpha_i$ and $\alpha_i \sim \mathcal{N}(0,V_\alpha)$ |
 
-* `jSDM_binomial_probit()` : 
+* `jSDM_gaussian()` : 
 
   **Ecological process:**
 
@@ -257,7 +257,8 @@ mod_frogs_jSDM_probit <- jSDM_binomial_probit(
   lambda_start=0, W_start=0,
   V_alpha=1, 
   # Priors
-  shape=0.1, rate=0.1,
+  shape_Valpha=0.1,
+  rate_Valpha=0.1,
   mu_beta=0, V_beta=1,
   mu_lambda=0, V_lambda=1,
   # Various 

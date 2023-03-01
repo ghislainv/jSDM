@@ -123,7 +123,7 @@ mod_birds_jSDM_logit <- jSDM_binomial_logit(
   lambda_start=0, W_start=0,
   V_alpha=1, 
   # Priors
-  shape=0.1, rate=0.1,
+  shape_Valpha=0.1, rate_Valpha=0.1,
   mu_beta=0, V_beta=10,
   mu_lambda=0, V_lambda=10,
   # Various 
