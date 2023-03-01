@@ -162,12 +162,12 @@ Different starting values for each chain can be specified by a list or a vector 
  Different starting values for each chain can be specified by a list or a vector of length <code>nchains</code>, by default the same starting values are considered for all chains.</p></dd>
 
 
-<dt>shape</dt>
+<dt>shape_Valpha</dt>
 <dd><p>Shape parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>. 
 Must be a strictly positive scalar. Default to 0.5 for weak informative prior.</p></dd>
 
 
-<dt>rate</dt>
+<dt>rate_Valpha</dt>
 <dd><p>Rate parameter of the Inverse-Gamma prior for the random site effect variance <code>V_alpha</code>, ignored if <code>site_effect="none"</code> or <code>site_effect="fixed"</code>
 Must be a strictly positive scalar. Default to 0.0005 for weak informative prior.</p></dd>
 
@@ -383,7 +383,8 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-in"><span>                                           W_start<span class="op">=</span><span class="fl">0</span>,</span></span>
 <span class="r-in"><span>                                           V_alpha<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                           <span class="co"># Priors</span></span></span>
-<span class="r-in"><span>                                           shape<span class="op">=</span><span class="fl">0.5</span>, rate<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
+<span class="r-in"><span>                                           shape_Valpha<span class="op">=</span><span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                                           rate_Valpha<span class="op">=</span><span class="fl">0.0005</span>,</span></span>
 <span class="r-in"><span>                                           mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                           mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                                           seed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>,<span class="fl">1234</span><span class="op">)</span>, verbose<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>

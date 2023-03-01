@@ -125,24 +125,329 @@ We use these forest inventories to calculate a matrix indicating the presence by
 <span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">taxize</span><span class="op">)</span></span>
 <span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span>
 <span><span class="co"># presence/absence of each species on each plot</span></span>
-<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nplot</span>,<span class="va">nsp</span><span class="op">)</span></span>
+<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">nplot</span>, <span class="va">nsp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PA</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">species</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">PA</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sp_"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nplot</span><span class="op">)</span><span class="op">{</span>    </span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsp</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">taxize</span> <span class="op">==</span> <span class="va">species</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="va">PA</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">plot</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span>,<span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span> </span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
+<span><span class="va">madagascar</span> <span class="op">&lt;-</span> <span class="va">PA</span></span>
 <span><span class="co"># save presence/absence at inventory sites matrix</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">PA</span>, file<span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">madagascar</span>, file<span class="op">=</span><span class="st">"~/Documents/jSDM/data/madagascar.rda"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">madagascar</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   sp_1 sp_2 sp_3 sp_4 sp_5 sp_6 sp_7 sp_8 sp_9 sp_10 sp_11 sp_12 sp_13 sp_14</span></span>
+<span><span class="co">#&gt; 1    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2    0    0    0    0    0    1    0    0    0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3    0    0    0    0    0    0    0    0    1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6    0    0    0    1    0    0    0    0    0     0     0     0     0     1</span></span>
+<span><span class="co">#&gt;   sp_15 sp_16 sp_17 sp_18 sp_19 sp_20 sp_21 sp_22 sp_23 sp_24 sp_25 sp_26 sp_27</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0     1     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     1     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0     1     1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_28 sp_29 sp_30 sp_31 sp_32 sp_33 sp_34 sp_35 sp_36 sp_37 sp_38 sp_39 sp_40</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_41 sp_42 sp_43 sp_44 sp_45 sp_46 sp_47 sp_48 sp_49 sp_50 sp_51 sp_52 sp_53</span></span>
+<span><span class="co">#&gt; 1     0     0     0     1     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     1     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_54 sp_55 sp_56 sp_57 sp_58 sp_59 sp_60 sp_61 sp_62 sp_63 sp_64 sp_65 sp_66</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     1     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     1     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_67 sp_68 sp_69 sp_70 sp_71 sp_72 sp_73 sp_74 sp_75 sp_76 sp_77 sp_78 sp_79</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     1     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_80 sp_81 sp_82 sp_83 sp_84 sp_85 sp_86 sp_87 sp_88 sp_89 sp_90 sp_91 sp_92</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     1     0     0     0     0     0     0     1     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt;   sp_93 sp_94 sp_95 sp_96 sp_97 sp_98 sp_99 sp_100 sp_101 sp_102 sp_103 sp_104</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3     0     0     1     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6     0     0     1     0     0     0     0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_105 sp_106 sp_107 sp_108 sp_109 sp_110 sp_111 sp_112 sp_113 sp_114 sp_115</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      1      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_116 sp_117 sp_118 sp_119 sp_120 sp_121 sp_122 sp_123 sp_124 sp_125 sp_126</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_127 sp_128 sp_129 sp_130 sp_131 sp_132 sp_133 sp_134 sp_135 sp_136 sp_137</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      1      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_138 sp_139 sp_140 sp_141 sp_142 sp_143 sp_144 sp_145 sp_146 sp_147 sp_148</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      1      0      1</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      1      1</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      1      1      1</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      1      0      1</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_149 sp_150 sp_151 sp_152 sp_153 sp_154 sp_155 sp_156 sp_157 sp_158 sp_159</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      1      1      1      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      1      0      0      0      0      0      0      0      1</span></span>
+<span><span class="co">#&gt; 3      1      1      1      1      1      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      1      0      0      0      0      0      0      1      1      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_160 sp_161 sp_162 sp_163 sp_164 sp_165 sp_166 sp_167 sp_168 sp_169 sp_170</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      1      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      1      0      1      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_171 sp_172 sp_173 sp_174 sp_175 sp_176 sp_177 sp_178 sp_179 sp_180 sp_181</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_182 sp_183 sp_184 sp_185 sp_186 sp_187 sp_188 sp_189 sp_190 sp_191 sp_192</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_193 sp_194 sp_195 sp_196 sp_197 sp_198 sp_199 sp_200 sp_201 sp_202 sp_203</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_204 sp_205 sp_206 sp_207 sp_208 sp_209 sp_210 sp_211 sp_212 sp_213 sp_214</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_215 sp_216 sp_217 sp_218 sp_219 sp_220 sp_221 sp_222 sp_223 sp_224 sp_225</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_226 sp_227 sp_228 sp_229 sp_230 sp_231 sp_232 sp_233 sp_234 sp_235 sp_236</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_237 sp_238 sp_239 sp_240 sp_241 sp_242 sp_243 sp_244 sp_245 sp_246 sp_247</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_248 sp_249 sp_250 sp_251 sp_252 sp_253 sp_254 sp_255 sp_256 sp_257 sp_258</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_259 sp_260 sp_261 sp_262 sp_263 sp_264 sp_265 sp_266 sp_267 sp_268 sp_269</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_270 sp_271 sp_272 sp_273 sp_274 sp_275 sp_276 sp_277 sp_278 sp_279 sp_280</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_281 sp_282 sp_283 sp_284 sp_285 sp_286 sp_287 sp_288 sp_289 sp_290 sp_291</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_292 sp_293 sp_294 sp_295 sp_296 sp_297 sp_298 sp_299 sp_300 sp_301 sp_302</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_303 sp_304 sp_305 sp_306 sp_307 sp_308 sp_309 sp_310 sp_311 sp_312 sp_313</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_314 sp_315 sp_316 sp_317 sp_318 sp_319 sp_320 sp_321 sp_322 sp_323 sp_324</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_325 sp_326 sp_327 sp_328 sp_329 sp_330 sp_331 sp_332 sp_333 sp_334 sp_335</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_336 sp_337 sp_338 sp_339 sp_340 sp_341 sp_342 sp_343 sp_344 sp_345 sp_346</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_347 sp_348 sp_349 sp_350 sp_351 sp_352 sp_353 sp_354 sp_355 sp_356 sp_357</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_358 sp_359 sp_360 sp_361 sp_362 sp_363 sp_364 sp_365 sp_366 sp_367 sp_368</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_369 sp_370 sp_371 sp_372 sp_373 sp_374 sp_375 sp_376 sp_377 sp_378 sp_379</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_380 sp_381 sp_382 sp_383 sp_384 sp_385 sp_386 sp_387 sp_388 sp_389 sp_390</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_391 sp_392 sp_393 sp_394 sp_395 sp_396 sp_397 sp_398 sp_399 sp_400 sp_401</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_402 sp_403 sp_404 sp_405 sp_406 sp_407 sp_408 sp_409 sp_410 sp_411 sp_412</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_413 sp_414 sp_415 sp_416 sp_417 sp_418 sp_419 sp_420 sp_421 sp_422 sp_423</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_424 sp_425 sp_426 sp_427 sp_428 sp_429 sp_430 sp_431 sp_432 sp_433 sp_434</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_435 sp_436 sp_437 sp_438 sp_439 sp_440 sp_441 sp_442 sp_443 sp_444 sp_445</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_446 sp_447 sp_448 sp_449 sp_450 sp_451 sp_452 sp_453 sp_454 sp_455 sp_456</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_457 sp_458 sp_459 sp_460 sp_461 sp_462 sp_463 sp_464 sp_465 sp_466 sp_467</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_468 sp_469 sp_470 sp_471 sp_472 sp_473 sp_474 sp_475 sp_476 sp_477 sp_478</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
+<span><span class="co">#&gt;   sp_479 sp_480 sp_481 sp_482 sp_483</span></span>
+<span><span class="co">#&gt; 1      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 2      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 3      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 4      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 5      0      0      0      0      0</span></span>
+<span><span class="co">#&gt; 6      0      0      0      0      0</span></span></code></pre></div>
 </div>
 <div class="section level3" number="2.2">
 <h3 id="current-environmental-variables">
 <span class="header-section-number">2.2</span> Current environmental variables<a class="anchor" aria-label="anchor" href="#current-environmental-variables"></a>
 </h3>
 <p>We use the function <a href="https://ecology.ghislainv.fr/gecevar/reference/get_chelsa_current.html" class="external-link"><code>get_chelsa_current</code></a> from the R package <a href="https://ecology.ghislainv.fr/gecevar" class="external-link"><code>gecevar</code></a> to download a set of climatic data for Madagascar Island from the website: .</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gecevar</span><span class="op">)</span></span>
 <span><span class="va">name</span> <span class="op">&lt;-</span> <span class="st">"Madagascar"</span></span>
 <span><span class="va">epsg</span> <span class="op">&lt;-</span> <span class="fl">32738</span></span>
@@ -431,7 +736,7 @@ We choose to use the following variables because they have an ecological meaning
 <strong>cwd</strong>: the annual climatic water deficit (mm) is based on monthly precipitation (<span class="math inline">\(prec\)</span>) and potential evapotranspiration (<span class="math inline">\(pet\)</span>) which is defined as the amount of evaporation that would occur in a month if a sufficient water source were available: <span class="math inline">\(\mathrm{cwd}= \sum_{m=1}^{12}\min(0, \ \mathrm{prec}_m-\ \mathrm{pet}_m)\)</span>.</li>
 </ul>
 <p>We consider also the quadratic effects of these climate variables to perform a quadratic regression, which is more suitable for fitting a niche model than a linear regression.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/output.RData"</span><span class="op">)</span></span>
 <span><span class="va">clim_path</span> <span class="op">&lt;-</span> <span class="st">"/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/data_raw/current_chelsa.tif"</span></span>
 <span><span class="co"># get interesting covariates among the climatic variables downloaded  </span></span>
@@ -550,9 +855,10 @@ The corresponding regression coefficients for each species <span class="math inl
 </h3>
 <p>We fit a binomial joint species distribution model, including two latent variables and random site effect using the <code><a href="../reference/jSDM_binomial_probit.html">jSDM_binomial_probit()</a></code> function to perform binomial probit regression considering all the species from the data described above, by performing <span class="math inline">\(80 000\)</span> iterations including <span class="math inline">\(40 000\)</span> of burn-in and we retain <span class="math inline">\(N_{samp}=1 000\)</span> values for each parameter of the model.
 We use species’s prevalence as starting values for species intercept <span class="math inline">\(\beta_0\)</span>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="va">madagascar</span></span>
 <span><span class="co"># Prevalence of species </span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">scaled_data_clim2</span>, <span class="op">-</span><span class="va">site</span>, <span class="op">-</span><span class="va">lat</span>, <span class="op">-</span><span class="va">long</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span><span class="fl">1</span></span>
 <span><span class="va">prevalence</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">PA</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">PA</span><span class="op">)</span></span>
@@ -575,7 +881,8 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span>  lambda_start<span class="op">=</span><span class="fl">0</span>, W_start<span class="op">=</span><span class="fl">0</span>,</span>
 <span>  V_alpha<span class="op">=</span><span class="fl">1</span>, </span>
 <span>  <span class="co"># Priors</span></span>
-<span>  shape<span class="op">=</span><span class="fl">0.1</span>, rate<span class="op">=</span><span class="fl">0.1</span>,</span>
+<span>  shape_Valpha<span class="op">=</span><span class="fl">0.1</span>,</span>
+<span>  rate_Valpha<span class="op">=</span><span class="fl">0.1</span>,</span>
 <span>  mu_beta<span class="op">=</span><span class="fl">0</span>, V_beta<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">np</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  mu_lambda<span class="op">=</span><span class="fl">0</span>, V_lambda<span class="op">=</span><span class="fl">1</span>,</span>
 <span>  <span class="co"># Various </span></span>
@@ -585,7 +892,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">mod_all</span>,<span class="va">T_all</span>,file<span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Madagascar_files/mod_mada.png" width="900" style="display: block; margin: auto;"></p>
 <p>The MCMC algorithm is used to obtain draws from the posterior distribution of the parameters. We use as estimator for each parameter the mean of the <span class="math inline">\(N_{samp}\)</span> values estimated in corresponding MCMC chain and we save the estimated parameters in .csv format.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/scaled_data_clim.RData"</span><span class="op">)</span></span>
 <span></span>
@@ -641,7 +948,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span class="header-section-number">3.3</span> Evaluation of MCMC convergence<a class="anchor" aria-label="anchor" href="#evaluation-of-mcmc-convergence"></a>
 </h3>
 <p>We visually evaluate the convergence of MCMCs by representing the trace and density <em>a posteriori</em> of the estimated parameters.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData"</span><span class="op">)</span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mod_all</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">beta_start</span><span class="op">)</span></span>
 <span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod_all</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">presence_data</span><span class="op">)</span></span>
@@ -716,10 +1023,11 @@ We use species’s prevalence as starting values for species intercept <span cla
 <h3 id="presence-probabilities">
 <span class="header-section-number">4.1</span> Presence probabilities<a class="anchor" aria-label="anchor" href="#presence-probabilities"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/output.RData"</span><span class="op">)</span></span>
 <span><span class="va">theta_latent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/theta_latent.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="va">madagascar</span></span>
 <span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Madagascar borders</span></span>
@@ -727,8 +1035,8 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="va">Mada_borders</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">Mada_borders</span>, <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Observed presence absence</span></span>
-<span><span class="va">id_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"Ocotea laevis"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">id_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"Ocotea laevis"</span><span class="op">]</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">id_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_1"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">id_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_1"</span><span class="op">]</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">obs_pres</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_pres</span>,<span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">obs_abs</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_abs</span>,<span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Representation</span></span>
@@ -750,7 +1058,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Mada_borders</span>, col<span class="op">=</span><span class="st">"lightgray"</span>,</span>
 <span>            main <span class="op">=</span><span class="st">"Estimated probabilities of presence for Ocotea laevis"</span>,</span>
 <span>            cex.main<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta_latent_sp</span>, y<span class="op">=</span><span class="st">"Ocotea.laevis"</span>, pch<span class="op">=</span><span class="fl">20</span>, cex<span class="op">=</span><span class="fl">1.1</span>,</span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta_latent_sp</span>, y<span class="op">=</span><span class="st">"sp_1"</span>, pch<span class="op">=</span><span class="fl">20</span>, cex<span class="op">=</span><span class="fl">1.1</span>,</span>
 <span>            legend<span class="op">=</span><span class="st">"topright"</span>, plg<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cex<span class="op">=</span><span class="fl">1.01</span><span class="op">)</span>, add<span class="op">=</span><span class="cn">TRUE</span>, col<span class="op">=</span><span class="va">col</span>,</span>
 <span>            type<span class="op">=</span><span class="st">"interval"</span>, breaks<span class="op">=</span><span class="va">cuts</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Madagascar_files/figure-html/proba_representation-1.png" width="50%"><img src="Madagascar_files/figure-html/proba_representation-2.png" width="50%"></p>
@@ -762,7 +1070,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 </h3>
 <p>Species richness also called diversity <span class="math inline">\(\alpha\)</span> reflects the number of species coexisting in a given environment and is computed by summing the number of species present on each site.</p>
 <p>We spatially represent the species richness observed at each inventory site defined by <span class="math inline">\(R_i=\sum\limits_ {j=1}^{n_{species}} y_{ij}\)</span> and the species richness estimated, following <span class="citation">Scherrer, Mod &amp; Guisan (<a href="#ref-Scherrer2020" role="doc-biblioref">2020</a>)</span>, by summing the estimated occurrence probabilities of all species on each site: <span class="math inline">\(\widehat{R}_i=\sum\limits_ {j=1}^{n_{species}} \widehat{\theta}_{ij}\)</span>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Madagascar borders</span></span>
 <span><span class="va">Mada_borders</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">output</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, layer <span class="op">=</span> <span class="st">"gadm36_MDG_0"</span><span class="op">)</span></span>
 <span><span class="va">Mada_borders</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">Mada_borders</span>, <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
@@ -813,7 +1121,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <p>After fitting the JSDM with latent variables, the <strong>full species residual correlation matrix</strong> <span class="math inline">\(R=(R_{ij})^{i=1,\ldots, n_{site}}_{j=1,\ldots, n_{species}}\)</span> can be derived from the covariance in the latent variables such as :
 <span class="math display">\[\Sigma_{ij} = \lambda_i^T .\lambda_j \]</span>, then we compute correlations from covariances :
 <span class="math display">\[R_{i,j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma _{ii}\Sigma _{jj}}}\]</span>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData"</span><span class="op">)</span></span>
 <span><span class="va">n.species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">mod_all</span><span class="op">$</span><span class="va">model_spec</span><span class="op">$</span><span class="va">presence_data</span><span class="op">)</span></span>
 <span><span class="va">n.mcmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mod_all</span><span class="op">$</span><span class="va">mcmc.latent</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -829,9 +1137,10 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">Tau.cor.arr</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span>,<span class="va">n.species</span>,byrow<span class="op">=</span><span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">R</span>, file <span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/R.csv"</span>, row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <p>We plot the top 50 estimated residual correlations between species based on their number of observed occurrences and environmental preferences.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Forest inventory </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="va">madagascar</span></span>
 <span><span class="co"># Species parameters </span></span>
 <span><span class="va">params_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv"</span><span class="op">)</span></span>
 <span><span class="co"># Residual correlation matrix R</span></span>
@@ -872,7 +1181,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <h3 id="random-site-effect-alpha">
 <span class="header-section-number">5.1</span> Random site effect <span class="math inline">\(\alpha\)</span><a class="anchor" aria-label="anchor" href="#random-site-effect-alpha"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Initialize GRASS</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"~/Documents/jSDM/vignettes"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>LD_LIBRARY_PATH<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"/usr/lib/grass78/lib"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"LD_LIBRARY_PATH"</span><span class="op">)</span>,sep<span class="op">=</span><span class="st">":"</span><span class="op">)</span><span class="op">)</span></span>
@@ -885,7 +1194,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span>          location<span class="op">=</span><span class="st">"interpolation"</span>, mapset<span class="op">=</span><span class="st">"PERMANENT"</span>,</span>
 <span>          override<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>We interpolate the random site effect at Madagascar scale using RST method.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grass.osgeo.org/" class="external-link">rgrass7</a></span><span class="op">)</span></span>
 <span><span class="co"># Import sites parameters</span></span>
 <span><span class="va">params_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_sites.csv"</span><span class="op">)</span></span>
@@ -941,7 +1250,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span class="header-section-number">5.2</span> Latent variables <span class="math inline">\(W\)</span><a class="anchor" aria-label="anchor" href="#latent-variables-w"></a>
 </h3>
 <p>We interpolate the first axis of latent variables at the Madagascar scale using the RST method.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># W1 </span></span>
 <span><span class="va">W1_sp</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>W1<span class="op">=</span><span class="va">params_sites</span><span class="op">$</span><span class="va">W1</span>, <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                     geom<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
@@ -984,7 +1293,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <p>We represent the first latent variable interpolated at Madagascar scale.</p>
 <p><img src="Madagascar_files/figure-html/RST-W1-1.png" width="800" style="display: block; margin: auto;"></p>
 <p>We interpolate the second axis of latent variables at the Madagascar scale using the RST method.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># W2 </span></span>
 <span><span class="va">W2_sp</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>W2<span class="op">=</span><span class="va">params_sites</span><span class="op">$</span><span class="va">W2</span>, <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                     geom<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>,<span class="st">"y"</span><span class="op">)</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
@@ -1037,7 +1346,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span class="header-section-number">6.1</span> Predictives maps of presence probabilities<a class="anchor" aria-label="anchor" href="#predictives-maps-of-presence-probabilities"></a>
 </h3>
 <p>We calculate the probabilities of species presences between inventory sites using interpolated site’s parameters.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># RST interpolation of sites parameters </span></span>
 <span><span class="va">rst_alpha</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/jSDM/vignettes/Madagascar_cache/alpha_rst_centered.tif"</span><span class="op">)</span></span>
@@ -1114,29 +1423,30 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We represent the presence probabilities of two species interpolated at the scale of Madagascar as well as their observed occurrences at the inventory sites represented by black crosses.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">params_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/params_species.csv"</span><span class="op">)</span></span>
 <span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">params_species</span><span class="op">)</span></span>
 <span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data/coords.shp"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/PA.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="va">PA</span> <span class="op">&lt;-</span> <span class="va">madagascar</span></span>
 <span><span class="co"># Observed presence absence</span></span>
-<span><span class="va">id_pres_Ocotea</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"Ocotea laevis"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">id_pres_Ocotea</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_1"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">obs_pres_Ocotea</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_pres_Ocotea</span>,<span class="op">]</span><span class="op">)</span>,</span>
 <span>                                type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">id_pres_Manilkara</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"Manilkara hexandra"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">id_pres_Manilkara</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_6"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">obs_pres_Manilkara</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_pres_Manilkara</span>,<span class="op">]</span><span class="op">)</span>,</span>
 <span>                                   type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Representation</span></span>
 <span><span class="va">npart</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">first.species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">nsp</span>,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">/</span><span class="va">npart</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/make.names.html" class="external-link">make.names</a></span><span class="op">(</span><span class="va">params_species</span><span class="op">$</span><span class="va">species</span><span class="op">[</span><span class="va">first.species</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="op">(</span><span class="va">first.species</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">/</span><span class="va">npart</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sp_"</span>, <span class="va">first.species</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="op">(</span><span class="va">first.species</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">/</span><span class="va">npart</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span><span class="op">$</span><span class="va">Ocotea.laevis</span>,</span>
-<span>            main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span><span class="op">$</span><span class="va">sp_1</span>,</span>
+<span>            main<span class="op">=</span><span class="st">"Ocotea.laevis"</span><span class="op">)</span></span>
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">obs_pres_Ocotea</span>, pch<span class="op">=</span><span class="fl">3</span>, cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span><span class="op">$</span><span class="va">Manilkara.hexandra</span>,</span>
-<span>            main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta</span><span class="op">$</span><span class="va">sp_6</span>,</span>
+<span>            main<span class="op">=</span><span class="st">"Manilkara.hexandra"</span><span class="op">)</span></span>
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">obs_pres_Manilkara</span>, pch<span class="op">=</span><span class="fl">3</span>, cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main<span class="op">=</span><span class="st">"Interpolated current probabilities of presence"</span>,</span>
 <span>      outer<span class="op">=</span><span class="cn">T</span>, cex.main<span class="op">=</span><span class="fl">1.3</span><span class="op">)</span></span></code></pre></div>
@@ -1153,7 +1463,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span class="header-section-number">6.2.1</span> Current species richness<a class="anchor" aria-label="anchor" href="#current-species-richness"></a>
 </h4>
 <p>We compute at Madagascar scale the species richness by summing the interpolated probabilities of occurrence for each map’s cell <span class="math inline">\(i\)</span> : <span class="math inline">\(\widehat{R}_i=\sum\limits_ {j=1}^{n_{species}} \widehat{\theta}_{ij}\)</span>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif"</span><span class="op">)</span></span>
 <span><span class="va">species_richness</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">sum</span><span class="op">)</span></span>
 <span><span class="va">npart</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
@@ -1172,7 +1482,7 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span class="header-section-number">6.2.2</span> Current species richness restricted to forest cover<a class="anchor" aria-label="anchor" href="#current-species-richness-restricted-to-forest-cover"></a>
 </h4>
 <p>However, the model used does not take into account human presence, which is manifested in particular by the deforestation of the island, so we use data on remaining forest cover in 2000 from the article <span class="citation">Vieilledent <em>et al.</em> (<a href="#ref-Vieilledent2018" role="doc-biblioref">2018</a>)</span> in order to replace with zero values the interpolated species richness at locations where forest is known to have been removed.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidyverse/glue" class="external-link">glue</a></span><span class="op">)</span></span>
 <span><span class="co"># raster of Madagascar's forest cover in 2000</span></span>
 <span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif"</span><span class="op">)</span></span>
@@ -1209,7 +1519,7 @@ richness between sites (one site is richer in species than another site).</p>
 <h4 id="current-species-turn-over">
 <span class="header-section-number">6.3.1</span> Current species turn-over<a class="anchor" aria-label="anchor" href="#current-species-turn-over"></a>
 </h4>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Sample 10000 cells of presence probabilities raster</span></span>
 <span><span class="va">npart</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/RST_theta_1.tif"</span><span class="op">)</span></span>
@@ -1289,7 +1599,7 @@ richness between sites (one site is richer in species than another site).</p>
 <span class="header-section-number">6.3.2</span> Current species turn over restricted to forest cover<a class="anchor" aria-label="anchor" href="#current-species-turn-over-restricted-to-forest-cover"></a>
 </h4>
 <p>In the same way as above, we restrict the values obtained for diversity <span class="math inline">\(\beta\)</span> to the forest cover remaining in 2000.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidyverse/glue" class="external-link">glue</a></span><span class="op">)</span></span>
 <span><span class="co"># raster of Madagascar's forest cover in 2000</span></span>
 <span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/for2000.tif"</span><span class="op">)</span></span>
@@ -1305,7 +1615,7 @@ richness between sites (one site is richer in species than another site).</p>
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></span><span class="op">(</span><span class="va">species_turnover_deforest</span>,</span>
 <span>                   filename<span class="op">=</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_deforest.tif"</span>,</span>
 <span>                   filetype<span class="op">=</span><span class="st">"GTiff"</span>, gdal<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMPRESS=LZW"</span>, <span class="st">"PREDICTOR=2"</span><span class="op">)</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Representation of species turn over restricted to forest cover in 2000's</span></span>
 <span><span class="va">species_turnover_current</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_30m.tif"</span><span class="op">)</span></span>
 <span><span class="va">species_turnover_deforest</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Report/Internship_Report/data/species_turnover_deforest.tif"</span><span class="op">)</span></span>
