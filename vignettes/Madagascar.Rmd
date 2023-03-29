@@ -80,9 +80,11 @@ madagascar <- PA
 save(madagascar, file="~/Documents/jSDM/data/madagascar.rda")
 ```
 
+We represent the presence-absence matrix obtained for the twenty first species.
+
 ```{r madagascar-pa, eval=TRUE}
 data(madagascar, package="jSDM")
-head(madagascar)
+head(madagascar[,1:20])
 ```
 
 ## Current environmental variables
@@ -337,7 +339,7 @@ save(mod_all,T_all,file="~/Documents/projet_BioSceneMada/Report/Internship_Repor
 load("~/Documents/projet_BioSceneMada/Report/Internship_Report/data/mada_mod.RData")
 nsp<-ncol(mod_all$model_spec$presence_data)
 nplot<-nrow(mod_all$model_spec$presence_data)
-p <- ncol(mod_all$model_spec$beta_start)
+p <- nrow(mod_all$model_spec$beta_start)
 T_all <- as.numeric(T_all,units="hours")
 results <- data.frame(nsp,nplot,
                       n_obs=nsp*nplot,n_param=(p+1)*nsp+2*nsp-1+2*nplot+nplot+1,
@@ -352,6 +354,7 @@ knitr::kable(results, row.names=F, digits=1, booktabs=TRUE, align = 'c') %>%
 \cr 
 \cr
 ```{r mada-fitting-mod, echo=FALSE, out.width=900, eval=TRUE}
+
 knitr::include_graphics("Madagascar_files/mod_mada.png")
 ```
 
@@ -502,8 +505,8 @@ Mada_borders <- terra::vect(output[[2]], layer = "gadm36_MDG_0")
 Mada_borders <- terra::project(Mada_borders, terra::crs(xy))
 
 # Observed presence absence
-id_pres <- which(PA[,"sp_1"]==1)
-id_abs <- which(PA[,"sp_1"]==0)
+id_pres <- which(PA[, 1]==1)
+id_abs <- which(PA[, 1]==0)
 obs_pres <-  terra::vect(terra::crds(xy[id_pres,]), type="point", crs=terra::crs(xy))
 obs_abs <-  terra::vect(terra::crds(xy[id_abs,]), type="point", crs=terra::crs(xy))
 # Representation
@@ -525,7 +528,7 @@ col <- c('red3','red','orange','yellow', 'yellow green', 'green3', 'forest green
 terra::plot(Mada_borders, col="lightgray",
             main ="Estimated probabilities of presence for Ocotea laevis",
             cex.main=1.4)
-terra::plot(theta_latent_sp, y="sp_1", pch=20, cex=1.1,
+terra::plot(theta_latent_sp, y=1, pch=20, cex=1.1,
             legend="topright", plg=list(cex=1.01), add=TRUE, col=col,
             type="interval", breaks=cuts)
 ```
@@ -578,8 +581,9 @@ terra::plot(species_richness_sp, 'species_richness', col=col,
 # Comparison between observed and estimated species richness at inventory sites
 plot(species_richness_obs$species_richness_obs,
      species_richness$species_richness,
-     main="Species richness", xlab="observed", ylab="estimated",
-     cex.main=1.4, cex.lab=1.3)
+     main="Species richness",
+     xlab="observed", ylab="estimated",
+     cex.main=1.6, cex.lab=1.4, cex.axis=1.2)
 abline(a=0,b=1,col='red')
 ```
 
@@ -1026,6 +1030,16 @@ terra::plot(c(species_richness, species_richness_deforest),
             main=c("Estimated current species richness",
                    "Current species richness restricted to forest cover"),
             cex.main=0.85)
+
+# terra::plot(species_richness_deforest,
+#             breaks=c(0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,40,65), 
+#             col=terrain.colors(200)[seq.int(from=200, to=1, length.out=20)],
+#             mar=c(3.1, 3.1, 3.1, 4.1),
+#             main=c("Estimated species richness restricted to forest cover"),
+#             cex.main=1.2, plg=list(cex=1.1),
+#             pax=list( # parameters for drawing axes
+#                 cex.axis = 1.1 ) # Axis text size 
+#                 )
 ```
 
 ```{r plot-species-richness-deforest2, echo=FALSE, out.width=800, eval=TRUE}
@@ -1161,7 +1175,7 @@ terra::plotRGB(species_turnover_current, stretch="hist",
                mar=c(1,1,1,1),
         main="Estimated current species turn over")
 terra::plotRGB(species_turnover_deforest, stretch="hist",
-               mar=c(1,1,1,1),
+               mar=c(1,1,1,1), 
                main="Current species turn over on forest cover")
 ```
 

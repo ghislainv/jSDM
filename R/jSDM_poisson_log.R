@@ -135,6 +135,7 @@
 #'   \tab \emph{trait effect} \tab \tab interaction \tab traits \tab environment \tab \tab \cr 
 #' }
 #'  
+#' @importFrom stats na.pass
 #' @examples 
 #' #==============================================
 #' # jSDM_poisson_log()
@@ -356,7 +357,8 @@ jSDM_poisson_log  <- function(# Iteration
     rownames(Y) <- 1:nrow(Y)
   }
   #==== Site formula suitability ====
-  mf.suit <- model.frame(formula=site_formula, data=as.data.frame(site_data))
+  mf.suit <- model.frame(formula=site_formula, data=as.data.frame(site_data),
+                         na.action=na.pass) # X will contain NA's in rows corresponding to site_data.
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
   n_Xint <- sum(sapply(apply(X,2,unique), FUN=function(x){all(x==1)}))

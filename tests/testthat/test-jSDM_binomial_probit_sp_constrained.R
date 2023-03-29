@@ -52,7 +52,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(burnin=burnin, mcmc=mcmc, thin=
                                                  lambda_start=0, W_start=0,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -116,7 +116,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  V_alpha=10,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with fixed site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -184,7 +184,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -252,7 +252,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -390,7 +390,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(burnin=burnin, mcmc=mcmc, thin=
                                                  lambda_start=0, W_start=0,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with traits, latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -513,7 +513,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(burnin=burnin, mcmc=mcmc, thin=
                                                  V_alpha=10,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with traits, fixed site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -603,7 +603,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with traits, random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -691,7 +691,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=10,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with  intercept only in X, random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -784,7 +784,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=1,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with  intercept only in Tr, traits, random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)
@@ -872,7 +872,7 @@ mod <- jSDM::jSDM_binomial_probit_sp_constrained(presence_data=Y,
                                                  shape_Valpha=0.5, rate_Valpha=0.0005,
                                                  mu_beta=0, V_beta=1,
                                                  mu_lambda=0, V_lambda=1,
-                                                 verbose=1)
+                                                 verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_sp_constrained works with intercept only in Tr and X, random site effect and latent variables", {
   expect_equal(length(mod[[1]]$mcmc.sp),nsp)

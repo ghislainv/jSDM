@@ -39,9 +39,9 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin,# Chains
                            # Starting values
                            beta_start=0,
                            # Priors
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 
 test_that("jSDM_binomial_logit works with one species", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
@@ -92,9 +92,9 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin,# Chains
                            # Starting values
                            beta_start=0,
                            # Priors
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works ", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
@@ -135,9 +135,9 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            beta_start=0,
                            # Priors
                            V_alpha=10,
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 
 # Tests
 test_that("jSDM_binomial_logit works with fixed site effect", {
@@ -183,9 +183,9 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            V_alpha=1,
                            # Priors
                            shape_Valpha=0.5, rate_Valpha=0.0005,
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 
 # Tests
 test_that("jSDM_binomial_logit works with random site effect", {
@@ -238,10 +238,10 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin,# Chains
                            beta_start=0, lambda_start = 0,
                            W_start=0,
                            # Priors
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -298,10 +298,10 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            W_start=0,
                            # Priors
                            V_alpha=10,
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_binomial_logit works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -362,10 +362,10 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            V_alpha=1,
                            # Priors
                            shape_Valpha=0.5, rate_Valpha=0.0005,
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_binomial_logit works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -427,10 +427,10 @@ mod <- jSDM_binomial_logit(burnin, mcmc, thin, # Chains
                            V_alpha=1,
                            # Priors
                            shape_Valpha=0.5, rate_Valpha=0.0005,
-                           mu_beta=0, V_beta=1.0E6,
+                           mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=10,
                            # Various
-                           seed=1234, ropt=0.44, verbose=1)
+                           seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_binomial_logit works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -550,7 +550,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   mu_gamma=0, V_gamma=10,
                                   beta_start=0,
                                   mu_beta=0, V_beta=10,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -621,7 +621,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   lambda_start=0, W_start=0,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits, latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -688,7 +688,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   V_alpha=10,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits, fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -754,7 +754,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   V_alpha=1,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits, random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -830,7 +830,7 @@ mod <- jSDM::jSDM_binomial_logit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits, fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -910,7 +910,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -987,7 +987,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with  intercept only in X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1069,7 +1069,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=1,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with  intercept only in Tr, traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1145,7 +1145,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                   shape_Valpha=0.5, rate_Valpha=0.0005,
                                   mu_beta=0, V_beta=1,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_logit works with intercept only in Tr and X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)

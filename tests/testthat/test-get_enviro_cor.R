@@ -53,7 +53,7 @@ mod <- jSDM::jSDM_binomial_probit(burnin=burnin, mcmc=mcmc, thin=thin,
                                   lambda_start=0, W_start=0,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 ########## get average environmental correlation  ################
 results <- get_enviro_cor(mod, prob=0.95, type="mean")
 # Tests

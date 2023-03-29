@@ -28,6 +28,7 @@
 ^vignettes/jSDM_binomial_probit_long_format\.Rmd$
 ^vignettes/jSDM_binomial_probit_sp_constrained\.Rmd$
 ^vignettes/jSDM_binomial_logit\.Rmd$
+^vignettes/jSDM_gaussian\.Rmd$
 ^vignettes/jSDM_poisson_log\.Rmd$
 ^vignettes/jSDM_in_parallel\.Rmd$
 ^vignettes/jSDM_with_traits\.Rmd$

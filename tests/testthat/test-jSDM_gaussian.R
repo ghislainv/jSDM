@@ -34,7 +34,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            mu_beta=0, V_beta=10,
                            V_start=1,
                            shape_V=0.5, rate_V=0.0005,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with one species", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -84,7 +84,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            mu_beta=0, V_beta=10,
                            V_start=1,
                            shape_V=0.5, rate_V=0.0005,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -136,7 +136,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            mu_lambda=0, V_lambda=1,
                            V_start=1,
                            shape_V=0.5, rate_V=0.0005,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -183,7 +183,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            V_start=1,
                            shape_V=0.5, rate_V=0.0005,
                            mu_beta=0, V_beta=10,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -230,7 +230,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            shape_V=0.5, rate_V=0.0005,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -292,7 +292,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_V=0.5, rate_V=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -355,7 +355,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -418,7 +418,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -535,7 +535,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            mu_gamma=0, V_gamma=10,
                            beta_start=0,
                            mu_beta=0, V_beta=10,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -613,7 +613,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            shape_V=0.5, rate_V=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits, latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -684,7 +684,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            V_start=1,
                            shape_V=0.5, rate_V=0.0005,
                            mu_beta=0, V_beta=10,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits, fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -755,7 +755,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            shape_V=0.5, rate_V=0.0005,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits, random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -841,7 +841,7 @@ mod <- jSDM::jSDM_gaussian(burnin=burnin, mcmc=mcmc, thin=thin,
                            shape_V=0.5, rate_V=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits, fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -930,7 +930,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1017,7 +1017,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=10,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with  intercept only in X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1109,7 +1109,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with  intercept only in Tr, traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1197,7 +1197,7 @@ mod <- jSDM::jSDM_gaussian(response_data=Y,
                            shape_Valpha=0.5, rate_Valpha=0.0005,
                            mu_beta=0, V_beta=1,
                            mu_lambda=0, V_lambda=1,
-                           seed=1234, verbose=1)
+                           seed=1234, verbose=0)
 # Tests
 test_that("jSDM_gaussian works with intercept only in Tr and X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)

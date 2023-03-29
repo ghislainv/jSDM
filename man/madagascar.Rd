@@ -18,9 +18,6 @@ We use these forest inventories to calculate a matrix indicating the presence by
   }
 }
 
-\source{
-Wilkinson, D. P.; Golding, N.; Guillera-Arroita, G.; Tingley, R. and McCarthy, M. A. (2018) A comparison of joint species distribution models for presence-absence data. \emph{Methods in Ecology and Evolution}.}
-
 \examples{
 data(madagascar, package="jSDM")
 head(madagascar)

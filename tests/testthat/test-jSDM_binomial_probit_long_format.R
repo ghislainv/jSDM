@@ -1,5 +1,3 @@
-#context("test-jSDM_binomial_probit_long_format")
-
 #=== Without traits =======
 
 ##============== Simple species distribution model (SDM) =======
@@ -54,7 +52,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               site_formula = ~ (x1 + x2):species,
                                               beta_start=0,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with one species", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -124,7 +122,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               site_formula = ~ (x1 + x2):species,
                                               beta_start=0,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -198,7 +196,7 @@ mod <- jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                         lambda_start=0, W_start=0,
                                         mu_beta=0, V_beta=100,
                                         mu_lambda=0, V_lambda=10,
-                                        seed=1234, verbose=1)
+                                        seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -265,7 +263,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               V_alpha=10,
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -330,7 +328,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               V_alpha=1,
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -407,7 +405,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -488,7 +486,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -561,7 +559,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -585,9 +583,6 @@ test_that("jSDM_binomial_probit_long_format works with random site effect and la
   expect_equal(sum(is.na(mod$mcmc.Deviance)),0)
   expect_equal(dim(mod$mcmc.Deviance),c(nsamp,1))
 })
-
-context("test-jSDM_binomial_probit_long_format")
-
 
 #=== With traits =======
 
@@ -661,7 +656,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               mu_gamma=0, V_gamma=100,
                                               beta_start=0,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with one species", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -740,7 +735,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               site_formula = ~ (x1 + x1.2):species + x1.SLA,
                                               beta_start=0,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -826,7 +821,7 @@ mod <- jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thin,
                                         lambda_start=0, W_start=0,
                                         mu_beta=0, V_beta=100,
                                         mu_lambda=0, V_lambda=10,
-                                        seed=1234, verbose=1)
+                                        seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -909,7 +904,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -991,7 +986,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(burnin=burnin, mcmc=mcmc, thin=thi
                                               shape_Valpha=0.5, rate_Valpha=0.0005,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1086,7 +1081,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1185,7 +1180,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1283,7 +1278,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_binomial_probit_long_format works with intercept only, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)

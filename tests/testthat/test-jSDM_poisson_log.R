@@ -39,7 +39,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         # Priors
                         mu_beta=0, V_beta=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 
 test_that("jSDM_poisson_log works with one species", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
@@ -90,7 +90,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         # Priors
                         mu_beta=0, V_beta=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works ", {
   expect_equal(sum(is.na(mod$theta_latent)),0)
@@ -132,7 +132,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         V_alpha=10,
                         mu_beta=0, V_beta=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 
 # Tests
 test_that("jSDM_poisson_log works with fixed site effect", {
@@ -180,7 +180,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         shape_Valpha=0.5, rate_Valpha=0.0005,
                         mu_beta=0, V_beta=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 
 # Tests
 test_that("jSDM_poisson_log works with random site effect", {
@@ -236,7 +236,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         mu_beta=0, V_beta=10,
                         mu_lambda=0, V_lambda=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -296,7 +296,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         mu_beta=0, V_beta=10,
                         mu_lambda=0, V_lambda=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_poisson_log works with fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -360,7 +360,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         mu_beta=0, V_beta=10,
                         mu_lambda=0, V_lambda=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_poisson_log works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -425,7 +425,7 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin, # Chains
                         mu_beta=0, V_beta=10,
                         mu_lambda=0, V_lambda=10,
                         # Various
-                        seed=1234, ropt=0.44, verbose=1)
+                        seed=1234, ropt=0.44, verbose=0)
 # Tests 
 test_that("jSDM_poisson_log works with random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -540,7 +540,7 @@ mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               mu_gamma=0, V_gamma=10,
                               beta_start=0,
                               mu_beta=0, V_beta=10,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -572,7 +572,7 @@ result <- form.Tr(trait_formula,trait_data,X)
 Tr <- result$Tr
 nt <- ncol(Tr)
 gamma_zeros <- result$gamma_zeros
-gamma.target <- matrix(runif(nt*np,-2,2), byrow=TRUE, nrow=nt)
+gamma.target <- matrix(runif(nt*np,-1,1), byrow=TRUE, nrow=nt)
 mu_beta <- as.matrix(Tr) %*% (gamma.target*gamma_zeros)
 V_beta <- diag(1,np)
 beta.target <- matrix(NA,nrow=np,ncol=nsp)
@@ -583,8 +583,8 @@ W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 #= Number of latent variables
 n_latent <- ncol(W)
 l.zero <- 0
-l.diag <- runif(2,0,2)
-l.other <- runif(nsp*n_latent-3,-2,2)
+l.diag <- runif(n_latent,0,2)
+l.other <- runif(nsp*n_latent-3,-1,1)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 log_theta <- as.matrix(X) %*% beta.target + W %*% lambda.target 
@@ -610,7 +610,7 @@ mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               lambda_start=0, W_start=0,
                               mu_beta=0, V_beta=10,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits, latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -676,7 +676,7 @@ mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               alpha_start=0, beta_start=0,
                               V_alpha=10,
                               mu_beta=0, V_beta=10,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits, fixed site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -742,7 +742,7 @@ mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               V_alpha=1,
                               shape_Valpha=0.5, rate_Valpha=0.0005,
                               mu_beta=0, V_beta=10,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits, random site effect", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -817,7 +817,7 @@ mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               V_alpha=10,
                               mu_beta=0, V_beta=10,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits, fixed site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -895,7 +895,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape_Valpha=0.5, rate_Valpha=0.0005,
                               mu_beta=0, V_beta=10,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -971,7 +971,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape_Valpha=0.5, rate_Valpha=0.0005,
                               mu_beta=0, V_beta=10,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with  intercept only in X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1052,7 +1052,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape_Valpha=0.5, rate_Valpha=0.0005,
                               mu_beta=0, V_beta=1,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with  intercept only in Tr, traits, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)
@@ -1128,7 +1128,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape_Valpha=0.5, rate_Valpha=0.0005,
                               mu_beta=0, V_beta=1,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
 test_that("jSDM_poisson_log works with intercept only in Tr and X, random site effect and latent variables", {
   expect_equal(length(mod$mcmc.sp),nsp)

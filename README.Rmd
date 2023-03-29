@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 [![Downloads](https://cranlogs.r-pkg.org/badges/jSDM)](https://cran.r-project.org/package=jSDM)
 [![Codecov test coverage](https://codecov.io/gh/ghislainv/jSDM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ghislainv/jSDM?branch=master)
 
-Package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework [@Warton2015]. The Gibbs sampler is written in C++. It uses [Rcpp](https://cran.r-project.org/package=Rcpp), [Armadillo](http://arma.sourceforge.net/docs.html) and [GSL](https://www.gnu.org/software/gsl/) to maximize computation efficiency.
+Package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework [@Warton2015]. The Gibbs sampler is written in C++. It uses [Rcpp](https://cran.r-project.org/package=Rcpp), [Armadillo](https://arma.sourceforge.net/docs.html) and [GSL](https://www.gnu.org/software/gsl/) to maximize computation efficiency.
 
 ## System requirements
 

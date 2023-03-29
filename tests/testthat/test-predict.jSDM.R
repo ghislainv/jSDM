@@ -116,7 +116,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                  shape=0.5, rate=0.0005,
                                  mu_beta=0, V_beta=10,
                                  mu_lambda=0, V_lambda=1,
-                                 seed=1234, verbose=1)
+                                 seed=1234, verbose=0)
 
 # Sites and species concerned by predictions :
 ## half of sites 
@@ -192,7 +192,7 @@ mod <- jSDM::jSDM_binomial_logit(presence_data=Y, trials=visits,
                                  shape=0.5, rate=0.0005,
                                  mu_beta=0, V_beta=1,
                                  mu_lambda=0, V_lambda=1,
-                                 seed=1234, verbose=1)
+                                 seed=1234, verbose=0)
 
 # Sites and species concerned by predictions :
 ## half of sites 
@@ -280,7 +280,7 @@ mod <- jSDM::jSDM_binomial_probit(presence_data=Y,
                                   shape=0.5, rate=0.0005,
                                   mu_beta=0, V_beta=10,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 
 # Sites and species concerned by predictions :
 ## half of sites 
@@ -363,7 +363,7 @@ mod <- jSDM::jSDM_binomial_probit(presence_data=Y,
                                   shape=0.5, rate=0.0005,
                                   mu_beta=0, V_beta=1,
                                   mu_lambda=0, V_lambda=1,
-                                  seed=1234, verbose=1)
+                                  seed=1234, verbose=0)
 # Tests
   # Sites and species concerned by predictions :
   ## half of sites 
@@ -445,7 +445,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape=0.5, rate=0.0005,
                               mu_beta=0, V_beta=1,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Sites and species concerned by predictions :
 ## half of sites 
 npred <- round(nrow(Y)/2)
@@ -518,7 +518,7 @@ mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               shape=0.5, rate=0.0005,
                               mu_beta=0, V_beta=1,
                               mu_lambda=0, V_lambda=1,
-                              seed=1234, verbose=1)
+                              seed=1234, verbose=0)
 # Tests
   # Sites and species concerned by predictions :
   ## half of sites 
@@ -619,7 +619,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
 
 # Sites and species concerned by predictions :
 ## half of sites 
@@ -720,7 +720,7 @@ mod <- jSDM::jSDM_binomial_probit_long_format(data=data,
                                               mu_gamma=0, V_gamma=100,
                                               mu_beta=0, V_beta=100,
                                               mu_lambda=0, V_lambda=10,
-                                              seed=1234, verbose=1)
+                                              seed=1234, verbose=0)
   # Sites and species concerned by predictions :
   ## half of sites 
   nsite_pred <- round(nsite/2)

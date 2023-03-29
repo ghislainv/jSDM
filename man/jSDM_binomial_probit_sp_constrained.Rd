@@ -183,7 +183,7 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 50
+nsite <- 30
 
 #= Set seed for repeatability
 seed <- 1234
@@ -235,7 +235,7 @@ for (i in 1:nsite){
 # Increase number of iterations (burnin and mcmc) to get convergence
 mod <- jSDM_binomial_probit_sp_constrained(# Iteration
                                            burnin=100,
-                                           mcmc=200,
+                                           mcmc=100,
                                            thin=1,
                                            # parallel MCMCs
                                            nchains=2, ncores=2,

@@ -151,6 +151,7 @@
 #' Jeanne Clément <jeanne.clement16@laposte.net> 
 #' 
 #' @importFrom MASS mvrnorm
+#' @importFrom stats na.pass
 #' @seealso \code{\link[coda]{plot.mcmc}}, \code{\link[coda]{summary.mcmc}} \code{\link{jSDM_binomial_logit}} \code{\link{jSDM_poisson_log}} 
 #' \code{\link{jSDM_binomial_probit_sp_constrained}} \code{\link{jSDM_binomial_probit}}
 #' @examples
@@ -375,7 +376,8 @@ jSDM_gaussian <- function(#Iteration
   }
   
   #==== Site formula suitability ====
-  mf.suit <- model.frame(formula=site_formula, data=as.data.frame(site_data))
+  mf.suit <- model.frame(formula=site_formula, data=as.data.frame(site_data),
+                         na.action=na.pass) # X will contain NA's in rows corresponding to site_data.
   X <- model.matrix(attr(mf.suit,"terms"), data=mf.suit)
   np <- ncol(X)
   n_Xint <- sum(sapply(apply(X,2,unique), FUN=function(x){all(x==1)}))

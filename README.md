@@ -15,7 +15,7 @@ Package for fitting joint species distribution models (JSDM) in a
 hierarchical Bayesian framework ([Warton *et al.*
 2015](#ref-Warton2015)). The Gibbs sampler is written in C++. It uses
 [Rcpp](https://cran.r-project.org/package=Rcpp),
-[Armadillo](http://arma.sourceforge.net/docs.html) and
+[Armadillo](https://arma.sourceforge.net/docs.html) and
 [GSL](https://www.gnu.org/software/gsl/) to maximize computation
 efficiency.
 
