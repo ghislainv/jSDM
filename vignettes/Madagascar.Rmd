@@ -83,6 +83,7 @@ save(madagascar, file="~/Documents/jSDM/data/madagascar.rda")
 We represent the presence-absence matrix obtained for the twenty first species.
 
 ```{r madagascar-pa, eval=TRUE}
+oldwd <- getwd()
 data(madagascar, package="jSDM")
 head(madagascar[,1:20])
 ```
@@ -96,7 +97,6 @@ library(gecevar)
 name <- "Madagascar"
 epsg <- 32738
 output_file <- "/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data"
-oldwd <- getwd()
 setwd("/home/clement/Documents/jSDM/vignettes/Madagascar_files/")
 # Get Madagascar extent in the specified coordinates system (EPSG)
 output <- transform_shp_country_extent(EPSG = epsg,
