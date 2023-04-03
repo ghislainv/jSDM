@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.4</span>
       </span>
     </div>
 
@@ -68,8 +68,9 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_residual_cor</span><span class="op">(</span></span>
 <span>  <span class="va">mod</span>,</span>
 <span>  prob <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"Residual Correlation Matrix from LVM"</span>,</span>
-<span>  diag <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Residual Correlation Matrix from LVM"</span>,</span>
+<span>  cex.main <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"lower"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>,</span>
 <span>  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -91,8 +92,12 @@ If <code>prob=0.95</code> is specified only significant correlations, whose \(95
 Defaults to <code>prob=NULL</code> to represent all correlations significant or not.</p></dd>
 
 
-<dt>title</dt>
+<dt>main</dt>
 <dd><p>Character, title of the graph.</p></dd>
+
+
+<dt>cex.main</dt>
+<dd><p>Numeric, title's size.</p></dd>
 
 
 <dt>diag</dt>
@@ -127,7 +132,7 @@ Defaults to <code>prob=NULL</code> to represent all correlations significant or 
     <h2>Value</h2>
     
 
-<p>Displays a reordered correlation matrix</p>
+<p>No return value. Displays a reordered correlation matrix.</p>
     </div>
     <div id="references">
     <h2>References</h2>

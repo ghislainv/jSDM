@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.4</span>
       </span>
     </div>
 
@@ -137,9 +137,11 @@ We use these forest inventories to calculate a matrix indicating the presence by
 <span><span class="va">madagascar</span> <span class="op">&lt;-</span> <span class="va">PA</span></span>
 <span><span class="co"># save presence/absence at inventory sites matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">madagascar</span>, file<span class="op">=</span><span class="st">"~/Documents/jSDM/data/madagascar.rda"</span><span class="op">)</span></span></code></pre></div>
+<p>We represent the presence-absence matrix obtained for the twenty first species.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">madagascar</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">oldwd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">madagascar</span>, package<span class="op">=</span><span class="st">"jSDM"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">madagascar</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   sp_1 sp_2 sp_3 sp_4 sp_5 sp_6 sp_7 sp_8 sp_9 sp_10 sp_11 sp_12 sp_13 sp_14</span></span>
 <span><span class="co">#&gt; 1    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
 <span><span class="co">#&gt; 2    0    0    0    0    0    1    0    0    0     0     0     0     0     0</span></span>
@@ -147,300 +149,13 @@ We use these forest inventories to calculate a matrix indicating the presence by
 <span><span class="co">#&gt; 4    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
 <span><span class="co">#&gt; 5    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
 <span><span class="co">#&gt; 6    0    0    0    1    0    0    0    0    0     0     0     0     0     1</span></span>
-<span><span class="co">#&gt;   sp_15 sp_16 sp_17 sp_18 sp_19 sp_20 sp_21 sp_22 sp_23 sp_24 sp_25 sp_26 sp_27</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     0     0     1     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     1     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 6     0     0     0     0     0     0     1     1     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_28 sp_29 sp_30 sp_31 sp_32 sp_33 sp_34 sp_35 sp_36 sp_37 sp_38 sp_39 sp_40</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_41 sp_42 sp_43 sp_44 sp_45 sp_46 sp_47 sp_48 sp_49 sp_50 sp_51 sp_52 sp_53</span></span>
-<span><span class="co">#&gt; 1     0     0     0     1     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     1     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 6     0     1     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_54 sp_55 sp_56 sp_57 sp_58 sp_59 sp_60 sp_61 sp_62 sp_63 sp_64 sp_65 sp_66</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     1     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     1     0     0</span></span>
-<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_67 sp_68 sp_69 sp_70 sp_71 sp_72 sp_73 sp_74 sp_75 sp_76 sp_77 sp_78 sp_79</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     1     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_80 sp_81 sp_82 sp_83 sp_84 sp_85 sp_86 sp_87 sp_88 sp_89 sp_90 sp_91 sp_92</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     1     0     0     0     0     0     0     1     0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 3     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt; 6     0     0     0     0     0     0     0     0     0     0     0     0     0</span></span>
-<span><span class="co">#&gt;   sp_93 sp_94 sp_95 sp_96 sp_97 sp_98 sp_99 sp_100 sp_101 sp_102 sp_103 sp_104</span></span>
-<span><span class="co">#&gt; 1     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3     0     0     1     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5     0     0     0     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6     0     0     1     0     0     0     0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_105 sp_106 sp_107 sp_108 sp_109 sp_110 sp_111 sp_112 sp_113 sp_114 sp_115</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      1      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_116 sp_117 sp_118 sp_119 sp_120 sp_121 sp_122 sp_123 sp_124 sp_125 sp_126</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_127 sp_128 sp_129 sp_130 sp_131 sp_132 sp_133 sp_134 sp_135 sp_136 sp_137</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      1      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_138 sp_139 sp_140 sp_141 sp_142 sp_143 sp_144 sp_145 sp_146 sp_147 sp_148</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      1      0      1</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      1      1</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      1      1      1</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      1      0      1</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_149 sp_150 sp_151 sp_152 sp_153 sp_154 sp_155 sp_156 sp_157 sp_158 sp_159</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      1      1      1      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      1      0      0      0      0      0      0      0      1</span></span>
-<span><span class="co">#&gt; 3      1      1      1      1      1      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      1      0      0      0      0      0      0      1      1      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_160 sp_161 sp_162 sp_163 sp_164 sp_165 sp_166 sp_167 sp_168 sp_169 sp_170</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      1      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      1      0      1      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_171 sp_172 sp_173 sp_174 sp_175 sp_176 sp_177 sp_178 sp_179 sp_180 sp_181</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_182 sp_183 sp_184 sp_185 sp_186 sp_187 sp_188 sp_189 sp_190 sp_191 sp_192</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_193 sp_194 sp_195 sp_196 sp_197 sp_198 sp_199 sp_200 sp_201 sp_202 sp_203</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_204 sp_205 sp_206 sp_207 sp_208 sp_209 sp_210 sp_211 sp_212 sp_213 sp_214</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_215 sp_216 sp_217 sp_218 sp_219 sp_220 sp_221 sp_222 sp_223 sp_224 sp_225</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_226 sp_227 sp_228 sp_229 sp_230 sp_231 sp_232 sp_233 sp_234 sp_235 sp_236</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_237 sp_238 sp_239 sp_240 sp_241 sp_242 sp_243 sp_244 sp_245 sp_246 sp_247</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_248 sp_249 sp_250 sp_251 sp_252 sp_253 sp_254 sp_255 sp_256 sp_257 sp_258</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_259 sp_260 sp_261 sp_262 sp_263 sp_264 sp_265 sp_266 sp_267 sp_268 sp_269</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_270 sp_271 sp_272 sp_273 sp_274 sp_275 sp_276 sp_277 sp_278 sp_279 sp_280</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_281 sp_282 sp_283 sp_284 sp_285 sp_286 sp_287 sp_288 sp_289 sp_290 sp_291</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_292 sp_293 sp_294 sp_295 sp_296 sp_297 sp_298 sp_299 sp_300 sp_301 sp_302</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_303 sp_304 sp_305 sp_306 sp_307 sp_308 sp_309 sp_310 sp_311 sp_312 sp_313</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_314 sp_315 sp_316 sp_317 sp_318 sp_319 sp_320 sp_321 sp_322 sp_323 sp_324</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_325 sp_326 sp_327 sp_328 sp_329 sp_330 sp_331 sp_332 sp_333 sp_334 sp_335</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_336 sp_337 sp_338 sp_339 sp_340 sp_341 sp_342 sp_343 sp_344 sp_345 sp_346</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_347 sp_348 sp_349 sp_350 sp_351 sp_352 sp_353 sp_354 sp_355 sp_356 sp_357</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_358 sp_359 sp_360 sp_361 sp_362 sp_363 sp_364 sp_365 sp_366 sp_367 sp_368</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_369 sp_370 sp_371 sp_372 sp_373 sp_374 sp_375 sp_376 sp_377 sp_378 sp_379</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_380 sp_381 sp_382 sp_383 sp_384 sp_385 sp_386 sp_387 sp_388 sp_389 sp_390</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_391 sp_392 sp_393 sp_394 sp_395 sp_396 sp_397 sp_398 sp_399 sp_400 sp_401</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_402 sp_403 sp_404 sp_405 sp_406 sp_407 sp_408 sp_409 sp_410 sp_411 sp_412</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_413 sp_414 sp_415 sp_416 sp_417 sp_418 sp_419 sp_420 sp_421 sp_422 sp_423</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_424 sp_425 sp_426 sp_427 sp_428 sp_429 sp_430 sp_431 sp_432 sp_433 sp_434</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_435 sp_436 sp_437 sp_438 sp_439 sp_440 sp_441 sp_442 sp_443 sp_444 sp_445</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_446 sp_447 sp_448 sp_449 sp_450 sp_451 sp_452 sp_453 sp_454 sp_455 sp_456</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_457 sp_458 sp_459 sp_460 sp_461 sp_462 sp_463 sp_464 sp_465 sp_466 sp_467</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_468 sp_469 sp_470 sp_471 sp_472 sp_473 sp_474 sp_475 sp_476 sp_477 sp_478</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0      0      0      0      0      0      0</span></span>
-<span><span class="co">#&gt;   sp_479 sp_480 sp_481 sp_482 sp_483</span></span>
-<span><span class="co">#&gt; 1      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 2      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 3      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 4      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 5      0      0      0      0      0</span></span>
-<span><span class="co">#&gt; 6      0      0      0      0      0</span></span></code></pre></div>
+<span><span class="co">#&gt;   sp_15 sp_16 sp_17 sp_18 sp_19 sp_20</span></span>
+<span><span class="co">#&gt; 1     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6     0     0     0     0     0     0</span></span></code></pre></div>
 </div>
 <div class="section level3" number="2.2">
 <h3 id="current-environmental-variables">
@@ -1035,8 +750,8 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="va">Mada_borders</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">Mada_borders</span>, <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Observed presence absence</span></span>
-<span><span class="va">id_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_1"</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">id_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>,<span class="st">"sp_1"</span><span class="op">]</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">id_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">id_abs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">PA</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">==</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">obs_pres</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_pres</span>,<span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">obs_abs</span> <span class="op">&lt;-</span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/coords.html" class="external-link">crds</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">id_abs</span>,<span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"point"</span>, crs<span class="op">=</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Representation</span></span>
@@ -1058,7 +773,7 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Mada_borders</span>, col<span class="op">=</span><span class="st">"lightgray"</span>,</span>
 <span>            main <span class="op">=</span><span class="st">"Estimated probabilities of presence for Ocotea laevis"</span>,</span>
 <span>            cex.main<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta_latent_sp</span>, y<span class="op">=</span><span class="st">"sp_1"</span>, pch<span class="op">=</span><span class="fl">20</span>, cex<span class="op">=</span><span class="fl">1.1</span>,</span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">theta_latent_sp</span>, y<span class="op">=</span><span class="fl">1</span>, pch<span class="op">=</span><span class="fl">20</span>, cex<span class="op">=</span><span class="fl">1.1</span>,</span>
 <span>            legend<span class="op">=</span><span class="st">"topright"</span>, plg<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cex<span class="op">=</span><span class="fl">1.01</span><span class="op">)</span>, add<span class="op">=</span><span class="cn">TRUE</span>, col<span class="op">=</span><span class="va">col</span>,</span>
 <span>            type<span class="op">=</span><span class="st">"interval"</span>, breaks<span class="op">=</span><span class="va">cuts</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Madagascar_files/figure-html/proba_representation-1.png" width="50%"><img src="Madagascar_files/figure-html/proba_representation-2.png" width="50%"></p>
@@ -1106,8 +821,9 @@ We use species’s prevalence as starting values for species intercept <span cla
 <span><span class="co"># Comparison between observed and estimated species richness at inventory sites</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">species_richness_obs</span><span class="op">$</span><span class="va">species_richness_obs</span>,</span>
 <span>     <span class="va">species_richness</span><span class="op">$</span><span class="va">species_richness</span>,</span>
-<span>     main<span class="op">=</span><span class="st">"Species richness"</span>, xlab<span class="op">=</span><span class="st">"observed"</span>, ylab<span class="op">=</span><span class="st">"estimated"</span>,</span>
-<span>     cex.main<span class="op">=</span><span class="fl">1.4</span>, cex.lab<span class="op">=</span><span class="fl">1.3</span><span class="op">)</span></span>
+<span>     main<span class="op">=</span><span class="st">"Species richness"</span>,</span>
+<span>     xlab<span class="op">=</span><span class="st">"observed"</span>, ylab<span class="op">=</span><span class="st">"estimated"</span>,</span>
+<span>     cex.main<span class="op">=</span><span class="fl">1.6</span>, cex.lab<span class="op">=</span><span class="fl">1.4</span>, cex.axis<span class="op">=</span><span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Madagascar_files/figure-html/species-richness-representation-2.png" width="50%"><img src="Madagascar_files/figure-html/species-richness-representation-1.png" width="50%"></p>
 <p><img src="Madagascar_files/figure-html/species-richness-representation-3.png" width="50%" style="display: block; margin: auto;"></p>
@@ -1624,7 +1340,7 @@ richness between sites (one site is richer in species than another site).</p>
 <span>               mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,</span>
 <span>        main<span class="op">=</span><span class="st">"Estimated current species turn over"</span><span class="op">)</span></span>
 <span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="va">species_turnover_deforest</span>, stretch<span class="op">=</span><span class="st">"hist"</span>,</span>
-<span>               mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,</span>
+<span>               mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, </span>
 <span>               main<span class="op">=</span><span class="st">"Current species turn over on forest cover"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Madagascar_files/figure-html/plot-diversity-beta-1.png" width="800" style="display: block; margin: auto;"></p>
 
