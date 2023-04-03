@@ -13,8 +13,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // Rcpp_jSDM_binomial_logit
-Rcpp::List Rcpp_jSDM_binomial_logit(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,7 +22,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< const int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type mu_beta(mu_betaSEXP);
@@ -30,13 +30,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit(ngibbs, nthin, nburn, Y, T, X, beta_start, mu_beta, V_beta, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit(ngibbs, nthin, nburn, Y, N, X, beta_start, mu_beta, V_beta, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_fixed_site
-Rcpp::List Rcpp_jSDM_binomial_logit_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -44,7 +44,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha_start(alpha_startSEXP);
@@ -54,13 +54,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_fixed_site(ngibbs, nthin, nburn, Y, T, X, beta_start, alpha_start, V_alpha, mu_beta, V_beta, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_fixed_site(ngibbs, nthin, nburn, Y, N, X, beta_start, alpha_start, V_alpha, mu_beta, V_beta, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_fixed_site_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -68,7 +68,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -83,13 +83,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_fixed_site_lv(ngibbs, nthin, nburn, Y, T, X, W_start, lambda_start, beta_start, alpha_start, V_alpha, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_fixed_site_lv(ngibbs, nthin, nburn, Y, N, X, W_start, lambda_start, beta_start, alpha_start, V_alpha, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -97,7 +97,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -110,13 +110,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_lv(ngibbs, nthin, nburn, Y, T, X, W_start, lambda_start, beta_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_lv(ngibbs, nthin, nburn, Y, N, X, W_start, lambda_start, beta_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_rand_site
-Rcpp::List Rcpp_jSDM_binomial_logit_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -124,7 +124,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha_start(alpha_startSEXP);
@@ -136,13 +136,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_rand_site(ngibbs, nthin, nburn, Y, T, X, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, shape_Valpha, rate_Valpha, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_rand_site(ngibbs, nthin, nburn, Y, N, X, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, shape_Valpha, rate_Valpha, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_rand_site_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -150,7 +150,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -167,13 +167,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_rand_site_lv(ngibbs, nthin, nburn, Y, T, X, W_start, lambda_start, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, shape_Valpha, rate_Valpha, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_rand_site_lv(ngibbs, nthin, nburn, Y, N, X, W_start, lambda_start, beta_start, alpha_start, V_alpha_start, mu_beta, V_beta, mu_lambda, V_lambda, V_W, shape_Valpha, rate_Valpha, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits
-Rcpp::List Rcpp_jSDM_binomial_logit_traits(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -181,7 +181,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< const int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -193,13 +193,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, beta_start, gamma_start, V_gamma, mu_gamma, V_beta, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, beta_start, gamma_start, V_gamma, mu_gamma, V_beta, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits_fixed_site
-Rcpp::List Rcpp_jSDM_binomial_logit_traits_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -207,7 +207,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -221,13 +221,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_fixed_site(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, beta_start, gamma_start, alpha_start, V_alpha, V_gamma, mu_gamma, V_beta, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_fixed_site(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, beta_start, gamma_start, alpha_start, V_alpha, V_gamma, mu_gamma, V_beta, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits_fixed_site_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -235,7 +235,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -254,13 +254,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, W_start, lambda_start, beta_start, gamma_start, alpha_start, V_alpha, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, W_start, lambda_start, beta_start, gamma_start, alpha_start, V_alpha, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_traits_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& gamma_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP gamma_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& gamma_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP gamma_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -268,7 +268,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -285,13 +285,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_lv(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, W_start, gamma_start, lambda_start, beta_start, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_lv(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, W_start, gamma_start, lambda_start, beta_start, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits_rand_site
-Rcpp::List Rcpp_jSDM_binomial_logit_traits_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -299,7 +299,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -315,13 +315,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_rand_site(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, beta_start, gamma_start, alpha_start, V_alpha_start, V_gamma, mu_gamma, V_beta, shape_Valpha, rate_Valpha, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_rand_site(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, beta_start, gamma_start, alpha_start, V_alpha_start, V_gamma, mu_gamma, V_beta, shape_Valpha, rate_Valpha, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp_jSDM_binomial_logit_traits_rand_site_lv
-Rcpp::List Rcpp_jSDM_binomial_logit_traits_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& T, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& gamma_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
-RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP TSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP gamma_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
+Rcpp::List Rcpp_jSDM_binomial_logit_traits_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::uvec& N, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& gamma_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+RcppExport SEXP _jSDM_Rcpp_jSDM_binomial_logit_traits_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP NSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP gamma_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -329,7 +329,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
     Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type N(NSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -350,7 +350,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const double& >::type ropt(roptSEXP);
     Rcpp::traits::input_parameter< const int& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_rand_site_lv(ngibbs, nthin, nburn, Y, T, X, Tr, gamma_zeros, W_start, gamma_start, lambda_start, beta_start, alpha_start, V_alpha_start, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, shape_Valpha, rate_Valpha, seed, ropt, verbose));
+    rcpp_result_gen = Rcpp::wrap(Rcpp_jSDM_binomial_logit_traits_rand_site_lv(ngibbs, nthin, nburn, Y, N, X, Tr, gamma_zeros, W_start, gamma_start, lambda_start, beta_start, alpha_start, V_alpha_start, V_gamma, mu_gamma, V_beta, mu_lambda, V_lambda, V_W, shape_Valpha, rate_Valpha, seed, ropt, verbose));
     return rcpp_result_gen;
 END_RCPP
 }

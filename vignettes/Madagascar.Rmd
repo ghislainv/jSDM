@@ -96,6 +96,7 @@ library(gecevar)
 name <- "Madagascar"
 epsg <- 32738
 output_file <- "/home/clement/Documents/projet_BioSceneMada/Report/Internship_Report/data"
+oldwd <- getwd()
 setwd("/home/clement/Documents/jSDM/vignettes/Madagascar_files/")
 # Get Madagascar extent in the specified coordinates system (EPSG)
 output <- transform_shp_country_extent(EPSG = epsg,
@@ -1187,6 +1188,7 @@ knitr::include_graphics("Madagascar_files/figure-html/plot-diversity-beta-1.png"
 
 ```{r plot-forest-type, echo=FALSE, out.width=280, fig.cap="(ref:cap-forest-type)", eval=TRUE}
 knitr::include_graphics("Madagascar_files/figure-html/mada_forest_type.jpg")
+setwd(oldwd)
 ```
 
 We can see that the estimated map of $\beta$-diversity agrees with the map of Madagascar’s forest types from the article @Vieilledent2018.     

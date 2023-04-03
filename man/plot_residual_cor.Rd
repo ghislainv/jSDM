@@ -7,8 +7,9 @@
 plot_residual_cor(
   mod,
   prob = NULL,
-  title = "Residual Correlation Matrix from LVM",
-  diag = F,
+  main = "Residual Correlation Matrix from LVM",
+  cex.main = 1.5,
+  diag = FALSE,
   type = "lower",
   method = "color",
   mar = c(1, 1, 3, 1),
@@ -24,7 +25,9 @@ plot_residual_cor(
 If \code{prob=0.95} is specified only significant correlations, whose \eqn{95\%} HPD interval does not contain zero, are represented. 
 Defaults to \code{prob=NULL} to represent all correlations significant or not.}
 
-\item{title}{Character, title of the graph.}
+\item{main}{Character, title of the graph.}
+
+\item{cex.main}{Numeric, title's size.}
 
 \item{diag}{Logical, whether display the correlation coefficients on the principal diagonal.}
 
@@ -41,7 +44,7 @@ Defaults to \code{prob=NULL} to represent all correlations significant or not.}
 \item{...}{Further arguments passed to \code{\link[corrplot]{corrplot}} function}
 }
 \value{
-Displays a reordered correlation matrix
+No return value. Displays a reordered correlation matrix.
 }
 \description{
 Plot the posterior mean estimator of residual correlation matrix reordered by first principal component using \code{\link[corrplot]{corrplot}} function from the package of the same name.

@@ -9,7 +9,7 @@
 #' @aliases jSDM_binomial_probit_long_format
 #' @title Binomial probit regression on long format data 
 #' @description The \code{jSDM_binomial_probit_long_format} function performs a Binomial probit regression in a Bayesian framework. 
-#' The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+#' The function calls a Gibbs sampler written in 'C++' code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
 #' @param thin The thinning interval used in the simulation. The number of mcmc iterations must be divisible by this value.
@@ -206,7 +206,7 @@
 #'   seed=1234, verbose=1)
 #' 
 #' #= Parameter estimates
-#' 
+#' oldpar <- par(no.readonly = TRUE) 
 #' # gamma 
 #' par(mfrow=c(2,2))
 #' for(d in 1:nd){
@@ -306,6 +306,7 @@
 #' plot(pnorm(probit_theta[-1]),mod$theta_latent,
 #'      main="theta",xlab="obs",ylab="fitted")
 #' abline(a=0,b=1,col='red')
+#' par(oldpar)
 #' 
 #' @keywords Binomial probit regression biodiversity JSDM hierarchical Bayesian models MCMC Markov Chains Monte Carlo Gibbs Sampling
 #' @export 
@@ -391,7 +392,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   np <- ncol(X)
   
   if((attr(attr(mf.suit,"terms"),"intercept")==0) & (unique(X[,1])!=1)) {
-    cat("Error: The model must include a species intercept to be interpretable.\n")
+    message("Error: The model must include a species intercept to be interpretable.\n")
     stop("Please respecify the site_formula and call ", calling.function(), " again.",
          call.=FALSE)
   }
@@ -415,7 +416,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
       }
     }
     if(sum(Id_common_var)!=0){
-      cat("Error: the general design matrix and the species effects design matrix should not contain the same variables
+      message("Error: the general design matrix and the species effects design matrix should not contain the same variables
         to ensure the identifiability and interpretability of the model.\n")
       stop("Please respecify the site_formula and call ", calling.function(), " again.",
            call.=FALSE)
@@ -442,7 +443,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   #========== 
   # Check data
   #==========
-  check.T.binomial(n_visit, nobs)
+  check.N.binomial(n_visit, nobs)
   check.Y.binomial(Y, n_visit)
   check.X(X, nobs)
   if(length(Dterms)!=0){
@@ -577,7 +578,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   if(n_latent>0 && site_effect=="none"){
     
     if (nsp==1) {
-      cat("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
+      message("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
     }
@@ -745,7 +746,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   if(n_latent==0 && site_effect=="fixed"){
     
     if (nsp==1) {
-      cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
+      message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
     }
@@ -888,7 +889,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   if(n_latent==0 && site_effect=="random"){
     
     if (nsp==1) {
-      cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
+      message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to none with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
     }
@@ -1046,7 +1047,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   if(n_latent>0 && site_effect=="random"){
     
     if (nsp==1) {
-      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+      message("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
     }
@@ -1238,7 +1239,7 @@ jSDM_binomial_probit_long_format <- function(#Iteration
   if(n_latent>0 && site_effect=="fixed"){
     
     if (nsp==1) {
-      cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n
+      message("Error: Unable to adjust site effect and latent variables from data about only one species.\n
         site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)

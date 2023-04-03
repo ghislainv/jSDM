@@ -88,7 +88,7 @@ double betadens_logit (double beta_jk, void *dens_data) {
     logit_theta += d->X(i,k) * beta_jk;
     double theta = invlogit(logit_theta);
     /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+    logL += R::dbinom(d->Y(i,j), d->N(i),  theta, 1);
   } // loop on sites 
   
   // logPosterior = logL + logPrior
@@ -123,7 +123,7 @@ double lambdadens_logit (double lambda_jq, void *dens_data) {
     logit_theta += d->W_run(i,q) * lambda_jq;
     double theta = invlogit(logit_theta);
     /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+    logL += R::dbinom(d->Y(i,j), d->N(i),  theta, 1);
   } // loop on sites 
   
   // logPosterior = logL + logPrior
@@ -157,7 +157,7 @@ double lambdaUdens_logit (double lambda_jq, void *dens_data) {
     logit_theta += d->W_run(i,q) * lambda_jq;
     double theta = invlogit(logit_theta);
     /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+    logL += R::dbinom(d->Y(i,j), d->N(i),  theta, 1);
   } // loop on sites 
   
   // logPosterior = logL + logPrior
@@ -188,7 +188,7 @@ double alphadens_logit(double alpha_i, void *dens_data) {
     logit_theta += alpha_i; 
     double theta = invlogit(logit_theta);
     /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+    logL += R::dbinom(d->Y(i,j), d->N(i),  theta, 1);
   } // loop on species
   
   // logPosterior = logL + logPrior
@@ -223,7 +223,7 @@ double Wdens_logit (double W_iq, void *dens_data) {
     logit_theta += W_iq * d->lambda_run(q,j) ;
     double theta = invlogit(logit_theta);
     /* log Likelihood */
-    logL += R::dbinom(d->Y(i,j), d->T(i),  theta, 1);
+    logL += R::dbinom(d->Y(i,j), d->N(i),  theta, 1);
   } // loop on species
   
   // logPosterior = logL + logPrior

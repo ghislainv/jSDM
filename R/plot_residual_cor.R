@@ -13,7 +13,8 @@
 #' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
 #'   If \code{prob=0.95} is specified only significant correlations, whose \eqn{95\%} HPD interval does not contain zero, are represented. 
 #'   Defaults to \code{prob=NULL} to represent all correlations significant or not.
-#' @param title Character, title of the graph.
+#' @param main Character, title of the graph.
+#' @param cex.main Numeric, title's size. 
 #' @param diag Logical, whether display the correlation coefficients on the principal diagonal.
 #' @param type Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.
 #' @param method Character, the visualization method of correlation matrix to be used. Currently, it supports seven methods, named "circle" (default), "square", "ellipse", "number", "pie", "shade" and "color". 
@@ -21,7 +22,7 @@
 #' @param tl.cex Numeric, for the size of text label (variable names).
 #' @param tl.srt Numeric, for text label string rotation in degrees, see \code{\link[graphics]{text}}.
 #' @param ... Further arguments passed to \code{\link[corrplot]{corrplot}} function
-#' @return Displays a reordered correlation matrix
+#' @return No return value. Displays a reordered correlation matrix.
 #' @author 
 #' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 #' 
@@ -77,8 +78,9 @@
 
 ## Plot of residual correlation matrix (posterior mean estimator, and reordered by first principal component)
 plot_residual_cor <- function(mod, prob=NULL,
-                              title = "Residual Correlation Matrix from LVM",
-                              diag = F, type = "lower",
+                              main = "Residual Correlation Matrix from LVM",
+                              cex.main= 1.5,
+                              diag = FALSE, type = "lower",
                               method = "color", 
                               mar = c(1,1,3,1),
                               tl.srt = 45, tl.cex = 0.5, ...) {
@@ -98,9 +100,11 @@ plot_residual_cor <- function(mod, prob=NULL,
   if(!is.null(mod$model_spec$data)){
     rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- rownames(lv2.cor$cor.mean) <- colnames(lv2.cor$cor.mean) <- unique(mod$model_spec$data$species)
   }
-  par(cex=1, cex.main=1.5)
+  oldpar <- par(no.readonly = TRUE) 
+  on.exit(par(oldpar))
+  par(cex=1, cex.main=cex.main)
   corrplot::corrplot(lv2.cor$cor.mean[lv2.cor$reorder.cor.mean,lv2.cor$reorder.cor.mean], diag = diag,
-                     type = type, title = title, mar = mar, method = method , tl.srt = tl.srt, tl.cex = tl.cex, ...)
-}
+                     type = type, title = main, mar = mar, method = method , tl.srt = tl.srt, tl.cex = tl.cex, ...)
+  }
 
 # End

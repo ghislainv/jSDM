@@ -171,6 +171,7 @@ add_species_arrows = function(radius = 5.0, label = "Species", reverse = TRUE, s
 #'  \code{"frequency"} \tab the number of sites where they occur \cr
 #'  \code{"main environmental effect"} \tab their most important environmental coefficients \cr}
 #' @param species_indices indices for sorting species
+#' @return No return value. Displays species-species associations.
 #' @details  After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
 #'  can be derived from the covariance in the latent variables such as : 
 #'  \eqn{\Sigma_{ij}=\lambda_i' .\lambda_j}{Sigma_ij=\lambda_i' . \lambda_j}, in the case of a regression with probit, logit or poisson link function and 
@@ -247,13 +248,14 @@ plot_associations = function(R, radius = 5.0, main = NULL, cex.main=NULL,
                              species_order="abundance",
                              species_indices = NULL
 ){
-  
+  oldpar <- par(no.readonly = TRUE) 
+  on.exit(par(oldpar))
   if(species_order!="main env_effect"){
     ##### circle #####
     
     lineSeq = 0.94*radius
     nseg = 100
-    graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = F, xlab = "", ylab = "")
+    graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = FALSE, xlab = "", ylab = "")
     if(!is.null(main)) graphics::text(x = 0, y = radius*1.25, pos = 3, xpd = NA, labels = main, cex=cex.main)
     xx = lineSeq*cos( seq(0,2*pi, length.out=nseg))
     yy = lineSeq*sin( seq(0,2*pi, length.out=nseg))
@@ -348,7 +350,7 @@ plot_associations = function(R, radius = 5.0, main = NULL, cex.main=NULL,
     ##### circle #####
     lineSeq = 0.94*radius
     nseg = 100
-    graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = F, xlab = "", ylab = "")
+    graphics::plot(NULL, NULL, xlim = c(-radius,radius), ylim =c(-radius,radius),pty="s", axes = FALSE, xlab = "", ylab = "")
     if(!is.null(main)) graphics::text(x = 0, y = radius*1.35, pos = 3, xpd = NA, labels = main, cex=cex.main)
     xx = lineSeq*cos( seq(0,2*pi, length.out=nseg))
     yy = lineSeq*sin( seq(0,2*pi, length.out=nseg))

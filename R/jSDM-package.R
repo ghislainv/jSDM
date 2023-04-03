@@ -4,7 +4,7 @@
 #' @title joint species distribution models
 #' @description \code{jSDM} is an R package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework.
 #'
-#' The Gibbs sampler is written in C++. It uses Rcpp, Armadillo and GSL to maximize computation efficiency.
+#' The Gibbs sampler is written in 'C++'. It uses 'Rcpp', 'Armadillo' and 'GSL' to maximize computation efficiency.
 #'\tabular{ll}{
 #'    Package: \tab jSDM\cr
 #'    Type: \tab Package\cr

@@ -13,7 +13,7 @@
 Rcpp::List  Rcpp_jSDM_binomial_logit(
     const int ngibbs, const int nthin, const int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
-    const arma::uvec &T, // Number of trials
+    const arma::uvec &N, // Number of trials
     const arma::mat &X, // Suitability covariates
     const arma::mat &beta_start,//beta
     const arma::vec &mu_beta,
@@ -63,8 +63,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
   dens_data.NL = NL;
   // Y
   dens_data.Y = Y;
-  // T
-  dens_data.T = T;
+  // N
+  dens_data.N = N;
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
@@ -145,7 +145,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
         logit_theta_run(i,j) = Xpart_theta;
         theta_run(i,j) = invlogit(Xpart_theta);
         /* log Likelihood */
-        logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
+        logL += R::dbinom(dens_data.Y(i,j), dens_data.N(i), theta_run(i,j), 1);
       } // loop on species
       R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
@@ -274,7 +274,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit(
 # mod <- Rcpp_jSDM_binomial_logit(
 #     ngibbs=ngibbs, nthin=nthin, nburn=nburn,
 #     Y=Y,
-#     T=visits,
+#     N=visits,
 #     X=X,
 #     beta_start=matrix(0,np,nsp),
 #     mu_beta=matrix(0,np), V_beta=rep(1.0E6,np),

@@ -148,7 +148,7 @@ An object of class \code{"jSDM"} acting like a list including :
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
 \description{
-The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
+The \code{jSDM_binomial_logit} function performs a Binomial logistic regression in a Bayesian framework. The function calls a Gibbs sampler written in 'C++' code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 }
 \details{
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
@@ -275,7 +275,7 @@ mod <- jSDM_binomial_logit(# Chains
 #== Outputs
 
 #= Parameter estimates
-
+oldpar <- par(no.readonly = TRUE)
 ## beta_j
 # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 mean_beta <- matrix(0,nsp,np)
@@ -362,6 +362,7 @@ plot(theta, mod$theta_latent,
      main="Probabilities of occurence theta",
      xlab="obs", ylab="fitted")
 abline(a=0 ,b=1, col="red")
+par(oldpar)
 }
 \references{
 Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.

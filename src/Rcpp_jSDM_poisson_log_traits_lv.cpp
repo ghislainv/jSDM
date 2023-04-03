@@ -75,8 +75,8 @@ Rcpp::List  Rcpp_jSDM_poisson_log_traits_lv(
   dens_data.NL = NL;
   // Y
   dens_data.Y = Y;
-  // T
-  dens_data.T = arma::ones<arma::uvec>(NSITE);
+  // N
+  dens_data.N = arma::ones<arma::uvec>(NSITE);
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;

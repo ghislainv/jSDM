@@ -119,7 +119,7 @@ The \code{mcmc.} objects can be summarized by functions provided by the \code{co
 }
 \description{
 The \code{jSDM_binomial_probit_long_format} function performs a Binomial probit regression in a Bayesian framework. 
-The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+The function calls a Gibbs sampler written in 'C++' code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 }
 \details{
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
@@ -244,7 +244,7 @@ mod<-jSDM_binomial_probit_long_format( # Iteration
   seed=1234, verbose=1)
 
 #= Parameter estimates
-
+oldpar <- par(no.readonly = TRUE) 
 # gamma 
 par(mfrow=c(2,2))
 for(d in 1:nd){
@@ -344,6 +344,7 @@ par(mfrow=c(1,1))
 plot(pnorm(probit_theta[-1]),mod$theta_latent,
      main="theta",xlab="obs",ylab="fitted")
 abline(a=0,b=1,col='red')
+par(oldpar)
 
 }
 \references{

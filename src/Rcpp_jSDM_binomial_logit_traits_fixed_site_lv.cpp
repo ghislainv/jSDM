@@ -13,7 +13,7 @@
 Rcpp::List  Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(
     const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
     const arma::umat &Y, // Number of successes (presences)
-    const arma::uvec &T, // Number of trials
+    const arma::uvec &N, // Number of trials
     const arma::mat &X, // Suitability covariates
     const arma::mat &Tr, // Species traits
     const arma::mat &gamma_zeros, // Interactions between covariates and traits to consider
@@ -80,8 +80,8 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(
   dens_data.NL = NL;
   // Y
   dens_data.Y = Y;
-  // T
-  dens_data.T = T;
+  // N
+  dens_data.N = N;
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;
@@ -280,7 +280,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(
         logit_theta_run(i,j)=Xpart_theta;
         theta_run(i,j) = invlogit(Xpart_theta);
         /* log Likelihood */
-        logL += R::dbinom(dens_data.Y(i,j), dens_data.T(i), theta_run(i,j), 1);
+        logL += R::dbinom(dens_data.Y(i,j), dens_data.N(i), theta_run(i,j), 1);
       } // loop on species
       R_CheckUserInterrupt(); // allow user interrupt
     } // loop on sites
@@ -478,7 +478,7 @@ Rcpp::List  Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(
 # 
 # # Call to C++ function
 # mod <- Rcpp_jSDM_binomial_logit_traits_fixed_site_lv(ngibbs=ngibbs, nthin=nthin, nburn=nburn,
-#                                                       Y=Y, T=visits, X=X, Tr=as.matrix(Tr),
+#                                                       Y=Y, N=visits, X=X, Tr=as.matrix(Tr),
 #                                                       beta_start=matrix(0,np,nsp),
 #                                                       lambda_start=matrix(0,nl,nsp),
 #                                                       W_start=matrix(0,nsite,nl),

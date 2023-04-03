@@ -55,6 +55,9 @@ plot_associations(
 
 \item{species_indices}{indices for sorting species}
 }
+\value{
+No return value. Displays species-species associations.
+}
 \description{
 plot_associations
 plot species-species associations

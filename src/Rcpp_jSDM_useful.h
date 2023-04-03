@@ -17,7 +17,7 @@ struct dens_par {
   int NSITE;
   int NSP;
   arma::umat Y;
-  arma::uvec T;
+  arma::uvec N;
   // Suitability 
   // beta
   int NP;

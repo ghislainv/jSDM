@@ -15,7 +15,7 @@
 #' Default is posterior mean.
 #' @param prob A numeric scalar in the interval \eqn{(0,1)} giving the target probability coverage of the intervals, by which to determine whether the correlations are "significant".
 #' Defaults to 0.95.
-#' @return results A list including : 
+#' @return results, a list including : 
 #' \item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
 #' \item{cor.sig}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior density (HPD) interval does not contain zero. All non-significant correlations are set to zero.}
 #' \item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}
@@ -91,7 +91,7 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
   if (prob<0 | prob>1) {stop("prob must be a probability between (0,1)")}
   model.spec <- mod$model_spec
   n.X.coeff <- nrow(model.spec$beta_start)
-
+  
   if(!is.null(model.spec$presence_data)){
     y <- model.spec$presence_data
     species <- colnames(y)
@@ -145,7 +145,7 @@ get_enviro_cor <- function(mod, type = "mean", prob = 0.95) {
     stop("Cannot find MCMC sample corresponding to coefficients for X")
   }
   if (n.X.coeff==0) {
-    cat("Error: The model provided don't include covariates.\n
+    message("Error: The model provided don't include covariates.\n
         The beta parameters needed to compute the environmental correlation matrix have not been estimated. \n")
     stop("Please fit a model including covariates on your data and call ", calling.function(), " again.",
          call.=FALSE)

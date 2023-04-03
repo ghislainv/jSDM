@@ -9,7 +9,7 @@
 #' @aliases jSDM_poisson_log 
 #' @title Poisson regression with log link function 
 #' @description The \code{jSDM_poisson_log} function performs a Poisson regression with log link function in a Bayesian framework. 
-#' The function calls a Gibbs sampler written in C++ code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
+#' The function calls a Gibbs sampler written in 'C++' code which uses an adaptive Metropolis algorithm to estimate the conditional posterior distribution of model's parameters.
 #' @param burnin The number of burnin iterations for the sampler.
 #' @param mcmc The number of Gibbs iterations for the sampler. Total number of Gibbs iterations is equal to \code{burnin+mcmc}.\cr
 #'  \code{burnin+mcmc} must be divisible by 10 and superior or equal to 100 so that the progress bar can be displayed.
@@ -212,6 +212,7 @@
 #' #' #==========
 #' #' #== Outputs
 #' 
+#' oldpar <- par(no.readonly = TRUE)
 #' #= Parameter estimates
 #' 
 #' ## beta_j
@@ -300,6 +301,8 @@
 #'      main="Expected abundance theta",
 #'      xlab="obs", ylab="fitted")
 #' abline(a=0 ,b=1, col="red")
+#' par(oldpar)
+#' 
 #' @references
 #' Gelfand, A. E.; Schmidt, A. M.; Wu, S.; Silander, J. A.; Latimer, A. and Rebelo, A. G. (2005) Modelling species diversity through species level hierarchical modelling. \emph{Applied Statistics}, 54, 1-20.
 #' 
@@ -364,7 +367,7 @@ jSDM_poisson_log  <- function(# Iteration
   n_Xint <- sum(sapply(apply(X,2,unique), FUN=function(x){all(x==1)}))
   col_Xint <- which(sapply(apply(X,2,unique), FUN=function(x){all(x==1)}))
   if(n_Xint!=1){
-    cat("Error: The model must include one species intercept to be interpretable.\n")
+    message("Error: The model must include one species intercept to be interpretable.\n")
     stop("Please respecify the site_formula formula and call ", calling.function(), " again.",
          call.=FALSE)
   }
@@ -432,7 +435,7 @@ jSDM_poisson_log  <- function(# Iteration
     if(n_latent>0 && site_effect=="none"){
       
       if (nsp==1) {
-        cat("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
+        message("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -504,7 +507,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with random site effect ======
     if(n_latent==0 && site_effect=="random"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
+        message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -568,7 +571,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with fixed site effect ======
     if(n_latent==0 && site_effect=="fixed"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
+        message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -628,7 +631,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with lv and fixed site effect======
     if(n_latent>0 && site_effect=="fixed"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+        message("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -707,7 +710,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with lv and random site effect======
     if(n_latent>0 && site_effect=="random"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+        message("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -797,7 +800,7 @@ jSDM_poisson_log  <- function(# Iteration
   #======== function with traits ========
   if(!is.null(trait_data)){
     if (nsp==1) {
-      cat("Error: Unable to estimate the influence of species-specific traits on species' responses from data about only one species.\n
+      message("Error: Unable to estimate the influence of species-specific traits on species' responses from data about only one species.\n
           trait_data should not be specified with a single species.\n")
       stop("Please respecify and call ", calling.function(), " again.",
            call.=FALSE)
@@ -832,7 +835,7 @@ jSDM_poisson_log  <- function(# Iteration
       n_Tint <- sum(sapply(apply(Tr,2,unique), FUN=function(x){all(x==1)}))
       col_Tint <- which(sapply(apply(Tr,2,unique), FUN=function(x){all(x==1)}))
       if(n_Tint!=1) {
-        cat("Error: The model must include one trait intercept to be interpretable.\n")
+        message("Error: The model must include one trait intercept to be interpretable.\n")
         stop("Please respecify the trait_formula formula and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -926,7 +929,7 @@ jSDM_poisson_log  <- function(# Iteration
     if(n_latent>0 && site_effect=="none"){
       
       if (nsp==1) {
-        cat("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
+        message("Error: Unable to adjust latent variables from data about only one species.\n n_latent must be equal to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -1020,7 +1023,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with random site effect ======
     if(n_latent==0 && site_effect=="random"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
+        message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -1106,7 +1109,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with fixed site effect ======
     if(n_latent==0 && site_effect=="fixed"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
+        message("Error: Unable to adjust site effect from data about only one species.\n site_effect must be equal to 'none' with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -1186,7 +1189,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with lv and fixed site effect======
     if(n_latent>0 && site_effect=="fixed"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+        message("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }
@@ -1289,7 +1292,7 @@ jSDM_poisson_log  <- function(# Iteration
     ##======== with lv and random site effect======
     if(n_latent>0 && site_effect=="random"){
       if (nsp==1) {
-        cat("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
+        message("Error: Unable to adjust site effect and latent variables from data about only one species.\n site_effect must be equal to 'none' and n_latent to 0 with a single species.\n")
         stop("Please respecify and call ", calling.function(), " again.",
              call.=FALSE)
       }

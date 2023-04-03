@@ -16,7 +16,7 @@ Default is posterior mean.}
 Defaults to 0.95.}
 }
 \value{
-results A list including : 
+results, a list including : 
 \item{cor, cor.lower, cor.upper}{A set of \eqn{np \times np}{np x np} correlation matrices, containing either the posterior median or mean estimate  over the MCMC samples plus lower and upper limits of the corresponding 95 \% highest posterior interval.} 
 \item{cor.sig}{A \eqn{np \times np}{np x np} correlation matrix containing only the “significant" correlations whose 95 \% highest posterior density (HPD) interval does not contain zero. All non-significant correlations are set to zero.}
 \item{cov}{Average over the MCMC samples of the \eqn{np \times np}{np x np} covariance matrix.}

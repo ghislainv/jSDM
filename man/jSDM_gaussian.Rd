@@ -157,7 +157,7 @@ The \code{mcmc.} objects can be summarized by functions provided by the \code{co
 }
 \description{
 The \code{jSDM_gaussian} function performs a linear regression in a Bayesian framework. 
-The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
+The function calls a Gibbs sampler written in 'C++' code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters.
 }
 \details{
 We model an ecological process where the continuous data \eqn{y_ij} about the species \eqn{j} and the site \eqn{i} is explained by habitat suitability.
@@ -293,7 +293,7 @@ Y <- matrix(rnorm(nsite*nsp, theta.target, sqrt(V.target)), nrow=nsite)
 #== Outputs
 
 #= Parameter estimates
-
+oldpar <- par(no.readonly = TRUE)
 ## beta_j
 # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 mean_beta <- matrix(0,nsp,ncol(X))
@@ -380,6 +380,7 @@ par(mfrow=c(1,1))
 plot(Y, mod$Y_pred,
      main="Response variable",xlab="obs",ylab="fitted")
 abline(a=0,b=1,col='red')
+par(oldpar)
 
 }
 \references{

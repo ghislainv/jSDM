@@ -125,7 +125,7 @@ A list of length \code{nchains} where each element is an object of class \code{"
 The \code{mcmc.} objects can be summarized by functions provided by the \code{coda} package.
 }
 \description{
-The \code{jSDM_binomial_probit_sp_constrained} function performs in parallel Binomial probit regressions in a Bayesian framework. The function calls a Gibbs sampler written in C++ code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters. Then the function evaluates the convergence of MCMC \eqn{\lambda} chains using the Gelman-Rubin convergence diagnostic (\eqn{\hat{R}}). \eqn{\hat{R}} is computed using the \code{\link[coda]{gelman.diag}} function. We identify the species (\eqn{\hat{j}_l}) having the higher \eqn{\hat{R}} for \eqn{\lambda_{\hat{j}_l}}. These species drive the structure of the latent axis \eqn{l}. The \eqn{\lambda} corresponding to this species are constrained to be positive and placed on the diagonal of the \eqn{\Lambda} matrix for fitting a second model. This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.
+The \code{jSDM_binomial_probit_sp_constrained} function performs in parallel Binomial probit regressions in a Bayesian framework. The function calls a Gibbs sampler written in 'C++' code which uses conjugate priors to estimate the conditional posterior distribution of model's parameters. Then the function evaluates the convergence of MCMC \eqn{\lambda} chains using the Gelman-Rubin convergence diagnostic (\eqn{\hat{R}}). \eqn{\hat{R}} is computed using the \code{\link[coda]{gelman.diag}} function. We identify the species (\eqn{\hat{j}_l}) having the higher \eqn{\hat{R}} for \eqn{\lambda_{\hat{j}_l}}. These species drive the structure of the latent axis \eqn{l}. The \eqn{\lambda} corresponding to this species are constrained to be positive and placed on the diagonal of the \eqn{\Lambda} matrix for fitting a second model. This usually improves the convergence of the latent variables and factor loadings. The function returns the parameter posterior distributions for this second model.
 }
 \details{
 We model an ecological process where the presence or absence of species \eqn{j} on site \eqn{i} is explained by habitat suitability.
@@ -265,6 +265,7 @@ mod <- jSDM_binomial_probit_sp_constrained(# Iteration
 
 #==========
 #== Outputs
+oldpar <- par(no.readonly = TRUE) 
 burnin <- mod[[1]]$model_spec$burnin
 ngibbs <- burnin + mod[[1]]$model_spec$mcmc
 thin <-  mod[[1]]$model_spec$thin
@@ -429,6 +430,8 @@ for (i in 2:nchains){
 abline(a=0,b=1, col='red')
 ## Deviance
 plot(mcmc_list_Deviance)
+
+par(oldpar)
 
 }
 \references{
