@@ -38,7 +38,6 @@ jobs:
       - name: Install kableExtra 
         run: |
           devtools::install_github("kupietz/kableExtra")
-          detach(package:kableExtra)
           library(kableExtra)
         shell: Rscript {0}
 
