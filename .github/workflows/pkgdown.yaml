@@ -32,11 +32,14 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown, any::devtools, local::.
           needs: website
           
       - name: Install kableExtra 
-        run: devtools::install_github("kupietz/kableExtra")
+        run: |
+          detach(package:kableExtra)
+          devtools::install_github("kupietz/kableExtra")
+          library(kableExtra)
         shell: Rscript {0}
 
       - name: Build site
