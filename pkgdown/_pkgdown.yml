@@ -10,7 +10,7 @@ authors:
     href: https://www.cirad.fr
     html: <img src='https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png'>
 template:
-    assets: folders4website
+    assets: logos
     
 navbar:
   structure:
