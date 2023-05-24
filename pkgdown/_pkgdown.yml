@@ -6,8 +6,11 @@ authors:
   Frédéric Gosselin:
     href: "https://cv.hal.science/frederic-gosselin"
   CIRAD:
-    href: "https://www.cirad.fr"
-    html: "<img src='https://ecology.ghislainv.fr/gecevar/articles/logos/logo-cirad.svg' height=24 style='height:24px;'>"
+    CIRAD:
+    href: https://www.cirad.fr
+    html: <img src='https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png'>
+template:
+    assets: folders4website
     
 navbar:
   structure:
