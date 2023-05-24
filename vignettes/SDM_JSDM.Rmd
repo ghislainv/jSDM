@@ -1,7 +1,6 @@
 ---
 title: "Comparing SDMs and JSDMs"
-output:
-  bookdown::html_document2:
+output: bookdown::html_document2:
   #base_format: rmarkdown::html_vignette
   #highlight: tango
   number_sections: true
