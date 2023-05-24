@@ -24,7 +24,6 @@ jobs:
           - {os: macos-latest, r: 'oldrel-1'}
           - {os: windows-latest, r: 'devel'}
           - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'oldrel-1'}
           - {os: ubuntu-latest, r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest, r: 'release'}
           - {os: ubuntu-latest, r: 'oldrel-1'}
@@ -36,9 +35,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install GSL on macos
-        if: runner.os == 'macOS'
-        run: brew install gsl
+      - name: Install GSL and jags on macos
+        if: runner.os == 'macOS' 
+        run: |
+          brew install jags
+          brew install gsl
+  
 
       - uses: r-lib/actions/setup-pandoc@v2
 
