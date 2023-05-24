@@ -35,12 +35,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install GSL and jags on macos
+      - name: Install GSL, GDAL and JAGS on macos
         if: runner.os == 'macOS' 
         run: |
           brew install jags
           brew install gsl
-  
+          brew install gdal
 
       - uses: r-lib/actions/setup-pandoc@v2
 
