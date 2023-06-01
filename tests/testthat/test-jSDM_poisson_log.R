@@ -18,7 +18,7 @@ set.seed(2*seed)
 x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 np <- ncol(X)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-3,3), byrow=TRUE, nrow=nsp)
 log.theta <- X %*% t(beta.target)
 theta <- exp(log.theta)
 set.seed(seed)
@@ -848,7 +848,7 @@ test_that("jSDM_poisson_log works with traits, fixed site effect and latent vari
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 trait_data <- data.frame(WSD=scale(runif(nsp,0,1000)),
@@ -858,7 +858,7 @@ result <- form.Tr(trait_formula,trait_data,X)
 Tr <- result$Tr
 nt <- ncol(Tr)
 gamma_zeros <- result$gamma_zeros
-gamma.target <- matrix(runif(nt*np,-1,1), byrow=TRUE, nrow=nt)
+gamma.target <- matrix(runif(nt*np,-0.5,0.5), byrow=TRUE, nrow=nt)
 mu_beta <- as.matrix(Tr) %*% (gamma.target*gamma_zeros)
 V_beta <- diag(1,np)
 beta.target <- matrix(NA,nrow=np,ncol=nsp)
@@ -867,7 +867,7 @@ for(j in 1:nsp){
 }
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 l.zero <- 0
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 l.other <- runif(nsp*n_latent-3,-1,1)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
@@ -929,12 +929,12 @@ test_that("jSDM_poisson_log works with traits, random site effect and latent var
 X <- data.frame(Int=rep(1,nsite))
 np <- ncol(X)
 trait_data <- data.frame(WSD=scale(runif(nsp,0,1000)), SLA=scale(runif(nsp,0,250)))
-trait_formula <- ~ WSD + SLA + I(WSD^2) + I(SLA^2) 
+trait_formula <- ~ WSD + SLA + I(WSD^2) + I(SLA^2)
 result <- form.Tr(trait_formula,trait_data,X)
 Tr <- result$Tr
 nt <- ncol(Tr)
 gamma_zeros <- result$gamma_zeros
-gamma.target <- matrix(runif(nt*np,-1,1), byrow=TRUE, nrow=nt)
+gamma.target <- matrix(runif(nt*np,-0.5,0.5), byrow=TRUE, nrow=nt)
 mu_beta <- as.matrix(Tr) %*% (gamma.target*gamma_zeros)
 V_beta <- diag(1,np)
 beta.target <- matrix(NA,nrow=np,ncol=nsp)
@@ -943,7 +943,7 @@ for(j in 1:nsp){
 }
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 l.zero <- 0
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 l.other <- runif(nsp*n_latent-3,-1,1)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
@@ -961,8 +961,8 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               site_formula=~Int-1,
-                              site_data=X, n_latent=2, 
-                              site_effect = "random", 
+                              site_data=X, n_latent=2,
+                              site_effect = "random",
                               burnin=burnin, mcmc=mcmc, thin=thin,
                               trait_formula = trait_formula,
                               trait_data = trait_data,
@@ -1005,7 +1005,7 @@ test_that("jSDM_poisson_log works with  intercept only in X, random site effect 
 x1 <- rnorm(nsite,0,1)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 trait_data <- data.frame(Int=rep(1,nsp))
@@ -1024,7 +1024,7 @@ for(j in 1:nsp){
 }
 W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 l.zero <- 0
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 l.other <- runif(nsp*n_latent-3,-1,1)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
@@ -1042,8 +1042,8 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               site_formula=site_formula,
-                              site_data=X, n_latent=2, 
-                              site_effect = "random", 
+                              site_data=X, n_latent=2,
+                              site_effect = "random",
                               burnin=burnin, mcmc=mcmc, thin=thin,
                               trait_formula = trait_formula,
                               trait_data = trait_data,
@@ -1118,8 +1118,8 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               site_formula=~Int-1,
-                              site_data=X, n_latent=2, 
-                              site_effect = "random", 
+                              site_data=X, n_latent=2,
+                              site_effect = "random",
                               burnin=burnin, mcmc=mcmc, thin=thin,
                               trait_formula = trait_formula,
                               trait_data = trait_data,
