@@ -64,9 +64,7 @@ jobs:
     strategy:
       matrix:
         path:
-          - 'src'
-          - 'examples'
-          - 'tests'
+          - 'tests/testthat'
 
     steps:
     - uses: actions/checkout@v3
