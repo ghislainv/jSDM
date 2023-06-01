@@ -129,9 +129,9 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” <em>Methods in Ecology and Evolution</em>, 7, 744–750.</p>
-<p>Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. <em>Methods in Ecology and Evolution</em>, 7, 549-555.</p>
-<p>Pollock et al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). <em>Methods in Ecology and Evolution</em>, 5, 397-406.</p>
+    <p>Hui FKC (2016). boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R. <em>Methods in Ecology and Evolution</em>, 7, 744–750. <br></p>
+<p>Ovaskainen and al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. <em>Methods in Ecology and Evolution</em>, 7, 549-555. <br></p>
+<p>Pollock and al. (2014). Understanding co-occurrence by modelling species simultaneously with a Joint Species Distribution Model (JSDM). <em>Methods in Ecology and Evolution</em>, 5, 397-406. <br></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -197,91 +197,91 @@ $$R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_ii\Sigma _jj}}$$.</p>
 <span class="r-in"><span><span class="co"># Residual variance-covariance matrix</span></span></span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Species_1    Species_2   Species_3   Species_4    Species_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.028882113 -0.007876548  0.08220407  0.18384722 -0.008027242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.007876548  0.367200048  0.82346102  0.01437183  0.379920728</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.082204070  0.823461025  3.35851878  1.71555853  1.038780519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.183847224  0.014371833  1.71555853  2.89713764  0.116703632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.008027242  0.379920728  1.03878052  0.11670363  0.779678899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.380756356  1.202075719  1.04783414 -4.01290508  1.801916199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.036067732  0.786743925  2.78418554  1.10364881  1.030318677</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.123436037 -0.574512101 -1.31553173  0.76552561 -0.824785688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.132111972  0.921254490  1.95813740 -1.01358309  1.423499077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.028882131 -0.007876559  0.08220418  0.18384738 -0.008027271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.007876559  0.367200198  0.82346255  0.01437305  0.379920798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.082204178  0.823462549  3.35852148  1.71555915  1.038780504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.183847379  0.014373054  1.71555915  2.89713642  0.116703121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.008027271  0.379920798  1.03878050  0.11670312  0.779678995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.380756673  1.202074627  1.04783316 -4.01290471  1.801916964</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.036067746  0.786744431  2.78418552  1.10364837  1.030318732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.123436082 -0.574512512 -1.31553229  0.76552561 -0.824785809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.132112143  0.921255028  1.95813704 -1.01358469  1.423499466</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_6   Species_7  Species_8  Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1 -0.3807564  0.03606773  0.1234360 -0.1321120</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  1.2020757  0.78674392 -0.5745121  0.9212545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  1.0478341  2.78418554 -1.3155317  1.9581374</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4 -4.0129051  1.10364881  0.7655256 -1.0135831</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  1.8019162  1.03031868 -0.8247857  1.4234991</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 13.1758205  1.95292776 -4.8547877  6.5710279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.9529278  2.55760926 -1.4172273  2.1176346</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -4.8547877 -1.41722729  2.4062093 -2.9009848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  6.5710279  2.11763458 -2.9009848  4.3619161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1 -0.3807567  0.03606775  0.1234361 -0.1321121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  1.2020746  0.78674443 -0.5745125  0.9212550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  1.0478332  2.78418552 -1.3155323  1.9581370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4 -4.0129047  1.10364837  0.7655256 -1.0135847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  1.8019170  1.03031873 -0.8247858  1.4234995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 13.1758198  1.95292660 -4.8547872  6.5710297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.9529266  2.55760755 -1.4172268  2.1176336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -4.8547872 -1.41722685  2.4062094 -2.9009848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  6.5710297  2.11763361 -2.9009848  4.3619168</span>
 <span class="r-in"><span><span class="co">## All non-significant co-variances are set to zero.</span></span></span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cov.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cov.sig</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Species_1  Species_2  Species_3  Species_4 Species_5  Species_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.02888211  0.0000000 0.08220407  0.1838472 0.0000000 -0.3807564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.00000000  0.3672000 0.00000000  0.0000000 0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.08220407  0.0000000 3.35851878  1.7155585 0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.18384722  0.0000000 1.71555853  2.8971376 0.0000000 -4.0129051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.00000000  0.0000000 0.00000000  0.0000000 0.7796789  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.38075636  0.0000000 0.00000000 -4.0129051 0.0000000 13.1758205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.00000000  0.7867439 2.78418554  1.1036488 0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.00000000 -0.5745121 0.00000000  0.0000000 0.0000000 -4.8547877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.13211197  0.0000000 1.95813740 -1.0135831 0.0000000  6.5710279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8 Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.132112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.7867439 -0.5745121  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  2.7841855  0.0000000  1.958137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  1.1036488  0.0000000 -1.013583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.0000000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -4.8547877  6.571028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  2.5576093 -1.4172273  2.117635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -1.4172273  2.4062093 -2.900985</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  2.1176346 -2.9009848  4.361916</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.02888213  0.0000000 0.08220418  0.1838474  0.000000 -0.3807567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.00000000  0.3672002 0.00000000  0.0000000  0.000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.08220418  0.0000000 3.35852148  1.7155592  0.000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.18384738  0.0000000 1.71555915  2.8971364  0.000000 -4.0129047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.00000000  0.0000000 0.00000000  0.0000000  0.779679  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.38075667  0.0000000 0.00000000 -4.0129047  0.000000 13.1758198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.00000000  0.7867444 2.78418552  1.1036484  0.000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.00000000 -0.5745125 0.00000000  0.0000000  0.000000 -4.8547872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.13211214  0.0000000 1.95813704 -1.0135847  0.000000  6.5710297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8  Species_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.1321121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.7867444 -0.5745125  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  2.7841855  0.0000000  1.9581370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  1.1036484  0.0000000 -1.0135847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -4.8547872  6.5710297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  2.5576076 -1.4172268  2.1176336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -1.4172268  2.4062094 -2.9009848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  2.1176336 -2.9009848  4.3619168</span>
 <span class="r-in"><span><span class="co"># Residual correlation matrix</span></span></span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_1  Species_2  Species_3   Species_4   Species_5  Species_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000 -0.1157971  0.3637104  0.94087340 -0.13250655 -0.8370988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.1157971  1.0000000  0.7610563  0.11203435  0.73890184  0.5629379</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637104  0.7610563  1.0000000  0.59980322  0.67624366  0.1655735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408734  0.1120343  0.5998032  1.00000000  0.09157163 -0.6619473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.1325066  0.7389018  0.6762437  0.09157163  1.00000000  0.5139636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370988  0.5629379  0.1655735 -0.66194732  0.51396360  1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.1865061  0.8292744  0.9651355  0.44529194  0.75206527  0.3439489</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.5742103 -0.7128097 -0.5101016  0.33582752 -0.66523508 -0.8892333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094296  0.7456521  0.4947718 -0.35521988  0.71225706  0.9091312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000 -0.1157965  0.3637105  0.94087343 -0.13250838 -0.8370988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2 -0.1157965  1.0000000  0.7610573  0.11203503  0.73890278  0.5629377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637105  0.7610573  1.0000000  0.59980324  0.67624278  0.1655734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408734  0.1120350  0.5998032  1.00000000  0.09156971 -0.6619474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5 -0.1325084  0.7389028  0.6762428  0.09156971  1.00000000  0.5139653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370988  0.5629377  0.1655734 -0.66194740  0.51396526  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.1865062  0.8292752  0.9651355  0.44529188  0.75206487  0.3439489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.5742101 -0.7128102 -0.5101016  0.33582748 -0.66523534 -0.8892332</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094300  0.7456524  0.4947714 -0.35522034  0.71225801  0.9091314</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8  Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.1865061  0.5742103 -0.6094296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292744 -0.7128097  0.7456521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651355 -0.5101016  0.4947718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452919  0.3358275 -0.3552199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520653 -0.6652351  0.7122571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.3439489 -0.8892333  0.9091312</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6457012  0.6451034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6457012  1.0000000 -0.9473238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451034 -0.9473238  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.1865062  0.5742101 -0.6094300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292752 -0.7128102  0.7456524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651355 -0.5101016  0.4947714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452919  0.3358275 -0.3552203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520649 -0.6652353  0.7122580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.3439489 -0.8892332  0.9091314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6457013  0.6451032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6457013  1.0000000 -0.9473237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451032 -0.9473237  1.0000000</span>
 <span class="r-in"><span><span class="co">## All non-significant correlations are set to zero.</span></span></span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">cor.mean</span> <span class="op">*</span> <span class="va">result</span><span class="op">$</span><span class="va">cor.sig</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_1  Species_2  Species_3  Species_4 Species_5  Species_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000  0.0000000  0.3637104  0.9408734 0.0000000 -0.8370988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  1.0000000  0.0000000  0.3637105  0.9408734 0.0000000 -0.8370988</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.0000000  1.0000000  0.0000000  0.0000000 0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637104  0.0000000  1.0000000  0.5998032 0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408734  0.0000000  0.5998032  1.0000000 0.0000000 -0.6619473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.3637105  0.0000000  1.0000000  0.5998032 0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.9408734  0.0000000  0.5998032  1.0000000 0.0000000 -0.6619474</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.0000000  0.0000000  0.0000000  0.0000000 1.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370988  0.0000000  0.0000000 -0.6619473 0.0000000  1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.0000000  0.8292744  0.9651355  0.4452919 0.7520653  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.0000000 -0.7128097 -0.5101016  0.0000000 0.0000000 -0.8892333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094296  0.7456521  0.4947718 -0.3552199 0.0000000  0.9091312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6 -0.8370988  0.0000000  0.0000000 -0.6619474 0.0000000  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  0.0000000  0.8292752  0.9651355  0.4452919 0.7520649  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8  0.0000000 -0.7128102 -0.5101016  0.0000000 0.0000000 -0.8892332</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9 -0.6094300  0.7456524  0.4947714 -0.3552203 0.0000000  0.9091314</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Species_7  Species_8  Species_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.6094296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292744 -0.7128097  0.7456521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651355 -0.5101016  0.4947718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452919  0.0000000 -0.3552199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520653  0.0000000  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -0.8892333  0.9091312</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6457012  0.6451034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6457012  1.0000000 -0.9473238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451034 -0.9473238  1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_1  0.0000000  0.0000000 -0.6094300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_2  0.8292752 -0.7128102  0.7456524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_3  0.9651355 -0.5101016  0.4947714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_4  0.4452919  0.0000000 -0.3552203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_5  0.7520649  0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_6  0.0000000 -0.8892332  0.9091314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_7  1.0000000 -0.6457013  0.6451032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_8 -0.6457013  1.0000000 -0.9473237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species_9  0.6451032 -0.9473237  1.0000000</span>
 </code></pre></div>
     </div>
   </div>
