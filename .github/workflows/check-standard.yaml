@@ -59,7 +59,21 @@ jobs:
         with:
           upload-snapshots: true
           
-      - uses: RafikFarhad/clang-format-github-action@v3
-        with:
-          sources: "**/*"
-          
+  clang-formatting-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'src'
+          - 'examples'
+          - 'test'
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run clang-format style check for C/C++/Protobuf programs.
+      uses: jidicula/clang-format-action@v4.11.0
+      with:
+        clang-format-version: '13'
+        check-path: ${{ matrix.path }}
+        fallback-style: 'Mozilla' # optional
+        

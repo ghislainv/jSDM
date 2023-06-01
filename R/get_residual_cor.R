@@ -38,8 +38,7 @@
 #' 
 #' Jeanne Clément <jeanne.clement16@laposte.net>
 #' 
-#' @references  
-#' Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” \emph{Methods in Ecology and Evolution}, 7, 744–750.
+#' @references Hui FKC (2016). “boral: Bayesian Ordination and Regression Analysis of Multivariate Abundance Data in R.” \emph{Methods in Ecology and Evolution}, 7, 744–750.
 #' 
 #' Ovaskainen et al. (2016). Using latent variable models to identify large networks of species-to-species associations at different spatial scales. \emph{Methods in Ecology and Evolution}, 7, 549-555.
 #' 
