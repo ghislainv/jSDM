@@ -1,4 +1,115 @@
-# jSDM v0.2.4
+# jSDM v0.2.6
+
+Using [R-hub builder](https://builder.r-hub.io/) to build on :
+
+
+## Platform: Windows Server 2022, R-devel, 64 bit
+
+❯ checking CRAN incoming feasibility ... [26s] NOTE
+  Maintainer: 'Jeanne Clément <jeanne.clement16@laposte.net>'
+  
+  New submission
+  
+  Package was archived on CRAN
+  
+  Possibly misspelled words in DESCRIPTION:
+    Warton (25:43)
+    al (25:54)
+  
+  CRAN repository db overrides:
+    X-CRAN-Comment: Archived on 2023-03-17 as issues were not corrected
+      in time.
+  
+  Uses the superseded package: 'snow'
+
+❯ checking installed package size ... NOTE
+    installed size is  5.2Mb
+    sub-directories of 1Mb or more:
+      libs   3.7Mb
+
+❯ checking HTML version of manual ... NOTE
+  
+
+❯ checking for non-standard things in the check directory ... NOTE
+  Found the following files/directories:
+    ''NULL''
+
+❯ checking for detritus in the temp directory ... NOTE
+  Found the following files/directories:
+    'lastMiKTeXException'
+
+0 errors ✔ | 0 warnings ✔ | 5 notes ✖
+
+
+##  Platform: Ubuntu Linux 20.04.1 LTS, R-release, GCC
+
+❯ checking CRAN incoming feasibility ... [7s/40s] NOTE
+  Maintainer: ‘Jeanne Clément <jeanne.clement16@laposte.net>’
+  
+  New submission
+  
+  Package was archived on CRAN
+  
+  Possibly misspelled words in DESCRIPTION:
+    al (25:54)
+    Warton (25:43)
+  
+  CRAN repository db overrides:
+    X-CRAN-Comment: Archived on 2023-03-17 as issues were not corrected
+      in time.
+  
+  Uses the superseded package: ‘snow’
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+
+## Platform : Fedora Linux, R-devel, clang, gfortran
+
+❯ checking package dependencies ... NOTE
+  Package suggested but not available for checking: ‘boral’
+
+❯ checking installed package size ... NOTE
+    installed size is 38.3Mb
+    sub-directories of 1Mb or more:
+      libs  36.8Mb
+
+0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+
+## Platform : Fedora Linux, R-devel, clang, gfortran
+
+❯ checking CRAN incoming feasibility ... [7s/40s] NOTE
+  Maintainer: ‘Jeanne Clément <jeanne.clement16@laposte.net>’
+  
+  New submission
+  
+  Package was archived on CRAN
+  
+  Possibly misspelled words in DESCRIPTION:
+    al (25:54)
+    Warton (25:43)
+  
+  CRAN repository db overrides:
+    X-CRAN-Comment: Archived on 2023-03-17 as issues were not corrected
+      in time.
+  
+  Uses the superseded package: ‘snow’
+
+❯ checking installed package size ... NOTE
+    installed size is  58.3Mb
+    sub-directories of 1Mb or more:
+      libs   58.3Mb
+
+0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+
+# jSDM v0.2.5
+
+## clang-UBSAN
+
+In test jSDM_poisson_log, Rcpp_jSDM_poisson_log_traits_lv : 
+runtime error: 2.86885e+10 is outside the range of representable values of type 'unsigned int'. 
+
+I have fixed this issues. 
+
+I have updated the date. 
 
 Always write package names, software names and API (application programming interface) names in single quotes in title and description. e.g: --> 'C++'
 
@@ -15,7 +126,7 @@ Make sure that you do not change the user's options, par or working directory. I
 
 Always make sure to reset to user's options(), working directory or par() after you changed it in examples and vignettes and demos
 
-I have fixed and this issues.
+I have fixed this issues.
 
 # jSDM v0.2.3
 ## R CMD check results 

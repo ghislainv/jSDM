@@ -207,9 +207,9 @@ library(jSDM)
 #== Data simulation
 
 #= Number of sites
-nsite <- 60
+nsite <- 50
 #= Number of species
-nsp <- 20
+nsp <- 10
 #= Set seed for repeatability
 seed <- 1234
 
@@ -266,14 +266,14 @@ mod <- jSDM_poisson_log(# Chains
                         seed=1234,
                         ropt=0.44,
                         verbose=1)
-#' #==========
-#' #== Outputs
+#==========
+#== Outputs
 
 oldpar <- par(no.readonly = TRUE)
+
 #= Parameter estimates
 
 ## beta_j
-# summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 mean_beta <- matrix(0,nsp,np)
 pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_log.pdf"))
 par(mfrow=c(ncol(X),2))
@@ -292,8 +292,6 @@ for (j in 1:nsp) {
 dev.off()
 
 ## lambda_j
-# summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
-# summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
 mean_lambda <- matrix(0,nsp,n_latent)
 pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_log.pdf"))
 par(mfrow=c(n_latent*2,2))
@@ -332,23 +330,20 @@ for (l in 1:n_latent) {
 }
 
 ## alpha
-# summary(mod$mcmc.alpha)
 par(mfrow=c(1,3))
 plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
      xlab ="obs", ylab ="fitted", main="site effect alpha")
 abline(a=0,b=1,col='red')
 ## Valpha
-# summary(mod$mcmc.V_alpha)
 coda::traceplot(mod$mcmc.V_alpha)
 coda::densplot(mod$mcmc.V_alpha)
 abline(v=V_alpha.target,col='red')
 
 ## Deviance
-# summary(mod$mcmc.Deviance)
+summary(mod$mcmc.Deviance)
 plot(mod$mcmc.Deviance)
 
 #= Predictions
-# summary(mod$theta_latent)
 par(mfrow=c(1,2))
 plot(log.theta, mod$log_theta_latent,
      main="log(theta)",

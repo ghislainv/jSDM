@@ -247,7 +247,6 @@
 #' #= Parameter estimates
 #' 
 #' ## beta_j
-#' # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 #' mean_beta <- matrix(0,nsp,ncol(X))
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit.pdf"))
 #' par(mfrow=c(ncol(X),2))
@@ -264,8 +263,6 @@
 #' dev.off()
 #' 
 #' ## lambda_j
-#' # summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
-#' # summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
 #' mean_lambda <- matrix(0,nsp,n_latent)
 #' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit.pdf"))
 #' par(mfrow=c(n_latent*2,2))
@@ -304,7 +301,6 @@
 #' }
 #' 
 #' ## alpha
-#' # summary(mod$mcmc.alpha)
 #' par(mfrow=c(1,3))
 #' plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
 #'      xlab ="obs", ylab ="fitted", main="site effect alpha")
@@ -322,19 +318,16 @@
 #' 
 #' ## Z
 #' par(mfrow=c(1,2))
-#' # summary(mod$Z_latent)
 #' plot(Z_true,mod$Z_latent,
 #'      main="Z_latent", xlab="obs", ylab="fitted")
 #' abline(a=0,b=1,col='red')
 #' 
 #' ## probit_theta
-#' # summary(mod$probit_theta_latent)
 #' plot(probit_theta,mod$probit_theta_latent,
 #'      main="probit(theta)",xlab="obs",ylab="fitted")
 #' abline(a=0,b=1,col='red')
 #' 
 #' ## probabilities theta
-#' # summary(mod$theta_latent)
 #' par(mfrow=c(1,1))
 #' plot(theta,mod$theta_latent,
 #'      main="theta",xlab="obs",ylab="fitted")

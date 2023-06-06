@@ -402,13 +402,14 @@
 #' }
 #' 
 #' #= Predictions 
-#' ## probabilities theta
+#' ## Occurence probabilities 
 #' plot(pnorm(probit_theta), mod[[1]]$theta_latent,
 #'      main="theta",xlab="obs",ylab="fitted")
 #' for (i in 2:nchains){
 #'   points(pnorm(probit_theta), mod[[i]]$theta_latent, col=i)
 #' }
 #' abline(a=0,b=1, col='red')
+#' 
 #' ## probit(theta)
 #' plot(probit_theta, mod[[1]]$probit_theta_latent,
 #'      main="probit(theta)",xlab="obs",ylab="fitted")
@@ -416,6 +417,7 @@
 #'   points(probit_theta, mod[[i]]$probit_theta_latent, col=i)
 #' }
 #' abline(a=0,b=1, col='red')
+#' 
 #' ## Deviance
 #' plot(mcmc_list_Deviance)
 #' 

@@ -165,10 +165,10 @@
 #' library(jSDM)
 #' 
 #' #==================
-#' #' #== Data simulation
+#' #== Data simulation
 #' 
 #' #= Number of sites
-#' nsite <- 150
+#' nsite <- 100
 #' 
 #' #= Set seed for repeatability
 #' seed <- 1234
@@ -248,7 +248,6 @@
 #' #= Parameter estimates
 #' oldpar <- par(no.readonly = TRUE)
 #' ## beta_j
-#' # summary(mod$mcmc.sp$sp_1[,1:ncol(X)])
 #' mean_beta <- matrix(0,nsp,ncol(X))
 #' pdf(file=file.path(tempdir(), "Posteriors_beta_jSDM_probit.pdf"))
 #' par(mfrow=c(ncol(X),2))
@@ -265,8 +264,6 @@
 #' dev.off()
 #' 
 #' ## lambda_j
-#' # summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])
-#' # summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])
 #' mean_lambda <- matrix(0,nsp,n_latent)
 #' pdf(file=file.path(tempdir(), "Posteriors_lambda_jSDM_probit.pdf"))
 #' par(mfrow=c(n_latent*2,2))
@@ -305,7 +302,6 @@
 #' }
 #' 
 #' ## alpha
-#' # summary(mod$mcmc.alpha)
 #' par(mfrow=c(1,3))
 #' plot(alpha.target, summary(mod$mcmc.alpha)[[1]][,"Mean"],
 #'      xlab ="obs", ylab ="fitted", main="site effect alpha")
@@ -328,7 +324,6 @@
 #' plot(mod$mcmc.Deviance)
 #' 
 #' #= Predictions
-#' # summary(mod$Y_pred)
 #' par(mfrow=c(1,1))
 #' plot(Y, mod$Y_pred,
 #'      main="Response variable",xlab="obs",ylab="fitted")
