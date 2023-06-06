@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
@@ -332,9 +332,9 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-in"><span><span class="co">#== Data simulation</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#= Number of sites</span></span></span>
-<span class="r-in"><span><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
+<span class="r-in"><span><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span><span class="co">#= Number of species</span></span></span>
-<span class="r-in"><span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="co">#= Set seed for repeatability</span></span></span>
 <span class="r-in"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span></span></span>
 <span class="r-in"><span></span></span>
@@ -400,16 +400,16 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:10.0%, mean accept. rates= beta:0.253 lambda:0.242 W:0.456 alpha:0.328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:20.0%, mean accept. rates= beta:0.333 lambda:0.323 W:0.350 alpha:0.446</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:30.0%, mean accept. rates= beta:0.391 lambda:0.382 W:0.400 alpha:0.445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:40.0%, mean accept. rates= beta:0.416 lambda:0.414 W:0.419 alpha:0.466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:50.0%, mean accept. rates= beta:0.423 lambda:0.461 W:0.426 alpha:0.445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:60.0%, mean accept. rates= beta:0.447 lambda:0.452 W:0.445 alpha:0.466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:70.0%, mean accept. rates= beta:0.440 lambda:0.444 W:0.440 alpha:0.468</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.469 lambda:0.479 W:0.443 alpha:0.470</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.464 lambda:0.459 W:0.451 alpha:0.453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.423 lambda:0.450 W:0.432 alpha:0.450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:10.0%, mean accept. rates= beta:0.287 lambda:0.349 W:0.508 alpha:0.368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:20.0%, mean accept. rates= beta:0.342 lambda:0.372 W:0.432 alpha:0.369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:30.0%, mean accept. rates= beta:0.429 lambda:0.372 W:0.438 alpha:0.230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:40.0%, mean accept. rates= beta:0.436 lambda:0.447 W:0.419 alpha:0.242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:50.0%, mean accept. rates= beta:0.454 lambda:0.453 W:0.439 alpha:0.376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:60.0%, mean accept. rates= beta:0.437 lambda:0.433 W:0.435 alpha:0.592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:70.0%, mean accept. rates= beta:0.434 lambda:0.489 W:0.443 alpha:0.689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.451 lambda:0.451 W:0.446 alpha:0.715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.444 lambda:0.449 W:0.429 alpha:0.722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.418 lambda:0.454 W:0.442 alpha:0.677</span>
 <span class="r-in"><span><span class="co">#==========</span></span></span>
 <span class="r-in"><span><span class="co">#== Outputs</span></span></span>
 <span class="r-in"><span></span></span>
@@ -437,8 +437,6 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## lambda_j</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
 <span class="r-in"><span><span class="va">mean_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">n_latent</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_lambda_jSDM_logit.pdf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -481,25 +479,39 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-plt img"><img src="jSDM_binomial_logit-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## alpha</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.alpha)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"site effect alpha"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Valpha</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.V_alpha)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_binomial_logit-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Deviance</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.Deviance)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iterations = 151:300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thinning interval = 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of chains = 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sample size per chain = 150 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. Empirical mean and standard deviation for each variable,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    plus standard error of the mean:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Mean             SD       Naive SE Time-series SE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        699.266         21.720          1.773          5.062 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. Quantiles for each variable:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2.5%   25%   50%   75% 97.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 659.4 686.5 697.7 712.2 743.8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_binomial_logit-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#= Predictions</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$theta_latent)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">logit.theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">logit_theta_latent</span>,</span></span>
 <span class="r-in"><span>     main<span class="op">=</span><span class="st">"logit(theta)"</span>,</span></span>

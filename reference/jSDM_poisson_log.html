@@ -18,7 +18,7 @@ The function calls a Gibbs sampler written in 'C++' code which uses an adaptive 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
@@ -331,9 +331,9 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-in"><span><span class="co">#== Data simulation</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#= Number of sites</span></span></span>
-<span class="r-in"><span><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">60</span></span></span>
+<span class="r-in"><span><span class="va">nsite</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span><span class="co">#= Number of species</span></span></span>
-<span class="r-in"><span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span><span class="va">nsp</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="co">#= Set seed for repeatability</span></span></span>
 <span class="r-in"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">1234</span></span></span>
 <span class="r-in"><span></span></span>
@@ -393,24 +393,24 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running the Gibbs sampler. It may be long, please keep cool :)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:10.0%, mean accept. rates= beta:0.152 lambda:0.136 W:0.329 alpha:0.217</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:20.0%, mean accept. rates= beta:0.183 lambda:0.176 W:0.328 alpha:0.268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:30.0%, mean accept. rates= beta:0.270 lambda:0.263 W:0.362 alpha:0.351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:40.0%, mean accept. rates= beta:0.330 lambda:0.354 W:0.415 alpha:0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:50.0%, mean accept. rates= beta:0.392 lambda:0.401 W:0.427 alpha:0.412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:60.0%, mean accept. rates= beta:0.438 lambda:0.429 W:0.438 alpha:0.448</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:70.0%, mean accept. rates= beta:0.453 lambda:0.436 W:0.439 alpha:0.443</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.443 lambda:0.423 W:0.420 alpha:0.450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.444 lambda:0.426 W:0.436 alpha:0.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.452 lambda:0.452 W:0.433 alpha:0.450</span>
-<span class="r-in"><span><span class="co">#' #==========</span></span></span>
-<span class="r-in"><span><span class="co">#' #== Outputs</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:10.0%, mean accept. rates= beta:0.160 lambda:0.151 W:0.385 alpha:0.286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:20.0%, mean accept. rates= beta:0.200 lambda:0.200 W:0.378 alpha:0.330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:30.0%, mean accept. rates= beta:0.315 lambda:0.275 W:0.405 alpha:0.368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:40.0%, mean accept. rates= beta:0.351 lambda:0.351 W:0.432 alpha:0.424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:50.0%, mean accept. rates= beta:0.413 lambda:0.388 W:0.450 alpha:0.437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:60.0%, mean accept. rates= beta:0.427 lambda:0.433 W:0.444 alpha:0.435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:70.0%, mean accept. rates= beta:0.431 lambda:0.433 W:0.439 alpha:0.430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:80.0%, mean accept. rates= beta:0.411 lambda:0.411 W:0.457 alpha:0.431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:90.0%, mean accept. rates= beta:0.435 lambda:0.397 W:0.456 alpha:0.439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **********:100.0%, mean accept. rates= beta:0.452 lambda:0.425 W:0.450 alpha:0.434</span>
+<span class="r-in"><span><span class="co">#==========</span></span></span>
+<span class="r-in"><span><span class="co">#== Outputs</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#= Parameter estimates</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## beta_j</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_1[,1:ncol(X)])</span></span></span>
 <span class="r-in"><span><span class="va">mean_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">np</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_beta_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -431,8 +431,6 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## lambda_j</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_1[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.sp$sp_2[,(ncol(X)+1):(ncol(X)+n_latent)])</span></span></span>
 <span class="r-in"><span><span class="va">mean_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">nsp</span>,<span class="va">n_latent</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Posteriors_lambda_jSDM_log.pdf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_latent</span><span class="op">*</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -475,25 +473,39 @@ where \(\mu_{\beta_jp} = \sum_{k=1}^{nt} t_{jk}.\gamma_{kp}\), takes different v
 <span class="r-plt img"><img src="jSDM_poisson_log-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## alpha</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.alpha)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">alpha.target</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.alpha</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="st">"Mean"</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>     xlab <span class="op">=</span><span class="st">"obs"</span>, ylab <span class="op">=</span><span class="st">"fitted"</span>, main<span class="op">=</span><span class="st">"site effect alpha"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">0</span>,b<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Valpha</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.V_alpha)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/densplot.html" class="external-link">densplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.V_alpha</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="va">V_alpha.target</span>,col<span class="op">=</span><span class="st">'red'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Deviance</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$mcmc.Deviance)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iterations = 201:400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Thinning interval = 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of chains = 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sample size per chain = 200 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1. Empirical mean and standard deviation for each variable,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    plus standard error of the mean:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Mean             SD       Naive SE Time-series SE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       1324.703         19.692          1.392          2.844 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2. Quantiles for each variable:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2.5%   25%   50%   75% 97.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1289  1310  1324  1338  1365 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">mcmc.Deviance</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="jSDM_poisson_log-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#= Predictions</span></span></span>
-<span class="r-in"><span><span class="co"># summary(mod$theta_latent)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">log.theta</span>, <span class="va">mod</span><span class="op">$</span><span class="va">log_theta_latent</span>,</span></span>
 <span class="r-in"><span>     main<span class="op">=</span><span class="st">"log(theta)"</span>,</span></span>
