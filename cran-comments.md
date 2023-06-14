@@ -1,5 +1,14 @@
 # jSDM v0.2.6
 
+## clang-UBSAN
+
+In test jSDM_poisson_log, Rcpp_jSDM_poisson_log_traits_rand_site_lv : 
+runtime error: 3.11579e+10 is outside the range of representable values of type 'unsigned int'. 
+
+I've corrected this problem, I thought it was already done but I hadn't set up and fixed the random seed generator correctly, it's done now. 
+
+I have updated the date and removed commented lines of codes in the examples. 
+
 Using [R-hub builder](https://builder.r-hub.io/) to build on :
 
 

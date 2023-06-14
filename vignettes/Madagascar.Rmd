@@ -93,6 +93,7 @@ head(madagascar[,1:20])
 We use the function [`get_chelsa_current`](https://ecology.ghislainv.fr/gecevar/reference/get_chelsa_current.html) from the R package [`gecevar`](https://ecology.ghislainv.fr/gecevar) to download a set of climatic data for Madagascar Island from the website: \url{chelsa-climate.org}.  
 
 ```{r download-climate-data, eval=FALSE}
+# devtools::install_github("ghislainv/gecevar")
 library(gecevar)
 name <- "Madagascar"
 epsg <- 32738
@@ -217,7 +218,7 @@ scaled_data_clim2 <- as_tibble(cbind(site=data_clim2$site,
                                      long=data_clim2$long))
 
 ## Design matrix
-X <- data.frame(intercept=rep(1,nplot),
+X <- data.frame(intercept=rep(1, nrow(pos)),
                 dplyr::select(scaled_data_clim2,-lat,-long, -site))
 np <- ncol(X)
 write.csv(X, file = "~/Documents/projet_BioSceneMada/Internship_Report/data/X.csv",
@@ -699,6 +700,16 @@ params_sites <- read.csv("~/Documents/projet_BioSceneMada/Internship_Report/data
 # inventory sites coordinates in UTM38S projection 
 xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Internship_Report/data/coords.shp")
 
+# Compute spatial autocorrelation between inventory site's (Moran's I) 
+alpha.dists <- as.matrix(dist(terra::crds(xy)))
+alpha.dists.inv <- 1/alpha.dists
+diag(alpha.dists.inv) <- 0
+ # Using package ape (add in jSDM's Suggests ) 
+ape::Moran.I(params_sites$alphas, weight=alpha.dists.inv, scaled=TRUE)
+# Using pacakge terra (no p-value returned)
+terra::autocor(params_sites$alphas, w=alpha.dists.inv,
+               method="moran")
+ 
 # alpha 
 alpha_sp <- terra::vect(data.frame(alpha=params_sites$alphas, terra::crds(xy)),
                         geom=c("x","y"), crs=terra::crs(xy))
@@ -756,6 +767,15 @@ We interpolate the first axis of latent variables at the Madagascar scale using 
 # W1 
 W1_sp <- terra::vect(data.frame(W1=params_sites$W1, terra::crds(xy)),
                      geom=c("x","y"), crs=terra::crs(xy))
+# Compute spatial autocorrelation between inventory site's (Moran's I) 
+W1.dists <- as.matrix(dist(terra::crds(xy)))
+W1.dists.inv <- 1/W1.dists
+diag(W1.dists.inv) <- 0
+# Using package ape (add in jSDM's Suggests ) 
+ape::Moran.I(params_sites$W1, weight=W1.dists.inv, scaled=TRUE)
+# Using package terra (no p-value returned)
+terra::autocor(params_sites$W1, w=W1.dists.inv,
+               method="moran")
 rgrass7::write_VECT(W1_sp, "W1", flags="overwrite")
 # Re-sample with RST
 # Note: use mask=Madagascar to save computation time
@@ -807,6 +827,15 @@ We interpolate the second axis of latent variables at the Madagascar scale using
 # W2 
 W2_sp <- terra::vect(data.frame(W2=params_sites$W2, terra::crds(xy)),
                      geom=c("x","y"), crs=terra::crs(xy))
+# Compute spatial autocorrelation between inventory site's (Moran's I) 
+W2.dists <- as.matrix(dist(terra::crds(xy)))
+W2.dists.inv <- 1/W2.dists
+diag(W2.dists.inv) <- 0
+ # Using package ape (add in jSDM's Suggests ) 
+ape::Moran.I(params_sites$W2, weight=W2.dists.inv, scaled=TRUE)
+# Using pacakge terra (no p-value returned)
+terra::autocor(params_sites$W2, w=W2.dists.inv,
+               method="moran")
 rgrass7::write_VECT(W2_sp, "W2", flags="overwrite")
 # Re-sample with RST
 # Note: use mask=Madagascar to save computation time

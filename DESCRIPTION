@@ -2,7 +2,7 @@ Package: jSDM
 Type: Package
 Title: Joint Species Distribution Models
 Version: 0.2.6
-Date: 2023-01-06
+Date: 2023-06-01
 Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS, parallel, doParallel, foreach, methods
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
 NeedsCompilation: yes
