@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-We want to identify biodiversity refuge zones in Madagascar
+We want to identify biodiversity refuge zones in Madagascar.
 
 # Load librairies
 
@@ -91,6 +91,8 @@ head(madagascar[,1:20])
 ## Current environmental variables
 
 We use the function [`get_chelsa_current`](https://ecology.ghislainv.fr/gecevar/reference/get_chelsa_current.html) from the R package [`gecevar`](https://ecology.ghislainv.fr/gecevar) to download a set of climatic data for Madagascar Island from the website: \url{chelsa-climate.org}.  
+
+### Downloading
 
 ```{r download-climate-data, eval=FALSE}
 # devtools::install_github("ghislainv/gecevar")
@@ -152,6 +154,27 @@ knitr::kable(dataset, row.names=F, booktabs=TRUE, align = 'l', escape=FALSE,
              caption="Climate data downloaded from https://chelsa-climate.org/") %>%
   kableExtra::kable_styling(latex_options=c("HOLD_position","striped"), full_width=FALSE)
 ```
+
+<!-- ### Assessing correlations between explanatory variables   -->
+
+<!-- ```{r var-corr} -->
+<!-- # Climatic variables -->
+<!-- load(file="~/Documents/projet_BioSceneMada/Internship_Report/data/output.RData") -->
+<!-- clim_path <- "/home/clement/Documents/projet_BioSceneMada/Internship_Report/data/data_raw/current_chelsa.tif" -->
+<!-- # get interesting covariates among the climatic variables downloaded   -->
+<!-- clim_var <- terra::rast(clim_path, -->
+<!--                         lyrs=c("bio1", "bio4", "bio12", "bio15", "cwd_penman")) -->
+<!-- names(clim_var) <- c("temp", "sais_temp", "prec", "sais_prec", "cwd") -->
+
+<!-- # pairwise correlation -->
+<!-- terra::pairs(clim_var, cor=TRUE,  use="pairwise.complete.obs", maxcells=200000, hist=TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r plot-var-corr, echo=FALSE, out.width=1000, eval=TRUE} -->
+<!-- knitr::include_graphics("Madagascar_files/figure-html/var-corr-1.png") -->
+<!-- ``` -->
+
+### Desing matrix 
 
 Among the climatic data downloaded, concerning the whole island of Madagascar at present (interpolations of representative observed data from the years 1960-1990).
 We choose to use the following variables because they have an ecological meaning which makes them easily interpretable and are little correlated between them according to the article @Vieilledent2013 : 
@@ -286,7 +309,7 @@ It can be easily shown that: $y_{ij} \sim \mathcal{B}ernoulli(\theta_{ij})$.
 - Latent variables: $W_i=(W_i^1,\ldots,W_i^q)$ where $q$ is the number of latent variables considered, which has to be fixed by the user (by default $q=2$).
 We assume that $W_i \sim \mathcal{N}(0,I_q)$ and we define the associated coefficients  $\lambda_j=(\lambda_j^1,\ldots, \lambda_j^q)'$, also known as "factor loadings" [@Warton2015]. We use a prior distribution $\mathcal{N}(0,1)$ for all lambda not concerned by constraints to $0$ on upper diagonal and to strictly positive values on diagonal. 
 
-- Explanatory variables: bioclimatic data about each site. $X=(X_i)_{i=1,\ldots,n_{site}}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bioclimatic variables considered.
+- Explanatory variables: bio-climatic data about each site. $X=(X_i)_{i=1,\ldots,n_{site}}$ with $X_i=(x_i^1,\ldots,x_i^p)\in \mathbb{R}^p$ where $p$ is the number of bio-climatic variables considered.
 The corresponding regression coefficients for each species $j$ are noted : $\beta_j=(\beta_j^1,\ldots,\beta_j^p)'$. We use a prior distribution $\mathcal{N}(0,1)$ for all beta.  
 
 - $\beta_{0j}$ correspond to the intercept for species $j$ which is assumed to be a fixed effect. We use a prior distribution $\mathcal{N}(0,10)$ for the species intercept. 
@@ -670,12 +693,98 @@ This representation of associations between species allows us to observe the pos
 
 # Intrapolation of parameters between inventory sites 
 
+## Assessing spatial auto-correlation of estimated site's parameters  
+
 The presence of a spatial structure where observations close to each other are more similar than those far away (spatial auto-correlation) is a prerequisite for the application of geostatistics and from the previous spatial representations it seems to be satisfied.  
+However, we verify the presence of spatial auto-correlation within our site parameters by calculating Moran indices, using [`ape::Moran.I()`](https://www.rdocumentation.org/packages/ape/versions/5.7-1/topics/Moran.I) function, on the one hand, and by representing the variograms corresponding to site effects ($\alpha$) and latent variables ($W1$ and $W2$) on the other. 
+
+### Moran's I autocorrelation coefficient 
+
+```{r sp-autocor}
+# Import sites parameters
+params_sites <- read.csv("~/Documents/projet_BioSceneMada/Internship_Report/data/params_sites.csv")
+# inventory sites coordinates in UTM38S projection 
+xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Internship_Report/data/coords.shp")
+# Compute spatial autocorrelation between inventory site's (Moran's I)
+tab <- matrix(NA, ncol=4, nrow=3)
+rownames(tab) <- c("alpha", "W1", "W2")
+colnames(tab) <- c("observed", "expected", "sd", "p.value")
+## Random site effect alpha
+alpha.dists <- as.matrix(dist(terra::crds(xy)))
+alpha.dists.inv <- 1/alpha.dists
+diag(alpha.dists.inv) <- 0
+ # Using package ape (add in jSDM's Suggests ) 
+tab["alpha",] <- unlist(ape::Moran.I(params_sites$alphas,
+                              weight=alpha.dists.inv, scaled=TRUE))
+# Using pacakge terra (no p-value returned)
+# terra::autocor(params_sites$alphas, w=alpha.dists.inv,
+#                method="moran")
+# First latent axis W1
+# Compute spatial autocorrelation between inventory site's (Moran's I) 
+W1.dists <- as.matrix(dist(terra::crds(xy)))
+W1.dists.inv <- 1/W1.dists
+diag(W1.dists.inv) <- 0
+tab["W1",] <- unlist(ape::Moran.I(params_sites$W1, weight=W1.dists.inv,
+                           scaled=TRUE))
+# Second latent axis W2
+W2.dists <- as.matrix(dist(terra::crds(xy)))
+W2.dists.inv <- 1/W2.dists
+diag(W2.dists.inv) <- 0
+tab["W2",] <- unlist(ape::Moran.I(params_sites$W2, weight=W2.dists.inv, scaled=TRUE))
+
+# Table of results 
+knitr::kable(tab, row.names=TRUE, digits=4, booktabs=TRUE, align = 'c') %>%
+  kableExtra::kable_styling(latex_options=c("HOLD_position","striped"),
+                            full_width=FALSE) %>% 
+  kableExtra::save_kable(file="~/Documents/jSDM/vignettes/Madagascar_files/Moran.I_mada.png")
+```
+
+```{r sp-autocor2, echo=FALSE, eval=TRUE}
+knitr::include_graphics("Madagascar_files/Moran.I_mada.png")
+```
+
+We can see that for each type of parameter, the p-value is null, then we can reject the null hypothesis, i.e. the absence of spatial auto-correlation within these parameters.  
+In the table above, the value "observed" corresponds to the computed Moran's I and the value "expected" to the expected value of I under the null hypothesis. 
+
+### Variograms 
+
+```{r variograms}
+library(gstat)
+# Import sites parameters
+params_sites <- read.csv("~/Documents/projet_BioSceneMada/Internship_Report/data/params_sites.csv")
+# inventory sites coordinates in UTM38S projection 
+xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Internship_Report/data/coords.shp")
+#  Coordinates in km
+params_sites[, c("x","y")] <- terra::crds(xy)/1000
+### variogram fo ordinary kriging
+# alpha
+var_alpha <- gstat::variogram(alphas~1, ~x+y, data=params_sites)
+mv_alpha <- gstat::fit.variogram(var_alpha, vgm("Sph"),
+                                 fit.kappa=TRUE)
+plot(var_alpha, model=mv_alpha, main="Variogram of site effect alpha")
+# W1
+var_W1 <- gstat::variogram(W1~1, ~x+y, data=params_sites)
+mv_W1 <- gstat::fit.variogram(var_W1, vgm("Gau"),  fit.kappa=TRUE)
+plot(var_W1, model=mv_W1, main="Variogram of latent variable W1")
+# W2
+var_W2 <- gstat::variogram(W2~1, ~x+y, data=params_sites)
+mv_W2 <- gstat::fit.variogram(var_W2, vgm("Sph"), fit.kappa=TRUE)
+plot(var_W2, model=mv_W2, main="Variogram of latent variable W2")
+```
+
+
+```{r variograms-plot, echo=FALSE, out.width=700, eval=TRUE}
+knitr::include_graphics(paste0("Madagascar_files/figure-html/variograms-", 1:3, ".png"))
+```
+
+We can see from the variograms above that the semi-variance is lower for the closest points and increases with distance between points for each parameter type. This shows that there is spatial auto-correlation.
+
+## Interpolation using regularized spline with tension
 
 Thus, it is possible to interpolate sites' parameters for the whole island from those estimated for the inventory plots using the spatial interpolation method called regularized spline with tension (**RST**) from [`GRASS GIS`](https://grass.osgeo.org/) software via `rgrass7` R package.
 This method is described in the article [@Mitasova1993].
 
-## Random site effect $\alpha$
+### Random site effect $\alpha$
 
 ```{r initialize-GRASS}
 ## Initialize GRASS
@@ -700,16 +809,6 @@ params_sites <- read.csv("~/Documents/projet_BioSceneMada/Internship_Report/data
 # inventory sites coordinates in UTM38S projection 
 xy <- terra::vect("/home/clement/Documents/projet_BioSceneMada/Internship_Report/data/coords.shp")
 
-# Compute spatial autocorrelation between inventory site's (Moran's I) 
-alpha.dists <- as.matrix(dist(terra::crds(xy)))
-alpha.dists.inv <- 1/alpha.dists
-diag(alpha.dists.inv) <- 0
- # Using package ape (add in jSDM's Suggests ) 
-ape::Moran.I(params_sites$alphas, weight=alpha.dists.inv, scaled=TRUE)
-# Using pacakge terra (no p-value returned)
-terra::autocor(params_sites$alphas, w=alpha.dists.inv,
-               method="moran")
- 
 # alpha 
 alpha_sp <- terra::vect(data.frame(alpha=params_sites$alphas, terra::crds(xy)),
                         geom=c("x","y"), crs=terra::crs(xy))
@@ -759,7 +858,7 @@ We represent the random site effect interpolated at Madagascar scale.
 knitr::include_graphics("Madagascar_files/figure-html/RST_alpha-1.png")
 ```
 
-## Latent variables $W$
+### Latent variables $W$
 
 We interpolate the first axis of latent variables at the Madagascar scale using the RST method.
 
@@ -767,15 +866,6 @@ We interpolate the first axis of latent variables at the Madagascar scale using 
 # W1 
 W1_sp <- terra::vect(data.frame(W1=params_sites$W1, terra::crds(xy)),
                      geom=c("x","y"), crs=terra::crs(xy))
-# Compute spatial autocorrelation between inventory site's (Moran's I) 
-W1.dists <- as.matrix(dist(terra::crds(xy)))
-W1.dists.inv <- 1/W1.dists
-diag(W1.dists.inv) <- 0
-# Using package ape (add in jSDM's Suggests ) 
-ape::Moran.I(params_sites$W1, weight=W1.dists.inv, scaled=TRUE)
-# Using package terra (no p-value returned)
-terra::autocor(params_sites$W1, w=W1.dists.inv,
-               method="moran")
 rgrass7::write_VECT(W1_sp, "W1", flags="overwrite")
 # Re-sample with RST
 # Note: use mask=Madagascar to save computation time
@@ -827,15 +917,6 @@ We interpolate the second axis of latent variables at the Madagascar scale using
 # W2 
 W2_sp <- terra::vect(data.frame(W2=params_sites$W2, terra::crds(xy)),
                      geom=c("x","y"), crs=terra::crs(xy))
-# Compute spatial autocorrelation between inventory site's (Moran's I) 
-W2.dists <- as.matrix(dist(terra::crds(xy)))
-W2.dists.inv <- 1/W2.dists
-diag(W2.dists.inv) <- 0
- # Using package ape (add in jSDM's Suggests ) 
-ape::Moran.I(params_sites$W2, weight=W2.dists.inv, scaled=TRUE)
-# Using pacakge terra (no p-value returned)
-terra::autocor(params_sites$W2, w=W2.dists.inv,
-               method="moran")
 rgrass7::write_VECT(W2_sp, "W2", flags="overwrite")
 # Re-sample with RST
 # Note: use mask=Madagascar to save computation time

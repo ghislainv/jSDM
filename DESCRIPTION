@@ -21,7 +21,9 @@ Suggests:
     snow,
     snowfall,
     ggplot2,
-    covr
+    covr,
+    ape,
+    gstat
 Authors@R: c(
     person("Jeanne", "Clément", , "jeanne.clement16@laposte.net", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5228-5015")),
