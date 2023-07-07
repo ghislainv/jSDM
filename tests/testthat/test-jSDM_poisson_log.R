@@ -74,7 +74,7 @@ x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 np <- ncol(X)
 set.seed(2*seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 log.theta <- X %*% t(beta.target)
 theta <- exp(log.theta)
 set.seed(seed)
@@ -170,7 +170,7 @@ x2 <- rnorm(nsite,0,1)
 X <- cbind(rep(1,nsite),x1,x2)
 np <- ncol(X)
 set.seed(seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 Valpha.target <- 0.5
 set.seed(seed)
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
@@ -231,12 +231,12 @@ W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 n_latent <-  ncol(W)
 l.zero <- 0
 set.seed(seed)
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 set.seed(seed)
-l.other <- runif(nsp*2-3,-2,2)
+l.other <- runif(nsp*2-3,-1,1)
 lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
 set.seed(seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 log.theta <- X %*% t(beta.target) + W %*% t(lambda.target)
 theta <- exp(log.theta)
 set.seed(seed)
@@ -254,8 +254,8 @@ mod <- jSDM::jSDM_poisson_log(burnin, mcmc, thin,# Chains
                         beta_start=0, lambda_start = 0,
                         W_start=0,
                         # Priors
-                        mu_beta=0, V_beta=10,
-                        mu_lambda=0, V_lambda=10,
+                        mu_beta=0, V_beta=1,
+                        mu_lambda=0, V_lambda=1,
                         # Various
                         seed=1234, ropt=0.44, verbose=0)
 # Tests
@@ -291,14 +291,14 @@ W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 n_latent <- ncol(W)
 l.zero <- 0
 set.seed(seed)
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 set.seed(seed)
-l.other <- runif(nsp*2-3,-2,2)
+l.other <- runif(nsp*2-3,-1,1)
 lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
 set.seed(seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 set.seed(seed)
-alpha.target <- runif(nsite,-2,2)
+alpha.target <- runif(nsite,-1,1)
 alpha.target[1] <- 0
 log.theta <- X %*% t(beta.target) + W %*% t(lambda.target) + alpha.target
 theta <- exp(log.theta)
@@ -361,12 +361,12 @@ W <- cbind(rnorm(nsite,0,1),rnorm(nsite,0,1))
 n_latent <- ncol(W)
 l.zero <- 0
 set.seed(seed)
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 set.seed(seed)
-l.other <- runif(nsp*2-3,-2,2)
+l.other <- runif(nsp*2-3,-1,1)
 lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
 set.seed(seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 Valpha.target <- 0.5
 set.seed(seed)
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
@@ -431,12 +431,12 @@ W <- cbind(rnorm(nsite, 0, 1),rnorm(nsite, 0, 1))
 n_latent <- ncol(W)
 l.zero <- 0
 set.seed(seed)
-l.diag <- runif(2,0,2)
+l.diag <- runif(2,0,1)
 set.seed(seed)
-l.other <- runif(nsp*2-3,-2,2)
-lambda.target <- matrix(c(l.diag[1],l.zero,l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp)
+l.other <- runif(nsp*2-3,-1,1)
+lambda.target <- matrix(c(l.diag[1], l.zero,l.other[1], l.diag[2], l.other[-1]), byrow=TRUE, nrow=nsp)
 set.seed(seed)
-beta.target <- matrix(runif(nsp*np,-2,2), byrow=TRUE, nrow=nsp)
+beta.target <- matrix(runif(nsp*np,-1,1), byrow=TRUE, nrow=nsp)
 Valpha.target <- 0.5
 set.seed(seed)
 alpha.target <- rnorm(nsite,0,sqrt(Valpha.target))
@@ -507,23 +507,23 @@ x1 <- rnorm(nsite,0,1)
 set.seed(2*seed)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1, x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 set.seed(seed)
 trait_data <- data.frame(WSD=scale(runif(nsp,0,1000)), SLA=scale(runif(nsp,0,250)))
-trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2) 
+trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2)
 form.Tr <- function(trait_formula, trait_data,X){
   data <- trait_data
-  # add column of 1 with names of covariables in site_data 
+  # add column of 1 with names of covariables in site_data
   data[,colnames(X)] <- 1
   mf.suit.tr <- model.frame(formula=trait_formula, data=data)
   # full design matrix corresponding to formula
   mod.mat <- model.matrix(attr(mf.suit.tr,"terms"), data=mf.suit.tr)
-  # Remove duplicated columns to get design matrix for traits 
+  # Remove duplicated columns to get design matrix for traits
   Tr <- as.matrix(mod.mat[,!duplicated(mod.mat,MARGIN=2)])
   colnames(Tr) <- colnames(mod.mat)[!duplicated(mod.mat,MARGIN=2)]
-  # Rename columns according to considered trait 
+  # Rename columns according to considered trait
   for(p in 1:np){
     if(sum(colnames(Tr)==colnames(X)[p])==0){
       colnames(Tr) <- gsub(pattern=paste0(":",colnames(X)[p]), replacement="",
@@ -542,11 +542,11 @@ form.Tr <- function(trait_formula, trait_data,X){
     for(p in 1:np){
       term <- c(grep(paste0(colnames(X)[p],":"), colnames(mod.mat), value=TRUE, fixed=TRUE),grep(paste0(":",colnames(X)[p]), colnames(mod.mat), value=TRUE, fixed=TRUE))
       if(length(term)==0) next
-      # fixed=TRUE pattern is a string to be matched as is 
-      # not a regular expression because of special characters in formula (^, /, [, ...) 
+      # fixed=TRUE pattern is a string to be matched as is
+      # not a regular expression because of special characters in formula (^, /, [, ...)
       gamma_zeros[t,p] <- length(c(grep(paste0(":",colnames(Tr)[t]), term, fixed=TRUE),grep(paste0(colnames(Tr)[t],":"), term, fixed=TRUE)))
     }
-    gamma_zeros[t,1] <- length(which(colnames(mod.mat)==colnames(Tr)[t]))  
+    gamma_zeros[t,1] <- length(which(colnames(mod.mat)==colnames(Tr)[t]))
   }
   gamma_zeros[col_Tint,] <- 1
   return(list(gamma_zeros=gamma_zeros,Tr=Tr))
@@ -564,7 +564,7 @@ for(j in 1:nsp){
   set.seed(seed)
   beta.target[,j] <- MASS::mvrnorm(n=1, mu=mu_beta[j,], Sigma=V_beta)
 }
-log_theta <- as.matrix(X) %*% beta.target 
+log_theta <- as.matrix(X) %*% beta.target
 theta <- exp(log_theta)
 set.seed(seed)
 Y <- apply(theta, 2, rpois, n=nsite)
@@ -609,12 +609,12 @@ x1 <- rnorm(nsite,0,1)
 set.seed(2*seed)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 set.seed(seed)
 trait_data <- data.frame(WSD=scale(runif(nsp,0,1000)), SLA=scale(runif(nsp,0,250)))
-trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2) 
+trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2)
 result <- form.Tr(trait_formula,trait_data,X)
 Tr <- result$Tr
 nt <- ncol(Tr)
@@ -639,7 +639,7 @@ set.seed(seed)
 l.other <- runif(nsp*n_latent-3,-0.5,0.5)
 lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
-log_theta <- as.matrix(X) %*% beta.target + W %*% lambda.target 
+log_theta <- as.matrix(X) %*% beta.target + W %*% lambda.target
 theta <- exp(log_theta)
 set.seed(seed)
 Y <- apply(theta, 2, rpois, n=nsite)
@@ -690,7 +690,7 @@ x1 <- rnorm(nsite,0,1)
 set.seed(2*seed)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 set.seed(seed)
@@ -711,7 +711,7 @@ set.seed(seed)
 }
 set.seed(seed)
 alpha.target <- runif(nsite,-1,1)
-alpha.target[1] <- 0 
+alpha.target[1] <- 0
 log_theta <- as.matrix(X) %*% beta.target + alpha.target
 theta <- exp(log_theta)
 set.seed(seed)
@@ -761,13 +761,13 @@ x1 <- rnorm(nsite,0,1)
 set.seed(seed)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 set.seed(2*seed)
 trait_data <- data.frame(WSD=scale(runif(nsp,0,1000)),
                          SLA=scale(runif(nsp,0,250)))
-trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2) 
+trait_formula <- ~ WSD + SLA + x1:I(WSD^2) + x2:I(SLA^2)
 result <- form.Tr(trait_formula,trait_data,X)
 Tr <- result$Tr
 nt <- ncol(Tr)
@@ -836,7 +836,7 @@ x1 <- rnorm(nsite,0,1)
 set.seed(seed)
 x2 <- rnorm(nsite,0,1)
 site_data <- data.frame(x1=x1,x2=x2)
-site_formula <- ~ x1 + x2 
+site_formula <- ~ x1 + x2
 X <- model.matrix(site_formula, site_data)
 np <- ncol(X)
 set.seed(seed)
@@ -867,7 +867,7 @@ lambda.target <- t(matrix(c(l.diag[1],l.zero,
                             l.other[1],l.diag[2],l.other[-1]), byrow=TRUE, nrow=nsp))
 set.seed(seed)
 alpha.target <- runif(nsite,-1,1)
-alpha.target[1] <- 0 
+alpha.target[1] <- 0
 log_theta <- as.matrix(X) %*% beta.target + W %*% lambda.target + alpha.target
 theta <- exp(log_theta)
 set.seed(seed)
@@ -881,8 +881,8 @@ nsamp <- mcmc/thin
 mod <- jSDM::jSDM_poisson_log(burnin=burnin, mcmc=mcmc, thin=thin,
                               count_data=Y,
                               site_formula=site_formula,
-                              site_data=X, n_latent=2, 
-                              site_effect = "fixed", 
+                              site_data=X, n_latent=2,
+                              site_effect = "fixed",
                               trait_formula = trait_formula,
                               trait_data = trait_data,
                               gamma_start=0,
@@ -967,8 +967,8 @@ thin <- 1
 nsamp <- mcmc/thin
 mod <- jSDM::jSDM_poisson_log(count_data=Y,
                               site_formula=site_formula,
-                              site_data=X, n_latent=2, 
-                              site_effect = "random", 
+                              site_data=X, n_latent=2,
+                              site_effect = "random",
                               burnin=burnin, mcmc=mcmc, thin=thin,
                               trait_formula = trait_formula,
                               trait_data = trait_data,
