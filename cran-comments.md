@@ -2,10 +2,10 @@
 
 ## clang-UBSAN
 
-In test jSDM_poisson_log, Rcpp_jSDM_poisson_log_traits_rand_site_lv : 
+In jSDM_poisson_log tests, Rcpp_jSDM_poisson_log_traits_rand_site_lv : 
 runtime error: 3.11579e+10 is outside the range of representable values of type 'unsigned int'. 
 
-I've corrected this problem, I thought it was already done but I hadn't set up and fixed the random seed generator correctly, it's done now. 
+I have changed the type of the count data (Y) from unsigned int to unsigned long int in all C++ functions called by the jSDM_poisson_log function, in order to avoid this range problem and I've put back all the jSDM_poisson_log function tests that were deleted for the previous submission. 
 
 I have updated the date and removed commented lines of codes in the examples. 
 

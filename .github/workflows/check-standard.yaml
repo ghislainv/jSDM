@@ -41,6 +41,7 @@ jobs:
           brew install jags
           brew install gsl
           brew install gdal
+          brew install udunits
 
       - uses: r-lib/actions/setup-pandoc@v2
 
