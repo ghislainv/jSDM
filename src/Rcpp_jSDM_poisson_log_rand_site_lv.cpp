@@ -12,7 +12,7 @@
 // [[Rcpp::export]]
 Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
     const int ngibbs, int nthin, int nburn, // Number of iterations, burning and samples
-    const arma::umat &Y, // Number of successes (presences)
+    const arma::Mat<unsigned long> &Y, // abundance of species
     const arma::mat &X, // Suitability covariates
     const arma::mat &W_start, // Starting values
     const arma::mat &lambda_start,
@@ -67,15 +67,13 @@ Rcpp::List  Rcpp_jSDM_poisson_log_rand_site_lv(
   
   //////////////////////////////////////////////////////////
   // Set up and initialize structure for density function //
-  dens_par dens_data;
+  dens_par_pois dens_data;
   // Data 
   dens_data.NSITE = NSITE;
   dens_data.NSP = NSP;
   dens_data.NL = NL;
   // Y
   dens_data.Y = Y;
-  // N
-  dens_data.N = arma::ones<arma::uvec>(NSITE);
   // Suitability process 
   dens_data.NP = NP;
   dens_data.X = X;

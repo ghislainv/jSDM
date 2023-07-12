@@ -11,6 +11,41 @@
 #include <gsl/gsl_matrix.h>
 #include <cmath>
 
+/* dens_par_pois.h */
+struct dens_par_pois {
+  // Data 
+  int NSITE;
+  int NSP;
+  arma::Mat<unsigned long> Y;
+  // Suitability 
+  // beta
+  int NP;
+  arma::mat X;
+  int pos_beta;
+  int sp_beta;
+  arma::vec mu_beta;
+  arma::vec V_beta;
+  arma::mat beta_run;
+  // lambda
+  int NL; 
+  int pos_lambda;
+  int sp_lambda;
+  arma::vec mu_lambda;
+  arma::vec V_lambda;
+  arma::mat lambda_run;
+  // W
+  int site_W;
+  int pos_W;
+  arma::vec V_W;
+  arma::mat W_run;
+  //alpha
+  int site_alpha; 
+  double V_alpha_run;
+  double shape_Valpha;
+  double rate_Valpha;
+  arma::rowvec alpha_run;
+};
+
 /* dens_par.h */
 struct dens_par {
   // Data 

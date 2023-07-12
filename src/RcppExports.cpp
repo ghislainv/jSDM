@@ -1369,7 +1369,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log
-Rcpp::List Rcpp_jSDM_poisson_log(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log(const int ngibbs, const int nthin, const int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1377,7 +1377,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< const int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< const int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type mu_beta(mu_betaSEXP);
@@ -1390,7 +1390,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_fixed_site
-Rcpp::List Rcpp_jSDM_poisson_log_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_fixed_site(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1398,7 +1398,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha_start(alpha_startSEXP);
@@ -1413,7 +1413,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_fixed_site_lv
-Rcpp::List Rcpp_jSDM_poisson_log_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1421,7 +1421,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -1441,7 +1441,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_lv
-Rcpp::List Rcpp_jSDM_poisson_log_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1449,7 +1449,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -1467,7 +1467,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_rand_site
-Rcpp::List Rcpp_jSDM_poisson_log_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_rand_site(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1475,7 +1475,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta_start(beta_startSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha_start(alpha_startSEXP);
@@ -1492,7 +1492,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_rand_site_lv
-Rcpp::List Rcpp_jSDM_poisson_log_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::vec& mu_beta, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP mu_betaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1500,7 +1500,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type W_start(W_startSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda_start(lambda_startSEXP);
@@ -1522,7 +1522,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits
-Rcpp::List Rcpp_jSDM_poisson_log_traits(const int ngibbs, const int nthin, const int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits(const int ngibbs, const int nthin, const int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1530,7 +1530,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< const int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< const int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -1547,7 +1547,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits_fixed_site
-Rcpp::List Rcpp_jSDM_poisson_log_traits_fixed_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits_fixed_site(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits_fixed_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1555,7 +1555,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -1574,7 +1574,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits_fixed_site_lv
-Rcpp::List Rcpp_jSDM_poisson_log_traits_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits_fixed_site_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits_fixed_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alphaSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1582,7 +1582,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -1606,7 +1606,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits_lv
-Rcpp::List Rcpp_jSDM_poisson_log_traits_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1614,7 +1614,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -1636,7 +1636,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits_rand_site
-Rcpp::List Rcpp_jSDM_poisson_log_traits_rand_site(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits_rand_site(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits_rand_site(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1644,7 +1644,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
@@ -1665,7 +1665,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_jSDM_poisson_log_traits_rand_site_lv
-Rcpp::List Rcpp_jSDM_poisson_log_traits_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::umat& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
+Rcpp::List Rcpp_jSDM_poisson_log_traits_rand_site_lv(const int ngibbs, int nthin, int nburn, const arma::Mat<unsigned long>& Y, const arma::mat& X, const arma::mat& Tr, const arma::mat& gamma_zeros, const arma::mat& W_start, const arma::mat& lambda_start, const arma::mat& beta_start, const arma::vec& alpha_start, const double& V_alpha_start, const arma::mat& gamma_start, const arma::mat& V_gamma, const arma::mat& mu_gamma, const arma::vec& V_beta, const arma::vec& mu_lambda, const arma::vec& V_lambda, const arma::vec& V_W, const double& shape_Valpha, const double& rate_Valpha, const int& seed, const double& ropt, const int& verbose);
 RcppExport SEXP _jSDM_Rcpp_jSDM_poisson_log_traits_rand_site_lv(SEXP ngibbsSEXP, SEXP nthinSEXP, SEXP nburnSEXP, SEXP YSEXP, SEXP XSEXP, SEXP TrSEXP, SEXP gamma_zerosSEXP, SEXP W_startSEXP, SEXP lambda_startSEXP, SEXP beta_startSEXP, SEXP alpha_startSEXP, SEXP V_alpha_startSEXP, SEXP gamma_startSEXP, SEXP V_gammaSEXP, SEXP mu_gammaSEXP, SEXP V_betaSEXP, SEXP mu_lambdaSEXP, SEXP V_lambdaSEXP, SEXP V_WSEXP, SEXP shape_ValphaSEXP, SEXP rate_ValphaSEXP, SEXP seedSEXP, SEXP roptSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1673,7 +1673,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type ngibbs(ngibbsSEXP);
     Rcpp::traits::input_parameter< int >::type nthin(nthinSEXP);
     Rcpp::traits::input_parameter< int >::type nburn(nburnSEXP);
-    Rcpp::traits::input_parameter< const arma::umat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::Mat<unsigned long>& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Tr(TrSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type gamma_zeros(gamma_zerosSEXP);
