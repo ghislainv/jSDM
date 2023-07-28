@@ -1,7 +1,7 @@
 Package: jSDM
 Type: Package
 Title: Joint Species Distribution Models
-Version: 0.2.6
+Version: 0.2.7
 Date: 2023-07-12
 Imports: Rcpp (>= 1.0.0), graphics, stats, coda, corrplot, stringi, MASS, parallel, doParallel, foreach, methods
 LinkingTo: Rcpp, RcppArmadillo, RcppGSL
@@ -25,15 +25,18 @@ Suggests:
     ape,
     gstat
 Authors@R: c(
-    person("Jeanne", "Clément", , "jeanne.clement16@laposte.net", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-5228-5015")),
-    person("Ghislain", "Vieilledent", , "ghislain.vieilledent@cirad.fr", role = "aut",
-           comment = c(ORCID = "0000-0002-1685-4997")),
-    person("Frédéric", "Gosselin", , "frederic.gosselin@inrae.fr", role = "ctb",
-           comment = c(ORCID = "0000-0003-3737-106X")),
-    person("CIRAD", role = c("cph", "fnd"))
+  person("Ghislain", "Vieilledent", role=c("aut", "cre"),
+    email="ghislain.vieilledent@cirad.fr",
+    comment=c(ORCID="0000-0002-1685-4997")),
+  person("Jeanne", "Clément", role="aut",
+    email="jeanne.clement16@laposte.net",
+    comment=c(ORCID="0000-0002-5228-5015")),
+  person("Frédéric", "Gosselin", role="ctb",
+    email="frederic.gosselin@inrae.fr", 
+    comment=c(ORCID="0000-0003-3737-106X")),
+  person("CIRAD", role=c("cph", "fnd"))
   )
-Maintainer: Jeanne Clément <jeanne.clement16@laposte.net>
+Maintainer: Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 Description: Fits joint species distribution models ('jSDM')
     in a hierarchical Bayesian framework (Warton and al. 2015
     <doi:10.1016/j.tree.2015.09.007>). The Gibbs sampler is written
