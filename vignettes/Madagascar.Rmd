@@ -1035,12 +1035,12 @@ for (n in 1:npart){
                           species.range=c(first.species[n],
                                           min(nsp,first.species[n]+floor(nsp/npart))))
   terra::writeRaster(probit_theta,
-                     filename=paste0("~/Documents/projet_BioSceneMada/Internship_Report/data/RST_centered_probit_theta_", n, ".tif"),
+                     filename=paste0("~/Documents/projet_BioSceneMada/Internship_Report/data/RST_probit_theta_", n, ".tif"),
                      filetype="GTiff",
                      gdal=c("COMPRESS=LZW", "PREDICTOR=2"), overwrite=TRUE)
   # Compute and save SpatRaster of probabilities of presence theta
   terra::app(probit_theta, pnorm, cores=2,
-             filename=paste0("~/Documents/projet_BioSceneMada/Internship_Report/data/RST_centered_theta_",n,".tif"), overwrite=TRUE, wopt=list(gdal=c("COMPRESS=LZW", "PREDICTOR=2"), filetype="GTiff"))
+             filename=paste0("~/Documents/projet_BioSceneMada/Internship_Report/data/RST_theta_",n,".tif"), overwrite=TRUE, wopt=list(gdal=c("COMPRESS=LZW", "PREDICTOR=2"), filetype="GTiff"))
   remove(probit_theta)
 }
 ```
