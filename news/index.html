@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
@@ -60,10 +60,6 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.2.7" id="jsdm-027">jSDM 0.2.7<a class="anchor" aria-label="anchor" href="#jsdm-027"></a></h2>
-<ul><li>From 0.2.2 to 0.2.7, minor corrections to pass checks on CRAN.</li>
-</ul></div>
-    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.2" id="jsdm-022">jSDM 0.2.2<small>2023-03-02</small><a class="anchor" aria-label="anchor" href="#jsdm-022"></a></h2>
 <ul><li>New function <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM_gaussian.html" class="external-link"><code>jSDM_gaussian</code></a> for fitting joint species distribution models from continuous Gaussian data, including an overdispersion parameter.</li>
 <li>Use of the R package <code>terra</code> instead of <code>raster</code> and <code>sp</code>, which are depreciated, in the vignette <a href="https://ecology.ghislainv.fr/jSDM/articles/Madagascar.html" class="external-link">Estimation of Madagascar’s plant biodiversity</a>.</li>
@@ -71,7 +67,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="jsdm-021">jSDM 0.2.1<small>2022-03-21</small><a class="anchor" aria-label="anchor" href="#jsdm-021"></a></h2>
 <ul><li>Add the possibility to consider only significant correlations in the <a href="https://ecology.ghislainv.fr/jSDM/reference/get_residual_cor.html" class="external-link"><code>get_residual_cor</code></a> and <a href="https://ecology.ghislainv.fr/jSDM/reference/plot_residual_cor.html" class="external-link"><code>plot_residual_cor</code></a> functions.</li>
-<li>Documentation corrections</li>
+<li>Documentation correction</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="jsdm-020">jSDM 0.2.0<small>2022-03-08</small><a class="anchor" aria-label="anchor" href="#jsdm-020"></a></h2>
@@ -87,18 +83,18 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.1" id="jsdm-011">jSDM 0.1.1<a class="anchor" aria-label="anchor" href="#jsdm-011"></a></h2>
-<ul><li>Use of <code>roxygen2</code> for documentation and NAMESPACE.</li>
+<ul><li>Use of <code>roxygen2</code> for documentation and NAMESPACE</li>
 <li>Rename <code>jSDM_binomial_probit_block</code> the function <code>jSDM_probit_block</code>.</li>
 <li>New function <code>jSDM_binomial_probit_block_long_format</code> for fitting joint species distribution models from presence-absence data in long format able to handle missing observations, multiple visits at sites and to integer species traits as explanatory variables.<br></li>
 <li>New function <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM_poisson_log.html" class="external-link"><code>jSDM_poisson_log</code></a> for fitting joint species distribution models from abundance data inspired by Hui and Francis K. C. 2016 <em>Methods in Ecology and Evolution</em> (<a href="https://doi.org/10.1111/2041-210X.12514" class="external-link">doi:10.1111/2041-210X.12514</a>).</li>
 <li>New function <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM_binomial_logit.html" class="external-link"><code>jSDM_binomial_logit</code></a> for fitting joint species distribution models from presence-absence data at multiple-visited sites using a bayesian inference method inspired by Albert, James H. and Chib Siddhartha 1993 <em>Journal of the American Statistical Association</em> (<a href="https://doi.org/10.1080/01621459.1993.10476321" class="external-link">doi:10.1080/01621459.1993.10476321</a>).</li>
 <li>Functions to fit models in which site effects are included as fixed effects, as random effects or not included and with or without latent variables.</li>
 <li>New function <a href="https://ecology.ghislainv.fr/jSDM/reference/get_enviro_cor.html" class="external-link"><code>get_enviro_cor</code></a> to extract covariances and correlations due to shared environmental responses.</li>
-<li>Completing <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html" class="external-link"><code>jSDM-package</code></a> documentation</li>
+<li>Complete <a href="https://ecology.ghislainv.fr/jSDM/reference/jSDM-package.html" class="external-link"><code>jSDM-package</code></a> documentation</li>
 <li>Add datasets (<a href="https://ecology.ghislainv.fr/jSDM/reference/mosquitos.html" class="external-link"><code>mosquitos</code></a>, <a href="https://ecology.ghislainv.fr/jSDM/reference/fungi.html" class="external-link"><code>fungi</code></a>, <a href="https://ecology.ghislainv.fr/jSDM/reference/eucalypts.html" class="external-link"><code>eucalypts</code></a>, <a href="https://ecology.ghislainv.fr/jSDM/reference/birds.html" class="external-link"><code>birds</code></a>, <a href="https://ecology.ghislainv.fr/jSDM/reference/mites.html" class="external-link"><code>mites</code></a>, <a href="https://ecology.ghislainv.fr/jSDM/reference/aravo.html" class="external-link"><code>aravo</code></a>).</li>
 <li>Seven new vignettes (<a href="https://ecology.ghislainv.fr/jSDM/articles/proof.html" class="external-link">Bayesian inference methods</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_poisson_log.html" class="external-link">Poisson log-linear regression</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_probit.html" class="external-link">Bernoulli probit regression</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_probit_long_format.html" class="external-link">Bernoulli probit regression with missing data and species traits</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_binomial_logit.html" class="external-link">Binomial logistic regression</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_in_parallel.html" class="external-link">Running jSDM in parallel</a>, <a href="https://ecology.ghislainv.fr/jSDM/articles/SDM_JSDM.html" class="external-link">Comparing SDMs and JSDMs</a> and <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_Hmsc.html" class="external-link">Comparison jSDM-Hmsc</a>) are available.</li>
-<li>Completing and correcting the vignette <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_boral.html" class="external-link">Comparison jSDM-boral</a>.</li>
-<li>Adding Code of conduct and Contributing sections.</li>
+<li>Complete and correct the vignette <a href="https://ecology.ghislainv.fr/jSDM/articles/jSDM_boral.html" class="external-link">Comparison jSDM-boral</a>.</li>
+<li>Add Code of conduct and Contributing section<br></li>
 <li>New package website available on GitHub: <a href="https://ecology.ghislainv.fr/jSDM/" class="external-link uri">https://ecology.ghislainv.fr/jSDM/</a>.</li>
 </ul></div>
     <div class="section level2">
@@ -121,7 +117,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://jeanneclement.github.io/" class="external-link">Jeanne Clément</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png"></a>.</p>
+  <p></p><p>Developed by <a href="https://jeanneclement.github.io/" class="external-link">Jeanne Clément</a>, <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png"></a>.</p>
 </div>
 
 <div class="pkgdown">
