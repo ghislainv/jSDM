@@ -1,15 +1,30 @@
+# jSDM v0.2.7
+
+Jeanne Clément has notified the CRAN team that the package has a new
+maintainer (email to CRAN-submissions@R-project.org on
+the 27/07/2023).
+
+The new package maintainer is Ghislain Vieilledent
+<ghislain.vieilledent@cirad.fr>.
+
 # jSDM v0.2.6
 
 ## clang-UBSAN
 
-In jSDM_poisson_log tests, Rcpp_jSDM_poisson_log_traits_rand_site_lv : 
-runtime error: 3.11579e+10 is outside the range of representable values of type 'unsigned int'. 
+In jSDM_poisson_log tests, Rcpp_jSDM_poisson_log_traits_rand_site_lv :
+runtime error: 3.11579e+10 is outside the range of representable
+values of type 'unsigned int'.
 
-I have changed the type of the count data (Y) from unsigned int to unsigned long int in all C++ functions called by the jSDM_poisson_log function, in order to avoid this range problem and I've put back all the jSDM_poisson_log function tests that were deleted for the previous submission. 
+I have changed the type of the count data (Y) from unsigned int to
+unsigned long int in all C++ functions called by the jSDM_poisson_log
+function, in order to avoid this range problem and I've put back all
+the jSDM_poisson_log function tests that were deleted for the previous
+submission.
 
-I have updated the date and removed commented lines of codes in the examples. 
+I have updated the date and removed commented lines of codes in the
+examples.
 
-Using [R-hub builder](https://builder.r-hub.io/) to build on :
+Using [R-hub builder](https://builder.r-hub.io/) to build on:
 
 
 ## Platform: Windows Server 2022, R-devel, 64 bit
@@ -138,7 +153,8 @@ Always make sure to reset to user's options(), working directory or par() after 
 I have fixed this issues.
 
 # jSDM v0.2.3
-## R CMD check results 
+
+## R CMD check results
 
 Using [R-hub builder](https://builder.r-hub.io/) to build on :
 
@@ -167,7 +183,8 @@ I have fixed this issues.
 I have also removed progress bars in non-interactive use, thank you for the advice.
 
 # jSDM v0.2.2
-## R CMD check results 
+
+## R CMD check results
 
 Using [R-hub builder](https://builder.r-hub.io/) to build on :
 
@@ -187,7 +204,8 @@ There was sometimes 1 NOTE:
     libs   3.8Mb
 
 # jSDM v0.2.1
-## R CMD check results 
+
+## R CMD check results
 
 Using [R-hub builder](https://builder.r-hub.io/) to build on :
 
@@ -218,7 +236,8 @@ and lots more.
 I have fixed this issues. 
     
 # jSDM v0.2.0
-## R CMD check results 
+
+## R CMD check results
 
 Using [R-hub builder](https://builder.r-hub.io/) to build on :
 

@@ -1,6 +1,10 @@
 # jSDM 0.2.7
 
-* From 0.2.2 to 0.2.7, minor corrections to pass checks on CRAN.
+* Changing maintainer to Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>.
+
+# jSDM 0.2.6
+
+* From 0.2.2 to 0.2.6, there are only minor corrections to pass checks on CRAN.
 
 # jSDM 0.2.2
 
