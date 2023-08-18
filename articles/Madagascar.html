@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jSDM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
       </span>
     </div>
 
@@ -1227,12 +1227,12 @@ This method is described in the article <span class="citation">(<a href="#ref-Mi
 <span>                          species.range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">first.species</span><span class="op">[</span><span class="va">n</span><span class="op">]</span>,</span>
 <span>                                          <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">nsp</span>,<span class="va">first.species</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">nsp</span><span class="op">/</span><span class="va">npart</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></span><span class="op">(</span><span class="va">probit_theta</span>,</span>
-<span>                     filename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Internship_Report/data/RST_centered_probit_theta_"</span>, <span class="va">n</span>, <span class="st">".tif"</span><span class="op">)</span>,</span>
+<span>                     filename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Internship_Report/data/RST_probit_theta_"</span>, <span class="va">n</span>, <span class="st">".tif"</span><span class="op">)</span>,</span>
 <span>                     filetype<span class="op">=</span><span class="st">"GTiff"</span>,</span>
 <span>                     gdal<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMPRESS=LZW"</span>, <span class="st">"PREDICTOR=2"</span><span class="op">)</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="co"># Compute and save SpatRaster of probabilities of presence theta</span></span>
 <span>  <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">probit_theta</span>, <span class="va">pnorm</span>, cores<span class="op">=</span><span class="fl">2</span>,</span>
-<span>             filename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Internship_Report/data/RST_centered_theta_"</span>,<span class="va">n</span>,<span class="st">".tif"</span><span class="op">)</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span>, wopt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>gdal<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMPRESS=LZW"</span>, <span class="st">"PREDICTOR=2"</span><span class="op">)</span>, filetype<span class="op">=</span><span class="st">"GTiff"</span><span class="op">)</span><span class="op">)</span></span>
+<span>             filename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"~/Documents/projet_BioSceneMada/Internship_Report/data/RST_theta_"</span>,<span class="va">n</span>,<span class="st">".tif"</span><span class="op">)</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span>, wopt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>gdal<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMPRESS=LZW"</span>, <span class="st">"PREDICTOR=2"</span><span class="op">)</span>, filetype<span class="op">=</span><span class="st">"GTiff"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove</a></span><span class="op">(</span><span class="va">probit_theta</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We represent the presence probabilities of two species interpolated at the scale of Madagascar as well as their observed occurrences at the inventory sites represented by black crosses.</p>
@@ -1494,7 +1494,7 @@ Warton, D.I., Blanchet, F.G., O’Hara, R.B., Ovaskainen, O., Taskinen, S., Walk
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://jeanneclement.github.io/" class="external-link">Jeanne Clément</a>, <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png"></a>.</p>
+<p>Developed by <a href="https://ecology.ghislainv.fr" class="external-link">Ghislain Vieilledent</a>, <a href="https://jeanneclement.github.io/" class="external-link">Jeanne Clément</a>, <a href="https://www.cirad.fr" class="external-link"><img src="https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png"></a>.</p>
 </div>
 
 <div class="pkgdown">
