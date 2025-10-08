@@ -44,11 +44,6 @@ Or install the development version of **jSDM** from
 devtools::install_github("ghislainv/jSDM")
 ```
 
-Or the binary release of **jSDM**’s development version compiled with R
-version 4.3.0 can be found here :
-
-[jSDM_windows](https://nextcloud.fraisedesbois.net/index.php/s/pC5FSBfHsLZKtkN).
-
 ## Available functions
 
 The package includes the following functions to fit various species

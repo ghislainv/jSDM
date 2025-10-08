@@ -5,7 +5,6 @@ bibliography: vignettes/bib/biblio-jSDM.bib
 biblio-style: vignettes/bib/jae.bst
 csl: vignettes/bib/journal-of-applied-ecology.csl
 ---
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -48,11 +47,8 @@ Or install the development version of **jSDM** from [GitHub](https://github.com/
 devtools::install_github("ghislainv/jSDM")
 ```
 
-Or the binary release of **jSDM**'s development version compiled with R version 4.0.5 can be found here :
-
-[jSDM_windows](https://nextcloud.fraisedesbois.net/index.php/s/bEQNBdwe2RCSK9F).
-
 ## Available functions
+
 The package includes the following functions to fit various species distribution models :
 
 | function |  data type   | data format |

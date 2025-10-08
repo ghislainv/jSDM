@@ -1,3 +1,5 @@
+url: https://ecology.ghislainv.fr/jSDM/
+
 authors:
   Ghislain Vieilledent:
     href: "https://ecology.ghislainv.fr"
@@ -9,6 +11,7 @@ authors:
     CIRAD:
     href: https://www.cirad.fr
     html: <img src='https://ecology.ghislainv.fr/jSDM/logos/logo-cirad.png'>
+
 template:
     assets: logos
     

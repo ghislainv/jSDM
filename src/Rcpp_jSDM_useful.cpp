@@ -82,7 +82,7 @@ double betadens_logit (double beta_jk, void *dens_data) {
         logit_theta += d->W_run(i,q) * d->lambda_run(q,j);
       } 
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       logit_theta +=  d->alpha_run(i);
     }
     logit_theta += d->X(i,k) * beta_jk;
@@ -117,7 +117,7 @@ double lambdadens_logit (double lambda_jq, void *dens_data) {
         logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       logit_theta +=  d->alpha_run(i);
     }
     logit_theta += d->W_run(i,q) * lambda_jq;
@@ -151,7 +151,7 @@ double lambdaUdens_logit (double lambda_jq, void *dens_data) {
         logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       logit_theta +=  d->alpha_run(i);
     }
     logit_theta += d->W_run(i,q) * lambda_jq;
@@ -217,7 +217,7 @@ double Wdens_logit (double W_iq, void *dens_data) {
         logit_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       logit_theta +=  d->alpha_run(i);
     }
     logit_theta += W_iq * d->lambda_run(q,j) ;
@@ -254,7 +254,7 @@ double betadens_pois (double beta_jk, void *dens_data) {
         log_theta += d->W_run(i,q) * d->lambda_run(q,j);
       } 
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       log_theta +=  d->alpha_run(i);
     }
     log_theta += d->X(i,k) * beta_jk;
@@ -289,7 +289,7 @@ double lambdadens_pois (double lambda_jq, void *dens_data) {
         log_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       log_theta +=  d->alpha_run(i);
     }
     log_theta += d->W_run(i,q) * lambda_jq;
@@ -323,7 +323,7 @@ double lambdaUdens_pois (double lambda_jq, void *dens_data) {
         log_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       log_theta +=  d->alpha_run(i);
     }
     log_theta += d->W_run(i,q) * lambda_jq;
@@ -389,7 +389,7 @@ double Wdens_pois (double W_iq, void *dens_data) {
         log_theta += d->W_run(i,l)* d->lambda_run(l,j);
       }
     }
-    if(arma::is_finite(d->alpha_run)){
+    if(d->alpha_run.is_finite()){
       log_theta +=  d->alpha_run(i);
     }
     log_theta += W_iq * d->lambda_run(q,j) ;

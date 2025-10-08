@@ -6,10 +6,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
-^NEWS\.Rmd$
 ^.git$
 ^.gitignore$
-^cran-comments\.md
+^cran-comments\.md$
+
 # pkgdown
 ^docs$
 ^logos$
@@ -18,7 +18,6 @@
 ^_pkgdown\.yml$
 
 # vignettes
-
 ^vignettes/jagsboralmodel\.txt$
 ^vignettes/Madagascar\.Rmd$
 ^vignettes/jSDM_binomial_probit\.Rmd$

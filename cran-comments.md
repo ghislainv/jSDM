@@ -1,11 +1,36 @@
 # jSDM v0.2.7
 
 Jeanne Clément has notified the CRAN team that the package has a new
-maintainer (email to CRAN-submissions@R-project.org on
-the 27/07/2023).
+maintainer (email to CRAN-submissions@R-project.org on 27/07/2023).
 
 The new package maintainer is Ghislain Vieilledent
 <ghislain.vieilledent@cirad.fr>.
+
+── R CMD check results ──────────────────────────────────────────────── jSDM 0.2.7 ────
+Duration: 13m 26s
+
+❯ checking CRAN incoming feasibility ... NOTE
+  Maintainer: ‘Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>’
+  
+  New maintainer:
+    Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+  Old maintainer(s):
+    Jeanne Clément <jeanne.clement16@laposte.net>
+
+❯ checking installed package size ... NOTE
+    installed size is 60.3Mb
+    sub-directories of 1Mb or more:
+      doc    2.4Mb
+      libs  57.2Mb
+
+❯ checking examples ... [40s/17s] NOTE
+  Examples with CPU (user + system) or elapsed time > 5s
+                                    user system elapsed
+  jSDM_binomial_probit             3.772  6.252   2.489
+  jSDM_gaussian                    2.559  5.291   1.578
+  jSDM_binomial_probit_long_format 4.034  2.815   3.577
+
+0 errors ✔ | 0 warnings ✔ | 3 notes ✖
 
 # jSDM v0.2.6
 
