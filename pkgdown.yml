@@ -1,22 +1,24 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   Code_of_conduct: Code_of_conduct.html
   Contributing: Contributing.html
-  Madagascar: Madagascar.html
-  SDM_JSDM: SDM_JSDM.html
-  jSDM: jSDM.html
-  jSDM_Hmsc: jSDM_Hmsc.html
   jSDM_binomial_logit: jSDM_binomial_logit.html
-  jSDM_binomial_probit: jSDM_binomial_probit.html
   jSDM_binomial_probit_long_format: jSDM_binomial_probit_long_format.html
   jSDM_binomial_probit_sp_constrained: jSDM_binomial_probit_sp_constrained.html
+  jSDM_binomial_probit: jSDM_binomial_probit.html
   jSDM_boral: jSDM_boral.html
   jSDM_gaussian: jSDM_gaussian.html
+  jSDM_Hmsc: jSDM_Hmsc.html
   jSDM_in_parallel: jSDM_in_parallel.html
   jSDM_poisson_log: jSDM_poisson_log.html
   jSDM_with_traits: jSDM_with_traits.html
+  jSDM: jSDM.html
+  Madagascar: Madagascar.html
   proof: proof.html
-last_built: 2023-08-18T13:46Z
-
+  SDM_JSDM: SDM_JSDM.html
+last_built: 2025-10-14T16:28Z
+urls:
+  reference: https://ecology.ghislainv.fr/jSDM/reference
+  article: https://ecology.ghislainv.fr/jSDM/articles
