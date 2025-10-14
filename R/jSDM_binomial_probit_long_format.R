@@ -18,7 +18,7 @@
 #'  \tab of the species observed during each visit of the sites.\cr 
 #'  \code{site} \tab numeric or character \eqn{n_{obs}}{n_obs}-length vector indicating the visited site, \cr
 #'  \tab  (sites can be visited several times).\cr
-#'  \code{species} \tab numeric or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed, \cr 
+#'  \code{species} \tab numeric or character \eqn{n_{obs}}{n_obs}-length vector indicating the species observed, \cr 
 #'  \tab (species may not have been recorded at all sites).\cr 
 #'  \code{x1,...,xp} \tab columns of explanatory variables for the suitability process of the model.\cr}
 #' @param site_formula A one-sided formula, as the formulas used by the \code{\link[stats]{lm}} function, of the form: '~ x1 + ... + xd + species:x1 + ... + species:xp' with \eqn{p} terms related to species effects \eqn{\beta},
