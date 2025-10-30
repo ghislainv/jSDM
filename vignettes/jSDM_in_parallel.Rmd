@@ -97,7 +97,7 @@ alpha_target <- rnorm(n_sites, mean=0, sd=sqrt(V_alpha_target))
 # Latent variable Z
 e <- matrix(rnorm(n_species * n_sites, 0, 1), n_sites, n_species)
 probit_theta <- alpha_target + X %*% beta_target + W %*% lambda_target
-Z <- probi_theta + e
+Z <- probit_theta + e
 # Presence-absence matrix Y
 Y <- matrix(0, n_sites, n_species)
 Y[Z > 0] <- 1

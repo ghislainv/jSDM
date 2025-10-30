@@ -17,7 +17,6 @@ Suggests:
     testthat (>= 3.0.0),
     boral,
     Hmsc,
-    BayesComm,
     ggplot2,
     covr,
     ape,
