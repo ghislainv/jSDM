@@ -6,31 +6,30 @@ maintainer (email to CRAN-submissions@R-project.org on 27/07/2023).
 The new package maintainer is Ghislain Vieilledent
 <ghislain.vieilledent@cirad.fr>.
 
-── R CMD check results ──────────────────────────────────────────────── jSDM 0.2.7 ────
-Duration: 13m 26s
+## R CMD check results
 
-❯ checking CRAN incoming feasibility ... NOTE
-  Maintainer: ‘Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>’
-  
-  New maintainer:
-    Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-  Old maintainer(s):
-    Jeanne Clément <jeanne.clement16@laposte.net>
+0 errors | 0 warnings | 0 notes
 
-❯ checking installed package size ... NOTE
-    installed size is 60.3Mb
-    sub-directories of 1Mb or more:
-      doc    2.4Mb
-      libs  57.2Mb
+## Previous WARNING in v0.2.7: Deprecated `is_finite` arma function
 
-❯ checking examples ... [40s/17s] NOTE
-  Examples with CPU (user + system) or elapsed time > 5s
-                                    user system elapsed
-  jSDM_binomial_probit             3.772  6.252   2.489
-  jSDM_gaussian                    2.559  5.291   1.578
-  jSDM_binomial_probit_long_format 4.034  2.815   3.577
+```
+Version: 0.2.6
+Check: whether package can be installed
+Result: WARN
+  Found the following significant warnings:
+    Rcpp_jSDM_useful.cpp:85:14: warning: 'is_finite<arma::Mat<double>>' is deprecated: change arma::is_finite(X) to X.is_finite() [-Wdeprecated-declarations]
+```
+	
+These warnings have been fixed.
 
-0 errors ✔ | 0 warnings ✔ | 3 notes ✖
+## Previous NOTE in v0.2.6: Lost braces in documentation
+
+```
+checkRd: (-1) jSDM_binomial_probit_long_format.Rd:45: Lost braces
+      45 | \code{species} \tab numeric or character eqn{n_{obs}}{n_obs}-length vector indicating the species observed, \cr
+```
+
+This note has been fixed.
 
 # jSDM v0.2.6
 
