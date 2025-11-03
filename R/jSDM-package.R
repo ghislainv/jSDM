@@ -1,17 +1,11 @@
-#' @docType package
+#' @keywords internal 
+"_PACKAGE"
 #' @name jSDM-package
 #' @aliases jSDM-package
 #' @title joint species distribution models
 #' @description \code{jSDM} is an R package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework.
 #'
 #' The Gibbs sampler is written in 'C++'. It uses 'Rcpp', 'Armadillo' and 'GSL' to maximize computation efficiency.
-#'\tabular{ll}{
-#'    Package: \tab jSDM\cr
-#'    Type: \tab Package\cr
-#'    Version: \tab 0.2.1\cr
-#'    Date: \tab 2019-01-11\cr
-#'    License: \tab GPL-3 \cr
-#'    LazyLoad: \tab yes\cr }
 #'    
 #' @details The package includes the following functions to fit various species distribution models :
 #' 
@@ -89,12 +83,6 @@
 #' }}
 #' 
 #' }
-#' @author 
-#' Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-#' 
-#' Jeanne Clément <jeanne.clement16@laposte.net>
-#' 
-#' Frédéric Gosselin <frederic.gosselin@inrae.fr>
 #'
 #'@references
 #' Chib, S. and Greenberg, E. (1998) Analysis of multivariate probit models. \emph{Biometrika}, 85, 347-361. 

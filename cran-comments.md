@@ -10,7 +10,7 @@ The new package maintainer is Ghislain Vieilledent
 
 0 errors | 0 warnings | 0 notes
 
-## Previous WARNING in v0.2.7: Deprecated `is_finite` arma function
+## Previous WARNING in v0.2.6: Deprecated `is_finite` arma function
 
 ```
 Version: 0.2.6

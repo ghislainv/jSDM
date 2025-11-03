@@ -2,19 +2,17 @@
 % Please edit documentation in R/jSDM-package.R
 \docType{package}
 \name{jSDM-package}
+\alias{jSDM}
 \alias{jSDM-package}
-\title{joint species distribution models}
+\title{jSDM: Joint Species Distribution Models}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Fits joint species distribution models ('jSDM') in a hierarchical Bayesian framework (Warton and al. 2015 \doi{10.1016/j.tree.2015.09.007}). The Gibbs sampler is written in 'C++'. It uses 'Rcpp', 'Armadillo' and 'GSL' to maximize computation efficiency.
+
 \code{jSDM} is an R package for fitting joint species distribution models (JSDM) in a hierarchical Bayesian framework.
 
 The Gibbs sampler is written in 'C++'. It uses 'Rcpp', 'Armadillo' and 'GSL' to maximize computation efficiency.
-\tabular{ll}{
-   Package: \tab jSDM\cr
-   Type: \tab Package\cr
-   Version: \tab 0.2.1\cr
-   Date: \tab 2019-01-11\cr
-   License: \tab GPL-3 \cr
-   LazyLoad: \tab yes\cr }
 }
 \details{
 The package includes the following functions to fit various species distribution models :
@@ -101,18 +99,36 @@ Warton, D. I.; Blanchet, F. G.; O'Hara, R. B.; O'Hara, R. B.; Ovaskainen, O.; Ta
 
 Ovaskainen, O., Tikhonov, G., Norberg, A., Blanchet, F. G., Duan, L., Dunson, D., Roslin, T. and Abrego, N. (2017) How to make more out of community data? A conceptual framework and its implementation as models and software. \emph{Ecology Letters}, 20, 561-576.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://ecology.ghislainv.fr/jSDM/}
+  \item \url{https://github.com/ghislainv/jSDM}
+  \item Report bugs at \url{https://github.com/ghislainv/jSDM/issues}
+}
+
+}
 \author{
-Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+\strong{Maintainer}: Ghislain Vieilledent \email{ghislain.vieilledent@cirad.fr} (\href{https://orcid.org/0000-0002-1685-4997}{ORCID})
 
-Jeanne Clément <jeanne.clement16@laposte.net>
+Authors:
+\itemize{
+  \item Jeanne Clément \email{jeanne.clement16@laposte.net} (\href{https://orcid.org/0000-0002-5228-5015}{ORCID})
+}
 
-Frédéric Gosselin <frederic.gosselin@inrae.fr>
+Other contributors:
+\itemize{
+  \item Frédéric Gosselin \email{frederic.gosselin@inrae.fr} (\href{https://orcid.org/0000-0003-3737-106X}{ORCID}) [contributor]
+  \item CIRAD [copyright holder, funder]
+}
+
 }
 \keyword{MCMC}
 \keyword{Metropolis}
 \keyword{algorithm}
 \keyword{binomial}
 \keyword{biodiversity}
+\keyword{internal}
 \keyword{logistic}
 \keyword{model}
 \keyword{multivariate}

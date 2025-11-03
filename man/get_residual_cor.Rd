@@ -15,7 +15,7 @@ get_residual_cor(mod, prob = 0.95, type = "mean")
 Default is posterior mean.}
 }
 \value{
-results A list including : 
+A list including : 
 \item{cov.mean}{Average over the MCMC samples of the variance-covariance matrix, if \code{type = "mean"}.} 
 \item{cov.median}{Median over the MCMC samples of the variance-covariance matrix, if \code{type = "median"}.}
 \item{cov.lower}{A \eqn{n_{species} \times n_{species}}{n_species x n_species} matrix containing the lower limits of the  (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval of variance-covariance matrices over the MCMC samples.}
@@ -29,10 +29,10 @@ results A list including :
  whose (\eqn{100 \times prob \%}{100 x prob \%}) HPD interval over the MCMC samples contain zero.}
 }
 \description{
-This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\dots,n_{species}}{j=1,...,n_species} and \eqn{l=1,\dots,n_{latent})}{l=1,...,n_latent)}, corresponding to latent variables fitted using \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
+This function use coefficients \eqn{(\lambda_{jl}}{(\lambda_jl} with \eqn{j=1,\dots,n_{species}}{j=1,...,n_species} and \eqn{l=1,\dots,n_{latent})}{l=1,...,n_latent)}, corresponding to latent variables fitted using the \code{jSDM} package, to calculate the variance-covariance matrix which controls correlation between species.
 }
 \details{
-After fitting the jSDM with latent variables, the \bold{fullspecies residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
+After fitting the jSDM with latent variables, the \bold{full species residual correlation matrix} : \eqn{R=(R_{ij})}{R=(R_ij)} with \eqn{i=1,\ldots, n_{species}}{i=1,..., n_species} and \eqn{j=1,\ldots, n_{species}}{j=1,..., n_species} can be derived from the covariance in the latent variables such as : 
 \eqn{\Sigma_{ij}=\lambda_i' .\lambda_j}{Sigma_ij=\lambda_i' . \lambda_j}, in the case of a regression with probit, logit or poisson link function and 
 \tabular{lll}{
 \eqn{\Sigma_{ij}}{Sigma_ij} \tab \eqn{= \lambda_i' .\lambda_j + V}{= \lambda_i' . \lambda_j + V} \tab if i=j \cr
@@ -43,47 +43,47 @@ Then we compute correlations from covariances :
 \examples{
 library(jSDM)
 # frogs data
- data(frogs, package="jSDM")
- # Arranging data
- PA_frogs <- frogs[,4:12]
- # Normalized continuous variables
- Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
- colnames(Env_frogs) <- colnames(frogs[,1:3])
- Env_frogs <- as.data.frame(Env_frogs)
- # Parameter inference
+data(frogs, package="jSDM")
+# Arranging data
+PA_frogs <- frogs[,4:12]
+# Normalized continuous variables
+Env_frogs <- cbind(scale(frogs[,1]),frogs[,2],scale(frogs[,3]))
+colnames(Env_frogs) <- colnames(frogs[,1:3])
+Env_frogs <- as.data.frame(Env_frogs)
+# Parameter inference
 # Increase the number of iterations to reach MCMC convergence
- mod <- jSDM_binomial_probit(# Response variable
-                             presence_data=PA_frogs,
-                             # Explanatory variables
-                             site_formula = ~.,
-                             site_data = Env_frogs,
-                             n_latent=2,
-                             site_effect="random",
-                             # Chains
-                             burnin=100,
-                             mcmc=100,
-                             thin=1,
-                             # Starting values
-                             alpha_start=0,
-                             beta_start=0,
-                             lambda_start=0,
-                             W_start=0,
-                             V_alpha=1,
-                             # Priors
-                             shape=0.5, rate=0.0005,
-                             mu_beta=0, V_beta=10,
-                             mu_lambda=0, V_lambda=10,
-                             # Various
-                             seed=1234, verbose=1)
+mod <- jSDM_binomial_probit(# Response variable
+                            presence_data=PA_frogs,
+                            # Explanatory variables
+                            site_formula = ~.,
+                            site_data = Env_frogs,
+                            n_latent=2,
+                            site_effect="random",
+                            # Chains
+                            burnin=100,
+                            mcmc=100,
+                            thin=1,
+                            # Starting values
+                            alpha_start=0,
+                            beta_start=0,
+                            lambda_start=0,
+                            W_start=0,
+                            V_alpha=1,
+                            # Priors
+                            shape=0.5, rate=0.0005,
+                            mu_beta=0, V_beta=10,
+                            mu_lambda=0, V_lambda=10,
+                            # Various
+                            seed=1234, verbose=1)
 # Calcul of residual correlation between species 
 result <- get_residual_cor(mod, prob=0.95, type="mean")
 # Residual variance-covariance matrix
 result$cov.mean
-## All non-significant co-variances are set to zero.
+# All non-significant co-variances are set to zero.
 result$cov.mean * result$cov.sig
 # Residual correlation matrix
 result$cor.mean
-## All non-significant correlations are set to zero.
+# All non-significant correlations are set to zero.
 result$cor.mean * result$cor.sig
 }
 \references{
